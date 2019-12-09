@@ -14,8 +14,10 @@ void main() {
       expect(Modular.selectRoute("/"), isA<Router>());
     });
     test('Test Get module Router', () {
-      expect(Modular.selectRoute("home/"), isA<Router>());
-      expect(Modular.selectRoute("/home/"), isA<Router>());
+     expect(Modular.selectRoute("home/"), isA<Router>());
+     expect(Modular.selectRoute("/home/"), isA<Router>());
+    var router = Modular.selectRoute("/home");
+      expect(router.routerName, '/');
     });
     test('Test Get module sub Router', () {
       expect(Modular.selectRoute("/home/list"), isA<Router>());
@@ -46,7 +48,7 @@ void main() {
     test('router with params get', () {
        expect(Modular.selectRoute("/list/1"), isA<Router>());
        expect(Modular.selectRoute("/home/list/1"), isA<Router>());
-      expect(Modular.selectRoute("/home/test"), null);
+       expect(Modular.selectRoute("/home/test"), null);
     });
   });
 }

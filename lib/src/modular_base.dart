@@ -101,7 +101,8 @@ class Modular {
     Router route;
     var module = _initialModule;
     List<ChildModule> requestBind = [];
-    paths.forEach((item) {
+    for(var i = 0; i < paths.length; i++){
+      String item = paths[i];
       item = "/$item";
 
       if (route == null)
@@ -119,9 +120,9 @@ class Modular {
         module = m;
         route = route.module.routers.firstWhere(
             (router) => searchRoute(router, item),
-            orElse: () => null);
+            orElse: () => i == (paths.length - 1) ? route.module.routers[0] : null);
       }
-    });
+    }
 
     requestBind.forEach((module) {
       bindModule(module, path);
