@@ -23,15 +23,19 @@ class Inject<T> {
 }
 
 mixin InjectMixin<T> {
-
   final Inject<T> _inject = Inject<T>.of();
 
   S get<S>() {
     return _inject.get<S>();
   }
 
-  Widget consumer<S extends ChangeNotifier>({Widget Function(BuildContext context, S value) builder, bool Function(S oldValue, S newValue) distinct}) {
-    return ConsumerWidget<S>(builder: builder, distinct: distinct, inject: _inject,);
+  Widget consumer<S extends ChangeNotifier>(
+      {Widget Function(BuildContext context, S value) builder,
+      bool Function(S oldValue, S newValue) distinct}) {
+    return ConsumerWidget<S>(
+      builder: builder,
+      distinct: distinct,
+      inject: _inject,
+    );
   }
-
 }

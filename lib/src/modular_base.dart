@@ -64,15 +64,14 @@ class Modular {
     paths.forEach((item) {
       item = "/$item";
 
-        if(route == null)
+      if (route == null)
         route = routeList.firstWhere((router) => router.routerName == item,
             orElse: () => null);
-        else {
-          item = route.routerName + item;
-          route = routeList.firstWhere((router) => router.routerName == item,
+      else {
+        item = route.routerName + item;
+        route = routeList.firstWhere((router) => router.routerName == item,
             orElse: () => null);
-        }
-      
+      }
 
       if (route?.module != null) {
         final m = route.module;
@@ -84,7 +83,7 @@ class Modular {
       }
     });
 
-    requestBind.forEach((module){
+    requestBind.forEach((module) {
       bindModule(module, path);
     });
 
@@ -105,8 +104,9 @@ class Modular {
       return null;
     }
 
-    if(settings.isInitialRoute) {
-      return _NoAnimationMaterialPageRoute(builder: (context) => router.child(context, settings.arguments));
+    if (settings.isInitialRoute) {
+      return _NoAnimationMaterialPageRoute(
+          builder: (context) => router.child(context, settings.arguments));
     }
 
     return pageRoute(
