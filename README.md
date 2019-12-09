@@ -84,8 +84,8 @@ class AppWidget extends StatelessWidget {
 
 ```dart
 
-//herde de BrowserModule
-class AppModule extends BrowserModule {
+//herde de MainModule
+class AppModule extends MainModule {
 
   //aqui ficarão qualquer classe que deseja Injetar no seu projeto (ex: bloc, dependency)
   @override
@@ -120,7 +120,7 @@ Pronto! Seu aplicativo já está configurado para Modular!
 Você pode adicionar rotas no seu módulo usando o getter 'routers';
 
 ```dart
-class AppModule extends BrowserModule {
+class AppModule extends MainModule {
 
   //aqui ficarão qualquer classe que deseja Injetar no seu projeto (ex: bloc, dependency)
   @override
@@ -149,7 +149,7 @@ Navigator.pushNamed(context, '/login');
 Você pode injetar qualquer classe no seu módulo usando o getter 'binds', como por exemplo classes **BLoC** ou **ChangeNotifier**
 
 ```dart
-class AppModule extends BrowserModule {
+class AppModule extends MainModule {
 
   //aqui ficarão qualquer classe que deseja Injetar no seu projeto (ex: bloc, dependency)
   @override
@@ -279,10 +279,10 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
 
 ## Criando Módulos Filhos.
 
-Você pode criar outros módulos no seu projeto, para isso, em vez de herdar de BrowseModule, deve-se herda de CommonModule.
+Você pode criar outros módulos no seu projeto, para isso, em vez de herdar de BrowseModule, deve-se herda de ChildModule.
 
 ```dart
-class HomeModule extends CommonModule {
+class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
     Bind((i) => HomeBloc()),
@@ -302,7 +302,7 @@ class HomeModule extends CommonModule {
 A partir disso você pode chamar seu módulos na rota do módulo principal
 
 ```dart
-class AppModule extends BrowserModule {
+class AppModule extends MainModule {
 
   @override
   List<Router> get routers => [
