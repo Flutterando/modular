@@ -139,12 +139,44 @@ And to access the route use Navigator.pushNamed:
 
 ```dart
 Navigator.pushNamed(context, '/login');
-Dependency Injection #
-You can inject any class into your module using getter 'binds', for example
+```
 
- classes BLoC ou ChangeNotifier
 
-class AppModule extends MainModule {
+## Dynamic Routes
+
+You can use the dynamic route system to pass a value per parameter and get it in your view.
+
+```dart
+
+//use (: parameter_name) to use dynamic routes;
+//use the args object that is a (ModularArguments) to get the value
+ @override
+  List<Router> get routers => [
+      Router("/product/:id", child: (_, args) => Product(id: args.params['id'])),
+  ];
+
+```
+A dynamic route is considered valid when the value corresponding to the parameter is filled.
+From this you can use:
+
+```dart
+ 
+Navigator.pushNamed(context, '/product/1'); //args.params['id']) gonna be 1
+
+```
+
+## Flutter Web url Routes
+
+The Routing System also recognizes what is typed in the website url (flutter web) so what you type in the browser url will open in the app. We hope this makes it easier for Flutter Web sites to make SEO more unique.
+
+Dynamic routes apply here as well:
+```
+https://flutter-website.com/#/product/1
+```
+this will open the Product view and args.params ['id']) will be equal to 1.
+
+## Dependency Injection
+You can inject any class into your module using getter 'binds', for example classes BLoC ou ChangeNotifier
 
 ```dart
 class AppModule extends MainModule {
@@ -326,7 +358,7 @@ This is currently our roadmap, please feel free to request additions/changes.
 | Integration with mobx	                    |    ✅    |
 | Rotas multiplas                           |    ✅    |
 | Pass arguments by route                   |    ✅    |
-| Pass url parameters per route             |    --    |
+| Pass url parameters per route             |    ✅    |
 
 ## Features and bugs
 Please send feature requests and bugs at the issue tracker.

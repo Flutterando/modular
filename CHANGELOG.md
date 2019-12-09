@@ -1,5 +1,6 @@
-## [0.0.3] - 9 Dec 2019
+## [0.0.4] - 9 Dec 2019
 
+* Dynamic Router
 * Added Doc Translation
 * Change BrowserModule to MainModule
 * Change CommonModule to ChildModule

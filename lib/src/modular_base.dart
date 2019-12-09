@@ -48,37 +48,77 @@ class Modular {
   }
 
   @visibleForTesting
+  static String prepareToRegex(String url) {
+    List<String> newUrl = [];
+    for (var part in url.split('/')) {
+      if (part.contains(":")) {
+        newUrl.add("${part.replaceFirst(':', '(?<')}>.*)");
+      } else {
+        newUrl.add(part);
+      }
+    }
+
+    return newUrl.join("/");
+  }
+
+  @visibleForTesting
+  static bool searchRoute(Router router, String path) {
+    if (router.routerName.contains('/:')) {
+      RegExp regExp = RegExp(
+        prepareToRegex(router.routerName),
+        caseSensitive: true,
+      );
+      var r = regExp.firstMatch(path);
+
+      if (r?.groupNames != null) {
+        Map<String, dynamic> params = {};
+        int count = 1;
+        for (var key in r?.groupNames) {
+          params[key] = r?.group(count);
+          count++;
+        }
+        router.params = params;
+        return true;
+      } else {
+        router.params = null;
+        return false;
+      }
+    }
+    return router.routerName == path;
+  }
+
+  @visibleForTesting
   static Router selectRoute(String path) {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
 
-    List<String> paths = path.split('.');
+    List<String> paths = path.split('/');
 
     if (paths.first.isEmpty) {
       paths.removeAt(0);
     }
     Router route;
-    var routeList = _initialModule.routers;
+    var module = _initialModule;
     List<ChildModule> requestBind = [];
     paths.forEach((item) {
       item = "/$item";
 
       if (route == null)
-        route = routeList.firstWhere((router) => router.routerName == item,
-            orElse: () => null);
+        route = module.routers.firstWhere((router) => searchRoute(router, item),
+            orElse: () => _initialModule == module ? module.routers[0] : null);
       else {
         item = route.routerName + item;
-        route = routeList.firstWhere((router) => router.routerName == item,
+        route = module.routers.firstWhere((router) => searchRoute(router, item),
             orElse: () => null);
       }
 
       if (route?.module != null) {
         final m = route.module;
         requestBind.add(m);
-        routeList = m.routers;
+        module = m;
         route = route.module.routers.firstWhere(
-            (router) => router.routerName == item,
+            (router) => searchRoute(router, item),
             orElse: () => null);
       }
     });
@@ -98,21 +138,23 @@ class Modular {
   static Route<dynamic> generateRoute(RouteSettings settings,
       {Function(Widget Function(BuildContext) builder) pageRoute =
           _defaultPageRouter}) {
-    String path = settings.name.replaceAll('/', '.');
+    String path = settings.name;
     Router router = selectRoute(path);
     if (router == null) {
       return null;
     }
 
+    ModularArguments args = ModularArguments(router.params, settings.arguments);
+
     if (settings.isInitialRoute) {
       return _NoAnimationMaterialPageRoute(
-          builder: (context) => router.child(context, settings.arguments));
+          builder: (context) => router.child(context, args));
     }
 
     return pageRoute(
       (context) {
         Widget page = _DisposableWidget(
-          child: router.child(context, settings.arguments),
+          child: router.child(context, args),
           dispose: () {
             final List<String> trash = [];
             _injectMap.forEach((key, module) {
@@ -133,6 +175,13 @@ class Modular {
       },
     );
   }
+}
+
+class ModularArguments {
+  final Map<String, dynamic> params;
+  final dynamic data;
+
+  ModularArguments(this.params, this.data);
 }
 
 class _NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {

@@ -12,7 +12,7 @@ class HomeWidget extends StatelessWidget with InjectMixin<HomeModule> {
       appBar: AppBar(title: Text("HomeModule"),
       actions: <Widget>[
         FlatButton(onPressed: () {
-          Navigator.of(context).pushNamed('/home/list/1');
+          Navigator.of(context).pushNamed('/list/1');
         }, child: Text("LIST"),)
       ],
       ),

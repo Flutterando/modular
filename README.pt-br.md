@@ -146,6 +146,42 @@ E para acessar a rota use o **Navigator.pushNamed**:
 Navigator.pushNamed(context, '/login');
 ```
 
+## Rotas dinâmicas
+
+Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetro e receber em sua view.
+
+
+```dart
+
+//use (:nome_do_parametro) para usar rotas dinâmicas;
+//use o objeto args que é um (ModularArguments) para receber o valor
+ @override
+  List<Router> get routers => [
+      Router("/product/:id", child: (_, args) => Product(id: args.params['id'])),
+  ];
+
+```
+Uma rota dinâmica é considerada válida quando o valor correspontente ao parâmentro é preenchido.
+A partir disso você pode usar:
+
+```dart
+ 
+Navigator.pushNamed(context, '/product/1'); //args.params['id']) será 1
+
+```
+
+## Rotas na url com Flutter Web
+
+O Sistema de rotas também reconhece o que é digitado na url do site (flutter web) então o que for digitado na url do browser será aberto no aplicativo. Esperamos que isso facilite o SEO para os sites feito em Flutter Web, fazendo com que tenha icones mais únicos.
+
+As rotas dinâmicas também se aplicam nesse caso.
+
+```
+https://flutter-website.com/#/product/1
+```
+isso abrirar a view Product e args.params['id']) será igual a 1.
+
+
 ## Injeção de dependências
 
 Você pode injetar qualquer classe no seu módulo usando o getter 'binds', como por exemplo classes **BLoC** ou **ChangeNotifier**
@@ -335,7 +371,7 @@ This is currently our roadmap, please feel free to request additions/changes.
 | Integração com mobx                    |    ✅    |
 | Rotas multiplas                        |    ✅    |
 | Passar argumentos por rota             |    ✅    |
-| Parâmetros de url por rota             |    --    |
+| Parâmetros de url por rota             |    ✅    |
 
 ## Features and bugs
 

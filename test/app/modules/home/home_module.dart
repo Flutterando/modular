@@ -13,6 +13,7 @@ class HomeModule extends ChildModule {
   List<Router> get routers => [
     Router("/", child: (_, args) => HomeWidget()),
     Router("/list", child: (_, args) => HomeWidget()),
+    Router("/list/:id", child: (_, args) => HomeWidget()),
   ];
 
   static Inject get to => Inject<HomeModule>.of();
