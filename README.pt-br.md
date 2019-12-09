@@ -1,6 +1,6 @@
 # Flutter Modular
 
-Estrutura de projeto inteligente e organizada.
+Estrutura de projeto inteligente.
 
 *Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
 
