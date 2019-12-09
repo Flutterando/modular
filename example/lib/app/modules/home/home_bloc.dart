@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-class HomeBloc extends ChangeNotifier{
-
+class HomeBloc extends ChangeNotifier {
   int counter = 0;
 
-
-  increment(){
+  increment() {
     counter++;
     notifyListeners();
   }
-
-
 }
