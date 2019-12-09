@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:modular/modular.dart';
-import 'package:modular/src/routers/router.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/src/routers/router.dart';
 
 class Modular {
   static Map<String, CommonModule> _injectMap = {};

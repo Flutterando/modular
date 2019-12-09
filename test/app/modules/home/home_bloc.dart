@@ -1,4 +1,4 @@
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeBloc extends Disposable {
 

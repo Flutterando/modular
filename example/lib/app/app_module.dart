@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'app_bloc.dart';
 import 'app_widget.dart';

@@ -1,4 +1,4 @@
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_bloc.dart';
 import 'home_widget.dart';

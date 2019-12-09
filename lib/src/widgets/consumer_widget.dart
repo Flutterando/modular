@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class ConsumerWidget<T extends ChangeNotifier> extends StatefulWidget {
   final Widget Function(BuildContext context, T value) builder;

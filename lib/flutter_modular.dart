@@ -1,4 +1,4 @@
-library modular;
+library flutter_modular;
 
 export 'src/modular_base.dart';
 export 'src/interfaces/common_module.dart';

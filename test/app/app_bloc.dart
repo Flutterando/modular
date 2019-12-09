@@ -1,4 +1,4 @@
-import 'package:modular/modular.dart' show Disposable;
+import 'package:flutter_modular/flutter_modular.dart' show Disposable;
 
 class AppBloc extends Disposable {
   

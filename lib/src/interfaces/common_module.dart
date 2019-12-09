@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:modular/modular.dart';
-import 'package:modular/src/routers/router.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/src/routers/router.dart';
 
 abstract class CommonModule {
   List<Bind> get binds;

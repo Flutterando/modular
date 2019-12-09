@@ -1,4 +1,4 @@
-# Modular
+# Flutter Modular
 
 Estrutura de projeto inteligente e organizada.
 
@@ -7,13 +7,13 @@ Estrutura de projeto inteligente e organizada.
 ** ESTE PROJETO ESTÁ EM DESENVOLVIMENTO E NÃO RECOMENDAMOS O USO EM PRODUÇÃO. ACOMPANHE OS LANÇAMENTOS E AJUDE A CONTRIBUIR COM O PROJETO;
 
 
-## O que é o Modular?
+## O que é o Flutter Modular?
 
 Quando um projeto vai ficando grande e complexo, acabamos juntando muitos arquivos em um só lugar, isso dificulta a manutenção do código e também o reaproveitamento.
 O Modular nós trás várias soluções adaptadas para o Flutter como Injeção de Dependências, Controle de Rotas e o Sistema de "Singleton Disposáveis" que é quando o provedor do código se encarrega de "chamar" o dispose automaticamente e limpar a injeção (prática muito comum no package bloc_pattern).
 O Modular vem preparado para adaptar qualquer gerência de estado ao seu sistema de Injeção de Dependências inteligente, gerenciando a memória do seu aplicativo.
 
-## Qual a diferença entre o Modular e o bloc_pattern;
+## Qual a diferença entre o Flutter Modular e o bloc_pattern;
 
 Aprendemos muito com o bloc_pattern, e entendemos que a comunidade tem diversas preferências com relação a Gerência de Estado, então, até mesmo por uma questão de nomeclatura, decidimos tratar o Modular como uma evolução natural do bloc_pattern, a partir dai implementar o sistema de Rotas Dinâmicas que ficará muito popular graças ao Flutter Web. Rotas nomeadas são o futuro do Flutter, e estamos preparando para isso.
 
@@ -43,13 +43,13 @@ Abra o pubspec.yaml do seu Projeto e digite:
 
 ```
 dependencies:
-    modular:
+    flutter_modular:
 ```
 ou instale diretamente pelo Git para testar as novas funcionalidades e correções:
 
 ```
 dependencies:
-    modular:
+    flutter_modular:
         git:
             url: https://github.com/Flutterando/modular
 ```
@@ -63,7 +63,7 @@ Você precisa fazer algumas configurações iniciais.
 ```dart
 
 import 'package:flutter/material.dart';
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -108,7 +108,7 @@ class AppModule extends BrowserModule {
 ```dart
 import 'package:example/app/app_module.dart';
 import 'package:flutter/material.dart';
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 void main() => runApp(ModularWidget(module: AppModule()));
 ```
@@ -175,7 +175,7 @@ Vamos supor que para exemplo nós queremos recuperar o AppBloc dentro do HomePag
 
 ```dart
 //código do bloc
-import 'package:modular/modular.dart' show Disposable;
+import 'package:flutter_modular/flutter_modular.dart' show Disposable;
 
 //você pode herdar ou implementar de Disposable para configurar um dispose para sua classe, se não não tiver.
 class AppBloc extends Disposable {

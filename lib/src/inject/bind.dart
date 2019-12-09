@@ -1,4 +1,5 @@
-import '../../modular.dart';
+
+import 'package:flutter_modular/flutter_modular.dart';
 
 class Bind {
   final dynamic Function(Inject i) inject;

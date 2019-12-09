@@ -1,6 +1,6 @@
 import 'package:example/app/modules/home/home_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:modular/modular.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_module.dart';
 
