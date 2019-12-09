@@ -307,17 +307,6 @@ Another benefit you get when working with modules is to load them "lazily". This
 
 This is currently our roadmap, please feel free to request additions/changes.
 
-Feature	Progress
-	✅
-	✅
-Widget Consume for ChangeNotifier	✅
-Auto-dispose	✅
-	✅
-✅
-Multiple Routes	✅
-	✅
-	--
-
 | Feature                                   | Progress |
 | :-----------------------------------------| :------: |
 | DI by Module                              |    ✅    |
