@@ -1,9 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/src/interfaces/main_module.dart';
 
 class ModularWidget extends StatefulWidget {
 
-  final BrowserModule module;
+  final MainModule module;
 
   const ModularWidget({Key key, this.module}) : super(key: key);
 

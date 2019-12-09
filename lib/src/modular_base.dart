@@ -3,17 +3,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/routers/router.dart';
 
-class Modular {
-  static Map<String, CommonModule> _injectMap = {};
-  static CommonModule _initialModule;
+import 'interfaces/child_module.dart';
 
-  static init(CommonModule module) {
+class Modular {
+  static Map<String, ChildModule> _injectMap = {};
+  static ChildModule _initialModule;
+
+  static init(ChildModule module) {
     _initialModule = module;
     bindModule(module, "global==");
   }
 
   @visibleForTesting
-  static void bindModule(CommonModule module, String path) {
+  static void bindModule(ChildModule module, String path) {
     assert(module != null);
     String name = module.runtimeType.toString();
     if (!_injectMap.containsKey(name)) {
@@ -24,7 +26,7 @@ class Modular {
   }
 
   @visibleForTesting
-  static void removeModule(CommonModule module) {
+  static void removeModule(ChildModule module) {
     String name = module.runtimeType.toString();
     if (_injectMap.containsKey(name)) {
       _injectMap[name].cleanInjects();
@@ -58,7 +60,7 @@ class Modular {
     }
     Router route;
     var routeList = _initialModule.routers;
-    List<CommonModule> requestBind = [];
+    List<ChildModule> requestBind = [];
     paths.forEach((item) {
       item = "/$item";
 
