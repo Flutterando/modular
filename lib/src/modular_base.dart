@@ -105,6 +105,10 @@ class Modular {
       return null;
     }
 
+    if(settings.isInitialRoute) {
+      return _NoAnimationMaterialPageRoute(builder: (context) => router.child(context, settings.arguments));
+    }
+
     return pageRoute(
       (context) {
         Widget page = _DisposableWidget(
@@ -128,6 +132,25 @@ class Modular {
         return page;
       },
     );
+  }
+}
+
+class _NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
+  _NoAnimationMaterialPageRoute({
+    @required WidgetBuilder builder,
+    RouteSettings settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) : super(
+            builder: builder,
+            maintainState: maintainState,
+            settings: settings,
+            fullscreenDialog: fullscreenDialog);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return child;
   }
 }
 
