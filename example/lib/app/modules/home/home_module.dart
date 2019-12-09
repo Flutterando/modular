@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'home_bloc.dart';
 import 'home_widget.dart';
 
-class HomeModule extends CommonModule {
+class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
     Bind((i) => HomeBloc()),

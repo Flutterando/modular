@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/routers/router.dart';
 
-abstract class CommonModule {
+abstract class ChildModule {
   List<Bind> get binds;
   List<Router> get routers;
 

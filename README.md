@@ -84,6 +84,10 @@ Create a file to be your main module: (app_module.dart)
 // extends from MainModule
 class AppModule extends MainModule {
 
+//extends MainModule
+class AppModule extends MainModule {
+
+
   // here will be any class you want to inject into your project (eg bloc, dependency)
   @override
   List<Bind> get binds => [];
@@ -111,6 +115,7 @@ Ready! Your app is already set to Modular!
 Adding Routes #
 You can add routes to your module using the getter 'routers';
 
+```dart
 class AppModule extends MainModule {
 
  // here will be any class you want to inject into your project (eg bloc, dependency)
@@ -139,6 +144,9 @@ You can inject any class into your module using getter 'binds', for example
 
  classes BLoC ou ChangeNotifier
 
+class AppModule extends MainModule {
+
+```dart
 class AppModule extends MainModule {
 
  // here will be any class you want to inject into your project (eg bloc, dependency)
@@ -286,6 +294,7 @@ class HomeModule extends ChildModule {
 }
 From this you can call your modules on the main module route.
 
+```dart
 class AppModule extends MainModule {
 
   @override

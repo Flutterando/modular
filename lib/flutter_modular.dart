@@ -1,8 +1,8 @@
 library flutter_modular;
 
 export 'src/modular_base.dart';
-export 'src/interfaces/common_module.dart';
-export 'src/interfaces/browser_module.dart';
+export 'src/interfaces/child_module.dart';
+export 'src/interfaces/main_module.dart';
 export 'src/interfaces/disposable.dart';
 export 'src/inject/inject.dart';
 export 'src/inject/bind.dart';

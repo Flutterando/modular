@@ -5,7 +5,7 @@ import 'app_bloc.dart';
 import 'app_widget.dart';
 import 'modules/home/home_module.dart';
 
-class AppModule extends BrowserModule {
+class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
         Bind((i) => AppBloc()),
