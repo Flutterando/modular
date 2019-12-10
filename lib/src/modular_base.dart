@@ -35,12 +35,12 @@ class Modular {
   }
 
   static T getInjectableObject<T>(String tag, {Map<String, dynamic> params}) {
-    T value = _injectMap[tag].get<T>() ?? _injectMap["global=="].get<T>();
+    T value = _injectMap[tag].get<T>(params) ?? _injectMap["global=="].get<T>(params);
     if (value == null) {
       throw Exception('${T.toString()} not found in module $tag');
     }
 
-    return _injectMap[tag].get<T>(params);
+    return value;
   }
 
   static T removeInjectableObject<T>(String tag) {

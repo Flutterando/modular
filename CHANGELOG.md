@@ -1,4 +1,4 @@
-## [0.0.6] - 9 Dec 2019
+## [0.0.6+1] - 9 Dec 2019
 
 * Dynamic Router
 * Added Doc Translation
