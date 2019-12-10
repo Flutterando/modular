@@ -35,7 +35,8 @@ class Modular {
   }
 
   static T getInjectableObject<T>(String tag, {Map<String, dynamic> params}) {
-    T value = _injectMap[tag].get<T>(params) ?? _injectMap["global=="].get<T>(params);
+    T value =
+        _injectMap[tag].get<T>(params) ?? _injectMap["global=="].get<T>(params);
     if (value == null) {
       throw Exception('${T.toString()} not found in module $tag');
     }
@@ -60,12 +61,30 @@ class Modular {
 
     return newUrl.join("/");
   }
+  @visibleForTesting
+  static dynamic convertType(String value){
+    if(int.tryParse(value) != null ) {
+      return int.parse(value);
+    } else if(double.tryParse(value) != null) {
+      return double.parse(value);
+    } else if(value.toLowerCase() == 'true') {
+      return true;
+    } else if(value.toLowerCase() == 'false') {
+      return false;
+    }  else {
+      return value;
+    }
+  }
 
   @visibleForTesting
-  static bool searchRoute(Router router, String path) {
-    if (router.routerName.contains('/:')) {
+  static bool searchRoute(Router router, String routeNamed, String path) {
+    if (routeNamed.split('/').length != path.split('/').length) {
+      return false;
+    }
+
+    if (routeNamed.contains('/:')) {
       RegExp regExp = RegExp(
-        prepareToRegex(router.routerName),
+        "^${prepareToRegex(routeNamed)}\$",
         caseSensitive: true,
       );
       var r = regExp.firstMatch(path);
@@ -74,8 +93,13 @@ class Modular {
         Map<String, dynamic> params = {};
         int count = 1;
         for (var key in r?.groupNames) {
-          params[key] = r?.group(count);
+          routeNamed = routeNamed.replaceFirst(':$key', r?.group(count));
+          params[key] = Modular.convertType("${r?.group(count)}");
           count++;
+        }
+        if (routeNamed != path) {
+          router.params = null;
+          return false;
         }
         router.params = params;
         return true;
@@ -84,7 +108,40 @@ class Modular {
         return false;
       }
     }
-    return router.routerName == path;
+    return routeNamed == path;
+  }
+
+  static Router _searchInModule(
+      ChildModule module, String routerName, String path) {
+    
+    path = "/$path".replaceAll('//', '/');
+
+    for (var route in module.routers) {
+      String tempRouteName = (routerName + route.routerName).replaceFirst('//', '/');
+      if (route.child == null) {
+        routerName = (routerName + route.routerName).replaceFirst('//', '/');
+        Router router;
+        if(routerName == path){
+          router = route.module.routers[0];
+          if(router.module != null) {
+            routerName = (routerName + route.routerName).replaceFirst('//', '/');
+            router = _searchInModule(route.module, routerName, path);
+          }
+        } else {
+          router = _searchInModule(route.module, routerName, path);
+        }
+        
+        if (router != null) {
+          bindModule(route.module, path);
+          return router;
+        }
+      } else {
+        if (searchRoute(route, tempRouteName, path)) {
+          return route;
+        }
+      }
+    }
+    return null;
   }
 
   @visibleForTesting
@@ -92,44 +149,53 @@ class Modular {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
-
-    List<String> paths = path.split('/');
-
-    if (paths.first.isEmpty) {
-      paths.removeAt(0);
-    }
-    Router route;
-    var module = _initialModule;
-    List<ChildModule> requestBind = [];
-    for(var i = 0; i < paths.length; i++){
-      String item = paths[i];
-      item = "/$item";
-
-      if (route == null)
-        route = module.routers.firstWhere((router) => searchRoute(router, item),
-            orElse: () => _initialModule == module ? module.routers[0] : null);
-      else {
-        item = route.routerName + item;
-        route = module.routers.firstWhere((router) => searchRoute(router, item),
-            orElse: () => null);
-      }
-
-      if (route?.module != null) {
-        final m = route.module;
-        requestBind.add(m);
-        module = m;
-        route = route.module.routers.firstWhere(
-            (router) => searchRoute(router, item),
-            orElse: () => i == (paths.length - 1) ? route.module.routers[0] : null);
-      }
-    }
-
-    requestBind.forEach((module) {
-      bindModule(module, path);
-    });
-
+    Router route = _searchInModule(_initialModule, "", path);
     return route;
   }
+
+  // @visibleForTesting
+  // static Router selectRoute(String path) {
+  //   if (path.isEmpty) {
+  //     throw Exception("Router can not be empty");
+  //   }
+
+  //   List<String> paths = path.split('/');
+
+  //   if (paths.first.isEmpty) {
+  //     paths.removeAt(0);
+  //   }
+  //   Router route;
+  //   var module = _initialModule;
+  //   List<ChildModule> requestBind = [];
+  //   for(var i = 0; i < paths.length; i++){
+  //     String item = paths[i];
+  //     item = "/$item";
+
+  //     if (route == null)
+  //       route = module.routers.firstWhere((router) => searchRoute(router, item),
+  //           orElse: () => _initialModule == module ? module.routers[0] : null);
+  //     else {
+  //       item = route.routerName + item;
+  //       route = module.routers.firstWhere((router) => searchRoute(router, item),
+  //           orElse: () => null);
+  //     }
+
+  //     if (route?.module != null) {
+  //       final m = route.module;
+  //       requestBind.add(m);
+  //       module = m;
+  //       route = route.module.routers.firstWhere(
+  //           (router) => searchRoute(router, item),
+  //           orElse: () => i == (paths.length - 1) ? route.module.routers[0] : null);
+  //     }
+  //   }
+
+  //   requestBind.forEach((module) {
+  //     bindModule(module, path);
+  //   });
+
+  //   return route;
+  // }
 
   static MaterialPageRoute _defaultPageRouter(
       Widget Function(BuildContext) builder) {

@@ -19,10 +19,7 @@ void main() {
     var router = Modular.selectRoute("/home");
       expect(router.routerName, '/');
     });
-    test('Test Get module sub Router', () {
-      expect(Modular.selectRoute("/home/list"), isA<Router>());
-    });
-
+ 
     test('router empty', () {
       expect(() => Modular.selectRoute(""), throwsException);
     });
@@ -39,16 +36,29 @@ void main() {
       var router = Router('/home/list/:id');
 
       expect(
-          Modular.searchRoute(router, "/home/list/1"), true);
-      expect(router.params['id'], '1');
+          Modular.searchRoute(router, "/home/list/:id", "/home/list/1"), true);
+      expect(router.params['id'], 1);
 
-      expect(Modular.searchRoute(Router('/home/list'), "/home/list/1"), false);
+      expect(Modular.searchRoute(Router('/home/list'), "/home/list",  "/home/list/1"), false);
     });
 
     test('router with params get', () {
-       expect(Modular.selectRoute("/list/1"), isA<Router>());
-       expect(Modular.selectRoute("/home/list/1"), isA<Router>());
+       expect(Modular.selectRoute("/list/1/2"), isA<Router>());
+       expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
        expect(Modular.selectRoute("/home/test"), null);
+    });
+    test('router with params get multiple', () {
+       expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
+    });
+    test('router with params get multiple 2 modules', () {
+       expect(Modular.selectRoute("/home/product/"), isA<Router>());
+    });
+
+    test('Convert type', () {
+       expect(Modular.convertType("value"), isA<String>());
+       expect(Modular.convertType("1"), isA<int>());
+       expect(Modular.convertType("1.1"), isA<double>());
+       expect(Modular.convertType("true"), isA<bool>());
     });
   });
 }

@@ -12,8 +12,9 @@ class HomeModule extends ChildModule {
 
   @override
   List<Router> get routers => [
-    Router("/", child: (_, args) => HomeWidget()),
+    Router("/:id/:id2", child: (_, args) => HomeWidget()),
     Router("/list", child: (_, args) => ListWidget()),
+    Router("/again", module: HomeModule()),
     Router("/list/:id", child: (_, args) => ListWidget(param: args.params['id'],)),
   ];
 
