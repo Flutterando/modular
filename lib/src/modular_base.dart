@@ -40,7 +40,7 @@ class Modular {
       throw Exception('${T.toString()} not found in module $tag');
     }
 
-    return _injectMap[tag].get<T>();
+    return _injectMap[tag].get<T>(params);
   }
 
   static T removeInjectableObject<T>(String tag) {
