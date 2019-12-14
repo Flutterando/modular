@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/routers/router.dart';
 
 import 'interfaces/child_module.dart';
+import 'interfaces/route_guard.dart';
 
 class Modular {
   static Map<String, ChildModule> _injectMap = {};
@@ -61,17 +62,18 @@ class Modular {
 
     return newUrl.join("/");
   }
+
   @visibleForTesting
-  static dynamic convertType(String value){
-    if(int.tryParse(value) != null ) {
+  static dynamic convertType(String value) {
+    if (int.tryParse(value) != null) {
       return int.parse(value);
-    } else if(double.tryParse(value) != null) {
+    } else if (double.tryParse(value) != null) {
       return double.parse(value);
-    } else if(value.toLowerCase() == 'true') {
+    } else if (value.toLowerCase() == 'true') {
       return true;
-    } else if(value.toLowerCase() == 'false') {
+    } else if (value.toLowerCase() == 'false') {
       return false;
-    }  else {
+    } else {
       return value;
     }
   }
@@ -113,35 +115,55 @@ class Modular {
 
   static Router _searchInModule(
       ChildModule module, String routerName, String path) {
-    
     path = "/$path".replaceAll('//', '/');
 
     for (var route in module.routers) {
-      String tempRouteName = (routerName + route.routerName).replaceFirst('//', '/');
+      String tempRouteName =
+          (routerName + route.routerName).replaceFirst('//', '/');
+      List<RouteGuard> masterRouteGuards;
       if (route.child == null) {
-        routerName = (routerName + route.routerName).replaceFirst('//', '/');
+        masterRouteGuards = route.guards;
+        var _routerName =
+            (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
-        if(routerName == path){
+        if (_routerName == path || _routerName == "$path/") {
           router = route.module.routers[0];
-          if(router.module != null) {
-            routerName = (routerName + route.routerName).replaceFirst('//', '/');
-            router = _searchInModule(route.module, routerName, path);
+          if (router.module != null) {
+            var _routerName =
+                (routerName + route.routerName).replaceFirst('//', '/');
+            router = _searchInModule(route.module, _routerName, path);
           }
         } else {
-          router = _searchInModule(route.module, routerName, path);
+          router = _searchInModule(route.module, _routerName, path);
         }
-        
+
         if (router != null) {
           bindModule(route.module, path);
           return router;
         }
       } else {
         if (searchRoute(route, tempRouteName, path)) {
-          return route;
+          var guards = _prepareGuardList(masterRouteGuards, route.guards);
+            var guard = guards.length == 0 ? null : guards.firstWhere(
+                (guard) => guard.canActivate(path) == false,
+                orElse: null);
+            return guard == null ? route : null;
         }
       }
     }
     return null;
+  }
+
+  static List<RouteGuard> _prepareGuardList(
+      List<RouteGuard> moduleGuard, List<RouteGuard> routeGuard) {
+    if (moduleGuard == null) {
+      moduleGuard = [];
+    }
+    if (routeGuard == null) {
+      routeGuard = [];
+    }
+
+    return List<RouteGuard>.from([...moduleGuard, ...routeGuard]);
   }
 
   @visibleForTesting

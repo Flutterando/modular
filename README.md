@@ -165,6 +165,38 @@ Navigator.pushNamed(context, '/product/1'); //args.params['id']) gonna be 1
 
 ```
 
+## Route Guard
+
+We may protect our routes with middleware that will verify that the route is available within a given Route.
+First create a RouteGuard:
+```dart
+class MyGuard implements RouteGuard {
+  @override
+  bool canActivate(String url) {
+    if(url != '/admin'){
+      //code of authorization
+      return true;
+    } else {
+      //access denied
+      return false
+    }
+  }
+}
+
+```
+Now put in the 'guards' property of your Router.
+
+```dart
+  @override
+  List<Router> get routers => [
+        Router("/", module: HomeModule()]),
+        Router("/admin", module: AdminModule(), guards: [MyGuard()]),
+      ];
+
+```
+
+If placed on a module route, RouterGuard will be global to that route.
+
 ## Flutter Web url Routes
 
 The Routing System also recognizes what is typed in the website url (flutter web) so what you type in the browser url will open in the app. We hope this makes it easier for Flutter Web sites to make SEO more unique.

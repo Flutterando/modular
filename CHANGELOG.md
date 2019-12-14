@@ -1,3 +1,7 @@
+## [0.0.8] - 13 Dec 2019
+
+* Route Guard
+
 ## [0.0.7] - 10 Dec 2019
 
 * Dynamic Router

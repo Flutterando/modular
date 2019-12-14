@@ -60,5 +60,11 @@ void main() {
        expect(Modular.convertType("1.1"), isA<double>());
        expect(Modular.convertType("true"), isA<bool>());
     });
+
+
+
+    test('RouteGuard test', () {
+       expect(Modular.selectRoute("/forbidden"), null);
+    });
   });
 }

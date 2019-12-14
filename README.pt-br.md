@@ -170,6 +170,38 @@ Navigator.pushNamed(context, '/product/1'); //args.params['id']) será 1
 
 ```
 
+## Route Guard
+
+Podemos proteger nossas rotas com middlewares que verificará se a rota está disponível dentro de uma determinada Rota.
+Primeiro crie um RouteGuard:
+```dart
+class MyGuard implements RouteGuard {
+  @override
+  bool canActivate(String url) {
+    if(url != '/admin'){
+      //code of authorization
+      return true;
+    } else {
+      //access denied
+      return false
+    }
+  }
+}
+
+```
+Agora coloque na propriedade 'guards' da sua Router.
+
+```dart
+  @override
+  List<Router> get routers => [
+        Router("/", module: HomeModule()]),
+        Router("/admin", module: AdminModule(), guards: [MyGuard()]),
+      ];
+
+```
+
+Se colocar em uma rota módulo, o RouterGuard ficará global para aquela rota.
+
 ## Rotas na url com Flutter Web
 
 O Sistema de rotas também reconhece o que é digitado na url do site (flutter web) então o que for digitado na url do browser será aberto no aplicativo. Esperamos que isso facilite o SEO para os sites feito em Flutter Web, fazendo com que tenha icones mais únicos.
