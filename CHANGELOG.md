@@ -1,3 +1,7 @@
+## [0.0.9] - 14 Dec 2019
+
+* Added logo
+
 ## [0.0.8] - 13 Dec 2019
 
 * Route Guard
