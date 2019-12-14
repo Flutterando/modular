@@ -1,6 +1,6 @@
 # Flutter Modular
 
-Estrutura de projeto inteligente.
+![](modular.png)
 
 *Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
 
