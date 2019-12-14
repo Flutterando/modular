@@ -1,6 +1,6 @@
 # Flutter Modular
 
-![](modular.png)
+![](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 
 *Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
 
