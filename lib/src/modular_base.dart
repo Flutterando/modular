@@ -5,6 +5,7 @@ import 'package:flutter_modular/src/routers/router.dart';
 
 import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
+import 'transitions/transitions.dart';
 
 class Modular {
   static Map<String, ChildModule> _injectMap = {};
@@ -16,7 +17,7 @@ class Modular {
   }
 
   @visibleForTesting
-  static void bindModule(ChildModule module, String path) {
+  static void bindModule(ChildModule module, [String path]) {
     assert(module != null);
     String name = module.runtimeType.toString();
     if (!_injectMap.containsKey(name)) {
@@ -138,16 +139,22 @@ class Modular {
         }
 
         if (router != null) {
+          if (router.transition == TransitionType.defaultTransition) {
+            router = router.copyWith(
+              transition: route.transition,
+            );
+          }
           bindModule(route.module, path);
           return router;
         }
       } else {
         if (searchRoute(route, tempRouteName, path)) {
           var guards = _prepareGuardList(masterRouteGuards, route.guards);
-            var guard = guards.length == 0 ? null : guards.firstWhere(
-                (guard) => guard.canActivate(path) == false,
-                orElse: null);
-            return guard == null ? route : null;
+          var guard = guards.length == 0
+              ? null
+              : guards.firstWhere((guard) => guard.canActivate(path) == false,
+                  orElse: null);
+          return guard == null ? route : null;
         }
       }
     }
@@ -175,54 +182,28 @@ class Modular {
     return route;
   }
 
-  // @visibleForTesting
-  // static Router selectRoute(String path) {
-  //   if (path.isEmpty) {
-  //     throw Exception("Router can not be empty");
-  //   }
-
-  //   List<String> paths = path.split('/');
-
-  //   if (paths.first.isEmpty) {
-  //     paths.removeAt(0);
-  //   }
-  //   Router route;
-  //   var module = _initialModule;
-  //   List<ChildModule> requestBind = [];
-  //   for(var i = 0; i < paths.length; i++){
-  //     String item = paths[i];
-  //     item = "/$item";
-
-  //     if (route == null)
-  //       route = module.routers.firstWhere((router) => searchRoute(router, item),
-  //           orElse: () => _initialModule == module ? module.routers[0] : null);
-  //     else {
-  //       item = route.routerName + item;
-  //       route = module.routers.firstWhere((router) => searchRoute(router, item),
-  //           orElse: () => null);
-  //     }
-
-  //     if (route?.module != null) {
-  //       final m = route.module;
-  //       requestBind.add(m);
-  //       module = m;
-  //       route = route.module.routers.firstWhere(
-  //           (router) => searchRoute(router, item),
-  //           orElse: () => i == (paths.length - 1) ? route.module.routers[0] : null);
-  //     }
-  //   }
-
-  //   requestBind.forEach((module) {
-  //     bindModule(module, path);
-  //   });
-
-  //   return route;
-  // }
-
   static MaterialPageRoute _defaultPageRouter(
       Widget Function(BuildContext) builder) {
     return MaterialPageRoute(builder: builder);
   }
+
+  static Map<
+      TransitionType,
+      PageRouteBuilder Function(
+          Widget Function(BuildContext, ModularArguments) builder,
+          ModularArguments args)> _transitions = {
+    TransitionType.fadeIn: fadeInTransition,
+    TransitionType.noTransition: noTransition,
+    TransitionType.rightToLeft: rightToLeft,
+    TransitionType.leftToRight: leftToRight,
+    TransitionType.upToDown: upToDown,
+    TransitionType.downToUp: downToUp,
+    TransitionType.scale: scale,
+    TransitionType.rotate: rotate,
+    TransitionType.size: size,
+    TransitionType.rightToLeftWithFade: rightToLeftWithFade,
+    TransitionType.leftToRightWithFade: leftToRightWithFade,
+  };
 
   static Route<dynamic> generateRoute(RouteSettings settings,
       {Function(Widget Function(BuildContext) builder) pageRoute =
@@ -240,29 +221,33 @@ class Modular {
           builder: (context) => router.child(context, args));
     }
 
-    return pageRoute(
-      (context) {
-        Widget page = _DisposableWidget(
-          child: router.child(context, args),
-          dispose: () {
-            final List<String> trash = [];
-            _injectMap.forEach((key, module) {
-              module.paths.removeWhere((v) => v == path);
-              if (module.paths.length == 0) {
-                module.cleanInjects();
-                trash.add(key);
-                print("-- ${module.runtimeType.toString()} DISPOSED");
-              }
-            });
+    if (router.transition == TransitionType.defaultTransition) {
+      return pageRoute(
+        (context) {
+          Widget page = _DisposableWidget(
+            child: router.child(context, args),
+            dispose: () {
+              final List<String> trash = [];
+              _injectMap.forEach((key, module) {
+                module.paths.removeWhere((v) => v == path);
+                if (module.paths.length == 0) {
+                  module.cleanInjects();
+                  trash.add(key);
+                  print("-- ${module.runtimeType.toString()} DISPOSED");
+                }
+              });
 
-            trash.forEach((key) {
-              _injectMap.remove(key);
-            });
-          },
-        );
-        return page;
-      },
-    );
+              trash.forEach((key) {
+                _injectMap.remove(key);
+              });
+            },
+          );
+          return page;
+        },
+      );
+    }
+
+    return _transitions[router.transition](router.child, args);
   }
 }
 

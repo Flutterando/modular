@@ -1,3 +1,7 @@
+## [0.0.11] - 15 Dec 2019
+
+* Added Route Transitions.
+
 ## [0.0.10] - 14 Dec 2019
 
 * Added logo

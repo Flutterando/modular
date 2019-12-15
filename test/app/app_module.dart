@@ -15,8 +15,13 @@ class AppModule extends MainModule {
 
   @override
   List<Router> get routers => [
-        Router("/forbidden", child: (_, args) => ForbiddenWidget(), guards: [MyGuard()]),
-        Router("/", module: HomeModule()),
+        Router(
+          "/forbidden",
+          child: (_, args) => ForbiddenWidget(),
+          guards: [MyGuard()],
+          transition: TransitionType.fadeIn,
+        ),
+        Router("/", module: HomeModule(), transition: TransitionType.fadeIn,),
         Router("/home", module: HomeModule()),
       ];
 

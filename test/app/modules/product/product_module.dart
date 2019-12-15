@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'product_bloc.dart';
-import 'product_widget.dart';
 
 
 class ProductModule extends ChildModule {

@@ -12,7 +12,7 @@ class HomeModule extends ChildModule {
 
   @override
   List<Router> get routers => [
-    Router("/", child: (_, args) => HomeWidget()),
+    Router("/", child: (_, args) => HomeWidget(), transition: TransitionType.fadeIn,),
     Router("/list/:id/:id2", child: (_, args) => HomeWidget()),
     Router("/product", module: ProductModule()),
   ];
