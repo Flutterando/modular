@@ -44,7 +44,7 @@ abstract class ChildModule {
       bind.close();
     } else {
       try {
-        bind.dispose();
+        bind?.dispose();
       } catch (e) {}
     }
   }

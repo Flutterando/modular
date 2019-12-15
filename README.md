@@ -84,10 +84,6 @@ Create a file to be your main module: (app_module.dart)
 // extends from MainModule
 class AppModule extends MainModule {
 
-//extends MainModule
-class AppModule extends MainModule {
-
-
   // here will be any class you want to inject into your project (eg bloc, dependency)
   @override
   List<Bind> get binds => [];
@@ -110,9 +106,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 void main() => runApp(ModularWidget(module: AppModule()));
+```
 Ready! Your app is already set to Modular!
 
-Adding Routes #
+## Adding Routes
 You can add routes to your module using the getter 'routers';
 
 ```dart
