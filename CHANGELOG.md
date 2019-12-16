@@ -1,4 +1,4 @@
-## [0.0.11] - 15 Dec 2019
+## [0.0.12] - 15 Dec 2019
 
 * Added Route Transitions.
 

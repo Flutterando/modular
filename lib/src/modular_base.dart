@@ -247,7 +247,26 @@ class Modular {
       );
     }
 
-    return _transitions[router.transition](router.child, args);
+    return _transitions[router.transition]((context, args) {
+      return _DisposableWidget(
+        child: router.child(context, args),
+        dispose: () {
+          final List<String> trash = [];
+          _injectMap.forEach((key, module) {
+            module.paths.removeWhere((v) => v == path);
+            if (module.paths.length == 0) {
+              module.cleanInjects();
+              trash.add(key);
+              print("-- ${module.runtimeType.toString()} DISPOSED");
+            }
+          });
+
+          trash.forEach((key) {
+            _injectMap.remove(key);
+          });
+        },
+      );
+    }, args);
   }
 }
 
