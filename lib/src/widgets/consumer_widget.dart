@@ -30,10 +30,11 @@ class _ConsumerWidgetState<T extends ChangeNotifier>
 
   @override
   void initState() {
+    super.initState();
+
     _inject = widget.inject ?? Inject();
     value = _inject.get<T>();
     value.addListener(listener);
-    super.initState();
   }
 
   @override
