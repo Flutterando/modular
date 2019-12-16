@@ -18,7 +18,7 @@ The Modular came up prepared for adapt to any state management approach to its s
 We learned a lot from bloc_pattern, and we understand that the community has a lot of preferences regarding State Management, so even for the sake of nomenclature, we decided to treat Modular as a natural evolution of bloc_pattern and from there implement the system of " Dynamic Routes "that will become very popular with Flutter Web. Named routes are the future of Flutter, and we are preparing for it.
 
 
-## Will bloc_pattern be depreciated?
+## Will bloc_pattern be deprecated?
 
 Nope! We will continue to support and improve it. Although the migration to Modular will be very simple as well.
 
