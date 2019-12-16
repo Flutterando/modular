@@ -69,9 +69,9 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //defina sua rota inicial
+      // set your initial route
       initialRoute: "/",
-      //adicione para que o Modular possa gerenciar o sistema de rotas.
+      // add Modular to manage the routing system
       onGenerateRoute: Modular.generateRoute,
     );
   }
@@ -225,8 +225,8 @@ class AppModule extends MainModule {
  // here will be any class you want to inject into your project (eg bloc, dependency)
   @override
   List<Bind> get binds => [
-    Bind((i) => AppBloc()), //usando bloc
-    Bind((i) => Counter()), //usando ChangeNotifier
+    Bind((i) => AppBloc()), // using bloc
+    Bind((i) => Counter()), // using ChangeNotifier
   ];
 
 // here will be the routes of your module

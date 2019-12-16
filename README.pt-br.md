@@ -170,7 +170,7 @@ Navigator.pushNamed(context, '/product/1'); //args.params['id']) será 1
 
 ```
 
-## Route Guard
+## Proteção de Rotas
 
 Podemos proteger nossas rotas com middlewares que verificará se a rota está disponível dentro de uma determinada Rota.
 Primeiro crie um RouteGuard:
@@ -183,7 +183,7 @@ class MyGuard implements RouteGuard {
       return true;
     } else {
       //access denied
-      return false
+      return false;
     }
   }
 }
@@ -194,7 +194,7 @@ Agora coloque na propriedade 'guards' da sua Router.
 ```dart
   @override
   List<Router> get routers => [
-        Router("/", module: HomeModule()]),
+        Router("/", module: HomeModule()),
         Router("/admin", module: AdminModule(), guards: [MyGuard()]),
       ];
 
@@ -223,7 +223,7 @@ As rotas dinâmicas também se aplicam nesse caso.
 ```
 https://flutter-website.com/#/product/1
 ```
-isso abrirar a view Product e args.params['id']) será igual a 1.
+Isso abrira a view Product e `args.params(['id'])` será igual a 1.
 
 
 ## Injeção de dependências
@@ -253,7 +253,7 @@ class AppModule extends MainModule {
 }
 ```
 
-Vamos supor que para exemplo nós queremos recuperar o AppBloc dentro do HomePage
+Vamos supor que por exemplo nós queremos recuperar o AppBloc dentro do HomePage.
 
 ```dart
 //código do bloc
@@ -282,13 +282,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-  //você pode usar o objeto Inject para recuperar.
-  AppBloc appBloc = Inject<AppModule>.of().get();
-  ...
-
+    //você pode usar o objeto Inject para recuperar.
+    AppBloc appBloc = Inject<AppModule>.of().get();
+    //...
+  }
+}
 ```
 
-ATENÇÂO: Quando recuperar uma classe usando o método get() do Inject, ele primeiro procurará no módulo que foi solicitado, se não encontrá, ele busca no módulo principal. Ainda falaremos sobre a criação de módulos filhos nessa documentação.
+ATENÇÂO: Quando recuperar uma classe usando o método get() do Inject, ele primeiro procurará no módulo que foi solicitado, se não encontrar, ele busca no módulo principal. Ainda falaremos sobre a criação de módulos filhos nessa documentação.
 
 ## Usando o InjectMixin para recuperar suas Classes
 
@@ -300,19 +301,21 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
   @override
   Widget build(BuildContext context) {
 
-  //com mixin você adiciona o método get direto na sua view.
-  AppBloc appBloc = get();
+    //com mixin você adiciona o método get direto na sua view.
+    AppBloc appBloc = get();
 
-  //uma outra forma de recuperar
-  final appBloc = get<AppBloc>();
-  ...
+    //uma outra forma de recuperar
+    final appBloc = get<AppBloc>();
+    //...
+  }
+}
 ```
 
 ## Consumindo uma Classe ChangeNotifier
 
-Como vimos antes, o InjectMixin nos permite mesclar alguns novos métodos na nossa view. Se estiver usando o Mixin além do método get(), você ganha o método **consumer()** e reconstrei seus filhos toda vez que uma classe é notificada com uma mudança:
+Como vimos antes, o InjectMixin nos permite mesclar alguns novos métodos na nossa view. Se estiver usando o Mixin além do método `get()`, você ganha o método `consumer()` e reconstroi seus filhos toda vez que uma classe é notificada com uma mudança:
 
-exemplo de uma Classe ChangeNotifier:
+Exemplo de uma classe `ChangeNotifier`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -327,7 +330,7 @@ class Counter extends ChangeNotifier {
 }
 ```
 
-Com o InjectMixin integrado, você pode usar o método consumer para gerenciar o estado de um bloco de widget.
+Com o `InjectMixin` integrado, você pode usar o método consumer para gerenciar o estado de um bloco de widget.
 
 ```dart
 
@@ -359,9 +362,9 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
 
 ```
 
-## Criando Módulos Filhos.
+## Criando Módulos Filhos
 
-Você pode criar outros módulos no seu projeto, para isso, em vez de herdar de BrowseModule, deve-se herda de CommonModule.
+Você pode criar outros módulos no seu projeto, para isso, em vez de herdar de `BrowseModule`, deve-se herdar de `CommonModule`.
 
 ```dart
 class HomeModule extends ChildModule {
@@ -381,7 +384,7 @@ class HomeModule extends ChildModule {
 }
 ```
 
-A partir disso você pode chamar seu módulos na rota do módulo principal
+A partir disso você pode chamar seus módulos na rota do módulo principal.
 
 ```dart
 class AppModule extends MainModule {
@@ -389,23 +392,23 @@ class AppModule extends MainModule {
   @override
   List<Router> get routers => [
         Router("/home", module: HomeModule()),
-        ...
+        //...
       ];
-
-...
+}
+//...
 ```
 
-Pense em dividir seu código em módulos como por exemplo, LoginModule, e dentro dele colocar as rotas relacionadas a esse módulo. Ficará muito mais fácil a manutenção e o compartilhamento do código em outro projeto.
+Pense em dividir seu código em módulos como por exemplo, `LoginModule`, e dentro dele colocar as rotas relacionadas a esse módulo. Ficará muito mais fácil a manutenção e o compartilhamento do código em outro projeto.
 
 ## Lazy Loading
 
-Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando vc navegar para de um módulo, e assim que sair desse módulo, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de dispose() (se disponível) em cada classe injetada referênte a aquele módulo.
+Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando vc navegar para um módulo, e assim que sair desse módulo, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte a aquele módulo.
 
 ## Roadmap
 
-This is currently our roadmap, please feel free to request additions/changes.
+Este é o nosso mapa, sinta-se a vontade para requisitar alterações.
 
-| Feature                                | Progress |
+| Funcionalidades                        | Progresso |
 | :------------------------------------- | :------: |
 | DI por Módulo                          |    ✅    |
 | Rotas por Módulo                       |    ✅    |
@@ -417,10 +420,10 @@ This is currently our roadmap, please feel free to request additions/changes.
 | Passar argumentos por rota             |    ✅    |
 | Parâmetros de url por rota             |    ✅    |
 
-## Features and bugs
+## Funcionalidades e Bugs
 
-Please send feature requests and bugs at the [issue tracker](https://github.com/Flutterando/modular/issues).
+Por favor envie pedido de funcionalidades no [rastreador de problemas](https://github.com/Flutterando/modular/issues).
 
-Created from templates made available by Stagehand under a BSD-style
+Criado a partir de modelos disponibilizados pelo Stagehand sob um estilo BSD
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
 
