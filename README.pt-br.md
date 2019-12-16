@@ -112,7 +112,7 @@ import 'package:example/app/app_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-void main() => runApp(ModularWidget(module: AppModule()));
+void main() => runApp(ModularApp(module: AppModule()));
 ```
 
 Pronto! Seu aplicativo já está configurado para Modular!
@@ -201,6 +201,18 @@ Agora coloque na propriedade 'guards' da sua Router.
 ```
 
 Se colocar em uma rota módulo, o RouterGuard ficará global para aquela rota.
+
+## Animação para Transição de Rota
+
+Você pode escolher qual tipo de animação deseja setando o parametro **transition** do Router usando o enum **TransitionType**.
+
+```dart
+Router("/product", 
+        module: AdminModule(),
+        transition: TransitionType.fadeIn), //use for change transition
+```
+
+Se usar o transition em um módulo, todas as rotas desse módulo herdarão essa animação de transição.
 
 ## Rotas na url com Flutter Web
 

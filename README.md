@@ -105,7 +105,7 @@ import 'package:example/app/app_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-void main() => runApp(ModularWidget(module: AppModule()));
+void main() => runApp(ModularApp(module: AppModule()));
 ```
 Ready! Your app is already set to Modular!
 
@@ -193,6 +193,18 @@ Now put in the 'guards' property of your Router.
 ```
 
 If placed on a module route, RouterGuard will be global to that route.
+
+## Route Transition Animation
+
+You can choose which type of animation you want by setting the Router's ** transition ** parameter using the ** TransitionType ** enum.
+
+```dart
+Router("/product", 
+        module: AdminModule(),
+        transition: TransitionType.fadeIn), //use for change transition
+```
+
+If you use transition in a module, all routes in that module will inherit this transition animation.
 
 ## Flutter Web url Routes
 
