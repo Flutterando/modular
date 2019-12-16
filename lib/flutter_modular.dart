@@ -8,5 +8,5 @@ export 'src/interfaces/route_guard.dart';
 export 'src/inject/inject.dart';
 export 'src/inject/bind.dart';
 export 'src/routers/router.dart';
-export 'src/widgets/module_widget.dart';
+export 'src/widgets/modular_app.dart';
 export 'src/widgets/consumer_widget.dart';
