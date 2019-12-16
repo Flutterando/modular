@@ -2,16 +2,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/interfaces/main_module.dart';
 
-class ModularWidget extends StatefulWidget {
+class ModularApp extends StatefulWidget {
   final MainModule module;
 
-  const ModularWidget({Key key, this.module}) : super(key: key);
+  const ModularApp({Key key, this.module}) : super(key: key);
 
   @override
-  _ModularWidgetState createState() => _ModularWidgetState();
+  _ModularAppState createState() => _ModularAppState();
 }
 
-class _ModularWidgetState extends State<ModularWidget> {
+class _ModularAppState extends State<ModularApp> {
   @override
   void initState() {
     super.initState();

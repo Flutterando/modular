@@ -8,7 +8,7 @@ main() {
 
   group("Init module widget", () {
     testWidgets('ModularWidget', (WidgetTester tester) async {
-      await tester.pumpWidget(ModularWidget(module: AppModule(),));
+      await tester.pumpWidget(ModularApp(module: AppModule(),));
       final textInject = find.text('testing inject');
       expect(textInject, findsOneWidget);
     });
