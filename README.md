@@ -35,7 +35,11 @@ Here are our main focuses with this package.
 - Dynamic Routes Control.
 - Modularization of Code.
 
-## Getting started with Modular
+## Exemplos
+
+- [Github Search](https://github.com/Flutterando/github_search)
+
+# Getting started with Modular
 
 ## Installation
 

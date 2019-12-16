@@ -1,4 +1,4 @@
-## [0.1.0] - 15 Dec 2019
+## [0.1.0+1] - 16 Dec 2019
 
 * Added Route Transitions.
 * Change ModularWidget to ModularApp.

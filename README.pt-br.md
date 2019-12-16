@@ -37,6 +37,11 @@ Aqui estão nossos focos principais com o package.
 - Modularização de Código.
 
 
+## Exemplos
+
+- [Github Search](https://github.com/Flutterando/github_search)
+
+
 # Começando com o Modular
 
 ## Instalação
@@ -419,6 +424,7 @@ Este é o nosso mapa, sinta-se a vontade para requisitar alterações.
 | Rotas multiplas                        |    ✅    |
 | Passar argumentos por rota             |    ✅    |
 | Parâmetros de url por rota             |    ✅    |
+| Animação de Transição de Rota          |    ✅    |
 
 ## Funcionalidades e Bugs
 
