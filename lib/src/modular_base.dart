@@ -251,7 +251,8 @@ class Modular {
   }
 
   @visibleForTesting
-  static void addCoreInit(ChildModule module, String tagText) {
+  static void addCoreInit(ChildModule module) {
+    var tagText = module.runtimeType.toString();
     _injectMap[tagText] = module;
   }
 }

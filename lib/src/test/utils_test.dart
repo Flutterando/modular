@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../flutter_modular.dart';
 
-// import '../bloc_provider.dart';
-// import '../bloc.dart';
-// import '../dependency.dart';
-
 class TestModule extends ChildModule {
   final List<Bind> changeBinds;
   final List<Router> changeRouters;
@@ -20,8 +16,7 @@ class TestModule extends ChildModule {
 }
 
 void initModule(ChildModule module, {List<Bind> changeBinds}) {
-  var key = module.runtimeType.toString();
-
+  
   ChildModule changedModule = TestModule(changeBinds, module.routers);
 
   for (var item in changeBinds) {
@@ -34,7 +29,7 @@ void initModule(ChildModule module, {List<Bind> changeBinds}) {
     }
   }
 
-  Modular.addCoreInit(changedModule, key);
+  Modular.addCoreInit(changedModule);
 }
 
 void initModules(List<ChildModule> modules, {List<Bind> changeBinds}) {
