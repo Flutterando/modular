@@ -35,7 +35,7 @@ Here are our main focuses with this package.
 - Dynamic Routes Control.
 - Modularization of Code.
 
-## Exemplos
+## Example
 
 - [Github Search](https://github.com/Flutterando/github_search)
 
@@ -404,6 +404,7 @@ This is currently our roadmap, please feel free to request additions/changes.
 | Rotas multiplas                           |    ✅    |
 | Pass arguments by route                   |    ✅    |
 | Pass url parameters per route             |    ✅    |
+| Route Transition Animation                |    ✅    |
 
 ## Features and bugs
 Please send feature requests and bugs at the issue tracker.
