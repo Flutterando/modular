@@ -1,11 +1,10 @@
 name: flutter_modular
-description: Estrutura de Projeto inteligente
-version: 0.0.1
-author: Flutterando Team <jacobaraujo7@gmail.com>
+description: Smart project structure with dependency injection and route management
+version: 0.0.11
 homepage: https://github.com/Flutterando/modular
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:

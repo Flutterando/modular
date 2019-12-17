@@ -6,15 +6,15 @@ class ConsumerWidget<T extends ChangeNotifier> extends StatefulWidget {
   final Inject inject;
   final bool Function(T oldValue, T newValue) distinct;
 
-  ConsumerWidget(
-      {Key key, @required this.builder, this.inject, this.distinct})
+  ConsumerWidget({Key key, @required this.builder, this.inject, this.distinct})
       : super(key: key);
 
   @override
   _ConsumerWidgetState<T> createState() => _ConsumerWidgetState<T>();
 }
 
-class _ConsumerWidgetState<T extends ChangeNotifier> extends State<ConsumerWidget<T>> {
+class _ConsumerWidgetState<T extends ChangeNotifier>
+    extends State<ConsumerWidget<T>> {
   T value;
 
   Inject _inject;

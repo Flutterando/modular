@@ -7,15 +7,15 @@ class ListWidget extends StatelessWidget with InjectMixin<HomeModule> {
 
   final String param;
 
-  ListWidget({Key key, this.param = "Nada"}) : super(key: key);
+  ListWidget({Key key, this.param = "0"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("RESULT = ${get<HomeBloc>().counter}"),
+        title: Text("PARAM id = $param"),
       ),
-      body: Center(child: Text(param),),
+      body: Center(child: Text("${get<HomeBloc>().counter}"),),
     );
   }
 }

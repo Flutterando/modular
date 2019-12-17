@@ -3,7 +3,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/interfaces/main_module.dart';
 
 class ModularWidget extends StatefulWidget {
-
   final MainModule module;
 
   const ModularWidget({Key key, this.module}) : super(key: key);
@@ -13,7 +12,6 @@ class ModularWidget extends StatefulWidget {
 }
 
 class _ModularWidgetState extends State<ModularWidget> {
-
   @override
   void initState() {
     super.initState();
