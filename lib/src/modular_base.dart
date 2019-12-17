@@ -268,6 +268,12 @@ class Modular {
       );
     }, args);
   }
+
+  @visibleForTesting
+  static void addCoreInit(ChildModule module) {
+    var tagText = module.runtimeType.toString();
+    _injectMap[tagText] = module;
+  }
 }
 
 class ModularArguments {
