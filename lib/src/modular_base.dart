@@ -64,15 +64,14 @@ class Modular {
     paths.forEach((item) {
       item = "/$item";
 
-        if(route == null)
+      if (route == null)
         route = routeList.firstWhere((router) => router.routerName == item,
             orElse: () => null);
-        else {
-          item = route.routerName + item;
-          route = routeList.firstWhere((router) => router.routerName == item,
+      else {
+        item = route.routerName + item;
+        route = routeList.firstWhere((router) => router.routerName == item,
             orElse: () => null);
-        }
-      
+      }
 
       if (route?.module != null) {
         final m = route.module;
@@ -84,7 +83,7 @@ class Modular {
       }
     });
 
-    requestBind.forEach((module){
+    requestBind.forEach((module) {
       bindModule(module, path);
     });
 
@@ -128,6 +127,11 @@ class Modular {
         return page;
       },
     );
+  }
+
+  @visibleForTesting
+  static void addCoreInit(ChildModule module, String tagText) {
+    _injectMap[tagText] = module;
   }
 }
 
