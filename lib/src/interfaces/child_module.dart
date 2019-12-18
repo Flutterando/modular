@@ -6,7 +6,7 @@ abstract class ChildModule {
   List<Bind> get binds;
   List<Router> get routers;
 
-  Set<String> paths = Set<String>();
+  List<String> paths = List<String>();
 
   final Map<String, dynamic> _injectBinds = {};
 

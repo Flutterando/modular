@@ -1,3 +1,11 @@
+## [0.1.2] - 17 Dec 2019
+
+* Route Settings, RemoveUntil fix #11
+
+## [0.1.1] - 17 Dec 2019
+
+* Fix tests
+
 ## [0.1.0+1] - 16 Dec 2019
 
 * Added Route Transitions.

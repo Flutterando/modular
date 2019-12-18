@@ -185,15 +185,17 @@ class Modular {
   }
 
   static MaterialPageRoute _defaultPageRouter(
-      Widget Function(BuildContext) builder) {
-    return MaterialPageRoute(builder: builder);
+      Widget Function(BuildContext) builder, RouteSettings settings) {
+    return MaterialPageRoute(builder: builder, settings: settings);
   }
 
   static Map<
       TransitionType,
       PageRouteBuilder Function(
-          Widget Function(BuildContext, ModularArguments) builder,
-          ModularArguments args)> _transitions = {
+    Widget Function(BuildContext, ModularArguments) builder,
+    ModularArguments args,
+    RouteSettings settings,
+  )> _transitions = {
     TransitionType.fadeIn: fadeInTransition,
     TransitionType.noTransition: noTransition,
     TransitionType.rightToLeft: rightToLeft,
@@ -207,31 +209,37 @@ class Modular {
     TransitionType.leftToRightWithFade: leftToRightWithFade,
   };
 
+  static String actualRoute = '/';
+
   static Route<dynamic> generateRoute(RouteSettings settings, {
-    Function(Widget Function(BuildContext) builder) pageRoute = _defaultPageRouter,
+    Function(Widget Function(BuildContext) builder, RouteSettings settings) pageRoute = _defaultPageRouter,
   }) {
     String path = settings.name;
     Router router = selectRoute(path);
     if (router == null) {
       return null;
     }
-
+    actualRoute = path;
     ModularArguments args = ModularArguments(router.params, settings.arguments);
 
     if (settings.isInitialRoute) {
       return _NoAnimationMaterialPageRoute(
+          settings: settings,
           builder: (context) => router.child(context, args));
     }
 
     if (router.transition == TransitionType.defaultTransition) {
-      return pageRoute(
+      var pageRouterGenerate = pageRoute(
         (context) {
           Widget page = _DisposableWidget(
             child: router.child(context, args),
             dispose: () {
               final List<String> trash = [];
+              if (actualRoute == path) {
+                return;
+              }
               _injectMap.forEach((key, module) {
-                module.paths.removeWhere((v) => v == path);
+                module.paths.remove(path);
                 if (module.paths.length == 0) {
                   module.cleanInjects();
                   trash.add(key);
@@ -246,14 +254,19 @@ class Modular {
           );
           return page;
         },
+        settings,
       );
+      return pageRouterGenerate;
     }
-
-    return _transitions[router.transition]((context, args) {
+    var selectTransition = _transitions[router.transition];
+    return selectTransition((context, args) {
       return _DisposableWidget(
         child: router.child(context, args),
         dispose: () {
           final List<String> trash = [];
+          if (actualRoute == path) {
+            return;
+          }
           _injectMap.forEach((key, module) {
             module.paths.removeWhere((v) => v == path);
             if (module.paths.length == 0) {
@@ -268,7 +281,13 @@ class Modular {
           });
         },
       );
-    }, args);
+    }, args, settings);
+  }
+
+  @visibleForTesting
+  static void addCoreInit(ChildModule module) {
+    var tagText = module.runtimeType.toString();
+    _injectMap[tagText] = module;
   }
 }
 
