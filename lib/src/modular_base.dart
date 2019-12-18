@@ -36,7 +36,9 @@ class Modular {
     }
   }
 
-  static T getInjectableObject<T>(String tag, {Map<String, dynamic> params}) {
+  static T getInjectableObject<T>(String tag, {
+    Map<String, dynamic> params,
+  }) {
     T value =
         _injectMap[tag].get<T>(params) ?? _injectMap["global=="].get<T>(params);
     if (value == null) {
@@ -54,11 +56,8 @@ class Modular {
   static String prepareToRegex(String url) {
     List<String> newUrl = [];
     for (var part in url.split('/')) {
-      if (part.contains(":")) {
-        newUrl.add("${part.replaceFirst(':', '(?<')}>.*)");
-      } else {
-        newUrl.add(part);
-      }
+      var url = part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
+      newUrl.add(url);
     }
 
     return newUrl.join("/");
@@ -74,9 +73,9 @@ class Modular {
       return true;
     } else if (value.toLowerCase() == 'false') {
       return false;
-    } else {
-      return value;
     }
+
+    return value;
   }
 
   @visibleForTesting
@@ -100,17 +99,20 @@ class Modular {
           params[key] = Modular.convertType("${r?.group(count)}");
           count++;
         }
+
         if (routeNamed != path) {
           router.params = null;
           return false;
         }
+
         router.params = params;
         return true;
-      } else {
-        router.params = null;
-        return false;
       }
+
+      router.params = null;
+      return false;
     }
+
     return routeNamed == path;
   }
 
@@ -209,9 +211,9 @@ class Modular {
 
   static String actualRoute = '/';
 
-  static Route<dynamic> generateRoute(RouteSettings settings,
-      {Function(Widget Function(BuildContext) builder, RouteSettings settings)
-          pageRoute = _defaultPageRouter}) {
+  static Route<dynamic> generateRoute(RouteSettings settings, {
+    Function(Widget Function(BuildContext) builder, RouteSettings settings) pageRoute = _defaultPageRouter,
+  }) {
     String path = settings.name;
     Router router = selectRoute(path);
     if (router == null) {
@@ -319,8 +321,11 @@ class _DisposableWidget extends StatefulWidget {
   final Function dispose;
   final Widget child;
 
-  const _DisposableWidget({Key key, this.dispose, this.child})
-      : super(key: key);
+  _DisposableWidget({
+    Key key,
+    this.dispose,
+    this.child,
+  }) : super(key: key);
 
   @override
   __DisposableWidgetState createState() => __DisposableWidgetState();

@@ -6,8 +6,12 @@ class ConsumerWidget<T extends ChangeNotifier> extends StatefulWidget {
   final Inject inject;
   final bool Function(T oldValue, T newValue) distinct;
 
-  ConsumerWidget({Key key, @required this.builder, this.inject, this.distinct})
-      : super(key: key);
+  ConsumerWidget({
+    Key key,
+    @required this.builder,
+    this.inject,
+    this.distinct,
+  }) : super(key: key);
 
   @override
   _ConsumerWidgetState<T> createState() => _ConsumerWidgetState<T>();
@@ -22,9 +26,7 @@ class _ConsumerWidgetState<T extends ChangeNotifier>
   void listener() {
     T newValue = _inject.get<T>();
     if (widget.distinct == null || widget.distinct(value, newValue)) {
-      setState(() {
-        value = newValue;
-      });
+      setState(() => value = newValue);
     }
   }
 

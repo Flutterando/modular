@@ -42,19 +42,22 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 Widget child) {
               switch (type) {
                 case PageTransitionType.fade:
-                  return FadeTransition(opacity: animation, child: child);
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
                   break;
                 case PageTransitionType.rightToLeft:
                   return SlideTransition(
                     transformHitTests: false,
-                    position: new Tween<Offset>(
-                      begin: const Offset(1.0, 0.0),
+                    position: Tween<Offset>(
+                      begin: Offset(1.0, 0.0),
                       end: Offset.zero,
                     ).animate(animation),
-                    child: new SlideTransition(
-                      position: new Tween<Offset>(
+                    child: SlideTransition(
+                      position: Tween<Offset>(
                         begin: Offset.zero,
-                        end: const Offset(-1.0, 0.0),
+                        end: Offset(-1.0, 0.0),
                       ).animate(secondaryAnimation),
                       child: child,
                     ),
@@ -64,13 +67,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                   return SlideTransition(
                     transformHitTests: false,
                     position: Tween<Offset>(
-                      begin: const Offset(-1.0, 0.0),
+                      begin: Offset(-1.0, 0.0),
                       end: Offset.zero,
                     ).animate(animation),
-                    child: new SlideTransition(
-                      position: new Tween<Offset>(
+                    child: SlideTransition(
+                      position: Tween<Offset>(
                         begin: Offset.zero,
-                        end: const Offset(1.0, 0.0),
+                        end: Offset(1.0, 0.0),
                       ).animate(secondaryAnimation),
                       child: child,
                     ),
@@ -80,13 +83,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                   return SlideTransition(
                     transformHitTests: false,
                     position: Tween<Offset>(
-                      begin: const Offset(0.0, -1.0),
+                      begin: Offset(0.0, -1.0),
                       end: Offset.zero,
                     ).animate(animation),
-                    child: new SlideTransition(
-                      position: new Tween<Offset>(
+                    child: SlideTransition(
+                      position: Tween<Offset>(
                         begin: Offset.zero,
-                        end: const Offset(0.0, 1.0),
+                        end: Offset(0.0, 1.0),
                       ).animate(secondaryAnimation),
                       child: child,
                     ),
@@ -96,13 +99,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                   return SlideTransition(
                     transformHitTests: false,
                     position: Tween<Offset>(
-                      begin: const Offset(0.0, 1.0),
+                      begin: Offset(0.0, 1.0),
                       end: Offset.zero,
                     ).animate(animation),
-                    child: new SlideTransition(
-                      position: new Tween<Offset>(
+                    child: SlideTransition(
+                      position: Tween<Offset>(
                         begin: Offset.zero,
-                        end: const Offset(0.0, -1.0),
+                        end: Offset(0.0, -1.0),
                       ).animate(secondaryAnimation),
                       child: child,
                     ),
@@ -123,10 +126,10 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                   );
                   break;
                 case PageTransitionType.rotate:
-                  return new RotationTransition(
+                  return RotationTransition(
                     alignment: alignment,
                     turns: animation,
-                    child: new ScaleTransition(
+                    child: ScaleTransition(
                       alignment: alignment,
                       scale: animation,
                       child: FadeTransition(
@@ -151,7 +154,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 case PageTransitionType.rightToLeftWithFade:
                   return SlideTransition(
                     position: Tween<Offset>(
-                      begin: const Offset(1.0, 0.0),
+                      begin: Offset(1.0, 0.0),
                       end: Offset.zero,
                     ).animate(animation),
                     child: FadeTransition(
@@ -159,7 +162,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                       child: SlideTransition(
                         position: Tween<Offset>(
                           begin: Offset.zero,
-                          end: const Offset(-1.0, 0.0),
+                          end: Offset(-1.0, 0.0),
                         ).animate(secondaryAnimation),
                         child: child,
                       ),
@@ -169,7 +172,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 case PageTransitionType.leftToRightWithFade:
                   return SlideTransition(
                     position: Tween<Offset>(
-                      begin: const Offset(-1.0, 0.0),
+                      begin: Offset(-1.0, 0.0),
                       end: Offset.zero,
                     ).animate(animation),
                     child: FadeTransition(
@@ -177,7 +180,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                       child: SlideTransition(
                         position: Tween<Offset>(
                           begin: Offset.zero,
-                          end: const Offset(1.0, 0.0),
+                          end: Offset(1.0, 0.0),
                         ).animate(secondaryAnimation),
                         child: child,
                       ),
@@ -185,7 +188,11 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                   );
                   break;
                 default:
-                  return FadeTransition(opacity: animation, child: child);
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
               }
-            });
+            },
+  );
 }
