@@ -32,7 +32,8 @@ PageRouteBuilder rightToLeft(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.rightToLeft);
+      type: PageTransitionType.rightToLeft,
+  );
 }
 
 PageRouteBuilder leftToRight(
@@ -42,7 +43,8 @@ PageRouteBuilder leftToRight(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.leftToRight);
+      type: PageTransitionType.leftToRight,
+  );
 }
 
 PageRouteBuilder upToDown(
@@ -52,7 +54,8 @@ PageRouteBuilder upToDown(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.upToDown);
+      type: PageTransitionType.upToDown,
+  );
 }
 
 PageRouteBuilder downToUp(
@@ -62,7 +65,8 @@ PageRouteBuilder downToUp(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.downToUp);
+      type: PageTransitionType.downToUp,
+  );
 }
 
 PageRouteBuilder scale(
@@ -72,7 +76,8 @@ PageRouteBuilder scale(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.scale);
+      type: PageTransitionType.scale,
+  );
 }
 
 PageRouteBuilder rotate(
@@ -82,7 +87,8 @@ PageRouteBuilder rotate(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.rotate);
+      type: PageTransitionType.rotate,
+  );
 }
 
 PageRouteBuilder size(
@@ -92,7 +98,8 @@ PageRouteBuilder size(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.size);
+      type: PageTransitionType.size,
+  );
 }
 
 PageRouteBuilder rightToLeftWithFade(
@@ -102,7 +109,8 @@ PageRouteBuilder rightToLeftWithFade(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.rightToLeftWithFade);
+      type: PageTransitionType.rightToLeftWithFade,
+  );
 }
 
 PageRouteBuilder leftToRightWithFade(
@@ -112,5 +120,6 @@ PageRouteBuilder leftToRightWithFade(
       builder: (context) {
         return builder(context, args);
       },
-      type: PageTransitionType.leftToRightWithFade);
+      type: PageTransitionType.leftToRightWithFade,
+  );
 }

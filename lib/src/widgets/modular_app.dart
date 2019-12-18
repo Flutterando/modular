@@ -5,7 +5,10 @@ import 'package:flutter_modular/src/interfaces/main_module.dart';
 class ModularApp extends StatefulWidget {
   final MainModule module;
 
-  const ModularApp({Key key, this.module}) : super(key: key);
+  ModularApp({
+    Key key,
+    this.module,
+  }) : super(key: key);
 
   @override
   _ModularAppState createState() => _ModularAppState();

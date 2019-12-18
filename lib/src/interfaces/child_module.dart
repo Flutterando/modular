@@ -15,16 +15,20 @@ abstract class ChildModule {
     T _bind;
     if (_injectBinds.containsKey(typeName)) {
       _bind = _injectBinds[typeName];
-    } else {
-      Bind b = binds.firstWhere((b) => b.inject is T Function(Inject),
-          orElse: () => null);
-      if (b == null) {
-        return null;
-      }
-      _bind =
-          b.inject(Inject(params: params, tag: this.runtimeType.toString()));
-      _injectBinds[typeName] = _bind;
+      return _bind;
     }
+
+    Bind b = binds.firstWhere((b) => b.inject is T Function(Inject),
+        orElse: () => null);
+    if (b == null) {
+      return null;
+    }
+    _bind =
+        b.inject(Inject(
+          params: params,
+          tag: this.runtimeType.toString(),
+        ));
+    _injectBinds[typeName] = _bind;
     return _bind;
   }
 
@@ -40,13 +44,15 @@ abstract class ChildModule {
   _callDispose(dynamic bind) {
     if (bind is Disposable || bind is ChangeNotifier) {
       bind.dispose();
+      return;
     } else if (bind is Sink) {
       bind.close();
-    } else {
-      try {
-        bind?.dispose();
-      } catch (e) {}
+      return;
     }
+
+    try {
+      bind?.dispose();
+    } catch (e) {}
   }
 
   cleanInjects() {
