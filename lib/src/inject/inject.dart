@@ -7,7 +7,10 @@ class Inject<T> {
   Map<String, dynamic> params = {};
   final String tag;
 
-  Inject({this.params, this.tag = "global=="});
+  Inject({
+    this.params,
+    this.tag = "global==",
+  });
 
   factory Inject.of() => Inject(tag: T.toString());
 
@@ -29,9 +32,10 @@ mixin InjectMixin<T> {
     return _inject.get<S>();
   }
 
-  Widget consumer<S extends ChangeNotifier>(
-      {Widget Function(BuildContext context, S value) builder,
-      bool Function(S oldValue, S newValue) distinct}) {
+  Widget consumer<S extends ChangeNotifier>({
+    Widget Function(BuildContext context, S value) builder,
+    bool Function(S oldValue, S newValue) distinct,
+  }) {
     return ConsumerWidget<S>(
       builder: builder,
       distinct: distinct,
