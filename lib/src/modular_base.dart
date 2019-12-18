@@ -24,6 +24,8 @@ class Modular {
       module.paths.add(path);
       _injectMap[name] = module;
       print("-- ${module.runtimeType.toString()} INITIALIZED");
+    } else {
+      _injectMap[name].paths.add(path);
     }
   }
 
@@ -208,6 +210,7 @@ class Modular {
   };
 
   static String actualRoute = '/';
+  static RouteSettings globaSetting;
 
   static Route<dynamic> generateRoute(RouteSettings settings,
       {Function(Widget Function(BuildContext) builder, RouteSettings settings)
@@ -229,11 +232,12 @@ class Modular {
     if (router.transition == TransitionType.defaultTransition) {
       var pageRouterGenerate = pageRoute(
         (context) {
+          var actual = ModalRoute.of(context);
           Widget page = _DisposableWidget(
             child: router.child(context, args),
             dispose: () {
               final List<String> trash = [];
-              if (actualRoute == path) {
+              if (actual.isCurrent) {
                 return;
               }
               _injectMap.forEach((key, module) {
@@ -258,15 +262,16 @@ class Modular {
     }
     var selectTransition = _transitions[router.transition];
     return selectTransition((context, args) {
+      var actual = ModalRoute.of(context);
       return _DisposableWidget(
         child: router.child(context, args),
         dispose: () {
           final List<String> trash = [];
-          if (actualRoute == path) {
+          if (actual.isCurrent) {
             return;
           }
           _injectMap.forEach((key, module) {
-            module.paths.removeWhere((v) => v == path);
+            module.paths.remove(path);
             if (module.paths.length == 0) {
               module.cleanInjects();
               trash.add(key);
