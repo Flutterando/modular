@@ -29,7 +29,7 @@ class Router {
       throw ArgumentError('You should provide only [module] or [child]');
   }
 
-  copyWith({
+  Router copyWith({
     Widget Function(BuildContext context, ModularArguments args) child,
     String routerName,
     ChildModule module,
