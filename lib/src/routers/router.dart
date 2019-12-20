@@ -18,7 +18,16 @@ class Router {
     this.guards,
     this.params,
     this.transition = TransitionType.defaultTransition,
-  });
+  }) {
+    assert(routerName != null);
+
+    if(transition == null)
+      throw ArgumentError('transaction must not be null');
+    if(module == null && child == null)
+       throw ArgumentError('[module] or [child] must be provided');
+    if(module != null && child != null)
+      throw ArgumentError('You should provide only [module] or [child]');
+  }
 
   copyWith({
     Widget Function(BuildContext context, ModularArguments args) child,
