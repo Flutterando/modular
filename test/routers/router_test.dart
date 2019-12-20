@@ -12,6 +12,10 @@ class TestModule extends ChildModule {
 }
 
 void main() {
+  test('throws assertionError routeName is null', () {
+    expect(() => Router(null), throwsAssertionError);
+  });
+
   test('throws ArgumentError if module or child was not provide', () {
     expect(() => Router('/'), throwsArgumentError);
   });

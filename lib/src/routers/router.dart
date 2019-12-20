@@ -38,7 +38,7 @@ class Router {
     TransitionType transition,
   }) {
     return Router(
-      routerName,
+      routerName ?? this.routerName,
       child: child ?? this.child,
       module: module ?? this.module,
       params: params ?? this.params,
