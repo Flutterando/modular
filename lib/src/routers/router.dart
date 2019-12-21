@@ -18,9 +18,18 @@ class Router {
     this.guards,
     this.params,
     this.transition = TransitionType.defaultTransition,
-  });
+  }) {
+    assert(routerName != null);
 
-  copyWith({
+    if(transition == null)
+      throw ArgumentError('transaction must not be null');
+    if(module == null && child == null)
+       throw ArgumentError('[module] or [child] must be provided');
+    if(module != null && child != null)
+      throw ArgumentError('You should provide only [module] or [child]');
+  }
+
+  Router copyWith({
     Widget Function(BuildContext context, ModularArguments args) child,
     String routerName,
     ChildModule module,
@@ -29,7 +38,7 @@ class Router {
     TransitionType transition,
   }) {
     return Router(
-      routerName,
+      routerName ?? this.routerName,
       child: child ?? this.child,
       module: module ?? this.module,
       params: params ?? this.params,
