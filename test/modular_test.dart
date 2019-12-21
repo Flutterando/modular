@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_modular/flutter_modular.dart';
@@ -33,13 +34,13 @@ void main() {
     });
 
     test('search object Router to url', () {
-      var router = Router('/home/list/:id');
+      var router = Router('/home/list/:id', child: (_, __) => SizedBox.shrink());
 
       expect(
           Modular.searchRoute(router, "/home/list/:id", "/home/list/1"), true);
       expect(router.params['id'], 1);
 
-      expect(Modular.searchRoute(Router('/home/list'), "/home/list",  "/home/list/1"), false);
+      expect(Modular.searchRoute(Router('/home/list', child: (_, __) => SizedBox.shrink()), "/home/list",  "/home/list/1"), false);
     });
 
     test('router with params get', () {
