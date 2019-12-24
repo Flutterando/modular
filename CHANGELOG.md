@@ -1,3 +1,7 @@
+## [0.1.4] - 24 Dec 2019
+
+* fix #7 and more
+
 ## [0.1.3] - 17 Dec 2019
 
 * Route Settings, RemoveUntil fix #11

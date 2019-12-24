@@ -214,7 +214,7 @@ class Modular {
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
-  static Route<dynamic> generateRoute(RouteSettings settings, {
+  static Route generateRoute(RouteSettings settings, {
     Function(Widget Function(BuildContext) builder, RouteSettings settings) pageRoute = _defaultPageRouter,
   }) {
     String path = settings.name;
