@@ -3,7 +3,7 @@ import 'package:example/app/modules/home/home_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class ListWidget extends StatelessWidget with InjectMixin<HomeModule> {
+class ListWidget extends ModularStatelessWidget<HomeModule> {
 
   final String param;
 
