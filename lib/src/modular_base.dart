@@ -38,13 +38,20 @@ class Modular {
     }
   }
 
-  static T getInjectableObject<T>(String tag, {
+  static T getInjectableObject<T>(
+    String tag, {
     Map<String, dynamic> params,
   }) {
-    T value =
-        _injectMap[tag].get<T>(params) ?? _injectMap["global=="].get<T>(params);
-    if (value == null) {
-      throw Exception('${T.toString()} not found in module $tag');
+    T value;
+    try {
+      value = _injectMap[tag].get<T>(params);
+      if (value == null) {
+        throw ModularError('${T.toString()} not found in module $tag');
+      }
+    } on ModularError {
+      rethrow;
+    } catch (e) {
+      throw ModularError('Module $tag not Initialized');
     }
 
     return value;
@@ -58,7 +65,8 @@ class Modular {
   static String prepareToRegex(String url) {
     List<String> newUrl = [];
     for (var part in url.split('/')) {
-      var url = part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
+      var url =
+          part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
       newUrl.add(url);
     }
 
@@ -214,8 +222,10 @@ class Modular {
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
-  static Route generateRoute(RouteSettings settings, {
-    Function(Widget Function(BuildContext) builder, RouteSettings settings) pageRoute = _defaultPageRouter,
+  static Route generateRoute(
+    RouteSettings settings, {
+    Function(Widget Function(BuildContext) builder, RouteSettings settings)
+        pageRoute = _defaultPageRouter,
   }) {
     String path = settings.name;
     Router router = selectRoute(path);
