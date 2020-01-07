@@ -1,3 +1,7 @@
+## [0.1.5] - 07 Jan 2020
+
+* fix test errors (initModule)
+
 ## [0.1.4] - 24 Dec 2019
 
 * fix #7 and more
