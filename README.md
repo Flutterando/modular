@@ -394,11 +394,11 @@ This is currently our roadmap, please feel free to request additions/changes.
 | :-----------------------------------------| :------: |
 | DI by Module                              |    ✅    |
 | Routes by Module                          |    ✅    |
-| Widget Consume para ChangeNotifier        |    ✅    |
+| Widget Consume for ChangeNotifier         |    ✅    |
 | Auto-dispose                              |    ✅    |
 | Integration with flutter_bloc             |    ✅    |
 | Integration with mobx	                    |    ✅    |
-| Rotas multiplas                           |    ✅    |
+| Multiple routes                           |    ✅    |
 | Pass arguments by route                   |    ✅    |
 | Pass url parameters per route             |    ✅    |
 | Route Transition Animation                |    ✅    |
