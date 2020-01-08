@@ -304,6 +304,48 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
 }
 ```
 
+### Using Modular widgets to retrieve your classes
+Note: You can also use `ModularStatelessWidget` instead of the mixin `InjectMixin<AppModule>` for example you can write:
+
+```dart
+class MyWidget extends ModularStatelessWidget<HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(
+        child: Text("${get<HomeBloc>().counter}"),
+      ),
+    );
+  }
+}
+```
+
+If your widget is a `StatefulWidget` it state can extends `ModularState<MyWidget, HomeModule>` so that you can the `get` and `consumer` inside if this widgets.
+
+Example with `StatefulWidget`:
+
+```dart
+class MyWidget extends StatefulWidget {
+  @override
+  _MyWidgetState createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+    );
+  }
+}
+```
+
 ## Consuming a ChangeNotifier Class
 
 As we saw before, InjectMixin allows us to merge some new methods into our view. If you're using Mixin in addition to the get () method, you get the consumer () method and rebuild your children every time a class is notified with a change:
@@ -352,48 +394,6 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
   }
 }
 ```
-
-Note: You can also use `ModularStatelessWidget` instead of the mixin `InjectMixin<AppModule>` for example you can write:
-
-```dart
-class MyWidget extends ModularStatelessWidget<HomeModule> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Modular"),
-      ),
-      body: Center(
-        child: Text("${get<HomeBloc>().counter}"),
-      ),
-    );
-  }
-}
-```
-
-If your widget is a `StatefulWidget` it state can extends `ModularState<MyWidget, HomeModule>` so that you can the `get` and `consumer` inside if this widgets.
-
-Example with `StatefulWidget`:
-
-```dart
-class MyWidget extends StatefulWidget {
-  @override
-  _MyWidgetState createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Modular"),
-      ),
-      body: Center(child: Text("${get<HomeBloc>().counter}"),),
-    );
-  }
-}
-```
-
 
 
 ## Creating Child Modules.
