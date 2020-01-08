@@ -4,9 +4,6 @@
 
 *Read this in other languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
 
-## WARNING 
-
-** THIS PROJECT IS UNDER DEVELOPMENT AND WE DO NOT RECOMMEND TO USE IN PRODUCTION. WATCH THE RELEASES AND WE APPRECIATE YOUR CONTRIBUTION;
 
 ## What is Flutter Modular?
 

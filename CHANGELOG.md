@@ -1,3 +1,8 @@
+## [0.1.8] - 08 Jan 2020
+
+* fix test errors (initModule)
+* Added modularException
+
 ## [0.1.4] - 24 Dec 2019
 
 * fix #7 and more

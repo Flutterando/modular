@@ -16,20 +16,19 @@ class TestModule extends ChildModule {
 }
 
 void initModule(ChildModule module, {List<Bind> changeBinds}) {
-  
-  ChildModule changedModule = TestModule(changeBinds, module.routers);
+  // ChildModule changedModule = TestModule(changeBinds, module.routers);
 
-  for (var item in changeBinds) {
-    var dep = changeBinds.firstWhere((dep) {
+  for (var item in module.binds ?? []) {
+    var dep = (changeBinds ?? []).firstWhere((dep) {
       return item.inject.runtimeType == dep.inject.runtimeType;
     }, orElse: () => null);
     if (dep != null) {
-      changeBinds.remove(dep);
-      changeBinds.add(item);
+      module.binds.remove(dep);
+      module.binds.add(item);
     }
   }
 
-  Modular.addCoreInit(changedModule);
+  Modular.addCoreInit(module);
 }
 
 void initModules(List<ChildModule> modules, {List<Bind> changeBinds}) {
