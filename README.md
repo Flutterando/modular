@@ -190,7 +190,7 @@ Now put in the 'guards' property of your Router.
 ```dart
   @override
   List<Router> get routers => [
-        Router("/", module: HomeModule()]),
+        Router("/", module: HomeModule()),
         Router("/admin", module: AdminModule(), guards: [MyGuard()]),
       ];
 
@@ -274,10 +274,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-// You can use the object Inject to retrieve..
+    // You can use the object Inject to retrieve..
   
-  AppBloc appBloc = Inject<AppModule>.of().get();
-  ...
+    AppBloc appBloc = Inject<AppModule>.of().get();
+    //...
+  }
+}
 ```
 
 ## ATTENTION: When retrieving a class using Inject's get () method, it first looks in the module that was requested, if not found, it looks in the main module. We will still talk about creating child modules in this documentation.
@@ -292,12 +294,14 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
   @override
   Widget build(BuildContext context) {
 
-  // with mixin you add the get method straight to your view.
-  AppBloc appBloc = get();
+    // with mixin you add the get method straight to your view.
+    AppBloc appBloc = get();
 
-// another way to recover
-  final appBloc = get<AppBloc>();
-  ...
+    // another way to recover
+    final appBloc = get<AppBloc>();
+    // ...
+ }
+}
 ```
 
 ## Consuming a ChangeNotifier Class
@@ -349,6 +353,49 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
 }
 ```
 
+Note: You can also use `ModularStatelessWidget` instead of the mixin `InjectMixin<AppModule>` for example you can write:
+
+```dart
+class MyWidget extends ModularStatelessWidget<HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(
+        child: Text("${get<HomeBloc>().counter}"),
+      ),
+    );
+  }
+}
+```
+
+If your widget is a `StatefulWidget` it state can extends `ModularState<MyWidget, HomeModule>` so that you can the `get` and `consumer` inside if this widgets.
+
+Example with `StatefulWidget`:
+
+```dart
+class MyWidget extends StatefulWidget {
+  @override
+  _MyWidgetState createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+    );
+  }
+}
+```
+
+
+
 ## Creating Child Modules.
 
 You can create other modules in your project, so instead of inheriting from MainModule, you should inherit from ChildModule.
@@ -369,6 +416,8 @@ class HomeModule extends ChildModule {
   static Inject get to => Inject<HomeModule>.of();
 
 }
+```
+
 From this you can call your modules on the main module route.
 
 ```dart
@@ -377,10 +426,10 @@ class AppModule extends MainModule {
   @override
   List<Router> get routers => [
         Router("/home", module: HomeModule()),
-        ...
+        //...
       ];
-
-...
+}
+//...
 ```
 
 Consider splitting your code into modules such as LoginModule, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
