@@ -322,8 +322,8 @@ class MyWidget extends ModularStatelessWidget<HomeModule> {
   }
 }
 ```
-
-If your widget is a `StatefulWidget` it state can extends `ModularState<MyWidget, HomeModule>` so that you can the `get` and `consumer` inside if this widgets.
+K
+If your widget is a `StatefulWidget` it state can extends `ModularState<MyWidget, HomeModule>` so that you can get access to `get` and `consumer` inside if this widget's state.
 
 Example with `StatefulWidget`:
 
