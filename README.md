@@ -21,7 +21,7 @@ Nope! We will continue to support and improve it. Although the migration to Modu
 
 
 ## Modular Structure
-Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects. .
+Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects.
 
 
 ## Modular Pillars
