@@ -7,12 +7,12 @@
 
 ## What is Flutter Modular?
 
-When a project is getting bigger and complexer, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
+When a project is getting bigger and more complex, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
 The Modular came up prepared for adapt to any state management approach to its smart injection system, managing the memory use of your application.
 
 ## What is the difference between Modular Flutter and bloc_pattern;
 
-We learned a lot from bloc_pattern, and we understand that the community has a lot of preferences regarding State Management, so even for the sake of nomenclature, we decided to treat Modular as a natural evolution of bloc_pattern and from there implement the system of " Dynamic Routes "that will become very popular with Flutter Web. Named routes are the future of Flutter, and we are preparing for it.
+We learned a lot from bloc_pattern, and we understand that the community has a lot of preferences regarding State Management, so even for the sake of nomenclature, we decided to treat Modular as a natural evolution of bloc_pattern and from there implement the system of "Dynamic Routes" that will become very popular with Flutter Web. Named routes are the future of Flutter, and we are preparing for it.
 
 
 ## Will bloc_pattern be deprecated?
