@@ -25,6 +25,7 @@ class Inject<T> {
   }
 }
 
+@Deprecated("Use InjectWidgetMixin instead")
 mixin InjectMixin<T> {
   final Inject<T> _inject = Inject<T>.of();
 
@@ -37,6 +38,43 @@ mixin InjectMixin<T> {
     bool Function(S oldValue, S newValue) distinct,
   }) {
     return ConsumerWidget<S>(
+      builder: builder,
+      distinct: distinct,
+      inject: _inject,
+    );
+  }
+}
+
+mixin InjectMixinBase<T> {
+  final Inject<T> _inject = Inject<T>.of();
+
+  S get<S>() => _inject.get<S>();
+
+  Widget consumer<S extends ChangeNotifier>({
+    Widget Function(BuildContext context, S value) builder,
+    bool Function(S oldValue, S newValue) distinct,
+  }) {
+    return ConsumerWidget(
+      builder: builder,
+      distinct: distinct,
+      inject: _inject,
+    );
+  }
+}
+
+/// A mixin that must be used only with classes that extends a [Widget]
+/// [T] the module to be injected on the widget.
+mixin InjectWidgetMixin<T extends ChildModule> on Widget
+    implements InjectMixinBase<T> {
+  final Inject<T> _inject = Inject<T>.of();
+
+  S get<S>() => _inject.get<S>();
+
+  Widget consumer<S extends ChangeNotifier>({
+    Widget Function(BuildContext context, S value) builder,
+    bool Function(S oldValue, S newValue) distinct,
+  }) {
+    return ConsumerWidget(
       builder: builder,
       distinct: distinct,
       inject: _inject,

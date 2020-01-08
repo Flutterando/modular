@@ -312,6 +312,46 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
 }
 ```
 
+### Usando widgets do Modular para obter suas classes
+Você pode usar o widget `ModularStatelessWidget` ao invés do mixin `InjectMixin<AppModule>` para simplificar sua implementação:
+
+```dart
+class MyWidget extends ModularStatelessWidget<HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(
+        child: Text("${get<HomeBloc>().counter}"),
+      ),
+    );
+  }
+}
+```
+
+Caso seu widget for `StatefulWidget` seu estado deve extender de `ModularState<MyWidget, HomeModule>` para ter acesso ao `get` e `consumer` dentro do estado do seu widget:
+
+```dart
+class MyWidget extends StatefulWidget {
+  @override
+  _MyWidgetState createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+    );
+  }
+}
+```
+
 ## Consumindo uma Classe ChangeNotifier
 
 Como vimos antes, o InjectMixin nos permite mesclar alguns novos métodos na nossa view. Se estiver usando o Mixin além do método `get()`, você ganha o método `consumer()` e reconstroi seus filhos toda vez que uma classe é notificada com uma mudança:
