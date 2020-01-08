@@ -64,7 +64,8 @@ mixin InjectMixinBase<T> {
 
 /// A mixin that must be used only with classes that extends a [Widget]
 /// [T] the module to be injected on the widget.
-mixin InjectWidgetMixin<T extends ChildModule> on Widget implements InjectMixinBase<T> {
+mixin InjectWidgetMixin<T extends ChildModule> on Widget
+    implements InjectMixinBase<T> {
   final Inject<T> _inject = Inject<T>.of();
 
   S get<S>() => _inject.get<S>();
