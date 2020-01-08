@@ -305,7 +305,7 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
 ```
 
 ### Using Modular widgets to retrieve your classes
-Note: You can also use `ModularStatelessWidget` instead of the mixin `InjectMixin<AppModule>` for example you can write:
+You can also use `ModularStatelessWidget` instead of the mixin `InjectMixin<AppModule>` for example you can write:
 
 ```dart
 class MyWidget extends ModularStatelessWidget<HomeModule> {
