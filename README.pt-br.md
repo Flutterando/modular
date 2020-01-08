@@ -4,10 +4,6 @@
 
 *Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
 
-## Aviso
-
-** ESTE PROJETO ESTÁ EM DESENVOLVIMENTO E NÃO RECOMENDAMOS O USO EM PRODUÇÃO. ACOMPANHE OS LANÇAMENTOS E AJUDE A CONTRIBUIR COM O PROJETO;
-
 
 ## O que é o Flutter Modular?
 
