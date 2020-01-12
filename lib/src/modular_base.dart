@@ -65,15 +65,9 @@ class Modular {
     Map<String, dynamic> params,
   }) {
     T value;
-    try {
-      value = _injectMap[tag].get<T>(params);
-      if (value == null) {
-        throw ModularError('${T.toString()} not found in module $tag');
-      }
-    } on ModularError {
-      rethrow;
-    } catch (e) {
-      throw ModularError('Module $tag not Initialized');
+    value = _injectMap[tag].get<T>(params);
+    if (value == null) {
+      throw ModularError('${T.toString()} not found in module $tag');
     }
 
     return value;
