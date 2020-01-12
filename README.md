@@ -133,10 +133,12 @@ class AppModule extends MainModule {
 }
 ```
 
-And to access the route use Navigator.pushNamed:
+And to access the route use Navigator.pushNamed or Modular.to.pushNamed:
 
 ```dart
 Navigator.pushNamed(context, '/login');
+//or
+Modular.to.pushNamed('/login');
 ```
 
 
@@ -160,6 +162,8 @@ From this you can use:
 ```dart
  
 Navigator.pushNamed(context, '/product/1'); //args.params['id']) gonna be 1
+//or
+Modular.to.pushNamed('/product/1'); //args.params['id']) gonna be 1
 
 ```
 

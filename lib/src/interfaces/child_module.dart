@@ -23,12 +23,13 @@ abstract class ChildModule {
     if (b == null) {
       return null;
     }
-    _bind =
-        b.inject(Inject(
-          params: params,
-          tag: this.runtimeType.toString(),
-        ));
-    _injectBinds[typeName] = _bind;
+    _bind = b.inject(Inject(
+      params: params,
+      tag: this.runtimeType.toString(),
+    ));
+    if (b.singleton) {
+      _injectBinds[typeName] = _bind;
+    }
     return _bind;
   }
 

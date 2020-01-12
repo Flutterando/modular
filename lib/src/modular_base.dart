@@ -10,10 +10,32 @@ import 'transitions/transitions.dart';
 class Modular {
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
+  static GlobalKey<NavigatorState> _navigatorKey;
+
+  static GlobalKey<NavigatorState> get navigatorKey {
+    if (_navigatorKey == null) {
+      _navigatorKey = GlobalKey<NavigatorState>();
+    }
+
+    return _navigatorKey;
+  }
 
   static init(ChildModule module) {
     _initialModule = module;
     bindModule(module, "global==");
+  }
+
+  static NavigatorState get to {
+    assert(
+        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+
+      return MaterialApp(
+        navigatorKey: Modular.navigatorKey,
+        ...
+
+.
+      ''');
+    return _navigatorKey.currentState;
   }
 
   @visibleForTesting

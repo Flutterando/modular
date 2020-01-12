@@ -145,6 +145,8 @@ class AppModule extends MainModule {
 E para acessar a rota use o **Navigator.pushNamed**:
 ```dart
 Navigator.pushNamed(context, '/login');
+//or
+Modular.to.pushNamed('/login');
 ```
 
 ## Rotas dinâmicas
@@ -168,6 +170,8 @@ A partir disso você pode usar:
 ```dart
  
 Navigator.pushNamed(context, '/product/1'); //args.params['id']) será 1
+//or
+Modular.to.pushNamed('/product/1'); //args.params['id']) será 1
 
 ```
 
