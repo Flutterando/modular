@@ -409,7 +409,7 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
 
 ## Criando Módulos Filhos
 
-Você pode criar outros módulos no seu projeto, para isso, em vez de herdar de `BrowseModule`, deve-se herdar de `CommonModule`.
+Você pode criar outros módulos no seu projeto, para isso, em vez de herdar de `MainModule`, deve-se herdar de `ChildModule`.
 
 ```dart
 class HomeModule extends ChildModule {
