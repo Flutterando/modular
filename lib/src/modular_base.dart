@@ -51,7 +51,6 @@ class Modular {
     }
   }
 
-  @visibleForTesting
   static void removeModule(ChildModule module) {
     String name = module.runtimeType.toString();
     if (_injectMap.containsKey(name)) {
@@ -315,7 +314,6 @@ class Modular {
     }, args, settings);
   }
 
-  @visibleForTesting
   static void addCoreInit(ChildModule module) {
     var tagText = module.runtimeType.toString();
     _injectMap[tagText] = module;
