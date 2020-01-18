@@ -17,7 +17,11 @@ class Inject<T> {
   ///get injected dependency
   T get<T>([Map<String, dynamic> params]) {
     params ??= {};
-    return Modular.get<T>(params: params);
+    if (tag == null) {
+      return Modular.get<T>(params: params);
+    } else {
+      return Modular.getInjectableObject<T>(tag, params: params);
+    }
   }
 
   dispose<T>() {
