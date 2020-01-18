@@ -1,4 +1,4 @@
-## [0.3.1] - 18 Jan 2020
+## [0.3.2] - 18 Jan 2020
 
 * Modular is BETA!!!
 * You can now control navigation without the context!
