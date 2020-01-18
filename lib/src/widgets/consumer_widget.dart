@@ -1,30 +1,25 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class ConsumerWidget<T extends ChangeNotifier> extends StatefulWidget {
+class Consumer<T extends ChangeNotifier> extends StatefulWidget {
   final Widget Function(BuildContext context, T value) builder;
-  final Inject inject;
   final bool Function(T oldValue, T newValue) distinct;
 
-  ConsumerWidget({
+  Consumer({
     Key key,
     @required this.builder,
-    this.inject,
     this.distinct,
   }) : super(key: key);
 
   @override
-  _ConsumerWidgetState<T> createState() => _ConsumerWidgetState<T>();
+  _ConsumerState<T> createState() => _ConsumerState<T>();
 }
 
-class _ConsumerWidgetState<T extends ChangeNotifier>
-    extends State<ConsumerWidget<T>> {
+class _ConsumerState<T extends ChangeNotifier> extends State<Consumer<T>> {
   T value;
 
-  Inject _inject;
-
   void listener() {
-    T newValue = _inject.get<T>();
+    T newValue = Modular.get<T>();
     if (widget.distinct == null || widget.distinct(value, newValue)) {
       setState(() => value = newValue);
     }
@@ -33,9 +28,7 @@ class _ConsumerWidgetState<T extends ChangeNotifier>
   @override
   void initState() {
     super.initState();
-
-    _inject = widget.inject ?? Inject();
-    value = _inject.get<T>();
+    value = Modular.get<T>();
     value.addListener(listener);
   }
 

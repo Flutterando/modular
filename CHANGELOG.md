@@ -1,8 +1,9 @@
-## [0.2.1] - 12 Jan 2020
+## [0.3.1] - 18 Jan 2020
 
 * Modular is BETA!!!
 * You can now control navigation without the context!
 * Added **Modular.to** and replace Navigator.of(context)
+* Added **Modular.get** and replace AppModule.to.get
 * Added flag "singleton" in Bind injection
 
 ## [0.1.8] - 08 Jan 2020

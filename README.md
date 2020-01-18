@@ -277,7 +277,7 @@ class HomePage extends StatelessWidget {
 
     // You can use the object Inject to retrieve..
   
-    AppBloc appBloc = Inject<AppModule>.of().get();
+    final appBloc = Modular.get<AppBloc>();
     //...
   }
 }
@@ -290,7 +290,7 @@ class HomePage extends StatelessWidget {
 We will use Mixin in the view to retrieve injections more easily
 
 ```dart
-class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
+class HomePage extends StatelessWidget  with InjectMixinBase<AppModule>{
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +306,7 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
 ```
 
 ### Using Modular widgets to retrieve your classes
-You can also use `ModularStatelessWidget` instead of the mixin `InjectMixin<AppModule>` for example you can write:
+You can also use `ModularStatelessWidget` instead of the mixin `InjectMixinBase<AppModule>` for example you can write:
 
 ```dart
 class MyWidget extends ModularStatelessWidget<HomeModule> {
@@ -324,7 +324,6 @@ class MyWidget extends ModularStatelessWidget<HomeModule> {
 }
 ```
 K
-If your widget is a `StatefulWidget` it state can extends `ModularState<MyWidget, HomeModule>` so that you can get access to `get` and `consumer` inside if this widget's state.
 
 Example with `StatefulWidget`:
 
@@ -349,7 +348,6 @@ class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
 
 ## Consuming a ChangeNotifier Class
 
-As we saw before, InjectMixin allows us to merge some new methods into our view. If you're using Mixin in addition to the get () method, you get the consumer () method and rebuild your children every time a class is notified with a change:
 
 Example of a ChangeNotifier Class:
 
@@ -366,10 +364,10 @@ class Counter extends ChangeNotifier {
 }
 ```
 
-With integrated InjectMixin, you can use the consumer method to manage the state of a widget block.
+ you can use the Consumer to manage the state of a widget block.
 
 ```dart
-class HomePage extends StatelessWidget with InjectMixin<AppModule> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -378,7 +376,7 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
       ),
       body: Center(
      // recognize the ChangeNotifier class and rebuild when notifyListeners () is called
-        child: consumer<Counter>(
+        child: Consumer<Counter>(
           builder: (context, value) {
             return Text('Counter ${value.counter}');
           }

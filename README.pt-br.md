@@ -288,7 +288,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     //você pode usar o objeto Inject para recuperar.
-    AppBloc appBloc = Inject<AppModule>.of().get();
+    final appBloc = Modular.get<AppBloc>();
     //...
   }
 }
@@ -301,7 +301,7 @@ ATENÇÂO: Quando recuperar uma classe usando o método get() do Inject, ele pri
 Usaremos Mixin na view para recuperar as injeções de forma mais fácil.
 
 ```dart
-class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
+class HomePage extends StatelessWidget  with InjectMixinBase<AppModule>{
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +317,7 @@ class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
 ```
 
 ### Usando widgets do Modular para obter suas classes
-Você pode usar o widget `ModularStatelessWidget` ao invés do mixin `InjectMixin<AppModule>` para simplificar sua implementação:
+Você pode usar o widget `ModularStatelessWidget` ao invés do mixin `InjectMixinBase<AppModule>` para simplificar sua implementação:
 
 ```dart
 class MyWidget extends ModularStatelessWidget<HomeModule> {
@@ -358,7 +358,6 @@ class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
 
 ## Consumindo uma Classe ChangeNotifier
 
-Como vimos antes, o InjectMixin nos permite mesclar alguns novos métodos na nossa view. Se estiver usando o Mixin além do método `get()`, você ganha o método `consumer()` e reconstroi seus filhos toda vez que uma classe é notificada com uma mudança:
 
 Exemplo de uma classe `ChangeNotifier`:
 
@@ -375,11 +374,11 @@ class Counter extends ChangeNotifier {
 }
 ```
 
-Com o `InjectMixin` integrado, você pode usar o método consumer para gerenciar o estado de um bloco de widget.
+você pode usar o Consumer para gerenciar o estado de um bloco de widget.
 
 ```dart
 
-class HomePage extends StatelessWidget with InjectMixin<AppModule> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -388,7 +387,7 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
       ),
       body: Center(
         //reconhece a classe ChangeNotifier e reconstroi quando é chamado o notifyListeners()
-        child: consumer<Counter>(
+        child: Consumer<Counter>(
           builder: (context, value) {
             return Text('Counter ${value.counter}');
           }
