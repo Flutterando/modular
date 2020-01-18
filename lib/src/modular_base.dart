@@ -59,14 +59,30 @@ class Modular {
     }
   }
 
-  static T getInjectableObject<T>(
+  static B get<B>({Map<String, dynamic> params, Type module}) {
+    if (module != null) {
+      return getInjectableObject(module.toString(), params: params);
+    } else {
+      for (var key in _injectMap.keys) {
+        B value =
+            getInjectableObject<B>(key, params: params, disableError: true);
+        if (value != null) {
+          return value;
+        }
+      }
+      throw ModularError('${B.toString()} not found');
+    }
+  }
+
+  static B getInjectableObject<B>(
     String tag, {
     Map<String, dynamic> params,
+    bool disableError = false,
   }) {
-    T value;
-    value = _injectMap[tag].get<T>(params);
-    if (value == null) {
-      throw ModularError('${T.toString()} not found in module $tag');
+    B value;
+    value = _injectMap[tag].getBind<B>(params);
+    if (value == null && !disableError) {
+      throw ModularError('${B.toString()} not found in module $tag');
     }
 
     return value;

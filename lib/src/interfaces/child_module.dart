@@ -10,7 +10,7 @@ abstract class ChildModule {
 
   final Map<String, dynamic> _injectBinds = {};
 
-  get<T>([Map<String, dynamic> params]) {
+  getBind<T>([Map<String, dynamic> params]) {
     String typeName = T.toString();
     T _bind;
     if (_injectBinds.containsKey(typeName)) {

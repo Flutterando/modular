@@ -15,12 +15,12 @@ void main() {
       expect(Modular.selectRoute("/"), isA<Router>());
     });
     test('Test Get module Router', () {
-     expect(Modular.selectRoute("home/"), isA<Router>());
-     expect(Modular.selectRoute("/home/"), isA<Router>());
-    var router = Modular.selectRoute("/home");
+      expect(Modular.selectRoute("home/"), isA<Router>());
+      expect(Modular.selectRoute("/home/"), isA<Router>());
+      var router = Modular.selectRoute("/home");
       expect(router.routerName, '/');
     });
- 
+
     test('router empty', () {
       expect(() => Modular.selectRoute(""), throwsException);
     });
@@ -34,38 +34,42 @@ void main() {
     });
 
     test('search object Router to url', () {
-      var router = Router('/home/list/:id', child: (_, __) => SizedBox.shrink());
+      var router =
+          Router('/home/list/:id', child: (_, __) => SizedBox.shrink());
 
       expect(
           Modular.searchRoute(router, "/home/list/:id", "/home/list/1"), true);
       expect(router.params['id'], 1);
 
-      expect(Modular.searchRoute(Router('/home/list', child: (_, __) => SizedBox.shrink()), "/home/list",  "/home/list/1"), false);
+      expect(
+          Modular.searchRoute(
+              Router('/home/list', child: (_, __) => SizedBox.shrink()),
+              "/home/list",
+              "/home/list/1"),
+          false);
     });
 
     test('router with params get', () {
-       expect(Modular.selectRoute("/list/1/2"), isA<Router>());
-       expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
-       expect(Modular.selectRoute("/home/test"), null);
+      expect(Modular.selectRoute("/list/1/2"), isA<Router>());
+      expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
+      expect(Modular.selectRoute("/home/test"), null);
     });
     test('router with params get multiple', () {
-       expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
+      expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
     });
     test('router with params get multiple 2 modules', () {
-       expect(Modular.selectRoute("/home/product/"), isA<Router>());
+      expect(Modular.selectRoute("/home/product/"), isA<Router>());
     });
 
     test('Convert type', () {
-       expect(Modular.convertType("value"), isA<String>());
-       expect(Modular.convertType("1"), isA<int>());
-       expect(Modular.convertType("1.1"), isA<double>());
-       expect(Modular.convertType("true"), isA<bool>());
+      expect(Modular.convertType("value"), isA<String>());
+      expect(Modular.convertType("1"), isA<int>());
+      expect(Modular.convertType("1.1"), isA<double>());
+      expect(Modular.convertType("true"), isA<bool>());
     });
 
-
-
     test('RouteGuard test', () {
-       expect(Modular.selectRoute("/forbidden"), null);
+      expect(Modular.selectRoute("/forbidden"), null);
     });
   });
 }

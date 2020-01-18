@@ -9,7 +9,7 @@ class Inject<T> {
 
   Inject({
     this.params,
-    this.tag = "global==",
+    this.tag,
   });
 
   factory Inject.of() => Inject(tag: T.toString());
@@ -17,7 +17,7 @@ class Inject<T> {
   ///get injected dependency
   T get<T>([Map<String, dynamic> params]) {
     params ??= {};
-    return Modular.getInjectableObject<T>(tag, params: params);
+    return Modular.get<T>(params: params);
   }
 
   dispose<T>() {
