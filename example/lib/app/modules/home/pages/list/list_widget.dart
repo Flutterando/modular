@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ListWidget extends ModularStatelessWidget<HomeModule> {
+  final int param;
 
-  final String param;
-
-  ListWidget({Key key, this.param = "0"}) : super(key: key);
+  ListWidget({Key key, this.param = 1}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +14,9 @@ class ListWidget extends ModularStatelessWidget<HomeModule> {
       appBar: AppBar(
         title: Text("PARAM id = $param"),
       ),
-      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+      body: Center(
+        child: Text("${Modular.get<HomeBloc>().counter}"),
+      ),
     );
   }
 }

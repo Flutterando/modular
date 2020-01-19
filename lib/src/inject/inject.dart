@@ -42,7 +42,7 @@ mixin InjectWidgetMixin<T extends ChildModule> on Widget
   final Inject<T> _inject = Inject<T>.of();
 
   S get<S>({Map<String, dynamic> params}) =>
-      Modular.get<S>(module: T.runtimeType, params: params);
+      Modular.get<S>(module: T, params: params);
 
   Widget consumer<S extends ChangeNotifier>({
     Widget Function(BuildContext context, S value) builder,

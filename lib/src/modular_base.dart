@@ -8,6 +8,8 @@ import 'interfaces/route_guard.dart';
 import 'transitions/transitions.dart';
 
 class Modular {
+  static String get initialRoute => '/';
+
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
   static GlobalKey<NavigatorState> _navigatorKey;
@@ -80,7 +82,7 @@ class Modular {
     bool disableError = false,
   }) {
     B value;
-    value = _injectMap[tag].getBind<B>(params);
+    if (_injectMap.containsKey(tag)) value = _injectMap[tag].getBind<B>(params);
     if (value == null && !disableError) {
       throw ModularError('${B.toString()} not found in module $tag');
     }
@@ -197,7 +199,7 @@ class Modular {
           try {
             guard = guards.length == 0
                 ? null
-                : guards.firstWhere((guard) => guard.canActivate(path),
+                : guards.firstWhere((guard) => !guard.canActivate(path),
                     orElse: null);
           } catch (e) {}
 

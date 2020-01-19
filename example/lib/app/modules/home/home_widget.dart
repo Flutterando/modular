@@ -6,21 +6,23 @@ import 'package:flutter_modular/flutter_modular.dart';
 class HomeWidget extends ModularStatelessWidget<HomeModule> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(title: Text("HomeModule"),
-      actions: <Widget>[
-        FlatButton(onPressed: () {
-          Navigator.of(context).pushNamed('/list/1');
-        }, child: Text("LIST"),)
-      ],
+      appBar: AppBar(
+        title: Text("HomeModule"),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed('/list/${get<HomeBloc>().counter}');
+            },
+            child: Text("LIST"),
+          )
+        ],
       ),
       body: Center(
-        child: consumer<HomeBloc>(
-          builder: (context, value) {
-            return Text('Counter ${value.counter}');
-          }
-        ),
+        child: Consumer<HomeBloc>(builder: (context, value) {
+          return Text('Counter ${value.counter}');
+        }),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
