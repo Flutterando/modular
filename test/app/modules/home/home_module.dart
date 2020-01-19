@@ -23,7 +23,6 @@ class HomeModule extends ChildModule {
         Router(
           "/forbidden2",
           child: (_, args) => ForbiddenWidget(),
-          guards: [MyGuard()],
           transition: TransitionType.fadeIn,
         ),
         Router("/list/:id/:id2", child: (_, args) => HomeWidget()),

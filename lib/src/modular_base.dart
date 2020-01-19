@@ -159,6 +159,8 @@ class Modular {
     return routeNamed == path;
   }
 
+  static List<RouteGuard> _masterRouteGuards;
+
   static Router _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
@@ -166,9 +168,8 @@ class Modular {
     for (var route in module.routers) {
       String tempRouteName =
           (routerName + route.routerName).replaceFirst('//', '/');
-      List<RouteGuard> masterRouteGuards;
       if (route.child == null) {
-        masterRouteGuards = route.guards;
+        _masterRouteGuards = route.guards;
         var _routerName =
             (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
@@ -194,7 +195,8 @@ class Modular {
         }
       } else {
         if (searchRoute(route, tempRouteName, path)) {
-          var guards = _prepareGuardList(masterRouteGuards, route.guards);
+          var guards = _prepareGuardList(_masterRouteGuards, route.guards);
+          _masterRouteGuards = null;
           RouteGuard guard;
           try {
             guard = guards.length == 0
