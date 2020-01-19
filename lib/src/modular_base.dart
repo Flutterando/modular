@@ -193,10 +193,14 @@ class Modular {
       } else {
         if (searchRoute(route, tempRouteName, path)) {
           var guards = _prepareGuardList(masterRouteGuards, route.guards);
-          var guard = guards.length == 0
-              ? null
-              : guards.firstWhere((guard) => guard.canActivate(path) == false,
-                  orElse: null);
+          RouteGuard guard;
+          try {
+            guard = guards.length == 0
+                ? null
+                : guards.firstWhere((guard) => guard.canActivate(path),
+                    orElse: null);
+          } catch (e) {}
+
           return guard == null ? route : null;
         }
       }
