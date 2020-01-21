@@ -8,12 +8,36 @@ import 'interfaces/route_guard.dart';
 import 'transitions/transitions.dart';
 
 class Modular {
+  static String get initialRoute => '/';
+
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
+  static GlobalKey<NavigatorState> _navigatorKey;
+
+  static GlobalKey<NavigatorState> get navigatorKey {
+    if (_navigatorKey == null) {
+      _navigatorKey = GlobalKey<NavigatorState>();
+    }
+
+    return _navigatorKey;
+  }
 
   static init(ChildModule module) {
     _initialModule = module;
     bindModule(module, "global==");
+  }
+
+  static NavigatorState get to {
+    assert(
+        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+
+      return MaterialApp(
+        navigatorKey: Modular.navigatorKey,
+        ...
+
+.
+      ''');
+    return _navigatorKey.currentState;
   }
 
   @visibleForTesting
@@ -29,7 +53,6 @@ class Modular {
     }
   }
 
-  @visibleForTesting
   static void removeModule(ChildModule module) {
     String name = module.runtimeType.toString();
     if (_injectMap.containsKey(name)) {
@@ -38,13 +61,30 @@ class Modular {
     }
   }
 
-  static T getInjectableObject<T>(String tag, {
+  static B get<B>({Map<String, dynamic> params, Type module}) {
+    if (module != null) {
+      return getInjectableObject(module.toString(), params: params);
+    } else {
+      for (var key in _injectMap.keys) {
+        B value =
+            getInjectableObject<B>(key, params: params, disableError: true);
+        if (value != null) {
+          return value;
+        }
+      }
+      throw ModularError('${B.toString()} not found');
+    }
+  }
+
+  static B getInjectableObject<B>(
+    String tag, {
     Map<String, dynamic> params,
+    bool disableError = false,
   }) {
-    T value =
-        _injectMap[tag].get<T>(params) ?? _injectMap["global=="].get<T>(params);
-    if (value == null) {
-      throw Exception('${T.toString()} not found in module $tag');
+    B value;
+    if (_injectMap.containsKey(tag)) value = _injectMap[tag].getBind<B>(params);
+    if (value == null && !disableError) {
+      throw ModularError('${B.toString()} not found in module $tag');
     }
 
     return value;
@@ -58,7 +98,8 @@ class Modular {
   static String prepareToRegex(String url) {
     List<String> newUrl = [];
     for (var part in url.split('/')) {
-      var url = part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
+      var url =
+          part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
       newUrl.add(url);
     }
 
@@ -118,6 +159,8 @@ class Modular {
     return routeNamed == path;
   }
 
+  static List<RouteGuard> _masterRouteGuards;
+
   static Router _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
@@ -125,9 +168,8 @@ class Modular {
     for (var route in module.routers) {
       String tempRouteName =
           (routerName + route.routerName).replaceFirst('//', '/');
-      List<RouteGuard> masterRouteGuards;
       if (route.child == null) {
-        masterRouteGuards = route.guards;
+        _masterRouteGuards = route.guards;
         var _routerName =
             (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
@@ -153,11 +195,16 @@ class Modular {
         }
       } else {
         if (searchRoute(route, tempRouteName, path)) {
-          var guards = _prepareGuardList(masterRouteGuards, route.guards);
-          var guard = guards.length == 0
-              ? null
-              : guards.firstWhere((guard) => guard.canActivate(path) == false,
-                  orElse: null);
+          var guards = _prepareGuardList(_masterRouteGuards, route.guards);
+          _masterRouteGuards = null;
+          RouteGuard guard;
+          try {
+            guard = guards.length == 0
+                ? null
+                : guards.firstWhere((guard) => !guard.canActivate(path),
+                    orElse: null);
+          } catch (e) {}
+
           return guard == null ? route : null;
         }
       }
@@ -214,8 +261,10 @@ class Modular {
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
-  static Route generateRoute(RouteSettings settings, {
-    Function(Widget Function(BuildContext) builder, RouteSettings settings) pageRoute = _defaultPageRouter,
+  static Route generateRoute(
+    RouteSettings settings, {
+    Function(Widget Function(BuildContext) builder, RouteSettings settings)
+        pageRoute = _defaultPageRouter,
   }) {
     String path = settings.name;
     Router router = selectRoute(path);
@@ -289,7 +338,6 @@ class Modular {
     }, args, settings);
   }
 
-  @visibleForTesting
   static void addCoreInit(ChildModule module) {
     var tagText = module.runtimeType.toString();
     _injectMap[tagText] = module;

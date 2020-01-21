@@ -9,7 +9,7 @@ class Inject<T> {
 
   Inject({
     this.params,
-    this.tag = "global==",
+    this.tag,
   });
 
   factory Inject.of() => Inject(tag: T.toString());
@@ -17,7 +17,11 @@ class Inject<T> {
   ///get injected dependency
   T get<T>([Map<String, dynamic> params]) {
     params ??= {};
-    return Modular.getInjectableObject<T>(tag, params: params);
+    if (tag == null) {
+      return Modular.get<T>(params: params);
+    } else {
+      return Modular.getInjectableObject<T>(tag, params: params);
+    }
   }
 
   dispose<T>() {
@@ -25,21 +29,28 @@ class Inject<T> {
   }
 }
 
-mixin InjectMixin<T> {
+mixin InjectMixinBase<T> {
   final Inject<T> _inject = Inject<T>.of();
 
-  S get<S>() {
-    return _inject.get<S>();
-  }
+  S get<S>() => _inject.get<S>();
+}
+
+/// A mixin that must be used only with classes that extends a [Widget]
+/// [T] the module to be injected on the widget.
+mixin InjectWidgetMixin<T extends ChildModule> on Widget
+    implements InjectMixinBase<T> {
+  final Inject<T> _inject = Inject<T>.of();
+
+  S get<S>({Map<String, dynamic> params}) =>
+      Modular.get<S>(module: T, params: params);
 
   Widget consumer<S extends ChangeNotifier>({
     Widget Function(BuildContext context, S value) builder,
     bool Function(S oldValue, S newValue) distinct,
   }) {
-    return ConsumerWidget<S>(
+    return Consumer(
       builder: builder,
       distinct: distinct,
-      inject: _inject,
     );
   }
 }

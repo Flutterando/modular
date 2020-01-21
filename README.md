@@ -4,18 +4,15 @@
 
 *Read this in other languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
 
-## WARNING 
-
-** THIS PROJECT IS UNDER DEVELOPMENT AND WE DO NOT RECOMMEND TO USE IN PRODUCTION. WATCH THE RELEASES AND WE APPRECIATE YOUR CONTRIBUTION;
 
 ## What is Flutter Modular?
 
-When a project is getting bigger and complexer, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
+When a project is getting bigger and more complex, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
 The Modular came up prepared for adapt to any state management approach to its smart injection system, managing the memory use of your application.
 
 ## What is the difference between Modular Flutter and bloc_pattern;
 
-We learned a lot from bloc_pattern, and we understand that the community has a lot of preferences regarding State Management, so even for the sake of nomenclature, we decided to treat Modular as a natural evolution of bloc_pattern and from there implement the system of " Dynamic Routes "that will become very popular with Flutter Web. Named routes are the future of Flutter, and we are preparing for it.
+We learned a lot from bloc_pattern, and we understand that the community has a lot of preferences regarding State Management, so even for the sake of nomenclature, we decided to treat Modular as a natural evolution of bloc_pattern and from there implement the system of "Dynamic Routes" that will become very popular with Flutter Web. Named routes are the future of Flutter, and we are preparing for it.
 
 
 ## Will bloc_pattern be deprecated?
@@ -24,7 +21,7 @@ Nope! We will continue to support and improve it. Although the migration to Modu
 
 
 ## Modular Structure
-Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects. .
+Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects.
 
 
 ## Modular Pillars
@@ -136,10 +133,12 @@ class AppModule extends MainModule {
 }
 ```
 
-And to access the route use Navigator.pushNamed:
+And to access the route use Navigator.pushNamed or Modular.to.pushNamed:
 
 ```dart
 Navigator.pushNamed(context, '/login');
+//or
+Modular.to.pushNamed('/login');
 ```
 
 
@@ -163,6 +162,8 @@ From this you can use:
 ```dart
  
 Navigator.pushNamed(context, '/product/1'); //args.params['id']) gonna be 1
+//or
+Modular.to.pushNamed('/product/1'); //args.params['id']) gonna be 1
 
 ```
 
@@ -190,7 +191,7 @@ Now put in the 'guards' property of your Router.
 ```dart
   @override
   List<Router> get routers => [
-        Router("/", module: HomeModule()]),
+        Router("/", module: HomeModule()),
         Router("/admin", module: AdminModule(), guards: [MyGuard()]),
       ];
 
@@ -274,10 +275,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-// You can use the object Inject to retrieve..
+    // You can use the object Inject to retrieve..
   
-  AppBloc appBloc = Inject<AppModule>.of().get();
-  ...
+    final appBloc = Modular.get<AppBloc>();
+    //...
+  }
+}
 ```
 
 ## ATTENTION: When retrieving a class using Inject's get () method, it first looks in the module that was requested, if not found, it looks in the main module. We will still talk about creating child modules in this documentation.
@@ -287,22 +290,64 @@ class HomePage extends StatelessWidget {
 We will use Mixin in the view to retrieve injections more easily
 
 ```dart
-class HomePage extends StatelessWidget  with InjectMixin<AppModule>{
+class HomePage extends StatelessWidget  with InjectMixinBase<AppModule>{
 
   @override
   Widget build(BuildContext context) {
 
-  // with mixin you add the get method straight to your view.
-  AppBloc appBloc = get();
+    // with mixin you add the get method straight to your view.
+    AppBloc appBloc = get();
 
-// another way to recover
-  final appBloc = get<AppBloc>();
-  ...
+    // another way to recover
+    final appBloc = get<AppBloc>();
+    // ...
+ }
+}
+```
+
+### Using Modular widgets to retrieve your classes
+You can also use `ModularStatelessWidget` instead of the mixin `InjectMixinBase<AppModule>` for example you can write:
+
+```dart
+class MyWidget extends ModularStatelessWidget<HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(
+        child: Text("${get<HomeBloc>().counter}"),
+      ),
+    );
+  }
+}
+```
+K
+
+Example with `StatefulWidget`:
+
+```dart
+class MyWidget extends StatefulWidget {
+  @override
+  _MyWidgetState createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Modular"),
+      ),
+      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+    );
+  }
+}
 ```
 
 ## Consuming a ChangeNotifier Class
 
-As we saw before, InjectMixin allows us to merge some new methods into our view. If you're using Mixin in addition to the get () method, you get the consumer () method and rebuild your children every time a class is notified with a change:
 
 Example of a ChangeNotifier Class:
 
@@ -319,10 +364,10 @@ class Counter extends ChangeNotifier {
 }
 ```
 
-With integrated InjectMixin, you can use the consumer method to manage the state of a widget block.
+ you can use the Consumer to manage the state of a widget block.
 
 ```dart
-class HomePage extends StatelessWidget with InjectMixin<AppModule> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -331,7 +376,7 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
       ),
       body: Center(
      // recognize the ChangeNotifier class and rebuild when notifyListeners () is called
-        child: consumer<Counter>(
+        child: Consumer<Counter>(
           builder: (context, value) {
             return Text('Counter ${value.counter}');
           }
@@ -348,6 +393,7 @@ class HomePage extends StatelessWidget with InjectMixin<AppModule> {
   }
 }
 ```
+
 
 ## Creating Child Modules.
 
@@ -369,6 +415,8 @@ class HomeModule extends ChildModule {
   static Inject get to => Inject<HomeModule>.of();
 
 }
+```
+
 From this you can call your modules on the main module route.
 
 ```dart
@@ -377,10 +425,10 @@ class AppModule extends MainModule {
   @override
   List<Router> get routers => [
         Router("/home", module: HomeModule()),
-        ...
+        //...
       ];
-
-...
+}
+//...
 ```
 
 Consider splitting your code into modules such as LoginModule, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
@@ -397,11 +445,11 @@ This is currently our roadmap, please feel free to request additions/changes.
 | :-----------------------------------------| :------: |
 | DI by Module                              |    ✅    |
 | Routes by Module                          |    ✅    |
-| Widget Consume para ChangeNotifier        |    ✅    |
+| Widget Consume for ChangeNotifier         |    ✅    |
 | Auto-dispose                              |    ✅    |
 | Integration with flutter_bloc             |    ✅    |
 | Integration with mobx	                    |    ✅    |
-| Rotas multiplas                           |    ✅    |
+| Multiple routes                           |    ✅    |
 | Pass arguments by route                   |    ✅    |
 | Pass url parameters per route             |    ✅    |
 | Route Transition Animation                |    ✅    |

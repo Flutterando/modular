@@ -6,11 +6,11 @@ abstract class ChildModule {
   List<Bind> get binds;
   List<Router> get routers;
 
-  List<String> paths = List<String>();
+  final List<String> paths = List<String>();
 
   final Map<String, dynamic> _injectBinds = {};
 
-  get<T>([Map<String, dynamic> params]) {
+  getBind<T>([Map<String, dynamic> params]) {
     String typeName = T.toString();
     T _bind;
     if (_injectBinds.containsKey(typeName)) {
@@ -23,12 +23,13 @@ abstract class ChildModule {
     if (b == null) {
       return null;
     }
-    _bind =
-        b.inject(Inject(
-          params: params,
-          tag: this.runtimeType.toString(),
-        ));
-    _injectBinds[typeName] = _bind;
+    _bind = b.inject(Inject(
+      params: params,
+      tag: this.runtimeType.toString(),
+    ));
+    if (b.singleton) {
+      _injectBinds[typeName] = _bind;
+    }
     return _bind;
   }
 
