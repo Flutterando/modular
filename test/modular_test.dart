@@ -39,7 +39,7 @@ void main() {
 
       expect(
           Modular.searchRoute(router, "/home/list/:id", "/home/list/1"), true);
-      expect(router.params['id'], 1);
+      expect(router.params['id'], "1");
 
       expect(
           Modular.searchRoute(
@@ -49,13 +49,29 @@ void main() {
           false);
     });
 
+    test('search object Router to url String', () {
+      var router =
+          Router('/home/list/:id', child: (_, __) => SizedBox.shrink());
+
+      expect(
+          Modular.searchRoute(router, "/home/list/:id", "/home/list/01"), true);
+      expect(router.params['id'], "01");
+
+      expect(
+          Modular.searchRoute(
+              Router('/home/list', child: (_, __) => SizedBox.shrink()),
+              "/home/list",
+              "/home/list/01"),
+          false);
+    });
+
     test('router with params get', () {
       expect(Modular.selectRoute("/list/1/2"), isA<Router>());
-      expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
       expect(Modular.selectRoute("/home/test"), null);
     });
     test('router with params get multiple', () {
-      expect(Modular.selectRoute("/home/list/1/2"), isA<Router>());
+      var a = Modular.selectRoute("/home/list/1/2");
+      expect(a, isA<Router>());
     });
     test('router with params get multiple 2 modules', () {
       expect(Modular.selectRoute("/home/product/"), isA<Router>());

@@ -7,7 +7,7 @@ class Router {
   final String routerName;
   final Widget Function(BuildContext context, ModularArguments args) child;
   final ChildModule module;
-  Map<String, dynamic> params;
+  Map<String, String> params;
   final List<RouteGuard> guards;
   final TransitionType transition;
 
@@ -32,7 +32,7 @@ class Router {
     Widget Function(BuildContext context, ModularArguments args) child,
     String routerName,
     ChildModule module,
-    Map<String, dynamic> params,
+    Map<String, String> params,
     List<RouteGuard> guards,
     TransitionType transition,
   }) {
