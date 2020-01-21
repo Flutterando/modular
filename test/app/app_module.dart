@@ -26,7 +26,8 @@ class AppModule extends MainModule {
           module: HomeModule(),
           transition: TransitionType.fadeIn,
         ),
-        Router("/home", module: HomeModule(), guards: [MyGuard()]),
+        Router("/home", module: HomeModule()),
+        Router("/homeTwo", module: HomeModule(), guards: [MyGuard()]),
       ];
 
   @override

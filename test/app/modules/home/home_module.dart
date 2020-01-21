@@ -20,11 +20,10 @@ class HomeModule extends ChildModule {
           child: (_, args) => HomeWidget(),
           transition: TransitionType.fadeIn,
         ),
-        Router(
-          "/forbidden2",
-          child: (_, args) => ForbiddenWidget(),
-          transition: TransitionType.fadeIn,
-        ),
+        Router("/forbidden2",
+            child: (_, args) => ForbiddenWidget(),
+            transition: TransitionType.fadeIn,
+            guards: [MyGuard()]),
         Router("/list/:id/:id2", child: (_, args) => HomeWidget()),
         Router("/product", module: ProductModule()),
       ];

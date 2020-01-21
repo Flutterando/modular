@@ -90,5 +90,9 @@ void main() {
     test('RouteGuard other module', () {
       expect(Modular.selectRoute("/home/forbidden2"), null);
     });
+
+     test('RouteGuard other module Two', () {
+      expect(Modular.selectRoute("/homeTwo/forbidden2"), null);
+    });
   });
 }
