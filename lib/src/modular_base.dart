@@ -135,11 +135,11 @@ class Modular {
       var r = regExp.firstMatch(path);
 
       if (r?.groupNames != null) {
-        Map<String, dynamic> params = {};
+        Map<String, String> params = {};
         int count = 1;
         for (var key in r?.groupNames) {
           routeNamed = routeNamed.replaceFirst(':$key', r?.group(count));
-          params[key] = Modular.convertType("${r?.group(count)}");
+          params[key] = r?.group(count);
           count++;
         }
 
@@ -180,7 +180,8 @@ class Modular {
                 (routerName + route.routerName).replaceFirst('//', '/');
             router = _searchInModule(route.module, _routerName, path);
           }
-        } else {
+        } else {          
+          //router = _searchInModule(route.module, _routerName, path.substring(path.indexOf("/",1)));
           router = _searchInModule(route.module, _routerName, path);
         }
 
