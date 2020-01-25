@@ -1,8 +1,8 @@
-import 'package:flutter_modular/src/interfaces/route_guard.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class MyGuard implements RouteGuard {
   @override
   bool canActivate(String url) {
-    return false;
+    return url != '/list/2';
   }
 }

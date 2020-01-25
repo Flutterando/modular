@@ -7,7 +7,7 @@ class Router {
   final String routerName;
   final Widget Function(BuildContext context, ModularArguments args) child;
   final ChildModule module;
-  Map<String, dynamic> params;
+  Map<String, String> params;
   final List<RouteGuard> guards;
   final TransitionType transition;
 
@@ -21,11 +21,10 @@ class Router {
   }) {
     assert(routerName != null);
 
-    if(transition == null)
-      throw ArgumentError('transition must not be null');
-    if(module == null && child == null)
-       throw ArgumentError('[module] or [child] must be provided');
-    if(module != null && child != null)
+    if (transition == null) throw ArgumentError('transition must not be null');
+    if (module == null && child == null)
+      throw ArgumentError('[module] or [child] must be provided');
+    if (module != null && child != null)
       throw ArgumentError('You should provide only [module] or [child]');
   }
 
@@ -33,7 +32,7 @@ class Router {
     Widget Function(BuildContext context, ModularArguments args) child,
     String routerName,
     ChildModule module,
-    Map<String, dynamic> params,
+    Map<String, String> params,
     List<RouteGuard> guards,
     TransitionType transition,
   }) {

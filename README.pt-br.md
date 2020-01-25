@@ -8,27 +8,27 @@
 ## O que é o Flutter Modular?
 
 Quando um projeto vai ficando grande e complexo, acabamos juntando muitos arquivos em um só lugar, isso dificulta a manutenção do código e também o reaproveitamento.
-O Modular nós trás várias soluções adaptadas para o Flutter como Injeção de Dependências, Controle de Rotas e o Sistema de "Singleton Disposáveis" que é quando o provedor do código se encarrega de "chamar" o dispose automaticamente e limpar a injeção (prática muito comum no package bloc_pattern).
+O Modular nos trás várias soluções adaptadas para o Flutter como Injeção de Dependências, Controle de Rotas e o Sistema de "Singleton Descartáveis" que é quando o provedor do código se encarrega de "chamar" o dispose automaticamente e limpar a injeção (prática muito comum no package bloc_pattern).
 O Modular vem preparado para adaptar qualquer gerência de estado ao seu sistema de Injeção de Dependências inteligente, gerenciando a memória do seu aplicativo.
 
 ## Qual a diferença entre o Flutter Modular e o bloc_pattern;
 
-Aprendemos muito com o bloc_pattern, e entendemos que a comunidade tem diversas preferências com relação a Gerência de Estado, então, até mesmo por uma questão de nomeclatura, decidimos tratar o Modular como uma evolução natural do bloc_pattern, a partir dai implementar o sistema de Rotas Dinâmicas que ficará muito popular graças ao Flutter Web. Rotas nomeadas são o futuro do Flutter, e estamos preparando para isso.
+Aprendemos muito com o bloc_pattern, e entendemos que a comunidade tem diversas preferências com relação a Gerência de Estado, então, até mesmo por uma questão de nomeclatura, decidimos tratar o Modular como uma evolução natural do bloc_pattern, e a partir daí implementar o sistema de Rotas Dinâmicas que ficará muito popular graças ao Flutter Web. Rotas nomeadas são o futuro do Flutter, e estamos nos preparando para isso.
 
 ## O bloc_pattern será depreciado?
 
-Não! Continuaremos a dar suporte e melhora-lo. Apesar que a migração para o Modular será muito simples também.
+Não! Continuaremos a dar suporte e melhora-lo. Apesar de que a migração para o Modular será muito simples também.
 
 ## Estrutura Modular
 
-O Modular nos tras uma estrutura que nos permite gerenciar a injeção de dependencia e as rotas em apenas um arquivo por módulo, com isso podemos organizar nossos arquivos pensando nisso. Quando todos as paginas, controllers, blocs (e etc..) estiverem em uma pasta e reconhecido por esse arquivo principal, a isso damos o nome de módulo, pois nos propocionará fácil manutenabilidade e principalmente o desacoplamento TOTAL do código para reaproveitamento em outros projetos.
+O Modular nos traz uma estrutura que permite gerenciar a injeção de dependencias e rotas em apenas um arquivo por módulo, permitindo organizar nossos arquivos a partir desta idéia. Quando todos as paginas, controllers, blocs (e etc..) estiverem em uma pasta e reconhecidos por esse arquivo principal, a isso damos o nome de módulo, pois nos propocionará fácil manutenabilidade e principalmente o desacoplamento TOTAL do código para reaproveitamento em outros projetos.
 
 ## Pilares do Modular
 
 Aqui estão nossos focos principais com o package.
 
 - Gerência Automática de Memória.
-- Injeção de Dependência.
+- Injeção de Dependências.
 - Controle de Rotas Dinâmicas.
 - Modularização de Código.
 
@@ -74,7 +74,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       //defina sua rota inicial
       initialRoute: "/",
-      //adicione para que o Modular possa gerenciar o sistema de rotas.
+      //adicione o Modular para que ele possa gerenciar o sistema de rotas.
       onGenerateRoute: Modular.generateRoute,
     );
   }
@@ -90,7 +90,7 @@ class AppWidget extends StatelessWidget {
 //herde de MainModule
 class AppModule extends MainModule {
 
-  //aqui ficarão qualquer classe que deseja Injetar no seu projeto (ex: bloc, dependency)
+  //aqui ficarão todas as classes que deseja Injetar no seu projeto (ex: bloc, dependency)
   @override
   List<Bind> get binds => [];
 
@@ -116,7 +116,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 void main() => runApp(ModularApp(module: AppModule()));
 ```
 
-Pronto! Seu aplicativo já está configurado para Modular!
+Pronto! Seu aplicativo já está configurado para usar o Modular!
 
 ## Adicionando Rotas
 
@@ -125,7 +125,7 @@ Você pode adicionar rotas no seu módulo usando o getter 'routers';
 ```dart
 class AppModule extends MainModule {
 
-  //aqui ficarão qualquer classe que deseja Injetar no seu projeto (ex: bloc, dependency)
+  //aqui ficarão todas as classes que deseja Injetar no seu projeto (ex: bloc, dependency)
   @override
   List<Bind> get binds => [];
 
@@ -151,7 +151,7 @@ Modular.to.pushNamed('/login');
 
 ## Rotas dinâmicas
 
-Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetro e receber em sua view.
+Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetro e o receber em sua view.
 
 
 ```dart
@@ -165,7 +165,7 @@ Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetr
 
 ```
 Uma rota dinâmica é considerada válida quando o valor correspontente ao parâmentro é preenchido.
-A partir disso você pode usar:
+A partir disto você pode usar:
 
 ```dart
  
@@ -177,17 +177,17 @@ Modular.to.pushNamed('/product/1'); //args.params['id']) será 1
 
 ## Proteção de Rotas
 
-Podemos proteger nossas rotas com middlewares que verificará se a rota está disponível dentro de uma determinada Rota.
+Podemos proteger nossas rotas com middlewares que verificarão se a rota está disponível dentro de um determinado Route.
 Primeiro crie um RouteGuard:
 ```dart
 class MyGuard implements RouteGuard {
   @override
   bool canActivate(String url) {
     if(url != '/admin'){
-      //code of authorization
+      //código para autorização
       return true;
     } else {
-      //access denied
+      //acesso negado
       return false;
     }
   }
@@ -214,14 +214,14 @@ Você pode escolher qual tipo de animação deseja setando o parametro **transit
 ```dart
 Router("/product", 
         module: AdminModule(),
-        transition: TransitionType.fadeIn), //use for change transition
+        transition: TransitionType.fadeIn), //use para mudar a transição
 ```
 
 Se usar o transition em um módulo, todas as rotas desse módulo herdarão essa animação de transição.
 
 ## Rotas na url com Flutter Web
 
-O Sistema de rotas também reconhece o que é digitado na url do site (flutter web) então o que for digitado na url do browser será aberto no aplicativo. Esperamos que isso facilite o SEO para os sites feito em Flutter Web, fazendo com que tenha icones mais únicos.
+O Sistema de rotas também reconhece o que é digitado na url do site (flutter web) então o que for digitado na url do browser será aberto no aplicativo. Esperamos que isso facilite o SEO para os sites feitos em Flutter Web, tornando-o mais único.
 
 As rotas dinâmicas também se aplicam nesse caso.
 
@@ -238,7 +238,7 @@ Você pode injetar qualquer classe no seu módulo usando o getter 'binds', como 
 ```dart
 class AppModule extends MainModule {
 
-  //aqui ficarão qualquer classe que deseja Injetar no seu projeto (ex: bloc, dependency)
+  //aqui ficarão todas as classes que deseja Injetar no seu projeto (ex: bloc, dependency)
   @override
   List<Bind> get binds => [
     Bind((i) => AppBloc()), //usando bloc
@@ -258,13 +258,13 @@ class AppModule extends MainModule {
 }
 ```
 
-Vamos supor que por exemplo nós queremos recuperar o AppBloc dentro do HomePage.
+Vamos supor por exemplo que nós queremos recuperar o AppBloc dentro do HomePage.
 
 ```dart
 //código do bloc
 import 'package:flutter_modular/flutter_modular.dart' show Disposable;
 
-//você pode herdar ou implementar de Disposable para configurar um dispose para sua classe, se não não tiver.
+//você pode herdar ou implementar a partir do Disposable para configurar um dispose para sua classe, se não não tiver um.
 class AppBloc extends Disposable {
 
   StreamController controller = StreamController();
@@ -294,7 +294,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-ATENÇÂO: Quando recuperar uma classe usando o método get() do Inject, ele primeiro procurará no módulo que foi solicitado, se não encontrar, ele busca no módulo principal. Ainda falaremos sobre a criação de módulos filhos nessa documentação.
+ATENÇÂO: Quando recuperar uma classe usando o método get() do Inject, ele primeiro procurará no módulo que foi solicitado, se não encontrar, ele buscará no módulo principal. Ainda falaremos sobre a criação de módulos filhos nesta documentação.
 
 ## Usando o InjectMixin para recuperar suas Classes
 
@@ -335,7 +335,7 @@ class MyWidget extends ModularStatelessWidget<HomeModule> {
 }
 ```
 
-Caso seu widget for `StatefulWidget` seu estado deve extender de `ModularState<MyWidget, HomeModule>` para ter acesso ao `get` e `consumer` dentro do estado do seu widget:
+Caso seu widget seja `StatefulWidget` seu estado deve extender de `ModularState<MyWidget, HomeModule>` para ter acesso ao `get` e `consumer` dentro dele:
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -428,7 +428,7 @@ class HomeModule extends ChildModule {
 }
 ```
 
-A partir disso você pode chamar seus módulos na rota do módulo principal.
+A partir disto você pode chamar seus módulos na rota do módulo principal.
 
 ```dart
 class AppModule extends MainModule {
@@ -446,11 +446,11 @@ Pense em dividir seu código em módulos como por exemplo, `LoginModule`, e dent
 
 ## Lazy Loading
 
-Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando vc navegar para um módulo, e assim que sair desse módulo, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte a aquele módulo.
+Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando você navegar para um módulo, e assim que sair dele, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte a aquele módulo.
 
 ## Roadmap
 
-Este é o nosso mapa, sinta-se a vontade para requisitar alterações.
+Este é o nosso roteiro, sinta-se a vontade para requisitar alterações.
 
 | Funcionalidades                        | Progresso |
 | :------------------------------------- | :------: |
@@ -467,7 +467,7 @@ Este é o nosso mapa, sinta-se a vontade para requisitar alterações.
 
 ## Funcionalidades e Bugs
 
-Por favor envie pedido de funcionalidades no [rastreador de problemas](https://github.com/Flutterando/modular/issues).
+Por favor envie seu pedido de funcionalidades no [rastreador de problemas](https://github.com/Flutterando/modular/issues).
 
 Criado a partir de modelos disponibilizados pelo Stagehand sob um estilo BSD
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).

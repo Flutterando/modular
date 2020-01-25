@@ -8,6 +8,8 @@ import 'interfaces/route_guard.dart';
 import 'transitions/transitions.dart';
 
 class Modular {
+  static String get initialRoute => '/';
+
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
   static GlobalKey<NavigatorState> _navigatorKey;
@@ -84,7 +86,7 @@ class Modular {
     bool disableError = false,
   }) {
     B value;
-    value = _injectMap[tag].getBind<B>(params);
+    if (_injectMap.containsKey(tag)) value = _injectMap[tag].getBind<B>(params);
     if (value == null && !disableError) {
       throw ModularError('${B.toString()} not found in module $tag');
     }
@@ -137,11 +139,11 @@ class Modular {
       var r = regExp.firstMatch(path);
 
       if (r?.groupNames != null) {
-        Map<String, dynamic> params = {};
+        Map<String, String> params = {};
         int count = 1;
         for (var key in r?.groupNames) {
           routeNamed = routeNamed.replaceFirst(':$key', r?.group(count));
-          params[key] = Modular.convertType("${r?.group(count)}");
+          params[key] = r?.group(count);
           count++;
         }
 
@@ -161,6 +163,8 @@ class Modular {
     return routeNamed == path;
   }
 
+  static List<RouteGuard> _masterRouteGuards;
+
   static Router _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
@@ -168,9 +172,8 @@ class Modular {
     for (var route in module.routers) {
       String tempRouteName =
           (routerName + route.routerName).replaceFirst('//', '/');
-      List<RouteGuard> masterRouteGuards;
       if (route.child == null) {
-        masterRouteGuards = route.guards;
+        _masterRouteGuards = route.guards;
         var _routerName =
             (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
@@ -181,7 +184,8 @@ class Modular {
                 (routerName + route.routerName).replaceFirst('//', '/');
             router = _searchInModule(route.module, _routerName, path);
           }
-        } else {
+        } else {          
+          //router = _searchInModule(route.module, _routerName, path.substring(path.indexOf("/",1)));
           router = _searchInModule(route.module, _routerName, path);
         }
 
@@ -196,11 +200,16 @@ class Modular {
         }
       } else {
         if (searchRoute(route, tempRouteName, path)) {
-          var guards = _prepareGuardList(masterRouteGuards, route.guards);
-          var guard = guards.length == 0
-              ? null
-              : guards.firstWhere((guard) => guard.canActivate(path) == false,
-                  orElse: null);
+          var guards = _prepareGuardList(_masterRouteGuards, route.guards);
+          _masterRouteGuards = null;
+          RouteGuard guard;
+          try {
+            guard = guards.length == 0
+                ? null
+                : guards.firstWhere((guard) => !guard.canActivate(path),
+                    orElse: null);
+          } catch (e) {}
+
           return guard == null ? route : null;
         }
       }
