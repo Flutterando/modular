@@ -15,17 +15,17 @@ class Inject<T> {
   factory Inject.of() => Inject(tag: T.toString());
 
   ///get injected dependency
-  T get<T>([Map<String, dynamic> params]) {
+  B get<B>([Map<String, dynamic> params]) {
     params ??= {};
     if (tag == null) {
-      return Modular.get<T>(params: params);
+      return Modular.get<B>(params: params);
     } else {
-      return Modular.getInjectableObject<T>(tag, params: params);
+      return Modular.getInjectableObject<B>(tag, params: params);
     }
   }
 
-  dispose<T>() {
-    return Modular.removeInjectableObject<T>(tag);
+  dispose<B>() {
+    return Modular.removeInjectableObject<B>(tag);
   }
 }
 

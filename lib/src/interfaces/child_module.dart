@@ -25,7 +25,7 @@ abstract class ChildModule {
     }
     _bind = b.inject(Inject(
       params: params,
-      tag: this.runtimeType.toString(),
+      //     tag: this.runtimeType.toString(),
     ));
     if (b.singleton) {
       _injectBinds[typeName] = _bind;

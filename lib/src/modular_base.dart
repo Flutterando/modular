@@ -60,6 +60,10 @@ class Modular {
   }
 
   static B get<B>({Map<String, dynamic> params, Type module}) {
+    if (B.toString() == 'dynamic') {
+      throw ModularError('not allow for dynamic values');
+    }
+
     if (module != null) {
       return getInjectableObject(module.toString(), params: params);
     } else {
