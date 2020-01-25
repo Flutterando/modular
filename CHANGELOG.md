@@ -1,3 +1,8 @@
+## [0.3.4] - 24 Jan 2020
+
+* fix inject error
+
+
 ## [0.3.3+1] - 18 Jan 2020
 
 * Modular is BETA!!!
