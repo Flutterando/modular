@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 abstract class ModuleWidget extends StatelessWidget with ChildModule {
+  ModuleWidget() {
+    this.paths.add(this.runtimeType.toString());
+  }
   @override
   List<Router> get routers => null;
 
