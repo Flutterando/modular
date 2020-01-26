@@ -1,5 +1,6 @@
-## [0.3.4] - 24 Jan 2020
+## [0.3.5] - 26 Jan 2020
 
+* fix module widget
 * fix inject error
 
 
