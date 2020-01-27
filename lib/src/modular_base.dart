@@ -27,7 +27,7 @@ class Modular {
     bindModule(module, "global==");
   }
 
-  static NavigatorState get to {
+  static NavigatorState to([BuildContext ctx]) {
     assert(
         _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
 
@@ -37,7 +37,13 @@ class Modular {
 
 .
       ''');
-    return _navigatorKey.currentState;
+    // case ctx exista, significa que o usuário está usando
+    // um Navigator filho.
+    if (ctx != null) {
+      return Navigator.of(ctx);
+    } else {
+      return _navigatorKey.currentState;
+    }
   }
 
   @visibleForTesting
@@ -184,7 +190,7 @@ class Modular {
                 (routerName + route.routerName).replaceFirst('//', '/');
             router = _searchInModule(route.module, _routerName, path);
           }
-        } else {          
+        } else {
           //router = _searchInModule(route.module, _routerName, path.substring(path.indexOf("/",1)));
           router = _searchInModule(route.module, _routerName, path);
         }
