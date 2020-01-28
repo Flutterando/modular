@@ -1,4 +1,4 @@
-## [0.3.5+1] - 26 Jan 2020
+## [0.4.0] - 28 Jan 2020
 * added Modular.dispose();
 * ModularState
 * Removed InjectMixin
