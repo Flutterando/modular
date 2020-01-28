@@ -33,12 +33,15 @@ abstract class ChildModule {
     return _bind;
   }
 
-  remove<T>() {
+  bool remove<T>() {
     String typeName = T.toString();
     if (_injectBinds.containsKey(typeName)) {
       var inject = _injectBinds[typeName];
       _callDispose(inject);
       _injectBinds.remove(typeName);
+      return true;
+    } else {
+      return false;
     }
   }
 

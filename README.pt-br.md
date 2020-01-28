@@ -294,48 +294,11 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-ATENÇÂO: Quando recuperar uma classe usando o método get() do Inject, ele primeiro procurará no módulo que foi solicitado, se não encontrar, ele buscará no módulo principal. Ainda falaremos sobre a criação de módulos filhos nesta documentação.
+## Using Modular widgets to retrieve your classes
 
-## Usando o InjectMixin para recuperar suas Classes
 
-Usaremos Mixin na view para recuperar as injeções de forma mais fácil.
+### ModularState
 
-```dart
-class HomePage extends StatelessWidget  with InjectMixinBase<AppModule>{
-
-  @override
-  Widget build(BuildContext context) {
-
-    //com mixin você adiciona o método get direto na sua view.
-    AppBloc appBloc = get();
-
-    //uma outra forma de recuperar
-    final appBloc = get<AppBloc>();
-    //...
-  }
-}
-```
-
-### Usando widgets do Modular para obter suas classes
-Você pode usar o widget `ModularStatelessWidget` ao invés do mixin `InjectMixinBase<AppModule>` para simplificar sua implementação:
-
-```dart
-class MyWidget extends ModularStatelessWidget<HomeModule> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Modular"),
-      ),
-      body: Center(
-        child: Text("${get<HomeBloc>().counter}"),
-      ),
-    );
-  }
-}
-```
-
-Caso seu widget seja `StatefulWidget` seu estado deve extender de `ModularState<MyWidget, HomeModule>` para ter acesso ao `get` e `consumer` dentro dele:
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -343,17 +306,40 @@ class MyWidget extends StatefulWidget {
   _MyWidgetState createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+class _MyWidgetState extends ModularState<MyWidget, HomeController> {
+
+  //variable controller
+  //automatic dispose off HomeController
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Modular"),
       ),
-      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+      body: Center(child: Text("${controller.counter}"),),
     );
   }
 }
+```
+
+### ModuleWidget
+
+A mesma estrutura de um MainModule/ChildModule. Muito útil para usar em uma TabBar com páginas modulares
+
+```dart
+class TabModule extends ModuleWidget {
+
+    @override
+  List<Bind> get binds => [
+    Bind((i) => TabBloc(repository: i.get<TabRepository>())),
+    Bind((i) => TabRepository()),
+  ];
+
+  Widget get view => TabPage();
+
+}
+
 ```
 
 ## Consumindo uma Classe ChangeNotifier

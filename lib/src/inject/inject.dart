@@ -20,12 +20,16 @@ class Inject<T> {
     if (tag == null) {
       return Modular.get<B>(params: params);
     } else {
-      return Modular.getInjectableObject<B>(tag, params: params);
+      return Modular.get<B>(module: tag, params: params);
     }
   }
 
   dispose<B>() {
-    return Modular.removeInjectableObject<B>(tag);
+    if (T.runtimeType.toString() == 'dynamic') {
+      return Modular.dispose<B>();
+    } else {
+      return Modular.dispose<B>(tag);
+    }
   }
 }
 
@@ -42,7 +46,7 @@ mixin InjectWidgetMixin<T extends ChildModule> on Widget
   final Inject<T> _inject = Inject<T>.of();
 
   S get<S>({Map<String, dynamic> params}) =>
-      Modular.get<S>(module: T, params: params);
+      Modular.get<S>(module: T.toString(), params: params);
 
   Widget consumer<S extends ChangeNotifier>({
     Widget Function(BuildContext context, S value) builder,

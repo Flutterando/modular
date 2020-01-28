@@ -283,49 +283,12 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## ATTENTION: When retrieving a class using Inject's get () method, it first looks in the module that was requested, if not found, it looks in the main module. We will still talk about creating child modules in this documentation.
 
-## Using InjectMixin to Retrieve Your Classes #
+## Using Modular widgets to retrieve your classes
 
-We will use Mixin in the view to retrieve injections more easily
 
-```dart
-class HomePage extends StatelessWidget  with InjectMixinBase<AppModule>{
+### ModularState
 
-  @override
-  Widget build(BuildContext context) {
-
-    // with mixin you add the get method straight to your view.
-    AppBloc appBloc = get();
-
-    // another way to recover
-    final appBloc = get<AppBloc>();
-    // ...
- }
-}
-```
-
-### Using Modular widgets to retrieve your classes
-You can also use `ModularStatelessWidget` instead of the mixin `InjectMixinBase<AppModule>` for example you can write:
-
-```dart
-class MyWidget extends ModularStatelessWidget<HomeModule> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Modular"),
-      ),
-      body: Center(
-        child: Text("${get<HomeBloc>().counter}"),
-      ),
-    );
-  }
-}
-```
-K
-
-Example with `StatefulWidget`:
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -333,18 +296,42 @@ class MyWidget extends StatefulWidget {
   _MyWidgetState createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+class _MyWidgetState extends ModularState<MyWidget, HomeController> {
+
+  //variable controller
+  //automatic dispose off HomeController
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Modular"),
       ),
-      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+      body: Center(child: Text("${controller.counter}"),),
     );
   }
 }
 ```
+
+### ModuleWidget
+
+The same structure as ChildModule. Very useful for modular TabBar visualizations.
+
+```dart
+class TabModule extends ModuleWidget {
+
+    @override
+  List<Bind> get binds => [
+    Bind((i) => TabBloc(repository: i.get<TabRepository>())),
+    Bind((i) => TabRepository()),
+  ];
+
+  Widget get view => TabPage();
+
+}
+
+```
+
 
 ## Consuming a ChangeNotifier Class
 

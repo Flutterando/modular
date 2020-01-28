@@ -1,4 +1,10 @@
 ## [0.3.5+1] - 26 Jan 2020
+* added Modular.dispose();
+* ModularState
+* Removed InjectMixin
+
+
+## [0.3.5+1] - 26 Jan 2020
 
 * fix module widget
 * fix inject error

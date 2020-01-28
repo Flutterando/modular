@@ -61,17 +61,17 @@ class Modular {
     }
   }
 
-  static B get<B>({Map<String, dynamic> params, Type module}) {
+  static B get<B>({Map<String, dynamic> params, String module}) {
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
     }
 
     if (module != null) {
-      return getInjectableObject(module.toString(), params: params);
+      return _getInjectableObject(module, params: params);
     } else {
       for (var key in _injectMap.keys) {
         B value =
-            getInjectableObject<B>(key, params: params, disableError: true);
+            _getInjectableObject<B>(key, params: params, disableError: true);
         if (value != null) {
           return value;
         }
@@ -80,7 +80,7 @@ class Modular {
     }
   }
 
-  static B getInjectableObject<B>(
+  static B _getInjectableObject<B>(
     String tag, {
     Map<String, dynamic> params,
     bool disableError = false,
@@ -94,8 +94,24 @@ class Modular {
     return value;
   }
 
-  static T removeInjectableObject<T>(String tag) {
-    return _injectMap[tag].remove<T>();
+  static void dispose<B>([String module]) {
+    if (B.toString() == 'dynamic') {
+      throw ModularError('not allow for dynamic values');
+    }
+
+    if (module != null) {
+      _removeInjectableObject(module);
+    } else {
+      for (var key in _injectMap.keys) {
+        if (_removeInjectableObject<B>(key)) {
+          break;
+        }
+      }
+    }
+  }
+
+  static bool _removeInjectableObject<B>(String tag) {
+    return _injectMap[tag].remove<B>();
   }
 
   @visibleForTesting
@@ -184,7 +200,7 @@ class Modular {
                 (routerName + route.routerName).replaceFirst('//', '/');
             router = _searchInModule(route.module, _routerName, path);
           }
-        } else {          
+        } else {
           //router = _searchInModule(route.module, _routerName, path.substring(path.indexOf("/",1)));
           router = _searchInModule(route.module, _routerName, path);
         }
