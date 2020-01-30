@@ -7,6 +7,8 @@ import 'app/app_bloc.dart';
 import 'app/app_module.dart';
 import 'app/modules/home/home_bloc.dart';
 import 'app/modules/home/home_module.dart';
+import 'app/shared/ILocalRepository.dart';
+import 'app/shared/local_storage_shared.dart';
 
 void main() {
   setUpAll(() {
@@ -40,6 +42,12 @@ void main() {
       expect(() {
         Modular.get<HomeModule>();
       }, throwsA(isA<ModularError>()));
+    });
+
+    test('Get Interface', () {
+      expect(Modular.get<LocalStorageSharePreference>(),
+          isA<LocalStorageSharePreference>());
+      expect(Modular.get<ILocalStorage>(), isA<LocalStorageSharePreference>());
     });
   });
 }

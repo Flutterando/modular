@@ -67,7 +67,7 @@ class Modular {
     }
 
     if (module != null) {
-      return _getInjectableObject(module, params: params);
+      return _getInjectableObject<B>(module, params: params);
     } else {
       for (var key in _injectMap.keys) {
         B value =

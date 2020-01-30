@@ -1,3 +1,8 @@
+## [0.4.1] - 30 Jan 2020
+
+* Internal Inject Interface reference
+
+
 ## [0.4.0] - 28 Jan 2020
 * added Modular.dispose();
 * ModularState

@@ -8,13 +8,13 @@ abstract class ChildModule {
 
   final List<String> paths = List<String>();
 
-  final Map<String, dynamic> _injectBinds = {};
+  final Map<Type, dynamic> _injectBinds = {};
 
   getBind<T>([Map<String, dynamic> params]) {
-    String typeName = T.toString();
     T _bind;
-    if (_injectBinds.containsKey(typeName)) {
-      _bind = _injectBinds[typeName];
+    Type type = _getInjectType<T>();
+    if (_injectBinds.containsKey(type)) {
+      _bind = _injectBinds[type];
       return _bind;
     }
 
@@ -28,17 +28,17 @@ abstract class ChildModule {
       //     tag: this.runtimeType.toString(),
     ));
     if (b.singleton) {
-      _injectBinds[typeName] = _bind;
+      _injectBinds[type] = _bind;
     }
     return _bind;
   }
 
   bool remove<T>() {
-    String typeName = T.toString();
-    if (_injectBinds.containsKey(typeName)) {
-      var inject = _injectBinds[typeName];
+    Type type = _getInjectType<T>();
+    if (_injectBinds.containsKey(type)) {
+      var inject = _injectBinds[type];
       _callDispose(inject);
-      _injectBinds.remove(typeName);
+      _injectBinds.remove(type);
       return true;
     } else {
       return false;
@@ -60,10 +60,19 @@ abstract class ChildModule {
   }
 
   cleanInjects() {
-    for (String key in _injectBinds.keys) {
+    for (Type key in _injectBinds.keys) {
       var _bind = _injectBinds[key];
       _callDispose(_bind);
     }
     _injectBinds.clear();
+  }
+
+  Type _getInjectType<B>() {
+    for (Type key in _injectBinds.keys) {
+      if (key is B) {
+        return key;
+      }
+    }
+    return B;
   }
 }
