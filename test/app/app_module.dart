@@ -6,13 +6,14 @@ import 'app_widget.dart';
 import 'guard/guard.dart';
 import 'modules/forbidden/forbidden_widget.dart';
 import 'modules/home/home_module.dart';
+import 'shared/ILocalRepository.dart';
 import 'shared/local_storage_shared.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
         Bind((i) => AppBloc()),
-        Bind((i) => LocalStorageSharePreference()),
+        Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
       ];
 
   @override

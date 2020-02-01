@@ -432,7 +432,36 @@ Pense em dividir seu código em módulos como por exemplo, `LoginModule`, e dent
 
 ## Lazy Loading
 
-Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando você navegar para um módulo, e assim que sair dele, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte a aquele módulo.
+Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando você navegar para um módulo, e assim que sair dele, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte aquele módulo).
+
+## Testes Unitários
+
+Você pode usar o sistema de injeção de dependências para substituir Binds por Binds de mocks, como por exemplo de um repositório. Você pode fazer também usando "Inversão de Controles"
+
+```dart
+@override
+  List<Bind> get binds => [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreferences()),
+      ];
+```
+
+Temos que importar o "flutter_modular_test" para usar os métodos que auxiliarão com a Injeção no ambiente de testes.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+...
+
+main() {
+  test('change bind', () {
+    initModule(AppModule(), changeBinds: [
+      Bind<ILocalStorage>((i) => LocalMock()), 
+    ]);
+    expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
+  });
+}
+```
+
 
 ## Roadmap
 

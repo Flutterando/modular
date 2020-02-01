@@ -3,8 +3,18 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/routers/router.dart';
 
 abstract class ChildModule {
+  List<Bind> _binds;
   List<Bind> get binds;
   List<Router> get routers;
+
+  ChildModule() {
+    _binds = binds;
+  }
+
+  @visibleForTesting
+  changeBinds(List<Bind> b) {
+    _binds = b;
+  }
 
   final List<String> paths = List<String>();
 
@@ -18,7 +28,7 @@ abstract class ChildModule {
       return _bind;
     }
 
-    Bind b = binds.firstWhere((b) => b.inject is T Function(Inject),
+    Bind b = _binds.firstWhere((b) => b.inject is T Function(Inject),
         orElse: () => null);
     if (b == null) {
       return null;

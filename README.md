@@ -424,6 +424,34 @@ Consider splitting your code into modules such as LoginModule, and into it placi
 
 Another benefit you get when working with modules is to load them "lazily". This means that your dependency injection will only be available when you navigate to a module, and as you exit that module, Modular will wipe memory by removing all injections and executing the dispose () methods (if available) on each module. injected class refers to that module.
 
+## Unit Test
+
+You can use the dependency injection system to replace Links from mock links,as an example of a repository. You can also do it using "Inversion of Control"
+
+```dart
+@override
+  List<Bind> get binds => [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreferences()),
+      ];
+```
+
+We have to import the "flutter_modular_test" to use the methods that will assist with Injection in the test environment.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+...
+
+main() {
+  test('change bind', () {
+    initModule(AppModule(), changeBinds: [
+      Bind<ILocalStorage>((i) => LocalMock()), 
+    ]);
+    expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
+  });
+}
+```
+
 ## Roadmap
 
 This is currently our roadmap, please feel free to request additions/changes.

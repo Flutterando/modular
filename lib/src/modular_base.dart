@@ -53,8 +53,8 @@ class Modular {
     }
   }
 
-  static void removeModule(ChildModule module) {
-    String name = module.runtimeType.toString();
+  static void removeModule(ChildModule module, [String name]) {
+    name ??= module.runtimeType.toString();
     if (_injectMap.containsKey(name)) {
       _injectMap[name].cleanInjects();
       _injectMap.remove(name);
@@ -361,6 +361,10 @@ class Modular {
 
   static void addCoreInit(ChildModule module) {
     var tagText = module.runtimeType.toString();
+    addCoreInitFromTag(module, tagText);
+  }
+
+  static void addCoreInitFromTag(ChildModule module, String tagText) {
     _injectMap[tagText] = module;
   }
 }
