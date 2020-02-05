@@ -179,6 +179,18 @@ class Modular {
     return routeNamed == path;
   }
 
+  static RouteGuard _verifyGuard(List<RouteGuard> guards, String path) {
+    RouteGuard guard;
+    try {
+      guard = guards.length == 0
+          ? null
+          : guards.firstWhere((guard) => !guard.canActivate(path),
+              orElse: null);
+    } catch (e) {}
+
+    return guard;
+  }
+
   static List<RouteGuard> _masterRouteGuards;
 
   static Router _searchInModule(
@@ -194,6 +206,10 @@ class Modular {
             (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
         if (_routerName == path || _routerName == "$path/") {
+          RouteGuard guard = _verifyGuard(route.guards, path);
+          if (guard != null) {
+            return null;
+          }
           router = route.module.routers[0];
           if (router.module != null) {
             var _routerName =
@@ -206,6 +222,13 @@ class Modular {
         }
 
         if (router != null) {
+          if (_routerName == path || _routerName == "$path/") {
+            RouteGuard guard = _verifyGuard(router.guards, path);
+            if (guard != null) {
+              return null;
+            }
+          }
+
           if (router.transition == TransitionType.defaultTransition) {
             router = router.copyWith(
               transition: route.transition,
@@ -225,7 +248,10 @@ class Modular {
                 : guards.firstWhere((guard) => !guard.canActivate(path),
                     orElse: null);
           } catch (e) {}
-
+          if ((tempRouteName == path || tempRouteName == "$path/") &&
+              path != '/') {
+            guard = _verifyGuard(guards, path);
+          }
           return guard == null ? route : null;
         }
       }
