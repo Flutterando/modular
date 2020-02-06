@@ -5,6 +5,10 @@
 
 ## [0.4.2] - 1 Feb 2020
 
+* fix routerGuards
+
+## [0.4.2] - 1 Feb 2020
+
 * fix tests
 
 ## [0.4.1] - 30 Jan 2020
