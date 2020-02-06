@@ -1,3 +1,10 @@
+## [0.4.4] - 6 Feb 2020
+
+* fix RouterGuards
+* Added Modular.debugMode = false;
+* Improve documentations
+* Fix Error in initalRoute
+
 ## [0.4.3] - 1 Feb 2020
 
 * fix RouterGuards
@@ -6,9 +13,6 @@
 ## [0.4.2] - 1 Feb 2020
 
 * fix routerGuards
-
-## [0.4.2] - 1 Feb 2020
-
 * fix tests
 
 ## [0.4.1] - 30 Jan 2020

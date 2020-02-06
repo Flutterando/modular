@@ -167,6 +167,26 @@ Modular.to.pushNamed('/product/1'); //args.params['id']) gonna be 1
 
 ```
 
+You can also pass an object using the "arguments" property in the navigation:
+
+```dart
+ 
+Navigator.pushNamed(context, '/product', arguments: ProductModel()); //args.data
+//or
+Modular.to.pushNamed('/product', arguments: ProductModel()); //args.data
+
+```
+getting on the route
+
+```dart
+
+ @override
+  List<Router> get routers => [
+      Router("/product", child: (_, args) => Product(model: args.data)),
+  ];
+
+```
+
 ## Route Guard
 
 We may protect our routes with middleware that will verify that the route is available within a given Route.

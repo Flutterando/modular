@@ -175,6 +175,26 @@ Modular.to.pushNamed('/product/1'); //args.params['id']) será 1
 
 ```
 
+Você também pode passar um objeto usando a propriedade "arguments" na navegação:
+
+```dart
+ 
+Navigator.pushNamed(context, '/product', arguments: ProductModel()); //args.data
+//or
+Modular.to.pushNamed('/product', arguments: ProductModel()); //args.data
+
+```
+recebendo na rota
+
+```dart
+
+ @override
+  List<Router> get routers => [
+      Router("/product", child: (_, args) => Product(model: args.data)),
+  ];
+
+```
+
 ## Proteção de Rotas
 
 Podemos proteger nossas rotas com middlewares que verificarão se a rota está disponível dentro de um determinado Route.
