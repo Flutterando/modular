@@ -461,7 +461,12 @@ main() {
   });
 }
 ```
+## DebugMode
 
+Remova os prints de depuração:
+```dart
+Modular.debugMode = false;
+```
 
 ## Roadmap
 

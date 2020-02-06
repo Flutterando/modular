@@ -1,19 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-abstract class ModuleWidget extends StatelessWidget {
+_debugPrintModular(String text) {
+  if (Modular.debugMode) {
+    print(text);
+  }
+}
+
+abstract class ModuleWidget extends StatelessWidget implements ChildModule {
+  @override
   List<Bind> get binds;
 
   Widget get view;
 
+  final _FakeModule _fakeModule = _FakeModule();
+
+  ModuleWidget() {
+    _fakeModule.changeBinds(binds);
+  }
+
+  @override
+  changeBinds(List<Bind> b) {
+    _fakeModule.changeBinds(b);
+  }
+
+  @override
+  cleanInjects() {
+    _fakeModule.cleanInjects();
+  }
+
+  getBind<T>([Map<String, dynamic> params]) {
+    return _fakeModule.getBind<T>(params);
+  }
+
+  @override
+  List<String> get paths => [this.runtimeType.toString()];
+
+  @override
+  bool remove<T>() {
+    return _fakeModule.remove<T>();
+  }
+
+  @override
+  List<Router> get routers => null;
+
   @override
   Widget build(BuildContext context) {
     return _ModularProvider(
-      tagText: this.runtimeType.toString(),
-      module: _FakeModule(
-        path: this.runtimeType.toString(),
-        bindsInject: binds,
-      ),
+      module: this,
       child: view,
     );
   }
@@ -36,10 +70,8 @@ class _FakeModule extends ChildModule {
 class _ModularProvider extends StatefulWidget {
   final ChildModule module;
   final Widget child;
-  final String tagText;
 
-  const _ModularProvider({Key key, this.module, this.tagText, this.child})
-      : super(key: key);
+  const _ModularProvider({Key key, this.module, this.child}) : super(key: key);
 
   @override
   __ModularProviderState createState() => __ModularProviderState();
@@ -49,8 +81,8 @@ class __ModularProviderState extends State<_ModularProvider> {
   @override
   void initState() {
     super.initState();
-    Modular.addCoreInitFromTag(widget.module, widget.tagText);
-    print("-- ${widget.tagText} INITIALIZED");
+    Modular.addCoreInit(widget.module);
+    _debugPrintModular("-- ${widget.module.runtimeType} INITIALIZED");
   }
 
   @override
@@ -61,7 +93,7 @@ class __ModularProviderState extends State<_ModularProvider> {
   @override
   void dispose() {
     super.dispose();
-    Modular.removeModule(null, widget.tagText);
-    print("-- ${widget.tagText} DISPOSED");
+    Modular.removeModule(widget.module);
+    _debugPrintModular("-- ${widget.module.runtimeType} DISPOSED");
   }
 }

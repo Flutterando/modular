@@ -11,7 +11,6 @@ abstract class ChildModule {
     _binds = binds;
   }
 
-  @visibleForTesting
   changeBinds(List<Bind> b) {
     _binds = b;
   }

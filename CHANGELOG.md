@@ -1,3 +1,8 @@
+## [0.4.3] - 1 Feb 2020
+
+* fix RouterGuards
+* Added Modular.debugMode = false;
+
 ## [0.4.2] - 1 Feb 2020
 
 * fix tests

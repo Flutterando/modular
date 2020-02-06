@@ -7,8 +7,15 @@ import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
 import 'transitions/transitions.dart';
 
+_debugPrintModular(String text) {
+  if (Modular.debugMode) {
+    print(text);
+  }
+}
+
 class Modular {
   static String get initialRoute => '/';
+  static bool debugMode = true;
 
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
@@ -47,7 +54,7 @@ class Modular {
     if (!_injectMap.containsKey(name)) {
       module.paths.add(path);
       _injectMap[name] = module;
-      print("-- ${module.runtimeType.toString()} INITIALIZED");
+      _debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
       _injectMap[name].paths.add(path);
     }
@@ -295,10 +302,8 @@ class Modular {
     actualRoute = path;
     ModularArguments args = ModularArguments(router.params, settings.arguments);
 
-    if (settings.isInitialRoute) {
-      return _NoAnimationMaterialPageRoute(
-          settings: settings,
-          builder: (context) => router.child(context, args));
+    if (path == settings.isInitialRoute) {
+      router = router.copyWith(transition: TransitionType.noTransition);
     }
 
     if (router.transition == TransitionType.defaultTransition) {
@@ -317,7 +322,8 @@ class Modular {
                 if (module.paths.length == 0) {
                   module.cleanInjects();
                   trash.add(key);
-                  print("-- ${module.runtimeType.toString()} DISPOSED");
+                  _debugPrintModular(
+                      "-- ${module.runtimeType.toString()} DISPOSED");
                 }
               });
 
@@ -347,7 +353,8 @@ class Modular {
             if (module.paths.length == 0) {
               module.cleanInjects();
               trash.add(key);
-              print("-- ${module.runtimeType.toString()} DISPOSED");
+              _debugPrintModular(
+                  "-- ${module.runtimeType.toString()} DISPOSED");
             }
           });
 
