@@ -263,7 +263,10 @@ https://flutter-website.com/#/product/1
 this will open the Product view and args.params ['id']) will be equal to 1.
 
 ## Dependency Injection
-You can inject any class into your module using getter 'binds', for example classes BLoC ou ChangeNotifier
+You can inject any class into your module using getter 'binds', for example classes BLoC, ChangeNotifier or Stores.
+
+Bind is responsible for configuring object injection.
+
 
 ```dart
 class AppModule extends MainModule {
@@ -323,6 +326,18 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
+By default, objects in Bind are singletons and lazy.
+When Bind is lazy, the object will only be instantiated when it is called for the first time. You can use 'lazy:false' if you want your object to be instantiated immediately.
+
+```dart
+Bind((i) => OtherWidgetNotLazy(), lazy: false),
+```
+If you do not want the injected object to have a single instance, just use 'singleton: false', this will cause your object to be instantiated every time it is called
+
+```dart
+Bind((i) => OtherWidgetNotLazy(), singleton: false),
+```
+
 
 
 ## Using Modular widgets to retrieve your classes

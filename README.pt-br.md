@@ -335,6 +335,18 @@ class HomePage extends StatelessWidget {
 }
 ```
 
+Por padrão, os objeto no Bind é singleton e lazy.
+Quando Bind é lazy, o objeto só será instanciado quando for chamado pela primeira vez. Você pode usar 'lazy:false' se desejar que seu objeto seja instanciado imediatamente.
+
+```dart
+Bind((i) => OtherWidgetNotLazy(), lazy: false),
+```
+Se você não quiser que o objeto injetado tenha uma instancia única, basta usar 'singleton:false', isso fará com que seu objeto seja instanciado toda vez que for chamado
+
+```dart
+Bind((i) => OtherWidgetNotLazy(), singleton: false),
+```
+
 ## Usando Modular widgets para recuperar suas classes
 
 
