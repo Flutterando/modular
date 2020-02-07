@@ -1,4 +1,6 @@
-## Flutter Modular 
+![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
+
+## Flutter Modular
 
 ![](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 

@@ -19,19 +19,13 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '1.7.8+hotfix.4'
-    - run: flutter doctor
     - run: flutter pub get
-    - run: flutter test
-    
-  build:
+    - run: flutter test --coverage
+    - name: Code coverage
+      id: dart-coverage
+      uses: johnpryan/dart-coverage-action@master
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+        github-token: ${{ secrets.github_token }}
 
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
