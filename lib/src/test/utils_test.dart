@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../flutter_modular.dart';
 
-void initModule(ChildModule module, {List<Bind> changeBinds}) {
+void initModule(ChildModule module, {List<Bind> changeBinds, bool initialModule}) {
   final list = module.binds;
   for (var item in list ?? []) {
     var dep = (changeBinds ?? []).firstWhere((dep) {
@@ -14,7 +14,7 @@ void initModule(ChildModule module, {List<Bind> changeBinds}) {
       module.changeBinds(list);
     }
   }
-  if (module.runtimeType.toString().toLowerCase().contains('app'))
+  if (initialModule ?? false)
     Modular.init(module);
   else
     Modular.bindModule(module);
