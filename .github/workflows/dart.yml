@@ -19,7 +19,6 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '1.7.8+hotfix.4'
-    - run: flutter doctor
     - run: flutter pub get
     - run: flutter test --coverage
     - name: Code coverage
