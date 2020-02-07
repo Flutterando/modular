@@ -204,8 +204,13 @@ class Modular {
   static Router _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
-
-    for (var route in module.routers) {
+    final routers = module.routers;
+    routers.sort((preview, actual) {
+      bool isContain =
+          preview.routerName.contains('/:') == actual.routerName.contains('/:');
+      return isContain ? -1 : 1;
+    });
+    for (var route in routers) {
       String tempRouteName =
           (routerName + route.routerName).replaceFirst('//', '/');
       if (route.child == null) {

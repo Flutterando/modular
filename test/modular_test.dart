@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'app/app_module.dart';
+import 'app/modules/product/product_module.dart';
 
 void main() {
   setUpAll(() {
@@ -90,9 +91,18 @@ void main() {
     test('RouteGuard other module', () {
       expect(Modular.selectRoute("/home/forbidden2"), null);
     });
+    test('RouteGuard other module', () {
+      expect(Modular.selectRoute("/home/forbidden2"), null);
+    });
 
-     test('RouteGuard other module Two', () {
+    test('RouteGuard other module Two', () {
       expect(Modular.selectRoute("/homeTwo/forbidden2"), null);
+    });
+
+    test('Get route correct', () {
+      final router = Modular.selectRoute("/prod/product");
+      final page = router.child(null, null);
+      expect(page, isA<ProductPage>());
     });
   });
 }

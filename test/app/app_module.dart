@@ -6,6 +6,7 @@ import 'app_widget.dart';
 import 'guard/guard.dart';
 import 'modules/forbidden/forbidden_widget.dart';
 import 'modules/home/home_module.dart';
+import 'modules/product/product_module.dart';
 import 'shared/ILocalRepository.dart';
 import 'shared/local_storage_shared.dart';
 
@@ -30,6 +31,7 @@ class AppModule extends MainModule {
           transition: TransitionType.fadeIn,
         ),
         Router("/home", module: HomeModule()),
+        Router("/prod", module: ProductModule()),
         Router("/homeTwo", module: HomeModule(), guards: [MyGuard()]),
       ];
 
