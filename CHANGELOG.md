@@ -1,3 +1,37 @@
+## [0.4.4] - 6 Feb 2020
+
+* fix RouterGuards
+* Added Modular.debugMode = false;
+* Improve documentations
+* Fix Error in initalRoute
+
+## [0.4.3] - 1 Feb 2020
+
+* fix RouterGuards
+* Added Modular.debugMode = false;
+
+## [0.4.2] - 1 Feb 2020
+
+* fix routerGuards
+* fix tests
+
+## [0.4.1] - 30 Jan 2020
+
+* Internal Inject Interface reference
+
+
+## [0.4.0] - 28 Jan 2020
+* added Modular.dispose();
+* ModularState
+* Removed InjectMixin
+
+
+## [0.3.5+1] - 26 Jan 2020
+
+* fix module widget
+* fix inject error
+
+
 ## [0.3.3+1] - 18 Jan 2020
 
 * Modular is BETA!!!

@@ -15,17 +15,21 @@ class Inject<T> {
   factory Inject.of() => Inject(tag: T.toString());
 
   ///get injected dependency
-  T get<T>([Map<String, dynamic> params]) {
+  B get<B>([Map<String, dynamic> params]) {
     params ??= {};
     if (tag == null) {
-      return Modular.get<T>(params: params);
+      return Modular.get<B>(params: params);
     } else {
-      return Modular.getInjectableObject<T>(tag, params: params);
+      return Modular.get<B>(module: tag, params: params);
     }
   }
 
-  dispose<T>() {
-    return Modular.removeInjectableObject<T>(tag);
+  dispose<B>() {
+    if (T.runtimeType.toString() == 'dynamic') {
+      return Modular.dispose<B>();
+    } else {
+      return Modular.dispose<B>(tag);
+    }
   }
 }
 
@@ -42,7 +46,7 @@ mixin InjectWidgetMixin<T extends ChildModule> on Widget
   final Inject<T> _inject = Inject<T>.of();
 
   S get<S>({Map<String, dynamic> params}) =>
-      Modular.get<S>(module: T, params: params);
+      Modular.get<S>(module: T.toString(), params: params);
 
   Widget consumer<S extends ChangeNotifier>({
     Widget Function(BuildContext context, S value) builder,

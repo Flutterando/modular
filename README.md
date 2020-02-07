@@ -167,6 +167,26 @@ Modular.to.pushNamed('/product/1'); //args.params['id']) gonna be 1
 
 ```
 
+You can also pass an object using the "arguments" property in the navigation:
+
+```dart
+ 
+Navigator.pushNamed(context, '/product', arguments: ProductModel()); //args.data
+//or
+Modular.to.pushNamed('/product', arguments: ProductModel()); //args.data
+
+```
+getting on the route
+
+```dart
+
+ @override
+  List<Router> get routers => [
+      Router("/product", child: (_, args) => Product(model: args.data)),
+  ];
+
+```
+
 ## Route Guard
 
 We may protect our routes with middleware that will verify that the route is available within a given Route.
@@ -283,49 +303,12 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## ATTENTION: When retrieving a class using Inject's get () method, it first looks in the module that was requested, if not found, it looks in the main module. We will still talk about creating child modules in this documentation.
 
-## Using InjectMixin to Retrieve Your Classes #
+## Using Modular widgets to retrieve your classes
 
-We will use Mixin in the view to retrieve injections more easily
 
-```dart
-class HomePage extends StatelessWidget  with InjectMixinBase<AppModule>{
+### ModularState
 
-  @override
-  Widget build(BuildContext context) {
-
-    // with mixin you add the get method straight to your view.
-    AppBloc appBloc = get();
-
-    // another way to recover
-    final appBloc = get<AppBloc>();
-    // ...
- }
-}
-```
-
-### Using Modular widgets to retrieve your classes
-You can also use `ModularStatelessWidget` instead of the mixin `InjectMixinBase<AppModule>` for example you can write:
-
-```dart
-class MyWidget extends ModularStatelessWidget<HomeModule> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Modular"),
-      ),
-      body: Center(
-        child: Text("${get<HomeBloc>().counter}"),
-      ),
-    );
-  }
-}
-```
-K
-
-Example with `StatefulWidget`:
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -333,18 +316,42 @@ class MyWidget extends StatefulWidget {
   _MyWidgetState createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends ModularState<MyWidget, HomeModule> {
+class _MyWidgetState extends ModularState<MyWidget, HomeController> {
+
+  //variable controller
+  //automatic dispose off HomeController
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Modular"),
       ),
-      body: Center(child: Text("${get<HomeBloc>().counter}"),),
+      body: Center(child: Text("${controller.counter}"),),
     );
   }
 }
 ```
+
+### ModuleWidget
+
+The same structure as ChildModule. Very useful for modular TabBar visualizations.
+
+```dart
+class TabModule extends ModuleWidget {
+
+    @override
+  List<Bind> get binds => [
+    Bind((i) => TabBloc(repository: i.get<TabRepository>())),
+    Bind((i) => TabRepository()),
+  ];
+
+  Widget get view => TabPage();
+
+}
+
+```
+
 
 ## Consuming a ChangeNotifier Class
 
@@ -436,6 +443,41 @@ Consider splitting your code into modules such as LoginModule, and into it placi
 ## Lazy Loading
 
 Another benefit you get when working with modules is to load them "lazily". This means that your dependency injection will only be available when you navigate to a module, and as you exit that module, Modular will wipe memory by removing all injections and executing the dispose () methods (if available) on each module. injected class refers to that module.
+
+## Unit Test
+
+You can use the dependency injection system to replace Links from mock links,as an example of a repository. You can also do it using "Inversion of Control"
+
+```dart
+@override
+  List<Bind> get binds => [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreferences()),
+      ];
+```
+
+We have to import the "flutter_modular_test" to use the methods that will assist with Injection in the test environment.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+...
+
+main() {
+  test('change bind', () {
+    initModule(AppModule(), changeBinds: [
+      Bind<ILocalStorage>((i) => LocalMock()), 
+    ]);
+    expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
+  });
+}
+```
+
+## DebugMode
+
+Remove prints debug:
+```dart
+Modular.debugMode = false;
+```
 
 ## Roadmap
 

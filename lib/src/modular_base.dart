@@ -7,8 +7,15 @@ import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
 import 'transitions/transitions.dart';
 
+_debugPrintModular(String text) {
+  if (Modular.debugMode) {
+    print(text);
+  }
+}
+
 class Modular {
   static String get initialRoute => '/';
+  static bool debugMode = true;
 
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
@@ -47,27 +54,31 @@ class Modular {
     if (!_injectMap.containsKey(name)) {
       module.paths.add(path);
       _injectMap[name] = module;
-      print("-- ${module.runtimeType.toString()} INITIALIZED");
+      _debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
       _injectMap[name].paths.add(path);
     }
   }
 
-  static void removeModule(ChildModule module) {
-    String name = module.runtimeType.toString();
+  static void removeModule(ChildModule module, [String name]) {
+    name ??= module.runtimeType.toString();
     if (_injectMap.containsKey(name)) {
       _injectMap[name].cleanInjects();
       _injectMap.remove(name);
     }
   }
 
-  static B get<B>({Map<String, dynamic> params, Type module}) {
+  static B get<B>({Map<String, dynamic> params, String module}) {
+    if (B.toString() == 'dynamic') {
+      throw ModularError('not allow for dynamic values');
+    }
+
     if (module != null) {
-      return getInjectableObject(module.toString(), params: params);
+      return _getInjectableObject<B>(module, params: params);
     } else {
       for (var key in _injectMap.keys) {
         B value =
-            getInjectableObject<B>(key, params: params, disableError: true);
+            _getInjectableObject<B>(key, params: params, disableError: true);
         if (value != null) {
           return value;
         }
@@ -76,7 +87,7 @@ class Modular {
     }
   }
 
-  static B getInjectableObject<B>(
+  static B _getInjectableObject<B>(
     String tag, {
     Map<String, dynamic> params,
     bool disableError = false,
@@ -90,8 +101,24 @@ class Modular {
     return value;
   }
 
-  static T removeInjectableObject<T>(String tag) {
-    return _injectMap[tag].remove<T>();
+  static void dispose<B>([String module]) {
+    if (B.toString() == 'dynamic') {
+      throw ModularError('not allow for dynamic values');
+    }
+
+    if (module != null) {
+      _removeInjectableObject(module);
+    } else {
+      for (var key in _injectMap.keys) {
+        if (_removeInjectableObject<B>(key)) {
+          break;
+        }
+      }
+    }
+  }
+
+  static bool _removeInjectableObject<B>(String tag) {
+    return _injectMap[tag].remove<B>();
   }
 
   @visibleForTesting
@@ -135,11 +162,11 @@ class Modular {
       var r = regExp.firstMatch(path);
 
       if (r?.groupNames != null) {
-        Map<String, dynamic> params = {};
+        Map<String, String> params = {};
         int count = 1;
         for (var key in r?.groupNames) {
           routeNamed = routeNamed.replaceFirst(':$key', r?.group(count));
-          params[key] = Modular.convertType("${r?.group(count)}");
+          params[key] = r?.group(count);
           count++;
         }
 
@@ -159,6 +186,18 @@ class Modular {
     return routeNamed == path;
   }
 
+  static RouteGuard _verifyGuard(List<RouteGuard> guards, String path) {
+    RouteGuard guard;
+    try {
+      guard = guards.length == 0
+          ? null
+          : guards.firstWhere((guard) => !guard.canActivate(path),
+              orElse: null);
+    } catch (e) {}
+
+    return guard;
+  }
+
   static List<RouteGuard> _masterRouteGuards;
 
   static Router _searchInModule(
@@ -174,6 +213,10 @@ class Modular {
             (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
         if (_routerName == path || _routerName == "$path/") {
+          RouteGuard guard = _verifyGuard(route.guards, path);
+          if (guard != null) {
+            return null;
+          }
           router = route.module.routers[0];
           if (router.module != null) {
             var _routerName =
@@ -181,10 +224,18 @@ class Modular {
             router = _searchInModule(route.module, _routerName, path);
           }
         } else {
+          //router = _searchInModule(route.module, _routerName, path.substring(path.indexOf("/",1)));
           router = _searchInModule(route.module, _routerName, path);
         }
 
         if (router != null) {
+          if (_routerName == path || _routerName == "$path/") {
+            RouteGuard guard = _verifyGuard(router.guards, path);
+            if (guard != null) {
+              return null;
+            }
+          }
+
           if (router.transition == TransitionType.defaultTransition) {
             router = router.copyWith(
               transition: route.transition,
@@ -204,7 +255,10 @@ class Modular {
                 : guards.firstWhere((guard) => !guard.canActivate(path),
                     orElse: null);
           } catch (e) {}
-
+          if ((tempRouteName == path || tempRouteName == "$path/") &&
+              path != '/') {
+            guard = _verifyGuard(guards, path);
+          }
           return guard == null ? route : null;
         }
       }
@@ -274,10 +328,8 @@ class Modular {
     actualRoute = path;
     ModularArguments args = ModularArguments(router.params, settings.arguments);
 
-    if (settings.isInitialRoute) {
-      return _NoAnimationMaterialPageRoute(
-          settings: settings,
-          builder: (context) => router.child(context, args));
+    if (path == settings.isInitialRoute) {
+      router = router.copyWith(transition: TransitionType.noTransition);
     }
 
     if (router.transition == TransitionType.defaultTransition) {
@@ -296,7 +348,8 @@ class Modular {
                 if (module.paths.length == 0) {
                   module.cleanInjects();
                   trash.add(key);
-                  print("-- ${module.runtimeType.toString()} DISPOSED");
+                  _debugPrintModular(
+                      "-- ${module.runtimeType.toString()} DISPOSED");
                 }
               });
 
@@ -326,7 +379,8 @@ class Modular {
             if (module.paths.length == 0) {
               module.cleanInjects();
               trash.add(key);
-              print("-- ${module.runtimeType.toString()} DISPOSED");
+              _debugPrintModular(
+                  "-- ${module.runtimeType.toString()} DISPOSED");
             }
           });
 
@@ -340,6 +394,10 @@ class Modular {
 
   static void addCoreInit(ChildModule module) {
     var tagText = module.runtimeType.toString();
+    addCoreInitFromTag(module, tagText);
+  }
+
+  static void addCoreInitFromTag(ChildModule module, String tagText) {
     _injectMap[tagText] = module;
   }
 }
