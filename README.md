@@ -9,7 +9,7 @@
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**  
 - **[Modular Pillars](#modular-pillars)**  
-    [Example](#example)
+  - [Example](#example)
 - **[Getting started with Modular](#getting-started-with-modular)** 
   - [Installation](#installation)
   - [Using in a New Project](#using-in-a-new-project)
