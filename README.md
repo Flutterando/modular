@@ -1,3 +1,5 @@
+![CI](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
+
 ## Flutter Modular 
 
 ![](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
