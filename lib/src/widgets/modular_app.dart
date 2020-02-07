@@ -24,7 +24,9 @@ class _ModularAppState extends State<ModularApp> {
   @override
   void dispose() {
     widget.module.cleanInjects();
-    print("-- ${widget.module.runtimeType.toString()} DISPOSED");
+    if (Modular.debugMode) {
+      print("-- ${widget.module.runtimeType.toString()} DISPOSED");
+    }
     super.dispose();
   }
 
