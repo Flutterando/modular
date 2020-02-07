@@ -5,19 +5,40 @@
 *Read this in other languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
 
 
+
+- **[What is Flutter Modular?](#what-is-flutter-modular)**
+- **[Modular Structure](#modular-structure)**  
+- **[Modular Pillars](#modular-pillars)**  
+    [Example](#example)
+- **[Getting started with Modular](#getting-started-with-modular)** 
+  - [Installation](#installation)
+  - [Using in a New Project](#using-in-a-new-project)
+  - [Adding Routes](#adding-routes)
+  - [Dynamic Routes](#dynamic-routes)
+  - [Route Guard](#route-guard)
+  - [Route Transition Animation](#route-transition-animation)
+  - [Flutter Web url Routes](#flutter-web-url-routes)
+  - [Dependency Injection](#dependency-injection)
+  - [Retrieving in view using injection](#retrieving-in-view-using-injection)
+
+- **[Using Modular widgets to retrieve your classes](#using-modular-widgets-to-retrieve-your-classes)**
+  
+  - [ModularState](#modularstate)
+  - [ModuleWidget](#modulewidget)
+  - [Consuming a ChangeNotifier Class](#consuming-a-changenotifier-class)
+  - [Creating Child Modules](#creating-child-modules)
+  - [Lazy Loading](#lazy-loading)
+  - [Unit Test](#unit-test)
+  - [DebugMode](#debugmode)
+
+- **[Roadmap](#roadmap)**
+- **[Features and bugs](#features-and-bugs)**
+
+
 ## What is Flutter Modular?
 
 When a project is getting bigger and more complex, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
 The Modular came up prepared for adapt to any state management approach to its smart injection system, managing the memory use of your application.
-
-## What is the difference between Modular Flutter and bloc_pattern;
-
-We learned a lot from bloc_pattern, and we understand that the community has a lot of preferences regarding State Management, so even for the sake of nomenclature, we decided to treat Modular as a natural evolution of bloc_pattern and from there implement the system of "Dynamic Routes" that will become very popular with Flutter Web. Named routes are the future of Flutter, and we are preparing for it.
-
-
-## Will bloc_pattern be deprecated?
-
-Nope! We will continue to support and improve it. Although the migration to Modular will be very simple as well.
 
 
 ## Modular Structure
@@ -286,7 +307,7 @@ class AppBloc extends Disposable {
 }
 ```
 
-Retrieving in view using injection. #
+## Retrieving in view using injection. 
 You have some ways to retrieve your injected classes.
 
 ```dart
