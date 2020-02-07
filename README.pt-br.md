@@ -5,19 +5,40 @@
 *Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
 
 
+- **[O que é o Flutter Modular?](#o-que-é-o-flutter-modular)**
+- **[Estrutura Modular](#estrutura-modular)**  
+- **[Pilares do Modular](#pilares-do-modular)**  
+  - [Exemplos](#exemplos)
+- **[Começando com o Modular](#getting-started-with-modular)** 
+  - [Instalação](#instalação)
+  - [Usando em um novo projeto](#usando-em-um-novo-projeto)
+  - [Adicionando Rotas](#adicionando-rotas)
+  - [Rotas dinâmicas](#rotas-dinâmicas)
+  - [Proteção de Rotas](#proteção-de-rotas)
+  - [Animação para Transição de Rota](#animação-para-transição-de-rota)
+  - [Rotas na url com Flutter Web](#rotas-na-url-com-flutter-web)
+  - [Injeção de dependências](#injeção-de-dependências)
+  - [Recuperando na view usando injeção](#recuperando-na-view-usando-injeção)
+    
+
+- **[Usando Modular widgets para recuperar suas classes](#usando-Modular-widgets-para-recuperar-suas-classes)**
+  
+  - [ModularState](#modularstate)
+  - [ModuleWidget](#modulewidget)
+  - [Consumindo uma Classe ChangeNotifier](#consumindo-uma-classe-changenotifier)
+  - [Criando Módulos Filhos](#criando-módulos-filhos)
+  - [Lazy Loading](#lazy-loading)
+  - [Testes Unitários](#testes-unitários)
+  - [DebugMode](#debugmode)
+
+- **[Roadmap](#roadmap)**
+- **[Funcionalidades e Bugs](#funcionalidades-e-bugs)**
+
 ## O que é o Flutter Modular?
 
 Quando um projeto vai ficando grande e complexo, acabamos juntando muitos arquivos em um só lugar, isso dificulta a manutenção do código e também o reaproveitamento.
 O Modular nos trás várias soluções adaptadas para o Flutter como Injeção de Dependências, Controle de Rotas e o Sistema de "Singleton Descartáveis" que é quando o provedor do código se encarrega de "chamar" o dispose automaticamente e limpar a injeção (prática muito comum no package bloc_pattern).
 O Modular vem preparado para adaptar qualquer gerência de estado ao seu sistema de Injeção de Dependências inteligente, gerenciando a memória do seu aplicativo.
-
-## Qual a diferença entre o Flutter Modular e o bloc_pattern;
-
-Aprendemos muito com o bloc_pattern, e entendemos que a comunidade tem diversas preferências com relação a Gerência de Estado, então, até mesmo por uma questão de nomeclatura, decidimos tratar o Modular como uma evolução natural do bloc_pattern, e a partir daí implementar o sistema de Rotas Dinâmicas que ficará muito popular graças ao Flutter Web. Rotas nomeadas são o futuro do Flutter, e estamos nos preparando para isso.
-
-## O bloc_pattern será depreciado?
-
-Não! Continuaremos a dar suporte e melhora-lo. Apesar de que a migração para o Modular será muito simples também.
 
 ## Estrutura Modular
 
@@ -314,7 +335,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## Using Modular widgets to retrieve your classes
+## Usando Modular widgets para recuperar suas classes
 
 
 ### ModularState
