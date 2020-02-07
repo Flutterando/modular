@@ -14,8 +14,10 @@ void initModule(ChildModule module, {List<Bind> changeBinds}) {
       module.changeBinds(list);
     }
   }
-
-  Modular.addCoreInit(module);
+  if (module.runtimeType.toString().toLowerCase().contains('app'))
+    Modular.init(module);
+  else
+    Modular.bindModule(module);
 }
 
 void initModules(List<ChildModule> modules, {List<Bind> changeBinds}) {
@@ -25,5 +27,13 @@ void initModules(List<ChildModule> modules, {List<Bind> changeBinds}) {
 }
 
 Widget buildTestableWidget(Widget widget) {
-  return MediaQuery(data: MediaQueryData(), child: MaterialApp(home: widget));
+  return MediaQuery(
+    data: MediaQueryData(),
+    child: MaterialApp(
+      home: widget,
+      initialRoute: '/',
+      navigatorKey: Modular.navigatorKey,
+      onGenerateRoute: Modular.generateRoute,
+    ),
+  );
 }
