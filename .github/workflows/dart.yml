@@ -7,6 +7,25 @@ on:
       - master
 
 jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    container:
+      image:  google/dart:latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: cd example_package && pub get
+  #      - name: Run tests
+  #        run: cd example_package && pub run test
+      - name: Code coverage
+        id: dart-coverage
+        uses: johnpryan/dart-coverage-action@master
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.0.1
+        with:
+          github-token: ${{ secrets.github_token }}
   test:
     name: Flutter Tests
     runs-on: ubuntu-latest
@@ -22,16 +41,4 @@ jobs:
     - run: flutter doctor
     - run: flutter pub get
     - run: flutter test
-    
-  build:
 
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
