@@ -8,9 +8,12 @@ class AppWidget extends StatelessWidget {
       initialRoute: "/",
       onGenerateRoute: Modular.generateRoute,
       onUnknownRoute: (context) {
-        return MaterialPageRoute(builder: (context)=> Scaffold(
-          appBar: AppBar(title: Text('Página não encontrada'),),
-        ));
+        return MaterialPageRoute(
+            builder: (context) => Scaffold(
+                  appBar: AppBar(
+                    title: Text('Página não encontrada'),
+                  ),
+                ));
       },
     );
   }

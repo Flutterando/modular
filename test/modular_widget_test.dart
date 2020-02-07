@@ -9,7 +9,7 @@ main() {
   });
 
   group("Init ModularWidget", () {
-    test('ModularWidget', () {
+    test('get ObjectTest', () {
       expect(Modular.get<ObjectTest>(), isA<ObjectTest>());
     });
   });
@@ -19,10 +19,21 @@ class OtherWidget extends ModuleWidget {
   @override
   List<Bind> get binds => [
         Bind((i) => ObjectTest()),
+        Bind((i) => OtherWidgetNotLazyError(), lazy: false),
       ];
 
   @override
   Widget get view => throw UnimplementedError();
 }
 
-class ObjectTest {}
+class OtherWidgetNotLazyError {
+  OtherWidgetNotLazyError() {
+    print('Not lazy');
+  }
+}
+
+class ObjectTest {
+  ObjectTest() {
+    print('lazy');
+  }
+}

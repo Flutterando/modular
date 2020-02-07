@@ -1,3 +1,13 @@
+## [0.4.5] - 7 Feb 2020
+
+* Added not lazy Objects
+```dart
+@override
+  List<Bind> get binds => [
+        Bind((i) => OtherWidgetNotLazy(), lazy: false),
+      ];
+```
+
 ## [0.4.4] - 6 Feb 2020
 
 * fix RouterGuards

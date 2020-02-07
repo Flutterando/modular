@@ -42,6 +42,11 @@ abstract class ModuleWidget extends StatelessWidget implements ChildModule {
   }
 
   @override
+  void instance() {
+    _fakeModule.instance();
+  }
+
+  @override
   List<Router> get routers => null;
 
   @override

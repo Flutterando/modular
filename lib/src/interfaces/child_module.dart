@@ -84,4 +84,13 @@ abstract class ChildModule {
     }
     return B;
   }
+
+  void instance() {
+    _binds.forEach((bindElement) {
+      if (!bindElement.lazy) {
+        var b = bindElement.inject(Inject());
+        _injectBinds[b.runtimeType] = b;
+      }
+    });
+  }
 }

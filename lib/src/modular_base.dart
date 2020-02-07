@@ -54,6 +54,7 @@ class Modular {
     if (!_injectMap.containsKey(name)) {
       module.paths.add(path);
       _injectMap[name] = module;
+      module.instance();
       _debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
       _injectMap[name].paths.add(path);
@@ -398,6 +399,7 @@ class Modular {
   }
 
   static void addCoreInitFromTag(ChildModule module, String tagText) {
+    module.instance();
     _injectMap[tagText] = module;
   }
 }
