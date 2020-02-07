@@ -15,8 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.7.8+hotfix.4'
       - name: Install dependencies
-        run: pub get
+        run: flutter pub get
   #      - name: Run tests
   #        run: cd example_package && pub run test
       - name: Code coverage
