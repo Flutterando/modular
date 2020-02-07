@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
-        run: cd example_package && pub get
+        run: pub get
   #      - name: Run tests
   #        run: cd example_package && pub run test
       - name: Code coverage
