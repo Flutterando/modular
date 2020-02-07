@@ -1,4 +1,4 @@
-![CI](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
+![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
 
 ## Flutter Modular 
 
