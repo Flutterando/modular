@@ -2,7 +2,8 @@
 
 * Added Custom Transition.
 * Added **Modular.args** (get route params in Controller).
-* (PREVIEW) RouterGuard in child routes. 
+* (PREVIEW) RouterGuard in child routes.
+* Fix error in WidgetTests
 
 ## [0.4.5] - 7 Feb 2020
 

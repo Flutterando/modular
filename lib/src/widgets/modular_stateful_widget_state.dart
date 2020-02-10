@@ -11,3 +11,13 @@ abstract class ModularState<TWidget extends StatefulWidget, TBind>
     Modular.dispose<TBind>();
   }
 }
+
+mixin ModularStateMixin<T extends StatefulWidget, TBind> on State<T> {
+  final controller = Modular.get<TBind>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    Modular.dispose<TBind>();
+  }
+}
