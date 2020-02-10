@@ -1,9 +1,10 @@
-## [0.4.6+1] - 9 Feb 2020
+## [0.4.7] - 9 Feb 2020
 
 * Added Custom Transition.
 * Added **Modular.args** (get route params in Controller).
 * (PREVIEW) RouterGuard in child routes.
 * Fix error in WidgetTests
+* Added Print routers in debugMode
 
 ## [0.4.5] - 7 Feb 2020
 
