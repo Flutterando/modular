@@ -20,7 +20,7 @@ class HomeModule extends ChildModule {
         Router(
           "/list/:id",
           child: (_, args) => ListWidget(
-            param: args.params['id'],
+            param: int.parse(args.params['id']),
           ),
           guards: [MyGuard()],
         ),
