@@ -1,3 +1,9 @@
+## [0.4.6] - 9 Feb 2020
+
+* Added Custom Transition.
+* Added **Modular.args** (get route params in Controller).
+* (PREVIEW) RouterGuard in child routes. 
+
 ## [0.4.5] - 7 Feb 2020
 
 * Added not lazy Objects

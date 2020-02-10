@@ -24,6 +24,10 @@ class Inject<T> {
     }
   }
 
+  ModularArguments get args {
+    return Modular.args;
+  }
+
   dispose<B>() {
     if (T.runtimeType.toString() == 'dynamic') {
       return Modular.dispose<B>();

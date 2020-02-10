@@ -20,6 +20,8 @@ class Modular {
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
   static GlobalKey<NavigatorState> _navigatorKey;
+  static ModularArguments _args;
+  static ModularArguments get args => _args?.copy();
 
   static GlobalKey<NavigatorState> get navigatorKey {
     if (_navigatorKey == null) {
@@ -332,48 +334,15 @@ class Modular {
       return null;
     }
     actualRoute = path;
-    ModularArguments args = ModularArguments(router.params, settings.arguments);
+    _args = ModularArguments(router.params, settings.arguments);
 
     if (path == settings.isInitialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);
     }
 
-    if (router.transition == TransitionType.defaultTransition) {
-      var pageRouterGenerate = pageRoute(
-        (context) {
-          var actual = ModalRoute.of(context);
-          Widget page = _DisposableWidget(
-            child: router.child(context, args),
-            dispose: () {
-              final List<String> trash = [];
-              if (actual.isCurrent) {
-                return;
-              }
-              _injectMap.forEach((key, module) {
-                module.paths.remove(path);
-                if (module.paths.length == 0) {
-                  module.cleanInjects();
-                  trash.add(key);
-                  _debugPrintModular(
-                      "-- ${module.runtimeType.toString()} DISPOSED");
-                }
-              });
-
-              trash.forEach((key) {
-                _injectMap.remove(key);
-              });
-            },
-          );
-          return page;
-        },
-        settings,
-      );
-      return pageRouterGenerate;
-    }
-    var selectTransition = _transitions[router.transition];
-    return selectTransition((context, args) {
+    Widget _disposableGenerate(BuildContext context) {
       var actual = ModalRoute.of(context);
-      return _DisposableWidget(
+      Widget page = _DisposableWidget(
         child: router.child(context, args),
         dispose: () {
           final List<String> trash = [];
@@ -395,7 +364,29 @@ class Modular {
           });
         },
       );
-    }, args, settings);
+      return page;
+    }
+
+    if (router.customTransition != null) {
+      return PageRouteBuilder(
+        pageBuilder: (context, _, __) {
+          return _disposableGenerate(context);
+        },
+        settings: settings,
+        transitionsBuilder: router.customTransition.transitionBuilder,
+        transitionDuration: router.customTransition.transitionDuration,
+      );
+    } else if (router.transition == TransitionType.defaultTransition) {
+      return pageRoute(
+        (context) => _disposableGenerate(context),
+        settings,
+      );
+    } else {
+      var selectTransition = _transitions[router.transition];
+      return selectTransition((context, args) {
+        return _disposableGenerate(context);
+      }, args, settings);
+    }
   }
 
   static void addCoreInit(ChildModule module) {
@@ -414,6 +405,10 @@ class ModularArguments {
   final dynamic data;
 
   ModularArguments(this.params, this.data);
+
+  ModularArguments copy() {
+    return ModularArguments(params, data);
+  }
 }
 
 class _NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {

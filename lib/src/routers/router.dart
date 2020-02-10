@@ -10,6 +10,7 @@ class Router {
   Map<String, String> params;
   final List<RouteGuard> guards;
   final TransitionType transition;
+  final CustomTransition customTransition;
 
   Router(
     this.routerName, {
@@ -18,6 +19,7 @@ class Router {
     this.guards,
     this.params,
     this.transition = TransitionType.defaultTransition,
+    this.customTransition,
   }) {
     assert(routerName != null);
 
@@ -28,14 +30,14 @@ class Router {
       throw ArgumentError('You should provide only [module] or [child]');
   }
 
-  Router copyWith({
-    Widget Function(BuildContext context, ModularArguments args) child,
-    String routerName,
-    ChildModule module,
-    Map<String, String> params,
-    List<RouteGuard> guards,
-    TransitionType transition,
-  }) {
+  Router copyWith(
+      {Widget Function(BuildContext context, ModularArguments args) child,
+      String routerName,
+      ChildModule module,
+      Map<String, String> params,
+      List<RouteGuard> guards,
+      TransitionType transition,
+      CustomTransition customTransition}) {
     return Router(
       routerName ?? this.routerName,
       child: child ?? this.child,
@@ -43,6 +45,7 @@ class Router {
       params: params ?? this.params,
       guards: guards ?? this.guards,
       transition: transition ?? this.transition,
+      customTransition: customTransition ?? this.customTransition,
     );
   }
 }
@@ -60,4 +63,16 @@ enum TransitionType {
   size,
   rightToLeftWithFade,
   leftToRightWithFade,
+  custom,
+}
+
+class CustomTransition {
+  final Widget Function(
+          BuildContext, Animation<double>, Animation<double>, Widget)
+      transitionBuilder;
+  final Duration transitionDuration;
+
+  CustomTransition(
+      {@required this.transitionBuilder,
+      this.transitionDuration = const Duration(milliseconds: 300)});
 }

@@ -12,16 +12,17 @@ PageRouteBuilder fadeInTransition(
     ModularArguments args,
     RouteSettings settings) {
   return PageRouteBuilder(
-    settings: settings,
-    pageBuilder: (BuildContext context, __, ___) {
-    return builder(context, args);
-  }, transitionsBuilder: (BuildContext context, Animation animation,
-      Animation secondaryAnimation, Widget child) {
-    return FadeTransition(
-      opacity: animation,
-      child: child,
-    );
-  });
+      settings: settings,
+      pageBuilder: (BuildContext context, __, ___) {
+        return builder(context, args);
+      },
+      transitionsBuilder: (BuildContext context, Animation animation,
+          Animation secondaryAnimation, Widget child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      });
 }
 
 PageRouteBuilder noTransition(
@@ -29,10 +30,10 @@ PageRouteBuilder noTransition(
     ModularArguments args,
     RouteSettings settings) {
   return PageRouteBuilder(
-    settings: settings,
-    pageBuilder: (BuildContext context, __, ___) {
-    return builder(context, args);
-  });
+      settings: settings,
+      pageBuilder: (BuildContext context, __, ___) {
+        return builder(context, args);
+      });
 }
 
 PageRouteBuilder rightToLeft(
@@ -41,10 +42,10 @@ PageRouteBuilder rightToLeft(
     RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.rightToLeft,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.rightToLeft,
   );
 }
 
@@ -54,10 +55,10 @@ PageRouteBuilder leftToRight(
     RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.leftToRight,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.leftToRight,
   );
 }
 
@@ -67,10 +68,10 @@ PageRouteBuilder upToDown(
     RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.upToDown,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.upToDown,
   );
 }
 
@@ -80,10 +81,10 @@ PageRouteBuilder downToUp(
     RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.downToUp,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.downToUp,
   );
 }
 
@@ -91,10 +92,10 @@ PageRouteBuilder scale(Widget Function(BuildContext, ModularArguments) builder,
     ModularArguments args, RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.scale,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.scale,
   );
 }
 
@@ -102,10 +103,10 @@ PageRouteBuilder rotate(Widget Function(BuildContext, ModularArguments) builder,
     ModularArguments args, RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.rotate,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.rotate,
   );
 }
 
@@ -113,10 +114,10 @@ PageRouteBuilder size(Widget Function(BuildContext, ModularArguments) builder,
     ModularArguments args, RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.size,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.size,
   );
 }
 
@@ -126,10 +127,10 @@ PageRouteBuilder rightToLeftWithFade(
     RouteSettings settings) {
   return PageTransition(
     settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.rightToLeftWithFade,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.rightToLeftWithFade,
   );
 }
 
@@ -138,10 +139,10 @@ PageRouteBuilder leftToRightWithFade(
     ModularArguments args,
     RouteSettings settings) {
   return PageTransition(
-      settings: settings,
-      builder: (context) {
-        return builder(context, args);
-      },
-      type: PageTransitionType.leftToRightWithFade,
+    settings: settings,
+    builder: (context) {
+      return builder(context, args);
+    },
+    type: PageTransitionType.leftToRightWithFade,
   );
 }
