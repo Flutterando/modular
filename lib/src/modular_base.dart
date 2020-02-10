@@ -78,7 +78,7 @@ class Modular {
     bool _condition(router) => (router.module != null &&
         !typesCheckds.contains(router.module.runtimeType));
 
-    for (var router in _initialModule.routers.where(_condition)) {
+    for (var router in module.routers.where(_condition)) {
       _printRoutersModule(
           router.module, router.routerName, paths, typesCheckds);
     }
