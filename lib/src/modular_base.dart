@@ -54,7 +54,11 @@ class Modular {
       if (sizedPath >= sizeLocalPath) {
         String spaces =
             List.generate(sizedPath - sizeLocalPath, (index) => ' ').join('');
-        return "${split[0]}$spaces => ${split[1]}";
+        String path = split[0];
+        if (path != '/' && path[path.length - 1] == '/') {
+          path = path.substring(0, path.length - 1);
+        }
+        return "$path$spaces => ${split[1]}";
       }
       return p;
     }).toList();
