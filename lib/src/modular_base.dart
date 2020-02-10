@@ -336,7 +336,7 @@ class Modular {
     actualRoute = path;
     _args = ModularArguments(router.params, settings.arguments);
 
-    if (path == settings.isInitialRoute) {
+    if (settings.isInitialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);
     }
 
