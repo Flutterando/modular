@@ -33,7 +33,55 @@ class Modular {
 
   static init(ChildModule module) {
     _initialModule = module;
+    if (Modular.debugMode) {
+      _printRouters();
+    }
     bindModule(module, "global==");
+  }
+
+  static _printRouters() {
+    List<Type> typesCheckds = [];
+    List<String> paths = [];
+    _printRoutersModule(_initialModule, '/', paths, typesCheckds);
+    paths.sort((preview, actual) => preview
+        .split(' => ')[0]
+        .length
+        .compareTo(actual.split(' => ')[0].length));
+    int sizedPath = paths[paths.length - 1].split(' => ')[0].length;
+    paths = paths.map((p) {
+      List<String> split = p.split(' => ');
+      int sizeLocalPath = split[0].length;
+      if (sizedPath >= sizeLocalPath) {
+        String spaces =
+            List.generate(sizedPath - sizeLocalPath, (index) => ' ').join('');
+        return "${split[0]}$spaces => ${split[1]}";
+      }
+      return p;
+    }).toList();
+
+    print('\n*** Modular Routers ***\n');
+    paths.forEach(print);
+    print("\n*****\n");
+  }
+
+  static _printRoutersModule(ChildModule module, String initialPath,
+      List<String> paths, List<Type> typesCheckds) {
+    typesCheckds.add(module.runtimeType);
+    for (var router in module.routers.where((router) => router.child != null)) {
+      String page = router.child.runtimeType
+          .toString()
+          .replaceFirst('(BuildContext, ModularArguments) => ', '');
+      String path = "$initialPath${router.routerName}".replaceFirst('//', '/');
+      paths.add('$path => $page');
+    }
+
+    bool _condition(router) => (router.module != null &&
+        !typesCheckds.contains(router.module.runtimeType));
+
+    for (var router in _initialModule.routers.where(_condition)) {
+      _printRoutersModule(
+          router.module, router.routerName, paths, typesCheckds);
+    }
   }
 
   static NavigatorState get to {
