@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_modular/flutter_modular_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_modular/flutter_modular.dart';
@@ -8,7 +9,7 @@ import 'app/modules/product/product_module.dart';
 
 void main() {
   setUpAll(() {
-    Modular.init(AppModule());
+    initModule(AppModule(), initialModule: true);
   });
 
   group("Group router", () {
