@@ -1,3 +1,21 @@
+## [0.5.0] - 13 Feb 2020
+
+* Added router generic type
+```dart
+ @override
+  List<Router> get routers => [
+    //type router with return type
+    Router<String>('/event', child: (_, args) => EventPage()),
+  ]
+```
+Now you can type your pushNamed and pop
+
+```dart
+ String value = await Modular.to.pushNamed<String>();
+ //and
+ Modular.to.pop('My String');
+```
+
 ## [0.4.7] - 9 Feb 2020
 
 * Added Custom Transition.

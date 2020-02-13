@@ -254,6 +254,27 @@ Router("/product",
 
 If you use transition in a module, all routes in that module will inherit this transition animation.
 
+
+
+## Router generic types
+
+You may need to navigate to a specific page and request a return value in the pop(), You can type the Router object with the value of that return;
+
+```dart
+ @override
+  List<Router> get routers => [
+    //type router with return type
+    Router<String>('/event', child: (_, args) => EventPage()),
+  ]
+```
+Now you can type your pushNamed and pop
+
+```dart
+ String name = await Modular.to.pushNamed<String>();
+ //and
+ Modular.to.pop('Jacob Moura');
+```
+
 ## Flutter Web url Routes
 
 The Routing System also recognizes what is typed in the website url (flutter web) so what you type in the browser url will open in the app. We hope this makes it easier for Flutter Web sites to make SEO more unique.
@@ -480,7 +501,7 @@ Consider splitting your code into modules such as LoginModule, and into it placi
 
 ## Lazy Loading
 
-Another benefit you get when working with modules is to load them "lazily". This means that your dependency injection will only be available when you navigate to a module, and as you exit that module, Modular will wipe memory by removing all injections and executing the dispose () methods (if available) on each module. injected class refers to that module.
+Another benefit you get when working with modules is to load them "lazily". This means that your dependency injection will only be available when you navigate to a module, and as you exit that module, Modular will wipe memory by removing all injections and executing the dispose() methods (if available) on each module. injected class refers to that module.
 
 ## Unit Test
 

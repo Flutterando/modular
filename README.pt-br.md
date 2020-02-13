@@ -271,6 +271,25 @@ https://flutter-website.com/#/product/1
 ```
 Isso abrira a view Product e `args.params(['id'])` será igual a 1.
 
+## Router generic types
+
+Você pode precisar navegar para uma pagina especifica e solicitar um valor de retorno no pop(), Você pode tipar o objeto Router com o valor desse retorno;
+
+```dart
+ @override
+  List<Router> get routers => [
+    //type router with return type
+    Router<String>('/event', child: (_, args) => EventPage()),
+  ]
+```
+Agora você pode "tipar" o **pushNamed** e o **pop**
+
+```dart
+ String name = await Modular.to.pushNamed<String>();
+ //and
+ Modular.to.pop('Jacob Moura');
+```
+
 
 ## Injeção de dependências
 
