@@ -352,34 +352,10 @@ class Modular {
     return MaterialPageRoute(builder: builder, settings: settings);
   }
 
-  static Map<
-      TransitionType,
-      PageRouteBuilder Function(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
-    RouteSettings settings,
-  )> _transitions = {
-    TransitionType.fadeIn: fadeInTransition,
-    TransitionType.noTransition: noTransition,
-    TransitionType.rightToLeft: rightToLeft,
-    TransitionType.leftToRight: leftToRight,
-    TransitionType.upToDown: upToDown,
-    TransitionType.downToUp: downToUp,
-    TransitionType.scale: scale,
-    TransitionType.rotate: rotate,
-    TransitionType.size: size,
-    TransitionType.rightToLeftWithFade: rightToLeftWithFade,
-    TransitionType.leftToRightWithFade: leftToRightWithFade,
-  };
-
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
-  static Route generateRoute(
-    RouteSettings settings, {
-    Function(Widget Function(BuildContext) builder, RouteSettings settings)
-        pageRoute = _defaultPageRouter,
-  }) {
+  static Route<T> generateRoute<T>(RouteSettings settings) {
     String path = settings.name;
     Router router = selectRoute(path);
     if (router == null) {
@@ -392,53 +368,7 @@ class Modular {
       router = router.copyWith(transition: TransitionType.noTransition);
     }
 
-    Widget _disposableGenerate(BuildContext context) {
-      var actual = ModalRoute.of(context);
-      Widget page = _DisposableWidget(
-        child: router.child(context, args),
-        dispose: () {
-          final List<String> trash = [];
-          if (actual.isCurrent) {
-            return;
-          }
-          _injectMap.forEach((key, module) {
-            module.paths.remove(path);
-            if (module.paths.length == 0) {
-              module.cleanInjects();
-              trash.add(key);
-              _debugPrintModular(
-                  "-- ${module.runtimeType.toString()} DISPOSED");
-            }
-          });
-
-          trash.forEach((key) {
-            _injectMap.remove(key);
-          });
-        },
-      );
-      return page;
-    }
-
-    if (router.customTransition != null) {
-      return PageRouteBuilder(
-        pageBuilder: (context, _, __) {
-          return _disposableGenerate(context);
-        },
-        settings: settings,
-        transitionsBuilder: router.customTransition.transitionBuilder,
-        transitionDuration: router.customTransition.transitionDuration,
-      );
-    } else if (router.transition == TransitionType.defaultTransition) {
-      return pageRoute(
-        (context) => _disposableGenerate(context),
-        settings,
-      );
-    } else {
-      var selectTransition = _transitions[router.transition];
-      return selectTransition((context, args) {
-        return _disposableGenerate(context);
-      }, args, settings);
-    }
+    return router.getPageRoute(settings: settings, injectMap: _injectMap);
   }
 
   static void addCoreInit(ChildModule module) {
@@ -479,32 +409,5 @@ class _NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     return child;
-  }
-}
-
-class _DisposableWidget extends StatefulWidget {
-  final Function dispose;
-  final Widget child;
-
-  _DisposableWidget({
-    Key key,
-    this.dispose,
-    this.child,
-  }) : super(key: key);
-
-  @override
-  __DisposableWidgetState createState() => __DisposableWidgetState();
-}
-
-class __DisposableWidgetState extends State<_DisposableWidget> {
-  @override
-  void dispose() {
-    widget.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
   }
 }
