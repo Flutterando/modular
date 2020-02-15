@@ -107,11 +107,13 @@ class Router<T> {
 
   Route<T> getPageRoute(
       {Map<String, ChildModule> injectMap, RouteSettings settings}) {
+    final arguments = Modular.args.copy();
+
     if (this.customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
           return _disposableGenerate(context,
-              args: Modular.args, injectMap: injectMap, path: settings.name);
+              args: arguments, injectMap: injectMap, path: settings.name);
         },
         settings: settings,
         transitionsBuilder: this.customTransition.transitionBuilder,
@@ -121,14 +123,14 @@ class Router<T> {
       return MaterialPageRoute<T>(
         settings: settings,
         builder: (context) => _disposableGenerate(context,
-            args: Modular.args, injectMap: injectMap, path: settings.name),
+            args: arguments, injectMap: injectMap, path: settings.name),
       );
     } else {
       var selectTransition = _transitions[this.transition];
       return selectTransition((context, args) {
         return _disposableGenerate(context,
             args: args, injectMap: injectMap, path: settings.name);
-      }, Modular.args, settings);
+      }, arguments, settings);
     }
   }
 }
