@@ -1,3 +1,6 @@
+## [0.5.1] - 15 Feb 2020
+* fix #52
+
 ## [0.5.0] - 13 Feb 2020
 
 * Added router generic type
