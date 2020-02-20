@@ -1,3 +1,6 @@
+## [0.5.2] - 20 Feb 2020
+* Prevent StackOverflow
+
 ## [0.5.1] - 15 Feb 2020
 * fix #52
 

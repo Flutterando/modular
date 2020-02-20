@@ -19,7 +19,7 @@ abstract class ChildModule {
 
   final Map<Type, dynamic> _injectBinds = {};
 
-  getBind<T>([Map<String, dynamic> params]) {
+  getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
     T _bind;
     Type type = _getInjectType<T>();
     if (_injectBinds.containsKey(type)) {
@@ -27,13 +27,28 @@ abstract class ChildModule {
       return _bind;
     }
 
+    if (typesInRequest.contains(type)) {
+      throw ModularError('''
+Recursive calls detected. This can cause StackOverflow.
+Check the Binds of the ${this.runtimeType} module:
+***
+${typesInRequest.join('\n')}
+***
+      
+      ''');
+    } else {
+      typesInRequest.add(type);
+    }
+
     Bind b = _binds.firstWhere((b) => b.inject is T Function(Inject),
         orElse: () => null);
     if (b == null) {
+      typesInRequest.remove(type);
       return null;
     }
     _bind = b.inject(Inject(
       params: params,
+      typesInRequest: typesInRequest,
       //     tag: this.runtimeType.toString(),
     ));
     if (b.singleton) {

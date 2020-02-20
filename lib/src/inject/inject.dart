@@ -6,11 +6,9 @@ import '../modular_base.dart';
 class Inject<T> {
   Map<String, dynamic> params = {};
   final String tag;
+  final List<Type> typesInRequest;
 
-  Inject({
-    this.params,
-    this.tag,
-  });
+  Inject({this.params, this.tag, this.typesInRequest});
 
   factory Inject.of() => Inject(tag: T.toString());
 
@@ -18,9 +16,10 @@ class Inject<T> {
   B get<B>([Map<String, dynamic> params]) {
     params ??= {};
     if (tag == null) {
-      return Modular.get<B>(params: params);
+      return Modular.get<B>(params: params, typesInRequest: typesInRequest);
     } else {
-      return Modular.get<B>(module: tag, params: params);
+      return Modular.get<B>(
+          module: tag, params: params, typesInRequest: typesInRequest);
     }
   }
 

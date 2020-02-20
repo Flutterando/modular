@@ -29,8 +29,9 @@ abstract class ModuleWidget extends StatelessWidget implements ChildModule {
     _fakeModule.cleanInjects();
   }
 
-  getBind<T>([Map<String, dynamic> params]) {
-    return _fakeModule.getBind<T>(params);
+  @override
+  getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
+    return _fakeModule.getBind<T>(params, typesInRequest: typesInRequest);
   }
 
   @override
