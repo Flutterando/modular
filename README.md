@@ -83,7 +83,7 @@ dependencies:
 
 You need to do some initial setup.
 
-Create a file to be your main widget, thinking of configuring named routes within MaterialApp: (app_widget.dart)
+Create a file to be your main widget, thinking of configuring named routes within `MaterialApp`: (app_widget.dart)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -156,7 +156,7 @@ class AppModule extends MainModule {
 }
 ```
 
-And to access the route use Navigator.pushNamed or Modular.to.pushNamed:
+And to access the route use `Navigator.pushNamed` or `Modular.to.pushNamed`:
 
 ```dart
 Navigator.pushNamed(context, '/login');
@@ -213,7 +213,7 @@ getting on the route
 ## Route Guard
 
 We may protect our routes with middleware that will verify that the route is available within a given Route.
-First create a RouteGuard:
+First create a `RouteGuard`:
 ```dart
 class MyGuard implements RouteGuard {
   @override
@@ -258,7 +258,7 @@ If you use transition in a module, all routes in that module will inherit this t
 
 ## Router generic types
 
-You may need to navigate to a specific page and request a return value in the pop(), You can type the Router object with the value of that return;
+You may need to navigate to a specific page and request a return value in the `pop()`, You can type the Router object with the value of that return;
 
 ```dart
  @override
@@ -314,7 +314,7 @@ class AppModule extends MainModule {
 }
 ```
 
-Let's assume that for example we want to retrieve AppBloc inside HomePage.
+Let's assume that for example we want to retrieve `AppBloc` inside `HomePage`.
 
 ```dart
 //code in bloc
@@ -394,7 +394,7 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 
 ### ModuleWidget
 
-The same structure as ChildModule. Very useful for modular TabBar visualizations.
+The same structure as `ChildModule`. Very useful for modular TabBar visualizations.
 
 ```dart
 class TabModule extends ModuleWidget {
@@ -415,7 +415,7 @@ class TabModule extends ModuleWidget {
 ## Consuming a ChangeNotifier Class
 
 
-Example of a ChangeNotifier Class:
+Example of a `ChangeNotifier` Class:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -430,7 +430,7 @@ class Counter extends ChangeNotifier {
 }
 ```
 
- you can use the Consumer to manage the state of a widget block.
+ you can use the `Consumer` to manage the state of a widget block.
 
 ```dart
 class HomePage extends StatelessWidget {
@@ -463,7 +463,7 @@ class HomePage extends StatelessWidget {
 
 ## Creating Child Modules.
 
-You can create other modules in your project, so instead of inheriting from MainModule, you should inherit from ChildModule.
+You can create other modules in your project, so instead of inheriting from `MainModule`, you should inherit from `ChildModule`.
 
 ```dart
 class HomeModule extends ChildModule {
@@ -497,7 +497,7 @@ class AppModule extends MainModule {
 //...
 ```
 
-Consider splitting your code into modules such as LoginModule, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
+Consider splitting your code into modules such as `LoginModule`, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
 
 ## Lazy Loading
 
