@@ -75,3 +75,5 @@ build/
 
 test/.test_coverage.dart
 coverage/
+pubspec.lock
+example/pubspec.lock

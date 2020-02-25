@@ -9,7 +9,7 @@ import 'transitions/transitions.dart';
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
-    print(text);
+    debugPrint(text);
   }
 }
 
@@ -63,9 +63,9 @@ class Modular {
       return p;
     }).toList();
 
-    print('\n*** Modular Routers ***\n');
+    debugPrint('\n*** Modular Routers ***\n');
     paths.forEach(print);
-    print("\n*****\n");
+    debugPrint("\n*****\n");
   }
 
   static _printRoutersModule(ChildModule module, String initialPath,
