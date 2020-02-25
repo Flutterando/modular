@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
-    print(text);
+    debugPrint(text);
   }
 }
 

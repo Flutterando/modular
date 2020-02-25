@@ -28,12 +28,12 @@ class OtherWidget extends ModuleWidget {
 
 class OtherWidgetNotLazyError {
   OtherWidgetNotLazyError() {
-    print('Not lazy');
+    debugPrint('Not lazy');
   }
 }
 
 class ObjectTest {
   ObjectTest() {
-    print('lazy');
+    debugPrint('lazy');
   }
 }
