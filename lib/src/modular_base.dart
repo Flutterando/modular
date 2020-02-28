@@ -362,6 +362,7 @@ class Modular {
 
   static Route<T> generateRoute<T>(RouteSettings settings) {
     String path = settings.name;
+    print("Settings name is ${settings.name}.");
     Router router = selectRoute(path);
     if (router == null) {
       return null;
@@ -369,9 +370,9 @@ class Modular {
     actualRoute = path;
     _args = ModularArguments(router.params, settings.arguments);
 
-    if (settings.isInitialRoute) {
-      router = router.copyWith(transition: TransitionType.noTransition);
-    }
+    // if (settings.isInitialRoute) {
+    //   router = router.copyWith(transition: TransitionType.noTransition);
+    // }
 
     return router.getPageRoute(settings: settings, injectMap: _injectMap);
   }
