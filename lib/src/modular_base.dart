@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -15,7 +16,7 @@ _debugPrintModular(String text) {
 
 class Modular {
   static String get initialRoute => '/';
-  static bool debugMode = true;
+  static bool debugMode = !kReleaseMode;
 
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
