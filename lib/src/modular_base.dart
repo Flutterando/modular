@@ -6,7 +6,6 @@ import 'package:flutter_modular/src/routers/router.dart';
 
 import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
-import 'transitions/transitions.dart';
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
@@ -353,11 +352,6 @@ class Modular {
     return route;
   }
 
-  static MaterialPageRoute _defaultPageRouter(
-      Widget Function(BuildContext) builder, RouteSettings settings) {
-    return MaterialPageRoute(builder: builder, settings: settings);
-  }
-
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
@@ -370,7 +364,7 @@ class Modular {
     actualRoute = path;
     _args = ModularArguments(router.params, settings.arguments);
 
-    if (settings.isInitialRoute) {
+    if (settings.name == Modular.initialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);
     }
 
@@ -396,24 +390,5 @@ class ModularArguments {
 
   ModularArguments copy() {
     return ModularArguments(params, data);
-  }
-}
-
-class _NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
-  _NoAnimationMaterialPageRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
-    bool maintainState = true,
-    bool fullscreenDialog = false,
-  }) : super(
-            builder: builder,
-            maintainState: maintainState,
-            settings: settings,
-            fullscreenDialog: fullscreenDialog);
-
-  @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    return child;
   }
 }
