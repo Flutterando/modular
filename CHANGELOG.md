@@ -1,3 +1,6 @@
+## [0.5.3] - 05 Mar 2020
+* Prevent StackOverflow
+
 ## [0.5.2] - 20 Feb 2020
 * Prevent StackOverflow
 
