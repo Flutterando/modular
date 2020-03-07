@@ -307,6 +307,7 @@ class Modular {
 
           if (router.transition == TransitionType.defaultTransition) {
             router = router.copyWith(
+              routeGenerator: route.routeGenerator,
               transition: route.transition,
             );
           }
