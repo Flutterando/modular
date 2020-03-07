@@ -86,17 +86,17 @@ void main() {
     });
 
     test('RouteGuard test', () {
-      expect(Modular.selectRoute("/forbidden"), null);
+      expect(() => Modular.selectRoute("/forbidden"), throwsA(isA<ModularError>()));
     });
     test('RouteGuard other module', () {
-      expect(Modular.selectRoute("/home/forbidden2"), null);
+      expect(() => Modular.selectRoute("/home/forbidden2"), throwsA(isA<ModularError>()));
     });
     test('RouteGuard other module', () {
-      expect(Modular.selectRoute("/home/forbidden2"), null);
+      expect(() => Modular.selectRoute("/home/forbidden2"), throwsA(isA<ModularError>()));
     });
 
     test('RouteGuard other module Two', () {
-      expect(Modular.selectRoute("/homeTwo/forbidden2"), null);
+      expect(() => Modular.selectRoute("/homeTwo/forbidden2"), throwsA(isA<ModularError>()));
     });
 
     test('Get route correct', () {
