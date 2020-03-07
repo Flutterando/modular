@@ -248,13 +248,17 @@ class Modular {
 
   static RouteGuard _verifyGuard(List<RouteGuard> guards, String path) {
     RouteGuard guard;
-    try {
-      guard = guards.length == 0
-          ? null
-          : guards.firstWhere((guard) => !guard.canActivate(path),
-              orElse: null);
-    } catch (e) {}
+    var realGuards = guards ?? [];
+    guard = realGuards.length == 0
+        ? null
+        : guards.firstWhere((guard) => !guard.canActivate(path),
+        orElse: () => null);
 
+    realGuards.expand((c) => c.executors).forEach((c) => c.onGuarded(path, guard == null));
+
+    if(guard != null) {
+      throw ModularError("Path guarded : $path");
+    }
     return guard;
   }
 
@@ -303,6 +307,7 @@ class Modular {
 
           if (router.transition == TransitionType.defaultTransition) {
             router = router.copyWith(
+              routeGenerator: route.routeGenerator,
               transition: route.transition,
             );
           }
@@ -313,13 +318,7 @@ class Modular {
         if (searchRoute(route, tempRouteName, path)) {
           var guards = _prepareGuardList(_masterRouteGuards, route.guards);
           _masterRouteGuards = null;
-          RouteGuard guard;
-          try {
-            guard = guards.length == 0
-                ? null
-                : guards.firstWhere((guard) => !guard.canActivate(path),
-                    orElse: null);
-          } catch (e) {}
+          RouteGuard guard = _verifyGuard(guards, path);
           if ((tempRouteName == path || tempRouteName == "$path/") &&
               path != '/') {
             guard = _verifyGuard(guards, path);
