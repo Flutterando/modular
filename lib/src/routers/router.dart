@@ -5,6 +5,8 @@ import 'package:flutter_modular/src/interfaces/child_module.dart';
 import 'package:flutter_modular/src/interfaces/route_guard.dart';
 import 'package:flutter_modular/src/transitions/transitions.dart';
 
+typedef RouteBuilder<T> = MaterialPageRoute<T> Function(WidgetBuilder, RouteSettings);
+
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
     debugPrint(text);
@@ -19,6 +21,7 @@ class Router<T> {
   final List<RouteGuard> guards;
   final TransitionType transition;
   final CustomTransition customTransition;
+  final RouteBuilder<T> routeGenerator;
 
   Router(
     this.routerName, {
@@ -27,6 +30,7 @@ class Router<T> {
     this.guards,
     this.params,
     this.transition = TransitionType.defaultTransition,
+    this.routeGenerator,
     this.customTransition,
   }) {
     assert(routerName != null);
@@ -64,6 +68,7 @@ class Router<T> {
       Map<String, String> params,
       List<RouteGuard> guards,
       TransitionType transition,
+      RouteBuilder routeGenerator,
       CustomTransition customTransition}) {
     return Router<T>(
       routerName ?? this.routerName,
@@ -71,6 +76,7 @@ class Router<T> {
       module: module ?? this.module,
       params: params ?? this.params,
       guards: guards ?? this.guards,
+      routeGenerator: routeGenerator ?? this.routeGenerator,
       transition: transition ?? this.transition,
       customTransition: customTransition ?? this.customTransition,
     );
@@ -120,10 +126,14 @@ class Router<T> {
         transitionDuration: this.customTransition.transitionDuration,
       );
     } else if (this.transition == TransitionType.defaultTransition) {
+      var widgetBuilder = (context) => _disposableGenerate(context,
+          args: arguments, injectMap: injectMap, path: settings.name);
+      if(routeGenerator != null) {
+        return routeGenerator(widgetBuilder, settings);
+      }
       return MaterialPageRoute<T>(
         settings: settings,
-        builder: (context) => _disposableGenerate(context,
-            args: arguments, injectMap: injectMap, path: settings.name),
+        builder: widgetBuilder,
       );
     } else {
       var selectTransition = _transitions[this.transition];

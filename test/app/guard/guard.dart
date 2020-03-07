@@ -5,4 +5,7 @@ class MyGuard implements RouteGuard {
   bool canActivate(String url) {
     return false;
   }
+
+  @override
+  List<GuardExecutor> get executors => [];
 }
