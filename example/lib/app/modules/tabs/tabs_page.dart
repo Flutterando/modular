@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'modules/tab1/tab1_module.dart';
+import 'modules/tab2/tab2_module.dart';
+import 'package:mobx/mobx.dart';
 
 class TabsPage extends StatefulWidget {
   final String title;
@@ -15,40 +17,52 @@ class TabsPage extends StatefulWidget {
 class _TabsPageState extends ModularState<TabsPage, TabsBloc> {
   //use 'controller' variable to access controller
 
-  int selectedPage = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: IndexedStack(
-        index: selectedPage,
-        children: <Widget>[
-          RouterOutlet(
-            module: Tab1Module(),
-          ),
-          Container(
-            color: Colors.red,
-          ),
-          Container(
-            color: Colors.blue,
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedPage,
-          onTap: (index) {
-            setState(() {
-              selectedPage = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),
-            BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),
-            BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),
-          ]),
+      body: StreamBuilder<int>(
+          stream: controller.selectedPage,
+          initialData: 0,
+          builder: (context, snapshot) {
+            int selectedPage = snapshot.data;
+            return IndexedStack(
+              index: selectedPage,
+              children: <Widget>[
+                RouterOutlet(
+                  module: Tab1Module(),
+                ),
+                RouterOutlet(
+                  module: Tab2Module(),
+                ),
+                Container(
+                  color: Colors.blue,
+                ),
+              ],
+            );
+          }),
+      bottomNavigationBar: StreamBuilder<int>(
+          stream: controller.selectedPage,
+          initialData: 0,
+          builder: (context, snapshot) {
+            int selectedPage = snapshot.data;
+
+            return BottomNavigationBar(
+                currentIndex: selectedPage,
+                onTap: (index) {
+                  controller.selectedPage.add(index);
+                },
+                items: [
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.add), title: Text('data')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.add), title: Text('data')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.add), title: Text('data')),
+                ]);
+          }),
     );
   }
 }

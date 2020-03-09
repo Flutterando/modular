@@ -1,7 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:rxdart/rxdart.dart';
 
-class TabsBloc extends Disposable {
-  //dispose will be called automatically by closing its streams
+class TabsBloc implements Disposable {
+  final selectedPage = BehaviorSubject<int>.seeded(0);
+
   @override
-  void dispose() {}
+  void dispose() {
+    selectedPage.close();
+  }
 }
