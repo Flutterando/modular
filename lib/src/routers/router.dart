@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -5,7 +6,8 @@ import 'package:flutter_modular/src/interfaces/child_module.dart';
 import 'package:flutter_modular/src/interfaces/route_guard.dart';
 import 'package:flutter_modular/src/transitions/transitions.dart';
 
-typedef RouteBuilder<T> = MaterialPageRoute<T> Function(WidgetBuilder, RouteSettings);
+typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
+    WidgetBuilder, RouteSettings);
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
@@ -128,13 +130,18 @@ class Router<T> {
     } else if (this.transition == TransitionType.defaultTransition) {
       var widgetBuilder = (context) => _disposableGenerate(context,
           args: arguments, injectMap: injectMap, path: settings.name);
-      if(routeGenerator != null) {
+      if (routeGenerator != null) {
         return routeGenerator(widgetBuilder, settings);
       }
-      return MaterialPageRoute<T>(
-        settings: settings,
-        builder: widgetBuilder,
-      );
+      return Modular.isCupertino
+          ? CupertinoPageRoute<T>(
+              settings: settings,
+              builder: widgetBuilder,
+            )
+          : MaterialPageRoute<T>(
+              settings: settings,
+              builder: widgetBuilder,
+            );
     } else {
       var selectTransition = _transitions[this.transition];
       return selectTransition((context, args) {

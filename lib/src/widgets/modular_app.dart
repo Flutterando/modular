@@ -4,11 +4,15 @@ import 'package:flutter_modular/src/interfaces/main_module.dart';
 
 class ModularApp extends StatefulWidget {
   final MainModule module;
+  final bool isCupertino;
 
   ModularApp({
     Key key,
     this.module,
-  }) : super(key: key);
+    this.isCupertino = false,
+  }) : super(key: key) {
+    Modular.isCupertino = isCupertino;
+  }
 
   @override
   _ModularAppState createState() => _ModularAppState();

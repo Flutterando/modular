@@ -7,7 +7,6 @@ import 'home_widget.dart';
 
 class SlowerPageRoute extends MaterialPageRoute {
   @override
-  // TODO: implement transitionDuration
   Duration get transitionDuration => Duration(milliseconds: 1200);
 
   Map eventP;

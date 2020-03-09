@@ -16,6 +16,7 @@ _debugPrintModular(String text) {
 class Modular {
   static const String initialRoute = '/';
   static bool debugMode = !kReleaseMode;
+  static bool isCupertino = false;
 
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
@@ -309,7 +310,6 @@ class Modular {
 
           if (router.transition == TransitionType.defaultTransition) {
             router = router.copyWith(
-              routeGenerator: route.routeGenerator,
               transition: route.transition,
             );
           }

@@ -17,8 +17,11 @@ class Tab1Module extends ChildModule {
   @override
   List<Router> get routers => [
         Router(Modular.initialRoute, child: (_, args) => Tab1Page()),
-        Router("/page1", child: (_, args) => Page1Page()),
-        Router("/page2", child: (_, args) => Page2Page()),
+        Router("/page1",
+            child: (_, args) => Page1Page(), transition: TransitionType.rotate),
+        Router("/page2",
+            child: (_, args) => Page2Page(),
+            transition: TransitionType.leftToRight),
       ];
 
   static Inject get to => Inject<Tab1Module>.of();
