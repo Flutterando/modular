@@ -1,6 +1,7 @@
 ## [0.5.4] - 08 Mar 2020
 * Fix StackOverflow error
 * Fix RouteGuard
+* Fix Transitions Animation 
 * PREVIEW: RouterOutlet Widget
   Use Navigation in BottomBarTab or Drawer
 ``` Dart
