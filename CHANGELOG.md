@@ -1,3 +1,26 @@
+## [0.5.4] - 08 Mar 2020
+* Fix StackOverflow error
+* Fix RouteGuard
+* PREVIEW: RouterOutlet Widget
+  Use Navigation in BottomBarTab or Drawer
+``` Dart
+PageView(
+  controller: controller
+  children: [
+    RouterOutlet(
+      module: Tab1Module()
+    ),
+    RouterOutlet(
+      module: Tab2Module()
+    ),
+    RouterOutlet(
+      module: Tab3Module()
+    ),
+  ]
+),
+```
+NOTE: Navigation is only Navigator.of (context) and only uses the module's literal route path.
+
 ## [0.5.3] - 05 Mar 2020
 * Prevent StackOverflow
 

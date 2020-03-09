@@ -14,7 +14,7 @@ _debugPrintModular(String text) {
 }
 
 class Modular {
-  static String get initialRoute => '/';
+  static const String initialRoute = '/';
   static bool debugMode = !kReleaseMode;
 
   static Map<String, ChildModule> _injectMap = {};
@@ -252,11 +252,13 @@ class Modular {
     guard = realGuards.length == 0
         ? null
         : guards.firstWhere((guard) => !guard.canActivate(path),
-        orElse: () => null);
+            orElse: () => null);
 
-    realGuards.expand((c) => c.executors).forEach((c) => c.onGuarded(path, guard == null));
+    realGuards
+        .expand((c) => c.executors)
+        .forEach((c) => c.onGuarded(path, guard == null));
 
-    if(guard != null) {
+    if (guard != null) {
       throw ModularError("Path guarded : $path");
     }
     return guard;
@@ -343,20 +345,21 @@ class Modular {
   }
 
   @visibleForTesting
-  static Router selectRoute(String path) {
+  static Router selectRoute(String path, [ChildModule module]) {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
-    Router route = _searchInModule(_initialModule, "", path);
+    Router route = _searchInModule(module ?? _initialModule, "", path);
     return route;
   }
 
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
-  static Route<T> generateRoute<T>(RouteSettings settings) {
+  static Route<T> generateRoute<T>(RouteSettings settings,
+      [ChildModule module]) {
     String path = settings.name;
-    Router router = selectRoute(path);
+    Router router = selectRoute(path, module);
     if (router == null) {
       return null;
     }

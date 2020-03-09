@@ -27,6 +27,13 @@ abstract class ChildModule {
       return _bind;
     }
 
+    Bind b = _binds.firstWhere((b) => b.inject is T Function(Inject),
+        orElse: () => null);
+    if (b == null) {
+      typesInRequest.remove(type);
+      return null;
+    }
+
     if (typesInRequest.contains(type)) {
       throw ModularError('''
 Recursive calls detected. This can cause StackOverflow.
@@ -40,12 +47,6 @@ ${typesInRequest.join('\n')}
       typesInRequest.add(type);
     }
 
-    Bind b = _binds.firstWhere((b) => b.inject is T Function(Inject),
-        orElse: () => null);
-    if (b == null) {
-      typesInRequest.remove(type);
-      return null;
-    }
     _bind = b.inject(Inject(
       params: params,
       typesInRequest: typesInRequest,

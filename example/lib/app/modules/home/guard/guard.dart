@@ -1,13 +1,12 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
 class LoginExecutor extends GuardExecutor {
-
   final String message;
   LoginExecutor({this.message});
 
   @override
   onGuarded(String path, bool isActive) {
-    if(isActive) {
+    if (isActive) {
       print('logined and pass');
       return;
     }
@@ -26,6 +25,5 @@ class MyGuard implements RouteGuard {
   }
 
   @override
-  // TODO: implement executors
   List<GuardExecutor> get executors => [LoginExecutor(message: 'List page')];
 }

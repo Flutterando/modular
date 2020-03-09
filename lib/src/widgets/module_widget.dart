@@ -52,7 +52,7 @@ abstract class ModuleWidget extends StatelessWidget implements ChildModule {
 
   @override
   Widget build(BuildContext context) {
-    return _ModularProvider(
+    return ModularProvider(
       module: this,
       child: view,
     );
@@ -73,17 +73,17 @@ class _FakeModule extends ChildModule {
   List<Router> get routers => null;
 }
 
-class _ModularProvider extends StatefulWidget {
+class ModularProvider extends StatefulWidget {
   final ChildModule module;
   final Widget child;
 
-  const _ModularProvider({Key key, this.module, this.child}) : super(key: key);
+  const ModularProvider({Key key, this.module, this.child}) : super(key: key);
 
   @override
-  __ModularProviderState createState() => __ModularProviderState();
+  _ModularProviderState createState() => _ModularProviderState();
 }
 
-class __ModularProviderState extends State<_ModularProvider> {
+class _ModularProviderState extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
