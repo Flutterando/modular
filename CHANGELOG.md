@@ -1,3 +1,6 @@
+## [0.5.6] - 13 Mar 2020
+* Added keepAlive flag in RouterOutlet. 
+
 ## [0.5.5] - 08 Mar 2020
 * Fix StackOverflow error
 * Fix RouteGuard

@@ -24,9 +24,10 @@
 - **[Usando Modular widgets para recuperar suas classes](#usando-Modular-widgets-para-recuperar-suas-classes)**
   
   - [ModularState](#modularstate)
-  - [ModuleWidget](#modulewidget)
   - [Consumindo uma Classe ChangeNotifier](#consumindo-uma-classe-changenotifier)
   - [Criando Módulos Filhos](#criando-módulos-filhos)
+  - [ModuleWidget](#modulewidget)
+  - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Testes Unitários](#testes-unitários)
   - [DebugMode](#debugmode)
@@ -271,7 +272,7 @@ https://flutter-website.com/#/product/1
 ```
 Isso abrira a view Product e `args.params(['id'])` será igual a 1.
 
-## Router generic types
+## Roteamento com tipo genérico de retorno
 
 Você pode precisar navegar para uma pagina especifica e solicitar um valor de retorno no pop(), Você pode tipar o objeto Router com o valor desse retorno;
 
@@ -395,25 +396,6 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 }
 ```
 
-### ModuleWidget
-
-A mesma estrutura de um MainModule/ChildModule. Muito útil para usar em uma TabBar com páginas modulares
-
-```dart
-class TabModule extends ModuleWidget {
-
-    @override
-  List<Bind> get binds => [
-    Bind((i) => TabBloc(repository: i.get<TabRepository>())),
-    Bind((i) => TabRepository()),
-  ];
-
-  Widget get view => TabPage();
-
-}
-
-```
-
 ## Consumindo uma Classe ChangeNotifier
 
 
@@ -502,6 +484,49 @@ class AppModule extends MainModule {
 
 Pense em dividir seu código em módulos como por exemplo, `LoginModule`, e dentro dele colocar as rotas relacionadas a esse módulo. Ficará muito mais fácil a manutenção e o compartilhamento do código em outro projeto.
 
+### ModuleWidget
+
+A mesma estrutura de um MainModule/ChildModule. Muito útil para usar em uma TabBar com páginas modulares
+
+```dart
+class TabModule extends ModuleWidget {
+
+    @override
+  List<Bind> get binds => [
+    Bind((i) => TabBloc(repository: i.get<TabRepository>())),
+    Bind((i) => TabRepository()),
+  ];
+
+  Widget get view => TabPage();
+
+}
+
+```
+
+## RouterOutlet
+
+  RouterOutlet é uma solução para usar outro sistema de rotas totalmente desprendido da Navegação Princípal.
+  Isso é muito útil quando precisa que um elemento tenha seu próprio conjunto de rotas mesmo entando dentro de uma página na rota principal. Um exemplo prático disso é o seu uso em um TabBar ou Drawer
+
+``` Dart
+PageView(
+  controller: controller
+  children: [
+    RouterOutlet(
+      module: Tab1Module()
+    ),
+    RouterOutlet(
+      module: Tab2Module()
+    ),
+    RouterOutlet(
+      module: Tab3Module()
+    ),
+  ]
+),
+```
+NOTE: A Navegação dentro desses módulos é feita apenas usando o Nvigator.of(context) usando os caminhos das rotas de forma literal.
+
+
 ## Lazy Loading
 
 Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando você navegar para um módulo, e assim que sair dele, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte aquele módulo).
@@ -540,7 +565,7 @@ Remova os prints de depuração:
 Modular.debugMode = false;
 ```
 
-## Roadmap
+# Roadmap
 
 Este é o nosso roteiro, sinta-se a vontade para requisitar alterações.
 
