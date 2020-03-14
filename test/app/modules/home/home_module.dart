@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../app_bloc.dart';
@@ -26,7 +27,47 @@ class HomeModule extends ChildModule {
             guards: [MyGuard()]),
         Router("/list/:id/:id2", child: (_, args) => HomeWidget()),
         Router("/product", module: ProductModule()),
+        Router("/arguments", child: (_, args) => ArgumentsPage(id: args.data)),
+        Router("/modularArguments", child: (_, args) => ModularArgumentsPage()),
       ];
 
   static Inject get to => Inject<HomeModule>.of();
+}
+
+class ArgumentsPage extends StatelessWidget {
+  final int id;
+
+  const ArgumentsPage({Key key, @required this.id}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text("$id"),
+      ),
+    );
+  }
+}
+
+class ModularArgumentsPage extends StatefulWidget {
+  @override
+  _ModularArgumentsPageState createState() => _ModularArgumentsPageState();
+}
+
+class _ModularArgumentsPageState extends State<ModularArgumentsPage> {
+  int _id;
+
+  @override
+  void initState() {
+    super.initState();
+    _id = Modular.args.data;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text("$_id"),
+      ),
+    );
+  }
 }
