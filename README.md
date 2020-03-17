@@ -2,29 +2,28 @@
 
 ## Flutter Modular
 
-![](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
+![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 
 *Read this in other languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
-
-
 
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**  
 - **[Modular Pillars](#modular-pillars)**  
   - [Example](#example)
-- **[Getting started with Modular](#getting-started-with-modular)** 
+
+- **[Getting started with Modular](#getting-started-with-modular)**
   - [Installation](#installation)
   - [Using in a New Project](#using-in-a-new-project)
   - [Adding Routes](#adding-routes)
   - [Dynamic Routes](#dynamic-routes)
   - [Route Guard](#route-guard)
   - [Route Transition Animation](#route-transition-animation)
+  - [Grouping Routes](#grouping-routes)
   - [Flutter Web url Routes](#flutter-web-url-routes)
   - [Dependency Injection](#dependency-injection)
   - [Retrieving in view using injection](#retrieving-in-view-using-injection)
 
 - **[Using Modular widgets to retrieve your classes](#using-modular-widgets-to-retrieve-your-classes)**
-  
   - [ModularState](#modularstate)
   - [Consuming a ChangeNotifier Class](#consuming-a-changenotifier-class)
   - [Creating Child Modules](#creating-child-modules)
@@ -37,18 +36,17 @@
 - **[Roadmap](#roadmap)**
 - **[Features and bugs](#features-and-bugs)**
 
-
 ## What is Flutter Modular?
 
 When a project is getting bigger and more complex, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
 The Modular came up prepared for adapt to any state management approach to its smart injection system, managing the memory use of your application.
 
-
 ## Modular Structure
+
 Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects.
 
-
 ## Modular Pillars
+
 Here are our main focuses with this package.
 
 - Automatic Memory Management.
@@ -56,7 +54,7 @@ Here are our main focuses with this package.
 - Dynamic Routes Control.
 - Modularization of Code.
 
-## Example
+## Examples
 
 - [Github Search](https://github.com/Flutterando/github_search)
 
@@ -66,21 +64,21 @@ Here are our main focuses with this package.
 
 Open pubspec.yaml of your Project and type:
 
-```
+```yaml
 dependencies:
     flutter_modular:
 ```
 
 or install directly from Git to try out new features and fixes:
 
-```
+```yaml
 dependencies:
     flutter_modular:
         git:
             url: https://github.com/Flutterando/modular
 ```
 
-## Using in a New Project 
+## Using in a New Project
 
 You need to do some initial setup.
 
@@ -132,9 +130,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 void main() => runApp(ModularApp(module: AppModule()));
 ```
+
 Ready! Your app is already set to Modular!
 
 ## Adding Routes
+
 You can add routes to your module using the getter 'routers';
 
 ```dart
@@ -165,7 +165,6 @@ Navigator.pushNamed(context, '/login');
 Modular.to.pushNamed('/login');
 ```
 
-
 ## Dynamic Routes
 
 You can use the dynamic route system to pass a value per parameter and get it in your view.
@@ -180,25 +179,24 @@ You can use the dynamic route system to pass a value per parameter and get it in
   ];
 
 ```
+
 A dynamic route is considered valid when the value corresponding to the parameter is filled.
 From this you can use:
 
 ```dart
- 
+
 Navigator.pushNamed(context, '/product/1'); //args.params['id']) gonna be 1
 //or
 Modular.to.pushNamed('/product/1'); //args.params['id']) gonna be 1
-
 ```
 
 You can also pass an object using the "arguments" property in the navigation:
 
 ```dart
- 
+
 Navigator.pushNamed(context, '/product', arguments: ProductModel()); //args.data
 //or
 Modular.to.pushNamed('/product', arguments: ProductModel()); //args.data
-
 ```
 getting on the route
 
@@ -215,6 +213,7 @@ getting on the route
 
 We may protect our routes with middleware that will verify that the route is available within a given Route.
 First create a `RouteGuard`:
+
 ```dart
 class MyGuard implements RouteGuard {
   @override
@@ -230,6 +229,7 @@ class MyGuard implements RouteGuard {
 }
 
 ```
+
 Now put in the 'guards' property of your Router.
 
 ```dart
@@ -245,17 +245,42 @@ If placed on a module route, RouterGuard will be global to that route.
 
 ## Route Transition Animation
 
-You can choose which type of animation you want by setting the Router's ** transition ** parameter using the ** TransitionType ** enum.
+You can choose which type of animation you want by setting the Router's **transition** parameter using the **TransitionType** enum.
 
 ```dart
-Router("/product", 
+Router("/product",
         module: AdminModule(),
         transition: TransitionType.fadeIn), //use for change transition
 ```
 
 If you use transition in a module, all routes in that module will inherit this transition animation.
 
+## Grouping Routes
 
+You can group routes that contains  one (or more) properties in common. Properties **guards**, **transition** and **customTransition** can be used together or just one to group routes in common.
+
+```dart
+List<Router> get routers => [
+        Router("/", module: HomeModule()),
+      ]..addAll(Router.group(guards: [MyGuard()], routes: [
+        Router("/admin", module: AdminModule()),
+        Router("/profile", module: ProfileModule()),
+      ])); // Adiciona as rotas agrupadas ao final da lista
+```
+
+Another way is using [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator), introduced in Dart 2.3:
+
+```dart
+List<Router> get routers => [
+        Router("/", module: HomeModule()),
+        ...Router.group(guards: [MyGuard()],
+          transition: TransitionType.rightToLeftWithFade,
+          routes: [
+            Router("/admin", module: AdminModule()),
+            Router("/profile", module: ProfileModule()),
+          ]),
+      ]; // Mesclar usando
+```
 
 ## Router generic types
 
@@ -268,6 +293,7 @@ You may need to navigate to a specific page and request a return value in the `p
     Router<String>('/event', child: (_, args) => EventPage()),
   ]
 ```
+
 Now you can type your pushNamed and pop
 
 ```dart
@@ -287,10 +313,10 @@ https://flutter-website.com/#/product/1
 this will open the Product view and args.params ['id']) will be equal to 1.
 
 ## Dependency Injection
+
 You can inject any class into your module using getter 'binds', for example classes BLoC, ChangeNotifier or Stores.
 
 Bind is responsible for configuring object injection.
-
 
 ```dart
 class AppModule extends MainModule {
@@ -334,7 +360,8 @@ class AppBloc extends Disposable {
 }
 ```
 
-## Retrieving in view using injection. 
+## Retrieving in view using injection
+
 You have some ways to retrieve your injected classes.
 
 ```dart
@@ -350,25 +377,23 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
+
 By default, objects in Bind are singletons and lazy.
 When Bind is lazy, the object will only be instantiated when it is called for the first time. You can use 'lazy:false' if you want your object to be instantiated immediately.
 
 ```dart
 Bind((i) => OtherWidgetNotLazy(), lazy: false),
 ```
+
 If you do not want the injected object to have a single instance, just use 'singleton: false', this will cause your object to be instantiated every time it is called
 
 ```dart
 Bind((i) => OtherWidgetNotLazy(), singleton: false),
 ```
 
-
-
 ## Using Modular widgets to retrieve your classes
 
-
 ### ModularState
-
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -394,7 +419,6 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 ```
 
 ## Consuming a ChangeNotifier Class
-
 
 Example of a `ChangeNotifier` Class:
 
@@ -441,8 +465,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-
-## Creating Child Modules.
+## Creating Child Modules
 
 You can create other modules in your project, so instead of inheriting from `MainModule`, you should inherit from `ChildModule`.
 
@@ -480,33 +503,6 @@ class AppModule extends MainModule {
 
 Consider splitting your code into modules such as `LoginModule`, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
 
-### ModularState
-
-
-```dart
-class MyWidget extends StatefulWidget {
-  @override
-  _MyWidgetState createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends ModularState<MyWidget, HomeController> {
-
-  //variable controller
-  //automatic dispose off HomeController
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Modular"),
-      ),
-      body: Center(child: Text("${controller.counter}"),),
-    );
-  }
-}
-
-```
-
 ### ModuleWidget
 
 The same structure as `ChildModule`. Very useful for modular TabBar visualizations.
@@ -526,11 +522,10 @@ class TabModule extends ModuleWidget {
 
 ```
 
-
 ## RouterOutlet
 
-  RouterOutlet é uma solução para usar outro sistema de rotas totalmente desprendido da Navegação Princípal.
-  Isso é muito útil quando precisa que um elemento tenha seu próprio conjunto de rotas mesmo entando dentro de uma página na rota principal. Um exemplo prático disso é o seu uso em um TabBar ou Drawer
+  RouterOutlet is a solution to use another route system totally detached from the Main Navigation.
+  This is useful when you need that an element to have its own set of routes even though its inside a page on the main route. A practical example of this is its use in a TabBar or Drawer
 
 ``` Dart
 PageView(
@@ -548,9 +543,8 @@ PageView(
   ]
 ),
 ```
-NOTE: A Navegação dentro desses módulos é feita apenas usando o Nvigator.of(context) usando os caminhos das rotas de forma literal.
 
-
+NOTE: Navigation within these modules is made only using Nvigator.of(context) using the routes paths literally.
 
 ## Lazy Loading
 
@@ -577,7 +571,7 @@ import 'package:flutter_test/flutter_test.dart';
 main() {
   test('change bind', () {
     initModule(AppModule(), changeBinds: [
-      Bind<ILocalStorage>((i) => LocalMock()), 
+      Bind<ILocalStorage>((i) => LocalMock()),
     ]);
     expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
   });
@@ -587,6 +581,7 @@ main() {
 ## DebugMode
 
 Remove prints debug:
+
 ```dart
 Modular.debugMode = false;
 ```
@@ -602,13 +597,14 @@ This is currently our roadmap, please feel free to request additions/changes.
 | Widget Consume for ChangeNotifier         |    ✅    |
 | Auto-dispose                              |    ✅    |
 | Integration with flutter_bloc             |    ✅    |
-| Integration with mobx	                    |    ✅    |
+| Integration with mobx                     |    ✅    |
 | Multiple routes                           |    ✅    |
 | Pass arguments by route                   |    ✅    |
 | Pass url parameters per route             |    ✅    |
 | Route Transition Animation                |    ✅    |
 
 ## Features and bugs
+
 Please send feature requests and bugs at the issue tracker.
 
 Created from templates made available by Stagehand under a BSD-style license.

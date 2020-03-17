@@ -84,6 +84,21 @@ class Router<T> {
     );
   }
 
+  static List<Router> group({
+    @required List<Router> routes,
+    List<RouteGuard> guards,
+    TransitionType transition,
+    CustomTransition customTransition,
+  }) {
+    return routes.map((r) {
+      return r.copyWith(
+        guards: guards,
+        transition: transition ?? r.transition,
+        customTransition: customTransition ?? r.customTransition,
+      );
+    }).toList();
+  }
+
   Widget _disposableGenerate(BuildContext context,
       {Map<String, ChildModule> injectMap,
       String path,
