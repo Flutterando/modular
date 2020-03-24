@@ -43,4 +43,26 @@ main() {
       Modular.removeModule(app);
     });
   });
+  group("arguments test", (){
+    AppModule app = AppModule();
+    HomeModule home = HomeModule();
+    setUpAll(() {
+      initModule(app, initialModule: true);
+    });
+    testWidgets("Arguments Page id", (WidgetTester tester) async{
+      await tester.pumpWidget(buildTestableWidget(ArgumentsPage(id: 10,)));
+      final titleFinder = find.text("10");
+      expect(titleFinder, findsOneWidget);
+    });
+    testWidgets("Modular Arguments Page id", (WidgetTester tester) async{
+      Modular.arguments(data: 10);
+      await tester.pumpWidget(buildTestableWidget(ModularArgumentsPage()));
+      final titleFinder = find.text("10");
+      expect(titleFinder, findsOneWidget);
+    });
+    tearDownAll(() {
+      Modular.removeModule(home);
+      Modular.removeModule(app);
+    });
+  });
 }

@@ -1,28 +1,27 @@
-# Flutter Modular
+## Flutter Modular
 
-![](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
+![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 
 *Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
-
 
 - **[O que é o Flutter Modular?](#o-que-é-o-flutter-modular)**
 - **[Estrutura Modular](#estrutura-modular)**  
 - **[Pilares do Modular](#pilares-do-modular)**  
   - [Exemplos](#exemplos)
-- **[Começando com o Modular](#getting-started-with-modular)** 
+  
+- **[Começando com o Modular](#getting-started-with-modular)**
   - [Instalação](#instalação)
   - [Usando em um novo projeto](#usando-em-um-novo-projeto)
   - [Adicionando Rotas](#adicionando-rotas)
   - [Rotas dinâmicas](#rotas-dinâmicas)
   - [Proteção de Rotas](#proteção-de-rotas)
   - [Animação para Transição de Rota](#animação-para-transição-de-rota)
+  - [Agrupando rotas](#agrupando-rotas)
   - [Rotas na url com Flutter Web](#rotas-na-url-com-flutter-web)
   - [Injeção de dependências](#injeção-de-dependências)
   - [Recuperando na view usando injeção](#recuperando-na-view-usando-injeção)
-    
 
 - **[Usando Modular widgets para recuperar suas classes](#usando-Modular-widgets-para-recuperar-suas-classes)**
-  
   - [ModularState](#modularstate)
   - [Consumindo uma Classe ChangeNotifier](#consumindo-uma-classe-changenotifier)
   - [Criando Módulos Filhos](#criando-módulos-filhos)
@@ -54,11 +53,9 @@ Aqui estão nossos focos principais com o package.
 - Controle de Rotas Dinâmicas.
 - Modularização de Código.
 
-
 ## Exemplos
 
 - [Github Search](https://github.com/Flutterando/github_search)
-
 
 # Começando com o Modular
 
@@ -66,13 +63,14 @@ Aqui estão nossos focos principais com o package.
 
 Abra o pubspec.yaml do seu Projeto e digite:
 
-```
+```yaml
 dependencies:
     flutter_modular:
 ```
+
 ou instale diretamente pelo Git para testar as novas funcionalidades e correções:
 
-```
+```yaml
 dependencies:
     flutter_modular:
         git:
@@ -101,14 +99,11 @@ class AppWidget extends StatelessWidget {
     );
   }
 }
-
 ```
-
 
 - Crie um arquivo para ser seu módulo principal: (app_module.dart)
 
 ```dart
-
 //herde de MainModule
 class AppModule extends MainModule {
 
@@ -124,8 +119,6 @@ class AppModule extends MainModule {
   @override
   Widget get bootstrap => AppWidget();
 }
-
-
 ```
 
 - Termine a configuração no seu arquivo main.dart para iniciar o Modular.
@@ -165,6 +158,7 @@ class AppModule extends MainModule {
 ```
 
 E para acessar a rota use o **Navigator.pushNamed**:
+
 ```dart
 Navigator.pushNamed(context, '/login');
 //or
@@ -174,7 +168,6 @@ Modular.to.pushNamed('/login');
 ## Rotas dinâmicas
 
 Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetro e o receber em sua view.
-
 
 ```dart
 
@@ -186,25 +179,24 @@ Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetr
   ];
 
 ```
+
 Uma rota dinâmica é considerada válida quando o valor correspontente ao parâmentro é preenchido.
 A partir disto você pode usar:
 
 ```dart
- 
+
 Navigator.pushNamed(context, '/product/1'); //args.params['id']) será 1
 //or
 Modular.to.pushNamed('/product/1'); //args.params['id']) será 1
-
 ```
 
 Você também pode passar um objeto usando a propriedade "arguments" na navegação:
 
 ```dart
- 
+
 Navigator.pushNamed(context, '/product', arguments: ProductModel()); //args.data
 //or
 Modular.to.pushNamed('/product', arguments: ProductModel()); //args.data
-
 ```
 recebendo na rota
 
@@ -221,6 +213,7 @@ recebendo na rota
 
 Podemos proteger nossas rotas com middlewares que verificarão se a rota está disponível dentro de um determinado Route.
 Primeiro crie um RouteGuard:
+
 ```dart
 class MyGuard implements RouteGuard {
   @override
@@ -236,6 +229,7 @@ class MyGuard implements RouteGuard {
 }
 
 ```
+
 Agora coloque na propriedade 'guards' da sua Router.
 
 ```dart
@@ -254,23 +248,39 @@ Se colocar em uma rota módulo, o RouterGuard ficará global para aquela rota.
 Você pode escolher qual tipo de animação deseja setando o parametro **transition** do Router usando o enum **TransitionType**.
 
 ```dart
-Router("/product", 
+Router("/product",
         module: AdminModule(),
         transition: TransitionType.fadeIn), //use para mudar a transição
 ```
 
 Se usar o transition em um módulo, todas as rotas desse módulo herdarão essa animação de transição.
 
-## Rotas na url com Flutter Web
+## Agrupando rotas
 
-O Sistema de rotas também reconhece o que é digitado na url do site (flutter web) então o que for digitado na url do browser será aberto no aplicativo. Esperamos que isso facilite o SEO para os sites feitos em Flutter Web, tornando-o mais único.
+Você pode agrupar rotas que contenham uma (ou mais) propriedades em comum. As propriedades **guards**, **transition** e **customTransition** podem ser usadas em conjunto somente uma para agrupar rotas.
 
-As rotas dinâmicas também se aplicam nesse caso.
-
+```dart
+List<Router> get routers => [
+        Router("/", module: HomeModule()),
+      ]..addAll(Router.group(guards: [MyGuard()], routes: [
+        Router("/admin", module: AdminModule()),
+        Router("/profile", module: ProfileModule()),
+      ])); // Adiciona as rotas agrupadas ao final da lista
 ```
-https://flutter-website.com/#/product/1
+
+Outra forma é usar [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator), introduzido no Dart 2.3:
+
+```dart
+List<Router> get routers => [
+        Router("/", module: HomeModule()),
+        ...Router.group(guards: [MyGuard()],
+          transition: TransitionType.rightToLeftWithFade,
+          routes: [
+            Router("/admin", module: AdminModule()),
+            Router("/profile", module: ProfileModule()),
+          ]),
+      ]; // Mesclar usando
 ```
-Isso abrira a view Product e `args.params(['id'])` será igual a 1.
 
 ## Roteamento com tipo genérico de retorno
 
@@ -283,6 +293,7 @@ Você pode precisar navegar para uma pagina especifica e solicitar um valor de r
     Router<String>('/event', child: (_, args) => EventPage()),
   ]
 ```
+
 Agora você pode "tipar" o **pushNamed** e o **pop**
 
 ```dart
@@ -291,6 +302,16 @@ Agora você pode "tipar" o **pushNamed** e o **pop**
  Modular.to.pop('Jacob Moura');
 ```
 
+## Rotas na url com Flutter Web
+
+O Sistema de rotas também reconhece o que é digitado na url do site (flutter web) então o que for digitado na url do browser será aberto no aplicativo. Esperamos que isso facilite o SEO para os sites feitos em Flutter Web, tornando-o mais único.
+
+As rotas dinâmicas também se aplicam nesse caso.
+
+```
+https://flutter-website.com/#/product/1
+```
+Isso abrira a view Product e `args.params(['id'])` será igual a 1.
 
 ## Injeção de dependências
 
@@ -337,7 +358,7 @@ class AppBloc extends Disposable {
 }
 ```
 
-## Recuperando na view usando injeção.
+## Recuperando na view usando injeção
 
 Você tem algumas formas de recuperar as suas classes injetadas.
 
@@ -361,6 +382,7 @@ Quando Bind é lazy, o objeto só será instanciado quando for chamado pela prim
 ```dart
 Bind((i) => OtherWidgetNotLazy(), lazy: false),
 ```
+
 Se você não quiser que o objeto injetado tenha uma instancia única, basta usar 'singleton:false', isso fará com que seu objeto seja instanciado toda vez que for chamado
 
 ```dart
@@ -369,9 +391,7 @@ Bind((i) => OtherWidgetNotLazy(), singleton: false),
 
 ## Usando Modular widgets para recuperar suas classes
 
-
 ### ModularState
-
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -398,7 +418,6 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 
 ## Consumindo uma Classe ChangeNotifier
 
-
 Exemplo de uma classe `ChangeNotifier`:
 
 ```dart
@@ -414,7 +433,7 @@ class Counter extends ChangeNotifier {
 }
 ```
 
-você pode usar o Consumer para gerenciar o estado de um bloco de widget.
+você pode usar o `Consumer` para gerenciar o estado de um bloco de widget.
 
 ```dart
 
@@ -524,8 +543,8 @@ PageView(
   ]
 ),
 ```
-NOTE: A Navegação dentro desses módulos é feita apenas usando o Nvigator.of(context) usando os caminhos das rotas de forma literal.
 
+NOTA: A Navegação dentro desses módulos é feita apenas usando o Nvigator.of(context) usando os caminhos das rotas de forma literal.
 
 ## Lazy Loading
 
@@ -552,15 +571,17 @@ import 'package:flutter_test/flutter_test.dart';
 main() {
   test('change bind', () {
     initModule(AppModule(), changeBinds: [
-      Bind<ILocalStorage>((i) => LocalMock()), 
+      Bind<ILocalStorage>((i) => LocalMock()),
     ]);
     expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
   });
 }
 ```
+
 ## DebugMode
 
 Remova os prints de depuração:
+
 ```dart
 Modular.debugMode = false;
 ```
@@ -588,4 +609,3 @@ Por favor envie seu pedido de funcionalidades no [rastreador de problemas](https
 
 Criado a partir de modelos disponibilizados pelo Stagehand sob um estilo BSD
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
-

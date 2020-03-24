@@ -24,6 +24,11 @@ class Modular {
   static ModularArguments _args;
   static ModularArguments get args => _args?.copy();
 
+  @visibleForTesting
+  static arguments({Map<String, dynamic> params, dynamic data}) {
+    _args = ModularArguments(params ?? {}, data);
+  }
+
   static GlobalKey<NavigatorState> get navigatorKey {
     if (_navigatorKey == null) {
       _navigatorKey = GlobalKey<NavigatorState>();
