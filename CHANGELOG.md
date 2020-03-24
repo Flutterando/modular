@@ -1,3 +1,6 @@
+## [1.0.0] - 24 Mar 2020
+* Release!!!
+
 ## [0.5.6] - 13 Mar 2020
 * Added keepAlive flag in RouterOutlet. 
 
