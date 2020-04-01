@@ -143,8 +143,11 @@ class Modular {
   static B _getInjectableObject<B>(String tag,
       {Map<String, dynamic> params, bool disableError = false, List<Type> typesInRequest, bool checkKey = true}) {
     B value;
-    if (checkKey && _injectMap.containsKey(tag))
+    if (!checkKey) {
       value = _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+    } else if (_injectMap.containsKey(tag)) {
+      value = _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+    }
     if (value == null && !disableError) {
       throw ModularError('${B.toString()} not found in module $tag');
     }
