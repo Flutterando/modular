@@ -49,17 +49,13 @@ class Modular {
     List<Type> typesCheckds = [];
     List<String> paths = [];
     _printRoutersModule(_initialModule, '/', paths, typesCheckds);
-    paths.sort((preview, actual) => preview
-        .split(' => ')[0]
-        .length
-        .compareTo(actual.split(' => ')[0].length));
+    paths.sort((preview, actual) => preview.split(' => ')[0].length.compareTo(actual.split(' => ')[0].length));
     int sizedPath = paths[paths.length - 1].split(' => ')[0].length;
     paths = paths.map((p) {
       List<String> split = p.split(' => ');
       int sizeLocalPath = split[0].length;
       if (sizedPath >= sizeLocalPath) {
-        String spaces =
-            List.generate(sizedPath - sizeLocalPath, (index) => ' ').join('');
+        String spaces = List.generate(sizedPath - sizeLocalPath, (index) => ' ').join('');
         String path = split[0];
         if (path != '/' && path[path.length - 1] == '/') {
           path = path.substring(0, path.length - 1);
@@ -74,29 +70,23 @@ class Modular {
     debugPrint("\n*****\n");
   }
 
-  static _printRoutersModule(ChildModule module, String initialPath,
-      List<String> paths, List<Type> typesCheckds) {
+  static _printRoutersModule(ChildModule module, String initialPath, List<String> paths, List<Type> typesCheckds) {
     typesCheckds.add(module.runtimeType);
     for (var router in module.routers.where((router) => router.child != null)) {
-      String page = router.child.runtimeType
-          .toString()
-          .replaceFirst('(BuildContext, ModularArguments) => ', '');
+      String page = router.child.runtimeType.toString().replaceFirst('(BuildContext, ModularArguments) => ', '');
       String path = "$initialPath${router.routerName}".replaceFirst('//', '/');
       paths.add('$path => $page');
     }
 
-    bool _condition(router) => (router.module != null &&
-        !typesCheckds.contains(router.module.runtimeType));
+    bool _condition(router) => (router.module != null && !typesCheckds.contains(router.module.runtimeType));
 
     for (var router in module.routers.where(_condition)) {
-      _printRoutersModule(
-          router.module, router.routerName, paths, typesCheckds);
+      _printRoutersModule(router.module, router.routerName, paths, typesCheckds);
     }
   }
 
   static NavigatorState get to {
-    assert(
-        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+    assert(_navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
 
       return MaterialApp(
         navigatorKey: Modular.navigatorKey,
@@ -129,8 +119,7 @@ class Modular {
     }
   }
 
-  static B get<B>(
-      {Map<String, dynamic> params, String module, List<Type> typesInRequest}) {
+  static B get<B>({Map<String, dynamic> params, String module, List<Type> typesInRequest}) {
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
     }
@@ -138,29 +127,24 @@ class Modular {
     typesInRequest ??= [];
 
     if (module != null) {
-      return _getInjectableObject<B>(module,
-          params: params, typesInRequest: typesInRequest);
-    } else {
-      for (var key in _injectMap.keys) {
-        B value = _getInjectableObject<B>(key,
-            params: params, disableError: true, typesInRequest: typesInRequest, checkKey: false);
-        if (value != null) {
-          return value;
-        }
-      }
-      throw ModularError('${B.toString()} not found');
+      return _getInjectableObject<B>(module, params: params, typesInRequest: typesInRequest);
     }
+
+    for (var key in _injectMap.keys) {
+      B value = _getInjectableObject<B>(key,
+          params: params, disableError: true, typesInRequest: typesInRequest, checkKey: false);
+      if (value != null) {
+        return value;
+      }
+    }
+    throw ModularError('${B.toString()} not found');
   }
 
   static B _getInjectableObject<B>(String tag,
-      {Map<String, dynamic> params,
-      bool disableError = false,
-      List<Type> typesInRequest,
-      bool checkKey = true}) {
+      {Map<String, dynamic> params, bool disableError = false, List<Type> typesInRequest, bool checkKey = true}) {
     B value;
     if (checkKey && _injectMap.containsKey(tag))
-      value =
-          _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+      value = _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
     if (value == null && !disableError) {
       throw ModularError('${B.toString()} not found in module $tag');
     }
@@ -192,8 +176,7 @@ class Modular {
   static String prepareToRegex(String url) {
     List<String> newUrl = [];
     for (var part in url.split('/')) {
-      var url =
-          part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
+      var url = part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
       newUrl.add(url);
     }
 
@@ -256,14 +239,9 @@ class Modular {
   static RouteGuard _verifyGuard(List<RouteGuard> guards, String path) {
     RouteGuard guard;
     var realGuards = guards ?? [];
-    guard = realGuards.length == 0
-        ? null
-        : guards.firstWhere((guard) => !guard.canActivate(path),
-            orElse: () => null);
+    guard = realGuards.length == 0 ? null : guards.firstWhere((guard) => !guard.canActivate(path), orElse: () => null);
 
-    realGuards
-        .expand((c) => c.executors)
-        .forEach((c) => c.onGuarded(path, guard == null));
+    realGuards.expand((c) => c.executors).forEach((c) => c.onGuarded(path, guard == null));
 
     if (guard != null) {
       throw ModularError("Path guarded : $path");
@@ -273,22 +251,18 @@ class Modular {
 
   static List<RouteGuard> _masterRouteGuards;
 
-  static Router _searchInModule(
-      ChildModule module, String routerName, String path) {
+  static Router _searchInModule(ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
     final routers = module.routers;
     routers.sort((preview, actual) {
-      bool isContain =
-          preview.routerName.contains('/:') == actual.routerName.contains('/:');
+      bool isContain = preview.routerName.contains('/:') == actual.routerName.contains('/:');
       return isContain ? -1 : 1;
     });
     for (var route in routers) {
-      String tempRouteName =
-          (routerName + route.routerName).replaceFirst('//', '/');
+      String tempRouteName = (routerName + route.routerName).replaceFirst('//', '/');
       if (route.child == null) {
         _masterRouteGuards = route.guards;
-        var _routerName =
-            (routerName + route.routerName + '/').replaceFirst('//', '/');
+        var _routerName = (routerName + route.routerName + '/').replaceFirst('//', '/');
         Router router;
         if (_routerName == path || _routerName == "$path/") {
           RouteGuard guard = _verifyGuard(route.guards, path);
@@ -297,8 +271,7 @@ class Modular {
           }
           router = route.module.routers[0];
           if (router.module != null) {
-            var _routerName =
-                (routerName + route.routerName).replaceFirst('//', '/');
+            var _routerName = (routerName + route.routerName).replaceFirst('//', '/');
             router = _searchInModule(route.module, _routerName, path);
           }
         } else {
@@ -327,8 +300,7 @@ class Modular {
           var guards = _prepareGuardList(_masterRouteGuards, route.guards);
           _masterRouteGuards = null;
           RouteGuard guard = _verifyGuard(guards, path);
-          if ((tempRouteName == path || tempRouteName == "$path/") &&
-              path != '/') {
+          if ((tempRouteName == path || tempRouteName == "$path/") && path != '/') {
             guard = _verifyGuard(guards, path);
           }
           return guard == null ? route : null;
@@ -338,8 +310,7 @@ class Modular {
     return null;
   }
 
-  static List<RouteGuard> _prepareGuardList(
-      List<RouteGuard> moduleGuard, List<RouteGuard> routeGuard) {
+  static List<RouteGuard> _prepareGuardList(List<RouteGuard> moduleGuard, List<RouteGuard> routeGuard) {
     if (moduleGuard == null) {
       moduleGuard = [];
     }
@@ -362,8 +333,7 @@ class Modular {
   static String actualRoute = '/';
   static RouteSettings globaSetting;
 
-  static Route<T> generateRoute<T>(RouteSettings settings,
-      [ChildModule module]) {
+  static Route<T> generateRoute<T>(RouteSettings settings, [ChildModule module]) {
     String path = settings.name;
     Router router = selectRoute(path, module);
     if (router == null) {
