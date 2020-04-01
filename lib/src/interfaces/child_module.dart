@@ -17,19 +17,18 @@ abstract class ChildModule {
 
   final List<String> paths = List<String>();
 
-  final Map<Type, dynamic> _injectBinds = {};
+  final Map<Type, dynamic> _singletonBinds = {};
 
   getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
-    T _bind;
-    Type type = _getInjectType<T>();
-    if (_injectBinds.containsKey(type)) {
-      _bind = _injectBinds[type];
-      return _bind;
+    T bindValue;
+    var type = _getInjectType<T>();
+    if (_singletonBinds.containsKey(type)) {
+      bindValue = _singletonBinds[type];
+      return bindValue;
     }
 
-    Bind b = _binds.firstWhere((b) => b.inject is T Function(Inject),
-        orElse: () => null);
-    if (b == null) {
+    var bind = _binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => null);
+    if (bind == null) {
       typesInRequest.remove(type);
       return null;
     }
@@ -47,23 +46,19 @@ ${typesInRequest.join('\n')}
       typesInRequest.add(type);
     }
 
-    _bind = b.inject(Inject(
-      params: params,
-      typesInRequest: typesInRequest,
-      //     tag: this.runtimeType.toString(),
-    ));
-    if (b.singleton) {
-      _injectBinds[type] = _bind;
+    bindValue = bind.inject(Inject(params: params, typesInRequest: typesInRequest));
+    if (bind.singleton) {
+      _singletonBinds[type] = bindValue;
     }
-    return _bind;
+    return bindValue;
   }
 
   bool remove<T>() {
     Type type = _getInjectType<T>();
-    if (_injectBinds.containsKey(type)) {
-      var inject = _injectBinds[type];
+    if (_singletonBinds.containsKey(type)) {
+      var inject = _singletonBinds[type];
       _callDispose(inject);
-      _injectBinds.remove(type);
+      _singletonBinds.remove(type);
       return true;
     } else {
       return false;
@@ -85,15 +80,15 @@ ${typesInRequest.join('\n')}
   }
 
   cleanInjects() {
-    for (Type key in _injectBinds.keys) {
-      var _bind = _injectBinds[key];
+    for (Type key in _singletonBinds.keys) {
+      var _bind = _singletonBinds[key];
       _callDispose(_bind);
     }
-    _injectBinds.clear();
+    _singletonBinds.clear();
   }
 
   Type _getInjectType<B>() {
-    for (Type key in _injectBinds.keys) {
+    for (Type key in _singletonBinds.keys) {
       if (key is B) {
         return key;
       }
@@ -105,7 +100,7 @@ ${typesInRequest.join('\n')}
     _binds.forEach((bindElement) {
       if (!bindElement.lazy) {
         var b = bindElement.inject(Inject());
-        _injectBinds[b.runtimeType] = b;
+        _singletonBinds[b.runtimeType] = b;
       }
     });
   }
