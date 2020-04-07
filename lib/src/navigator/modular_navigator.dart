@@ -10,8 +10,8 @@ class ModularNavigator implements IModularNavigator {
 
   @override
   Future showDialog({
-    Widget child,
-    WidgetBuilder builder,
+    @deprecated Widget child,
+    @required WidgetBuilder builder,
     bool barrierDismissible = true,
   }) {
     return navigator.push(DialogRoute(

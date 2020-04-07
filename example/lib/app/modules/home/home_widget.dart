@@ -4,6 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeWidget extends ModularStatelessWidget<HomeModule> {
+  HomeWidget() {
+    var c = Modular.get<HomeBloc>();
+    c.addListener(() {
+      if (c.counter > 10) {
+        Modular.to.showDialog(
+          child: AlertDialog(
+            title: Text('Test'),
+            content: Text('Content'),
+          ),
+        );
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

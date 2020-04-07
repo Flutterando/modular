@@ -21,6 +21,14 @@ class _TabsPageState extends ModularState<TabsPage, TabsBloc> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          RaisedButton(
+            onPressed: () {
+              Modular.to.pushNamed('/home');
+            },
+            child: Text('HOME'),
+          )
+        ],
       ),
       body: StreamBuilder<int>(
           stream: controller.selectedPage,
