@@ -90,26 +90,34 @@ class Modular {
     if (module != null) {
       return _getInjectableObject<B>(module,
           params: params, typesInRequest: typesInRequest);
-    } else {
-      for (var key in _injectMap.keys) {
-        B value = _getInjectableObject<B>(key,
-            params: params, disableError: true, typesInRequest: typesInRequest);
-        if (value != null) {
-          return value;
-        }
-      }
-      throw ModularError('${B.toString()} not found');
     }
+
+    for (var key in _injectMap.keys) {
+      B value = _getInjectableObject<B>(key,
+          params: params,
+          disableError: true,
+          typesInRequest: typesInRequest,
+          checkKey: false);
+      if (value != null) {
+        return value;
+      }
+    }
+    throw ModularError('${B.toString()} not found');
   }
 
   static B _getInjectableObject<B>(String tag,
       {Map<String, dynamic> params,
       bool disableError = false,
-      List<Type> typesInRequest}) {
+      List<Type> typesInRequest,
+      bool checkKey = true}) {
     B value;
-    if (_injectMap.containsKey(tag))
+    if (!checkKey) {
       value =
           _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+    } else if (_injectMap.containsKey(tag)) {
+      value =
+          _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+    }
     if (value == null && !disableError) {
       throw ModularError('${B.toString()} not found in module $tag');
     }
