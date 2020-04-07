@@ -9,7 +9,7 @@ class ModularNavigator implements IModularNavigator {
   ModularNavigator(this.navigator);
 
   @override
-  Future showGlobalDialog({
+  Future showDialog({
     Widget child,
     WidgetBuilder builder,
     bool barrierDismissible = true,

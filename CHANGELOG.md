@@ -1,8 +1,8 @@
 ## [1.1.0] - 07 Apr 2020
-* Added **showGlobalDialog**
+* Added **showDialog**
 
 ```dart
-Modular.to.showGlobalDialog(
+Modular.to.showDialog(
   barrierDismissible: false,
   builder: (_) => AlertDialog(),
 );

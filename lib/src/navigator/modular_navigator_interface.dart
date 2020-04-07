@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class IModularNavigator {
-  Future showGlobalDialog({
+  Future showDialog({
     Widget child,
     WidgetBuilder builder,
     bool barrierDismissible = true,
