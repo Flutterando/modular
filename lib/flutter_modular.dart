@@ -15,3 +15,4 @@ export 'src/widgets/modular_stateless_widget.dart';
 export 'src/widgets/modular_stateful_widget_state.dart';
 export 'src/widgets/router_outlet.dart';
 export 'src/exceptions/modular_error.dart';
+export 'src/navigator/modular_navigator_interface.dart';
