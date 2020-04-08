@@ -1,4 +1,4 @@
-## [1.1.0] - 07 Apr 2020
+## [1.1.1] - 07 Apr 2020
 * Added **showDialog**
 
 ```dart
