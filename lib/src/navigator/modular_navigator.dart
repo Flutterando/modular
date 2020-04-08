@@ -55,7 +55,7 @@ class ModularNavigator implements IModularNavigator {
       navigator.maybePop(result);
 
   @override
-  bool pop<T extends Object>([T result]) => navigator.pop(result);
+  void pop<T extends Object>([T result]) => navigator.pop(result);
 
   @override
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(

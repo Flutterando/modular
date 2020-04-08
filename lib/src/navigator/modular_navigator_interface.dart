@@ -22,7 +22,7 @@ abstract class IModularNavigator {
       {TO result,
       Object arguments});
 
-  bool pop<T extends Object>([T result]);
+  void pop<T extends Object>([T result]);
 
   bool canPop();
   Future<bool> maybePop<T extends Object>([T result]);
