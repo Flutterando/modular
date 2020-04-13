@@ -150,7 +150,7 @@ class Modular {
     List<String> newUrl = [];
     for (var part in url.split('/')) {
       var url =
-          part.contains(":") ? "${part.replaceFirst(':', '(?<')}>.*)" : part;
+      part.contains(":") ? "(.*?)" : part;
       newUrl.add(url);
     }
 
@@ -184,15 +184,24 @@ class Modular {
         caseSensitive: true,
       );
       var r = regExp.firstMatch(path);
-
-      if (r?.groupNames != null) {
+      if (r != null) {
         Map<String, String> params = {};
-        int count = 1;
-        for (var key in r?.groupNames) {
-          routeNamed = routeNamed.replaceFirst(':$key', r?.group(count));
-          params[key] = r?.group(count);
-          count++;
+        int paramPos = 0;
+        var routeParts = routeNamed.split('/');
+        var pathParts = path.split('/');
+
+        print('Match! Processing ${path} as ${routeNamed}');
+
+        for (var routePart in routeParts) {
+          if (routePart.contains(":")) {
+            var paramName = routePart.replaceFirst(':', '');
+            params[paramName] = pathParts[paramPos];
+            routeNamed = routeNamed.replaceFirst(routePart, params[paramName]);
+          }
+          paramPos++;
         }
+
+        print('Result processed ${path} as ${routeNamed}');
 
         if (routeNamed != path) {
           router.params = null;
@@ -209,6 +218,7 @@ class Modular {
 
     return routeNamed == path;
   }
+
 
   static RouteGuard _verifyGuard(List<RouteGuard> guards, String path) {
     RouteGuard guard;

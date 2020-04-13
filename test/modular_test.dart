@@ -27,11 +27,11 @@ void main() {
     });
 
     test('prepare to regex', () {
-      expect(Modular.prepareToRegex('/home/list/:id'), '/home/list/(?<id>.*)');
+      expect(Modular.prepareToRegex('/home/list/:id'), '/home/list/(.*?)');
       expect(
-          Modular.prepareToRegex('/home/list/:id/'), '/home/list/(?<id>.*)/');
+          Modular.prepareToRegex('/home/list/:id/'), '/home/list/(.*?)/');
       expect(Modular.prepareToRegex('/home/list/:id/item/:num'),
-          '/home/list/(?<id>.*)/item/(?<num>.*)');
+          '/home/list/(.*?)/item/(.*?)');
     });
 
     test('search object Router to url', () {
@@ -41,6 +41,11 @@ void main() {
       expect(
           Modular.searchRoute(router, "/home/list/:id", "/home/list/1"), true);
       expect(router.params['id'], "1");
+
+      expect(
+          Modular.searchRoute(router, "/home/list/:id/item/:num", "/home/list/1/item/2"), true);
+      expect(router.params['id'], "1");
+      expect(router.params['num'], "2");
 
       expect(
           Modular.searchRoute(
