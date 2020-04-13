@@ -80,7 +80,8 @@ class ModularNavigator implements IModularNavigator {
   Future<T> pushNamedAndRemoveUntil<T extends Object>(
           String newRouteName, bool Function(Route) predicate,
           {Object arguments}) =>
-      pushNamedAndRemoveUntil(newRouteName, predicate, arguments: arguments);
+      navigator.pushNamedAndRemoveUntil(newRouteName, predicate,
+          arguments: arguments);
 
   @override
   Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
