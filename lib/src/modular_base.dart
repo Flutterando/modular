@@ -317,7 +317,6 @@ class Modular {
   }
 
   static String actualRoute = '/';
-  static RouteSettings globaSetting;
 
   static Route<T> generateRoute<T>(RouteSettings settings,
       [ChildModule module]) {
