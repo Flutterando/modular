@@ -1,3 +1,7 @@
+## [1.1.2] - 13 Apr 2020
+* Fix bugs
+```
+
 ## [1.1.1] - 07 Apr 2020
 * Added **showDialog**
 
