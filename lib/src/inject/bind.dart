@@ -11,7 +11,6 @@ class Bind<T> {
   final bool lazy;
 
   Bind(this.inject, {this.singleton = true, this.lazy = true})
-      : assert(
-            (singleton && lazy) || (singleton && !lazy) || (!singleton && lazy),
+      : assert((singleton || lazy),
             r"'singleton' can't be false if 'lazy' is also false");
 }
