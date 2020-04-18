@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/interfaces/child_module.dart';
 import 'package:flutter_modular/src/interfaces/route_guard.dart';
