@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class IModularNavigator {
   Future showDialog({
@@ -13,6 +13,7 @@ abstract class IModularNavigator {
       Object arguments});
 
   Future<T> pushNamed<T extends Object>(String routeName, {Object arguments});
+
   Future<T> pushNamedAndRemoveUntil<T extends Object>(
       String newRouteName, bool Function(Route<dynamic>) predicate,
       {Object arguments});
@@ -25,6 +26,8 @@ abstract class IModularNavigator {
   void pop<T extends Object>([T result]);
 
   bool canPop();
+
   Future<bool> maybePop<T extends Object>([T result]);
+
   void popUntil(bool Function(Route<dynamic>) predicate);
 }
