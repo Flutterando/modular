@@ -80,7 +80,10 @@ class Modular {
   }
 
   static B get<B>(
-      {Map<String, dynamic> params, String module, List<Type> typesInRequest}) {
+      {Map<String, dynamic> params,
+      String module,
+      List<Type> typesInRequest,
+      B defaultValue}) {
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
     }
@@ -102,6 +105,11 @@ class Modular {
         return value;
       }
     }
+
+    if (defaultValue != null) {
+      return defaultValue;
+    }
+
     throw ModularError('${B.toString()} not found');
   }
 
@@ -149,8 +157,7 @@ class Modular {
   static String prepareToRegex(String url) {
     List<String> newUrl = [];
     for (var part in url.split('/')) {
-      var url =
-      part.contains(":") ? "(.*?)" : part;
+      var url = part.contains(":") ? "(.*?)" : part;
       newUrl.add(url);
     }
 
@@ -218,7 +225,6 @@ class Modular {
 
     return routeNamed == path;
   }
-
 
   static RouteGuard _verifyGuard(List<RouteGuard> guards, String path) {
     RouteGuard guard;
