@@ -7,7 +7,7 @@ _debugPrintModular(String text) {
   }
 }
 
-abstract class ModuleWidget extends StatelessWidget implements ChildModule {
+abstract class WidgetModule extends StatelessWidget implements ChildModule {
   @override
   List<Bind> get binds;
 
@@ -15,7 +15,7 @@ abstract class ModuleWidget extends StatelessWidget implements ChildModule {
 
   final _FakeModule _fakeModule = _FakeModule();
 
-  ModuleWidget() {
+  WidgetModule() {
     _fakeModule.changeBinds(binds);
   }
 
