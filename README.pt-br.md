@@ -25,7 +25,7 @@
   - [ModularState](#modularstate)
   - [Consumindo uma Classe ChangeNotifier](#consumindo-uma-classe-changenotifier)
   - [Criando Módulos Filhos](#criando-módulos-filhos)
-  - [ModuleWidget](#modulewidget)
+  - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Testes Unitários](#testes-unitários)
@@ -503,12 +503,12 @@ class AppModule extends MainModule {
 
 Pense em dividir seu código em módulos como por exemplo, `LoginModule`, e dentro dele colocar as rotas relacionadas a esse módulo. Ficará muito mais fácil a manutenção e o compartilhamento do código em outro projeto.
 
-### ModuleWidget
+### WidgetModule
 
 A mesma estrutura de um MainModule/ChildModule. Muito útil para usar em uma TabBar com páginas modulares
 
 ```dart
-class TabModule extends ModuleWidget {
+class TabModule extends WidgetModule {
 
     @override
   List<Bind> get binds => [

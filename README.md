@@ -27,7 +27,7 @@
   - [ModularState](#modularstate)
   - [Consuming a ChangeNotifier Class](#consuming-a-changenotifier-class)
   - [Creating Child Modules](#creating-child-modules)
-  - [ModuleWidget](#modulewidget)
+  - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
@@ -503,12 +503,12 @@ class AppModule extends MainModule {
 
 Consider splitting your code into modules such as `LoginModule`, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
 
-### ModuleWidget
+### WidgetModule
 
 The same structure as `ChildModule`. Very useful for modular TabBar visualizations.
 
 ```dart
-class TabModule extends ModuleWidget {
+class TabModule extends WidgetModule {
 
     @override
   List<Bind> get binds => [
