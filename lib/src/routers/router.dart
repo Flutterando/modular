@@ -37,6 +37,8 @@ class Router<T> {
     assert(routerName != null);
 
     if (transition == null) throw ArgumentError('transition must not be null');
+    if (transition == TransitionType.custom && customTransition == null)
+      throw ArgumentError('[customTransition] required for transition type [TransitionType.custom]');
     if (module == null && child == null)
       throw ArgumentError('[module] or [child] must be provided');
     if (module != null && child != null)
@@ -131,7 +133,7 @@ class Router<T> {
       {Map<String, ChildModule> injectMap, RouteSettings settings}) {
     final arguments = Modular.args.copy();
 
-    if (this.customTransition != null) {
+    if (this.transition == TransitionType.custom && this.customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
           return _disposableGenerate(context,

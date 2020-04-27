@@ -255,6 +255,58 @@ Router("/product",
 
 If you use transition in a module, all routes in that module will inherit this transition animation.
 
+### Custom Transition Animation Route
+
+You can also use a custom transition animation by setting the Router parameters **transistion** and **customTransition** with **TransitionType.custom** and the **CustomTransition**, respectively.
+
+```dart
+Router("/product",
+        module: AdminModule(),
+        transition: TransitionType.custom,
+        customTransition: myCustomTransition),
+
+// ...
+```
+
+And, for example, in a custom transitions file declare your custom transitions.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+CustomTransition get myCustomTransition => CustomTransition(
+    transitionDuration: Duration(milliseconds: 500),
+    transitionBuilder: (context, animation, secondaryAnimation, child){
+      return RotationTransition(turns: animation,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(-1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: Curves.linear,
+              ),
+            ),
+            ),
+            child: child,
+          ),
+        ),
+      )
+      ;
+    },
+  );
+
+
+```
+
 ## Grouping Routes
 
 You can group routes that contains  one (or more) properties in common. Properties **guards**, **transition** and **customTransition** can be used together or just one to group routes in common.

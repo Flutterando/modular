@@ -255,6 +255,59 @@ Router("/product",
 
 Se usar o transition em um módulo, todas as rotas desse módulo herdarão essa animação de transição.
 
+### Animação Customizada para Transição de Rota
+
+Você também pode utilizar uma transição com animação customizada setando os parametros **transistion** e **customTransition** do Router com **TransitionType.custom** e **CustomTransition**, respectivamente.
+
+```dart
+Router("/product",
+        module: AdminModule(),
+        transition: TransitionType.custom,
+        customTransition: myCustomTransition),
+
+// ...
+```
+
+E, por exemplo, num arquivo de transições customizadas, você pode declarar suas transições.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+CustomTransition get myCustomTransition => CustomTransition(
+    transitionDuration: Duration(milliseconds: 500),
+    transitionBuilder: (context, animation, secondaryAnimation, child){
+      return RotationTransition(turns: animation,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(-1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: Curves.linear,
+              ),
+            ),
+            ),
+            child: child,
+          ),
+        ),
+      )
+      ;
+    },
+  );
+
+
+```
+
+
 ## Agrupando rotas
 
 Você pode agrupar rotas que contenham uma (ou mais) propriedades em comum. As propriedades **guards**, **transition** e **customTransition** podem ser usadas em conjunto somente uma para agrupar rotas.
