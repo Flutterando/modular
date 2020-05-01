@@ -15,7 +15,7 @@ main() {
   });
 }
 
-class OtherWidget extends ModuleWidget {
+class OtherWidget extends WidgetModule {
   @override
   List<Bind> get binds => [
         Bind((i) => ObjectTest()),
