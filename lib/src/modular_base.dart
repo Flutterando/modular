@@ -289,6 +289,7 @@ class Modular {
           if (router.transition == TransitionType.defaultTransition) {
             router = router.copyWith(
               transition: route.transition,
+              customTransition: route.customTransition,
             );
           }
           bindModule(route.module, path);
