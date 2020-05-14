@@ -1,6 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 abstract class IModularNavigator {
+  String get path;
+  String get modulePath;
+  NavigatorState get navigator;
+
   Future showDialog({
     Widget child,
     WidgetBuilder builder,

@@ -90,6 +90,12 @@ class ModularNavigator implements IModularNavigator {
           Object arguments}) =>
       navigator.pushReplacementNamed(routeName,
           result: result, arguments: arguments);
+
+  @override
+  String get modulePath => Modular.link.modulePath;
+
+  @override
+  String get path => Modular.link.path;
 }
 
 class DialogRoute<T> extends PopupRoute<T> {

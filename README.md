@@ -165,6 +165,21 @@ Navigator.pushNamed(context, '/login');
 Modular.to.pushNamed('/login');
 ```
 
+### Current Module Navigation
+
+Use Modular.to for literal paths or Modular.link for routes in current module.
+
+```dart
+//Modules home>product
+Modular.to.pushNamed('/home/product/list');
+Modular.to.pushNamed('/home/product/detail/:id');
+
+//into product module, use Modular.link and navigate between routes of current Module (Product)
+Modular.link.pushNamed('/list');
+Modular.link.pushNamed('/detail/:id');
+
+```
+
 ## Dynamic Routes
 
 You can use the dynamic route system to pass a value per parameter and get it in your view.

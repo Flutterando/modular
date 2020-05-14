@@ -23,6 +23,7 @@ class Router<T> {
   final TransitionType transition;
   final CustomTransition customTransition;
   final RouteBuilder<T> routeGenerator;
+  final String modulePath;
 
   Router(
     this.routerName, {
@@ -33,12 +34,14 @@ class Router<T> {
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
     this.customTransition,
+    this.modulePath,
   }) {
     assert(routerName != null);
 
     if (transition == null) throw ArgumentError('transition must not be null');
     if (transition == TransitionType.custom && customTransition == null)
-      throw ArgumentError('[customTransition] required for transition type [TransitionType.custom]');
+      throw ArgumentError(
+          '[customTransition] required for transition type [TransitionType.custom]');
     if (module == null && child == null)
       throw ArgumentError('[module] or [child] must be provided');
     if (module != null && child != null)
@@ -72,12 +75,14 @@ class Router<T> {
       List<RouteGuard> guards,
       TransitionType transition,
       RouteBuilder routeGenerator,
+      String modulePath,
       CustomTransition customTransition}) {
     return Router<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
       module: module ?? this.module,
       params: params ?? this.params,
+      modulePath: modulePath ?? this.modulePath,
       guards: guards ?? this.guards,
       routeGenerator: routeGenerator ?? this.routeGenerator,
       transition: transition ?? this.transition,
@@ -105,10 +110,13 @@ class Router<T> {
       String path,
       ModularArguments args}) {
     var actual = ModalRoute.of(context);
+    final _old = Modular.old;
+
     Widget page = _DisposableWidget(
       child: this.child(context, args),
       dispose: () {
         final List<String> trash = [];
+        Modular.oldProccess(_old);
         if (actual.isCurrent) {
           return;
         }
@@ -133,7 +141,8 @@ class Router<T> {
       {Map<String, ChildModule> injectMap, RouteSettings settings}) {
     final arguments = Modular.args.copy();
 
-    if (this.transition == TransitionType.custom && this.customTransition != null) {
+    if (this.transition == TransitionType.custom &&
+        this.customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
           return _disposableGenerate(context,

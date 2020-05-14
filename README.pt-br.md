@@ -165,6 +165,21 @@ Navigator.pushNamed(context, '/login');
 Modular.to.pushNamed('/login');
 ```
 
+### Navegação no Módulo Atual
+
+Use Modular.to para rotas literais e Modular.link para as **rotas do módulo atual**.
+
+```dart
+//Modules home>product
+Modular.to.pushNamed('/home/product/list');
+Modular.to.pushNamed('/home/product/detail/:id');
+
+//dentro do módulo produto, use Modular.link e navega nas rotas do módulo ativo atual
+Modular.link.pushNamed('/list');
+Modular.link.pushNamed('/detail/:id');
+
+```
+
 ## Rotas dinâmicas
 
 Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetro e o receber em sua view.

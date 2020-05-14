@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/routers/router.dart';
+import 'package:flutter_modular/src/utils/old.dart';
 
 import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
@@ -23,6 +24,10 @@ class Modular {
   static ChildModule _initialModule;
   static GlobalKey<NavigatorState> _navigatorKey;
   static ModularArguments _args;
+  static RouteLink _routeLink;
+  static Old _old = Old();
+  static Old get old => _old;
+  static RouteLink get link => _routeLink?.copy();
   static ModularArguments get args => _args?.copy();
 
   @visibleForTesting
@@ -196,7 +201,7 @@ class Modular {
         var routeParts = routeNamed.split('/');
         var pathParts = path.split('/');
 
-        print('Match! Processing ${path} as ${routeNamed}');
+        print('Match! Processing $path as $routeNamed');
 
         for (var routePart in routeParts) {
           if (routePart.contains(":")) {
@@ -207,7 +212,7 @@ class Modular {
           paramPos++;
         }
 
-        print('Result processed ${path} as ${routeNamed}');
+        print('Result processed $path as $routeNamed');
 
         if (routeNamed != path) {
           router.params = null;
@@ -274,11 +279,13 @@ class Modular {
             router = _searchInModule(route.module, _routerName, path);
           }
         } else {
-          //router = _searchInModule(route.module, _routerName, path.substring(path.indexOf("/",1)));
           router = _searchInModule(route.module, _routerName, path);
         }
 
         if (router != null) {
+          router = router.modulePath == null
+              ? router.copyWith(modulePath: tempRouteName)
+              : router;
           if (_routerName == path || _routerName == "$path/") {
             RouteGuard guard = _verifyGuard(router.guards, path);
             if (guard != null) {
@@ -332,7 +339,11 @@ class Modular {
     return route;
   }
 
-  static String actualRoute = '/';
+  @visibleForTesting
+  static void oldProccess(Old $old) {
+    _args = $old?.args?.copy();
+    _routeLink = $old?.link?.copy();
+  }
 
   static Route<T> generateRoute<T>(RouteSettings settings,
       [ChildModule module]) {
@@ -341,8 +352,13 @@ class Modular {
     if (router == null) {
       return null;
     }
-    actualRoute = path;
+    _old = Old(
+      args: args,
+      link: link,
+    );
     _args = ModularArguments(router.params, settings.arguments);
+
+    _routeLink = RouteLink(path: path, modulePath: router.modulePath);
 
     if (settings.name == Modular.initialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);
