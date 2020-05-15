@@ -38,16 +38,17 @@
 
 ## What is Flutter Modular?
 
-When a project is getting bigger and more complex, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
-The Modular came up prepared for adapt to any state management approach to its smart injection system, managing the memory use of your application.
+Modular proposes a modularized and scalable structure capable of increasing the maintenance capacity, code reusability and memory optimization.
 
 ## Modular Structure
 
-Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects.
+Modular structure consists in decoupled and independent modules that will represent the features of the application. 
+Each module controls its own dependencies, routes, pages, widgets and business logic. 
+As each module has its own folder, you can reuse this module in different projects.
 
 ## Modular Pillars
 
-Here are our main focuses with this package.
+Here are the main focuses of the package:
 
 - Automatic Memory Management.
 - Dependency Injection.
@@ -66,7 +67,7 @@ Open pubspec.yaml of your Project and type:
 
 ```yaml
 dependencies:
-    flutter_modular:
+    flutter_modular: any
 ```
 
 or install directly from Git to try out new features and fixes:
@@ -82,7 +83,7 @@ dependencies:
 
 You need to do some initial setup.
 
-Create a file to be your main widget, thinking of configuring named routes within `MaterialApp`: (app_widget.dart)
+Create a file to be your main widget, set an initial route and use Modular to manage your routing system (app_widget.dart)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -324,7 +325,8 @@ CustomTransition get myCustomTransition => CustomTransition(
 
 ## Grouping Routes
 
-You can group routes that contains  one (or more) properties in common. Properties **guards**, **transition** and **customTransition** can be used together or just one to group routes in common.
+You can group routes that contains one(or more) properties in common. 
+Properties like **guards**, **transition** and **customTransition** can be for one single route or for a group of routes.
 
 ```dart
 List<Router> get routers => [
@@ -335,7 +337,7 @@ List<Router> get routers => [
       ])); // Adiciona as rotas agrupadas ao final da lista
 ```
 
-Another way is using [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator), introduced in Dart 2.3:
+Another way of usage with [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator) introduced in Dart 2.3:
 
 ```dart
 List<Router> get routers => [
@@ -349,9 +351,11 @@ List<Router> get routers => [
       ]; // Mesclar usando
 ```
 
-## Router generic types
+## Router Generic Types
 
-You may need to navigate to a specific page and request a return value in the `pop()`, You can type the Router object with the value of that return;
+
+You can return values from navigation, like `pop()`.
+To achieve this just write the Router object with the value of that return.
 
 ```dart
  @override
@@ -361,7 +365,7 @@ You may need to navigate to a specific page and request a return value in the `p
   ]
 ```
 
-Now you can type your pushNamed and pop
+Now you can write pushNamed and pop
 
 ```dart
  String name = await Modular.to.pushNamed<String>();
@@ -369,15 +373,15 @@ Now you can type your pushNamed and pop
  Modular.to.pop('Jacob Moura');
 ```
 
-## Flutter Web url Routes
+## Flutter Web URL Routes(Deeplink-like)
 
-The Routing System also recognizes what is typed in the website url (flutter web) so what you type in the browser url will open in the app. We hope this makes it easier for Flutter Web sites to make SEO more unique.
+The Routing System can recognizes what's in the website URL and navigate to a part of the application.
 
 Dynamic routes apply here as well:
 ```
 https://flutter-website.com/#/product/1
 ```
-this will open the Product view and args.params ['id']) will be equal to 1.
+The URL above will open the Product view and args.params ['id']) will be equal to 1.
 
 ## Dependency Injection
 
