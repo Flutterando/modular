@@ -341,8 +341,8 @@ class Modular {
 
   @visibleForTesting
   static void oldProccess(Old $old) {
-    _args = $old?.args?.copy();
-    _routeLink = $old?.link?.copy();
+    if ($old?.args != null) _args = $old?.args?.copy();
+    if ($old?.link != null) _routeLink = $old?.link?.copy();
   }
 
   static Route<T> generateRoute<T>(RouteSettings settings,
