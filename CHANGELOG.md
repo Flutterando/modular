@@ -1,4 +1,4 @@
-## [1.2.0] - 14 May 2020
+## [1.2.1] - 15 May 2020
 * Fix bugs
 * new Modular.link for Navigation in Current Module;
 ```dart
