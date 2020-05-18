@@ -1,4 +1,3 @@
-
 abstract class GuardExecutor {
   onGuarded(String path, bool isActive);
 }

@@ -339,7 +339,6 @@ class Modular {
     return route;
   }
 
-  @visibleForTesting
   static void oldProccess(Old $old) {
     if ($old?.args != null) _args = $old?.args?.copy();
     if ($old?.link != null) _routeLink = $old?.link?.copy();

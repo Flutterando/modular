@@ -27,7 +27,8 @@ abstract class ChildModule {
       return bindValue;
     }
 
-    var bind = _binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => null);
+    var bind = _binds.firstWhere((b) => b.inject is T Function(Inject),
+        orElse: () => null);
     if (bind == null) {
       typesInRequest.remove(type);
       return null;
@@ -46,7 +47,8 @@ ${typesInRequest.join('\n')}
       typesInRequest.add(type);
     }
 
-    bindValue = bind.inject(Inject(params: params, typesInRequest: typesInRequest));
+    bindValue =
+        bind.inject(Inject(params: params, typesInRequest: typesInRequest));
     if (bind.singleton) {
       _singletonBinds[type] = bindValue;
     }
