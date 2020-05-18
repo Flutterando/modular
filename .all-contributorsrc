@@ -113,6 +113,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "wemersonrv",
+      "name": "Wemerson Couto Guimarães",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2028673?v=4",
+      "profile": "https://github.com/wemersonrv",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
