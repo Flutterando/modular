@@ -149,6 +149,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "FelipeMarra",
+      "name": "Felipe Marra",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/27727671?v=4",
+      "profile": "https://github.com/FelipeMarra",
+      "contributions": [
+        "doc",
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
