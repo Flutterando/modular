@@ -75,6 +75,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "AlbertoMonteiro",
+      "name": "Alberto Monteiro",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/836496?v=4",
+      "profile": "https://medium.com/@albertomonteiro",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
