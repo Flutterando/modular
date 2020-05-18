@@ -1,6 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -694,6 +694,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://flutterando.com.br"><img src="https://avatars2.githubusercontent.com/u/4047813?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Moura</b></sub></a><br /><a href="#maintenance-jacobaraujo7" title="Maintenance">🚧</a> <a href="https://github.com/Flutterando/modular/commits?author=jacobaraujo7" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/pulls?q=is%3Apr+reviewed-by%3Ajacobaraujo7" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://www.flutterando.com.br/"><img src="https://avatars1.githubusercontent.com/u/4654514?v=4" width="100px;" alt=""/><br /><sub><b>Vilson Blanco Dauinheimer</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=bwolfs2" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=bwolfs2" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/pulls?q=is%3Apr+reviewed-by%3Abwolfs2" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://patreon.com/pedromassango"><img src="https://avatars1.githubusercontent.com/u/33294549?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Massango</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=pedromassango" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=pedromassango" title="Documentation">📖</a> <a href="#ideas-pedromassango" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
