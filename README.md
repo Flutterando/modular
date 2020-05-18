@@ -1,6 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -707,6 +707,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Ascenio"><img src="https://avatars1.githubusercontent.com/u/7662016?v=4" width="100px;" alt=""/><br /><sub><b>Ascênio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Ascenio" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=Ascenio" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/wemersonrv"><img src="https://avatars3.githubusercontent.com/u/2028673?v=4" width="100px;" alt=""/><br /><sub><b>Wemerson Couto Guimarães</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=wemersonrv" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/maguro"><img src="https://avatars2.githubusercontent.com/u/165060?v=4" width="100px;" alt=""/><br /><sub><b>Alan D. Cabrera</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=maguro" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/jeanluucas/"><img src="https://avatars1.githubusercontent.com/u/6116799?v=4" width="100px;" alt=""/><br /><sub><b>Jean Lucas</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=jeaanlucas" title="Code">💻</a></td>
   </tr>
 </table>
 
