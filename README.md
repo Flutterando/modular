@@ -1,6 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -696,6 +696,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.flutterando.com.br/"><img src="https://avatars1.githubusercontent.com/u/4654514?v=4" width="100px;" alt=""/><br /><sub><b>Vilson Blanco Dauinheimer</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=bwolfs2" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=bwolfs2" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/pulls?q=is%3Apr+reviewed-by%3Abwolfs2" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://patreon.com/pedromassango"><img src="https://avatars1.githubusercontent.com/u/33294549?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Massango</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=pedromassango" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=pedromassango" title="Documentation">📖</a> <a href="#ideas-pedromassango" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://kelvengalvao@gmail.com"><img src="https://avatars3.githubusercontent.com/u/32758755?v=4" width="100px;" alt=""/><br /><sub><b>Kelven I. B. Galvão</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=irvine5k" title="Documentation">📖</a> <a href="#translation-irvine5k" title="Translation">🌍</a></td>
+    <td align="center"><a href="http://flutterando.com.br"><img src="https://avatars1.githubusercontent.com/u/16373553?v=4" width="100px;" alt=""/><br /><sub><b>David Araujo</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=davidsdearaujo" title="Code">💻</a></td>
   </tr>
 </table>
 

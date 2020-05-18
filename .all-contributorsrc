@@ -47,6 +47,15 @@
         "doc",
         "translation"
       ]
+    },
+    {
+      "login": "davidsdearaujo",
+      "name": "David Araujo",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16373553?v=4",
+      "profile": "http://flutterando.com.br",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
