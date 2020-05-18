@@ -56,6 +56,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "AlvaroVasconcelos",
+      "name": "Alvaro Vasconcelos",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/41203980?v=4",
+      "profile": "https://flutterando.com.br",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
