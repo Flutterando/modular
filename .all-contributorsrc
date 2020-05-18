@@ -65,6 +65,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "andredealmei",
+      "name": "André de Almeida",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/33403972?v=4",
+      "profile": "https://github.com/andredealmei",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
