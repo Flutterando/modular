@@ -15,6 +15,17 @@
         "code",
         "review"
       ]
+    },
+    {
+      "login": "bwolfs2",
+      "name": "Vilson Blanco Dauinheimer",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4654514?v=4",
+      "profile": "https://www.flutterando.com.br/",
+      "contributions": [
+        "code",
+        "doc",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
