@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "jacobaraujo7",
+      "name": "Jacob Moura",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4047813?v=4",
+      "profile": "https://flutterando.com.br",
+      "contributions": [
+        "maintenance",
+        "code",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "modular",
+  "projectOwner": "Flutterando",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
