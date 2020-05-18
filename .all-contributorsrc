@@ -140,6 +140,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "MoacirSchmidt",
+      "name": "Moacir Schmidt",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15182027?v=4",
+      "profile": "http://www.polygonus.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
