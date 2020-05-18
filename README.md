@@ -1,6 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -699,6 +699,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://flutterando.com.br"><img src="https://avatars1.githubusercontent.com/u/16373553?v=4" width="100px;" alt=""/><br /><sub><b>David Araujo</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=davidsdearaujo" title="Code">💻</a></td>
     <td align="center"><a href="https://flutterando.com.br"><img src="https://avatars3.githubusercontent.com/u/41203980?v=4" width="100px;" alt=""/><br /><sub><b>Alvaro Vasconcelos</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=AlvaroVasconcelos" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/andredealmei"><img src="https://avatars3.githubusercontent.com/u/33403972?v=4" width="100px;" alt=""/><br /><sub><b>André de Almeida</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=andredealmei" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=andredealmei" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://medium.com/@albertomonteiro"><img src="https://avatars2.githubusercontent.com/u/836496?v=4" width="100px;" alt=""/><br /><sub><b>Alberto Monteiro</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
