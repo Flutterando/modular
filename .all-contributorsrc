@@ -85,6 +85,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "GUIKAR741",
+      "name": "Guilherme Nepomuceno de Carvalho",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/18069622?v=4",
+      "profile": "https://github.com/GUIKAR741",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
