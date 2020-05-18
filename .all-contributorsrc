@@ -159,6 +159,15 @@
         "doc",
         "translation"
       ]
+    },
+    {
+      "login": "Ademking",
+      "name": "Adem Kouki",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12462188?v=4",
+      "profile": "https://facebook.com/AdemKouki.Officiel",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
