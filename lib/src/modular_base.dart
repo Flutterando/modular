@@ -346,24 +346,30 @@ class Modular {
 
   static Route<T> generateRoute<T>(RouteSettings settings,
       [ChildModule module]) {
+    bool isRouterOutlet = module != null;
     String path = settings.name;
     Router router = selectRoute(path, module);
     if (router == null) {
       return null;
     }
-    _old = Old(
-      args: args,
-      link: link,
-    );
+    if (!isRouterOutlet) {
+      _old = Old(
+        args: args,
+        link: link,
+      );
+    }
     _args = ModularArguments(router.params, settings.arguments);
-
-    _routeLink = RouteLink(path: path, modulePath: router.modulePath);
+    if (!isRouterOutlet)
+      _routeLink = RouteLink(path: path, modulePath: router.modulePath);
 
     if (settings.name == Modular.initialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);
     }
 
-    return router.getPageRoute(settings: settings, injectMap: _injectMap);
+    return router.getPageRoute(
+        settings: settings,
+        injectMap: _injectMap,
+        isRouterOutlet: isRouterOutlet);
   }
 
   static void addCoreInit(ChildModule module) {
