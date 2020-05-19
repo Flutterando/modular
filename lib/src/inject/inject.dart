@@ -27,6 +27,8 @@ class Inject<T> {
     return Modular.args;
   }
 
+  RouteLink get link => Modular.link;
+
   dispose<B>() {
     if (T.runtimeType.toString() == 'dynamic') {
       return Modular.dispose<B>();

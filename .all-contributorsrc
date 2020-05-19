@@ -1,0 +1,179 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "jacobaraujo7",
+      "name": "Jacob Moura",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4047813?v=4",
+      "profile": "https://flutterando.com.br",
+      "contributions": [
+        "maintenance",
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "bwolfs2",
+      "name": "Vilson Blanco Dauinheimer",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4654514?v=4",
+      "profile": "https://www.flutterando.com.br/",
+      "contributions": [
+        "code",
+        "doc",
+        "review"
+      ]
+    },
+    {
+      "login": "pedromassango",
+      "name": "Pedro Massango",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/33294549?v=4",
+      "profile": "https://patreon.com/pedromassango",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas"
+      ]
+    },
+    {
+      "login": "irvine5k",
+      "name": "Kelven I. B. Galvão",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/32758755?v=4",
+      "profile": "http://kelvengalvao@gmail.com",
+      "contributions": [
+        "doc",
+        "translation"
+      ]
+    },
+    {
+      "login": "davidsdearaujo",
+      "name": "David Araujo",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16373553?v=4",
+      "profile": "http://flutterando.com.br",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "AlvaroVasconcelos",
+      "name": "Alvaro Vasconcelos",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/41203980?v=4",
+      "profile": "https://flutterando.com.br",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "andredealmei",
+      "name": "André de Almeida",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/33403972?v=4",
+      "profile": "https://github.com/andredealmei",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "AlbertoMonteiro",
+      "name": "Alberto Monteiro",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/836496?v=4",
+      "profile": "https://medium.com/@albertomonteiro",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "GUIKAR741",
+      "name": "Guilherme Nepomuceno de Carvalho",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/18069622?v=4",
+      "profile": "https://github.com/GUIKAR741",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lucioeduardo",
+      "name": "Eduardo Lúcio",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14063319?v=4",
+      "profile": "https://github.com/lucioeduardo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Ascenio",
+      "name": "Ascênio",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7662016?v=4",
+      "profile": "https://github.com/Ascenio",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "wemersonrv",
+      "name": "Wemerson Couto Guimarães",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2028673?v=4",
+      "profile": "https://github.com/wemersonrv",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "maguro",
+      "name": "Alan D. Cabrera",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/165060?v=4",
+      "profile": "https://github.com/maguro",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jeaanlucas",
+      "name": "Jean Lucas",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6116799?v=4",
+      "profile": "https://www.linkedin.com/in/jeanluucas/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MoacirSchmidt",
+      "name": "Moacir Schmidt",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15182027?v=4",
+      "profile": "http://www.polygonus.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "FelipeMarra",
+      "name": "Felipe Marra",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/27727671?v=4",
+      "profile": "https://github.com/FelipeMarra",
+      "contributions": [
+        "doc",
+        "translation"
+      ]
+    },
+    {
+      "login": "Ademking",
+      "name": "Adem Kouki",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12462188?v=4",
+      "profile": "https://facebook.com/AdemKouki.Officiel",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "modular",
+  "projectOwner": "Flutterando",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

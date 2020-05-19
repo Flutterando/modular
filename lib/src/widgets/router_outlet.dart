@@ -26,6 +26,7 @@ class _RouterOutletState extends State<RouterOutlet>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ModularProvider(
       module: widget.module,
       child: Navigator(

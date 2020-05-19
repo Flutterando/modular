@@ -1,4 +1,7 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
 
@@ -27,7 +30,7 @@
   - [ModularState](#modularstate)
   - [Consuming a ChangeNotifier Class](#consuming-a-changenotifier-class)
   - [Creating Child Modules](#creating-child-modules)
-  - [ModuleWidget](#modulewidget)
+  - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
@@ -38,16 +41,17 @@
 
 ## What is Flutter Modular?
 
-When a project is getting bigger and more complex, we unfortunately end up joining a lot of archives in just one, it makes harder the code maintenance and reusability too. The Modular give us a bunch of adapted solutions for Flutter, such a dependency injection, routes controller and a "Disposable Singletons" System(When a code provider call automatically dispose and clear the injection).
-The Modular came up prepared for adapt to any state management approach to its smart injection system, managing the memory use of your application.
+Modular proposes a modularized and scalable structure capable of increasing the maintenance capacity, code reusability and memory optimization.
 
 ## Modular Structure
 
-Modular gives us a structure that allows us to manage dependency injection and routes in just one file per module, so we can organize our files with that in mind. When all pages, controllers, blocs (and so on) are in a folder and recognized by this main file, we call this a module, as it will provide us with easy maintainability and especially the TOTAL decoupling of code for reuse in other projects.
+Modular structure consists in decoupled and independent modules that will represent the features of the application. 
+Each module controls its own dependencies, routes, pages, widgets and business logic. 
+As each module has its own folder, you can reuse this module in different projects.
 
 ## Modular Pillars
 
-Here are our main focuses with this package.
+Here are the main focuses of the package:
 
 - Automatic Memory Management.
 - Dependency Injection.
@@ -66,7 +70,7 @@ Open pubspec.yaml of your Project and type:
 
 ```yaml
 dependencies:
-    flutter_modular:
+    flutter_modular: any
 ```
 
 or install directly from Git to try out new features and fixes:
@@ -82,7 +86,7 @@ dependencies:
 
 You need to do some initial setup.
 
-Create a file to be your main widget, thinking of configuring named routes within `MaterialApp`: (app_widget.dart)
+Create a file to be your main widget, set an initial route and use Modular to manage your routing system (app_widget.dart)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -163,6 +167,21 @@ And to access the route use `Navigator.pushNamed` or `Modular.to.pushNamed`:
 Navigator.pushNamed(context, '/login');
 //or
 Modular.to.pushNamed('/login');
+```
+
+### Current Module Navigation
+
+Use Modular.to for literal paths or Modular.link for routes in current module.
+
+```dart
+//Modules home>product
+Modular.to.pushNamed('/home/product/list');
+Modular.to.pushNamed('/home/product/detail/:id');
+
+//into product module, use Modular.link and navigate between routes of current Module (Product)
+Modular.link.pushNamed('/list');
+Modular.link.pushNamed('/detail/:id');
+
 ```
 
 ## Dynamic Routes
@@ -255,9 +274,62 @@ Router("/product",
 
 If you use transition in a module, all routes in that module will inherit this transition animation.
 
+### Custom Transition Animation Route
+
+You can also use a custom transition animation by setting the Router parameters **transistion** and **customTransition** with **TransitionType.custom** and the **CustomTransition**, respectively.
+
+```dart
+Router("/product",
+        module: AdminModule(),
+        transition: TransitionType.custom,
+        customTransition: myCustomTransition),
+
+// ...
+```
+
+And, for example, in a custom transitions file declare your custom transitions.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+CustomTransition get myCustomTransition => CustomTransition(
+    transitionDuration: Duration(milliseconds: 500),
+    transitionBuilder: (context, animation, secondaryAnimation, child){
+      return RotationTransition(turns: animation,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(-1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: Curves.linear,
+              ),
+            ),
+            ),
+            child: child,
+          ),
+        ),
+      )
+      ;
+    },
+  );
+
+
+```
+
 ## Grouping Routes
 
-You can group routes that contains  one (or more) properties in common. Properties **guards**, **transition** and **customTransition** can be used together or just one to group routes in common.
+You can group routes that contains one(or more) properties in common. 
+Properties like **guards**, **transition** and **customTransition** can be for one single route or for a group of routes.
 
 ```dart
 List<Router> get routers => [
@@ -268,7 +340,7 @@ List<Router> get routers => [
       ])); // Adiciona as rotas agrupadas ao final da lista
 ```
 
-Another way is using [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator), introduced in Dart 2.3:
+Another way of usage with [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator) introduced in Dart 2.3:
 
 ```dart
 List<Router> get routers => [
@@ -282,9 +354,11 @@ List<Router> get routers => [
       ]; // Mesclar usando
 ```
 
-## Router generic types
+## Router Generic Types
 
-You may need to navigate to a specific page and request a return value in the `pop()`, You can type the Router object with the value of that return;
+
+You can return values from navigation, like `pop()`.
+To achieve this just write the Router object with the value of that return.
 
 ```dart
  @override
@@ -294,7 +368,7 @@ You may need to navigate to a specific page and request a return value in the `p
   ]
 ```
 
-Now you can type your pushNamed and pop
+Now you can write pushNamed and pop
 
 ```dart
  String name = await Modular.to.pushNamed<String>();
@@ -302,15 +376,15 @@ Now you can type your pushNamed and pop
  Modular.to.pop('Jacob Moura');
 ```
 
-## Flutter Web url Routes
+## Flutter Web URL Routes(Deeplink-like)
 
-The Routing System also recognizes what is typed in the website url (flutter web) so what you type in the browser url will open in the app. We hope this makes it easier for Flutter Web sites to make SEO more unique.
+The Routing System can recognizes what's in the website URL and navigate to a part of the application.
 
 Dynamic routes apply here as well:
 ```
 https://flutter-website.com/#/product/1
 ```
-this will open the Product view and args.params ['id']) will be equal to 1.
+The URL above will open the Product view and args.params ['id']) will be equal to 1.
 
 ## Dependency Injection
 
@@ -503,12 +577,12 @@ class AppModule extends MainModule {
 
 Consider splitting your code into modules such as `LoginModule`, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
 
-### ModuleWidget
+### WidgetModule
 
 The same structure as `ChildModule`. Very useful for modular TabBar visualizations.
 
 ```dart
-class TabModule extends ModuleWidget {
+class TabModule extends WidgetModule {
 
     @override
   List<Bind> get binds => [
@@ -609,3 +683,41 @@ Please send feature requests and bugs at the issue tracker.
 
 Created from templates made available by Stagehand under a BSD-style license.
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://flutterando.com.br"><img src="https://avatars2.githubusercontent.com/u/4047813?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Moura</b></sub></a><br /><a href="#maintenance-jacobaraujo7" title="Maintenance">🚧</a> <a href="https://github.com/Flutterando/modular/commits?author=jacobaraujo7" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/pulls?q=is%3Apr+reviewed-by%3Ajacobaraujo7" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://www.flutterando.com.br/"><img src="https://avatars1.githubusercontent.com/u/4654514?v=4" width="100px;" alt=""/><br /><sub><b>Vilson Blanco Dauinheimer</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=bwolfs2" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=bwolfs2" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/pulls?q=is%3Apr+reviewed-by%3Abwolfs2" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://patreon.com/pedromassango"><img src="https://avatars1.githubusercontent.com/u/33294549?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Massango</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=pedromassango" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=pedromassango" title="Documentation">📖</a> <a href="#ideas-pedromassango" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://kelvengalvao@gmail.com"><img src="https://avatars3.githubusercontent.com/u/32758755?v=4" width="100px;" alt=""/><br /><sub><b>Kelven I. B. Galvão</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=irvine5k" title="Documentation">📖</a> <a href="#translation-irvine5k" title="Translation">🌍</a></td>
+    <td align="center"><a href="http://flutterando.com.br"><img src="https://avatars1.githubusercontent.com/u/16373553?v=4" width="100px;" alt=""/><br /><sub><b>David Araujo</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=davidsdearaujo" title="Code">💻</a></td>
+    <td align="center"><a href="https://flutterando.com.br"><img src="https://avatars3.githubusercontent.com/u/41203980?v=4" width="100px;" alt=""/><br /><sub><b>Alvaro Vasconcelos</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=AlvaroVasconcelos" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/andredealmei"><img src="https://avatars3.githubusercontent.com/u/33403972?v=4" width="100px;" alt=""/><br /><sub><b>André de Almeida</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=andredealmei" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=andredealmei" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://medium.com/@albertomonteiro"><img src="https://avatars2.githubusercontent.com/u/836496?v=4" width="100px;" alt=""/><br /><sub><b>Alberto Monteiro</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/GUIKAR741"><img src="https://avatars2.githubusercontent.com/u/18069622?v=4" width="100px;" alt=""/><br /><sub><b>Guilherme Nepomuceno de Carvalho</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=GUIKAR741" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/lucioeduardo"><img src="https://avatars1.githubusercontent.com/u/14063319?v=4" width="100px;" alt=""/><br /><sub><b>Eduardo Lúcio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Ascenio"><img src="https://avatars1.githubusercontent.com/u/7662016?v=4" width="100px;" alt=""/><br /><sub><b>Ascênio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Ascenio" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=Ascenio" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/wemersonrv"><img src="https://avatars3.githubusercontent.com/u/2028673?v=4" width="100px;" alt=""/><br /><sub><b>Wemerson Couto Guimarães</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=wemersonrv" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/maguro"><img src="https://avatars2.githubusercontent.com/u/165060?v=4" width="100px;" alt=""/><br /><sub><b>Alan D. Cabrera</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=maguro" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/jeanluucas/"><img src="https://avatars1.githubusercontent.com/u/6116799?v=4" width="100px;" alt=""/><br /><sub><b>Jean Lucas</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=jeaanlucas" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://www.polygonus.com"><img src="https://avatars1.githubusercontent.com/u/15182027?v=4" width="100px;" alt=""/><br /><sub><b>Moacir Schmidt</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=MoacirSchmidt" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/FelipeMarra"><img src="https://avatars0.githubusercontent.com/u/27727671?v=4" width="100px;" alt=""/><br /><sub><b>Felipe Marra</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=FelipeMarra" title="Documentation">📖</a> <a href="#translation-FelipeMarra" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://facebook.com/AdemKouki.Officiel"><img src="https://avatars3.githubusercontent.com/u/12462188?v=4" width="100px;" alt=""/><br /><sub><b>Adem Kouki</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Ademking" title="Documentation">📖</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

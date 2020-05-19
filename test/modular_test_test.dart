@@ -32,10 +32,11 @@ main() {
       initModule(app, initialModule: true);
       initModules([home, product]);
     });
-    testWidgets('on pushNamed modify actualRoute ', (WidgetTester tester) async{
+    testWidgets('on pushNamed modify actualRoute ',
+        (WidgetTester tester) async {
       await tester.pumpWidget(buildTestableWidget(HomeWidget()));
       Modular.to.pushNamed('/prod');
-      expect(Modular.actualRoute, '/prod');
+      expect(Modular.link.path, '/prod');
     });
     tearDown(() {
       Modular.removeModule(product);
@@ -43,18 +44,20 @@ main() {
       Modular.removeModule(app);
     });
   });
-  group("arguments test", (){
+  group("arguments test", () {
     AppModule app = AppModule();
     HomeModule home = HomeModule();
     setUpAll(() {
       initModule(app, initialModule: true);
     });
-    testWidgets("Arguments Page id", (WidgetTester tester) async{
-      await tester.pumpWidget(buildTestableWidget(ArgumentsPage(id: 10,)));
+    testWidgets("Arguments Page id", (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(ArgumentsPage(
+        id: 10,
+      )));
       final titleFinder = find.text("10");
       expect(titleFinder, findsOneWidget);
     });
-    testWidgets("Modular Arguments Page id", (WidgetTester tester) async{
+    testWidgets("Modular Arguments Page id", (WidgetTester tester) async {
       Modular.arguments(data: 10);
       await tester.pumpWidget(buildTestableWidget(ModularArgumentsPage()));
       final titleFinder = find.text("10");

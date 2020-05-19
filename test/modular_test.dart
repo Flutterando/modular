@@ -28,8 +28,7 @@ void main() {
 
     test('prepare to regex', () {
       expect(Modular.prepareToRegex('/home/list/:id'), '/home/list/(.*?)');
-      expect(
-          Modular.prepareToRegex('/home/list/:id/'), '/home/list/(.*?)/');
+      expect(Modular.prepareToRegex('/home/list/:id/'), '/home/list/(.*?)/');
       expect(Modular.prepareToRegex('/home/list/:id/item/:num'),
           '/home/list/(.*?)/item/(.*?)');
     });
@@ -43,7 +42,9 @@ void main() {
       expect(router.params['id'], "1");
 
       expect(
-          Modular.searchRoute(router, "/home/list/:id/item/:num", "/home/list/1/item/2"), true);
+          Modular.searchRoute(
+              router, "/home/list/:id/item/:num", "/home/list/1/item/2"),
+          true);
       expect(router.params['id'], "1");
       expect(router.params['num'], "2");
 
@@ -83,6 +84,17 @@ void main() {
       expect(Modular.selectRoute("/home/product/"), isA<Router>());
     });
 
+    test('modulePath', () {
+      Router router = Modular.selectRoute("/home/product/");
+
+      expect(router, isA<Router>());
+      expect(router.modulePath, "/home/product");
+
+      router = Modular.selectRoute("/home/product/1");
+      expect(router, isA<Router>());
+      expect(router.modulePath, "/home/product");
+    });
+
     test('Convert type', () {
       expect(Modular.convertType("value"), isA<String>());
       expect(Modular.convertType("1"), isA<int>());
@@ -91,17 +103,21 @@ void main() {
     });
 
     test('RouteGuard test', () {
-      expect(() => Modular.selectRoute("/forbidden"), throwsA(isA<ModularError>()));
+      expect(() => Modular.selectRoute("/forbidden"),
+          throwsA(isA<ModularError>()));
     });
     test('RouteGuard other module', () {
-      expect(() => Modular.selectRoute("/home/forbidden2"), throwsA(isA<ModularError>()));
+      expect(() => Modular.selectRoute("/home/forbidden2"),
+          throwsA(isA<ModularError>()));
     });
     test('RouteGuard other module', () {
-      expect(() => Modular.selectRoute("/home/forbidden2"), throwsA(isA<ModularError>()));
+      expect(() => Modular.selectRoute("/home/forbidden2"),
+          throwsA(isA<ModularError>()));
     });
 
     test('RouteGuard other module Two', () {
-      expect(() => Modular.selectRoute("/homeTwo/forbidden2"), throwsA(isA<ModularError>()));
+      expect(() => Modular.selectRoute("/homeTwo/forbidden2"),
+          throwsA(isA<ModularError>()));
     });
 
     test('Get route correct', () {

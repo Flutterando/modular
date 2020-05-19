@@ -25,7 +25,7 @@
   - [ModularState](#modularstate)
   - [Consumindo uma Classe ChangeNotifier](#consumindo-uma-classe-changenotifier)
   - [Criando Módulos Filhos](#criando-módulos-filhos)
-  - [ModuleWidget](#modulewidget)
+  - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Testes Unitários](#testes-unitários)
@@ -165,6 +165,21 @@ Navigator.pushNamed(context, '/login');
 Modular.to.pushNamed('/login');
 ```
 
+### Navegação no Módulo Atual
+
+Use Modular.to para rotas literais e Modular.link para as **rotas do módulo atual**.
+
+```dart
+//Modules home>product
+Modular.to.pushNamed('/home/product/list');
+Modular.to.pushNamed('/home/product/detail/:id');
+
+//dentro do módulo produto, use Modular.link e navega nas rotas do módulo ativo atual
+Modular.link.pushNamed('/list');
+Modular.link.pushNamed('/detail/:id');
+
+```
+
 ## Rotas dinâmicas
 
 Você pode usar o sistema de rotas dinâmicas para passar um valor por parâmetro e o receber em sua view.
@@ -254,6 +269,59 @@ Router("/product",
 ```
 
 Se usar o transition em um módulo, todas as rotas desse módulo herdarão essa animação de transição.
+
+### Animação Customizada para Transição de Rota
+
+Você também pode utilizar uma transição com animação customizada setando os parametros **transistion** e **customTransition** do Router com **TransitionType.custom** e **CustomTransition**, respectivamente.
+
+```dart
+Router("/product",
+        module: AdminModule(),
+        transition: TransitionType.custom,
+        customTransition: myCustomTransition),
+
+// ...
+```
+
+E, por exemplo, num arquivo de transições customizadas, você pode declarar suas transições.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+CustomTransition get myCustomTransition => CustomTransition(
+    transitionDuration: Duration(milliseconds: 500),
+    transitionBuilder: (context, animation, secondaryAnimation, child){
+      return RotationTransition(turns: animation,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(-1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: Curves.linear,
+              ),
+            ),
+            ),
+            child: child,
+          ),
+        ),
+      )
+      ;
+    },
+  );
+
+
+```
+
 
 ## Agrupando rotas
 
@@ -503,12 +571,12 @@ class AppModule extends MainModule {
 
 Pense em dividir seu código em módulos como por exemplo, `LoginModule`, e dentro dele colocar as rotas relacionadas a esse módulo. Ficará muito mais fácil a manutenção e o compartilhamento do código em outro projeto.
 
-### ModuleWidget
+### WidgetModule
 
 A mesma estrutura de um MainModule/ChildModule. Muito útil para usar em uma TabBar com páginas modulares
 
 ```dart
-class TabModule extends ModuleWidget {
+class TabModule extends WidgetModule {
 
     @override
   List<Bind> get binds => [

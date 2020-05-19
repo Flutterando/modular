@@ -1,6 +1,28 @@
+## [1.2.2] - 19 May 2020
+* Health suggestions
+* Added Contributors in README
+* Fix RouterOutlet
+
+## [1.2.1] - 15 May 2020
+* Fix bugs
+* new Modular.link for Navigation in Current Module;
+```dart
+//Modules home>product
+Modular.to.pushNamed('/home/product/list');
+Modular.to.pushNamed('/home/product/detail/:id');
+
+//into product module, use Modular.link and navigate between routes of current Module (Product)
+
+Modular.link.pushNamed('/list');
+Modular.link.pushNamed('/detail/:id');
+
+```
+Use Modular.to for literal paths or Modular.link for routes in current module.
+
+* Finally, use Modular.to.path (or Modular.link.path) if you want see the "Current Route Path".
+
 ## [1.1.2] - 13 Apr 2020
 * Fix bugs
-```
 
 ## [1.1.1] - 07 Apr 2020
 * Added **showDialog**
