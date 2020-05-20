@@ -1,7 +1,8 @@
-## [1.2.2] - 19 May 2020
+## [1.2.3] - 19 May 2020
 * Health suggestions
 * Added Contributors in README
 * Fix RouterOutlet
+* Fix Modular.link
 
 ## [1.2.1] - 15 May 2020
 * Fix bugs
