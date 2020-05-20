@@ -107,6 +107,7 @@ class Router<T> {
 
   Widget _disposableGenerate(BuildContext context,
       {Map<String, ChildModule> injectMap,
+      bool isRouterOutlet,
       String path,
       ModularArguments args}) {
     var actual = ModalRoute.of(context);
@@ -116,7 +117,9 @@ class Router<T> {
       child: this.child(context, args),
       dispose: () {
         final List<String> trash = [];
-        Modular.oldProccess(_old);
+        if (!isRouterOutlet) {
+          Modular.oldProccess(_old);
+        }
         if (actual.isCurrent) {
           return;
         }
@@ -138,7 +141,9 @@ class Router<T> {
   }
 
   Route<T> getPageRoute(
-      {Map<String, ChildModule> injectMap, RouteSettings settings}) {
+      {Map<String, ChildModule> injectMap,
+      RouteSettings settings,
+      bool isRouterOutlet}) {
     final arguments = Modular.args.copy();
 
     if (this.transition == TransitionType.custom &&
@@ -146,7 +151,10 @@ class Router<T> {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
           return _disposableGenerate(context,
-              args: arguments, injectMap: injectMap, path: settings.name);
+              args: arguments,
+              injectMap: injectMap,
+              path: settings.name,
+              isRouterOutlet: isRouterOutlet);
         },
         settings: settings,
         transitionsBuilder: this.customTransition.transitionBuilder,
@@ -154,7 +162,10 @@ class Router<T> {
       );
     } else if (this.transition == TransitionType.defaultTransition) {
       var widgetBuilder = (context) => _disposableGenerate(context,
-          args: arguments, injectMap: injectMap, path: settings.name);
+          args: arguments,
+          injectMap: injectMap,
+          path: settings.name,
+          isRouterOutlet: isRouterOutlet);
       if (routeGenerator != null) {
         return routeGenerator(widgetBuilder, settings);
       }
@@ -171,7 +182,10 @@ class Router<T> {
       var selectTransition = _transitions[this.transition];
       return selectTransition((context, args) {
         return _disposableGenerate(context,
-            args: args, injectMap: injectMap, path: settings.name);
+            args: args,
+            injectMap: injectMap,
+            path: settings.name,
+            isRouterOutlet: isRouterOutlet);
       }, arguments, settings);
     }
   }
