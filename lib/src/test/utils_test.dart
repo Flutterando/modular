@@ -6,16 +6,17 @@ void initModule(ChildModule module,
     {List<Bind> changeBinds, bool initialModule}) {
   Modular.debugMode = false;
   final list = module.binds;
+  final changedList = List<Bind>.from(list);
   for (var item in list ?? []) {
     var dep = (changeBinds ?? []).firstWhere((dep) {
       return item.runtimeType == dep.runtimeType;
     }, orElse: () => null);
     if (dep != null) {
-      list.remove(item);
-      list.add(dep);
-      module.changeBinds(list);
+      changedList.remove(item);
+      changedList.add(dep);
     }
   }
+  module.changeBinds(changedList);
   if (initialModule ?? false)
     Modular.init(module);
   else
