@@ -11,6 +11,8 @@ abstract class IModularNavigator {
     bool barrierDismissible = true,
   });
 
+  Future<T> push<T extends Object>(Route<T> route);
+
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(String routeName, {TO result, Object arguments});
 
   Future<T> pushNamed<T extends Object>(String routeName, {Object arguments});

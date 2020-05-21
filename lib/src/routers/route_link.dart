@@ -28,6 +28,9 @@ class RouteLink extends IModularNavigator {
   void popUntil(bool Function(Route) predicate) => Modular.to.popUntil(predicate);
 
   @override
+  Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
+
+  @override
   Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) =>
       Modular.to.pushNamed(_checkpath(routeName), arguments: arguments);
 

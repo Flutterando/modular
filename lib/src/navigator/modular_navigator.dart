@@ -67,6 +67,9 @@ class ModularNavigator implements IModularNavigator {
   void popUntil(bool Function(Route) predicate) => navigator.popUntil(predicate);
 
   @override
+  Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
+
+  @override
   Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) =>
       navigator.pushNamed(routeName, arguments: arguments);
 
