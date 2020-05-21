@@ -1,6 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-19-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -714,6 +714,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/FelipeMarra"><img src="https://avatars0.githubusercontent.com/u/27727671?v=4" width="100px;" alt=""/><br /><sub><b>Felipe Marra</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=FelipeMarra" title="Documentation">📖</a> <a href="#translation-FelipeMarra" title="Translation">🌍</a></td>
     <td align="center"><a href="https://facebook.com/AdemKouki.Officiel"><img src="https://avatars3.githubusercontent.com/u/12462188?v=4" width="100px;" alt=""/><br /><sub><b>Adem Kouki</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Ademking" title="Documentation">📖</a></td>
     <td align="center"><a href="http://gabul.dev"><img src="https://avatars0.githubusercontent.com/u/32063378?v=4" width="100px;" alt=""/><br /><sub><b>Gabriel Sávio - Flutterando</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=gabuldev" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.iatec.com"><img src="https://avatars0.githubusercontent.com/u/17324575?v=4" width="100px;" alt=""/><br /><sub><b>Tiagosito</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=tiagosito" title="Code">💻</a></td>
   </tr>
 </table>
 
