@@ -7,7 +7,7 @@
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 
-*Read this in other languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+*This README is also available in [Brazilian Portuguese](README.pt-br.md).*
 
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**  
@@ -41,22 +41,24 @@
 
 ## What is Flutter Modular?
 
-Modular proposes a modularized and scalable structure capable of increasing the maintenance capacity, code reusability and memory optimization.
+As an application project grows and becomes complex, it's hard to keep your code and project structure mantainable and reusable. Modular provides a bunch of Flutter-suiting solutions to deal with this problem, like dependency injection, routing system and the "disposable singleton" system (that is, Modular disposes the injected module automatically as it is out of scope).
+
+Modular's dependency injection system has out-of-the-box support for any state management system, managing your application memory usage.
 
 ## Modular Structure
 
 Modular structure consists in decoupled and independent modules that will represent the features of the application. 
-Each module controls its own dependencies, routes, pages, widgets and business logic. 
-As each module has its own folder, you can reuse this module in different projects.
+Each module is located in its own directory, and controls its own dependencies, routes, pages, widgets and business logic. 
+Consequently, you can easily detach one module from your project and use it wherever you want.
 
 ## Modular Pillars
 
-Here are the main focuses of the package:
+These are the main aspects that Modular focus on:
 
 - Automatic Memory Management.
 - Dependency Injection.
-- Dynamic Routes Control.
-- Modularization of Code.
+- Dynamic Routing.
+- Code Modularization.
 
 ## Examples
 
@@ -66,14 +68,14 @@ Here are the main focuses of the package:
 
 ## Installation
 
-Open pubspec.yaml of your Project and type:
+Open your project's `pubspec.yaml` and add `flutter_modular` as a dependency:
 
 ```yaml
 dependencies:
     flutter_modular: any
 ```
 
-or install directly from Git to try out new features and fixes:
+You can also provide the git repository as source instead, to try out the newest features and fixes:
 
 ```yaml
 dependencies:
@@ -82,13 +84,14 @@ dependencies:
             url: https://github.com/Flutterando/modular
 ```
 
-## Using in a New Project
+## Using in a new project
 
-You need to do some initial setup.
+To use Modular in a new project, you will have to make some initial setup:
 
-Create a file to be your main widget, set an initial route and use Modular to manage your routing system (app_widget.dart)
+1. Create your main widget with a `MaterialApp` and set its `initialRoute`. On `onGenerateroute`, you will have to provide Modular's routing system (`Modular.generateRoute`), so it can manage your routes.
 
 ```dart
+//  app_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -105,189 +108,199 @@ class AppWidget extends StatelessWidget {
 }
 ```
 
-Create a file to be your main module: (app_module.dart)
+2. Create your project's main module file extending `MainModule`:
 
 ```dart
-// extends from MainModule
+// app_module.dart
 class AppModule extends MainModule {
 
-  // here will be any class you want to inject into your project (eg bloc, dependency)
+  // Provide a list of dependencies to inject into your project
   @override
   List<Bind> get binds => [];
 
-  // here will be the routes of your module
+  // Provide all the routes for your module
   @override
   List<Router> get routers => [];
 
-// add your main widget here
+  // Provide the root widget associated with your module
+  // In this case, it's the widget you created in the first step
   @override
   Widget get bootstrap => AppWidget();
 }
 ```
 
-Finish the configuration in your main.dart file to start Modular.
+3. In your `main.dart`, wrap your main module in `ModularApp` to initialize it with Modular:
 
 ```dart
-import 'package:example/app/app_module.dart';
+// main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
+import 'app/app_module.dart';
 
 void main() => runApp(ModularApp(module: AppModule()));
 ```
 
-Ready! Your app is already set to Modular!
+4. Done! Your app is set and ready to work with Modular!
 
-## Adding Routes
+## Adding routes
 
-You can add routes to your module using the getter 'routers';
+Your module's routes are provided by overriding the `routers` getter:
 
 ```dart
+// app_module.dart
 class AppModule extends MainModule {
 
- // here will be any class you want to inject into your project (eg bloc, dependency)
+  // Provide a list of dependencies to inject into your project
   @override
   List<Bind> get binds => [];
 
- // here will be the routes of your module
+  // Provide all the routes for your module
   @override
   List<Router> get routers => [
-      Router("/", child: (_, args) => HomePage()),
-      Router("/login", child: (_, args) => LoginPage()),
+      Router('/', child: (_, __) => HomePage()),
+      Router('/login', child: (_, __) => LoginPage()),
   ];
 
-  // add your main widget here  
+  // Provide the root widget associated with your module
   @override
   Widget get bootstrap => AppWidget();
 }
 ```
 
-And to access the route use `Navigator.pushNamed` or `Modular.to.pushNamed`:
+To push your route to your app, you can use `Navigator.pushNamed`:
 
 ```dart
 Navigator.pushNamed(context, '/login');
-//or
+```
+
+Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
+```dart
 Modular.to.pushNamed('/login');
 ```
 
-### Current Module Navigation
+### Navigation on the current module
 
-Use Modular.to for literal paths or Modular.link for routes in current module.
+Use `Modular.to` for literal paths or `Modular.link` for routes in current module:
 
 ```dart
-//Modules home>product
+// Modules Home → Product
 Modular.to.pushNamed('/home/product/list');
 Modular.to.pushNamed('/home/product/detail/:id');
 
-//into product module, use Modular.link and navigate between routes of current Module (Product)
+// Inside Product module, use Modular.link and navigate between Product module routes
 Modular.link.pushNamed('/list');
 Modular.link.pushNamed('/detail/:id');
 
 ```
 
-## Dynamic Routes
+## Dynamic routes
 
-You can use the dynamic route system to pass a value per parameter and get it in your view.
-
-```dart
-
-//use (: parameter_name) to use dynamic routes;
-//use the args object that is a (ModularArguments) to get the value
- @override
-  List<Router> get routers => [
-      Router("/product/:id", child: (_, args) => Product(id: args.params['id'])),
-  ];
-
-```
-
-A dynamic route is considered valid when the value corresponding to the parameter is filled.
-From this you can use:
+You can use the dynamic routing system to provide parameters to your `Router`:
 
 ```dart
+// Use :parameter_name syntax to provide a parameter in your route.
+// Route arguments will be available through `args`, and may be accessed in `params` property,
+// using square brackets notation (['parameter_name']).
 
-Navigator.pushNamed(context, '/product/1'); //args.params['id']) gonna be 1
-//or
-Modular.to.pushNamed('/product/1'); //args.params['id']) gonna be 1
+@override
+List<Router> get routers => [
+  Router(
+    '/product/:id',
+    child: (_, args) => Product(id: args.params['id']),
+  ),
+];
 ```
 
-You can also pass an object using the "arguments" property in the navigation:
+The parameter will, then, be pattern-matched when calling the given route. For example:
 
 ```dart
-
-Navigator.pushNamed(context, '/product', arguments: ProductModel()); //args.data
-//or
-Modular.to.pushNamed('/product', arguments: ProductModel()); //args.data
+// In this case, `args.params['id']` will have the value `1`.
+Modular.to.pushNamed('/product/1');
 ```
-getting on the route
+
+This notation, however, is only valid for simple literals. If you want to pass a complex object to your route, provide it in `arguments` parameter:
 
 ```dart
-
- @override
-  List<Router> get routers => [
-      Router("/product", child: (_, args) => Product(model: args.data)),
-  ];
-
+Modular.to.pushNamed('/product', arguments: ProductModel());
 ```
 
-## Route Guard
+And it will be available in the `args.data` property instead of `args.params`:
 
-We may protect our routes with middleware that will verify that the route is available within a given Route.
-First create a `RouteGuard`:
+```dart
+@override
+List<Router> get routers => [
+  Router(
+    '/product',
+    child: (_, args) => Product(model: args.data),
+  ),
+];
+```
+
+## Route guard
+
+Route guards are middleware-like objects that allow you to control the access of a given route from other route. You can implement a route guard by making a class that `implements RouteGuard`.
+
+For example, the following class will only allow a redirection from `/admin` route:
 
 ```dart
 class MyGuard implements RouteGuard {
   @override
   bool canActivate(String url) {
-    if(url != '/admin'){
-      //code of authorization
+    if (url != '/admin'){
+      // Return `true` to allow access
       return true;
     } else {
-      //access denied
+      // Return `false` to disallow access
       return false
     }
   }
 }
+```
+
+To use your `RouteGuard` in a route, pass it to the `guards` parameter:
+
+```dart
+@override
+List<Router> get routers => [
+  Router('/', module: HomeModule()),
+  Router(
+    '/admin',
+    module: AdminModule(),
+    guards: [MyGuard()],
+  ),
+];
 
 ```
 
-Now put in the 'guards' property of your Router.
+If placed on a module route, `RouterGuard` will be global to that route.
+
+## Route transition animation
+
+You can choose which type of animation you want to be used on your pages transition by setting the `Router`'s `transition` parameter, providing a `TransitionType`.
 
 ```dart
-  @override
-  List<Router> get routers => [
-        Router("/", module: HomeModule()),
-        Router("/admin", module: AdminModule(), guards: [MyGuard()]),
-      ];
-
-```
-
-If placed on a module route, RouterGuard will be global to that route.
-
-## Route Transition Animation
-
-You can choose which type of animation you want by setting the Router's **transition** parameter using the **TransitionType** enum.
-
-```dart
-Router("/product",
-        module: AdminModule(),
-        transition: TransitionType.fadeIn), //use for change transition
+Router('/product',
+  module: AdminModule(),
+  transition: TransitionType.fadeIn,
+), //use for change transition
 ```
 
 If you use transition in a module, all routes in that module will inherit this transition animation.
 
-### Custom Transition Animation Route
+### Custom transition animation route
 
-You can also use a custom transition animation by setting the Router parameters **transistion** and **customTransition** with **TransitionType.custom** and the **CustomTransition**, respectively.
+You can also use a custom transition animation by setting the Router parameters `transistion` and `customTransition` with `TransitionType.custom` and your `CustomTransition`, respectively:
 
 ```dart
-Router("/product",
-        module: AdminModule(),
-        transition: TransitionType.custom,
-        customTransition: myCustomTransition),
-
-// ...
+Router('/product',
+  module: AdminModule(),
+  transition: TransitionType.custom,
+  customTransition: myCustomTransition,
+),
 ```
 
-And, for example, in a custom transitions file declare your custom transitions.
+For example, this is a custom transition that could be declared in a separated file and used in the `customTransition` parameter:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -322,110 +335,97 @@ CustomTransition get myCustomTransition => CustomTransition(
       ;
     },
   );
-
-
 ```
 
-## Grouping Routes
+## Grouping routes
 
-You can group routes that contains one(or more) properties in common. 
-Properties like **guards**, **transition** and **customTransition** can be for one single route or for a group of routes.
+You can group routes that contains one or more common properties. Properties like `guards`, `transition` and `customTransition` can be provided both for single routes and groups of routes:
 
 ```dart
 List<Router> get routers => [
-        Router("/", module: HomeModule()),
-      ]..addAll(Router.group(guards: [MyGuard()], routes: [
-        Router("/admin", module: AdminModule()),
-        Router("/profile", module: ProfileModule()),
-      ])); // Adiciona as rotas agrupadas ao final da lista
+  Router('/', module: HomeModule()),
+  Router.group(
+    guards: [MyGuard()],
+    routes: [
+      Router("/admin", module: AdminModule()),
+      Router("/profile", module: ProfileModule()),
+    ],
+  ),
+);
 ```
 
-Another way of usage with [Sperad Operator](https://dart.dev/guides/language/language-tour#spread-operator) introduced in Dart 2.3:
+## Router generic types
 
+You can return values from navigation, just like `.pop`.
+To achieve this, pass the type you expect to return as type parameter to `Router`:
+  
 ```dart
+@override
 List<Router> get routers => [
-        Router("/", module: HomeModule()),
-        ...Router.group(guards: [MyGuard()],
-          transition: TransitionType.rightToLeftWithFade,
-          routes: [
-            Router("/admin", module: AdminModule()),
-            Router("/profile", module: ProfileModule()),
-          ]),
-      ]; // Mesclar usando
+  // This router expects to receive a `String` when popped.
+  Router<String>('/event', child: (_, __) => EventPage()),
+]
 ```
 
-## Router Generic Types
-
-
-You can return values from navigation, like `pop()`.
-To achieve this just write the Router object with the value of that return.
+Now, use `.pop` as you would with `Navigator.pop`:
 
 ```dart
- @override
-  List<Router> get routers => [
-    //type router with return type
-    Router<String>('/event', child: (_, args) => EventPage()),
-  ]
+// Push route
+String name = await Modular.to.pushNamed<String>();
+
+// And pass the value when popping 
+Modular.to.pop('Jacob Moura');
 ```
 
-Now you can write pushNamed and pop
+## Flutter Web URL routes (Deeplink-like)
 
-```dart
- String name = await Modular.to.pushNamed<String>();
- //and
- Modular.to.pop('Jacob Moura');
-```
+The routing system can recognize what is in the URL and navigate to a specific part of the application.
+Dynamic routes apply here as well. The following URL, for instance, will open the Product view, with `args.params['id']` set to `1`.
 
-## Flutter Web URL Routes(Deeplink-like)
-
-The Routing System can recognizes what's in the website URL and navigate to a part of the application.
-
-Dynamic routes apply here as well:
 ```
 https://flutter-website.com/#/product/1
 ```
-The URL above will open the Product view and args.params ['id']) will be equal to 1.
 
 ## Dependency Injection
 
-You can inject any class into your module using getter 'binds', for example classes BLoC, ChangeNotifier or Stores.
+You can inject any class into your module by overriding the `binds` getter of your module. Typical examples to inject are BLoCs, ChangeNotifier classes or stores.
 
-Bind is responsible for configuring object injection.
+A `Bind` object is responsible for configuring the object injection.
 
 ```dart
 class AppModule extends MainModule {
 
- // here will be any class you want to inject into your project (eg bloc, dependency)
+  // Provide a list of dependencies to inject into your project
   @override
   List<Bind> get binds => [
-    Bind((i) => AppBloc()), // using bloc
-    Bind((i) => Counter()), // using ChangeNotifier
+    Bind((_) => AppBloc()), // Injecting a BLoC
+    Bind((_) => Counter()), // Injecting a ChangeNotifier class
   ];
 
-// here will be the routes of your module
+  // Provide all the routes for your module
   @override
   List<Router> get routers => [
-      Router("/", child: (_, args) => HomePage()),
-      Router("/login", child: (_, args) => LoginPage()),
+    Router('/', child: (_, args) => HomePage()),
+    Router('/login', child: (_, args) => LoginPage()),
   ];
-
-// add your main widget here
+  
+  // Provide the root widget associated with your module
   @override
   Widget get bootstrap => AppWidget();
 }
 ```
 
-Let's assume that for example we want to retrieve `AppBloc` inside `HomePage`.
+### Retrieving your injected dependencies in the view
+
+Let's assume the following BLoC has been defined and injected in our module (as in the previous example):
 
 ```dart
-//code in bloc
 import 'package:flutter_modular/flutter_modular.dart' show Disposable;
 
-// you can extend or implement from Disposable to define a discard for your class, if not.
+// In Modular, `Disposable` classes are automatically disposed when out of the module scope.
 
 class AppBloc extends Disposable {
-
-  StreamController controller = StreamController();
+  final controller = StreamController();
 
   @override
   void dispose() {
@@ -434,9 +434,7 @@ class AppBloc extends Disposable {
 }
 ```
 
-## Retrieving in view using injection
-
-You have some ways to retrieve your injected classes.
+There are several ways to retrieve our injected `AppBloc`.
 
 ```dart
 class HomePage extends StatelessWidget {
