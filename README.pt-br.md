@@ -2,7 +2,7 @@
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 
-*Leia em outros idiomas: [Inglês](README.md), [Português](README.pt-br.md).*
+*Este README também está disponível em [Inglês](README.md)*
 
 - **[O que é o Flutter Modular?](#o-que-é-o-flutter-modular)**
 - **[Estrutura Modular](#estrutura-modular)**  
