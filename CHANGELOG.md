@@ -1,3 +1,12 @@
+## [1.2.4] - 23 May 2020
+* Welcome Navigator API 2.0!!!
+* Added push, pushReplacement in Modular.to and Modular.link;
+* Added Modular.navigatorDelegate for tests mocks. Just implements IModularNavigator.
+```dart
+//Modular.to and Modular.link will be called MyNavigatorMock implements!
+Modular.navigatorDelegate = MyNavigatorMock();
+```
+
 ## [1.2.3] - 19 May 2020
 * Health suggestions
 * Added Contributors in README

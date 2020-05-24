@@ -27,8 +27,34 @@ class Modular {
   static RouteLink _routeLink;
   static Old _old = Old();
   static Old get old => _old;
-  static RouteLink get link => _routeLink?.copy();
   static ModularArguments get args => _args?.copy();
+  static IModularNavigator navigatorDelegate;
+
+  static RouteLink get link {
+    assert(
+        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+
+      return MaterialApp(
+        navigatorKey: Modular.navigatorKey,
+        ...
+
+.
+      ''');
+    return navigatorDelegate ?? _routeLink?.copy();
+  }
+
+  static IModularNavigator get to {
+    assert(
+        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+
+      return MaterialApp(
+        navigatorKey: Modular.navigatorKey,
+        ...
+
+.
+      ''');
+    return navigatorDelegate ?? ModularNavigator(_navigatorKey.currentState);
+  }
 
   @visibleForTesting
   static arguments({Map<String, dynamic> params, dynamic data}) {
@@ -46,19 +72,6 @@ class Modular {
   static init(ChildModule module) {
     _initialModule = module;
     bindModule(module, "global==");
-  }
-
-  static IModularNavigator get to {
-    assert(
-        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
-
-      return MaterialApp(
-        navigatorKey: Modular.navigatorKey,
-        ...
-
-.
-      ''');
-    return ModularNavigator(_navigatorKey.currentState);
   }
 
   @visibleForTesting

@@ -650,6 +650,13 @@ main() {
 }
 ```
 
+We find it interesting to leave a native way in Modular to mock the navigation system when used from the Modular.to and Modular.link directives, just implement IModularNavigator and add in Modular.navigatorDelegate
+
+```dart
+//Modular.to and Modular.link will be called MyNavigatorMock implements!
+Modular.navigatorDelegate = MyNavigatorMock();
+```
+
 ## DebugMode
 
 Remove prints debug:
