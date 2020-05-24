@@ -186,6 +186,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mateusfccp",
+      "name": "Mateus Felipe C. C. Pinto",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4605213?v=4",
+      "profile": "https://github.com/mateusfccp",
+      "contributions": [
+        "translation",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
