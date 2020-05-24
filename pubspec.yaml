@@ -1,6 +1,6 @@
 name: flutter_modular
 description: Smart project structure with dependency injection and route management
-version: 1.2.3
+version: 1.2.4
 homepage: https://github.com/Flutterando/modular
 
 environment:
