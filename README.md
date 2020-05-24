@@ -451,13 +451,13 @@ class HomePage extends StatelessWidget {
 ```
 
 By default, objects in Bind are singletons and lazy.
-When Bind is lazy, the object will only be instantiated when it is called for the first time. You can use 'lazy:false' if you want your object to be instantiated immediately.
+When Bind is lazy, the object will only be instantiated when it is called for the first time. You can use 'lazy: false' if you want your object to be instantiated immediately (eager-loaded).
 
 ```dart
 Bind((i) => OtherWidgetNotLazy(), lazy: false),
 ```
 
-If you do not want the injected object to have a single instance, just use 'singleton: false', this will cause your object to be instantiated every time it is called
+If you want the injected object to be instantiated every time it is called (instead of being a singleton instance), you may simple pass `false` to the `singleton` parameter:
 
 ```dart
 Bind((i) => OtherWidgetNotLazy(), singleton: false),
@@ -475,8 +475,8 @@ class MyWidget extends StatefulWidget {
 
 class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 
-  //variable controller
-  //automatic dispose off HomeController
+  // Variable controller
+  // Automatic dispose of HomeController
 
   @override
   Widget build(BuildContext context) {
@@ -490,9 +490,9 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 }
 ```
 
-## Consuming a ChangeNotifier Class
+## Consuming a ChangeNotifier class
 
-Example of a `ChangeNotifier` Class:
+Example of a `ChangeNotifier` class:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -515,10 +515,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text("Home"),
-      ),
+      appBar: AppBar(title: Text("Home")),
       body: Center(
-     // recognize the ChangeNotifier class and rebuild when notifyListeners () is called
+        // By passing your ChangeNotifier class as type parameter, the `builder` will be called every time `notifyListeners` is called
         child: Consumer<Counter>(
           builder: (context, value) {
             return Text('Counter ${value.counter}');
@@ -528,7 +527,7 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // retrieving the class directly and executing the increment method
+          // You can retrive the class directly with `get` and execute the increment method
           get<Counter>().increment();
         },
       ),
@@ -537,9 +536,9 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## Creating Child Modules
+## Creating child modules
 
-You can create other modules in your project, so instead of inheriting from `MainModule`, you should inherit from `ChildModule`.
+You can create as many modules in your project as you wish, but they will be dependent of the main module. To do so, instead of inheriting from `MainModule`, you should inherit from `ChildModule`:
 
 ```dart
 class HomeModule extends ChildModule {
@@ -550,34 +549,31 @@ class HomeModule extends ChildModule {
 
   @override
   List<Router> get routers => [
-    Router("/", child: (_, args) => HomeWidget()),
-    Router("/list", child: (_, args) => ListWidget()),
+    Router('/', child: (_, args) => HomeWidget()),
+    Router('/list', child: (_, args) => ListWidget()),
   ];
 
   static Inject get to => Inject<HomeModule>.of();
-
 }
 ```
 
-From this you can call your modules on the main module route.
+You may then pass the submodule to a `Router` in your main module through the `module` parameter:
 
 ```dart
 class AppModule extends MainModule {
 
   @override
   List<Router> get routers => [
-        Router("/home", module: HomeModule()),
-        //...
-      ];
+    Router('/home', module: HomeModule()),
+  ];
 }
-//...
 ```
 
-Consider splitting your code into modules such as `LoginModule`, and into it placing routes related to that module. Maintaining and sharing code in another project will be much easier.
+We recommend that you split your code in various modules, such as `LoginModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
 
 ### WidgetModule
 
-The same structure as `ChildModule`. Very useful for modular TabBar visualizations.
+`WidgetModule` has the same structure as `MainModule`/`ChildModule`. It is very useful if you want to have a TabBar with modular pages.
 
 ```dart
 class TabModule extends WidgetModule {
@@ -596,10 +592,11 @@ class TabModule extends WidgetModule {
 
 ## RouterOutlet
 
-  RouterOutlet is a solution to use another route system totally detached from the Main Navigation.
-  This is useful when you need that an element to have its own set of routes even though its inside a page on the main route. A practical example of this is its use in a TabBar or Drawer
+A `RouterOutlet` may be used if you need a routing system that is totally detached from the main routing system. This is useful, for example, when you need an element to have its own set of routes, even though it is inside a page on the main route.
 
-``` Dart
+A practical example of this is its use in a `TabBar` or `Drawer`:
+
+```dart
 PageView(
   controller: controller
   children: [
@@ -616,29 +613,30 @@ PageView(
 ),
 ```
 
-NOTE: Navigation within these modules is made only using Nvigator.of(context) using the routes paths literally.
+> **NOTE:** Navigation within these modules are only supported through `Navigator.of(context)` using literal routes paths.
 
-## Lazy Loading
+## Lazy loading
 
-Another benefit you get when working with modules is to load them "lazily". This means that your dependency injection will only be available when you navigate to a module, and as you exit that module, Modular will wipe memory by removing all injections and executing the dispose() methods (if available) on each module. injected class refers to that module.
+Another benefit you get when working with modules is that they are (by default) lazily-loaded. This means that your dependency injection will only be available when you navigate to a module, and when you exit that module, Modular will manage the resources disposal by removing all injections and executing `dispose()` (if available) on each injected dependency.
 
-## Unit Test
+## Unit test
 
-You can use the dependency injection system to replace Links from mock links,as an example of a repository. You can also do it using "Inversion of Control"
+You can use the dependency injection system to replace a `Bind` with a mocked `Bind`, like, for example, a mocked repository. You can also do it using "Inversion of Control" (IoC).
+
+For example, you can make a repository interface (`ILocalStorage`) that satisfies your repository contract requirement and pass it as a paramter type to `Bind`.
 
 ```dart
 @override
-  List<Bind> get binds => [
-        Bind<ILocalStorage>((i) => LocalStorageSharePreferences()),
-      ];
+List<Bind> get binds => [
+  Bind<ILocalStorage>((i) => LocalStorageSharePreferences()),
+];
 ```
 
-We have to import the "flutter_modular_test" to use the methods that will assist with Injection in the test environment.
+Then, on your test file, you import `flutter_modular_test` and provide your mocked repository in the `initModule` as a replacement of your concrete repository:
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-...
 
 main() {
   test('change bind', () {
@@ -650,16 +648,16 @@ main() {
 }
 ```
 
-We find it interesting to leave a native way in Modular to mock the navigation system when used from the Modular.to and Modular.link directives, just implement IModularNavigator and add in Modular.navigatorDelegate
+We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
 ```dart
-//Modular.to and Modular.link will be called MyNavigatorMock implements!
+// Modular.to and Modular.link will be called MyNavigatorMock implements!
 Modular.navigatorDelegate = MyNavigatorMock();
 ```
 
 ## DebugMode
 
-Remove prints debug:
+By default, Modular prints a lot of debug info in the console. You may disable this by disabling `debugMode`:
 
 ```dart
 Modular.debugMode = false;
@@ -667,7 +665,7 @@ Modular.debugMode = false;
 
 ## Roadmap
 
-This is currently our roadmap, please feel free to request additions/changes.
+This is our current roadmap. Please, feel free to request additions/changes.
 
 | Feature                                   | Progress |
 | :-----------------------------------------| :------: |
@@ -684,13 +682,13 @@ This is currently our roadmap, please feel free to request additions/changes.
 
 ## Features and bugs
 
-Please send feature requests and bugs at the issue tracker.
+Please send feature requests and bugs at the [issue tracker](https://github.com/Flutterando/modular/issues).
 
-Created from templates made available by Stagehand under a BSD-style license.
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+This README was created based on templates made available by Stagehand under a BSD-style [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Our thanks goes out to all these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -727,4 +725,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
