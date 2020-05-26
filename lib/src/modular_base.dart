@@ -34,9 +34,10 @@ class Modular {
   /// ```
   /// Modular.link;
   /// ```
-  static RouteLink get link {
-    assert(
-        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+  static IModularNavigator get link {
+    if (navigatorDelegate == null)
+      assert(_navigatorKey != null,
+          '''Add Modular.navigatorKey in your MaterialApp;
 
       return MaterialApp(
         navigatorKey: Modular.navigatorKey,
@@ -53,8 +54,9 @@ class Modular {
   /// Modular.to;
   /// ```
   static IModularNavigator get to {
-    assert(
-        _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
+    if (navigatorDelegate == null)
+      assert(_navigatorKey != null,
+          '''Add Modular.navigatorKey in your MaterialApp;
 
       return MaterialApp(
         navigatorKey: Modular.navigatorKey,
