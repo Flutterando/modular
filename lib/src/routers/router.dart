@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/interfaces/child_module.dart';
 import 'package:flutter_modular/src/interfaces/route_guard.dart';
 import 'package:flutter_modular/src/transitions/transitions.dart';
+import 'package:flutter_modular/src/utils/old.dart';
 
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
     WidgetBuilder, RouteSettings);
@@ -105,20 +106,17 @@ class Router<T> {
     }).toList();
   }
 
-  Widget _disposableGenerate(BuildContext context,
-      {Map<String, ChildModule> injectMap,
-      bool isRouterOutlet,
-      String path,
-      ModularArguments args}) {
-    var actual = ModalRoute.of(context);
-    final _old = Modular.old;
-
+  Widget _disposableGenerate({
+    Map<String, ChildModule> injectMap,
+    bool isRouterOutlet,
+    String path,
+  }) {
     Widget page = _DisposableWidget(
-      child: this.child(context, args),
-      dispose: () {
+      child: (context, args) => this.child(context, args),
+      dispose: (Old old, ModalRoute actual) {
         final List<String> trash = [];
         if (!isRouterOutlet) {
-          Modular.oldProccess(_old);
+          Modular.oldProccess(old);
         }
         if (actual.isCurrent) {
           return;
@@ -144,28 +142,23 @@ class Router<T> {
       {Map<String, ChildModule> injectMap,
       RouteSettings settings,
       bool isRouterOutlet}) {
-    final arguments = Modular.args.copy();
+    final Widget disposablePage = _disposableGenerate(
+        injectMap: injectMap,
+        path: settings.name,
+        isRouterOutlet: isRouterOutlet);
 
     if (this.transition == TransitionType.custom &&
         this.customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
-          return _disposableGenerate(context,
-              args: arguments,
-              injectMap: injectMap,
-              path: settings.name,
-              isRouterOutlet: isRouterOutlet);
+          return disposablePage;
         },
         settings: settings,
         transitionsBuilder: this.customTransition.transitionBuilder,
         transitionDuration: this.customTransition.transitionDuration,
       );
     } else if (this.transition == TransitionType.defaultTransition) {
-      var widgetBuilder = (context) => _disposableGenerate(context,
-          args: arguments,
-          injectMap: injectMap,
-          path: settings.name,
-          isRouterOutlet: isRouterOutlet);
+      var widgetBuilder = (context) => disposablePage;
       if (routeGenerator != null) {
         return routeGenerator(widgetBuilder, settings);
       }
@@ -181,12 +174,8 @@ class Router<T> {
     } else {
       var selectTransition = _transitions[this.transition];
       return selectTransition((context, args) {
-        return _disposableGenerate(context,
-            args: args,
-            injectMap: injectMap,
-            path: settings.name,
-            isRouterOutlet: isRouterOutlet);
-      }, arguments, settings);
+        return disposablePage;
+      }, Modular.args, settings);
     }
   }
 }
@@ -219,8 +208,8 @@ class CustomTransition {
 }
 
 class _DisposableWidget extends StatefulWidget {
-  final Function dispose;
-  final Widget child;
+  final Function(Old old, ModalRoute actual) dispose;
+  final Widget Function(BuildContext context, ModularArguments args) child;
 
   _DisposableWidget({
     Key key,
@@ -233,14 +222,31 @@ class _DisposableWidget extends StatefulWidget {
 }
 
 class __DisposableWidgetState extends State<_DisposableWidget> {
+  Old old;
+  ModalRoute actual;
+  ModularArguments args;
+
+  @override
+  void initState() {
+    super.initState();
+    old = Modular.old;
+    args = Modular.args;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    actual = ModalRoute.of(context);
+  }
+
   @override
   void dispose() {
-    widget.dispose();
+    widget.dispose(old, actual);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return widget.child(context, args);
   }
 }
