@@ -55,6 +55,7 @@ ${typesInRequest.join('\n')}
     return bindValue;
   }
 
+  /// Dispose bind from the memory
   bool remove<T>() {
     Type type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -81,6 +82,7 @@ ${typesInRequest.join('\n')}
     } catch (e) {}
   }
 
+  /// Dispose all bind from the memory
   cleanInjects() {
     for (Type key in _singletonBinds.keys) {
       var _bind = _singletonBinds[key];
@@ -98,6 +100,7 @@ ${typesInRequest.join('\n')}
     return B;
   }
 
+  /// Create a instance of all binds isn't lazy Loaded
   void instance() {
     _binds.forEach((bindElement) {
       if (!bindElement.lazy) {
