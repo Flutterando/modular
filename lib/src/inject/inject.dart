@@ -12,7 +12,7 @@ class Inject<T> {
 
   factory Inject.of() => Inject(tag: T.toString());
 
-  ///get injected dependency
+  /// get injected dependency
   B get<B>([Map<String, dynamic> params]) {
     params ??= {};
     if (tag == null) {
@@ -27,6 +27,7 @@ class Inject<T> {
     return Modular.args;
   }
 
+  /// get current modulex
   RouteLink get link => Modular.link;
 
   dispose<B>() {
