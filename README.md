@@ -290,7 +290,7 @@ If you use transition in a module, all routes in that module will inherit this t
 
 ### Custom transition animation route
 
-You can also use a custom transition animation by setting the Router parameters `transistion` and `customTransition` with `TransitionType.custom` and your `CustomTransition`, respectively:
+You can also use a custom transition animation by setting the Router parameters `transition` and `customTransition` with `TransitionType.custom` and your `CustomTransition`, respectively:
 
 ```dart
 Router('/product',
