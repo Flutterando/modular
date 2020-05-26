@@ -205,6 +205,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "toshiossada",
+      "name": "Toshi Ossada",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2637049?v=4",
+      "profile": "http://toshiossada.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
