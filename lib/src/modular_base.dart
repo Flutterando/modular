@@ -30,6 +30,11 @@ class Modular {
   static ModularArguments get args => _args?.copy();
   static IModularNavigator navigatorDelegate;
 
+  /// Return RouteLink of the current module
+  ///
+  /// ```
+  /// Modular.link;
+  /// ```
   static RouteLink get link {
     assert(
         _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;
@@ -43,6 +48,11 @@ class Modular {
     return navigatorDelegate ?? _routeLink?.copy();
   }
 
+  /// Return Modular.navigatorKey
+  ///
+  /// ```
+  /// Modular.to;
+  /// ```
   static IModularNavigator get to {
     assert(
         _navigatorKey != null, '''Add Modular.navigatorKey in your MaterialApp;

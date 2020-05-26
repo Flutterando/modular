@@ -24,7 +24,8 @@ class ModularNavigator implements IModularNavigator {
         );
       },
       barrierDismissible: barrierDismissible,
-      barrierLabel: "barier-label", //MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel:
+          "barier-label", //MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 150),
       transitionBuilder: _buildMaterialDialogTransitions,
@@ -50,13 +51,17 @@ class ModularNavigator implements IModularNavigator {
   bool canPop() => navigator.canPop();
 
   @override
-  Future<bool> maybePop<T extends Object>([T result]) => navigator.maybePop(result);
+  Future<bool> maybePop<T extends Object>([T result]) =>
+      navigator.maybePop(result);
 
   @override
   void pop<T extends Object>([T result]) => navigator.pop(result);
 
   @override
-  Future<T> popAndPushNamed<T extends Object, TO extends Object>(String routeName, {TO result, Object arguments}) =>
+  Future<T> popAndPushNamed<T extends Object, TO extends Object>(
+          String routeName,
+          {TO result,
+          Object arguments}) =>
       navigator.popAndPushNamed(
         routeName,
         result: result,
@@ -64,7 +69,8 @@ class ModularNavigator implements IModularNavigator {
       );
 
   @override
-  void popUntil(bool Function(Route) predicate) => navigator.popUntil(predicate);
+  void popUntil(bool Function(Route) predicate) =>
+      navigator.popUntil(predicate);
 
   @override
   Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
@@ -74,15 +80,24 @@ class ModularNavigator implements IModularNavigator {
       navigator.pushNamed(routeName, arguments: arguments);
 
   @override
-  Future<T> pushNamedAndRemoveUntil<T extends Object>(String newRouteName, bool Function(Route) predicate, {Object arguments}) =>
-      navigator.pushNamedAndRemoveUntil(newRouteName, predicate, arguments: arguments);
+  Future<T> pushNamedAndRemoveUntil<T extends Object>(
+          String newRouteName, bool Function(Route) predicate,
+          {Object arguments}) =>
+      navigator.pushNamedAndRemoveUntil(newRouteName, predicate,
+          arguments: arguments);
 
   @override
-  Future<T> pushReplacementNamed<T extends Object, TO extends Object>(String routeName, {TO result, Object arguments}) =>
-      navigator.pushReplacementNamed(routeName, result: result, arguments: arguments);
+  Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
+          String routeName,
+          {TO result,
+          Object arguments}) =>
+      navigator.pushReplacementNamed(routeName,
+          result: result, arguments: arguments);
 
   @override
-  Future<T> pushReplacement<T extends Object, TO extends Object>(Route<T> newRoute, {TO result}) =>
+  Future<T> pushReplacement<T extends Object, TO extends Object>(
+          Route<T> newRoute,
+          {TO result}) =>
       navigator.pushReplacement(newRoute, result: result);
 
   @override
@@ -131,7 +146,8 @@ class DialogRoute<T> extends PopupRoute<T> {
   final RouteTransitionsBuilder _transitionBuilder;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
     return Semantics(
       child: _pageBuilder(context, animation, secondaryAnimation),
       scopesRoute: true,
@@ -140,7 +156,8 @@ class DialogRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
     if (_transitionBuilder == null) {
       return FadeTransition(
           opacity: CurvedAnimation(
