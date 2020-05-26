@@ -1,3 +1,9 @@
+## [1.2.5] - 26 May 2020
+* Fix Modular.link bug
+* Smooth Animation Navigator: 56% faster navigation animations
+
+
+
 ## [1.2.4] - 23 May 2020
 * Welcome Navigator API 2.0!!!
 * Added push, pushReplacement in Modular.to and Modular.link;
