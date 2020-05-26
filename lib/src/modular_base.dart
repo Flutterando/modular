@@ -19,7 +19,6 @@ class Modular {
   static const String initialRoute = '/';
   static bool debugMode = !kReleaseMode;
   static bool isCupertino = false;
-
   static Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
   static GlobalKey<NavigatorState> _navigatorKey;
