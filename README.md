@@ -1,6 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master) 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -720,6 +720,9 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
     <td align="center"><a href="http://www.iatec.com"><img src="https://avatars0.githubusercontent.com/u/17324575?v=4" width="100px;" alt=""/><br /><sub><b>Tiagosito</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=tiagosito" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mateusfccp"><img src="https://avatars2.githubusercontent.com/u/4605213?v=4" width="100px;" alt=""/><br /><sub><b>Mateus Felipe C. C. Pinto</b></sub></a><br /><a href="#translation-mateusfccp" title="Translation">🌍</a> <a href="https://github.com/Flutterando/modular/commits?author=mateusfccp" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/pgrimaud"><img src="https://avatars1.githubusercontent.com/u/1866496?v=4" width="100px;" alt=""/><br /><sub><b>Pierre Grimaud</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=pgrimaud" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://toshiossada.com"><img src="https://avatars2.githubusercontent.com/u/2637049?v=4" width="100px;" alt=""/><br /><sub><b>Toshi Ossada</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=toshiossada" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=toshiossada" title="Code">💻</a></td>
   </tr>
 </table>
 
