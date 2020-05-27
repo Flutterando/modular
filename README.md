@@ -649,6 +649,64 @@ main() {
 }
 ```
 
+Before write in your test file, if you want to improve readability you try to import `flutter_modular_test` and define your mocked module using `IModularTest` and override his methods to create a mock similar to `ChildModule`, when writing your tests:
+
+The first step is write a class like that:
+
+```dart
+
+import 'package:flutter_modular/flutter_modular.dart';
+import 'module_helper_base.dart';
+
+class InitAppModuleHelper extends IModularTest {
+  
+  @override
+  List<Bind> binds() {
+    LocalStorageMock localStorageMock = LocalStorageMock();
+    return [
+      Bind<ILocalStorage>((i) => localStorageMock),
+    ];
+  }
+
+  @override
+  ChildModule module() {
+    return AppModule();
+  }
+
+  @override
+  List<IModularTest> modularDependencies() {
+    return [];
+  }
+
+  
+}
+
+```
+
+The right way to use is write one of that per module, its important to remember to put the modular dependecies in `modularDependencies()` because when you load this module for testing, all related modules will be load together. In that case the `AppModule` is the root module and it has no one dependency.
+
+Then, on your test file, you import your custom `IModularTest` and call it like the example:
+
+`note:` by default when use `IModularTest` each `InitAppModuleHelper().load()` will clean and rebuid the modular and his injects, this is fine to do
+each test block independent and make more easy to write modular tests without noisy.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+main() {
+  test('change bind', () {
+    InitAppModuleHelper().load();
+    //do something
+  });
+  test('change bind', () {
+    InitAppModuleHelper().load();
+    //do something
+  });
+}
+```
+Remeber you only need to call the most deeper `IModularTest` and it can load all dependency modules you have added on your mock definition.
+
 We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
 ```dart
