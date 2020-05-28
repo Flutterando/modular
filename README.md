@@ -649,22 +649,22 @@ main() {
 }
 ```
 
-Before write in your test file, if you want to improve readability you try to import `flutter_modular_test` and define your mocked module using `IModularTest` and override his methods to create a mock similar to `ChildModule`, when writing your tests:
+Another way is, before write in your test file, if you want to improve readability you might to import `flutter_modular_test` and define your mocked module using `IModularTest` and override his methods to create a mock, similar as `ChildModule`, when writing your tests:
 
 The first step is write a class like that:
 
 ```dart
 
 import 'package:flutter_modular/flutter_modular.dart';
-import 'module_helper_base.dart';
+import 'package:flutter_modular/flutter_modular_test.dart';
 
 class InitAppModuleHelper extends IModularTest {
   
   @override
   List<Bind> binds() {
-    LocalStorageMock localStorageMock = LocalStorageMock();
+    
     return [
-      Bind<ILocalStorage>((i) => localStorageMock),
+       Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
     ];
   }
 
@@ -674,8 +674,8 @@ class InitAppModuleHelper extends IModularTest {
   }
 
   @override
-  List<IModularTest> modularDependencies() {
-    return [];
+  IModularTest modularDependency() {
+    return null;
   }
 
   
@@ -683,11 +683,11 @@ class InitAppModuleHelper extends IModularTest {
 
 ```
 
-The right way to use is write one of that per module, its important to remember to put the modular dependecies in `modularDependencies()` because when you load this module for testing, all related modules will be load together. In that case the `AppModule` is the root module and it has no one dependency.
+The right way to use is write one of that per module, its important to remember to put the modular dependecies in `modularDependency()` because when you load this module for testing, all related modules will be load together. In this case the `AppModule` is the root module and it has no one dependency.
 
 Then, on your test file, you import your custom `IModularTest` and call it like the example:
 
-`note:` by default when use `IModularTest` each `InitAppModuleHelper().load()` will clean and rebuid the modular and his injects, this is fine to do
+> **NOTE:** by default when use `IModularTest` each `InitAppModuleHelper().load()` will clean and rebuid the modular and his injects, this is fine to do
 each test block independent and make more easy to write modular tests without noisy.
 
 ```dart
@@ -705,7 +705,58 @@ main() {
   });
 }
 ```
-Remeber you only need to call the most deeper `IModularTest` and it can load all dependency modules you have added on your mock definition.
+Remember you only need to call the most deeper `IModularTest` and it can load all dependency modules you have added on your mock definition, like the next example:
+
+The first step is define a `IModularTest` to another module, pay attention that the `HomeModule` is a child of `AppModule`, because of that you need to put the `AppModule` on `modularDependency`.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_modular/src/interfaces/child_module.dart';
+import 'package:flutter_modular/src/inject/bind.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../app_module_test_modular.dart';
+import 'home_module.dart';
+
+class InitHomeModuleHelper extends IModularTest {
+ 
+  @override
+  List<Bind> binds() {
+    return [
+    ];
+  }
+
+  @override
+  ChildModule module() {
+    return HomeModule();
+  }
+
+  @override
+  IModularTest modularDependency() {
+    return InitAppModuleHelper();
+    
+  }
+}
+```
+
+Now we can init the `HomeModule` and all his dependencies just by typing `InitHomeModuleHelper().load()` on your `test_file`. Dont matters how deeper is your module, this way load all dependencies in a batch you only need to create a `IModuleTest` for each one and put your dependencies correctly and it will works fine.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'app/modules/home/home_module_test_modular.dart';
+main() {
+  test('change bind', () {
+    InitHomeModuleHelper().load();
+    //do something
+  });
+  test('change bind', () {
+    InitHomeModuleHelper().load();
+    //do something
+  });
+}
+
+```
 
 We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
