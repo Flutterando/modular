@@ -16,3 +16,4 @@ class LocalMock implements ILocalStorage {
     throw UnimplementedError();
   }
 }
+
