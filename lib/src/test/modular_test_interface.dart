@@ -1,9 +1,6 @@
-// import '../../flutter_modular.dart';
-
 import 'package:flutter/material.dart';
-
-import '../../flutter_modular.dart';
-import 'utils_test.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/flutter_modular_test.dart';
 
 enum ModularTestType { resetModule, keepModulesOnMemory }
 
@@ -25,9 +22,9 @@ abstract class IModularTest {
       isLoadDependency,
     );
     List<Bind> binds = this.getNewOrDefaultBinds(changeBinds);
-
     memoryManage(this.modularTestType);
-    this.loadModularDependency(isLoadDependency, dependency);
+    this.loadModularDependency(isLoadDependency, changeBinds, dependency);
+
     initModule(
       this.module(),
       changeBinds: binds,
@@ -53,13 +50,26 @@ abstract class IModularTest {
 
   @visibleForTesting
   List<Bind> getNewOrDefaultBinds(List<Bind> changeBinds) {
-    changeBinds ??= this.binds();
-    assert(
-      changeBinds != null,
-      "changeBinds must not be null",
-    );
+    final mergedChangeBinds = _mergeBinds(changeBinds, this.binds());
 
-    return changeBinds;
+    return mergedChangeBinds;
+  }
+
+  //b has priority
+  List<Bind> _mergeBinds(List<Bind> src, List<Bind> dest) {
+    final resultBinds = dest ?? [];
+
+    for (var bind in (src ?? [])) {
+      var changedBind = resultBinds.firstWhere(
+        (item) => item.runtimeType == bind.runtimeType,
+        orElse: () => null,
+      );
+
+      if (changedBind != null) resultBinds.remove(changedBind);
+      resultBinds.add(bind);
+    }
+
+    return resultBinds;
   }
 
   @visibleForTesting
@@ -71,10 +81,11 @@ abstract class IModularTest {
   @visibleForTesting
   void loadModularDependency(
     bool isLoadDependency,
+    List<Bind> changeBinds,
     IModularTest dependency,
   ) {
     if (isLoadDependency && dependency != null) {
-      dependency.load();
+      dependency.load(changeBinds: changeBinds);
     }
   }
 

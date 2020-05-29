@@ -15,6 +15,7 @@ import 'app/shared/local_mock.dart';
 import 'app/shared/local_storage_shared.dart';
 
 class CustomModuleTestMock extends Mock implements IModularTest {}
+class CustomLocalStorage extends Mock implements ILocalStorage {}
 
 
 main() {
@@ -81,7 +82,8 @@ main() {
     test('ILocalStorage getNewOrDefaultBinds', () {
       IModularTest modularTest = InitAppModuleHelper();
 
-      expect(modularTest.getNewOrDefaultBinds([]), isEmpty);
+      expect(modularTest.getNewOrDefaultBinds([]).length,
+          modularTest.binds().length);
       expect(modularTest.getNewOrDefaultBinds(null), isNotEmpty);
       expect(modularTest.getNewOrDefaultBinds(null).first,
           isInstanceOf<Bind<ILocalStorage>>());
@@ -108,13 +110,14 @@ main() {
       IModularTest modularTest = InitAppModuleHelper();
 
       final customModule = CustomModuleTestMock();
-      when(customModule.load()).thenReturn(() {});
+      when(customModule.load(changeBinds: anyNamed("changeBinds")))
+          .thenReturn(() {});
 
-      modularTest.loadModularDependency(true, customModule);
-      verify(customModule.load()).called(1);
+      modularTest.loadModularDependency(true, [], customModule);
+      verify(customModule.load(changeBinds: anyNamed("changeBinds"))).called(1);
 
-      modularTest.loadModularDependency(false, customModule);
-      verifyNever(customModule.load());
+      modularTest.loadModularDependency(false, [], customModule);
+      verifyNever(customModule.load(changeBinds: anyNamed("changeBinds")));
     });
     test('ILocalStorage load HomeModule', () {
       IModularTest homeModuleTest = InitHomeModuleHelper();
@@ -180,4 +183,22 @@ main() {
       Modular.removeModule(app);
     });
   });
+
+  test('Changing binds of parent modules', () {
+      IModularTest homeModuleTest = InitHomeModuleHelper();
+
+      homeModuleTest.load();
+      ILocalStorage instance = Modular.get();
+
+      expect(
+        instance,
+        isNotNull,
+      );
+
+      homeModuleTest.load(
+          changeBinds: [Bind<ILocalStorage>((i) => CustomLocalStorage())]);
+
+      expect(instance.runtimeType,
+          isNot(equals(Modular.get<ILocalStorage>().runtimeType)));
+    });
 }
