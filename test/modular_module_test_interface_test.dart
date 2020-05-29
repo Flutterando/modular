@@ -16,6 +16,7 @@ import 'app/shared/local_storage_shared.dart';
 
 class CustomModuleTestMock extends Mock implements IModularTest {}
 
+
 main() {
   group("change bind", () {
     AppModule app = AppModule();
@@ -42,6 +43,7 @@ main() {
 
     test('ILocalStorage is not equal when reload by default', () {
       ILocalStorage localStorageAfterReload = Modular.get<ILocalStorage>();
+      
       expect(localStorageBeforeReload.hashCode,
           isNot(equals(localStorageAfterReload.hashCode)));
     });

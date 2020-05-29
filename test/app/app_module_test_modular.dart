@@ -16,6 +16,7 @@ class InitAppModuleHelper extends IModularTest {
 
   @override
   List<Bind> binds() {
+    
     return [
       Bind<ILocalStorage>((i) => LocalMock()),
     ];
