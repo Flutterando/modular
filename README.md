@@ -41,6 +41,7 @@ _This README is also available in [Brazilian Portuguese](README.pt-br.md)._
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
+  - [Modular test helper](#modular-test-helper)
   - [DebugMode](#debugmode)
 
 - **[Roadmap](#roadmap)**
@@ -699,7 +700,7 @@ The right way to use is writing as least one of that per module, its important t
 ### Load Modular helper on tests
 
 1. By default when use `IModularTest` each `InitAppModuleHelper().load()` will clean and rebuid the modular and his injects, this is fine to do
-each test block independent and make more easy to write modular tests without noisy.
+each test block independent and make more easy to write modular tests without noise.
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -717,7 +718,9 @@ main() {
 }
 ```
 
-2. To keep previous modular and its injects you can pass the param `modularTestType` (Same behavior as use `initModule()`):
+2. To keep previous modular and it injects you can pass the param `modularTestType`.
+> **NOTE:** With `modularTestType.keepModulesOnMemory`, it won't clean the modules that already have been loaded. (It doesn't call `Modular.removeModule()`)
+
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -794,7 +797,7 @@ class InitHomeModuleHelper extends IModularTest {
 }
 ```
 
-Now we can init the `HomeModule` and all his dependencies just by typing `InitHomeModuleHelper().load()` on your `test_file`. Dont matters how deeper is your module, this way load all dependencies in a batch, you only need to create a `IModuleTest` for each one and put your dependencies correctly and it will works fine.
+Now we can init the `HomeModule` and all his dependencies just by typing `InitHomeModuleHelper().load()` on your `test_file`. It doesn't matter how deep is your module, this way all dependencies are recursively loaded in a batch, you only need to create a `IModuleTest` for each one and put your dependencies correctly and it will work fine.
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
