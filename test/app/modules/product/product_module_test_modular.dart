@@ -6,14 +6,14 @@ import 'package:flutter_modular/src/inject/bind.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../app_module_test_modular.dart';
-import 'home_module.dart';
+import 'product_module.dart';
 
 
 
-class InitHomeModuleHelper extends IModularTest {
+class InitProductModuleHelper extends IModularTest {
   final ModularTestType modularTestType;
 
-  InitHomeModuleHelper({this.modularTestType: ModularTestType.resetModules});
+  InitProductModuleHelper({this.modularTestType: ModularTestType.resetModules});
 
   @override
   List<Bind> binds() {
@@ -23,7 +23,7 @@ class InitHomeModuleHelper extends IModularTest {
 
   @override
   ChildModule module() {
-    return HomeModule();
+    return ProductModule();
   }
 
   @override

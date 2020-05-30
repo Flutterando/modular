@@ -12,7 +12,7 @@ import 'shared/local_mock.dart';
 class InitAppModuleHelper extends IModularTest {
   final ModularTestType modularTestType;
 
-  InitAppModuleHelper({this.modularTestType: ModularTestType.resetModule});
+  InitAppModuleHelper({this.modularTestType: ModularTestType.resetModules});
 
   @override
   List<Bind> binds() {
