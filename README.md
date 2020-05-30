@@ -718,7 +718,7 @@ main() {
 }
 ```
 
-2. To keep previous modular and it injects you can pass the param `modularTestType`.
+2. To keep previous modular and its injects you can pass the param `modularTestType`.
 > **NOTE:** With `modularTestType.keepModulesOnMemory`, it won't clean the modules that already have been loaded. (It doesn't call `Modular.removeModule()`)
 
 
