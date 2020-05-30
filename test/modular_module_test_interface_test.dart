@@ -8,7 +8,8 @@ import 'app/app_module_test_modular.dart';
 import 'app/modules/home/home_module.dart';
 import 'app/modules/home/home_module_test_modular.dart';
 import 'app/modules/home/home_widget.dart';
-import 'app/modules/product/product_module.dart';
+
+import 'app/modules/product/product_module_test_modular.dart';
 import 'app/shared/ILocalRepository.dart';
 import 'app/shared/app_info.state.dart';
 import 'app/shared/local_mock.dart';
@@ -20,27 +21,26 @@ class CustomLocalStorage extends Mock implements ILocalStorage {}
 
 main() {
   group("change bind", () {
-    AppModule app = AppModule();
-    InitAppModuleHelper().load();
-
+    IModularTest appModularHelper = InitAppModuleHelper();
+    setUp(() {
+      appModularHelper.load();
+    });
     test('ILocalStorage is a LocalMock', () {
       expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
     });
 
-    setUp(() {
-      InitAppModuleHelper().load();
-    });
-
     tearDown(() {
-      Modular.removeModule(app);
+      appModularHelper.memoryManage(ModularTestType.resetModules);
     });
   });
   group("IModuleTest", () {
+    ILocalStorage localStorageBeforeReload;
     setUp(() {
       InitAppModuleHelper().load();
+      Modular.get<ILocalStorage>();
     });
 
-    ILocalStorage localStorageBeforeReload = Modular.get<ILocalStorage>();
+    // ILocalStorage localStorageBeforeReload = ;
 
     test('ILocalStorage is not equal when reload by default', () {
       ILocalStorage localStorageAfterReload = Modular.get<ILocalStorage>();
@@ -56,7 +56,7 @@ main() {
       expect(localStorageBeforeReload.hashCode,
           equals(localStorageAfterReload.hashCode));
     });
-    test('ILocalStorage Change bind on load on runtime', () {
+    test('ILocalStorage Change bind when load on runtime', () {
       IModularTest modularTest = InitAppModuleHelper();
       modularTest.load();
 
@@ -119,7 +119,7 @@ main() {
       modularTest.memoryManage(ModularTestType.keepModulesOnMemory);
       expect(Modular.get<ILocalStorage>(), isNotNull);
 
-      modularTest.memoryManage(ModularTestType.resetModule);
+      modularTest.memoryManage(ModularTestType.resetModules);
 
       expect(
         () => Modular.get<ILocalStorage>(),
@@ -189,12 +189,11 @@ main() {
         Modular.get<ILocalStorage>(),
         isInstanceOf<LocalMock>(),
       );
-      
+
       expect(
-        ()=>Modular.get<String>(),
+        () => Modular.get<String>(),
         throwsA(isInstanceOf<ModularError>()),
       );
-      
     });
 
     // tearDown(() {
@@ -202,12 +201,12 @@ main() {
     // });
   });
   group("navigation test", () {
-    AppModule app = AppModule();
-    HomeModule home = HomeModule();
-    ProductModule product = ProductModule();
+    //because both share the same parent you can pass by changeDependency and it can load in a row
+    IModularTest modularProductTest = InitProductModuleHelper();
     setUp(() {
-      initModule(app, initialModule: true);
-      initModules([home, product]);
+      InitProductModuleHelper().load(
+        changedependency: InitHomeModuleHelper(),
+      );
     });
     testWidgets('on pushNamed modify actualRoute ',
         (WidgetTester tester) async {
@@ -216,16 +215,14 @@ main() {
       expect(Modular.link.path, '/prod');
     });
     tearDown(() {
-      Modular.removeModule(product);
-      Modular.removeModule(home);
-      Modular.removeModule(app);
+      modularProductTest.memoryManage(ModularTestType.resetModules);
     });
   });
   group("arguments test", () {
-    AppModule app = AppModule();
-    HomeModule home = HomeModule();
+    IModularTest modularHomeTest = InitHomeModuleHelper();
+
     setUpAll(() {
-      initModule(app, initialModule: true);
+      modularHomeTest.load();
     });
     testWidgets("Arguments Page id", (WidgetTester tester) async {
       await tester.pumpWidget(buildTestableWidget(ArgumentsPage(
@@ -241,8 +238,7 @@ main() {
       expect(titleFinder, findsOneWidget);
     });
     tearDownAll(() {
-      Modular.removeModule(home);
-      Modular.removeModule(app);
+      modularHomeTest.memoryManage(ModularTestType.resetModules);
     });
   });
 }

@@ -694,9 +694,7 @@ class InitAppModuleHelper extends IModularTest {
 
 ```
 
-The right way to use is writing one of that per module, its important to remember to put the modular dependecies in `modularDependency()` because when you load this module for testing, all related modules will be load together. In this case the `AppModule` is the root module and it hasn`t dependency.
-
-Then, on your test file, you import your custom `IModularTest` and call it like the example:
+The right way to use is writing as least one of that per module, its important to remember to put the modular dependecies in `modularDependency()`. its useful because when you load this module for testing, all related modules will be load together. In this case the `AppModule` is the root module and it hasn`t dependency.
 
 ### Load Modular helper on tests
 
@@ -719,7 +717,7 @@ main() {
 }
 ```
 
-2. To keep previous modular and it injects you can pass the param `modularTestType` (Same behavior as use `initModule()`).
+2. To keep previous modular and its injects you can pass the param `modularTestType` (Same behavior as use `initModule()`):
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -730,6 +728,7 @@ main() {
   test('test1', () {
     InitAppModuleHelper().load();
   });
+
   test('test2', () {
     InitAppModuleHelper(
       modularTestType: ModularTestType.keepModulesOnMemory
@@ -741,8 +740,9 @@ main() {
 
 3. Changing the binds when `load()` the module like `initModule()`.
 
-> **NOTE:** It also can change binds of another modules that are its dependencies, including the MainModule.  
-Ex: When you have a tree like InitAppModuleHelper <- InitHomeModuleHelper, when you call `InitHomeModuleHelper.load(changeBinds:[])` it will be able to change binds on `HomeModule` and `AppModule`. Because of that you only need one changeBinds array and it can make all the changes for you.
+> **NOTE:** It also can change binds of another modules that are its dependencies until find the MainModule.  
+
+Ex: When you have a tree like `InitAppModuleHelper` <- `InitHomeModuleHelper`, when you call `InitHomeModuleHelper.load(changeBinds:[<newBinds>])` it will be able to change binds on `HomeModule` and `AppModule`. Because of that you only need one changeBinds array and it can make all the changes for you see on section- [Create helper on child module](#create-helper-for-a-child-module).
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -814,7 +814,7 @@ main() {
 
 ### Mocking with mockito
 
-1. Add the mock into the `bind()` list on your `IModularTest` helper.
+1. Add the mock into the `bind()` list on your `IModularTest` helper, if you dont need to change during the tests.
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -872,7 +872,9 @@ main() {
   group("IModuleTest", () {
     setUp(() {
       InitAppModuleHelper().load(changeBinds:[
+        
         Bind<ILocalStorage>((i) => localStorageMock),
+
       ]);
       ILocalStorage iLocalStorage = Modular.get<ILocalStorage>();
     });

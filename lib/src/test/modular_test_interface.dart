@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/flutter_modular_test.dart';
 
-enum ModularTestType { resetModule, keepModulesOnMemory }
+enum ModularTestType { resetModules, keepModulesOnMemory }
 
 abstract class IModularTest {
   final ModularTestType modularTestType;
-  IModularTest({this.modularTestType: ModularTestType.resetModule});
+  IModularTest({this.modularTestType: ModularTestType.resetModules});
 
   ChildModule module();
   List<Bind> binds();
@@ -28,6 +28,7 @@ abstract class IModularTest {
     initModule(
       this.module(),
       changeBinds: binds,
+      initialModule: this.isMainModule
     );
   }
 
@@ -75,7 +76,7 @@ abstract class IModularTest {
 
   @visibleForTesting
   void memoryManage(ModularTestType modularTestType) {
-    if (modularTestType == ModularTestType.resetModule)
+    if (modularTestType == ModularTestType.resetModules)
       Modular.removeModule(this.module());
   }
 
