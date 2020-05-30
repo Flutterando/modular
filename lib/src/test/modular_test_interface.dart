@@ -17,11 +17,11 @@ abstract class IModularTest {
     List<Bind> changeBinds,
     bool isLoadDependency = true,
   }) {
-    IModularTest dependency = getNewOrDefaultDendencies(
+    IModularTest dependency = getDendencies(
       changedependency,
       isLoadDependency,
     );
-    List<Bind> binds = this.getNewOrDefaultBinds(changeBinds);
+    List<Bind> binds = this.getBinds(changeBinds);
     memoryManage(this.modularTestType);
     this.loadModularDependency(isLoadDependency, changeBinds, dependency);
 
@@ -32,7 +32,7 @@ abstract class IModularTest {
   }
 
   @visibleForTesting
-  IModularTest getNewOrDefaultDendencies(
+  IModularTest getDendencies(
     IModularTest changedependency,
     bool isLoadDependency,
   ) {
@@ -49,17 +49,18 @@ abstract class IModularTest {
       dependency == null && isLoadDependency && isMainModule;
 
   @visibleForTesting
-  List<Bind> getNewOrDefaultBinds(List<Bind> changeBinds) {
-    final mergedChangeBinds = _mergeBinds(changeBinds, this.binds());
+  List<Bind> getBinds(List<Bind> changeBinds) {
+    final mergedChangeBinds = mergeBinds(changeBinds, this.binds());
 
     return mergedChangeBinds;
   }
 
-  //b has priority
-  List<Bind> _mergeBinds(List<Bind> src, List<Bind> dest) {
-    final resultBinds = dest ?? [];
+  
+  @visibleForTesting
+  List<Bind> mergeBinds(List<Bind> changeBinds, List<Bind> defaultBinds) {
+    final resultBinds = defaultBinds ?? [];
 
-    for (var bind in (src ?? [])) {
+    for (var bind in (changeBinds ?? [])) {
       var changedBind = resultBinds.firstWhere(
         (item) => item.runtimeType == bind.runtimeType,
         orElse: () => null,

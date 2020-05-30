@@ -15,8 +15,8 @@ import 'app/shared/local_mock.dart';
 import 'app/shared/local_storage_shared.dart';
 
 class CustomModuleTestMock extends Mock implements IModularTest {}
-class CustomLocalStorage extends Mock implements ILocalStorage {}
 
+class CustomLocalStorage extends Mock implements ILocalStorage {}
 
 main() {
   group("change bind", () {
@@ -44,7 +44,7 @@ main() {
 
     test('ILocalStorage is not equal when reload by default', () {
       ILocalStorage localStorageAfterReload = Modular.get<ILocalStorage>();
-      
+
       expect(localStorageBeforeReload.hashCode,
           isNot(equals(localStorageAfterReload.hashCode)));
     });
@@ -71,22 +71,44 @@ main() {
       expect(localStorageAfterChangeBind.runtimeType,
           equals(LocalStorageSharePreference));
     });
-    test('ILocalStorage getNewOrDefaultDendencies', () {
+    test('ILocalStorage getDendencies', () {
       IModularTest modularTest = InitAppModuleHelper();
 
-      expect(modularTest.getNewOrDefaultDendencies(null, true), isNull);
-      expect(
-          modularTest.getNewOrDefaultDendencies(InitAppModuleHelper(), true),
-          isNotNull);
+      expect(modularTest.getDendencies(null, true), isNull);
+      expect(modularTest.getDendencies(InitAppModuleHelper(), true), isNotNull);
     });
-    test('ILocalStorage getNewOrDefaultBinds', () {
+    test('ILocalStorage getBinds', () {
       IModularTest modularTest = InitAppModuleHelper();
 
-      expect(modularTest.getNewOrDefaultBinds([]).length,
-          modularTest.binds().length);
-      expect(modularTest.getNewOrDefaultBinds(null), isNotEmpty);
-      expect(modularTest.getNewOrDefaultBinds(null).first,
+      expect(modularTest.getBinds([]).length, modularTest.binds().length);
+      expect(modularTest.getBinds(null), isNotEmpty);
+      expect(modularTest.getBinds(null).first,
           isInstanceOf<Bind<ILocalStorage>>());
+
+      Bind<String> stringBind = Bind<String>((i) => "teste");
+      List<Bind> changeBinds = [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
+        stringBind,
+      ];
+
+      expect(modularTest.getBinds(changeBinds), containsAll(changeBinds));
+    });
+    test('ILocalStorage mergeBinds', () {
+      IModularTest modularTest = InitAppModuleHelper();
+      Bind<String> stringBind = Bind<String>((i) => "teste");
+      List<Bind> changeBinds = [
+        Bind<ILocalStorage>((i) => LocalMock()),
+      ];
+      List<Bind> defaultBinds = [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
+        stringBind,
+      ];
+
+      expect(modularTest.mergeBinds(changeBinds, defaultBinds),
+          containsAll([changeBinds.first, stringBind]));
+      expect(modularTest.mergeBinds(changeBinds, null), equals(changeBinds));
+      expect(modularTest.mergeBinds(null, defaultBinds), equals(defaultBinds));
+      expect(modularTest.mergeBinds(null, null), equals([]));
     });
     test('ILocalStorage memoryManage', () {
       IModularTest modularTest = InitAppModuleHelper();
@@ -106,7 +128,7 @@ main() {
         ),
       );
     });
-    test('ILocalStorage loadModularDependencies', () {
+    test('ILocalStorage loadModularDependency', () {
       IModularTest modularTest = InitAppModuleHelper();
 
       final customModule = CustomModuleTestMock();
@@ -133,6 +155,46 @@ main() {
         Modular.get<AppState>(),
         isNotNull,
       );
+    });
+
+    test('Changing binds of parent modules', () {
+      IModularTest homeModuleTest = InitHomeModuleHelper();
+
+      homeModuleTest.load();
+      ILocalStorage instance = Modular.get();
+
+      expect(
+        instance,
+        isInstanceOf<LocalMock>(),
+      );
+
+      homeModuleTest.load(changeBinds: [
+        Bind<ILocalStorage>(
+          (i) => CustomLocalStorage(),
+        )
+      ]);
+
+      expect(
+        Modular.get<ILocalStorage>(),
+        isInstanceOf<CustomLocalStorage>(),
+      );
+
+      homeModuleTest.load(changeBinds: [
+        Bind<String>(
+          (i) => "test",
+        )
+      ]);
+
+      expect(
+        Modular.get<ILocalStorage>(),
+        isInstanceOf<LocalMock>(),
+      );
+      
+      expect(
+        ()=>Modular.get<String>(),
+        throwsA(isInstanceOf<ModularError>()),
+      );
+      
     });
 
     // tearDown(() {
@@ -183,22 +245,4 @@ main() {
       Modular.removeModule(app);
     });
   });
-
-  test('Changing binds of parent modules', () {
-      IModularTest homeModuleTest = InitHomeModuleHelper();
-
-      homeModuleTest.load();
-      ILocalStorage instance = Modular.get();
-
-      expect(
-        instance,
-        isNotNull,
-      );
-
-      homeModuleTest.load(
-          changeBinds: [Bind<ILocalStorage>((i) => CustomLocalStorage())]);
-
-      expect(instance.runtimeType,
-          isNot(equals(Modular.get<ILocalStorage>().runtimeType)));
-    });
 }
