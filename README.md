@@ -703,7 +703,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://medium.com/@albertomonteiro"><img src="https://avatars2.githubusercontent.com/u/836496?v=4" width="100px;" alt=""/><br /><sub><b>Alberto Monteiro</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/GUIKAR741"><img src="https://avatars2.githubusercontent.com/u/18069622?v=4" width="100px;" alt=""/><br /><sub><b>Guilherme Nepomuceno de Carvalho</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=GUIKAR741" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/lucioeduardo"><img src="https://avatars1.githubusercontent.com/u/14063319?v=4" width="100px;" alt=""/><br /><sub><b>Eduardo Lúcio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/lucioeduardo"><img src="https://avatars1.githubusercontent.com/u/14063319?v=4" width="100px;" alt=""/><br /><sub><b>Eduardo Lúcio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
