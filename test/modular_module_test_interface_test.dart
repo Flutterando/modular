@@ -3,12 +3,10 @@ import 'package:flutter_modular/flutter_modular_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'app/app_module.dart';
 import 'app/app_module_test_modular.dart';
 import 'app/modules/home/home_module.dart';
 import 'app/modules/home/home_module_test_modular.dart';
 import 'app/modules/home/home_widget.dart';
-
 import 'app/modules/product/product_module_test_modular.dart';
 import 'app/shared/ILocalRepository.dart';
 import 'app/shared/app_info.state.dart';
@@ -80,7 +78,7 @@ main() {
     test('ILocalStorage getBinds', () {
       IModularTest modularTest = InitAppModuleHelper();
 
-      expect(modularTest.getBinds([]).length, modularTest.binds().length);
+      expect(modularTest.getBinds([]).length, modularTest.binds.length);
       expect(modularTest.getBinds(null), isNotEmpty);
       expect(modularTest.getBinds(null).first,
           isInstanceOf<Bind<ILocalStorage>>());
