@@ -1,21 +1,26 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master)
 [![Join the chat at https://discord.gg/ZbdsWA4](https://img.shields.io/badge/Chat-on%20Discord-lightgrey?style=flat&logo=discord)](https://discord.gg/ZbdsWA4)
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
 
-*This README is also available in [Brazilian Portuguese](README.pt-br.md).*
+_This README is also available in [Brazilian Portuguese](README.pt-br.md)._
 
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
-- **[Modular Structure](#modular-structure)**  
-- **[Modular Pillars](#modular-pillars)**  
+- **[Modular Structure](#modular-structure)**
+- **[Modular Pillars](#modular-pillars)**
+
   - [Example](#example)
 
 - **[Getting started with Modular](#getting-started-with-modular)**
+
   - [Installation](#installation)
   - [Using in a New Project](#using-in-a-new-project)
   - [Adding Routes](#adding-routes)
@@ -28,6 +33,7 @@
   - [Retrieving in view using injection](#retrieving-in-view-using-injection)
 
 - **[Using Modular widgets to retrieve your classes](#using-modular-widgets-to-retrieve-your-classes)**
+
   - [ModularState](#modularstate)
   - [Consuming a ChangeNotifier Class](#consuming-a-changenotifier-class)
   - [Creating Child Modules](#creating-child-modules)
@@ -35,6 +41,7 @@
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
+  - [Modular test helper](#modular-test-helper)
   - [DebugMode](#debugmode)
 
 - **[Roadmap](#roadmap)**
@@ -48,8 +55,8 @@ Modular's dependency injection system has out-of-the-box support for any state m
 
 ## Modular Structure
 
-Modular structure consists in decoupled and independent modules that will represent the features of the application. 
-Each module is located in its own directory, and controls its own dependencies, routes, pages, widgets and business logic. 
+Modular structure consists in decoupled and independent modules that will represent the features of the application.
+Each module is located in its own directory, and controls its own dependencies, routes, pages, widgets and business logic.
 Consequently, you can easily detach one module from your project and use it wherever you want.
 
 ## Modular Pillars
@@ -73,16 +80,16 @@ Open your project's `pubspec.yaml` and add `flutter_modular` as a dependency:
 
 ```yaml
 dependencies:
-    flutter_modular: any
+  flutter_modular: any
 ```
 
 You can also provide the git repository as source instead, to try out the newest features and fixes:
 
 ```yaml
 dependencies:
-    flutter_modular:
-        git:
-            url: https://github.com/Flutterando/modular
+  flutter_modular:
+    git:
+      url: https://github.com/Flutterando/modular
 ```
 
 ## Using in a new project
@@ -176,6 +183,7 @@ Navigator.pushNamed(context, '/login');
 ```
 
 Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
+
 ```dart
 Modular.to.pushNamed('/login');
 ```
@@ -359,7 +367,7 @@ List<Router> get routers => [
 
 You can return values from navigation, just like `.pop`.
 To achieve this, pass the type you expect to return as type parameter to `Router`:
-  
+
 ```dart
 @override
 List<Router> get routers => [
@@ -374,7 +382,7 @@ Now, use `.pop` as you would with `Navigator.pop`:
 // Push route
 String name = await Modular.to.pushNamed<String>();
 
-// And pass the value when popping 
+// And pass the value when popping
 Modular.to.pop('Jacob Moura');
 ```
 
@@ -409,7 +417,7 @@ class AppModule extends MainModule {
     Router('/', child: (_, args) => HomePage()),
     Router('/login', child: (_, args) => LoginPage()),
   ];
-  
+
   // Provide the root widget associated with your module
   @override
   Widget get bootstrap => AppWidget();
@@ -444,7 +452,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // You can use the object Inject to retrieve..
-  
+
     final appBloc = Modular.get<AppBloc>();
     //...
   }
@@ -508,7 +516,7 @@ class Counter extends ChangeNotifier {
 }
 ```
 
- you can use the `Consumer` to manage the state of a widget block.
+you can use the `Consumer` to manage the state of a widget block.
 
 ```dart
 class HomePage extends StatelessWidget {
@@ -648,6 +656,226 @@ main() {
   });
 }
 ```
+## Modular test helper
+
+Before write in your test file, if you want to improve readability you might to import `flutter_modular_test` and define your mocked module using `IModularTest` and override his methods to create a mock, similar as `ChildModule`, when writing your tests:
+
+The first step is write a class like that:
+
+```dart
+
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/flutter_modular_test.dart';
+
+class InitAppModuleHelper extends IModularTest {
+
+  final ModularTestType modularTestType;
+  IModularTest({this.modularTestType: ModularTestType.resetModule});
+
+  @override
+  List<Bind> get binds => [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
+      ];
+
+  @override
+  ChildModule get module => AppModule();
+  
+
+  @override
+  IModularTest get modulardependency => null;
+
+}
+
+```
+
+The right way to use is writing as least one of that per module, its important to remember to put the modular dependecies in `modularDependency`. its useful because when you load this module for testing, all related modules will be load together. In this case the `AppModule` is the root module and it hasn`t dependency.
+
+### Load Modular helper on tests
+
+1. By default when use `IModularTest` each `InitAppModuleHelper().load()` will clean and rebuid the modular and his injects, this is fine to do
+each test block independent and make more easy to write modular tests without noise.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+main() {
+  test('change bind', () {
+    InitAppModuleHelper().load();
+    //do something
+  });
+  test('change bind', () {
+    InitAppModuleHelper().load();
+    //do something
+  });
+}
+```
+
+2. To keep previous modular and its injects you can pass the param `modularTestType`.
+> **NOTE:** With `modularTestType.keepModulesOnMemory`, it won't clean the modules that already have been loaded. (It doesn't call `Modular.removeModule()`)
+
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+main() {
+  
+  test('test1', () {
+    InitAppModuleHelper().load();
+  });
+
+  test('test2', () {
+    InitAppModuleHelper(
+      modularTestType: ModularTestType.keepModulesOnMemory
+      ).load();
+      // Keep the same injects loaded by test1
+  });
+}
+```
+
+3. Changing the binds when `load()` the module like `initModule()`.
+
+> **NOTE:** It also can change binds of another modules that are its dependencies until find the MainModule.  
+
+Ex: When you have a tree like `InitAppModuleHelper` <- `InitHomeModuleHelper`, when you call `InitHomeModuleHelper.load(changeBinds:[<newBinds>])` it will be able to change binds on `HomeModule` and `AppModule`. Because of that you only need one changeBinds array and it can make all the changes for you, see it on section: [Create helper for a child module](#create-helper-for-a-child-module).
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+main() {
+  
+  test('test1', () {
+    InitAppModuleHelper().load(changeBinds:[
+      Bind<ILocalStorage>((i) => LocalStorageHive())
+
+    ]);
+  });
+  
+}
+```
+### Create helper for a child module
+Remember you only need to call the most deeper `IModularTest` and it can load all dependency modules you have added on your mock definition, like the next example:
+
+The first step is define a `IModularTest` to another module, pay attention that the `HomeModule` is a child of `AppModule`, because of that you need to put the `AppModule` on `modularDependency`.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_modular/src/interfaces/child_module.dart';
+import 'package:flutter_modular/src/inject/bind.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../app_module_test_modular.dart';
+import 'home_module.dart';
+
+class InitHomeModuleHelper extends IModularTest {
+
+  @override
+  List<Bind> get binds => [];
+
+  @override
+  ChildModule get module => HomeModule();
+  
+  @override
+  IModularTest get modulardependency => InitAppModuleHelper();
+
+}
+```
+
+Now we can init the `HomeModule` and all his dependencies just by typing `InitHomeModuleHelper().load()` on your `test_file`. It doesn't matter how deep is your module, all dependencies are recursively loaded in a batch, you only need to create a `IModuleTest` for each one and put your dependencies correctly and it will work fine.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'app/modules/home/home_module_test_modular.dart';
+main() {
+  test('change bind', () {
+    InitHomeModuleHelper().load();
+    //do something
+  });
+  test('change bind', () {
+    InitHomeModuleHelper().load();
+    //do something
+  });
+}
+```
+
+### Mocking with mockito
+
+1. Add the mock into the `binds` list on your `IModularTest` helper, if you dont need to change during the tests.
+
+```dart
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_modular/src/interfaces/child_module.dart';
+import 'package:flutter_modular/src/inject/bind.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mockito/mockito.dart';
+
+import '../../app_module_test_modular.dart';
+import 'home_module.dart';
+
+class LocalStorageMock extends Mock implements ILocalStorage {}
+
+class InitHomeModuleHelper extends IModularTest {
+
+  @override
+  List<Bind> get binds => [
+    Bind<ILocalStorage>((i) => LocalStorageMock()),
+  ];
+
+  @override
+  ChildModule get module => HomeModule();
+  
+  @override
+  IModularTest get modulardependency => InitAppModuleHelper();
+  
+}
+
+
+```
+
+2. Get the instance using `Modular.get()` and change the behavior as you need in the middle of the test:
+
+```dart
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+import 'app/modules/home/home_module_test_modular.dart';
+
+class LocalStorageMock extends Mock implements ILocalStorage {}
+
+main() {
+
+  LocalStorageMock localStorageMock = LocalStorageMock();
+
+  group("IModuleTest", () {
+    setUp(() {
+      InitAppModuleHelper().load(changeBinds:[
+        
+        Bind<ILocalStorage>((i) => localStorageMock),
+
+      ]);
+      ILocalStorage iLocalStorage = Modular.get<ILocalStorage>();
+    });
+
+    test('change bind', () {
+      when(localStorageMock.doSomething()).thenReturn("Hello");
+      iLocalStorage.doSomething();
+      //return Hello
+
+      when(localStorageMock.doSomething()).thenReturn("World");
+      iLocalStorage.doSomething();
+      //return World
+    });
+
+  });
+
+}
+```
+### Mock the navigation system
 
 We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
@@ -668,18 +896,18 @@ Modular.debugMode = false;
 
 This is our current roadmap. Please, feel free to request additions/changes.
 
-| Feature                                   | Progress |
-| :-----------------------------------------| :------: |
-| DI by Module                              |    ✅    |
-| Routes by Module                          |    ✅    |
-| Widget Consume for ChangeNotifier         |    ✅    |
-| Auto-dispose                              |    ✅    |
-| Integration with flutter_bloc             |    ✅    |
-| Integration with mobx                     |    ✅    |
-| Multiple routes                           |    ✅    |
-| Pass arguments by route                   |    ✅    |
-| Pass url parameters per route             |    ✅    |
-| Route Transition Animation                |    ✅    |
+| Feature                           | Progress |
+| :-------------------------------- | :------: |
+| DI by Module                      |    ✅    |
+| Routes by Module                  |    ✅    |
+| Widget Consume for ChangeNotifier |    ✅    |
+| Auto-dispose                      |    ✅    |
+| Integration with flutter_bloc     |    ✅    |
+| Integration with mobx             |    ✅    |
+| Multiple routes                   |    ✅    |
+| Pass arguments by route           |    ✅    |
+| Pass url parameters per route     |    ✅    |
+| Route Transition Animation        |    ✅    |
 
 ## Features and bugs
 
@@ -729,6 +957,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
