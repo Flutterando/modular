@@ -673,29 +673,22 @@ class InitAppModuleHelper extends IModularTest {
   IModularTest({this.modularTestType: ModularTestType.resetModule});
 
   @override
-  List<Bind> binds() {
-
-    return [
-       Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
-    ];
-  }
+  List<Bind> get binds => [
+        Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
+      ];
 
   @override
-  ChildModule module() {
-    return AppModule();
-  }
+  ChildModule get module => AppModule();
+  
 
   @override
-  IModularTest modularDependency() {
-    return null;
-  }
-
+  IModularTest get modulardependency => null;
 
 }
 
 ```
 
-The right way to use is writing as least one of that per module, its important to remember to put the modular dependecies in `modularDependency()`. its useful because when you load this module for testing, all related modules will be load together. In this case the `AppModule` is the root module and it hasn`t dependency.
+The right way to use is writing as least one of that per module, its important to remember to put the modular dependecies in `modularDependency`. its useful because when you load this module for testing, all related modules will be load together. In this case the `AppModule` is the root module and it hasn`t dependency.
 
 ### Load Modular helper on tests
 
@@ -745,7 +738,7 @@ main() {
 
 > **NOTE:** It also can change binds of another modules that are its dependencies until find the MainModule.  
 
-Ex: When you have a tree like `InitAppModuleHelper` <- `InitHomeModuleHelper`, when you call `InitHomeModuleHelper.load(changeBinds:[<newBinds>])` it will be able to change binds on `HomeModule` and `AppModule`. Because of that you only need one changeBinds array and it can make all the changes for you see on section- [Create helper on child module](#create-helper-for-a-child-module).
+Ex: When you have a tree like `InitAppModuleHelper` <- `InitHomeModuleHelper`, when you call `InitHomeModuleHelper.load(changeBinds:[<newBinds>])` it will be able to change binds on `HomeModule` and `AppModule`. Because of that you only need one changeBinds array and it can make all the changes for you, see it on section: [Create helper for a child module](#create-helper-for-a-child-module).
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -779,25 +772,18 @@ import 'home_module.dart';
 class InitHomeModuleHelper extends IModularTest {
 
   @override
-  List<Bind> binds() {
-    return [
-    ];
-  }
+  List<Bind> get binds => [];
 
   @override
-  ChildModule module() {
-    return HomeModule();
-  }
-
+  ChildModule get module => HomeModule();
+  
   @override
-  IModularTest modularDependency() {
-    return InitAppModuleHelper();
+  IModularTest get modulardependency => InitAppModuleHelper();
 
-  }
 }
 ```
 
-Now we can init the `HomeModule` and all his dependencies just by typing `InitHomeModuleHelper().load()` on your `test_file`. It doesn't matter how deep is your module, this way all dependencies are recursively loaded in a batch, you only need to create a `IModuleTest` for each one and put your dependencies correctly and it will work fine.
+Now we can init the `HomeModule` and all his dependencies just by typing `InitHomeModuleHelper().load()` on your `test_file`. It doesn't matter how deep is your module, all dependencies are recursively loaded in a batch, you only need to create a `IModuleTest` for each one and put your dependencies correctly and it will work fine.
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -817,7 +803,7 @@ main() {
 
 ### Mocking with mockito
 
-1. Add the mock into the `bind()` list on your `IModularTest` helper, if you dont need to change during the tests.
+1. Add the mock into the `binds` list on your `IModularTest` helper, if you dont need to change during the tests.
 
 ```dart
 import 'package:flutter_modular/flutter_modular_test.dart';
@@ -834,23 +820,16 @@ class LocalStorageMock extends Mock implements ILocalStorage {}
 class InitHomeModuleHelper extends IModularTest {
 
   @override
-  List<Bind> binds() {
-
-    return [
-       Bind<ILocalStorage>((i) => LocalStorageMock()),
-    ];
-  }
+  List<Bind> get binds => [
+    Bind<ILocalStorage>((i) => LocalStorageMock()),
+  ];
 
   @override
-  ChildModule module() {
-    return HomeModule();
-  }
-
+  ChildModule get module => HomeModule();
+  
   @override
-  IModularTest modularDependency() {
-    return InitAppModuleHelper();
-
-  }
+  IModularTest get modulardependency => InitAppModuleHelper();
+  
 }
 
 
