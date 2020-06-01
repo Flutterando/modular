@@ -8,28 +8,17 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../app_module_test_modular.dart';
 import 'product_module.dart';
 
-
-
 class InitProductModuleHelper extends IModularTest {
   final ModularTestType modularTestType;
 
   InitProductModuleHelper({this.modularTestType: ModularTestType.resetModules});
 
   @override
-  List<Bind> binds() {
-    return [
-    ];
-  }
+  List<Bind> get binds => [];
 
   @override
-  ChildModule module() {
-    return ProductModule();
-  }
+  ChildModule get module => ProductModule();
 
   @override
-  IModularTest modulardependency() {
-    return InitAppModuleHelper();
-  }
-
-  
+  IModularTest get modulardependency => InitAppModuleHelper();
 }

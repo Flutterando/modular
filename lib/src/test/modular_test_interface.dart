@@ -8,9 +8,9 @@ abstract class IModularTest {
   final ModularTestType modularTestType;
   IModularTest({this.modularTestType: ModularTestType.resetModules});
 
-  ChildModule module();
-  List<Bind> binds();
-  IModularTest modulardependency();
+  ChildModule get module;
+  List<Bind> get binds;
+  IModularTest get modulardependency;
 
   void load({
     IModularTest changedependency,
@@ -26,7 +26,7 @@ abstract class IModularTest {
     this.loadModularDependency(isLoadDependency, changeBinds, dependency);
 
     initModule(
-      this.module(),
+      this.module,
       changeBinds: binds,
       initialModule: this.isMainModule
     );
@@ -37,7 +37,7 @@ abstract class IModularTest {
     IModularTest changedependency,
     bool isLoadDependency,
   ) {
-    changedependency ??= this.modulardependency();
+    changedependency ??= this.modulardependency;
 
     assert(
       !_isDependencyRequired(changedependency, isLoadDependency),
@@ -51,7 +51,7 @@ abstract class IModularTest {
 
   @visibleForTesting
   List<Bind> getBinds(List<Bind> changeBinds) {
-    final mergedChangeBinds = mergeBinds(changeBinds, this.binds());
+    final mergedChangeBinds = mergeBinds(changeBinds, this.binds);
 
     return mergedChangeBinds;
   }
@@ -77,7 +77,7 @@ abstract class IModularTest {
   @visibleForTesting
   void memoryManage(ModularTestType modularTestType) {
     if (modularTestType == ModularTestType.resetModules)
-      Modular.removeModule(this.module());
+      Modular.removeModule(this.module);
   }
 
   @visibleForTesting
@@ -91,5 +91,5 @@ abstract class IModularTest {
     }
   }
 
-  bool get isMainModule => !(this.module() is MainModule);
+  bool get isMainModule => !(this.module is MainModule);
 }

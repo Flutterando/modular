@@ -15,22 +15,15 @@ class InitAppModuleHelper extends IModularTest {
   InitAppModuleHelper({this.modularTestType: ModularTestType.resetModules});
 
   @override
-  List<Bind> binds() {
-    
-    return [
-      Bind<ILocalStorage>((i) => LocalMock()),
-    ];
-  }
+  List<Bind> get binds => [
+        Bind<ILocalStorage>((i) => LocalMock()),
+      ];
 
   @override
-  ChildModule module() {
-    return AppModule();
-  }
+  ChildModule get module => AppModule();
+  
 
   @override
-  IModularTest modulardependency() {
-    return null;
-  }
-
+  IModularTest get modulardependency => null;
   
 }
