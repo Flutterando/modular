@@ -618,6 +618,26 @@ NOTA: A Navegação dentro desses módulos é feita apenas usando o Nvigator.of(
 
 Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando você navegar para um módulo, e assim que sair dele, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte aquele módulo).
 
+## Initialization and Disposers
+
+Pode ser útil que algumas classes tenham o comportamento de construtor/destrutor. Para isso, Modular utiliza-se das interfaces `Initializable` and `Disposable`, respectivamente. 
+
+Veja como seria implementar a leitura de dados de uma persistência local.
+```dart
+class AuthStore implements Initializable, Disposable {
+  @override
+  void init() {
+    // Read user from persistent storage (e.g. Hive or SharedPreferences)
+  }
+  
+  @override
+  void dispose() {
+    // Free resources (e.g. closing streams)
+  }
+}
+```
+Este comportamento pode ser útil para separar ainda mais as regras de negócio da UI, evitando chamar o controller a partir da UI apenas para configurá-lo.
+
 ## Testes Unitários
 
 Você pode usar o sistema de injeção de dependências para substituir Binds por Binds de mocks, como por exemplo de um repositório. Você pode fazer também usando "Inversão de Controles"
