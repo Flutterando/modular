@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/flutter_modular_test.dart';
+import 'package:flutter_modular/src/interfaces/initializable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -16,6 +17,12 @@ import 'app/shared/local_storage_shared.dart';
 class CustomModuleTestMock extends Mock implements IModularTest {}
 
 class CustomLocalStorage extends Mock implements ILocalStorage {}
+
+class MockInitializableController extends Mock implements Initializable {}
+
+class MockNotInitializableController extends Mock {
+  void init();
+}
 
 main() {
   group("change bind", () {
@@ -237,6 +244,48 @@ main() {
     });
     tearDownAll(() {
       modularHomeTest.memoryManage(ModularTestType.resetModules);
+    });
+  });
+  group("Initializable", () {
+    test("shouldn't initialize Bind if isn't of type Initializable", () {
+      InitAppModuleHelper().load(changeBinds: [
+        Bind((_) => MockNotInitializableController()),
+      ]);
+
+      final controller = Modular.get<MockNotInitializableController>();
+      verifyNever(controller.init());
+    });
+
+    test('should initialize Bind at first injection', () {
+      final controller = MockInitializableController();
+      // Initializes the module
+      InitAppModuleHelper().load(changeBinds: [
+        Bind((_) => controller),
+      ]);
+      // Verifies if controller has not been initialized
+      verifyNever(controller.init());
+
+      final injectedController = Modular.get<MockInitializableController>();
+      // Verifies if controller was initialized
+      verify(injectedController.init()).called(1);
+    });
+
+    test('should initialize Bind only once', () {
+      // Initializes the module
+      InitAppModuleHelper().load(changeBinds: [
+        Bind((_) => MockInitializableController()),
+      ]);
+
+      // Injects the controller
+      final controller = Modular.get<MockInitializableController>();
+
+      // Simulates being Injected into some pages
+      Iterable.generate(10, (_) {
+        Modular.get<MockInitializableController>();
+      });
+
+      // Check if it wasn't initialized more than once
+      verify(controller.init()).called(1);
     });
   });
 }

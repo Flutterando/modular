@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/routers/router.dart';
 
+import 'initializable.dart';
+
 abstract class ChildModule {
   List<Bind> _binds;
   List<Bind> get binds;
@@ -49,6 +51,9 @@ ${typesInRequest.join('\n')}
 
     bindValue =
         bind.inject(Inject(params: params, typesInRequest: typesInRequest));
+    if (bindValue is Initializable) {
+      bindValue.init();
+    }
     if (bind.singleton) {
       _singletonBinds[type] = bindValue;
     }
