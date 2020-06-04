@@ -38,6 +38,7 @@ _This README is also available in [Brazilian Portuguese](README.pt-br.md)._
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
+  - [Initialization and Disposers](#initialization-and-disposers)
   - [Unit Test](#unit-test)
   - [Modular test helper](#modular-test-helper)
   - [DebugMode](#debugmode)
@@ -625,6 +626,27 @@ PageView(
 ## Lazy loading
 
 Another benefit you get when working with modules is that they are (by default) lazily-loaded. This means that your dependency injection will only be available when you navigate to a module, and when you exit that module, Modular will manage the resources disposal by removing all injections and executing `dispose()` (if available) on each injected dependency.
+
+## Initialization and Disposers
+
+It may be useful to some classes to have a constructor/destructor behavior. To accomplish such funcionality, Modular makes use of the interfaces `Initializable` and `Disposable` respectively. 
+
+Take a look at a case how you could implement loading data from local storage to 
+```dart
+class AuthStore implements Initializable, Disposable {
+  @override
+  void init() {
+    // Read user from persistent storage (e.g. Hive or SharedPreferences)
+  }
+  
+  @override
+  void dispose() {
+    // Free resources (e.g. closing streams)
+  }
+}
+```
+
+This can be helpful to separe even more business logic from UI, avoiding calling the controller from the UI just to set it up.
 
 ## Unit test
 
