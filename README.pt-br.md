@@ -28,6 +28,7 @@
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
+  - [Inicialização e Destruição](#inicializacao-e-destruicao)
   - [Testes Unitários](#testes-unitários)
   - [DebugMode](#debugmode)
 
@@ -618,7 +619,7 @@ NOTA: A Navegação dentro desses módulos é feita apenas usando o Nvigator.of(
 
 Outro benefício que ganha ao trabalhar com módulos é carrega-los "preguiçosamente". Isso significa que sua injeção de dependência ficará disponível apenas quando você navegar para um módulo, e assim que sair dele, o Modular fará uma limpeza na memória removendo todas a injeções e executando os métodos de `dispose()` (se disponível) em cada classe injetada referênte aquele módulo).
 
-## Initialization and Disposers
+## Inicialização e Destruição
 
 Pode ser útil que algumas classes tenham o comportamento de construtor/destrutor. Para isso, Modular utiliza-se das interfaces `Initializable` and `Disposable`, respectivamente. 
 
