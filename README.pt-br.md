@@ -28,7 +28,7 @@
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Lazy Loading](#lazy-loading)
-  - [Inicialização e Destruição](#inicializacao-e-destruicao)
+  - [Inicialização e Destruição](#inicialização-e-destruição)
   - [Testes Unitários](#testes-unitários)
   - [DebugMode](#debugmode)
 
