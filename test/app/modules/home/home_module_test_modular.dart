@@ -11,15 +11,14 @@ import 'home_module.dart';
 class InitHomeModuleHelper extends IModularTest {
   final ModularTestType modularTestType;
 
-  InitHomeModuleHelper({this.modularTestType: ModularTestType.resetModules});
+  InitHomeModuleHelper({this.modularTestType = ModularTestType.resetModules});
 
   @override
   List<Bind> get binds => [];
 
   @override
   ChildModule get module => HomeModule();
-  
+
   @override
   IModularTest get modulardependency => InitAppModuleHelper();
-  
 }

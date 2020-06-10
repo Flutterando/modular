@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../flutter_modular.dart';
 
 import '../modular_base.dart';
 
@@ -30,11 +30,11 @@ class Inject<T> {
   /// get current modulex
   RouteLink get link => Modular.link;
 
-  dispose<B>() {
+  void dispose<B>() {
     if (T.runtimeType.toString() == 'dynamic') {
-      return Modular.dispose<B>();
+      Modular.dispose<B>();
     } else {
-      return Modular.dispose<B>(tag);
+      Modular.dispose<B>(tag);
     }
   }
 }

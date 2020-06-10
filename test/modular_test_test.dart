@@ -6,12 +6,12 @@ import 'app/app_module.dart';
 import 'app/modules/home/home_module.dart';
 import 'app/modules/home/home_widget.dart';
 import 'app/modules/product/product_module.dart';
-import 'app/shared/ILocalRepository.dart';
+import 'app/shared/ilocal_repository.dart';
 import 'app/shared/local_mock.dart';
 
-main() {
+void main() {
   group("change bind", () {
-    AppModule app = AppModule();
+    final app = AppModule();
     setUp(() {
       initModule(AppModule(), changeBinds: [
         Bind<ILocalStorage>((i) => LocalMock()),
@@ -25,15 +25,14 @@ main() {
     });
   });
   group("navigation test", () {
-    AppModule app = AppModule();
-    HomeModule home = HomeModule();
-    ProductModule product = ProductModule();
+    final app = AppModule();
+    final home = HomeModule();
+    final product = ProductModule();
     setUp(() {
       initModule(app, initialModule: true);
       initModules([home, product]);
     });
-    testWidgets('on pushNamed modify actualRoute ',
-        (WidgetTester tester) async {
+    testWidgets('on pushNamed modify actualRoute ', (tester) async {
       await tester.pumpWidget(buildTestableWidget(HomeWidget()));
       Modular.to.pushNamed('/prod');
       expect(Modular.link.path, '/prod');
@@ -45,19 +44,19 @@ main() {
     });
   });
   group("arguments test", () {
-    AppModule app = AppModule();
-    HomeModule home = HomeModule();
+    final app = AppModule();
+    final home = HomeModule();
     setUpAll(() {
       initModule(app, initialModule: true);
     });
-    testWidgets("Arguments Page id", (WidgetTester tester) async {
+    testWidgets("Arguments Page id", (tester) async {
       await tester.pumpWidget(buildTestableWidget(ArgumentsPage(
         id: 10,
       )));
       final titleFinder = find.text("10");
       expect(titleFinder, findsOneWidget);
     });
-    testWidgets("Modular Arguments Page id", (WidgetTester tester) async {
+    testWidgets("Modular Arguments Page id", (tester) async {
       Modular.arguments(data: 10);
       await tester.pumpWidget(buildTestableWidget(ModularArgumentsPage()));
       final titleFinder = find.text("10");

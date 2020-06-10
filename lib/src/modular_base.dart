@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/routers/router.dart';
-import 'package:flutter_modular/src/utils/old.dart';
 
+import '../flutter_modular.dart';
 import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
 import 'navigator/modular_navigator.dart';
 import 'navigator/modular_navigator_interface.dart';
+import 'routers/router.dart';
+import 'utils/old.dart';
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
@@ -19,7 +19,7 @@ class Modular {
   static const String initialRoute = '/';
   static bool debugMode = !kReleaseMode;
   static bool isCupertino = false;
-  static Map<String, ChildModule> _injectMap = {};
+  static final Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
   static GlobalKey<NavigatorState> _navigatorKey;
   static ModularArguments _args;
@@ -35,7 +35,7 @@ class Modular {
   /// Modular.link;
   /// ```
   static IModularNavigator get link {
-    if (navigatorDelegate == null)
+    if (navigatorDelegate == null) {
       assert(_navigatorKey != null,
           '''Add Modular.navigatorKey in your MaterialApp;
 
@@ -45,6 +45,7 @@ class Modular {
 
 .
       ''');
+    }
     return navigatorDelegate ?? _routeLink?.copy();
   }
 
@@ -54,7 +55,7 @@ class Modular {
   /// Modular.to;
   /// ```
   static IModularNavigator get to {
-    if (navigatorDelegate == null)
+    if (navigatorDelegate == null) {
       assert(_navigatorKey != null,
           '''Add Modular.navigatorKey in your MaterialApp;
 
@@ -64,11 +65,12 @@ class Modular {
 
 .
       ''');
+    }
     return navigatorDelegate ?? ModularNavigator(_navigatorKey.currentState);
   }
 
   @visibleForTesting
-  static arguments({Map<String, dynamic> params, dynamic data}) {
+  static void arguments({Map<String, dynamic> params, dynamic data}) {
     _args = ModularArguments(params ?? {}, data);
   }
 
@@ -80,7 +82,7 @@ class Modular {
     return _navigatorKey;
   }
 
-  static init(ChildModule module) {
+  static void init(ChildModule module) {
     _initialModule = module;
     bindModule(module, "global==");
   }
@@ -88,7 +90,7 @@ class Modular {
   @visibleForTesting
   static void bindModule(ChildModule module, [String path]) {
     assert(module != null);
-    String name = module.runtimeType.toString();
+    final name = module.runtimeType.toString();
     if (!_injectMap.containsKey(name)) {
       module.paths.add(path);
       _injectMap[name] = module;
@@ -124,7 +126,7 @@ class Modular {
     }
 
     for (var key in _injectMap.keys) {
-      B value = _getInjectableObject<B>(key,
+      final value = _getInjectableObject<B>(key,
           params: params,
           disableError: true,
           typesInRequest: typesInRequest,
@@ -183,7 +185,7 @@ class Modular {
 
   @visibleForTesting
   static String prepareToRegex(String url) {
-    List<String> newUrl = [];
+    final newUrl = <String>[];
     for (var part in url.split('/')) {
       var url = part.contains(":") ? "(.*?)" : part;
       newUrl.add(url);
@@ -214,16 +216,16 @@ class Modular {
     }
 
     if (routeNamed.contains('/:')) {
-      RegExp regExp = RegExp(
+      final regExp = RegExp(
         "^${prepareToRegex(routeNamed)}\$",
         caseSensitive: true,
       );
       var r = regExp.firstMatch(path);
       if (r != null) {
-        Map<String, String> params = {};
-        int paramPos = 0;
-        var routeParts = routeNamed.split('/');
-        var pathParts = path.split('/');
+        final params = <String, String>{};
+        var paramPos = 0;
+        final routeParts = routeNamed.split('/');
+        final pathParts = path.split('/');
 
         print('Match! Processing $path as $routeNamed');
 
@@ -279,20 +281,20 @@ class Modular {
     path = "/$path".replaceAll('//', '/');
     final routers = module.routers;
     routers.sort((preview, actual) {
-      bool isContain =
+      final isContain =
           preview.routerName.contains('/:') == actual.routerName.contains('/:');
       return isContain ? -1 : 1;
     });
     for (var route in routers) {
-      String tempRouteName =
+      final tempRouteName =
           (routerName + route.routerName).replaceFirst('//', '/');
       if (route.child == null) {
         _masterRouteGuards = route.guards;
         var _routerName =
-            (routerName + route.routerName + '/').replaceFirst('//', '/');
+            ('$routerName${route.routerName}/').replaceFirst('//', '/');
         Router router;
         if (_routerName == path || _routerName == "$path/") {
-          RouteGuard guard = _verifyGuard(route.guards, path);
+          final guard = _verifyGuard(route.guards, path);
           if (guard != null) {
             return null;
           }
@@ -311,7 +313,7 @@ class Modular {
               ? router.copyWith(modulePath: tempRouteName)
               : router;
           if (_routerName == path || _routerName == "$path/") {
-            RouteGuard guard = _verifyGuard(router.guards, path);
+            final guard = _verifyGuard(router.guards, path);
             if (guard != null) {
               return null;
             }
@@ -330,7 +332,7 @@ class Modular {
         if (searchRoute(route, tempRouteName, path)) {
           var guards = _prepareGuardList(_masterRouteGuards, route.guards);
           _masterRouteGuards = null;
-          RouteGuard guard = _verifyGuard(guards, path);
+          var guard = _verifyGuard(guards, path);
           if ((tempRouteName == path || tempRouteName == "$path/") &&
               path != '/') {
             guard = _verifyGuard(guards, path);
@@ -359,7 +361,7 @@ class Modular {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
-    Router route = _searchInModule(module ?? _initialModule, "", path);
+    final route = _searchInModule(module ?? _initialModule, "", path);
     return route;
   }
 
@@ -370,9 +372,9 @@ class Modular {
 
   static Route<T> generateRoute<T>(RouteSettings settings,
       [ChildModule module]) {
-    bool isRouterOutlet = module != null;
-    String path = settings.name;
-    Router router = selectRoute(path, module);
+    final isRouterOutlet = module != null;
+    final path = settings.name;
+    var router = selectRoute(path, module);
     if (router == null) {
       return null;
     }
@@ -383,8 +385,9 @@ class Modular {
       );
     }
     _args = ModularArguments(router.params, settings.arguments);
-    if (!isRouterOutlet)
+    if (!isRouterOutlet) {
       _routeLink = RouteLink(path: path, modulePath: router.modulePath);
+    }
 
     if (settings.name == Modular.initialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);

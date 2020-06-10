@@ -7,7 +7,7 @@ import 'guard/guard.dart';
 import 'modules/forbidden/forbidden_widget.dart';
 import 'modules/home/home_module.dart';
 import 'modules/product/product_module.dart';
-import 'shared/ILocalRepository.dart';
+import 'shared/ilocal_repository.dart';
 import 'shared/local_storage_shared.dart';
 
 class AppModule extends MainModule {

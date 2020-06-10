@@ -17,10 +17,11 @@ void initModule(ChildModule module,
     }
   }
   module.changeBinds(changedList);
-  if (initialModule ?? false)
+  if (initialModule ?? false) {
     Modular.init(module);
-  else
+  } else {
     Modular.bindModule(module);
+  }
 }
 
 void initModules(List<ChildModule> modules, {List<Bind> changeBinds}) {

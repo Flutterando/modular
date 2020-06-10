@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/flutter_modular_test.dart';
+import '../../flutter_modular.dart';
+import '../../flutter_modular_test.dart';
 
 enum ModularTestType { resetModules, keepModulesOnMemory }
 
 abstract class IModularTest {
   final ModularTestType modularTestType;
-  IModularTest({this.modularTestType: ModularTestType.resetModules});
+  IModularTest({this.modularTestType = ModularTestType.resetModules});
 
   ChildModule get module;
   List<Bind> get binds;
@@ -17,27 +17,27 @@ abstract class IModularTest {
     List<Bind> changeBinds,
     bool isLoadDependency = true,
   }) {
-    IModularTest dependency = getDendencies(
-      changedependency,
-      isLoadDependency,
+    final dependency = getDendencies(
+      changedependency: changedependency,
+      isLoadDependency: isLoadDependency,
     );
-    List<Bind> binds = this.getBinds(changeBinds);
-    memoryManage(this.modularTestType);
-    this.loadModularDependency(isLoadDependency, changeBinds, dependency);
+    final binds = getBinds(changeBinds);
+    memoryManage(modularTestType);
+    loadModularDependency(
+      isLoadDependency: isLoadDependency,
+      changeBinds: changeBinds,
+      dependency: dependency,
+    );
 
-    initModule(
-      this.module,
-      changeBinds: binds,
-      initialModule: this.isMainModule
-    );
+    initModule(module, changeBinds: binds, initialModule: isMainModule);
   }
 
   @visibleForTesting
-  IModularTest getDendencies(
+  IModularTest getDendencies({
     IModularTest changedependency,
-    bool isLoadDependency,
-  ) {
-    changedependency ??= this.modulardependency;
+    @required bool isLoadDependency,
+  }) {
+    changedependency ??= modulardependency;
 
     assert(
       !_isDependencyRequired(changedependency, isLoadDependency),
@@ -51,12 +51,11 @@ abstract class IModularTest {
 
   @visibleForTesting
   List<Bind> getBinds(List<Bind> changeBinds) {
-    final mergedChangeBinds = mergeBinds(changeBinds, this.binds);
+    final mergedChangeBinds = mergeBinds(changeBinds, binds);
 
     return mergedChangeBinds;
   }
 
-  
   @visibleForTesting
   List<Bind> mergeBinds(List<Bind> changeBinds, List<Bind> defaultBinds) {
     final resultBinds = defaultBinds ?? [];
@@ -76,20 +75,21 @@ abstract class IModularTest {
 
   @visibleForTesting
   void memoryManage(ModularTestType modularTestType) {
-    if (modularTestType == ModularTestType.resetModules)
-      Modular.removeModule(this.module);
+    if (modularTestType == ModularTestType.resetModules) {
+      Modular.removeModule(module);
+    }
   }
 
   @visibleForTesting
-  void loadModularDependency(
-    bool isLoadDependency,
-    List<Bind> changeBinds,
-    IModularTest dependency,
-  ) {
+  void loadModularDependency({
+    @required bool isLoadDependency,
+    @required List<Bind> changeBinds,
+    @required IModularTest dependency,
+  }) {
     if (isLoadDependency && dependency != null) {
       dependency.load(changeBinds: changeBinds);
     }
   }
 
-  bool get isMainModule => !(this.module is MainModule);
+  bool get isMainModule => !(module is MainModule);
 }

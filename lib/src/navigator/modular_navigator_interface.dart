@@ -79,13 +79,15 @@ abstract class IModularNavigator {
   ///the previous route once the new route has finished animating in.
   ///
   /// ```
-  /// Modular.to.pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+  /// Modular.to.pushReplacement(
+  ///   MaterialPageRoute(builder: (context) => HomePage())
+  /// );
   /// ```
   Future<T> pushReplacement<T extends Object, TO extends Object>(
       Route<T> newRoute,
       {TO result});
 
-  /// Removes the current Route from the stack of routes managed by the Navigator.
+  /// Removes the current Route from the stack of routes.
   ///
   /// ```
   /// Modular.to.pop();

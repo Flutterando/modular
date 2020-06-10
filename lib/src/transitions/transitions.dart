@@ -13,11 +13,10 @@ PageRouteBuilder<T> fadeInTransition<T>(
     RouteSettings settings) {
   return PageRouteBuilder<T>(
       settings: settings,
-      pageBuilder: (BuildContext context, __, ___) {
+      pageBuilder: (context, __, ___) {
         return builder(context, args);
       },
-      transitionsBuilder: (BuildContext context, Animation animation,
-          Animation secondaryAnimation, Widget child) {
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(
           opacity: animation,
           child: child,
@@ -31,7 +30,7 @@ PageRouteBuilder<T> noTransition<T>(
     RouteSettings settings) {
   return PageRouteBuilder(
       settings: settings,
-      pageBuilder: (BuildContext context, __, ___) {
+      pageBuilder: (context, __, ___) {
         return builder(context, args);
       });
 }

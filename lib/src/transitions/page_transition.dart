@@ -29,16 +29,12 @@ class PageTransition<T> extends PageRouteBuilder<T> {
     this.duration = const Duration(milliseconds: 600),
     RouteSettings settings,
   }) : super(
-          pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
+          pageBuilder: (context, animation, secondaryAnimation) {
             return builder(context);
           },
           transitionDuration: duration,
           settings: settings,
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
             switch (type) {
               case PageTransitionType.fade:
                 return FadeTransition(

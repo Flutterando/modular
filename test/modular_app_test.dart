@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-main() {
+void main() {
   setUpAll(() {});
 
 //  group("Init module widget", () {

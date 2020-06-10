@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../flutter_modular.dart';
 
 class Consumer<T extends ChangeNotifier> extends StatefulWidget {
   final Widget Function(BuildContext context, T value) builder;
@@ -19,7 +19,7 @@ class _ConsumerState<T extends ChangeNotifier> extends State<Consumer<T>> {
   T value;
 
   void listener() {
-    T newValue = Modular.get<T>();
+    final newValue = Modular.get<T>();
     if (widget.distinct == null || widget.distinct(value, newValue)) {
       setState(() => value = newValue);
     }

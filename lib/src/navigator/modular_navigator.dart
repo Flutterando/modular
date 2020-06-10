@@ -24,8 +24,8 @@ class ModularNavigator implements IModularNavigator {
         );
       },
       barrierDismissible: barrierDismissible,
-      barrierLabel:
-          "barier-label", //MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      //MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: "barier-label",
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 150),
       transitionBuilder: _buildMaterialDialogTransitions,

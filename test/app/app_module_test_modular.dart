@@ -6,13 +6,13 @@ import 'package:flutter_modular/src/inject/bind.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'app_module.dart';
-import 'shared/ILocalRepository.dart';
+import 'shared/ilocal_repository.dart';
 import 'shared/local_mock.dart';
 
 class InitAppModuleHelper extends IModularTest {
   final ModularTestType modularTestType;
 
-  InitAppModuleHelper({this.modularTestType: ModularTestType.resetModules});
+  InitAppModuleHelper({this.modularTestType = ModularTestType.resetModules});
 
   @override
   List<Bind> get binds => [
@@ -21,9 +21,7 @@ class InitAppModuleHelper extends IModularTest {
 
   @override
   ChildModule get module => AppModule();
-  
 
   @override
   IModularTest get modulardependency => null;
-  
 }

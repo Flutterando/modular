@@ -1,4 +1,4 @@
-import 'ILocalRepository.dart';
+import 'ilocal_repository.dart';
 
 class LocalMock implements ILocalStorage {
   @override
@@ -16,4 +16,3 @@ class LocalMock implements ILocalStorage {
     throw UnimplementedError();
   }
 }
-

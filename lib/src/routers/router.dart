@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/interfaces/child_module.dart';
-import 'package:flutter_modular/src/interfaces/route_guard.dart';
-import 'package:flutter_modular/src/transitions/transitions.dart';
-import 'package:flutter_modular/src/utils/old.dart';
+import '../../flutter_modular.dart';
+import '../interfaces/child_module.dart';
+import '../interfaces/route_guard.dart';
+import '../transitions/transitions.dart';
+import '../utils/old.dart';
 
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
     WidgetBuilder, RouteSettings);
@@ -40,15 +40,18 @@ class Router<T> {
     assert(routerName != null);
 
     if (transition == null) throw ArgumentError('transition must not be null');
-    if (transition == TransitionType.custom && customTransition == null)
+    if (transition == TransitionType.custom && customTransition == null) {
       throw ArgumentError(
           '[customTransition] required for transition type [TransitionType.custom]');
-    if (module == null && child == null)
+    }
+    if (module == null && child == null) {
       throw ArgumentError('[module] or [child] must be provided');
-    if (module != null && child != null)
+    }
+    if (module != null && child != null) {
       throw ArgumentError('You should provide only [module] or [child]');
+    }
   }
-  Map<
+  final Map<
       TransitionType,
       PageRouteBuilder<T> Function(
     Widget Function(BuildContext, ModularArguments) builder,
@@ -112,9 +115,9 @@ class Router<T> {
     String path,
   }) {
     Widget page = _DisposableWidget(
-      child: (context, args) => this.child(context, args),
-      dispose: (Old old, ModalRoute actual) {
-        final List<String> trash = [];
+      child: child,
+      dispose: (old, actual) {
+        final trash = <String>[];
         if (!isRouterOutlet) {
           Modular.oldProccess(old);
         }
@@ -130,9 +133,9 @@ class Router<T> {
           }
         });
 
-        trash.forEach((key) {
+        for (final key in trash) {
           injectMap.remove(key);
-        });
+        }
       },
     );
     return page;
@@ -142,23 +145,26 @@ class Router<T> {
       {Map<String, ChildModule> injectMap,
       RouteSettings settings,
       bool isRouterOutlet}) {
-    final Widget disposablePage = _disposableGenerate(
+    final disposablePage = _disposableGenerate(
         injectMap: injectMap,
         path: settings.name,
         isRouterOutlet: isRouterOutlet);
 
-    if (this.transition == TransitionType.custom &&
-        this.customTransition != null) {
+    if (transition == TransitionType.custom && customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
           return disposablePage;
         },
         settings: settings,
-        transitionsBuilder: this.customTransition.transitionBuilder,
-        transitionDuration: this.customTransition.transitionDuration,
+        transitionsBuilder: customTransition.transitionBuilder,
+        transitionDuration: customTransition.transitionDuration,
       );
-    } else if (this.transition == TransitionType.defaultTransition) {
-      var widgetBuilder = (context) => disposablePage;
+    } else if (transition == TransitionType.defaultTransition) {
+      // Helper function
+      Widget widgetBuilder(BuildContext context) {
+        return disposablePage;
+      }
+
       if (routeGenerator != null) {
         return routeGenerator(widgetBuilder, settings);
       }
@@ -172,7 +178,7 @@ class Router<T> {
               builder: widgetBuilder,
             );
     } else {
-      var selectTransition = _transitions[this.transition];
+      var selectTransition = _transitions[transition];
       return selectTransition((context, args) {
         return disposablePage;
       }, Modular.args, settings);

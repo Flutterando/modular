@@ -1,4 +1,4 @@
-import 'ILocalRepository.dart';
+import 'ilocal_repository.dart';
 
 class LocalStorageSharePreference implements ILocalStorage {
   @override
