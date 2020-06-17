@@ -7,8 +7,8 @@ import 'app/app_bloc.dart';
 import 'app/app_module.dart';
 import 'app/modules/home/home_bloc.dart';
 import 'app/modules/home/home_module.dart';
-import 'app/shared/ILocalRepository.dart';
 import 'app/shared/app_info.state.dart';
+import 'app/shared/ilocal_repository.dart';
 import 'app/shared/local_storage_shared.dart';
 
 void main() {
@@ -40,9 +40,7 @@ void main() {
     });
 
     test('Inject not found withless module', () {
-      expect(() {
-        Modular.get<HomeModule>();
-      }, throwsA(isA<ModularError>()));
+      expect(Modular.get, throwsA(isA<ModularError>()));
     });
 
     test('Inject singleton does not create duplicated instances', () {
@@ -52,7 +50,8 @@ void main() {
     });
 
     test('Get Interface', () {
-      expect(Modular.get<LocalStorageSharePreference>(), isA<LocalStorageSharePreference>());
+      expect(Modular.get<LocalStorageSharePreference>(),
+          isA<LocalStorageSharePreference>());
       expect(Modular.get<ILocalStorage>(), isA<LocalStorageSharePreference>());
     });
   });

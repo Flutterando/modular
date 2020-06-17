@@ -1,5 +1,5 @@
 abstract class GuardExecutor {
-  onGuarded(String path, bool isActive);
+  void onGuarded(String path, bool isActive);
 }
 
 abstract class RouteGuard {

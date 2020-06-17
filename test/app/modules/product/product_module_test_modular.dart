@@ -11,7 +11,9 @@ import 'product_module.dart';
 class InitProductModuleHelper extends IModularTest {
   final ModularTestType modularTestType;
 
-  InitProductModuleHelper({this.modularTestType: ModularTestType.resetModules});
+  InitProductModuleHelper({
+    this.modularTestType = ModularTestType.resetModules,
+  });
 
   @override
   List<Bind> get binds => [];

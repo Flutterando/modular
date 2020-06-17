@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/transitions/transitions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-main() {
+void main() {
   test('fadeInTransition', () {
     var r = fadeInTransition((context, args) => Container(), null, null);
     expect(r, isA<PageRouteBuilder>());

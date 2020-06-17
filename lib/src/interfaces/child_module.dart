@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/routers/router.dart';
+
+import '../../flutter_modular.dart';
+import '../routers/router.dart';
 
 abstract class ChildModule {
   List<Bind> _binds;
@@ -11,15 +12,15 @@ abstract class ChildModule {
     _binds = binds;
   }
 
-  changeBinds(List<Bind> b) {
+  void changeBinds(List<Bind> b) {
     _binds = b;
   }
 
-  final List<String> paths = List<String>();
+  final List<String> paths = <String>[];
 
   final Map<Type, dynamic> _singletonBinds = {};
 
-  getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
+  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -37,7 +38,7 @@ abstract class ChildModule {
     if (typesInRequest.contains(type)) {
       throw ModularError('''
 Recursive calls detected. This can cause StackOverflow.
-Check the Binds of the ${this.runtimeType} module:
+Check the Binds of the $runtimeType module:
 ***
 ${typesInRequest.join('\n')}
 ***
@@ -57,7 +58,7 @@ ${typesInRequest.join('\n')}
 
   /// Dispose bind from the memory
   bool remove<T>() {
-    Type type = _getInjectType<T>();
+    final type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
       var inject = _singletonBinds[type];
       _callDispose(inject);
@@ -83,8 +84,8 @@ ${typesInRequest.join('\n')}
   }
 
   /// Dispose all bind from the memory
-  cleanInjects() {
-    for (Type key in _singletonBinds.keys) {
+  void cleanInjects() {
+    for (final key in _singletonBinds.keys) {
       var _bind = _singletonBinds[key];
       _callDispose(_bind);
     }
@@ -92,7 +93,7 @@ ${typesInRequest.join('\n')}
   }
 
   Type _getInjectType<B>() {
-    for (Type key in _singletonBinds.keys) {
+    for (final key in _singletonBinds.keys) {
       if (key is B) {
         return key;
       }
@@ -102,11 +103,11 @@ ${typesInRequest.join('\n')}
 
   /// Create a instance of all binds isn't lazy Loaded
   void instance() {
-    _binds.forEach((bindElement) {
+    for (final bindElement in _binds) {
       if (!bindElement.lazy) {
         var b = bindElement.inject(Inject());
         _singletonBinds[b.runtimeType] = b;
       }
-    });
+    }
   }
 }

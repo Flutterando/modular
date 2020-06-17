@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/interfaces/main_module.dart';
+import '../../flutter_modular.dart';
+import '../interfaces/main_module.dart';
 
 class ModularApp extends StatefulWidget {
   final MainModule module;

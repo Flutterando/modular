@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../flutter_modular.dart';
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
@@ -20,22 +20,22 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  changeBinds(List<Bind> b) {
+  void changeBinds(List<Bind> b) {
     _fakeModule.changeBinds(b);
   }
 
   @override
-  cleanInjects() {
+  void cleanInjects() {
     _fakeModule.cleanInjects();
   }
 
   @override
-  getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
+  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
     return _fakeModule.getBind<T>(params, typesInRequest: typesInRequest);
   }
 
   @override
-  List<String> get paths => [this.runtimeType.toString()];
+  List<String> get paths => [runtimeType.toString()];
 
   @override
   bool remove<T>() {
@@ -63,7 +63,7 @@ class _FakeModule extends ChildModule {
   final List<Bind> bindsInject;
 
   _FakeModule({String path, this.bindsInject}) {
-    this.paths.add(this.runtimeType.toString());
+    paths.add(runtimeType.toString());
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../flutter_modular.dart';
 
 class Old {
   final ModularArguments args;

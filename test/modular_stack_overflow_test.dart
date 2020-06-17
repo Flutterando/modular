@@ -10,8 +10,7 @@ void main() {
 
   group("Stackoverflow", () {
     test('Error in bind', () {
-      expect(
-          () => Modular.get<ObjectController>(), throwsA(isA<ModularError>()));
+      expect(Modular.get, throwsA(isA<ModularError>()));
     });
 
     test('Not Error', () {

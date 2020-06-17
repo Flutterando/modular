@@ -15,7 +15,7 @@ class RouterOutlet extends StatefulWidget {
       this.initialRoute = Modular.initialRoute,
       this.keepAlive = true})
       : super(key: key) {
-    this.module.paths.add(this.runtimeType.toString());
+    module.paths.add(runtimeType.toString());
   }
 
   @override

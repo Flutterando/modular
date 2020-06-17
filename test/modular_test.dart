@@ -83,7 +83,7 @@ void main() {
     });
 
     test('modulePath', () {
-      Router router = Modular.selectRoute("/home/product/");
+      var router = Modular.selectRoute("/home/product/");
 
       expect(router, isA<Router>());
       expect(router.modulePath, "/home/product");

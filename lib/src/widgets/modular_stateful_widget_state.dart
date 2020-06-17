@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../flutter_modular.dart';
 
 abstract class ModularState<TWidget extends StatefulWidget, TBind>
     extends State<TWidget> {
-  final controller = Modular.get<TBind>();
+  final TBind controller = Modular.get<TBind>();
 
   @override
   void dispose() {
@@ -13,7 +13,7 @@ abstract class ModularState<TWidget extends StatefulWidget, TBind>
 }
 
 mixin ModularStateMixin<T extends StatefulWidget, TBind> on State<T> {
-  final controller = Modular.get<TBind>();
+  final TBind controller = Modular.get<TBind>();
 
   @override
   void dispose() {
