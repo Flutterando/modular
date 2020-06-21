@@ -107,6 +107,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       // set your initial route
       initialRoute: "/",
+      navigatorKey: Modular.navigatorKey,
       // add Modular to manage the routing system
       onGenerateRoute: Modular.generateRoute,
     );
