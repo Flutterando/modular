@@ -5,7 +5,7 @@ class LoginExecutor extends GuardExecutor {
   LoginExecutor({this.message});
 
   @override
-  onGuarded(String path, bool isActive) {
+  onGuarded(String path, {bool isActive}) {
     if (isActive) {
       print('logined and pass');
       return;

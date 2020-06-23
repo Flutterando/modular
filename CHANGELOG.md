@@ -1,8 +1,20 @@
+## [1.2.6] - 23 Jun 2020
+* Direct call Inject
+```dart
+@override
+  List<Bind> get binds => [
+        Bind((i) => HomeBloc(repository: i(), appBloc: i())),
+        Bind((i) => HomeRepository(dio: i())),
+        Bind((i) => Dio()),
+      ];
+```
+
+Use **i()** instead **i.get()**
+
+
 ## [1.2.5+1] - 26 May 2020
 * Fix Modular.link bug
 * Smooth Animation Navigator: 56% faster navigation animations
-
-
 
 ## [1.2.4] - 23 May 2020
 * Welcome Navigator API 2.0!!!

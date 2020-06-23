@@ -12,6 +12,8 @@ class Inject<T> {
 
   factory Inject.of() => Inject(tag: T.toString());
 
+  B call<B>([Map<String, dynamic> params]) => get<B>(params);
+
   /// get injected dependency
   B get<B>([Map<String, dynamic> params]) {
     params ??= {};
@@ -23,11 +25,9 @@ class Inject<T> {
     }
   }
 
-  ModularArguments get args {
-    return Modular.args;
-  }
+  ModularArguments get args => Modular.args;
 
-  /// get current modulex
+  /// get current module link
   RouteLink get link => Modular.link;
 
   void dispose<B>() {

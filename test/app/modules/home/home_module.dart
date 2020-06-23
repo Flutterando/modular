@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../app_bloc.dart';
 import '../../guard/guard.dart';
 import '../../shared/app_info.state.dart';
 import '../forbidden/forbidden_widget.dart';
@@ -13,7 +12,7 @@ class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
         Bind((i) => AppState(), singleton: true),
-        Bind((i) => HomeBloc(i.get<AppBloc>())),
+        Bind((i) => HomeBloc(i())),
       ];
 
   @override

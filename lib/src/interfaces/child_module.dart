@@ -80,7 +80,7 @@ ${typesInRequest.join('\n')}
 
     try {
       bind?.dispose();
-    } catch (e) {}
+    } on Exception {} 
   }
 
   /// Dispose all bind from the memory
