@@ -77,10 +77,6 @@ ${typesInRequest.join('\n')}
       bind.close();
       return;
     }
-
-    try {
-      bind?.dispose();
-    } on Exception {} 
   }
 
   /// Dispose all bind from the memory
