@@ -1,4 +1,4 @@
-## [1.2.6] - 23 Jun 2020
+## [1.2.6+1] - 23 Jun 2020
 * Direct call Inject
 ```dart
 @override
