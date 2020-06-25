@@ -588,7 +588,7 @@ class TabModule extends WidgetModule {
 
     @override
   List<Bind> get binds => [
-    Bind((i) => TabBloc(repository: i.get<TabRepository>())),
+    Bind((i) => TabBloc(repository: i())),
     Bind((i) => TabRepository()),
   ];
 
