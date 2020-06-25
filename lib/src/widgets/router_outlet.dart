@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-
 import '../../flutter_modular.dart';
+import 'widget_module.dart';
 
 class RouterOutlet extends StatefulWidget {
   final ChildModule module;
