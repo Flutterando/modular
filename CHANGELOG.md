@@ -1,3 +1,6 @@
+## [1.2.7] - 26 Jun 2020
+- Fix route error issue [#118](https://github.com/Flutterando/modular/issues/118)
+
 ## [1.2.6+1] - 23 Jun 2020
 * Direct call Inject
 ```dart

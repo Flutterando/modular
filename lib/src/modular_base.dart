@@ -227,18 +227,21 @@ class Modular {
         final routeParts = routeNamed.split('/');
         final pathParts = path.split('/');
 
-        print('Match! Processing $path as $routeNamed');
+        //  print('Match! Processing $path as $routeNamed');
 
         for (var routePart in routeParts) {
           if (routePart.contains(":")) {
             var paramName = routePart.replaceFirst(':', '');
-            params[paramName] = pathParts[paramPos];
-            routeNamed = routeNamed.replaceFirst(routePart, params[paramName]);
+            if (pathParts[paramPos].isNotEmpty) {
+              params[paramName] = pathParts[paramPos];
+              routeNamed =
+                  routeNamed.replaceFirst(routePart, params[paramName]);
+            }
           }
           paramPos++;
         }
 
-        print('Result processed $path as $routeNamed');
+        // print('Result processed $path as $routeNamed');
 
         if (routeNamed != path) {
           router.params = null;
@@ -281,9 +284,7 @@ class Modular {
     path = "/$path".replaceAll('//', '/');
     final routers = module.routers;
     routers.sort((preview, actual) {
-      final isContain =
-          preview.routerName.contains('/:') == actual.routerName.contains('/:');
-      return isContain ? -1 : 1;
+      return preview.routerName.contains('/:') ? 1 : 0;
     });
     for (var route in routers) {
       final tempRouteName =

@@ -120,8 +120,7 @@ void main() {
 
     test('Get route correct', () {
       final router = Modular.selectRoute("/prod/product");
-      final page = router.child(null, null);
-      expect(page, isA<ProductPage>());
+      expect(router.routerName, "/product");
     });
   });
 }
