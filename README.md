@@ -1,4 +1,6 @@
-![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) [![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master)
+![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) 
+[![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) 
+[![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master)
 [![Join the chat at https://discord.gg/ZbdsWA4](https://img.shields.io/badge/Chat-on%20Discord-lightgrey?style=flat&logo=discord)](https://discord.gg/ZbdsWA4)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
