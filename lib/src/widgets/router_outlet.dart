@@ -24,17 +24,30 @@ class RouterOutlet extends StatefulWidget {
 
 class _RouterOutletState extends State<RouterOutlet>
     with AutomaticKeepAliveClientMixin {
+  GlobalKey<NavigatorState> _key;
+
+  @override
+  void initState() {
+    super.initState();
+    _key = widget.navigatorKey ?? GlobalKey<NavigatorState>();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ModularProvider(
-      module: widget.module,
-      child: Navigator(
-        key: widget.navigatorKey,
-        initialRoute: widget.initialRoute,
-        onGenerateRoute: (setting) {
-          return Modular.generateRoute(setting, widget.module);
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        return !await _key.currentState.maybePop();
+      },
+      child: ModularProvider(
+        module: widget.module,
+        child: Navigator(
+          key: _key,
+          initialRoute: widget.initialRoute,
+          onGenerateRoute: (setting) {
+            return Modular.generateRoute(setting, widget.module);
+          },
+        ),
       ),
     );
   }

@@ -10,9 +10,9 @@ class DynamicModule extends ChildModule {
   List<Router> get routers => [
         Router('/', child: (_, __) => Container()),
         Router('/home', child: (_, __) => Container()),
-        Router('/:id', child: (_, __) => Container()),
         Router('/product', child: (_, __) => Container()),
         Router('/product/:id', child: (_, __) => Container()),
+        Router('/:id', child: (_, __) => Container()),
       ];
 }
 
