@@ -1,5 +1,6 @@
-## [1.2.7] - 26 Jun 2020
+## [1.2.7+1] - 26 Jun 2020
 - Fix route error issue [#118](https://github.com/Flutterando/modular/issues/118)
+- Added WillPopScope in RouterOutlet
 
 ## [1.2.6+1] - 23 Jun 2020
 * Direct call Inject
