@@ -9,7 +9,7 @@
 
 ## Flutter Modular
 
-![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/modular.png)
+![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png)
 
 _This README is also available in [Brazilian Portuguese](README.pt-br.md)._
 
