@@ -17,6 +17,8 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  
+  mobx: ^1.2.1+1
   rxdart: ^0.23.1
   flutter:
     sdk: flutter
@@ -28,6 +30,10 @@ dependencies:
     path: ../
 
 dev_dependencies:
+  mobx_codegen: ^1.1.0+1
+  build_runner: ^1.10.0
+  modular_codegen:
+    path: ../modular_codegen
   flutter_test:
     sdk: flutter
 
