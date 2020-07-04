@@ -15,19 +15,37 @@ class Inject<T> {
   B call<B>([Map<String, dynamic> params]) => get<B>(params);
 
   /// get injected dependency
-  B get<B>([Map<String, dynamic> params, B defaultValue]) {
+  B get<B>([Map<String, dynamic> params]) {
     params ??= {};
     if (tag == null) {
       return Modular.get<B>(
-          params: params,
-          typesInRequest: typesInRequest,
-          defaultValue: defaultValue);
+        params: params,
+        typesInRequest: typesInRequest,
+      );
     } else {
       return Modular.get<B>(
-          module: tag,
-          params: params,
-          typesInRequest: typesInRequest,
-          defaultValue: defaultValue);
+        module: tag,
+        params: params,
+        typesInRequest: typesInRequest,
+      );
+    }
+  }
+
+  B getDefault<B>(B defaultValue, [Map<String, dynamic> params]) {
+    params ??= {};
+    if (tag == null) {
+      return Modular.get<B>(
+        params: params,
+        typesInRequest: typesInRequest,
+        defaultValue: defaultValue,
+      );
+    } else {
+      return Modular.get<B>(
+        module: tag,
+        params: params,
+        typesInRequest: typesInRequest,
+        defaultValue: defaultValue,
+      );
     }
   }
 
