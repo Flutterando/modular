@@ -3,35 +3,20 @@ import '../../flutter_modular.dart';
 
 import '../modular_base.dart';
 
-class Injection<T> {
+class Inject<T> {
   Map<String, dynamic> params = {};
   final String tag;
   final List<Type> typesInRequest;
 
-  Injection({this.params, this.tag, this.typesInRequest});
+  Inject({this.params, this.tag, this.typesInRequest});
 
-  factory Injection.of() => Injection(tag: T.toString());
+  factory Inject.of() => Inject(tag: T.toString());
 
-  B call<B>([Map<String, dynamic> params]) => get<B>(params);
+  B call<B>({Map<String, dynamic> params, B defaultValue}) =>
+      get<B>(params: params, defaultValue: defaultValue);
 
   /// get injected dependency
-  B get<B>([Map<String, dynamic> params]) {
-    params ??= {};
-    if (tag == null) {
-      return Modular.get<B>(
-        params: params,
-        typesInRequest: typesInRequest,
-      );
-    } else {
-      return Modular.get<B>(
-        module: tag,
-        params: params,
-        typesInRequest: typesInRequest,
-      );
-    }
-  }
-
-  B getDefault<B>(B defaultValue, [Map<String, dynamic> params]) {
+  B get<B>({Map<String, dynamic> params, B defaultValue}) {
     params ??= {};
     if (tag == null) {
       return Modular.get<B>(
@@ -64,7 +49,7 @@ class Injection<T> {
 }
 
 mixin InjectMixinBase<T> {
-  final Injection<T> _inject = Injection<T>.of();
+  final Inject<T> _inject = Inject<T>.of();
 
   S get<S>() => _inject.get<S>();
 }
@@ -73,7 +58,7 @@ mixin InjectMixinBase<T> {
 /// [T] the module to be injected on the widget.
 mixin InjectWidgetMixin<T extends ChildModule> on Widget
     implements InjectMixinBase<T> {
-  final Injection<T> _inject = Injection<T>.of();
+  final Inject<T> _inject = Inject<T>.of();
 
   S get<S>({Map<String, dynamic> params}) =>
       Modular.get<S>(module: T.toString(), params: params);

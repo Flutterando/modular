@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
-import 'package:build/src/builder/build_step.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:build/build.dart';
+import 'package:flutter_modular/src/annotations/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
-class InjectionGenerator extends GeneratorForAnnotation<Inject> {
+class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
   @override
   FutureOr<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
@@ -21,14 +20,20 @@ class InjectionGenerator extends GeneratorForAnnotation<Inject> {
     for (var i = listElements.length - 1; i >= 0; i--) {
       var item = listElements[i];
       item.visitChildren(visitor);
+
       if (visitor.isAnnotation) {
+        break;
+      }
+
+      if (i == 0) {
+        element.visitChildren(visitor);
         break;
       }
     }
 
     // print(visitor2.params);
     _write(
-        "final ${element.displayName[0].toLowerCase()}${element.displayName.substring(1)} = Bind((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
+        "final ${element.displayName[0].toLowerCase()}${element.displayName.substring(1)} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
     return _buffer.toString();
   }
 }

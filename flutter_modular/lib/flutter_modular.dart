@@ -1,8 +1,8 @@
 library flutter_modular;
 
 export 'src/exceptions/modular_error.dart';
-export 'src/injection/bind.dart';
-export 'src/injection/injection.dart';
+export 'src/inject/bind.dart';
+export 'src/inject/inject.dart';
 export 'src/interfaces/child_module.dart';
 export 'src/interfaces/disposable.dart';
 export 'src/interfaces/main_module.dart';

@@ -1,7 +1,7 @@
-class Inject {
+class Injectable {
   final bool singleton;
   final bool lazy;
-  const Inject({this.singleton = true, this.lazy = true});
+  const Injectable({this.singleton = true, this.lazy = true});
 }
 
 class _ModularParam {
