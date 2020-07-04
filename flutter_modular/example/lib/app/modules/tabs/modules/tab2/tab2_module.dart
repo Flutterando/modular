@@ -12,6 +12,4 @@ class Tab2Module extends ChildModule {
   List<Router> get routers => [
         Router(Modular.initialRoute, child: (_, args) => Tab2Page()),
       ];
-
-  static Inject get to => Inject<Tab2Module>.of();
 }

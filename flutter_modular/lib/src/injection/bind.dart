@@ -1,7 +1,7 @@
 import '../../flutter_modular.dart';
 
 class Bind<T> {
-  final T Function(Inject i) inject;
+  final T Function(Injection i) inject;
 
   ///single instance object?
   final bool singleton;

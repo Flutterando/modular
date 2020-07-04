@@ -49,7 +49,7 @@ ${typesInRequest.join('\n')}
     }
 
     bindValue =
-        bind.inject(Inject(params: params, typesInRequest: typesInRequest));
+        bind.inject(Injection(params: params, typesInRequest: typesInRequest));
     if (bind.singleton) {
       _singletonBinds[type] = bindValue;
     }
@@ -101,7 +101,7 @@ ${typesInRequest.join('\n')}
   void instance() {
     for (final bindElement in _binds) {
       if (!bindElement.lazy) {
-        var b = bindElement.inject(Inject());
+        var b = bindElement.inject(Injection());
         _singletonBinds[b.runtimeType] = b;
       }
     }

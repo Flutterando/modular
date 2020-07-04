@@ -23,6 +23,4 @@ class Tab1Module extends ChildModule {
             child: (_, args) => Page2Page(),
             transition: TransitionType.leftToRight),
       ];
-
-  static Inject get to => Inject<Tab1Module>.of();
 }

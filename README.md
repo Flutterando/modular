@@ -11,8 +11,6 @@
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png)
 
-_This README is also available in [Brazilian Portuguese](README.pt-br.md)._
-
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**
 - **[Modular Pillars](#modular-pillars)**

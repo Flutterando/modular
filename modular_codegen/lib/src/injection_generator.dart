@@ -4,13 +4,10 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/src/builder/build_step.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'package:modular_codegen/src/annotations.dart';
-
-export 'package:modular_codegen/src/annotations.dart';
-
-class InjectionGenerator extends GeneratorForAnnotation<Injection> {
+class InjectionGenerator extends GeneratorForAnnotation<Inject> {
   @override
   FutureOr<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {

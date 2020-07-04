@@ -35,8 +35,6 @@ class HomeModule extends ChildModule {
         Router("/arguments", child: (_, args) => ArgumentsPage(id: args.data)),
         Router("/modularArguments", child: (_, args) => ModularArgumentsPage()),
       ];
-
-  static Inject get to => Inject<HomeModule>.of();
 }
 
 class ArgumentsPage extends StatelessWidget {

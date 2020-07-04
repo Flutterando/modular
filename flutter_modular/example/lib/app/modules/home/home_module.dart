@@ -37,6 +37,4 @@ class HomeModule extends ChildModule {
           guards: [MyGuard()],
         ),
       ];
-
-  static Inject get to => Inject<HomeModule>.of();
 }

@@ -14,8 +14,6 @@ class ProductModule extends ChildModule {
         Router("/:test", child: (_, args) => DetailsPage(id: 1)),
         Router("/product", child: (_, args) => ProductPage()),
       ];
-
-  static Inject get to => Inject<ProductModule>.of();
 }
 
 class DetailsPage extends StatelessWidget {
