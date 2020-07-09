@@ -352,7 +352,7 @@ You can group routes that contains one or more common properties. Properties lik
 ```dart
 List<Router> get routers => [
   Router('/', module: HomeModule()),
-  Router.group(
+  ...Router.group(
     guards: [MyGuard()],
     routes: [
       Router("/admin", module: AdminModule()),
