@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      modular_codegen|modular_generator:
+        enabled: true
+
+builders:
+  modular_generator:
+    target: ":inject_generator"
+    import: "package:modular_codegen/builder.dart"
+    builder_factories: ["injection"]
+    build_extensions: {".dart": [".injection.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]

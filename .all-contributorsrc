@@ -168,6 +168,64 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "gabuldev",
+      "name": "Gabriel Sávio - Flutterando",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/32063378?v=4",
+      "profile": "http://gabul.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tiagosito",
+      "name": "Tiagosito",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/17324575?v=4",
+      "profile": "http://www.iatec.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mateusfccp",
+      "name": "Mateus Felipe C. C. Pinto",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4605213?v=4",
+      "profile": "https://github.com/mateusfccp",
+      "contributions": [
+        "translation",
+        "doc"
+      ]
+    },
+    {
+      "login": "pgrimaud",
+      "name": "Pierre Grimaud",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1866496?v=4",
+      "profile": "https://github.com/pgrimaud",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "toshiossada",
+      "name": "Toshi Ossada",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2637049?v=4",
+      "profile": "http://toshiossada.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "allanlucio",
+      "name": "Allan L.",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7063932?v=4",
+      "profile": "https://github.com/allanlucio",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,

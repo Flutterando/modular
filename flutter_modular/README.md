@@ -11,6 +11,7 @@
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png)
 
+
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**
 - **[Modular Pillars](#modular-pillars)**
