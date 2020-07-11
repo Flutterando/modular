@@ -27,13 +27,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   flutter_modular:
-    path: /home/gabul/Development/Packages/modular/flutter_modular
+    path: /home/gabul/Development/Packages/modular_gabul/modular/flutter_modular
 
 dev_dependencies:
   mobx_codegen: 
   build_runner: ^1.10.0
   modular_codegen: 
-    path: /home/gabul/Development/Packages/modular/modular_codegen
+   
   flutter_test:
     sdk: flutter
 
