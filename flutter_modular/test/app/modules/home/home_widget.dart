@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../../../lib/flutter_modular.dart';
 import 'home_bloc.dart';
-import 'home_module.dart';
 
 class HomeWidget extends StatelessWidget {
   @override

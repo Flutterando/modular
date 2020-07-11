@@ -13,8 +13,8 @@ class TabsPage extends StatefulWidget {
   _TabsPageState createState() => _TabsPageState();
 }
 
-class _TabsPageState extends ModularState<TabsPage, TabsBloc> {
-  //use 'controller' variable to access controller
+class _TabsPageState extends State<TabsPage> {
+  var controller = RouterOutletListController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,52 +24,22 @@ class _TabsPageState extends ModularState<TabsPage, TabsBloc> {
         actions: <Widget>[
           RaisedButton(
             onPressed: () {
-              Modular.to.pushNamed('/home');
+              Modular.navigator.pushNamed('/home');
             },
             child: Text('HOME'),
           )
         ],
       ),
-      body: StreamBuilder<int>(
-          stream: controller.selectedPage,
-          initialData: 0,
-          builder: (context, snapshot) {
-            int selectedPage = snapshot.data;
-            return IndexedStack(
-              index: selectedPage,
-              children: <Widget>[
-                RouterOutlet(
-                  module: Tab1Module(),
-                ),
-                RouterOutlet(
-                  module: Tab2Module(),
-                ),
-                Container(
-                  color: Colors.blue,
-                ),
-              ],
-            );
-          }),
-      bottomNavigationBar: StreamBuilder<int>(
-          stream: controller.selectedPage,
-          initialData: 0,
-          builder: (context, snapshot) {
-            int selectedPage = snapshot.data;
-
-            return BottomNavigationBar(
-                currentIndex: selectedPage,
-                onTap: (index) {
-                  controller.selectedPage.add(index);
-                },
-                items: [
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.add), title: Text('data')),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.add), title: Text('data')),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.add), title: Text('data')),
-                ]);
-          }),
+      body: RouterOutletList(
+          modules: [Tab1Module(), Tab2Module()], controller: controller),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          onTap: controller.changeModule,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),
+            BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),
+            BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),
+          ]),
     );
   }
 }

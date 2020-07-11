@@ -223,8 +223,8 @@ void main() {
     });
     testWidgets('on pushNamed modify actualRoute ', (tester) async {
       await tester.pumpWidget(buildTestableWidget(HomeWidget()));
-      Modular.to.pushNamed('/prod');
-      expect(Modular.link.path, '/prod');
+      Modular.to.pushNamed('/product');
+      expect(Modular.to.path, '/product');
     });
     tearDown(() {
       modularProductTest.memoryManage(ModularTestType.resetModules);
