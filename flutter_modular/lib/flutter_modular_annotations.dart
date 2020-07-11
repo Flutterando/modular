@@ -15,3 +15,8 @@ class _ModularData {
 }
 
 const Data = _ModularData();
+
+class Default {
+  final dynamic defaultValue;
+  const Default(this.defaultValue);
+}

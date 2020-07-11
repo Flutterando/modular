@@ -6,8 +6,8 @@ part of 'test.controller.dart';
 // InjectionGenerator
 // **************************************************************************
 
-final testController = Bind(
-  (i) => TestController(),
+final $HomeRealController = BindInject(
+  (i) => HomeRealController(i<AppBloc>()),
   singleton: true,
   lazy: true,
 );

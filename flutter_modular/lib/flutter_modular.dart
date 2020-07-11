@@ -1,5 +1,6 @@
 library flutter_modular;
 
+export 'flutter_modular_annotations.dart';
 export 'src/exceptions/modular_error.dart';
 export 'src/inject/bind.dart';
 export 'src/inject/inject.dart';
@@ -17,4 +18,3 @@ export 'src/widgets/modular_stateful_widget_state.dart';
 export 'src/widgets/modular_stateless_widget.dart';
 export 'src/widgets/router_outlet.dart';
 export 'src/widgets/widget_module.dart';
-export 'src/annotations/annotations.dart';

@@ -9,7 +9,7 @@ import 'modules/tabs/tabs_module.dart';
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
-        testController,
+        $HomeRealController,
       ];
 
   @override

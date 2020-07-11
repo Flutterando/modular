@@ -14,7 +14,7 @@ class HomeModule extends ChildModule {
   List<Bind> get binds => [
         Bind((i) => AppState(), singleton: true),
         Bind((i) => HomeBloc(i())),
-        Bind((i) => HomeBloc(i.getDefault(AppBloc()))),
+        Bind((i) => HomeBloc(i(defaultValue: AppBloc()))),
       ];
 
   @override
