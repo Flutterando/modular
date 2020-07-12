@@ -20,7 +20,7 @@ jobs:
       working-directory: flutter_modular
     
     - name: Flutter Test
-      run: flutter test --coverage --coverage-path coverage/lcov.info
+      run: flutter test --coverage --coverage-path ../coverage/lcov.info
       working-directory: flutter_modular
       
     - name: Code coverage
