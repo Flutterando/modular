@@ -1,3 +1,5 @@
+![CI](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
+
 # modular_codegen
 
 Code Generate for flutter_modular. Inject Automation. Annotation @Injectable, @Param and @Data.
