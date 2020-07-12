@@ -15,11 +15,18 @@ jobs:
     - uses: subosito/flutter-action@v1.3.2
       with:
         channel: 'stable'
-    - run: flutter pub get
-    - run: flutter test --coverage
+    - name: get packages
+      run: flutter pub get
+      working-directory: flutter_modular
+    
+    - name: Flutter Test
+      run: flutter test --coverage --coverage-path coverage/lcov.info
+      working-directory: flutter_modular
+      
     - name: Code coverage
       id: dart-coverage
       uses: johnpryan/dart-coverage-action@master
+      
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.0.1
       with:
