@@ -1,6 +1,6 @@
 # modular_codegen
 
-Code geneeration for `flutter_modular`. Injection automation. Annotation @Injectable, @Param and @Data.
+Code geneeration for `flutter_modular`. Injection automation. Annotations `Injectable`, `Param` and `Data`.
 
 ## Instalation
 
