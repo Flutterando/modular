@@ -37,7 +37,7 @@ class Modular {
   static Old get old => _old;
   static ModularArguments get args => _args?.copy();
   static IModularNavigator navigatorDelegate;
-  static String currentNavigatorOutlet;
+  static List<String> currentModule = <String>[];
   static Map<String, GlobalKey<NavigatorState>> _navigators =
       <String, GlobalKey<NavigatorState>>{};
 
@@ -61,14 +61,14 @@ class Modular {
     return navigatorDelegate ?? _routeLink?.copy();
   }
 
+  /// Return Modular.navigator
+  /// Used for inside RouterOutlet
+
   static IModularNavigator get navigator {
-    if (currentNavigatorOutlet != null) {
-      return ModularNavigator(_navigators[currentNavigatorOutlet].currentState);
-    } else {
-      return ModularNavigator(_navigators["app"].currentState);
-    }
+    return ModularNavigator(_navigators[currentModule.last].currentState);
   }
 
+  /// Add Navigator key for RouterOutlet
   static GlobalKey<NavigatorState> outletNavigatorKey(String path) {
     if (!_navigators.containsKey(path)) {
       _navigators.addAll({path: GlobalKey<NavigatorState>()});
@@ -76,10 +76,27 @@ class Modular {
     return _navigators[path];
   }
 
+  /// Remove Navigator key
   static void removeOutletNavigatorKey(String path) {
     if (_navigators.containsKey(path)) {
       _navigators.remove(path);
     }
+  }
+
+  /// Add first position app in currentModule
+  static void updateCurrentModuleApp() {
+    if (Modular.currentModule.contains("app")) {
+      Modular.currentModule.remove("app");
+    }
+    Modular.currentModule.insert(0, "app");
+  }
+
+  /// Add last position module in currentModule
+  static void updateCurrentModule(String name) {
+    if (Modular.currentModule.contains(name)) {
+      Modular.currentModule.remove(name);
+    }
+    Modular.currentModule.add(name);
   }
 
   /// Return Modular.navigatorKey
@@ -111,6 +128,9 @@ class Modular {
   static GlobalKey<NavigatorState> get navigatorKey {
     if (!_navigators.containsKey('app')) {
       _navigators.addAll({'app': GlobalKey<NavigatorState>()});
+      if (!currentModule.contains("app")) {
+        currentModule.add("app");
+      }
     }
     return _navigators['app'];
   }
@@ -141,11 +161,8 @@ class Modular {
       _injectMap.remove(name);
       if (_navigators.containsKey(name)) {
         _navigators.remove(name);
-        if (currentNavigatorOutlet == name) {
-          currentNavigatorOutlet = null;
-        }
+        currentModule.remove(name);
       }
-      ;
     }
   }
 
@@ -424,9 +441,7 @@ class Modular {
         args: args,
         link: link,
       );
-    }
-    if (!isRouterOutlet) {
-      currentNavigatorOutlet = null;
+      updateCurrentModule("app");
     }
 
     _args = ModularArguments(router.params, settings.arguments);

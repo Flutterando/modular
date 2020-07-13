@@ -40,6 +40,11 @@ class _TabsPageState extends State<TabsPage> {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.shopping_cart),
+          onPressed: () {
+            Modular.to.pushNamed("/shopping");
+          }),
       body: RouterOutletList(
           modules: [Tab1Module(), Tab2Module()], controller: controller),
       bottomNavigationBar: BottomNavigationBar(

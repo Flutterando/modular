@@ -51,11 +51,12 @@ class RouterOutletListController {
   ValueChanged<int> _listen;
   void init(List<ChildModule> modules) {
     _modules = modules;
-    Modular.currentNavigatorOutlet = _modules[0].runtimeType.toString();
+    Modular.updateCurrentModule(modules[0].runtimeType.toString());
   }
 
   void changeModule(int index) {
-    Modular.currentNavigatorOutlet = _modules[index].runtimeType.toString();
+    final name = _modules[index].runtimeType.toString();
+    Modular.updateCurrentModule(name);
     _pageController.jumpToPage(index);
     if (_listen != null) {
       _listen(index);

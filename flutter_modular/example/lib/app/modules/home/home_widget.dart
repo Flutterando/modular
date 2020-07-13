@@ -39,8 +39,8 @@ class HomeWidget extends ModularStatelessWidget<HomeModule> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // get<HomeBloc>().increment();
-          Modular.to.pushNamed('/home');
+          get<HomeBloc>().increment();
+          //Modular.to.pushNamed('/home');
         },
       ),
     );
