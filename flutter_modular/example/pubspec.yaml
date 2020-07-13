@@ -33,7 +33,7 @@ dev_dependencies:
   mobx_codegen: 
   build_runner: ^1.10.0
   modular_codegen: 
-   
+    path: /home/gabul/Development/Packages/modular_gabul/modular/modular_codegen
   flutter_test:
     sdk: flutter
 

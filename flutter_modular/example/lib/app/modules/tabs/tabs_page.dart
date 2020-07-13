@@ -15,6 +15,16 @@ class TabsPage extends StatefulWidget {
 
 class _TabsPageState extends State<TabsPage> {
   var controller = RouterOutletListController();
+  var currentIndex = 0;
+  @override
+  void initState() {
+    controller.listen((value) {
+      setState(() {
+        currentIndex = value;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,7 @@ class _TabsPageState extends State<TabsPage> {
         actions: <Widget>[
           RaisedButton(
             onPressed: () {
-              Modular.navigator.pushNamed('/home');
+              Modular.to.pushNamed('/home');
             },
             child: Text('HOME'),
           )
@@ -33,7 +43,7 @@ class _TabsPageState extends State<TabsPage> {
       body: RouterOutletList(
           modules: [Tab1Module(), Tab2Module()], controller: controller),
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
+          currentIndex: currentIndex,
           onTap: controller.changeModule,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('data')),

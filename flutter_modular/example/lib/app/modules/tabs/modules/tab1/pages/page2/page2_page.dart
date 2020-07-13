@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class Page2Page extends StatefulWidget {
   final String title;
@@ -17,7 +18,7 @@ class _Page2PageState extends State<Page2Page> {
       ),
       body: Center(
         child: RaisedButton(onPressed: () {
-          Navigator.of(context).pushNamed('/page1');
+          Modular.navigator.pushNamed('/page1');
         }),
       ),
     );

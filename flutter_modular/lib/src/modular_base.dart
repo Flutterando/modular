@@ -139,7 +139,13 @@ class Modular {
     if (_injectMap.containsKey(name)) {
       _injectMap[name].cleanInjects();
       _injectMap.remove(name);
-      if (_navigators.containsKey(name)) _navigators.remove(name);
+      if (_navigators.containsKey(name)) {
+        _navigators.remove(name);
+        if (currentNavigatorOutlet == name) {
+          currentNavigatorOutlet = null;
+        }
+      }
+      ;
     }
   }
 

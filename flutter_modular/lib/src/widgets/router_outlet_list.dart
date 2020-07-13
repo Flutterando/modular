@@ -48,14 +48,22 @@ class _RouterOutletListState extends State<RouterOutletList> {
 class RouterOutletListController {
   final _pageController = PageController();
   List<ChildModule> _modules;
-
+  ValueChanged<int> _listen;
   void init(List<ChildModule> modules) {
     _modules = modules;
+    Modular.currentNavigatorOutlet = _modules[0].runtimeType.toString();
   }
 
   void changeModule(int index) {
     Modular.currentNavigatorOutlet = _modules[index].runtimeType.toString();
     _pageController.jumpToPage(index);
+    if (_listen != null) {
+      _listen(index);
+    }
+  }
+
+  void listen(ValueChanged<int> current) {
+    _listen = current;
   }
 
   void _dispose() {
