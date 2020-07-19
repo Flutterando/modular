@@ -1,3 +1,6 @@
+## [1.3.1] - 19 Jul 2020
+- Prevent StackOverflow in Injections
+
 ## [1.3.0] - 12 Jul 2020
 - modular_codegen integration.
 - Added defaul value in Modular.get

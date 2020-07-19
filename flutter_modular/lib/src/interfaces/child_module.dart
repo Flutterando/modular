@@ -53,6 +53,8 @@ ${typesInRequest.join('\n')}
     if (bind.singleton) {
       _singletonBinds[type] = bindValue;
     }
+
+    typesInRequest.remove(type);
     return bindValue;
   }
 
