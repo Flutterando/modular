@@ -876,11 +876,23 @@ main() {
 ```
 ### Mock the navigation system
 
-We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
+We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`. This can be done using Mockito package, according to the following example.
 
 ```dart
-// Modular.to and Modular.link will be called MyNavigatorMock implements!
-Modular.navigatorDelegate = MyNavigatorMock();
+class MyNavigatorMock extends Mock implements IModularNavigator {}
+
+void main() {
+  setUpAll(() {
+    // Modular.to and Modular.link will be called MyNavigatorMock implements!
+    Modular.navigatorDelegate = MyNavigatorMock();
+    initModules([AppModule(), HomeModule()]);
+  });
+  testWidgets('HomePage has scaffold', (tester) async {
+    await tester.pumpWidget(buildTestableWidget(HomePage()));
+    final scaffoldFinder = find.byType(Scaffold);
+    expect(scaffoldFinder, findsOneWidget);
+  });
+}
 ```
 
 ## DebugMode
