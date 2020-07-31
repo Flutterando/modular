@@ -1,3 +1,6 @@
+## [1.3.2] - 30 Jul 2020
+- Fix issue [#210](https://github.com/Flutterando/modular/issues/210)
+
 ## [1.3.1] - 19 Jul 2020
 - Prevent StackOverflow in Injections
 

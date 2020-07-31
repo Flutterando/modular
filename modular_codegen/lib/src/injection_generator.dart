@@ -31,7 +31,6 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
       }
     }
 
-    // print(visitor2.params);
     _write(
         "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
     return _buffer.toString();
@@ -44,7 +43,6 @@ class ModelVisitor extends SimpleElementVisitor {
   bool isAnnotation = false;
 
   ModelVisitor();
-  //ModelVisitor visitor = ModelVisitor();
 
   @override
   visitConstructorElement(ConstructorElement element) {
@@ -68,6 +66,7 @@ class ModelVisitor extends SimpleElementVisitor {
     params = parameters.map((param) {
       if (param.metadata.length > 0) {
         String arg;
+
         for (var meta in param.metadata) {
           if (meta.element.displayName == 'Param') {
             arg = _normalizeParam(param);

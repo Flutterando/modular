@@ -91,9 +91,9 @@ ${typesInRequest.join('\n')}
   }
 
   Type _getInjectType<B>() {
-    for (final key in _singletonBinds.keys) {
-      if (key is B) {
-        return key;
+    for (final value in _singletonBinds.values) {
+      if (value is B) {
+        return value.runtimeType;
       }
     }
     return B;
