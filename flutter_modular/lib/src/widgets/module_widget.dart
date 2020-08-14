@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Router;
 import '../../flutter_modular.dart';
 
 _debugPrintModular(String text) {

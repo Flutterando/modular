@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
+
 import '../../flutter_modular.dart';
 import '../interfaces/child_module.dart';
 import '../interfaces/route_guard.dart';

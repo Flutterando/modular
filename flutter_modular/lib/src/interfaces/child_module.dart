@@ -1,4 +1,5 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart' hide Router;
+import 'package:flutter/widgets.dart' hide Router;
 
 import '../../flutter_modular.dart';
 import '../routers/router.dart';

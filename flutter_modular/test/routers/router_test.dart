@@ -1,5 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Router;
+
 import 'package:flutter_modular/flutter_modular.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 
 class TestModule extends ChildModule {
@@ -8,7 +10,6 @@ class TestModule extends ChildModule {
 
   @override
   List<Router> get routers => [];
-
 }
 
 void main() {
@@ -22,18 +23,16 @@ void main() {
 
   test('throws ArgumentError if both the module and child was provided', () {
     expect(() {
-      Router('/',
-        module: TestModule(),
-        child: (_, __) => SizedBox.shrink()
-      );
+      Router('/', module: TestModule(), child: (_, __) => SizedBox.shrink());
     }, throwsArgumentError);
   });
 
   test('throws ArgumentError if transaction is null', () {
     expect(() {
-      Router('/',
-          child: (_, __) => SizedBox.shrink(),
-          transition: null,
+      Router(
+        '/',
+        child: (_, __) => SizedBox.shrink(),
+        transition: null,
       );
     }, throwsArgumentError);
   });

@@ -1,6 +1,9 @@
-import 'package:example/app/modules/home/pages/list/list_widget.dart';
+import 'package:flutter/material.dart' hide Router;
+
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter/material.dart';
+
+import 'pages/list/list_widget.dart';
+
 import 'guard/guard.dart';
 import 'home_bloc.dart';
 import 'home_widget.dart';
