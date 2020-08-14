@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Tab1Page extends StatefulWidget {
+class Page3Page extends StatefulWidget {
   final String title;
-  const Tab1Page({Key key, this.title = "Tab1"}) : super(key: key);
+  const Page3Page({Key key, this.title = "Page3"}) : super(key: key);
 
   @override
-  _Tab1PageState createState() => _Tab1PageState();
+  _Page3PageState createState() => _Page3PageState();
 }
 
-class _Tab1PageState extends State<Tab1Page> {
+class _Page3PageState extends State<Page3Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +17,9 @@ class _Tab1PageState extends State<Tab1Page> {
       ),
       body: Center(
         child: RaisedButton(
-            child: Text('Go to Page 1'),
+            child: Text('Go to Page 4'),
             onPressed: () {
-              Navigator.of(context).pushNamed('/page1');
+              Navigator.of(context).pushNamed('/page4');
             }),
       ),
     );
