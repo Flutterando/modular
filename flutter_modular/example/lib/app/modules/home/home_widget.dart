@@ -1,7 +1,9 @@
-import 'package:example/app/modules/home/home_bloc.dart';
-import 'package:example/app/modules/home/home_module.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
+
+import 'home_bloc.dart';
+import 'home_module.dart';
 
 class HomeWidget extends ModularStatelessWidget<HomeModule> {
   HomeWidget() {

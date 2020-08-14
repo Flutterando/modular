@@ -1,6 +1,7 @@
-import 'package:example/app/modules/tabs/modules/tab2/tab2_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:example/app/modules/tabs/modules/tab2/tab2_page.dart';
+
+import 'tab2_bloc.dart';
+import 'tab2_page.dart';
 
 class Tab2Module extends ChildModule {
   @override

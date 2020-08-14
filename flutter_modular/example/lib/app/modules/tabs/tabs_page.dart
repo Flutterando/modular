@@ -1,9 +1,11 @@
-import 'package:example/app/modules/tabs/tabs_bloc.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'modules/tab1/tab1_module.dart';
 import 'modules/tab2/tab2_module.dart';
+
+import 'tabs_bloc.dart';
 
 class TabsPage extends StatefulWidget {
   final String title;
