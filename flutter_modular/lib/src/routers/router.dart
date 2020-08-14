@@ -6,7 +6,8 @@ import '../interfaces/route_guard.dart';
 import '../transitions/transitions.dart';
 import '../utils/old.dart';
 
-typedef RouteBuilder<T> = MaterialPageRoute<T> Function(WidgetBuilder, RouteSettings);
+typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
+    WidgetBuilder, RouteSettings);
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
@@ -187,7 +188,8 @@ class Router<T> {
 
     if (transition == null) throw ArgumentError('transition must not be null');
     if (transition == TransitionType.custom && customTransition == null) {
-      throw ArgumentError('[customTransition] required for transition type [TransitionType.custom]');
+      throw ArgumentError(
+          '[customTransition] required for transition type [TransitionType.custom]');
     }
     if (module == null && child == null) {
       throw ArgumentError('[module] or [child] must be provided');
@@ -286,8 +288,14 @@ class Router<T> {
     return page;
   }
 
-  Route<T> getPageRoute({Map<String, ChildModule> injectMap, RouteSettings settings, bool isRouterOutlet}) {
-    final disposablePage = _disposableGenerate(injectMap: injectMap, path: settings.name, isRouterOutlet: isRouterOutlet);
+  Route<T> getPageRoute(
+      {Map<String, ChildModule> injectMap,
+      RouteSettings settings,
+      bool isRouterOutlet}) {
+    final disposablePage = _disposableGenerate(
+        injectMap: injectMap,
+        path: settings.name,
+        isRouterOutlet: isRouterOutlet);
 
     if (transition == TransitionType.custom && customTransition != null) {
       return PageRouteBuilder(
@@ -342,10 +350,14 @@ enum TransitionType {
 }
 
 class CustomTransition {
-  final Widget Function(BuildContext, Animation<double>, Animation<double>, Widget) transitionBuilder;
+  final Widget Function(
+          BuildContext, Animation<double>, Animation<double>, Widget)
+      transitionBuilder;
   final Duration transitionDuration;
 
-  CustomTransition({@required this.transitionBuilder, this.transitionDuration = const Duration(milliseconds: 300)});
+  CustomTransition(
+      {@required this.transitionBuilder,
+      this.transitionDuration = const Duration(milliseconds: 300)});
 }
 
 class _DisposableWidget extends StatefulWidget {
