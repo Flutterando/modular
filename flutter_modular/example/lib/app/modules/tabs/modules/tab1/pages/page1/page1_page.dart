@@ -16,9 +16,11 @@ class _Page1PageState extends State<Page1Page> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: RaisedButton(onPressed: () {
-          Navigator.of(context).pushNamed('/page2');
-        }),
+        child: RaisedButton(
+            child: Text('Go to Page 2'),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/page2');
+            }),
       ),
     );
   }
