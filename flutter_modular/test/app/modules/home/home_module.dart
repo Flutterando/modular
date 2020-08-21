@@ -18,22 +18,22 @@ class HomeModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router(
+  List<ModularRouter> get routers => [
+        ModularRouter(
           "/",
           child: (_, args) => HomeWidget(),
           transition: TransitionType.fadeIn,
         ),
-        Router(
+        ModularRouter(
           "/forbidden2",
           child: (_, args) => ForbiddenWidget(),
           transition: TransitionType.fadeIn,
           guards: [MyGuard()],
         ),
-        Router("/list/:id/:id2", child: (_, args) => HomeWidget()),
-        Router("/product", module: ProductModule()),
-        Router("/arguments", child: (_, args) => ArgumentsPage(id: args.data)),
-        Router("/modularArguments", child: (_, args) => ModularArgumentsPage()),
+        ModularRouter("/list/:id/:id2", child: (_, args) => HomeWidget()),
+        ModularRouter("/product", module: ProductModule()),
+        ModularRouter("/arguments", child: (_, args) => ArgumentsPage(id: args.data)),
+        ModularRouter("/modularArguments", child: (_, args) => ModularArgumentsPage()),
       ];
 }
 

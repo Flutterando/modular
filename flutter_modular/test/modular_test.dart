@@ -9,12 +9,12 @@ void main() {
   });
 
   group("Group router", () {
-    test('Test Get Router', () {
-      expect(Modular.selectRoute("/"), isA<Router>());
+    test('Test Get ModularRouter', () {
+      expect(Modular.selectRoute("/"), isA<ModularRouter>());
     });
-    test('Test Get module Router', () {
-      expect(Modular.selectRoute("home/"), isA<Router>());
-      expect(Modular.selectRoute("/home/"), isA<Router>());
+    test('Test Get module ModularRouter', () {
+      expect(Modular.selectRoute("home/"), isA<ModularRouter>());
+      expect(Modular.selectRoute("/home/"), isA<ModularRouter>());
       var router = Modular.selectRoute("/home");
       expect(router.routerName, '/');
     });
@@ -30,9 +30,9 @@ void main() {
           '/home/list/(.*?)/item/(.*?)');
     });
 
-    test('search object Router to url', () {
+    test('search object ModularRouter to url', () {
       var router =
-          Router('/home/list/:id', child: (_, __) => SizedBox.shrink());
+          ModularRouter('/home/list/:id', child: (_, __) => SizedBox.shrink());
 
       expect(
           Modular.searchRoute(router, "/home/list/:id", "/home/list/1"), true);
@@ -47,15 +47,15 @@ void main() {
 
       expect(
           Modular.searchRoute(
-              Router('/home/list', child: (_, __) => SizedBox.shrink()),
+              ModularRouter('/home/list', child: (_, __) => SizedBox.shrink()),
               "/home/list",
               "/home/list/1"),
           false);
     });
 
-    test('search object Router to url String', () {
+    test('search object ModularRouter to url String', () {
       var router =
-          Router('/home/list/:id', child: (_, __) => SizedBox.shrink());
+          ModularRouter('/home/list/:id', child: (_, __) => SizedBox.shrink());
 
       expect(
           Modular.searchRoute(router, "/home/list/:id", "/home/list/01"), true);
@@ -63,32 +63,32 @@ void main() {
 
       expect(
           Modular.searchRoute(
-              Router('/home/list', child: (_, __) => SizedBox.shrink()),
+              ModularRouter('/home/list', child: (_, __) => SizedBox.shrink()),
               "/home/list",
               "/home/list/01"),
           false);
     });
 
     test('router with params get', () {
-      expect(Modular.selectRoute("/list/1/2"), isA<Router>());
+      expect(Modular.selectRoute("/list/1/2"), isA<ModularRouter>());
       expect(Modular.selectRoute("/home/test"), null);
     });
     test('router with params get multiple', () {
       var a = Modular.selectRoute("/home/list/1/2");
-      expect(a, isA<Router>());
+      expect(a, isA<ModularRouter>());
     });
     test('router with params get multiple 2 modules', () {
-      expect(Modular.selectRoute("/home/product/"), isA<Router>());
+      expect(Modular.selectRoute("/home/product/"), isA<ModularRouter>());
     });
 
     test('modulePath', () {
       var router = Modular.selectRoute("/home/product/");
 
-      expect(router, isA<Router>());
+      expect(router, isA<ModularRouter>());
       expect(router.modulePath, "/home/product");
 
       router = Modular.selectRoute("/home/product/1");
-      expect(router, isA<Router>());
+      expect(router, isA<ModularRouter>());
       expect(router.modulePath, "/home/product");
     });
 
