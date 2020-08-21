@@ -12,54 +12,56 @@ class RouteLink extends IModularNavigator {
   }
 
   @override
-  bool canPop() => Modular.to.canPop();
+  bool canPop() => Modular.navigator.canPop();
 
   @override
   Future<bool> maybePop<T extends Object>([T result]) {
-    return Modular.to.maybePop(result);
+    return Modular.navigator.maybePop(result);
   }
 
   @override
-  void pop<T extends Object>([T result]) => Modular.to.pop(result);
+  void pop<T extends Object>([T result]) => Modular.navigator.pop(result);
 
   @override
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(
           String routeName,
           {TO result,
           Object arguments}) =>
-      Modular.to.popAndPushNamed(_checkpath(routeName),
+      Modular.navigator.popAndPushNamed(_checkpath(routeName),
           result: result, arguments: arguments);
 
   @override
   void popUntil(bool Function(Route) predicate) =>
-      Modular.to.popUntil(predicate);
+      Modular.navigator.popUntil(predicate);
 
   @override
-  Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
+  Future<T> push<T extends Object>(Route<T> route) =>
+      Modular.navigator.push(route);
 
   @override
   Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) =>
-      Modular.to.pushNamed(_checkpath(routeName), arguments: arguments);
+      Modular.navigator.pushNamed(_checkpath(routeName), arguments: arguments);
 
   @override
   Future<T> pushNamedAndRemoveUntil<T extends Object>(
           String newRouteName, bool Function(Route) predicate,
           {Object arguments}) =>
-      Modular.to.pushNamedAndRemoveUntil(_checkpath(newRouteName), predicate,
+      Modular.navigator.pushNamedAndRemoveUntil(
+          _checkpath(newRouteName), predicate,
           arguments: arguments);
   @override
   Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
           String routeName,
           {TO result,
           Object arguments}) =>
-      Modular.to.pushReplacementNamed(_checkpath(routeName),
+      Modular.navigator.pushReplacementNamed(_checkpath(routeName),
           result: result, arguments: arguments);
 
   @override
   Future<T> pushReplacement<T extends Object, TO extends Object>(
           Route<T> newRoute,
           {TO result}) =>
-      navigator.pushReplacement(newRoute, result: result);
+      Modular.navigator.pushReplacement(newRoute, result: result);
 
   @override
   Future showDialog({
@@ -67,7 +69,7 @@ class RouteLink extends IModularNavigator {
     @required WidgetBuilder builder,
     bool barrierDismissible = true,
   }) =>
-      Modular.to.showDialog(
+      Modular.navigator.showDialog(
           builder: builder,
           child: child,
           barrierDismissible: barrierDismissible);

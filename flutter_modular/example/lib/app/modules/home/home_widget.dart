@@ -25,7 +25,6 @@ class HomeWidget extends ModularStatelessWidget<HomeModule> {
         actions: <Widget>[
           FlatButton(
             onPressed: () {
-              print(Modular.link.path);
               Modular.link.pushNamed('/list/${get<HomeBloc>().counter}');
             },
             child: Text("LIST"),
@@ -41,6 +40,7 @@ class HomeWidget extends ModularStatelessWidget<HomeModule> {
         child: Icon(Icons.add),
         onPressed: () {
           get<HomeBloc>().increment();
+          //Modular.to.pushNamed('/home');
         },
       ),
     );

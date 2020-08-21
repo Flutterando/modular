@@ -267,6 +267,7 @@ class ModularRouter<T> {
         final trash = <String>[];
         if (!isRouterOutlet) {
           Modular.oldProccess(old);
+          Modular.updateCurrentModuleApp();
         }
         if (actual.isCurrent) {
           return;

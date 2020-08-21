@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 
 class TabsBloc implements Disposable {
   final selectedPage = BehaviorSubject<int>.seeded(0);
+  TabsBloc();
 
   @override
   void dispose() {

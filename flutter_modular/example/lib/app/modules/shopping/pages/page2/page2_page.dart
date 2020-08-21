@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'page2_bloc.dart';
 
 class Page2Page extends StatefulWidget {
   final String title;
@@ -9,19 +10,17 @@ class Page2Page extends StatefulWidget {
   _Page2PageState createState() => _Page2PageState();
 }
 
-class _Page2PageState extends State<Page2Page> {
+class _Page2PageState extends ModularState<Page2Page, Page2Bloc> {
+  //use 'controller' variable to access controller
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: RaisedButton(
-            child: Text('Go to Page 3'),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/page3');
-            }),
+      body: Column(
+        children: <Widget>[],
       ),
     );
   }

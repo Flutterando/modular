@@ -18,3 +18,5 @@ export 'src/widgets/modular_stateful_widget_state.dart';
 export 'src/widgets/modular_stateless_widget.dart';
 export 'src/widgets/router_outlet.dart';
 export 'src/widgets/widget_module.dart';
+export 'src/annotations/annotations.dart';
+export 'src/widgets/router_outlet_list.dart';

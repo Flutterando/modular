@@ -15,19 +15,31 @@ _debugPrintModular(String text) {
   }
 }
 
+class ModularNavigatorObserver extends NavigatorObserver {
+  @override
+  void didPop(Route route, Route previousRoute) {
+    Modular._navigators.forEach((key, value) {
+      if (value.currentState != null && key != null) {}
+    });
+    super.didPop(route, previousRoute);
+  }
+}
+
 class Modular {
   static const String initialRoute = '/';
   static bool debugMode = !kReleaseMode;
   static bool isCupertino = false;
   static final Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
-  static GlobalKey<NavigatorState> _navigatorKey;
   static ModularArguments _args;
   static RouteLink _routeLink;
   static Old _old = Old();
   static Old get old => _old;
   static ModularArguments get args => _args?.copy();
   static IModularNavigator navigatorDelegate;
+  static List<String> currentModule = <String>[];
+  static Map<String, GlobalKey<NavigatorState>> _navigators =
+      <String, GlobalKey<NavigatorState>>{};
 
   /// Return RouteLink of the current module
   ///
@@ -36,7 +48,7 @@ class Modular {
   /// ```
   static IModularNavigator get link {
     if (navigatorDelegate == null) {
-      assert(_navigatorKey != null,
+      assert(_navigators.containsKey('app') == true,
           '''Add Modular.navigatorKey in your MaterialApp;
 
       return MaterialApp(
@@ -49,6 +61,44 @@ class Modular {
     return navigatorDelegate ?? _routeLink?.copy();
   }
 
+  /// Return Modular.navigator
+  /// Used for inside RouterOutlet
+
+  static IModularNavigator get navigator {
+    return ModularNavigator(_navigators[currentModule.last].currentState);
+  }
+
+  /// Add Navigator key for RouterOutlet
+  static GlobalKey<NavigatorState> outletNavigatorKey(String path) {
+    if (!_navigators.containsKey(path)) {
+      _navigators.addAll({path: GlobalKey<NavigatorState>()});
+    }
+    return _navigators[path];
+  }
+
+  /// Remove Navigator key
+  static void removeOutletNavigatorKey(String path) {
+    if (_navigators.containsKey(path)) {
+      _navigators.remove(path);
+    }
+  }
+
+  /// Add first position app in currentModule
+  static void updateCurrentModuleApp() {
+    if (Modular.currentModule.contains("app")) {
+      Modular.currentModule.remove("app");
+    }
+    Modular.currentModule.insert(0, "app");
+  }
+
+  /// Add last position module in currentModule
+  static void updateCurrentModule(String name) {
+    if (Modular.currentModule.contains(name)) {
+      Modular.currentModule.remove(name);
+    }
+    Modular.currentModule.add(name);
+  }
+
   /// Return Modular.navigatorKey
   ///
   /// ```
@@ -56,17 +106,18 @@ class Modular {
   /// ```
   static IModularNavigator get to {
     if (navigatorDelegate == null) {
-      assert(_navigatorKey != null,
+      assert(_navigators.containsKey('app') == true,
           '''Add Modular.navigatorKey in your MaterialApp;
 
       return MaterialApp(
         navigatorKey: Modular.navigatorKey,
         ...
 
-.
+
       ''');
     }
-    return navigatorDelegate ?? ModularNavigator(_navigatorKey.currentState);
+    return navigatorDelegate ??
+        ModularNavigator(_navigators['app'].currentState);
   }
 
   @visibleForTesting
@@ -75,11 +126,13 @@ class Modular {
   }
 
   static GlobalKey<NavigatorState> get navigatorKey {
-    if (_navigatorKey == null) {
-      _navigatorKey = GlobalKey<NavigatorState>();
+    if (!_navigators.containsKey('app')) {
+      _navigators.addAll({'app': GlobalKey<NavigatorState>()});
+      if (!currentModule.contains("app")) {
+        currentModule.add("app");
+      }
     }
-
-    return _navigatorKey;
+    return _navigators['app'];
   }
 
   static void init(ChildModule module) {
@@ -106,6 +159,10 @@ class Modular {
     if (_injectMap.containsKey(name)) {
       _injectMap[name].cleanInjects();
       _injectMap.remove(name);
+      if (_navigators.containsKey(name)) {
+        _navigators.remove(name);
+        currentModule.remove(name);
+      }
     }
   }
 
@@ -384,11 +441,12 @@ class Modular {
         args: args,
         link: link,
       );
+      updateCurrentModule("app");
     }
+
     _args = ModularArguments(router.params, settings.arguments);
-    if (!isRouterOutlet) {
-      _routeLink = RouteLink(path: path, modulePath: router.modulePath);
-    }
+
+    _routeLink = RouteLink(path: path, modulePath: router.modulePath);
 
     if (settings.name == Modular.initialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);

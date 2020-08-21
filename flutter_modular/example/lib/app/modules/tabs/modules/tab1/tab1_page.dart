@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class Tab1Page extends StatefulWidget {
   final String title;
@@ -16,11 +17,9 @@ class _Tab1PageState extends State<Tab1Page> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: RaisedButton(
-            child: Text('Go to Page 1'),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/page1');
-            }),
+        child: RaisedButton(onPressed: () {
+          Modular.navigator.pushNamed('/page1');
+        }),
       ),
     );
   }
