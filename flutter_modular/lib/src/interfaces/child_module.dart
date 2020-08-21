@@ -6,7 +6,7 @@ import '../routers/router.dart';
 abstract class ChildModule {
   List<Bind> _binds;
   List<Bind> get binds;
-  List<Router> get routers;
+  List<ModularRouter> get routers;
 
   ChildModule() {
     _binds = binds;
@@ -53,6 +53,8 @@ ${typesInRequest.join('\n')}
     if (bind.singleton) {
       _singletonBinds[type] = bindValue;
     }
+
+    typesInRequest.remove(type);
     return bindValue;
   }
 
@@ -89,9 +91,9 @@ ${typesInRequest.join('\n')}
   }
 
   Type _getInjectType<B>() {
-    for (final key in _singletonBinds.keys) {
-      if (key is B) {
-        return key;
+    for (final value in _singletonBinds.values) {
+      if (value is B) {
+        return value.runtimeType;
       }
     }
     return B;

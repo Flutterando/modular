@@ -48,7 +48,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  List<Router> get routers => null;
+  List<ModularRouter> get routers => null;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _FakeModule extends ChildModule {
   List<Bind> get binds => bindsInject;
 
   @override
-  List<Router> get routers => null;
+  List<ModularRouter> get routers => null;
 }
 
 class ModularProvider extends StatefulWidget {

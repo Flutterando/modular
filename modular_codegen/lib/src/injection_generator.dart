@@ -3,7 +3,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
-import 'package:flutter_modular/src/annotations/annotations.dart';
+import 'package:flutter_modular/flutter_modular_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
@@ -31,9 +31,8 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
       }
     }
 
-    // print(visitor2.params);
     _write(
-        "final ${element.displayName[0].toLowerCase()}${element.displayName.substring(1)} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
+        "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
     return _buffer.toString();
   }
 }
@@ -44,7 +43,6 @@ class ModelVisitor extends SimpleElementVisitor {
   bool isAnnotation = false;
 
   ModelVisitor();
-  //ModelVisitor visitor = ModelVisitor();
 
   @override
   visitConstructorElement(ConstructorElement element) {
@@ -53,7 +51,8 @@ class ModelVisitor extends SimpleElementVisitor {
           if (param.metadata.length > 0) {
             return param.metadata.firstWhere((param) {
                   return param.element.displayName == "Data" ||
-                      param.element.displayName == "Param";
+                      param.element.displayName == "Param" ||
+                      param.element.displayName == "Default";
                 }, orElse: () => null) !=
                 null;
           }
@@ -67,11 +66,14 @@ class ModelVisitor extends SimpleElementVisitor {
     params = parameters.map((param) {
       if (param.metadata.length > 0) {
         String arg;
+
         for (var meta in param.metadata) {
           if (meta.element.displayName == 'Param') {
             arg = _normalizeParam(param);
           } else if (meta.element.displayName == 'Data') {
             arg = _normalizeData(param);
+          } else if (meta.element.displayName == 'Default') {
+            arg = _normalizeDefault(param);
           }
         }
         return arg == null ? _normalize(param) : arg;
@@ -105,8 +107,14 @@ class ModelVisitor extends SimpleElementVisitor {
     }
   }
 
-  @override
-  visitClassElement(ClassElement element) {
-    print(element.name);
+  String _normalizeDefault(ParameterElement param) {
+    if (param.isNamed) {
+      return "${param.name}: i<${param.type}>(defaultValue: null)";
+    } else {
+      return "i<${param.type}>(defaultValue: null)";
+    }
   }
+
+  @override
+  visitClassElement(ClassElement element) {}
 }

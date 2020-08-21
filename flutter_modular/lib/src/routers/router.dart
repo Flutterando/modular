@@ -15,18 +15,165 @@ _debugPrintModular(String text) {
   }
 }
 
-class Router<T> {
+class ModularRouter<T> {
+  ///
+  /// Paramenter name: [routerName]
+  ///
+  /// Name for your route
+  ///
+  /// Type: String
+  ///
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
   final String routerName;
+
+  ///
+  /// Paramenter name: [child]
+  ///
+  /// The widget will be displayed
+  ///
+  /// Type: Widget
+  ///
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
+
   final Widget Function(BuildContext context, ModularArguments args) child;
+
+  ///
+  /// Paramenter name: [module]
+  ///
+  /// The module will be loaded
+  ///
+  /// Type: ChildModule
+  ///
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
   final ChildModule module;
+
+  ///
+  /// Paramenter name: [params]
+  ///
+  /// The parameters that can be transferred to another screen
+  ///
+  /// Type: Map<String, String>
+  ///
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
   Map<String, String> params;
+
+  ///
+  /// Paramenter name: [guards]
+  ///
+  /// Route guards are middleware-like objects
+  ///
+  /// that allow you to control the access of a given route from other route.
+  ///
+  /// You can implement a route guard by making a class that implements RouteGuard.
+  ///
+  /// Type: List<RouteGuard>
+  ///
+  /// Example:
+  /// ```dart
+  ///class MyGuard implements RouteGuard {
+  ///  @override
+  ///  bool canActivate(String url) {
+  ///    if (url != '/admin'){
+  ///      // Return `true` to allow access
+  ///      return true;
+  ///    } else {
+  ///      // Return `false` to disallow access
+  ///      return false
+  ///    }
+  ///  }
+  ///}
+  ///To use your RouteGuard in a route, pass it to the guards parameter:
+  ///
+  ///@override
+  ///List<Router> get routers => [
+  ///  Router('/', module: HomeModule()),
+  ///  Router(
+  ///    '/admin',
+  ///    module: AdminModule(),
+  ///    guards: [MyGuard()],
+  ///  ),
+  ///];
+  /// ```
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
+
   final List<RouteGuard> guards;
+
+  ///
+  /// Paramenter name: [transition]
+  ///
+  /// Used to animate the transition from one screen to another
+  ///
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
   final TransitionType transition;
+
+  ///
+  /// Paramenter name: [customTransiton]
+  ///
+  /// PS: For [customTransition] to work,
+  ///
+  /// you must set the [transition] parameter for
+  /// ```dart
+  /// transition.custom,
+  /// ```
+  ///
+  /// Example: Using just First Animation
+  /// ```dart
+  /// customTransition: CustomTransition(
+  ///   transitionBuilder: (context, animation, secondaryAnimation, child) {
+  ///     return SlideTransition(
+  ///         transformHitTests: false,
+  ///         position: Tween<Offset>(
+  ///           begin: const Offset(0.0, 1.0),
+  ///           end: Offset.zero,
+  ///         ).chain(CurveTween(curve: Curves.ease)).animate(animation),
+  ///         child: child);
+  ///   },
+  /// ),
+  /// ```
+
+  /// Example: Using just secondaryAnimation
+  /// ```dart
+  /// customTransition: CustomTransition(
+  /// transitionBuilder: (context, animation, secondaryAnimation, child) {
+  ///   return SlideTransition(
+  ///     transformHitTests: false,
+  ///     position: Tween<Offset>(
+  ///       begin: const Offset(0.0, 1.0),
+  ///       end: Offset.zero,
+  ///     ).chain(CurveTween(curve: Curves.ease)).animate(animation),
+  ///     child: SlideTransition(
+  ///       transformHitTests: false,
+  ///       position: Tween<Offset>(
+  ///         begin: Offset.zero,
+  ///         end: const Offset(0.0, -1.0),
+  ///       ).chain(CurveTween(curve: Curves.ease)).animate(secondaryAnimation),
+  ///       child: child,
+  ///     ),
+  ///   );
+  ///   },
+  /// ),
+  /// ```
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
   final CustomTransition customTransition;
+
+  ///
+  /// Paramenter name: [transition]
+  ///
+  /// Used to animate the transition from one screen to another
+  ///
+  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
+  ///
   final RouteBuilder<T> routeGenerator;
   final String modulePath;
 
-  Router(
+  ModularRouter(
     this.routerName, {
     this.module,
     this.child,
@@ -71,7 +218,7 @@ class Router<T> {
     TransitionType.leftToRightWithFade: leftToRightWithFade,
   };
 
-  Router<T> copyWith(
+  ModularRouter<T> copyWith(
       {Widget Function(BuildContext context, ModularArguments args) child,
       String routerName,
       ChildModule module,
@@ -81,7 +228,7 @@ class Router<T> {
       RouteBuilder routeGenerator,
       String modulePath,
       CustomTransition customTransition}) {
-    return Router<T>(
+    return ModularRouter<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
       module: module ?? this.module,
@@ -94,8 +241,8 @@ class Router<T> {
     );
   }
 
-  static List<Router> group({
-    @required List<Router> routes,
+  static List<ModularRouter> group({
+    @required List<ModularRouter> routes,
     List<RouteGuard> guards,
     TransitionType transition,
     CustomTransition customTransition,

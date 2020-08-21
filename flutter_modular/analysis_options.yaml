@@ -1,4 +1,4 @@
-include: package:effective_dart/analysis_options.1.2.2.yaml
+include: package:effective_dart/analysis_options.yaml
 
 linter:   
   rules:
@@ -7,3 +7,4 @@ linter:
     lines_longer_than_80_chars: false     
     use_setters_to_change_properties: false
     avoid_classes_with_only_static_members: false
+    constant_identifier_names: false

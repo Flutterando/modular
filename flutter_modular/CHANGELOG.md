@@ -1,3 +1,19 @@
+## [1.3.2] - 30 Jul 2020
+- Fix issue [#210](https://github.com/Flutterando/modular/issues/210)
+
+## [1.3.1] - 19 Jul 2020
+- Prevent StackOverflow in Injections
+
+## [1.3.0] - 12 Jul 2020
+- modular_codegen integration.
+- Added defaul value in Modular.get
+```dart
+//return AppBlocMock if no injectable AppBloc in module.
+var appBloc = Modular.get(defaultValue: AppBlocMock());
+```
+- Fix CI (Tests) and Lints
+- Update docs
+
 ## [1.2.7+1] - 26 Jun 2020
 - Fix route error issue [#118](https://github.com/Flutterando/modular/issues/118)
 - Added WillPopScope in RouterOutlet

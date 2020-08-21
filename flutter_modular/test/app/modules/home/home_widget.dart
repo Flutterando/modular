@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../lib/flutter_modular.dart';
 import 'home_bloc.dart';
 
 class HomeWidget extends StatelessWidget {

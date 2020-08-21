@@ -4,6 +4,7 @@ import '../../flutter_modular.dart';
 import '../modular_base.dart';
 
 class Inject<T> {
+  @deprecated
   Map<String, dynamic> params = {};
   final String tag;
   final List<Type> typesInRequest;
