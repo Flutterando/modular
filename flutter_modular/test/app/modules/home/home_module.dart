@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../app_bloc.dart';
 import '../../guard/guard.dart';
 import '../../shared/app_info.state.dart';
 import '../forbidden/forbidden_widget.dart';
@@ -31,8 +32,10 @@ class HomeModule extends ChildModule {
         ),
         ModularRouter("/list/:id/:id2", child: (_, args) => HomeWidget()),
         ModularRouter("/product", module: ProductModule()),
-        ModularRouter("/arguments", child: (_, args) => ArgumentsPage(id: args.data)),
-        ModularRouter("/modularArguments", child: (_, args) => ModularArgumentsPage()),
+        ModularRouter("/arguments",
+            child: (_, args) => ArgumentsPage(id: args.data)),
+        ModularRouter("/modularArguments",
+            child: (_, args) => ModularArgumentsPage()),
       ];
 }
 

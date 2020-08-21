@@ -126,7 +126,7 @@ NOTE: Navigation is only Navigator.of (context) and only uses the module's liter
 * Added router generic type
 ```dart
  @override
-  List<Router> get routers => [
+  List<ModularRouter> get routers => [
     //type router with return type
     Router<String>('/event', child: (_, args) => EventPage()),
   ]

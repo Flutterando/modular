@@ -15,8 +15,8 @@ class ShoppingModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router('/', child: (_, args) => ShoppingPage()),
+  List<ModularRouter> get routers => [
+        ModularRouter('/', child: (_, args) => ShoppingPage()),
       ];
 
   static Inject get to => Inject<ShoppingModule>.of();

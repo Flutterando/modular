@@ -9,7 +9,7 @@ class TabsModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router('/', child: (_, args) => TabsPage()),
+  List<ModularRouter> get routers => [
+        ModularRouter('/', child: (_, args) => TabsPage()),
       ];
 }

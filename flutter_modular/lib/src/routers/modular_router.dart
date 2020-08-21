@@ -89,9 +89,9 @@ class ModularRouter<T> {
   ///To use your RouteGuard in a route, pass it to the guards parameter:
   ///
   ///@override
-  ///List<Router> get routers => [
-  ///  Router('/', module: HomeModule()),
-  ///  Router(
+  ///List<ModularRouter> get routers => [
+  ///  ModularRouter('/', module: HomeModule()),
+  ///  ModularRouter(
   ///    '/admin',
   ///    module: AdminModule(),
   ///    guards: [MyGuard()],

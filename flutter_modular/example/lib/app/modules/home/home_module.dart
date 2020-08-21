@@ -23,12 +23,12 @@ class HomeModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router(
+  List<ModularRouter> get routers => [
+        ModularRouter(
           Modular.initialRoute,
           child: (_, args) => HomeWidget(),
         ),
-        Router(
+        ModularRouter(
           "/list/:id",
           routeGenerator: (b, s) => SlowerPageRoute(builder: b, settings: s),
           child: (_, args) => ListWidget(

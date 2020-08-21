@@ -6,7 +6,7 @@ import 'interfaces/child_module.dart';
 import 'interfaces/route_guard.dart';
 import 'navigator/modular_navigator.dart';
 import 'navigator/modular_navigator_interface.dart';
-import 'routers/router.dart';
+import 'routers/modular_router.dart';
 import 'utils/old.dart';
 
 _debugPrintModular(String text) {
@@ -267,7 +267,8 @@ class Modular {
   }
 
   @visibleForTesting
-  static bool searchRoute(ModularRouter router, String routeNamed, String path) {
+  static bool searchRoute(
+      ModularRouter router, String routeNamed, String path) {
     if (routeNamed.split('/').length != path.split('/').length) {
       return false;
     }

@@ -11,9 +11,10 @@ class AppModule extends MainModule {
   Widget get bootstrap => MyApp();
 
   @override
-  List<Router> get routers => [
-        Router('/', module: HomeModule()),
-        Router('/profile', module: ProfileModule(), guards: [AuthGuard()]),
+  List<ModularRouter> get routers => [
+        ModularRouter('/', module: HomeModule()),
+        ModularRouter('/profile',
+            module: ProfileModule(), guards: [AuthGuard()]),
       ];
 }
 
@@ -22,8 +23,8 @@ class HomeModule extends ChildModule {
   List<Bind> get binds => [];
 
   @override
-  List<Router> get routers => [
-        Router('/', child: (_, __) => MyHomePage()),
+  List<ModularRouter> get routers => [
+        ModularRouter('/', child: (_, __) => MyHomePage()),
       ];
 }
 
@@ -32,8 +33,8 @@ class ProfileModule extends ChildModule {
   List<Bind> get binds => [];
 
   @override
-  List<Router> get routers => [
-        Router('/', child: (_, __) => ProfilePage()),
+  List<ModularRouter> get routers => [
+        ModularRouter('/', child: (_, __) => ProfilePage()),
       ];
 }
 

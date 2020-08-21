@@ -9,16 +9,13 @@ import 'modules/tabs/tabs_module.dart';
 
 class AppModule extends MainModule {
   @override
-  List<Bind> get binds => [
-        $HomeRealController,
-      ];
-
+  List<Bind> get binds => [];
 
   @override
-  List<Router> get routers => [
-        Router("/", module: TabsModule()),
-        Router("/home", module: HomeModule()),
-        Router("/shopping", module: ShoppingModule())
+  List<ModularRouter> get routers => [
+        ModularRouter("/", module: TabsModule()),
+        ModularRouter("/home", module: HomeModule()),
+        ModularRouter("/shopping", module: ShoppingModule())
       ];
 
   @override

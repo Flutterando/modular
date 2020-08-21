@@ -8,7 +8,6 @@ class TestModule extends ChildModule {
 
   @override
   List<ModularRouter> get routers => [];
-
 }
 
 void main() {
@@ -23,17 +22,16 @@ void main() {
   test('throws ArgumentError if both the module and child was provided', () {
     expect(() {
       ModularRouter('/',
-        module: TestModule(),
-        child: (_, __) => SizedBox.shrink()
-      );
+          module: TestModule(), child: (_, __) => SizedBox.shrink());
     }, throwsArgumentError);
   });
 
   test('throws ArgumentError if transaction is null', () {
     expect(() {
-      ModularRouter('/',
-          child: (_, __) => SizedBox.shrink(),
-          transition: null,
+      ModularRouter(
+        '/',
+        child: (_, __) => SizedBox.shrink(),
+        transition: null,
       );
     }, throwsArgumentError);
   });

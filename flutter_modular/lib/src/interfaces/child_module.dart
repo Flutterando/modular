@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../../flutter_modular.dart';
-import '../routers/router.dart';
+import '../routers/modular_router.dart';
 
 abstract class ChildModule {
   List<Bind> _binds;

@@ -19,11 +19,14 @@ class Tab1Module extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router(Modular.initialRoute, child: (_, args) => Tab1Page()),
-        Router("/page1", child: (_, args) => Page1Page(), transition: TransitionType.rotate),
-        Router("/page2", child: (_, args) => Page2Page(), transition: TransitionType.leftToRight),
-        Router(
+  List<ModularRouter> get routers => [
+        ModularRouter(Modular.initialRoute, child: (_, args) => Tab1Page()),
+        ModularRouter("/page1",
+            child: (_, args) => Page1Page(), transition: TransitionType.rotate),
+        ModularRouter("/page2",
+            child: (_, args) => Page2Page(),
+            transition: TransitionType.leftToRight),
+        ModularRouter(
           '/page3',
           child: (_, args) => Page3Page(),
           transition: TransitionType.custom,
@@ -57,6 +60,8 @@ class Tab1Module extends ChildModule {
             },
           ),
         ),
-        Router("/page4", child: (_, args) => Page4Page(), transition: TransitionType.rightToLeft),
+        ModularRouter("/page4",
+            child: (_, args) => Page4Page(),
+            transition: TransitionType.rightToLeft),
       ];
 }
