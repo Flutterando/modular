@@ -210,7 +210,7 @@ class Modular {
   }
 
   @visibleForTesting
-  static bool searchRoute(Router router, String routeNamed, String path) {
+  static bool searchRoute(ModularRouter router, String routeNamed, String path) {
     if (routeNamed.split('/').length != path.split('/').length) {
       return false;
     }
@@ -279,7 +279,7 @@ class Modular {
 
   static List<RouteGuard> _masterRouteGuards;
 
-  static Router _searchInModule(
+  static ModularRouter _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
     final routers = module.routers;
@@ -293,7 +293,7 @@ class Modular {
         _masterRouteGuards = route.guards;
         var _routerName =
             ('$routerName${route.routerName}/').replaceFirst('//', '/');
-        Router router;
+        ModularRouter router;
         if (_routerName == path || _routerName == "$path/") {
           final guard = _verifyGuard(route.guards, path);
           if (guard != null) {
@@ -358,7 +358,7 @@ class Modular {
   }
 
   @visibleForTesting
-  static Router selectRoute(String path, [ChildModule module]) {
+  static ModularRouter selectRoute(String path, [ChildModule module]) {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }

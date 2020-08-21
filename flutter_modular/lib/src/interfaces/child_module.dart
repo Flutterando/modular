@@ -6,7 +6,7 @@ import '../routers/router.dart';
 abstract class ChildModule {
   List<Bind> _binds;
   List<Bind> get binds;
-  List<Router> get routers;
+  List<ModularRouter> get routers;
 
   ChildModule() {
     _binds = binds;

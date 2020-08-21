@@ -30,7 +30,7 @@ class ModuleStackOverflowMock extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [];
+  List<ModularRouter> get routers => [];
 }
 
 class ObjectController {
@@ -56,7 +56,7 @@ class ModuleStackOverflowMockNotError extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [];
+  List<ModularRouter> get routers => [];
 }
 
 class HomeController {

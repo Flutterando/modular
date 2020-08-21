@@ -7,22 +7,22 @@ class TestModule extends ChildModule {
   List<Bind> get binds => [];
 
   @override
-  List<Router> get routers => [];
+  List<ModularRouter> get routers => [];
 
 }
 
 void main() {
   test('throws assertionError routeName is null', () {
-    expect(() => Router(null), throwsAssertionError);
+    expect(() => ModularRouter(null), throwsAssertionError);
   });
 
   test('throws ArgumentError if module or child was not provide', () {
-    expect(() => Router('/'), throwsArgumentError);
+    expect(() => ModularRouter('/'), throwsArgumentError);
   });
 
   test('throws ArgumentError if both the module and child was provided', () {
     expect(() {
-      Router('/',
+      ModularRouter('/',
         module: TestModule(),
         child: (_, __) => SizedBox.shrink()
       );
@@ -31,7 +31,7 @@ void main() {
 
   test('throws ArgumentError if transaction is null', () {
     expect(() {
-      Router('/',
+      ModularRouter('/',
           child: (_, __) => SizedBox.shrink(),
           transition: null,
       );

@@ -18,21 +18,21 @@ class AppModule extends MainModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router(
+  List<ModularRouter> get routers => [
+        ModularRouter(
           "/forbidden",
           child: (_, args) => ForbiddenWidget(),
           guards: [MyGuard()],
           transition: TransitionType.fadeIn,
         ),
-        Router(
+        ModularRouter(
           "/",
           module: HomeModule(),
           transition: TransitionType.fadeIn,
         ),
-        Router("/home", module: HomeModule()),
-        Router("/prod", module: ProductModule()),
-        Router("/homeTwo", module: HomeModule(), guards: [MyGuard()]),
+        ModularRouter("/home", module: HomeModule()),
+        ModularRouter("/prod", module: ProductModule()),
+        ModularRouter("/homeTwo", module: HomeModule(), guards: [MyGuard()]),
       ];
 
   @override

@@ -7,12 +7,12 @@ class DynamicModule extends ChildModule {
   List<Bind> get binds => [];
 
   @override
-  List<Router> get routers => [
-        Router('/', child: (_, __) => Container()),
-        Router('/home', child: (_, __) => Container()),
-        Router('/product', child: (_, __) => Container()),
-        Router('/product/:id', child: (_, __) => Container()),
-        Router('/:id', child: (_, __) => Container()),
+  List<ModularRouter> get routers => [
+        ModularRouter('/', child: (_, __) => Container()),
+        ModularRouter('/home', child: (_, __) => Container()),
+        ModularRouter('/product', child: (_, __) => Container()),
+        ModularRouter('/product/:id', child: (_, __) => Container()),
+        ModularRouter('/:id', child: (_, __) => Container()),
       ];
 }
 
@@ -22,23 +22,23 @@ main() {
   });
 
   group("Dynamic router", () {
-    test('Test Get Router', () {
+    test('Test Get ModularRouter', () {
       var router = Modular.selectRoute("/");
       expect(router.routerName, "/");
     });
-    test('Test Get Router dynamic', () {
+    test('Test Get ModularRouter dynamic', () {
       var router = Modular.selectRoute("/1");
       expect(router.routerName, "/:id");
     });
-    test('Test Get Router home', () {
+    test('Test Get ModularRouter home', () {
       var router = Modular.selectRoute("/home");
       expect(router.routerName, "/home");
     });
 
-    test('Test Get Router product', () {
+    test('Test Get ModularRouter product', () {
       expect(Modular.selectRoute("/product")?.routerName, "/product");
     });
-    test('Test Get Router product id', () {
+    test('Test Get ModularRouter product id', () {
       var router = Modular.selectRoute("/product/1");
       expect(router.routerName, "/product/:id");
     });

@@ -10,9 +10,9 @@ class ProductModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router("/:test", child: (_, args) => DetailsPage(id: 1)),
-        Router("/product", child: (_, args) => ProductPage()),
+  List<ModularRouter> get routers => [
+        ModularRouter("/:test", child: (_, args) => DetailsPage(id: 1)),
+        ModularRouter("/product", child: (_, args) => ProductPage()),
       ];
 }
 
