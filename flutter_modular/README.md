@@ -1,7 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) 
 [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) 
 
-[![Join the chat at https://discord.gg/ZbdsWA4](https://img.shields.io/badge/Chat-on%20Discord-lightgrey?style=flat&logo=discord)](https://discord.gg/ZbdsWA4)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
@@ -38,6 +37,7 @@
   - [Creating Child Modules](#creating-child-modules)
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
+  - [RouterOutletList](#routeroutletlist)
   - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
   - [Modular test helper](#modular-test-helper)
@@ -622,7 +622,29 @@ PageView(
 ),
 ```
 
-> **NOTE:** Navigation within these modules are only supported through `Navigator.of(context)` using literal routes paths.
+> **NOTE:** Navigation within these modules are only supported through `Navigator.of(context)` or `Modular.navigator` using literal routes paths.
+
+## RouterOutletList
+
+Using multiples RouterOutlets.
+
+```dart
+    var controller = RouterOutletListController();
+    controller.listen((value) {
+      setState(() {
+        currentIndex = value;
+      });
+    });
+....
+    RouterOutletList(
+      modules: [
+        Tab1Module(), 
+        Tab2Module(),
+      ], controller: controller,
+    ),
+```
+
+
 
 ## Lazy loading
 

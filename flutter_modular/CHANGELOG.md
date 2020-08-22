@@ -1,3 +1,27 @@
+## [2.0.0] - 21 Ago 2020
+### Welcome to Flutter Modular 2.0!!!
+## Break Changes
+Router object Renamed to ModularRouter.
+```dart
+//before
+  @override
+  List<Router> get routers => [
+        Router('/', (i, args) => LoginPage()),
+        Router('/home', (i, args) => HomePage()),
+      ];
+//now 2.0
+  @override
+  List<ModularRouter> get routers => [
+        ModularRouter('/', (i, args) => LoginPage()),
+        ModularRouter('/home', (i, args) => HomePage()),
+      ];
+```
+
+- New Widget `RouterOutletList` (Check doc);
+- `Inject.params` is deprecated
+
+
+
 ## [1.3.2] - 30 Jul 2020
 - Fix issue [#210](https://github.com/Flutterando/modular/issues/210)
 
@@ -21,7 +45,7 @@ var appBloc = Modular.get(defaultValue: AppBlocMock());
 ## [1.2.6+1] - 23 Jun 2020
 * Direct call Inject
 ```dart
-@override
+  @override
   List<Bind> get binds => [
         Bind((i) => HomeBloc(repository: i(), appBloc: i())),
         Bind((i) => HomeRepository(dio: i())),

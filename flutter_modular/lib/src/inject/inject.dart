@@ -4,6 +4,9 @@ import '../../flutter_modular.dart';
 import '../modular_base.dart';
 
 class Inject<T> {
+  ///!!!!NOT RECOMMENDED USE!!!!
+  ///Bind has access to the arguments coming from the routes.
+  ///If you need specific access, do it through functions.
   @deprecated
   Map<String, dynamic> params = {};
   final String tag;

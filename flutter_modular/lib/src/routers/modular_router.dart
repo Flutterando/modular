@@ -172,6 +172,7 @@ class ModularRouter<T> {
   ///
   final RouteBuilder<T> routeGenerator;
   final String modulePath;
+  final Duration duration;
 
   ModularRouter(
     this.routerName, {
@@ -182,6 +183,7 @@ class ModularRouter<T> {
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
     this.customTransition,
+    this.duration = const Duration(milliseconds: 300),
     this.modulePath,
   }) {
     assert(routerName != null);
@@ -203,6 +205,7 @@ class ModularRouter<T> {
       PageRouteBuilder<T> Function(
     Widget Function(BuildContext, ModularArguments) builder,
     ModularArguments args,
+    Duration transitionDuration,
     RouteSettings settings,
   )> _transitions = {
     TransitionType.fadeIn: fadeInTransition,
@@ -227,6 +230,7 @@ class ModularRouter<T> {
       TransitionType transition,
       RouteBuilder routeGenerator,
       String modulePath,
+      String duration,
       CustomTransition customTransition}) {
     return ModularRouter<T>(
       routerName ?? this.routerName,
@@ -235,6 +239,7 @@ class ModularRouter<T> {
       params: params ?? this.params,
       modulePath: modulePath ?? this.modulePath,
       guards: guards ?? this.guards,
+      duration: duration ?? this.duration,
       routeGenerator: routeGenerator ?? this.routeGenerator,
       transition: transition ?? this.transition,
       customTransition: customTransition ?? this.customTransition,
@@ -329,7 +334,7 @@ class ModularRouter<T> {
       var selectTransition = _transitions[transition];
       return selectTransition((context, args) {
         return disposablePage;
-      }, Modular.args, settings);
+      }, Modular.args, duration, settings);
     }
   }
 }
