@@ -1,7 +1,6 @@
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) 
 [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) 
-[![Coverage Status](https://coveralls.io/repos/github/Flutterando/modular/badge.svg?branch=master)](https://coveralls.io/github/Flutterando/modular?branch=master)
-[![Join the chat at https://discord.gg/ZbdsWA4](https://img.shields.io/badge/Chat-on%20Discord-lightgrey?style=flat&logo=discord)](https://discord.gg/ZbdsWA4)
+
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
@@ -10,6 +9,7 @@
 ## Flutter Modular
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png)
+
 
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**
@@ -37,6 +37,7 @@
   - [Creating Child Modules](#creating-child-modules)
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
+  - [RouterOutletList](#routeroutletlist)
   - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
   - [Modular test helper](#modular-test-helper)
@@ -127,7 +128,7 @@ class AppModule extends MainModule {
 
   // Provide all the routes for your module
   @override
-  List<Router> get routers => [];
+  List<ModularRouter> get routers => [];
 
   // Provide the root widget associated with your module
   // In this case, it's the widget you created in the first step
@@ -164,9 +165,9 @@ class AppModule extends MainModule {
 
   // Provide all the routes for your module
   @override
-  List<Router> get routers => [
-      Router('/', child: (_, __) => HomePage()),
-      Router('/login', child: (_, __) => LoginPage()),
+  List<ModularRouter> get routers => [
+      ModularRouter('/', child: (_, __) => HomePage()),
+      ModularRouter('/login', child: (_, __) => LoginPage()),
   ];
 
   // Provide the root widget associated with your module
@@ -212,8 +213,8 @@ You can use the dynamic routing system to provide parameters to your `Router`:
 // using square brackets notation (['parameter_name']).
 
 @override
-List<Router> get routers => [
-  Router(
+List<ModularRouter> get routers => [
+  ModularRouter(
     '/product/:id',
     child: (_, args) => Product(id: args.params['id']),
   ),
@@ -237,8 +238,8 @@ And it will be available in the `args.data` property instead of `args.params`:
 
 ```dart
 @override
-List<Router> get routers => [
-  Router(
+List<ModularRouter> get routers => [
+  ModularRouter(
     '/product',
     child: (_, args) => Product(model: args.data),
   ),
@@ -270,9 +271,9 @@ To use your `RouteGuard` in a route, pass it to the `guards` parameter:
 
 ```dart
 @override
-List<Router> get routers => [
-  Router('/', module: HomeModule()),
-  Router(
+List<ModularRouter> get routers => [
+  ModularRouter('/', module: HomeModule()),
+  ModularRouter(
     '/admin',
     module: AdminModule(),
     guards: [MyGuard()],
@@ -288,7 +289,7 @@ If placed on a module route, `RouterGuard` will be global to that route.
 You can choose which type of animation you want to be used on your pages transition by setting the `Router`'s `transition` parameter, providing a `TransitionType`.
 
 ```dart
-Router('/product',
+ModularRouter('/product',
   module: AdminModule(),
   transition: TransitionType.fadeIn,
 ), //use for change transition
@@ -301,7 +302,7 @@ If you use transition in a module, all routes in that module will inherit this t
 You can also use a custom transition animation by setting the Router parameters `transition` and `customTransition` with `TransitionType.custom` and your `CustomTransition`, respectively:
 
 ```dart
-Router('/product',
+ModularRouter('/product',
   module: AdminModule(),
   transition: TransitionType.custom,
   customTransition: myCustomTransition,
@@ -350,13 +351,13 @@ CustomTransition get myCustomTransition => CustomTransition(
 You can group routes that contains one or more common properties. Properties like `guards`, `transition` and `customTransition` can be provided both for single routes and groups of routes:
 
 ```dart
-List<Router> get routers => [
-  Router('/', module: HomeModule()),
+List<ModularRouter> get routers => [
+  ModularRouter('/', module: HomeModule()),
   Router.group(
     guards: [MyGuard()],
     routes: [
-      Router("/admin", module: AdminModule()),
-      Router("/profile", module: ProfileModule()),
+      ModularRouter("/admin", module: AdminModule()),
+      ModularRouter("/profile", module: ProfileModule()),
     ],
   ),
 );
@@ -369,7 +370,7 @@ To achieve this, pass the type you expect to return as type parameter to `Router
 
 ```dart
 @override
-List<Router> get routers => [
+List<ModularRouter> get routers => [
   // This router expects to receive a `String` when popped.
   Router<String>('/event', child: (_, __) => EventPage()),
 ]
@@ -412,9 +413,9 @@ class AppModule extends MainModule {
 
   // Provide all the routes for your module
   @override
-  List<Router> get routers => [
-    Router('/', child: (_, args) => HomePage()),
-    Router('/login', child: (_, args) => LoginPage()),
+  List<ModularRouter> get routers => [
+    ModularRouter('/', child: (_, args) => HomePage()),
+    ModularRouter('/login', child: (_, args) => LoginPage()),
   ];
 
   // Provide the root widget associated with your module
@@ -556,9 +557,9 @@ class HomeModule extends ChildModule {
   ];
 
   @override
-  List<Router> get routers => [
-    Router('/', child: (_, args) => HomeWidget()),
-    Router('/list', child: (_, args) => ListWidget()),
+  List<ModularRouter> get routers => [
+    ModularRouter('/', child: (_, args) => HomeWidget()),
+    ModularRouter('/list', child: (_, args) => ListWidget()),
   ];
 
   static Inject get to => Inject<HomeModule>.of();
@@ -571,8 +572,8 @@ You may then pass the submodule to a `Router` in your main module through the `m
 class AppModule extends MainModule {
 
   @override
-  List<Router> get routers => [
-    Router('/home', module: HomeModule()),
+  List<ModularRouter> get routers => [
+    ModularRouter('/home', module: HomeModule()),
   ];
 }
 ```
@@ -621,7 +622,29 @@ PageView(
 ),
 ```
 
-> **NOTE:** Navigation within these modules are only supported through `Navigator.of(context)` using literal routes paths.
+> **NOTE:** Navigation within these modules are only supported through `Navigator.of(context)` or `Modular.navigator` using literal routes paths.
+
+## RouterOutletList
+
+Using multiples RouterOutlets.
+
+```dart
+    var controller = RouterOutletListController();
+    controller.listen((value) {
+      setState(() {
+        currentIndex = value;
+      });
+    });
+....
+    RouterOutletList(
+      modules: [
+        Tab1Module(), 
+        Tab2Module(),
+      ], controller: controller,
+    ),
+```
+
+
 
 ## Lazy loading
 
@@ -876,23 +899,11 @@ main() {
 ```
 ### Mock the navigation system
 
-We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`. This can be done using Mockito package, according to the following example.
+We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
 ```dart
-class MyNavigatorMock extends Mock implements IModularNavigator {}
-
-void main() {
-  setUpAll(() {
-    // Modular.to and Modular.link will be called MyNavigatorMock implements!
-    Modular.navigatorDelegate = MyNavigatorMock();
-    initModules([AppModule(), HomeModule()]);
-  });
-  testWidgets('HomePage has scaffold', (tester) async {
-    await tester.pumpWidget(buildTestableWidget(HomePage()));
-    final scaffoldFinder = find.byType(Scaffold);
-    expect(scaffoldFinder, findsOneWidget);
-  });
-}
+// Modular.to and Modular.link will be called MyNavigatorMock implements!
+Modular.navigatorDelegate = MyNavigatorMock();
 ```
 
 ## DebugMode
