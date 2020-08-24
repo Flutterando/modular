@@ -1,6 +1,6 @@
 ## [2.0.0+1] - 21 Ago 2020
 ### Welcome to Flutter Modular 2.0!!!
-## Break Changes
+## Breaking Changes
 Router object Renamed to ModularRouter.
 ```dart
 //before
