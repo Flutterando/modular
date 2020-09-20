@@ -38,7 +38,7 @@ class Modular {
   static ModularArguments get args => _args?.copy();
   static IModularNavigator navigatorDelegate;
   static List<String> currentModule = <String>[];
-  static Map<String, GlobalKey<NavigatorState>> _navigators =
+  static final Map<String, GlobalKey<NavigatorState>> _navigators =
       <String, GlobalKey<NavigatorState>>{};
 
   /// Return RouteLink of the current module
@@ -298,8 +298,6 @@ class Modular {
           }
           paramPos++;
         }
-
-        // print('Result processed $path as $routeNamed');
 
         if (routeNamed != path) {
           router.params = null;
