@@ -430,7 +430,7 @@ class Modular {
   }
 
   static Route<T> generateRoute<T>(RouteSettings settings,
-      [ChildModule module]) {
+      [ChildModule module, void Function(String) onChangeRoute]) {
     final isRouterOutlet = module != null;
     final path = settings.name;
     var router = selectRoute(path, module);
@@ -451,6 +451,10 @@ class Modular {
 
     if (settings.name == Modular.initialRoute) {
       router = router.copyWith(transition: TransitionType.noTransition);
+    }
+
+    if (onChangeRoute != null) {
+      onChangeRoute(path);
     }
 
     return router.getPageRoute(
