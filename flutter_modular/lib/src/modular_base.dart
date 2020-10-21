@@ -1,13 +1,64 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../flutter_modular.dart';
+import 'delegates/book_route_information_parser.dart';
+import 'delegates/book_router_delegate.dart';
 import 'interfaces/child_module.dart';
+import 'interfaces/modular_interface.dart';
 import 'interfaces/route_guard.dart';
+import 'modular_impl.dart';
 import 'navigator/modular_navigator.dart';
 import 'navigator/modular_navigator_interface.dart';
 import 'routers/modular_router.dart';
+import 'utils/modular_arguments.dart';
 import 'utils/old.dart';
+
+final _routeInformationParser = ModularRouteInformationParser();
+final _routerDelegate = ModularRouterDelegate();
+const Map<String, ChildModule> _injectMap = {};
+// ignore: non_constant_identifier_names
+final ModularInterface Modular =
+    ModularImpl(routerDelegate: _routerDelegate, injectiMap: _injectMap);
+
+extension ModularExtension on MaterialApp {
+  MaterialApp modular() {
+    final app = MaterialApp.router(
+      key: key,
+      scaffoldMessengerKey: scaffoldMessengerKey,
+      routeInformationProvider: routeInformationProvider,
+      backButtonDispatcher: backButtonDispatcher,
+      builder: builder,
+      title: title,
+      onGenerateTitle: onGenerateTitle,
+      color: color,
+      theme: theme,
+      darkTheme: darkTheme,
+      highContrastTheme: highContrastTheme,
+      highContrastDarkTheme: highContrastDarkTheme,
+      themeMode: themeMode,
+      locale: locale,
+      localizationsDelegates: localizationsDelegates,
+      localeListResolutionCallback: localeListResolutionCallback,
+      localeResolutionCallback: localeResolutionCallback,
+      supportedLocales: supportedLocales,
+      debugShowMaterialGrid: debugShowMaterialGrid,
+      showPerformanceOverlay: showPerformanceOverlay,
+      checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+      showSemanticsDebugger: showSemanticsDebugger,
+      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+      shortcuts: shortcuts,
+      actions: actions,
+      restorationScopeId: restorationScopeId,
+      //modular delegate
+      routeInformationParser: _routeInformationParser,
+      routerDelegate: _routerDelegate,
+    );
+
+    return app;
+  }
+}
 
 _debugPrintModular(String text) {
   if (Modular.debugMode) {
@@ -27,7 +78,6 @@ class ModularNavigatorObserver extends NavigatorObserver {
 
 class Modular {
   static const String initialRoute = '/';
-  static bool debugMode = !kReleaseMode;
   static bool isCupertino = false;
   static final Map<String, ChildModule> _injectMap = {};
   static ChildModule _initialModule;
@@ -38,7 +88,7 @@ class Modular {
   static ModularArguments get args => _args?.copy();
   static IModularNavigator navigatorDelegate;
   static List<String> currentModule = <String>[];
-  static Map<String, GlobalKey<NavigatorState>> _navigators =
+  static final Map<String, GlobalKey<NavigatorState>> _navigators =
       <String, GlobalKey<NavigatorState>>{};
 
   /// Return RouteLink of the current module
@@ -99,7 +149,6 @@ class Modular {
     Modular.currentModule.add(name);
   }
 
-  /// Return Modular.navigatorKey
   ///
   /// ```
   /// Modular.to;
@@ -471,16 +520,5 @@ class Modular {
   static void addCoreInitFromTag(ChildModule module, String tagText) {
     module.instance();
     _injectMap[tagText] = module;
-  }
-}
-
-class ModularArguments {
-  final Map<String, dynamic> params;
-  final dynamic data;
-
-  ModularArguments(this.params, this.data);
-
-  ModularArguments copy() {
-    return ModularArguments(params, data);
   }
 }
