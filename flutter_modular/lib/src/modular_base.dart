@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../flutter_modular.dart';
-import 'delegates/book_route_information_parser.dart';
-import 'delegates/book_router_delegate.dart';
+import 'delegates/modular_route_information_parser.dart';
+import 'delegates/modular_router_delegate.dart';
 import 'interfaces/child_module.dart';
 import 'interfaces/modular_interface.dart';
 import 'interfaces/route_guard.dart';

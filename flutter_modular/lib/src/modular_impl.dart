@@ -1,5 +1,5 @@
 import '../flutter_modular.dart';
-import 'delegates/book_router_delegate.dart';
+import 'delegates/modular_router_delegate.dart';
 import 'interfaces/modular_interface.dart';
 import 'navigator/modular_navigator.dart';
 

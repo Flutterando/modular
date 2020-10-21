@@ -1,4 +1,5 @@
 import '../../flutter_modular.dart';
+import 'modular_arguments.dart';
 
 class Old {
   final ModularArguments args;
