@@ -6,8 +6,8 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: "/",
-      navigatorKey: Modular.navigatorKey,
-      onGenerateRoute: Modular.generateRoute,
+      //  navigatorKey: Modular.navigatorKey,
+      //  onGenerateRoute: Modular.generateRoute,
     );
   }
 }

@@ -4,15 +4,11 @@ import '../interfaces/main_module.dart';
 
 class ModularApp extends StatefulWidget {
   final MainModule module;
-  final bool isCupertino;
 
   ModularApp({
     Key key,
     this.module,
-    this.isCupertino = false,
-  }) : super(key: key) {
-    Modular.isCupertino = isCupertino;
-  }
+  }) : super(key: key);
 
   @override
   _ModularAppState createState() => _ModularAppState();
@@ -22,7 +18,7 @@ class _ModularAppState extends State<ModularApp> {
   @override
   void initState() {
     super.initState();
-    Modular.init(widget.module);
+    // Modular.init(widget.module);
   }
 
   @override

@@ -18,7 +18,7 @@ class _Tab1PageState extends State<Tab1Page> {
       ),
       body: Center(
         child: RaisedButton(onPressed: () {
-          Modular.navigator.pushNamed('/page1');
+          //    Modular.navigator.pushNamed('/page1');
         }),
       ),
     );

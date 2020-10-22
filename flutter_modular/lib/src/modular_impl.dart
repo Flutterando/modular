@@ -1,13 +1,17 @@
+import 'package:flutter/foundation.dart';
+
 import '../flutter_modular.dart';
 import 'delegates/modular_router_delegate.dart';
 import 'interfaces/modular_interface.dart';
-import 'navigator/modular_navigator.dart';
+import 'routers/modular_navigator.dart';
 
-class ModularImpl extends ModularInterface {
+class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, ChildModule> injectMap;
+  final IModularNavigator navigatorDelegate;
 
-  ModularImpl({this.routerDelegate, this.injectMap});
+  const ModularImpl(
+      {this.routerDelegate, this.injectMap, this.navigatorDelegate});
 
   @override
   IModularNavigator get to {
@@ -16,8 +20,13 @@ class ModularImpl extends ModularInterface {
   }
 
   @override
-  // TODO: implement link
   IModularNavigator get link => throw UnimplementedError();
+
+  @override
+  bool get debugMode => !kReleaseMode;
+
+  @override
+  String get initialRoute => '/';
 
   @override
   B get<B>(

@@ -63,9 +63,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      navigatorKey: Modular.navigatorKey,
+      //    navigatorKey: Modular.navigatorKey,
       initialRoute: '/',
-      onGenerateRoute: Modular.generateRoute,
+      //    onGenerateRoute: Modular.generateRoute,
     );
   }
 }

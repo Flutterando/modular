@@ -7,7 +7,13 @@ class ModularRouterDelegate extends RouterDelegate<BookRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<BookRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  ModularRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  ModularRouterDelegate(this.navigatorKey);
+
+  int counter = 0;
+
+  @override
+  BookRoutePath get currentConfiguration =>
+      counter == 0 ? BookRoutePath.home() : BookRoutePath.home();
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +25,16 @@ class ModularRouterDelegate extends RouterDelegate<BookRoutePath>
           key: ValueKey('BooksListPage'),
           child: Scaffold(),
         ),
+        if (counter > 0)
+          MaterialPage(
+            key: ValueKey('BooksListPage2'),
+            child: Scaffold(),
+          ),
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
           return false;
         }
-
-        notifyListeners();
-
         return true;
       },
     );
@@ -34,13 +42,15 @@ class ModularRouterDelegate extends RouterDelegate<BookRoutePath>
 
   @override
   Future<void> setNewRoutePath(BookRoutePath path) async {
-    // if (path.isDetailsPage) {
-    //   _selectedBook = books[path.id];
-    // }
+    if (path?.isDetailsPage == true) {
+      counter = 2;
+      print(path?.id);
+    }
   }
 
-  void _handleBookTapped(dynamic book) {
+  void handleBookTapped() {
     // _selectedBook = book;
-    // notifyListeners();
+    counter = 2;
+    notifyListeners();
   }
 }

@@ -64,7 +64,7 @@ class _ModularArgumentsPageState extends State<ModularArgumentsPage> {
   @override
   void initState() {
     super.initState();
-    _id = Modular.args.data;
+    //  _id = Modular.args.data;
   }
 
   @override

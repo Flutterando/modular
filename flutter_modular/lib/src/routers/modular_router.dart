@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/utils/modular_arguments.dart';
 import '../../flutter_modular.dart';
 import '../interfaces/child_module.dart';
 import '../interfaces/route_guard.dart';
@@ -271,8 +272,8 @@ class ModularRouter<T> {
       dispose: (old, actual) {
         final trash = <String>[];
         if (!isRouterOutlet) {
-          Modular.oldProccess(old);
-          Modular.updateCurrentModuleApp();
+          // Modular.oldProccess(old);
+          // Modular.updateCurrentModuleApp();
         }
         if (actual.isCurrent) {
           return;
@@ -321,20 +322,15 @@ class ModularRouter<T> {
       if (routeGenerator != null) {
         return routeGenerator(widgetBuilder, settings);
       }
-      return Modular.isCupertino
-          ? CupertinoPageRoute<T>(
-              settings: settings,
-              builder: widgetBuilder,
-            )
-          : MaterialPageRoute<T>(
-              settings: settings,
-              builder: widgetBuilder,
-            );
+      return MaterialPageRoute<T>(
+        settings: settings,
+        builder: widgetBuilder,
+      );
     } else {
       var selectTransition = _transitions[transition];
       return selectTransition((context, args) {
         return disposablePage;
-      }, Modular.args, duration, settings);
+      }, null, duration, settings);
     }
   }
 }
@@ -388,8 +384,8 @@ class __DisposableWidgetState extends State<_DisposableWidget> {
   @override
   void initState() {
     super.initState();
-    old = Modular.old;
-    args = Modular.args;
+    // old = Modular.old;
+    // args = Modular.args;
   }
 
   @override

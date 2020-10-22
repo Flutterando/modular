@@ -76,7 +76,7 @@ abstract class IModularTest {
   @visibleForTesting
   void memoryManage(ModularTestType modularTestType) {
     if (modularTestType == ModularTestType.resetModules) {
-      Modular.removeModule(module);
+      // Modular.removeModule(module);
     }
   }
 

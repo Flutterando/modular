@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../flutter_modular.dart';
-import 'modular_navigator_interface.dart';
+import '../interfaces/modular_navigator_interface.dart';
 
 class ModularNavigator implements IModularNavigator {
   final NavigatorState navigator;

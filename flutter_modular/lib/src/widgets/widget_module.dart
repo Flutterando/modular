@@ -87,7 +87,7 @@ class _ModularProviderState extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
-    Modular.addCoreInit(widget.module);
+    // Modular.addCoreInit(widget.module);
     _debugPrintModular("-- ${widget.module.runtimeType} INITIALIZED");
   }
 
@@ -99,7 +99,7 @@ class _ModularProviderState extends State<ModularProvider> {
   @override
   void dispose() {
     super.dispose();
-    Modular.removeModule(widget.module);
+    // Modular.removeModule(widget.module);
     _debugPrintModular("-- ${widget.module.runtimeType} DISPOSED");
   }
 }

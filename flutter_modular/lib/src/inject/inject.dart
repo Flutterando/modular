@@ -39,7 +39,7 @@ class Inject<T> {
     }
   }
 
-  ModularArguments get args => Modular.args;
+  // ModularArguments get args => Modular.args;
 
   /// get current module link
   RouteLink get link => Modular.link;

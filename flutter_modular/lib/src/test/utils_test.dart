@@ -4,7 +4,7 @@ import '../../flutter_modular.dart';
 
 void initModule(ChildModule module,
     {List<Bind> changeBinds, bool initialModule}) {
-  Modular.debugMode = false;
+  //Modular.debugMode = false;
   final list = module.binds;
   final changedList = List<Bind>.from(list);
   for (var item in list ?? []) {
@@ -18,9 +18,9 @@ void initModule(ChildModule module,
   }
   module.changeBinds(changedList);
   if (initialModule ?? false) {
-    Modular.init(module);
+    //  Modular.init(module);
   } else {
-    Modular.bindModule(module);
+    //  Modular.bindModule(module);
   }
 }
 
@@ -36,8 +36,8 @@ Widget buildTestableWidget(Widget widget) {
     child: MaterialApp(
       home: widget,
       initialRoute: '/',
-      navigatorKey: Modular.navigatorKey,
-      onGenerateRoute: Modular.generateRoute,
+      //    navigatorKey: Modular.navigatorKey,
+      //    onGenerateRoute: Modular.generateRoute,
     ),
   );
 }

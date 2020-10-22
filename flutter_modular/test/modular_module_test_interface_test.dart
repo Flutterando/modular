@@ -244,7 +244,7 @@ void main() {
       expect(titleFinder, findsOneWidget);
     });
     testWidgets("Modular Arguments Page id", (tester) async {
-      Modular.arguments(data: 10);
+      // Modular.arguments(data: 10);
       await tester.pumpWidget(buildTestableWidget(ModularArgumentsPage()));
       final titleFinder = find.text("10");
       expect(titleFinder, findsOneWidget);

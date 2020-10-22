@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
-
 import '../../flutter_modular.dart';
 
 abstract class ModularInterface {
-  bool debugMode = !kReleaseMode;
-  IModularNavigator navigatorDelegate;
+  bool get debugMode;
+
+  String get initialRoute;
+  IModularNavigator get navigatorDelegate;
 
   IModularNavigator get to;
   IModularNavigator get link;

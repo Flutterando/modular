@@ -8,12 +8,12 @@ class HomeWidget extends ModularStatelessWidget<HomeModule> {
     var c = Modular.get<HomeBloc>();
     c.addListener(() {
       if (c.counter > 10) {
-        Modular.to.showDialog(
-          child: AlertDialog(
-            title: Text('Test'),
-            content: Text('Content'),
-          ),
-        );
+        // Modular.to.showDialog(
+        //   child: AlertDialog(
+        //     title: Text('Test'),
+        //     content: Text('Content'),
+        //   ),
+        // );
       }
     });
   }

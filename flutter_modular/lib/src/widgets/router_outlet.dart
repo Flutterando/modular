@@ -14,7 +14,7 @@ class RouterOutlet extends StatefulWidget {
     Key key,
     @required this.module,
     this.navigatorKey,
-    this.initialRoute = Modular.initialRoute,
+    this.initialRoute = '/',
     this.keepAlive = true,
     this.onChangeRoute,
   }) : super(key: key) {
@@ -31,8 +31,8 @@ class _RouterOutletState extends State<RouterOutlet>
   @override
   void initState() {
     super.initState();
-    _key = widget.navigatorKey ??
-        Modular.outletNavigatorKey(widget.module.runtimeType.toString());
+    //  _key = widget.navigatorKey ??
+    //    Modular.outletNavigatorKey(widget.module.runtimeType.toString());
   }
 
   @override
@@ -47,10 +47,10 @@ class _RouterOutletState extends State<RouterOutlet>
         child: Navigator(
           key: _key,
           initialRoute: widget.initialRoute,
-          onGenerateRoute: (setting) {
-            return Modular.generateRoute(
-                setting, widget.module, widget.onChangeRoute);
-          },
+          // onGenerateRoute: (setting) {
+          //   return Modular.generateRoute(
+          //       setting, widget.module, widget.onChangeRoute);
+          // },
         ),
       ),
     );

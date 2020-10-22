@@ -21,7 +21,7 @@ void main() {
       expect(Modular.get<ILocalStorage>(), isA<LocalMock>());
     });
     tearDown(() {
-      Modular.removeModule(app);
+      //  Modular.removeModule(app);
     });
   });
   group("navigation test", () {
@@ -38,9 +38,9 @@ void main() {
       expect(Modular.link.path, '/prod');
     });
     tearDown(() {
-      Modular.removeModule(product);
-      Modular.removeModule(home);
-      Modular.removeModule(app);
+      // Modular.removeModule(product);
+      // Modular.removeModule(home);
+      // Modular.removeModule(app);
     });
   });
   group("arguments test", () {
@@ -57,14 +57,14 @@ void main() {
       expect(titleFinder, findsOneWidget);
     });
     testWidgets("Modular Arguments Page id", (tester) async {
-      Modular.arguments(data: 10);
+      // Modular.arguments(data: 10);
       await tester.pumpWidget(buildTestableWidget(ModularArgumentsPage()));
       final titleFinder = find.text("10");
       expect(titleFinder, findsOneWidget);
     });
     tearDownAll(() {
-      Modular.removeModule(home);
-      Modular.removeModule(app);
+      //  Modular.removeModule(home);
+      // Modular.removeModule(app);
     });
   });
 }

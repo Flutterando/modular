@@ -6,7 +6,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: "/",
-      onGenerateRoute: Modular.generateRoute,
+      // onGenerateRoute: Modular.generateRoute,
       onUnknownRoute: (context) {
         return MaterialPageRoute(
             builder: (context) => Scaffold(

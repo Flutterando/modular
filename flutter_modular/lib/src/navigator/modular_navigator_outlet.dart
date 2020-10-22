@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'modular_navigator.dart';
+import '../routers/modular_navigator.dart';
 
 class ModularNavigatorOutlet extends ModularNavigator {
   final NavigatorState global;
