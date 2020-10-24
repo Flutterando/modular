@@ -5,18 +5,54 @@ import 'delegates/modular_router_delegate.dart';
 import 'interfaces/modular_interface.dart';
 import 'routers/modular_navigator.dart';
 
+ChildModule _initialModule;
+
 class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, ChildModule> injectMap;
   final IModularNavigator navigatorDelegate;
 
-  const ModularImpl(
-      {this.routerDelegate, this.injectMap, this.navigatorDelegate});
+  const ModularImpl({
+    this.routerDelegate,
+    this.injectMap,
+    this.navigatorDelegate,
+  });
+
+  @override
+  ChildModule get initialModule => _initialModule;
+
+  @override
+  void debugPrintModular(String text) {
+    if (Modular.debugMode) {
+      debugPrint(text);
+    }
+  }
+
+  @override
+  void bindModule(ChildModule module, [String path]) {
+    assert(module != null);
+    final name = module.runtimeType.toString();
+    if (!injectMap.containsKey(name)) {
+      module.paths.add(path);
+      injectMap[name] = module;
+      module.instance();
+      debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
+    } else {
+      injectMap[name].paths.add(path);
+    }
+  }
+
+  @override
+  void init(ChildModule module) {
+    _initialModule = module;
+    bindModule(module, "global==");
+  }
 
   @override
   IModularNavigator get to {
     return navigatorDelegate ??
-        ModularNavigator(routerDelegate.navigatorKey.currentState);
+        ModularNavigator(
+            routerDelegate.navigatorKey.currentState, routerDelegate);
   }
 
   @override

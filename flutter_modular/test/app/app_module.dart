@@ -22,7 +22,6 @@ class AppModule extends MainModule {
         ModularRouter(
           "/forbidden",
           child: (_, args) => ForbiddenWidget(),
-          guards: [MyGuard()],
           transition: TransitionType.fadeIn,
         ),
         ModularRouter(
@@ -30,9 +29,9 @@ class AppModule extends MainModule {
           module: HomeModule(),
           transition: TransitionType.fadeIn,
         ),
-        ModularRouter("/home", module: HomeModule()),
-        ModularRouter("/prod", module: ProductModule()),
-        ModularRouter("/homeTwo", module: HomeModule(), guards: [MyGuard()]),
+        // ModularRouter("/home", module: HomeModule()),
+        // ModularRouter("/prod", module: ProductModule()),
+        // ModularRouter("/homeTwo", module: HomeModule(), guards: [MyGuard()]),
       ];
 
   @override

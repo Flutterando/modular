@@ -1,56 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/src/routers/modular_page.dart';
 
+import 'modular_route_information_parser.dart';
 import 'modular_route_path.dart';
 import 'transitionDelegate.dart';
 
-class ModularRouterDelegate extends RouterDelegate<BookRoutePath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<BookRoutePath> {
+final List<ModularRouter> _routers = [];
+
+class ModularRouterDelegate extends RouterDelegate<ModularRouter>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<ModularRouter> {
   final GlobalKey<NavigatorState> navigatorKey;
+  final ModularRouteInformationParser parser;
+  final Map<String, ChildModule> injectMap;
 
-  ModularRouterDelegate(this.navigatorKey);
+  TransitionDelegate transitionDelegate = NoAnimationTransitionDelegate();
 
-  int counter = 0;
+  ModularRouterDelegate(this.navigatorKey, this.parser, this.injectMap);
 
   @override
-  BookRoutePath get currentConfiguration =>
-      counter == 0 ? BookRoutePath.home() : BookRoutePath.home();
+  ModularRouter get currentConfiguration => _routers.last;
 
   @override
   Widget build(BuildContext context) {
+    if (_routers.isEmpty) {
+      _routers.add(parser.selectRoute(Modular.initialRoute));
+    }
+
     return Navigator(
       key: navigatorKey,
-      transitionDelegate: NoAnimationTransitionDelegate(),
-      pages: [
-        MaterialPage(
-          key: ValueKey('BooksListPage'),
-          child: Scaffold(),
-        ),
-        if (counter > 0)
-          MaterialPage(
-            key: ValueKey('BooksListPage2'),
-            child: Scaffold(),
-          ),
-      ],
+      transitionDelegate: transitionDelegate,
+      pages: _routers.map((router) => ModularPage(router)).toList(),
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
           return false;
         }
+        final path = _routers.last.path;
+        _routers.removeLast();
+        notifyListeners();
+
+        final trash = <String>[];
+
+        injectMap.forEach((key, module) {
+          module.paths.remove(path);
+          if (module.paths.length == 0) {
+            module.cleanInjects();
+            trash.add(key);
+            Modular.debugPrintModular(
+                "-- ${module.runtimeType.toString()} DISPOSED");
+          }
+        });
+
+        for (final key in trash) {
+          injectMap.remove(key);
+        }
+
         return true;
       },
     );
   }
 
   @override
-  Future<void> setNewRoutePath(BookRoutePath path) async {
-    if (path?.isDetailsPage == true) {
-      counter = 2;
-      print(path?.id);
+  Future<void> setNewRoutePath(ModularRouter router) async {
+    if (Modular.initialRoute != router.path) {
+      transitionDelegate = DefaultTransitionDelegate();
+      final index = _routers.indexOf(router);
+      if (index == -1) {
+        _routers.add(router);
+      } else {
+        _routers[index] = router;
+        transitionDelegate = NoAnimationTransitionDelegate();
+      }
+
+      notifyListeners();
     }
   }
 
-  void handleBookTapped() {
-    // _selectedBook = book;
-    counter = 2;
-    notifyListeners();
+  Future<T> pushNamed<T extends Object>(String path, {Object arguments}) async {
+    final router = parser.selectRoute(path);
+    setNewRoutePath(
+        router.copyWith(args: router?.args?.copyWith(data: arguments)));
   }
 }

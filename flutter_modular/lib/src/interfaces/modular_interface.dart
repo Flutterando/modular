@@ -5,6 +5,10 @@ abstract class ModularInterface {
 
   String get initialRoute;
   IModularNavigator get navigatorDelegate;
+  ChildModule get initialModule;
+  void init(ChildModule module);
+  void bindModule(ChildModule module, [String path]);
+  void debugPrintModular(String text);
 
   IModularNavigator get to;
   IModularNavigator get link;

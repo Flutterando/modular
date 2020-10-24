@@ -24,18 +24,18 @@ class HomeModule extends ChildModule {
           child: (_, args) => HomeWidget(),
           transition: TransitionType.fadeIn,
         ),
-        ModularRouter(
-          "/forbidden2",
-          child: (_, args) => ForbiddenWidget(),
-          transition: TransitionType.fadeIn,
-          guards: [MyGuard()],
-        ),
-        ModularRouter("/list/:id/:id2", child: (_, args) => HomeWidget()),
-        ModularRouter("/product", module: ProductModule()),
-        ModularRouter("/arguments",
-            child: (_, args) => ArgumentsPage(id: args.data)),
-        ModularRouter("/modularArguments",
-            child: (_, args) => ModularArgumentsPage()),
+        // ModularRouter(
+        //   "/forbidden2",
+        //   child: (_, args) => ForbiddenWidget(),
+        //   transition: TransitionType.fadeIn,
+        //   guards: [MyGuard()],
+        // ),
+        // ModularRouter("/list/:id/:id2", child: (_, args) => HomeWidget()),
+        // ModularRouter("/product", module: ProductModule()),
+        // ModularRouter("/arguments",
+        //     child: (_, args) => ArgumentsPage(id: args.data)),
+        // ModularRouter("/modularArguments",
+        //     child: (_, args) => ModularArgumentsPage()),
       ];
 }
 

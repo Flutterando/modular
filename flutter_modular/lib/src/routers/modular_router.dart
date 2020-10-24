@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/utils/modular_arguments.dart';
+
 import '../../flutter_modular.dart';
 import '../interfaces/child_module.dart';
 import '../interfaces/route_guard.dart';
 import '../transitions/transitions.dart';
+import '../utils/modular_arguments.dart';
 import '../utils/old.dart';
 
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
@@ -17,6 +19,12 @@ _debugPrintModular(String text) {
 }
 
 class ModularRouter<T> {
+  final ChildModule currentModule;
+
+  ModularArguments args = ModularArguments();
+
+  final String path;
+
   ///
   /// Paramenter name: [routerName]
   ///
@@ -177,15 +185,18 @@ class ModularRouter<T> {
 
   ModularRouter(
     this.routerName, {
+    this.path = '/',
+    this.args = const ModularArguments(),
     this.module,
     this.child,
     this.guards,
     this.params,
+    this.currentModule,
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
     this.customTransition,
     this.duration = const Duration(milliseconds: 300),
-    this.modulePath,
+    this.modulePath = '/',
   }) {
     assert(routerName != null);
 
@@ -226,19 +237,25 @@ class ModularRouter<T> {
       {Widget Function(BuildContext context, ModularArguments args) child,
       String routerName,
       ChildModule module,
+      ChildModule currentModule,
       Map<String, String> params,
       List<RouteGuard> guards,
       TransitionType transition,
       RouteBuilder routeGenerator,
       String modulePath,
+      String path,
       String duration,
+      ModularArguments args,
       CustomTransition customTransition}) {
     return ModularRouter<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
+      args: args ?? this.args,
       module: module ?? this.module,
+      currentModule: currentModule ?? this.currentModule,
       params: params ?? this.params,
       modulePath: modulePath ?? this.modulePath,
+      path: path ?? this.path,
       guards: guards ?? this.guards,
       duration: duration ?? this.duration,
       routeGenerator: routeGenerator ?? this.routeGenerator,
@@ -295,19 +312,17 @@ class ModularRouter<T> {
     return page;
   }
 
-  Route<T> getPageRoute(
-      {Map<String, ChildModule> injectMap,
-      RouteSettings settings,
-      bool isRouterOutlet}) {
-    final disposablePage = _disposableGenerate(
-        injectMap: injectMap,
-        path: settings.name,
-        isRouterOutlet: isRouterOutlet);
+  Route<T> getPageRoute(RouteSettings settings) {
+    // final disposablePage = _disposableGenerate(
+    //     injectMap: injectMap,
+    //     path: settings.name,
+    //     isRouterOutlet: isRouterOutlet);
 
     if (transition == TransitionType.custom && customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
-          return disposablePage;
+          //return disposablePage;
+          return child(context, args);
         },
         settings: settings,
         transitionsBuilder: customTransition.transitionBuilder,
@@ -316,7 +331,8 @@ class ModularRouter<T> {
     } else if (transition == TransitionType.defaultTransition) {
       // Helper function
       Widget widgetBuilder(BuildContext context) {
-        return disposablePage;
+        //return disposablePage;
+        return child(context, args);
       }
 
       if (routeGenerator != null) {
@@ -328,10 +344,23 @@ class ModularRouter<T> {
       );
     } else {
       var selectTransition = _transitions[transition];
-      return selectTransition((context, args) {
-        return disposablePage;
-      }, null, duration, settings);
+      return selectTransition(child, null, duration, settings);
     }
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is ModularRouter<T> &&
+        o.modulePath == modulePath &&
+        o.routerName == routerName &&
+        o.module == module;
+  }
+
+  @override
+  int get hashCode {
+    return currentModule.hashCode ^ routerName.hashCode;
   }
 }
 

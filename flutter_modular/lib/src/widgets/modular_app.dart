@@ -18,7 +18,7 @@ class _ModularAppState extends State<ModularApp> {
   @override
   void initState() {
     super.initState();
-    // Modular.init(widget.module);
+    Modular.init(widget.module);
   }
 
   @override
