@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/routers/modular_page.dart';
+import '../../flutter_modular.dart';
+import '../routers/modular_page.dart';
 
 import 'modular_route_information_parser.dart';
-import 'modular_route_path.dart';
 import 'transitionDelegate.dart';
 
 final List<ModularRouter> _routers = [];
 
 class ModularRouterDelegate extends RouterDelegate<ModularRouter>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<ModularRouter> {
+    with
+        // ignore: prefer_mixin
+        ChangeNotifier,
+        PopNavigatorRouterDelegateMixin<ModularRouter> {
   final GlobalKey<NavigatorState> navigatorKey;
   final ModularRouteInformationParser parser;
   final Map<String, ChildModule> injectMap;
@@ -31,32 +33,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       key: navigatorKey,
       transitionDelegate: transitionDelegate,
       pages: _routers.map((router) => ModularPage(router)).toList(),
-      onPopPage: (route, result) {
-        if (!route.didPop(result)) {
-          return false;
-        }
-        final path = _routers.last.path;
-        _routers.removeLast();
-        notifyListeners();
-
-        final trash = <String>[];
-
-        injectMap.forEach((key, module) {
-          module.paths.remove(path);
-          if (module.paths.length == 0) {
-            module.cleanInjects();
-            trash.add(key);
-            Modular.debugPrintModular(
-                "-- ${module.runtimeType.toString()} DISPOSED");
-          }
-        });
-
-        for (final key in trash) {
-          injectMap.remove(key);
-        }
-
-        return true;
-      },
+      onPopPage: _onPopPage,
     );
   }
 
@@ -80,5 +57,32 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     final router = parser.selectRoute(path);
     setNewRoutePath(
         router.copyWith(args: router?.args?.copyWith(data: arguments)));
+  }
+
+  bool _onPopPage(Route<dynamic> route, dynamic result) {
+    if (!route.didPop(result)) {
+      return false;
+    }
+    final path = _routers.last.path;
+    _routers.removeLast();
+    notifyListeners();
+
+    final trash = <String>[];
+
+    injectMap.forEach((key, module) {
+      module.paths.remove(path);
+      if (module.paths.length == 0) {
+        module.cleanInjects();
+        trash.add(key);
+        Modular.debugPrintModular(
+            "-- ${module.runtimeType.toString()} DISPOSED");
+      }
+    });
+
+    for (final key in trash) {
+      injectMap.remove(key);
+    }
+
+    return true;
   }
 }

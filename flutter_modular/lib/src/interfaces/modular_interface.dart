@@ -4,7 +4,6 @@ abstract class ModularInterface {
   bool get debugMode;
 
   String get initialRoute;
-  IModularNavigator get navigatorDelegate;
   ChildModule get initialModule;
   void init(ChildModule module);
   void bindModule(ChildModule module, [String path]);

@@ -34,6 +34,22 @@ class ModularRouteInformationParser
     return null;
   }
 
+  ModularRouter _normalizeRoute(
+      ModularRouter route, String routerName, String path) {
+    ModularRouter router;
+    if (routerName == path || routerName == "$path/") {
+      router = route.module.routers[0];
+      if (router.module != null) {
+        var _routerName =
+            (routerName + route.routerName).replaceFirst('//', '/');
+        router = _searchInModule(route.module, _routerName, path);
+      }
+    } else {
+      router = _searchInModule(route.module, routerName, path);
+    }
+    return router;
+  }
+
   ModularRouter _searchRoute(
       ModularRouter route, String routerName, String path) {
     final tempRouteName =
@@ -41,17 +57,7 @@ class ModularRouteInformationParser
     if (route.child == null) {
       var _routerName =
           ('$routerName${route.routerName}/').replaceFirst('//', '/');
-      ModularRouter router;
-      if (_routerName == path || _routerName == "$path/") {
-        router = route.module.routers[0];
-        if (router.module != null) {
-          var _routerName =
-              (routerName + route.routerName).replaceFirst('//', '/');
-          router = _searchInModule(route.module, _routerName, path);
-        }
-      } else {
-        router = _searchInModule(route.module, _routerName, path);
-      }
+      var router = _normalizeRoute(route, _routerName, path);
 
       if (router != null) {
         router = router.copyWith(

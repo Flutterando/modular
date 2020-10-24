@@ -10,13 +10,19 @@ ChildModule _initialModule;
 class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, ChildModule> injectMap;
-  final IModularNavigator navigatorDelegate;
+  IModularNavigator toNavigator;
 
-  const ModularImpl({
+  ModularImpl({
     this.routerDelegate,
     this.injectMap,
-    this.navigatorDelegate,
-  });
+    IModularNavigator navigatorDelegate,
+  }) {
+    toNavigator = navigatorDelegate ??
+        ModularNavigator(
+          routerDelegate.navigatorKey.currentState,
+          routerDelegate,
+        );
+  }
 
   @override
   ChildModule get initialModule => _initialModule;
@@ -49,11 +55,7 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  IModularNavigator get to {
-    return navigatorDelegate ??
-        ModularNavigator(
-            routerDelegate.navigatorKey.currentState, routerDelegate);
-  }
+  IModularNavigator get to => toNavigator;
 
   @override
   IModularNavigator get link => throw UnimplementedError();
