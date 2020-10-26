@@ -2,10 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../app_bloc.dart';
-import '../../guard/guard.dart';
 import '../../shared/app_info.state.dart';
-import '../forbidden/forbidden_widget.dart';
-import '../product/product_module.dart';
 import 'home_bloc.dart';
 import 'home_widget.dart';
 

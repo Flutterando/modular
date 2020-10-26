@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,21 +9,16 @@ import '../interfaces/child_module.dart';
 import '../interfaces/route_guard.dart';
 import '../transitions/transitions.dart';
 import '../utils/modular_arguments.dart';
-import '../utils/old.dart';
 
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
     WidgetBuilder, RouteSettings);
 
-_debugPrintModular(String text) {
-  if (Modular.debugMode) {
-    debugPrint(text);
-  }
-}
-
 class ModularRouter<T> {
   final ChildModule currentModule;
 
-  ModularArguments args = ModularArguments();
+  Completer<T> popRoute = Completer<T>();
+
+  ModularArguments args;
 
   final String path;
 
@@ -195,10 +192,13 @@ class ModularRouter<T> {
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
     this.customTransition,
+    this.popRoute,
     this.duration = const Duration(milliseconds: 300),
     this.modulePath = '/',
   }) {
     assert(routerName != null);
+
+    popRoute = popRoute ?? Completer<T>();
 
     if (transition == null) throw ArgumentError('transition must not be null');
     if (transition == TransitionType.custom && customTransition == null) {
@@ -245,6 +245,7 @@ class ModularRouter<T> {
       String modulePath,
       String path,
       String duration,
+      Completer<T> popRoute,
       ModularArguments args,
       CustomTransition customTransition}) {
     return ModularRouter<T>(
@@ -256,6 +257,7 @@ class ModularRouter<T> {
       params: params ?? this.params,
       modulePath: modulePath ?? this.modulePath,
       path: path ?? this.path,
+      popRoute: popRoute ?? this.popRoute,
       guards: guards ?? this.guards,
       duration: duration ?? this.duration,
       routeGenerator: routeGenerator ?? this.routeGenerator,
@@ -279,45 +281,7 @@ class ModularRouter<T> {
     }).toList();
   }
 
-  Widget _disposableGenerate({
-    Map<String, ChildModule> injectMap,
-    bool isRouterOutlet,
-    String path,
-  }) {
-    Widget page = _DisposableWidget(
-      child: child,
-      dispose: (old, actual) {
-        final trash = <String>[];
-        if (!isRouterOutlet) {
-          // Modular.oldProccess(old);
-          // Modular.updateCurrentModuleApp();
-        }
-        if (actual.isCurrent) {
-          return;
-        }
-        injectMap.forEach((key, module) {
-          module.paths.remove(path);
-          if (module.paths.length == 0) {
-            module.cleanInjects();
-            trash.add(key);
-            _debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
-          }
-        });
-
-        for (final key in trash) {
-          injectMap.remove(key);
-        }
-      },
-    );
-    return page;
-  }
-
   Route<T> getPageRoute(RouteSettings settings) {
-    // final disposablePage = _disposableGenerate(
-    //     injectMap: injectMap,
-    //     path: settings.name,
-    //     isRouterOutlet: isRouterOutlet);
-
     if (transition == TransitionType.custom && customTransition != null) {
       return PageRouteBuilder(
         pageBuilder: (context, _, __) {
@@ -344,11 +308,12 @@ class ModularRouter<T> {
       );
     } else {
       var selectTransition = _transitions[transition];
-      return selectTransition(child, null, duration, settings);
+      return selectTransition(child, args, duration, settings);
     }
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
@@ -359,6 +324,7 @@ class ModularRouter<T> {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode {
     return currentModule.hashCode ^ routerName.hashCode;
   }
@@ -389,48 +355,4 @@ class CustomTransition {
   CustomTransition(
       {@required this.transitionBuilder,
       this.transitionDuration = const Duration(milliseconds: 300)});
-}
-
-class _DisposableWidget extends StatefulWidget {
-  final Function(Old old, ModalRoute actual) dispose;
-  final Widget Function(BuildContext context, ModularArguments args) child;
-
-  _DisposableWidget({
-    Key key,
-    this.dispose,
-    this.child,
-  }) : super(key: key);
-
-  @override
-  __DisposableWidgetState createState() => __DisposableWidgetState();
-}
-
-class __DisposableWidgetState extends State<_DisposableWidget> {
-  Old old;
-  ModalRoute actual;
-  ModularArguments args;
-
-  @override
-  void initState() {
-    super.initState();
-    // old = Modular.old;
-    // args = Modular.args;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    actual = ModalRoute.of(context);
-  }
-
-  @override
-  void dispose() {
-    widget.dispose(old, actual);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child(context, args);
-  }
 }

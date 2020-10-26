@@ -3,9 +3,6 @@ import '../../flutter_modular.dart';
 import '../routers/modular_page.dart';
 
 import 'modular_route_information_parser.dart';
-import 'transitionDelegate.dart';
-
-final List<ModularRouter> _routers = [];
 
 class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     with
@@ -16,56 +13,65 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   final ModularRouteInformationParser parser;
   final Map<String, ChildModule> injectMap;
 
-  TransitionDelegate transitionDelegate = NoAnimationTransitionDelegate();
-
   ModularRouterDelegate(this.navigatorKey, this.parser, this.injectMap);
 
+  List<ModularPage> _pages = [];
+
   @override
-  ModularRouter get currentConfiguration => _routers.last;
+  ModularRouter get currentConfiguration => _pages.last.router;
 
   @override
   Widget build(BuildContext context) {
-    if (_routers.isEmpty) {
-      _routers.add(parser.selectRoute(Modular.initialRoute));
-    }
-
-    return Navigator(
-      key: navigatorKey,
-      transitionDelegate: transitionDelegate,
-      pages: _routers.map((router) => ModularPage(router)).toList(),
-      onPopPage: _onPopPage,
-    );
+    return _pages.isEmpty
+        ? Material()
+        : Navigator(
+            key: navigatorKey,
+            pages: _pages,
+            onPopPage: _onPopPage,
+          );
   }
 
   @override
   Future<void> setNewRoutePath(ModularRouter router) async {
-    if (Modular.initialRoute != router.path) {
-      transitionDelegate = DefaultTransitionDelegate();
-      final index = _routers.indexOf(router);
-      if (index == -1) {
-        _routers.add(router);
-      } else {
-        _routers[index] = router;
-        transitionDelegate = NoAnimationTransitionDelegate();
-      }
-
-      notifyListeners();
+    final index = _pages.indexWhere((element) => element.router == router);
+    final page = ModularPage(
+      key: ValueKey('url:${router.path}'),
+      router: router,
+    );
+    if (index == -1) {
+      _pages.add(page);
+    } else {
+      _pages[index] = page;
     }
+
+    rebuildPages();
   }
 
   Future<T> pushNamed<T extends Object>(String path, {Object arguments}) async {
-    final router = parser.selectRoute(path);
-    setNewRoutePath(
-        router.copyWith(args: router?.args?.copyWith(data: arguments)));
+    var router = parser.selectRoute(path);
+    router = router.copyWith(args: router?.args?.copyWith(data: arguments));
+    final page = ModularPage(
+      router: router,
+    );
+    _pages.add(page);
+    rebuildPages();
+    return router.popRoute.future;
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     if (!route.didPop(result)) {
       return false;
     }
-    final path = _routers.last.path;
-    _routers.removeLast();
-    notifyListeners();
+
+    if (route.isFirst) {
+      return false;
+    }
+
+    final page = route.settings as ModularPage;
+    final path = page.router.path;
+    page.router.popRoute.complete(result);
+    _pages.removeLast();
+    rebuildPages();
 
     final trash = <String>[];
 
@@ -84,5 +90,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     }
 
     return true;
+  }
+
+  void rebuildPages() {
+    _pages = List.from(_pages);
+    notifyListeners();
   }
 }

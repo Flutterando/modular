@@ -62,7 +62,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
 class _FakeModule extends ChildModule {
   final List<Bind> bindsInject;
 
-  _FakeModule({String path, this.bindsInject}) {
+  _FakeModule({this.bindsInject}) {
     paths.add(runtimeType.toString());
   }
 

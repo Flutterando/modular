@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/delegates/modular_route_path.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -7,7 +5,7 @@ import 'app/app_module.dart';
 
 main() {
   testWidgets('Button is present and triggers navigation after tapped',
-      (WidgetTester tester) async {
+      (tester) async {
     await tester.runAsync(() async {
       await tester.pumpWidget(ModularApp(
         module: AppModule(),

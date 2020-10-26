@@ -17,11 +17,7 @@ class ModularImpl implements ModularInterface {
     this.injectMap,
     IModularNavigator navigatorDelegate,
   }) {
-    toNavigator = navigatorDelegate ??
-        ModularNavigator(
-          routerDelegate.navigatorKey.currentState,
-          routerDelegate,
-        );
+    toNavigator = navigatorDelegate ?? ModularNavigator(routerDelegate);
   }
 
   @override

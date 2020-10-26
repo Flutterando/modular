@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/delegates/modular_router_delegate.dart';
-
 import '../../flutter_modular.dart';
+import '../delegates/modular_router_delegate.dart';
 import '../interfaces/modular_navigator_interface.dart';
 
 class ModularNavigator implements IModularNavigator {
-  final NavigatorState navigator;
   final ModularRouterDelegate routerDelegate;
 
-  ModularNavigator(this.navigator, this.routerDelegate);
+  ModularNavigator(this.routerDelegate);
+
+  NavigatorState get navigator => routerDelegate.navigatorKey.currentState;
 
   @override
   bool canPop() => navigator.canPop();

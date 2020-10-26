@@ -11,7 +11,7 @@ import 'app/shared/local_mock.dart';
 
 void main() {
   group("change bind", () {
-    final app = AppModule();
+    // final app = AppModule();
     setUp(() {
       initModule(AppModule(), changeBinds: [
         Bind<ILocalStorage>((i) => LocalMock()),
@@ -45,7 +45,6 @@ void main() {
   });
   group("arguments test", () {
     final app = AppModule();
-    final home = HomeModule();
     setUpAll(() {
       initModule(app, initialModule: true);
     });

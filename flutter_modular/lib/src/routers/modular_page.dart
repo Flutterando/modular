@@ -4,7 +4,7 @@ import '../../flutter_modular.dart';
 class ModularPage extends Page {
   final ModularRouter router;
 
-  ModularPage(this.router) : super(key: ValueKey(router.path));
+  const ModularPage({Key key, this.router}) : super(key: key);
 
   @override
   Route createRoute(BuildContext context) {
