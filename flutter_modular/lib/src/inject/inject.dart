@@ -38,11 +38,6 @@ class Inject<T> {
     }
   }
 
-  // ModularArguments get args => Modular.args;
-
-  /// get current module link
-  RouteLink get link => Modular.link;
-
   void dispose<B>() {
     if (T.runtimeType.toString() == 'dynamic') {
       Modular.dispose<B>();
@@ -56,24 +51,4 @@ mixin InjectMixinBase<T> {
   final Inject<T> _inject = Inject<T>.of();
 
   S get<S>() => _inject.get<S>();
-}
-
-/// A mixin that must be used only with classes that extends a [Widget]
-/// [T] the module to be injected on the widget.
-mixin InjectWidgetMixin<T extends ChildModule> on Widget
-    implements InjectMixinBase<T> {
-  final Inject<T> _inject = Inject<T>.of();
-
-  S get<S>({Map<String, dynamic> params}) =>
-      Modular.get<S>(module: T.toString(), params: params);
-
-  Widget consumer<S extends ChangeNotifier>({
-    Widget Function(BuildContext context, S value) builder,
-    bool Function(S oldValue, S newValue) distinct,
-  }) {
-    return Consumer(
-      builder: builder,
-      distinct: distinct,
-    );
-  }
 }
