@@ -1,3 +1,9 @@
+## [3.0.0] - 
+* Navigator 2.0
+* Removed Modular.link
+* Refactor RouteGuard
+* Added Modular.to.navigate and Modular.to.navigateByUrl 
+
 ## [2.0.1] - 21 Sep 2020
 * added onChangeRoute propety in RouterOutlet
 

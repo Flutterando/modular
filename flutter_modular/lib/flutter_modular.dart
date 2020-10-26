@@ -13,5 +13,6 @@ export 'src/modular_base.dart';
 export 'src/routers/modular_router.dart';
 export 'src/utils/modular_arguments.dart';
 export 'src/widgets/modular_app.dart';
+export 'src/widgets/modular_state.dart';
 export 'src/widgets/router_outlet.dart';
 export 'src/widgets/widget_module.dart';

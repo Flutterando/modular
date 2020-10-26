@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import '../../flutter_modular.dart';
 
 import '../modular_base.dart';

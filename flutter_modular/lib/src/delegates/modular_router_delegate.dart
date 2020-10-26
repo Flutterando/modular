@@ -15,10 +15,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   ModularRouterDelegate(this.navigatorKey, this.parser, this.injectMap);
 
+  ModularRouter _router;
+
   List<ModularPage> _pages = [];
 
   @override
-  ModularRouter get currentConfiguration => _pages.last.router;
+  ModularRouter get currentConfiguration => _router;
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +35,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   @override
   Future<void> setNewRoutePath(ModularRouter router) async {
-    final index = _pages.indexWhere((element) => element.router == router);
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,
     );
-    if (index == -1) {
-      _pages.add(page);
-    } else {
-      _pages[index] = page;
-    }
+    _pages.last = page;
+    _router = router;
 
     rebuildPages();
   }
@@ -59,11 +57,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
-    if (!route.didPop(result)) {
-      return false;
-    }
-
-    if (route.isFirst) {
+    if (!route.didPop(result) || route.isFirst) {
       return false;
     }
 
