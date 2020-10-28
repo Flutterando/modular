@@ -53,6 +53,13 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     rebuildPages();
   }
 
+  @override
+  void navigate(String path, {arguments}) {
+    var router = parser.selectRoute(path);
+    router = router.copyWith(args: router?.args?.copyWith(data: arguments));
+    setNewRoutePath(router);
+  }
+
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     if (!route.didPop(result) || route.isFirst) {
       return false;

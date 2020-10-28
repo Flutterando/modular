@@ -92,4 +92,6 @@ abstract class IModularNavigator {
   /// Modular.to.popUntil(ModalRoute.withName('/login'));
   /// ```
   void popUntil(bool Function(Route<dynamic>) predicate);
+
+  void navigate(String path, {dynamic arguments});
 }
