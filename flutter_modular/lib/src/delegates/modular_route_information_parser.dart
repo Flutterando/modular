@@ -75,7 +75,8 @@ class ModularRouteInformationParser
         return router;
       }
     } else {
-      if (_parseUrlParams(route, tempRouteName, path)) {
+      route = _parseUrlParams(route, tempRouteName, path);
+      if (route != null) {
         Modular.bindModule(route.currentModule, path);
         return route.copyWith(path: path);
       }
@@ -94,9 +95,10 @@ class ModularRouteInformationParser
     return newUrl.join("/");
   }
 
-  bool _parseUrlParams(ModularRouter router, String routeNamed, String path) {
+  ModularRouter _parseUrlParams(
+      ModularRouter router, String routeNamed, String path) {
     if (routeNamed.split('/').length != path.split('/').length) {
-      return false;
+      return null;
     }
 
     if (routeNamed.contains('/:')) {
@@ -106,7 +108,7 @@ class ModularRouteInformationParser
       );
       var r = regExp.firstMatch(path);
       if (r != null) {
-        final params = <String, String>{};
+        var params = <String, String>{};
         var paramPos = 0;
         final routeParts = routeNamed.split('/');
         final pathParts = path.split('/');
@@ -125,21 +127,14 @@ class ModularRouteInformationParser
           paramPos++;
         }
 
-        // print('Result processed $path as $routeNamed');
-
-        if (routeNamed != path) {
-          router.args = router.args.copyWith(params: null);
-          return false;
-        }
-        router.args = router.args.copyWith(params: params);
-        return true;
+        params = routeNamed != path ? null : params;
+        return router.copyWith(args: router.args.copyWith(params: params));
       }
 
-      router.args = router.args.copyWith(params: null);
-      return false;
+      return router.copyWith(args: router.args.copyWith(params: null));
     }
 
-    return routeNamed == path;
+    return router;
   }
 
   ModularRouter selectRoute(String path, [ChildModule module]) {

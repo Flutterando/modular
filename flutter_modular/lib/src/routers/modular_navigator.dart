@@ -21,6 +21,13 @@ class ModularNavigator implements IModularNavigator {
   void pop<T extends Object>([T result]) => navigator.pop(result);
 
   @override
+  Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
+
+  @override
+  Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) =>
+      routerDelegate.pushNamed<T>(routeName, arguments: arguments);
+
+  @override
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(
           String routeName,
           {TO result,
@@ -34,13 +41,6 @@ class ModularNavigator implements IModularNavigator {
   @override
   void popUntil(bool Function(Route) predicate) =>
       navigator.popUntil(predicate);
-
-  @override
-  Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
-
-  @override
-  Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) =>
-      routerDelegate.pushNamed<T>(routeName, arguments: arguments);
 
   @override
   Future<T> pushNamedAndRemoveUntil<T extends Object>(

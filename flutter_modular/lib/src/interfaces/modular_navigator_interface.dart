@@ -4,13 +4,6 @@ abstract class IModularNavigator {
   String get path;
   String get modulePath;
 
-  /// Navigate to a new screen.
-  ///
-  /// ```
-  /// Modular.to.push(MaterialPageRoute(builder: (context) => HomePage()),);
-  /// ```
-  Future<T> push<T extends Object>(Route<T> route);
-
   /// Pop the current route off the navigator and navigate to a route.
   ///
   /// ```
@@ -66,19 +59,6 @@ abstract class IModularNavigator {
       String routeName,
       {TO result,
       Object arguments});
-
-  ///Replace the current route of the navigator that most tightly encloses
-  ///the given context by pushing the given route and then disposing
-  ///the previous route once the new route has finished animating in.
-  ///
-  /// ```
-  /// Modular.to.pushReplacement(
-  ///   MaterialPageRoute(builder: (context) => HomePage())
-  /// );
-  /// ```
-  Future<T> pushReplacement<T extends Object, TO extends Object>(
-      Route<T> newRoute,
-      {TO result});
 
   /// Removes the current Route from the stack of routes.
   ///

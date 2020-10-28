@@ -60,7 +60,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
     final page = route.settings as ModularPage;
     final path = page.router.path;
-    page.popRoute.complete(result);
+    page.completePop(result);
     _pages.removeLast();
     rebuildPages();
 
@@ -91,14 +91,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   @override
   Future<T> pushNamed<T extends Object>(String routeName,
       {Object arguments}) async {
-    var router = parser.selectRoute(path);
+    var router = parser.selectRoute(routeName);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
     final page = ModularPage<T>(
       router: router,
     );
     _pages.add(page);
     rebuildPages();
-    return page.popRoute.future;
+    return page.waitPop();
   }
 
   @override
@@ -106,20 +106,23 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       String routeName,
       {TO result,
       Object arguments}) {
-    var router = parser.selectRoute(path);
+    var router = parser.selectRoute(routeName);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
-    final page = ModularPage<T>(
+    final page = ModularPage(
       router: router,
     );
 
-    _onPopPage(ModularRoute(_pages.last), result);
-    _pages.add(page);
+    _pages.last.completePop(result);
+
+    _pages.last = page;
     rebuildPages();
-    return page.popRoute.future;
+    return page.waitPop();
   }
 
   @override
-  bool canPop() => navigator.canPop();
+  bool canPop() {
+    return navigator.canPop();
+  }
 
   @override
   Future<bool> maybePop<T extends Object>([T result]) =>
@@ -127,11 +130,6 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   @override
   void pop<T extends Object>([T result]) => navigator.pop(result);
-
-  @override
-  Future<T> push<T extends Object>(Route<T> route) {
-    return navigator.push<T>(route);
-  }
 
   @override
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(

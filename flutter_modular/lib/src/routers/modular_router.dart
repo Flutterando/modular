@@ -12,13 +12,13 @@ import '../utils/modular_arguments.dart';
 
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
     WidgetBuilder, RouteSettings);
+typedef ModularChild = Widget Function(
+    BuildContext context, ModularArguments args);
 
 class ModularRouter<T> {
   final ChildModule currentModule;
 
-  Completer<T> popRoute = Completer<T>();
-
-  ModularArguments args;
+  final ModularArguments args;
 
   final String path;
 
@@ -43,7 +43,7 @@ class ModularRouter<T> {
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
 
-  final Widget Function(BuildContext context, ModularArguments args) child;
+  final ModularChild child;
 
   ///
   /// Paramenter name: [module]
@@ -65,7 +65,7 @@ class ModularRouter<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  Map<String, String> params;
+  final Map<String, String> params;
 
   ///
   /// Paramenter name: [guards]
@@ -179,9 +179,30 @@ class ModularRouter<T> {
   final RouteBuilder<T> routeGenerator;
   final String modulePath;
   final Duration duration;
+  final Map<
+      TransitionType,
+      PageRouteBuilder<T> Function(
+    Widget Function(BuildContext, ModularArguments) builder,
+    ModularArguments args,
+    Duration transitionDuration,
+    RouteSettings settings,
+  )> transitions;
 
-  ModularRouter(
+  const ModularRouter(
     this.routerName, {
+    this.transitions = const {
+      TransitionType.fadeIn: fadeInTransition,
+      TransitionType.noTransition: noTransition,
+      TransitionType.rightToLeft: rightToLeft,
+      TransitionType.leftToRight: leftToRight,
+      TransitionType.upToDown: upToDown,
+      TransitionType.downToUp: downToUp,
+      TransitionType.scale: scale,
+      TransitionType.rotate: rotate,
+      TransitionType.size: size,
+      TransitionType.rightToLeftWithFade: rightToLeftWithFade,
+      TransitionType.leftToRightWithFade: leftToRightWithFade,
+    },
     this.path = '/',
     this.args = const ModularArguments(),
     this.module,
@@ -192,49 +213,18 @@ class ModularRouter<T> {
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
     this.customTransition,
-    this.popRoute,
     this.duration = const Duration(milliseconds: 300),
     this.modulePath = '/',
-  }) {
-    assert(routerName != null);
-
-    popRoute = popRoute ?? Completer<T>();
-
-    if (transition == null) throw ArgumentError('transition must not be null');
-    if (transition == TransitionType.custom && customTransition == null) {
-      throw ArgumentError(
-          '[customTransition] required for transition type [TransitionType.custom]');
-    }
-    if (module == null && child == null) {
-      throw ArgumentError('[module] or [child] must be provided');
-    }
-    if (module != null && child != null) {
-      throw ArgumentError('You should provide only [module] or [child]');
-    }
-  }
-  final Map<
-      TransitionType,
-      PageRouteBuilder<T> Function(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
-    Duration transitionDuration,
-    RouteSettings settings,
-  )> _transitions = {
-    TransitionType.fadeIn: fadeInTransition,
-    TransitionType.noTransition: noTransition,
-    TransitionType.rightToLeft: rightToLeft,
-    TransitionType.leftToRight: leftToRight,
-    TransitionType.upToDown: upToDown,
-    TransitionType.downToUp: downToUp,
-    TransitionType.scale: scale,
-    TransitionType.rotate: rotate,
-    TransitionType.size: size,
-    TransitionType.rightToLeftWithFade: rightToLeftWithFade,
-    TransitionType.leftToRightWithFade: leftToRightWithFade,
-  };
+  })  : assert(routerName != null),
+        assert(transition != null),
+        assert((transition == TransitionType.custom &&
+                customTransition != null) ||
+            transition != TransitionType.custom && customTransition == null),
+        assert((module == null && child != null) ||
+            (module != null && child == null));
 
   ModularRouter<T> copyWith(
-      {Widget Function(BuildContext context, ModularArguments args) child,
+      {ModularChild child,
       String routerName,
       ChildModule module,
       ChildModule currentModule,
@@ -257,7 +247,6 @@ class ModularRouter<T> {
       params: params ?? this.params,
       modulePath: modulePath ?? this.modulePath,
       path: path ?? this.path,
-      popRoute: popRoute ?? this.popRoute,
       guards: guards ?? this.guards,
       duration: duration ?? this.duration,
       routeGenerator: routeGenerator ?? this.routeGenerator,
@@ -307,7 +296,7 @@ class ModularRouter<T> {
         builder: widgetBuilder,
       );
     } else {
-      var selectTransition = _transitions[transition];
+      var selectTransition = transitions[transition];
       return selectTransition(child, args, duration, settings);
     }
   }
