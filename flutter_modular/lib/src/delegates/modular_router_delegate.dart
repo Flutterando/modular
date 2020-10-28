@@ -8,12 +8,16 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     with
         // ignore: prefer_mixin
         ChangeNotifier,
-        PopNavigatorRouterDelegateMixin<ModularRouter> {
+        PopNavigatorRouterDelegateMixin<ModularRouter>
+    implements
+        IModularNavigator {
   final GlobalKey<NavigatorState> navigatorKey;
   final ModularRouteInformationParser parser;
   final Map<String, ChildModule> injectMap;
 
   ModularRouterDelegate(this.navigatorKey, this.parser, this.injectMap);
+
+  NavigatorState get navigator => navigatorKey.currentState;
 
   ModularRouter _router;
 
@@ -39,21 +43,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       key: ValueKey('url:${router.path}'),
       router: router,
     );
-    _pages.last = page;
+    if (_pages.isEmpty) {
+      _pages.add(page);
+    } else {
+      _pages.last = page;
+    }
     _router = router;
 
     rebuildPages();
-  }
-
-  Future<T> pushNamed<T extends Object>(String path, {Object arguments}) async {
-    var router = parser.selectRoute(path);
-    router = router.copyWith(args: router?.args?.copyWith(data: arguments));
-    final page = ModularPage(
-      router: router,
-    );
-    _pages.add(page);
-    rebuildPages();
-    return router.popRoute.future;
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
@@ -63,7 +60,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
     final page = route.settings as ModularPage;
     final path = page.router.path;
-    page.router.popRoute.complete(result);
+    page.popRoute.complete(result);
     _pages.removeLast();
     rebuildPages();
 
@@ -90,4 +87,77 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     _pages = List.from(_pages);
     notifyListeners();
   }
+
+  @override
+  Future<T> pushNamed<T extends Object>(String routeName,
+      {Object arguments}) async {
+    var router = parser.selectRoute(path);
+    router = router.copyWith(args: router?.args?.copyWith(data: arguments));
+    final page = ModularPage<T>(
+      router: router,
+    );
+    _pages.add(page);
+    rebuildPages();
+    return page.popRoute.future;
+  }
+
+  @override
+  Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
+      String routeName,
+      {TO result,
+      Object arguments}) {
+    var router = parser.selectRoute(path);
+    router = router.copyWith(args: router?.args?.copyWith(data: arguments));
+    final page = ModularPage<T>(
+      router: router,
+    );
+
+    _onPopPage(ModularRoute(_pages.last), result);
+    _pages.add(page);
+    rebuildPages();
+    return page.popRoute.future;
+  }
+
+  @override
+  bool canPop() => navigator.canPop();
+
+  @override
+  Future<bool> maybePop<T extends Object>([T result]) =>
+      navigator.maybePop(result);
+
+  @override
+  void pop<T extends Object>([T result]) => navigator.pop(result);
+
+  @override
+  Future<T> push<T extends Object>(Route<T> route) {
+    return navigator.push<T>(route);
+  }
+
+  @override
+  Future<T> popAndPushNamed<T extends Object, TO extends Object>(
+          String routeName,
+          {TO result,
+          Object arguments}) =>
+      navigator.popAndPushNamed(
+        routeName,
+        result: result,
+        arguments: arguments,
+      );
+
+  @override
+  void popUntil(bool Function(Route) predicate) =>
+      navigator.popUntil(predicate);
+
+  @override
+  Future<T> pushNamedAndRemoveUntil<T extends Object>(
+          String newRouteName, bool Function(Route) predicate,
+          {Object arguments}) =>
+      navigator.pushNamedAndRemoveUntil(newRouteName, predicate,
+          arguments: arguments);
+
+  @override
+  String get modulePath => _router.modulePath;
+
+  @override
+  String get path => _router.path;
 }
