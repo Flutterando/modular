@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import '../flutter_modular.dart';
 import 'delegates/modular_router_delegate.dart';
 import 'interfaces/modular_interface.dart';
-import 'routers/modular_navigator.dart';
 
 ChildModule _initialModule;
 

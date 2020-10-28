@@ -21,9 +21,6 @@ class ModularNavigator implements IModularNavigator {
   void pop<T extends Object>([T result]) => navigator.pop(result);
 
   @override
-  Future<T> push<T extends Object>(Route<T> route) => navigator.push(route);
-
-  @override
   Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) =>
       routerDelegate.pushNamed<T>(routeName, arguments: arguments);
 
@@ -56,12 +53,6 @@ class ModularNavigator implements IModularNavigator {
           Object arguments}) =>
       navigator.pushReplacementNamed(routeName,
           result: result, arguments: arguments);
-
-  @override
-  Future<T> pushReplacement<T extends Object, TO extends Object>(
-          Route<T> newRoute,
-          {TO result}) =>
-      navigator.pushReplacement(newRoute, result: result);
 
   @override
   String get modulePath => Modular.link.modulePath;
