@@ -8,12 +8,9 @@ class Inject<T> {
   ///If you need specific access, do it through functions.
   @deprecated
   Map<String, dynamic> params = {};
-  final String tag;
   final List<Type> typesInRequest;
 
-  Inject({this.params, this.tag, this.typesInRequest});
-
-  factory Inject.of() => Inject(tag: T.toString());
+  Inject({this.params, this.typesInRequest});
 
   B call<B>({Map<String, dynamic> params, B defaultValue}) =>
       get<B>(params: params, defaultValue: defaultValue);
@@ -21,33 +18,20 @@ class Inject<T> {
   /// get injected dependency
   B get<B>({Map<String, dynamic> params, B defaultValue}) {
     params ??= {};
-    if (tag == null) {
-      return Modular.get<B>(
-        params: params,
-        typesInRequest: typesInRequest,
-        defaultValue: defaultValue,
-      );
-    } else {
-      return Modular.get<B>(
-        module: tag,
-        params: params,
-        typesInRequest: typesInRequest,
-        defaultValue: defaultValue,
-      );
-    }
+    return Modular.get<B>(
+      params: params,
+      typesInRequest: typesInRequest,
+      defaultValue: defaultValue,
+    );
   }
 
   void dispose<B>() {
-    if (T.runtimeType.toString() == 'dynamic') {
-      Modular.dispose<B>();
-    } else {
-      Modular.dispose<B>(tag);
-    }
+    Modular.dispose<B>();
   }
 }
 
 mixin InjectMixinBase<T> {
-  final Inject<T> _inject = Inject<T>.of();
+  final Inject<T> _inject = Inject<T>();
 
   S get<S>() => _inject.get<S>();
 }

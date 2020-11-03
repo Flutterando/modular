@@ -62,7 +62,6 @@ class ModularImpl implements ModularInterface {
   @override
   B get<B>(
       {Map<String, dynamic> params,
-      String module,
       List<Type> typesInRequest,
       B defaultValue}) {
     if (B.toString() == 'dynamic') {
@@ -71,9 +70,18 @@ class ModularImpl implements ModularInterface {
 
     typesInRequest ??= [];
 
-    if (module != null) {
-      return _getInjectableObject<B>(module,
+    B result;
+
+    if (typesInRequest.isEmpty) {
+      final module = routerDelegate
+          .currentConfiguration.currentModule.runtimeType
+          .toString();
+      result = _getInjectableObject<B>(module,
           params: params, typesInRequest: typesInRequest);
+    }
+
+    if (result != null) {
+      return result;
     }
 
     for (var key in injectMap.keys) {
@@ -83,11 +91,12 @@ class ModularImpl implements ModularInterface {
           typesInRequest: typesInRequest,
           checkKey: false);
       if (value != null) {
-        return value;
+        result = value;
+        break;
       }
     }
 
-    if (defaultValue != null) {
+    if (result == null && defaultValue != null) {
       return defaultValue;
     }
 
@@ -120,13 +129,9 @@ class ModularImpl implements ModularInterface {
       throw ModularError('not allow for dynamic values');
     }
 
-    if (moduleName != null) {
-      _removeInjectableObject(moduleName);
-    } else {
-      for (var key in injectMap.keys) {
-        if (_removeInjectableObject<B>(key)) {
-          break;
-        }
+    for (var key in injectMap.keys) {
+      if (_removeInjectableObject<B>(key)) {
+        break;
       }
     }
   }

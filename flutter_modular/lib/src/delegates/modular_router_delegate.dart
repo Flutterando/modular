@@ -25,6 +25,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   @override
   ModularRouter get currentConfiguration => _router;
+  ModularRouter get lastPage => _pages.last.router;
 
   @override
   Widget build(BuildContext context) {

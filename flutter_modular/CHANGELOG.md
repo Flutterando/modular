@@ -1,6 +1,6 @@
 ## [2.5.0] - 
 * Navigator 2.0
-* Removed Modular.link
+* Fixed Modular.link
 * Refactor RouteGuard
 * Added Modular.to.navigate
 * Added 3 new bind factories
