@@ -186,23 +186,22 @@ class ModularRouter<T> {
     ModularArguments args,
     Duration transitionDuration,
     RouteSettings settings,
-  )> transitions;
+  )> transitions = {
+    TransitionType.fadeIn: fadeInTransition,
+    TransitionType.noTransition: noTransition,
+    TransitionType.rightToLeft: rightToLeft,
+    TransitionType.leftToRight: leftToRight,
+    TransitionType.upToDown: upToDown,
+    TransitionType.downToUp: downToUp,
+    TransitionType.scale: scale,
+    TransitionType.rotate: rotate,
+    TransitionType.size: size,
+    TransitionType.rightToLeftWithFade: rightToLeftWithFade,
+    TransitionType.leftToRightWithFade: leftToRightWithFade,
+  };
 
-  const ModularRouter(
+  ModularRouter(
     this.routerName, {
-    this.transitions = const {
-      TransitionType.fadeIn: fadeInTransition,
-      TransitionType.noTransition: noTransition,
-      TransitionType.rightToLeft: rightToLeft,
-      TransitionType.leftToRight: leftToRight,
-      TransitionType.upToDown: upToDown,
-      TransitionType.downToUp: downToUp,
-      TransitionType.scale: scale,
-      TransitionType.rotate: rotate,
-      TransitionType.size: size,
-      TransitionType.rightToLeftWithFade: rightToLeftWithFade,
-      TransitionType.leftToRightWithFade: leftToRightWithFade,
-    },
     this.path = '/',
     this.args = const ModularArguments(),
     this.module,
@@ -272,9 +271,8 @@ class ModularRouter<T> {
 
   Route<T> getPageRoute(RouteSettings settings) {
     if (transition == TransitionType.custom && customTransition != null) {
-      return PageRouteBuilder(
+      return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) {
-          //return disposablePage;
           return child(context, args);
         },
         settings: settings,

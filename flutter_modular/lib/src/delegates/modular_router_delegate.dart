@@ -46,6 +46,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     if (_pages.isEmpty) {
       _pages.add(page);
     } else {
+      _pages.last.completePop(null);
       _pages.last = page;
     }
     _router = router;
@@ -61,7 +62,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
-    if (!route.didPop(result) || route.isFirst) {
+    if (!route.didPop(result)) {
+      return false;
+    }
+
+    if (route.isFirst) {
+      rebuildPages();
       return false;
     }
 
@@ -101,6 +107,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     var router = parser.selectRoute(routeName);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
     final page = ModularPage<T>(
+      key: UniqueKey(),
       router: router,
     );
     _pages.add(page);
@@ -116,14 +123,24 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     var router = parser.selectRoute(routeName);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
     final page = ModularPage(
+      key: UniqueKey(),
       router: router,
     );
 
     _pages.last.completePop(result);
-
     _pages.last = page;
     rebuildPages();
     return page.waitPop();
+  }
+
+  @override
+  Future<T> popAndPushNamed<T extends Object, TO extends Object>(
+      String routeName,
+      {TO result,
+      Object arguments}) {
+    _pages.last.completePop(result);
+    _pages.removeLast();
+    return pushNamed<T>(routeName, arguments: arguments);
   }
 
   @override
@@ -139,30 +156,25 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   void pop<T extends Object>([T result]) => navigator.pop(result);
 
   @override
-  Future<T> popAndPushNamed<T extends Object, TO extends Object>(
-          String routeName,
-          {TO result,
-          Object arguments}) =>
-      navigator.popAndPushNamed(
-        routeName,
-        result: result,
-        arguments: arguments,
-      );
-
-  @override
   void popUntil(bool Function(Route) predicate) =>
       navigator.popUntil(predicate);
 
   @override
   Future<T> pushNamedAndRemoveUntil<T extends Object>(
-          String newRouteName, bool Function(Route) predicate,
-          {Object arguments}) =>
-      navigator.pushNamedAndRemoveUntil(newRouteName, predicate,
-          arguments: arguments);
+      String newRouteName, bool Function(Route) predicate,
+      {Object arguments}) {
+    popUntil(predicate);
+    return pushNamed<T>(newRouteName, arguments: arguments);
+  }
 
   @override
   String get modulePath => _router.modulePath;
 
   @override
   String get path => _router.path;
+
+  @override
+  Future<T> push<T extends Object>(Route<T> route) {
+    return navigator.push<T>(route);
+  }
 }

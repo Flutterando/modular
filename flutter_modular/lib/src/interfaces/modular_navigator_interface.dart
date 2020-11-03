@@ -4,6 +4,13 @@ abstract class IModularNavigator {
   String get path;
   String get modulePath;
 
+  /// Navigate to a new screen.
+  ///
+  /// ```
+  /// Modular.to.push(MaterialPageRoute(builder: (context) => HomePage()),);
+  /// ```
+  Future<T> push<T extends Object>(Route<T> route);
+
   /// Pop the current route off the navigator and navigate to a route.
   ///
   /// ```
