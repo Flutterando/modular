@@ -18,18 +18,19 @@ abstract class ChildModule {
 
   final List<String> paths = <String>[];
 
-  final Map<Type, dynamic> _singletonBinds = {};
+  final Map<String, dynamic> _singletonBinds = {};
 
-  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest, String alias}) {
+  T getBind<T>(Map<String, dynamic> params, {List<String> typesInRequest, String alias}) {
     T bindValue;
-    var type = alias ?? _getInjectType<T>();
+    var type = alias ?? _getInjectType<T>().toString();
     if (_singletonBinds.containsKey(type)) {
       bindValue = _singletonBinds[type];
       return bindValue;
     }
 
-    var bind = _binds.firstWhere((b) => b.inject is T Function(Inject),
+    var bind = _binds.firstWhere((b) => b.alias == type || ( b.alias == null && T.toString() != 'dynamic' && b.inject is T Function(Inject)),
         orElse: () => null);
+
     if (bind == null) {
       typesInRequest.remove(type);
       return null;
@@ -51,7 +52,7 @@ ${typesInRequest.join('\n')}
     bindValue =
         bind.inject(Inject(params: params, typesInRequest: typesInRequest));
     if (bind.singleton) {
-      _singletonBinds[type] = bindValue;
+      _singletonBinds[bind.alias ?? type] = bindValue;
     }
 
     typesInRequest.remove(type);
@@ -105,7 +106,7 @@ ${typesInRequest.join('\n')}
     for (final bindElement in _binds) {
       if (!bindElement.lazy) {
         var b = bindElement.inject(Inject());
-        _singletonBinds[bindElement.alias ?? b.runtimeType] = b;
+        _singletonBinds[bindElement.alias ?? b.runtimeType.toString()] = b;
       }
     }
   }

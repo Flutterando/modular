@@ -10,7 +10,7 @@ class Inject<T> {
   @deprecated
   Map<String, dynamic> params = {};
   final String tag;
-  final List<Type> typesInRequest;
+  final List<String> typesInRequest;
 
   Inject({this.params, this.tag, this.typesInRequest});
 

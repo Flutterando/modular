@@ -10,7 +10,7 @@ class Bind<T> {
   ///When 'false', the object is instantiated along with the module.
   final bool lazy;
 
-  final bool alias;
+  final String alias;
 
   Bind(this.inject, {this.singleton = true, this.lazy = true, this.alias })
       : assert((singleton || lazy),

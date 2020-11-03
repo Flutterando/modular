@@ -8,6 +8,7 @@ void main() {
       expect(Bind((i) => 'obs', singleton: true, lazy: true), isA<Bind>());
       expect(Bind((i) => 'obs', singleton: true, lazy: false), isA<Bind>());
       expect(Bind((i) => 'obs', singleton: false, lazy: true), isA<Bind>());
+      expect(Bind((i) => 'obs', singleton: false, lazy: true, alias: 'test'), isA<Bind>());
     });
     test('error', () {
       expect(

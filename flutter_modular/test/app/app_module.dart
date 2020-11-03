@@ -9,12 +9,14 @@ import 'modules/home/home_module.dart';
 import 'modules/product/product_module.dart';
 import 'shared/ilocal_repository.dart';
 import 'shared/local_storage_shared.dart';
+import 'shared/local_storage_shared_alias.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
         Bind((i) => AppBloc()),
         Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
+        Bind((i) => LocalStorageSharePreferenceAlias(),alias: 'test'),
       ];
 
   @override

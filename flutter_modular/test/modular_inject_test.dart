@@ -10,6 +10,7 @@ import 'app/modules/home/home_module.dart';
 import 'app/shared/app_info.state.dart';
 import 'app/shared/ilocal_repository.dart';
 import 'app/shared/local_storage_shared.dart';
+import 'app/shared/local_storage_shared_alias.dart';
 
 void main() {
   setUpAll(() {
@@ -23,11 +24,15 @@ void main() {
     test('Get withless module', () {
       expect(Modular.get<AppBloc>(), isA<AppBloc>());
       expect(Modular.get<HomeBloc>(), isA<HomeBloc>());
+      expect(Modular.get(alias: 'test'), isA<LocalStorageSharePreferenceAlias>());
+
     });
 
     test('Get with module', () {
       expect(Modular.get<AppBloc>(module: 'AppModule'), isA<AppBloc>());
       expect(Modular.get<HomeBloc>(module: 'HomeModule'), isA<HomeBloc>());
+      expect(Modular.get(module: 'AppModule', alias: 'test'), isA<LocalStorageSharePreferenceAlias>());
+
     });
 
     test('Inject not found with module', () {

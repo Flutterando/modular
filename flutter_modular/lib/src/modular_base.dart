@@ -169,10 +169,10 @@ class Modular {
   static B get<B>(
       {Map<String, dynamic> params,
       String module,
-      List<Type> typesInRequest,
+      List<String> typesInRequest,
       String alias,
       B defaultValue}) {
-    if (B.toString() == 'dynamic') {
+    if (B.toString() == 'dynamic' && alias == null) {
       throw ModularError('not allow for dynamic values');
     }
 
@@ -205,7 +205,7 @@ class Modular {
   static B _getInjectableObject<B>(String tag,
       {Map<String, dynamic> params,
       bool disableError = false,
-      List<Type> typesInRequest,
+      List<String> typesInRequest,
       String alias,
       bool checkKey = true}) {
     B value;
