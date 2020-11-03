@@ -170,6 +170,7 @@ class Modular {
       {Map<String, dynamic> params,
       String module,
       List<Type> typesInRequest,
+      String alias,
       B defaultValue}) {
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
@@ -179,7 +180,7 @@ class Modular {
 
     if (module != null) {
       return _getInjectableObject<B>(module,
-          params: params, typesInRequest: typesInRequest);
+          params: params, typesInRequest: typesInRequest, alias: alias);
     }
 
     for (var key in _injectMap.keys) {
@@ -187,6 +188,7 @@ class Modular {
           params: params,
           disableError: true,
           typesInRequest: typesInRequest,
+          alias: alias,
           checkKey: false);
       if (value != null) {
         return value;
@@ -204,14 +206,15 @@ class Modular {
       {Map<String, dynamic> params,
       bool disableError = false,
       List<Type> typesInRequest,
+      String alias,
       bool checkKey = true}) {
     B value;
     if (!checkKey) {
       value =
-          _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+          _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest, alias: alias);
     } else if (_injectMap.containsKey(tag)) {
       value =
-          _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+          _injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest, alias: alias);
     }
     if (value == null && !disableError) {
       throw ModularError('${B.toString()} not found in module $tag');
