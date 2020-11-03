@@ -59,8 +59,8 @@ ${typesInRequest.join('\n')}
   }
 
   /// Dispose bind from the memory
-  bool remove<T>({String alias}) {
-    final type = alias ?? _getInjectType<T>();
+  bool remove<T>() {
+    final type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
       var inject = _singletonBinds[type];
       _callDispose(inject);

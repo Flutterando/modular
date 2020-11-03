@@ -30,8 +30,8 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
-    return _fakeModule.getBind<T>(params, typesInRequest: typesInRequest);
+  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest, String alias}) {
+    return _fakeModule.getBind<T>(params, typesInRequest: typesInRequest, alias: alias);
   }
 
   @override
