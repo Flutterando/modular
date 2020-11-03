@@ -11,16 +11,16 @@ final _navigatorKey = GlobalKey<NavigatorState>();
 
 final Map<String, ChildModule> _injectMap = {};
 
-final routeInformationParser = ModularRouteInformationParser();
-final routerDelegate = ModularRouterDelegate(
+final _routeInformationParser = ModularRouteInformationParser();
+final _routerDelegate = ModularRouterDelegate(
   _navigatorKey,
-  routeInformationParser,
+  _routeInformationParser,
   _injectMap,
 );
 
 // ignore: non_constant_identifier_names
 final ModularInterface Modular = ModularImpl(
-  routerDelegate: routerDelegate,
+  routerDelegate: _routerDelegate,
   injectMap: _injectMap,
 );
 

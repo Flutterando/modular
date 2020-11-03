@@ -7,5 +7,7 @@
 			"path": "modular_codegen"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"dart.flutterSdkPath": "/Users/jacobmoura/fvm/versions/1.22.1"
+	}
 }
