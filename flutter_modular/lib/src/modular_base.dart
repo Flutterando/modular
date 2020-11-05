@@ -28,7 +28,7 @@ extension ModularExtension on MaterialApp {
   MaterialApp modular() {
     final app = MaterialApp.router(
       key: key,
-      scaffoldMessengerKey: scaffoldMessengerKey,
+      //scaffoldMessengerKey: scaffoldMessengerKey,
       routeInformationProvider: routeInformationProvider,
       backButtonDispatcher: backButtonDispatcher,
       builder: builder,
@@ -53,7 +53,7 @@ extension ModularExtension on MaterialApp {
       debugShowCheckedModeBanner: debugShowCheckedModeBanner,
       shortcuts: shortcuts,
       actions: actions,
-      restorationScopeId: restorationScopeId,
+      //restorationScopeId: restorationScopeId,
       routeInformationParser: _routeInformationParser,
       routerDelegate: _routerDelegate,
     );
