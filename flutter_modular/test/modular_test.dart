@@ -118,6 +118,10 @@ void main() {
           throwsA(isA<ModularError>()));
     });
 
+    test('RouteGuard other module Two 2', () {
+      final router = Modular.selectRoute("/homeTwo2/forbidden2");
+      expect(router.routerName, "/forbidden2");
+    });
     test('Get route correct', () {
       final router = Modular.selectRoute("/prod/product");
       expect(router.routerName, "/product");

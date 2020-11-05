@@ -322,17 +322,17 @@ class Modular {
     var realGuards = guards ?? [];
     guard = realGuards.length == 0
         ? null
-        : guards.firstWhere((guard) => !guard.canActivate(path),
+        : guards.firstWhere((guard) => guard.canActivate(path),
             orElse: () => null);
 
     realGuards
         .expand((c) => c.executors)
         .forEach((c) => c.onGuarded(path, isActive: guard == null));
 
-    if (guard != null) {
+    if (realGuards.length > 0 && guard == null) {
       throw ModularError("Path guarded : $path");
     }
-    return guard;
+    return null;
   }
 
   static List<RouteGuard> _masterRouteGuards;
