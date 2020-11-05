@@ -54,8 +54,8 @@ extension ModularExtension on MaterialApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: routeInformationParser,
-      routerDelegate: routerDelegate,
+      routeInformationParser: _routeInformationParser,
+      routerDelegate: _routerDelegate,
     );
 
     return app;

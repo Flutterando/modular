@@ -91,8 +91,7 @@ class ModularImpl implements ModularInterface {
           typesInRequest: typesInRequest,
           checkKey: false);
       if (value != null) {
-        result = value;
-        break;
+        return value;
       }
     }
 
@@ -116,9 +115,9 @@ class ModularImpl implements ModularInterface {
     } else if (injectMap.containsKey(tag)) {
       value = injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
     }
-    if (value == null && !disableError) {
-      throw ModularError('${B.toString()} not found in module $tag');
-    }
+    // if (value == null && !disableError) {
+    //   throw ModularError('${B.toString()} not found in module $tag');
+    // }
 
     return value;
   }
