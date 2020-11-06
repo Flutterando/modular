@@ -86,10 +86,7 @@ class ModularImpl implements ModularInterface {
 
     for (var key in injectMap.keys) {
       final value = _getInjectableObject<B>(key,
-          params: params,
-          disableError: true,
-          typesInRequest: typesInRequest,
-          checkKey: false);
+          params: params, typesInRequest: typesInRequest, checkKey: false);
       if (value != null) {
         return value;
       }
@@ -105,7 +102,6 @@ class ModularImpl implements ModularInterface {
   B _getInjectableObject<B>(
     String tag, {
     Map<String, dynamic> params,
-    bool disableError = false,
     List<Type> typesInRequest,
     bool checkKey = true,
   }) {
@@ -115,9 +111,6 @@ class ModularImpl implements ModularInterface {
     } else if (injectMap.containsKey(tag)) {
       value = injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
     }
-    // if (value == null && !disableError) {
-    //   throw ModularError('${B.toString()} not found in module $tag');
-    // }
 
     return value;
   }

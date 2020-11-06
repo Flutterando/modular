@@ -8,7 +8,7 @@ class ModularRouteInformationParser
   Future<ModularRouter> parseRouteInformation(
       RouteInformation routeInformation) async {
     final path = routeInformation.location;
-    final route = selectRoute(path);
+    final route = await selectRoute(path);
     return route;
   }
 
@@ -137,11 +137,34 @@ class ModularRouteInformationParser
     return router;
   }
 
-  ModularRouter selectRoute(String path, [ChildModule module]) {
+  Future<ModularRouter> selectRoute(String path, [ChildModule module]) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
     final route = _searchInModule(module ?? Modular.initialModule, "", path);
-    return route;
+    return canActivate(path, route);
+  }
+
+  Future<ModularRouter> canActivate(String path, ModularRouter router) async {
+    if (router == null) {
+      return null;
+    }
+
+    if (router.guards?.isNotEmpty == true) {
+      for (var guard in router.guards) {
+        try {
+          final result = await guard.canActivate(path, router);
+          if (!result) {
+            print('$path is NOT ACTIVATE');
+            return null;
+          }
+          // ignore: avoid_catches_without_on_clauses
+        } catch (e) {
+          throw ModularError(
+              'RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
+        }
+      }
+    }
+    return router;
   }
 }

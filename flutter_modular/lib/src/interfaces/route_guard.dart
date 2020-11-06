@@ -1,10 +1,6 @@
 //ignore:one_member_abstracts
-abstract class GuardExecutor {
-  void onGuarded(String path, {bool isActive});
-}
+import '../routers/modular_router.dart';
 
-abstract class RouteGuard {
-  bool canActivate(String url);
-
-  List<GuardExecutor> get executors;
+mixin RouteGuard {
+  Future<bool> canActivate(String path, ModularRouter router);
 }

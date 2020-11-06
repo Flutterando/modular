@@ -56,8 +56,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  void navigate(String path, {arguments}) {
-    var router = parser.selectRoute(path);
+  Future<void> navigate(String path, {arguments}) async {
+    var router = await parser.selectRoute(path);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
     setNewRoutePath(router);
   }
@@ -105,7 +105,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   @override
   Future<T> pushNamed<T extends Object>(String routeName,
       {Object arguments}) async {
-    var router = parser.selectRoute(routeName);
+    var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
     final page = ModularPage<T>(
       key: UniqueKey(),
@@ -120,8 +120,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
       String routeName,
       {TO result,
-      Object arguments}) {
-    var router = parser.selectRoute(routeName);
+      Object arguments}) async {
+    var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router?.args?.copyWith(data: arguments));
     final page = ModularPage(
       key: UniqueKey(),

@@ -82,7 +82,7 @@ class ModularRouter<T> {
   /// ```dart
   ///class MyGuard implements RouteGuard {
   ///  @override
-  ///  bool canActivate(String url) {
+  ///  Future<bool> canActivate(String url, ModularRouter router) {
   ///    if (url != '/admin'){
   ///      // Return `true` to allow access
   ///      return true;
@@ -92,17 +92,6 @@ class ModularRouter<T> {
   ///    }
   ///  }
   ///}
-  ///To use your RouteGuard in a route, pass it to the guards parameter:
-  ///
-  ///@override
-  ///List<ModularRouter> get routers => [
-  ///  ModularRouter('/', module: HomeModule()),
-  ///  ModularRouter(
-  ///    '/admin',
-  ///    module: AdminModule(),
-  ///    guards: [MyGuard()],
-  ///  ),
-  ///];
   /// ```
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
