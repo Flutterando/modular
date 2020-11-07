@@ -30,7 +30,6 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
         break;
       }
     }
-
     _write(
         "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
     return _buffer.toString();
@@ -85,9 +84,9 @@ class ModelVisitor extends SimpleElementVisitor {
 
   String _normalize(ParameterElement param) {
     if (param.isNamed) {
-      return "${param.name}: i<${param.type}>()";
+      return "${param.name}: i<${param.type.element.displayName}>()";
     } else {
-      return "i<${param.type}>()";
+      return "i<${param.type.element.displayName}>()";
     }
   }
 
