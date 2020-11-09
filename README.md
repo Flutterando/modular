@@ -537,7 +537,7 @@ class HomePage extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () {
           // You can retrive the class directly with `get` and execute the increment method
-          get<Counter>().increment();
+          Modular.get<Counter>().increment();
         },
       ),
     );
