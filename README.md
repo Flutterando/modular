@@ -372,7 +372,7 @@ To achieve this, pass the type you expect to return as type parameter to `Router
 @override
 List<ModularRouter> get routers => [
   // This router expects to receive a `String` when popped.
-  Router<String>('/event', child: (_, __) => EventPage()),
+  ModularRouter<String>('/event', child: (_, __) => EventPage()),
 ]
 ```
 
