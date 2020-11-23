@@ -11,10 +11,10 @@ abstract class ModularInterface {
 
   IModularNavigator get to;
   IModularNavigator get link;
-  B get<B>({
-    Map<String, dynamic> params,
-    List<Type> typesInRequest,
-    B defaultValue,
+  B? get<B>({
+    Map<String, dynamic> params = const {},
+    List<Type> typesInRequest = const [],
+    B? defaultValue,
   });
-  void dispose<B>([String moduleName]);
+  void dispose<B>();
 }

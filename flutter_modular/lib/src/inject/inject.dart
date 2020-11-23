@@ -7,17 +7,16 @@ class Inject<T> {
   ///Bind has access to the arguments coming from the routes.
   ///If you need specific access, do it through functions.
   @deprecated
-  Map<String, dynamic> params = {};
+  Map<String, dynamic>? params = {};
   final List<Type> typesInRequest;
 
-  Inject({this.params, this.typesInRequest});
+  Inject({this.params, this.typesInRequest = const []});
 
-  B call<B>({Map<String, dynamic> params, B defaultValue}) =>
+  B? call<B>({Map<String, dynamic> params = const {}, B? defaultValue}) =>
       get<B>(params: params, defaultValue: defaultValue);
 
   /// get injected dependency
-  B get<B>({Map<String, dynamic> params, B defaultValue}) {
-    params ??= {};
+  B? get<B>({Map<String, dynamic> params = const {}, B? defaultValue}) {
     return Modular.get<B>(
       params: params,
       typesInRequest: typesInRequest,
@@ -33,5 +32,5 @@ class Inject<T> {
 mixin InjectMixinBase<T> {
   final Inject<T> _inject = Inject<T>();
 
-  S get<S>() => _inject.get<S>();
+  S? get<S>() => _inject.get<S>();
 }

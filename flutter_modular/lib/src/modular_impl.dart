@@ -4,16 +4,16 @@ import '../flutter_modular.dart';
 import 'delegates/modular_router_delegate.dart';
 import 'interfaces/modular_interface.dart';
 
-ChildModule _initialModule;
+late ChildModule _initialModule;
 
 class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, ChildModule> injectMap;
-  IModularNavigator navigatorDelegate;
+  IModularNavigator? navigatorDelegate;
 
   ModularImpl({
-    this.routerDelegate,
-    this.injectMap,
+    required this.routerDelegate,
+    required this.injectMap,
     this.navigatorDelegate,
   });
 
@@ -28,8 +28,7 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  void bindModule(ChildModule module, [String path]) {
-    assert(module != null);
+  void bindModule(ChildModule module, [String path = '']) {
     final name = module.runtimeType.toString();
     if (!injectMap.containsKey(name)) {
       module.paths.add(path);
@@ -37,7 +36,7 @@ class ModularImpl implements ModularInterface {
       module.instance();
       debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
-      injectMap[name].paths.add(path);
+      injectMap[name]?.paths.add(path);
     }
   }
 
@@ -61,21 +60,19 @@ class ModularImpl implements ModularInterface {
 
   @override
   B get<B>(
-      {Map<String, dynamic> params,
-      List<Type> typesInRequest,
-      B defaultValue}) {
+      {Map<String, dynamic> params = const {},
+      List<Type> typesInRequest = const [],
+      B? defaultValue}) {
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
     }
-
-    typesInRequest ??= [];
-
-    B result;
+    B? result;
 
     if (typesInRequest.isEmpty) {
       final module = routerDelegate
-          .currentConfiguration.currentModule.runtimeType
-          .toString();
+              .currentConfiguration?.currentModule.runtimeType
+              .toString() ??
+          '=global';
       result = _getInjectableObject<B>(module,
           params: params, typesInRequest: typesInRequest);
     }
@@ -99,24 +96,26 @@ class ModularImpl implements ModularInterface {
     throw ModularError('${B.toString()} not found');
   }
 
-  B _getInjectableObject<B>(
+  B? _getInjectableObject<B>(
     String tag, {
-    Map<String, dynamic> params,
-    List<Type> typesInRequest,
+    Map<String, dynamic> params = const {},
+    List<Type> typesInRequest = const [],
     bool checkKey = true,
   }) {
-    B value;
+    B? value;
     if (!checkKey) {
-      value = injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+      value =
+          injectMap[tag]?.getBind<B>(params, typesInRequest: typesInRequest);
     } else if (injectMap.containsKey(tag)) {
-      value = injectMap[tag].getBind<B>(params, typesInRequest: typesInRequest);
+      value =
+          injectMap[tag]?.getBind<B>(params, typesInRequest: typesInRequest);
     }
 
     return value;
   }
 
   @override
-  void dispose<B>([String moduleName]) {
+  void dispose<B>() {
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
     }
@@ -129,6 +128,6 @@ class ModularImpl implements ModularInterface {
   }
 
   bool _removeInjectableObject<B>(String tag) {
-    return injectMap[tag].remove<B>();
+    return injectMap[tag]?.remove<B>() ?? false;
   }
 }

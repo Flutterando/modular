@@ -4,7 +4,7 @@ import '../../flutter_modular.dart';
 
 abstract class ModularState<TWidget extends StatefulWidget, TBind>
     extends State<TWidget> {
-  final TBind controller = Modular.get<TBind>();
+  final TBind? controller = Modular.get<TBind>();
 
   @override
   void dispose() {

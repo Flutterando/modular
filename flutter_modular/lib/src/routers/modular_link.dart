@@ -13,23 +13,23 @@ class ModularLink implements IModularNavigator {
   bool canPop() => delegate.canPop();
 
   @override
-  Future<T> push<T extends Object>(Route<T> route) => delegate.push<T>(route);
+  Future<T?> push<T extends Object>(Route<T> route) => delegate.push<T>(route);
 
   @override
-  Future<bool> maybePop<T extends Object>([T result]) =>
+  Future<bool> maybePop<T extends Object>([T? result]) =>
       delegate.maybePop<T>(result);
 
   @override
-  void pop<T extends Object>([T result]) => delegate.pop<T>(result);
+  void pop<T extends Object>([T? result]) => delegate.pop<T>(result);
 
   @override
   void popUntil(bool Function(Route<dynamic>) predicate) =>
       delegate.popUntil(predicate);
 
   @override
-  String get modulePath => delegate.lastPage.modulePath;
+  String get modulePath => delegate.lastPage.modulePath ?? '/';
   @override
-  String get path => delegate.lastPage.path;
+  String get path => delegate.lastPage.path ?? '/';
 
   @override
   void navigate(String path, {arguments}) => delegate.navigate(
@@ -40,8 +40,8 @@ class ModularLink implements IModularNavigator {
   @override
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(
       String routeName,
-      {TO result,
-      Object arguments}) {
+      {TO? result,
+      Object? arguments}) {
     return delegate.popAndPushNamed<T, TO>(
       modulePath + routeName,
       result: result,
@@ -50,7 +50,7 @@ class ModularLink implements IModularNavigator {
   }
 
   @override
-  Future<T> pushNamed<T extends Object>(String routeName, {Object arguments}) {
+  Future<T> pushNamed<T extends Object>(String routeName, {Object? arguments}) {
     return delegate.pushNamed<T>(
       modulePath + routeName,
       arguments: arguments,
@@ -60,7 +60,7 @@ class ModularLink implements IModularNavigator {
   @override
   Future<T> pushNamedAndRemoveUntil<T extends Object>(
       String newRouteName, bool Function(Route<dynamic>) predicate,
-      {Object arguments}) {
+      {Object? arguments}) {
     return delegate.pushNamedAndRemoveUntil<T>(
       modulePath + newRouteName,
       predicate,
@@ -71,8 +71,8 @@ class ModularLink implements IModularNavigator {
   @override
   Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
       String routeName,
-      {TO result,
-      Object arguments}) {
+      {TO? result,
+      Object? arguments}) {
     return delegate.pushReplacementNamed<T, TO>(
       modulePath + routeName,
       result: result,

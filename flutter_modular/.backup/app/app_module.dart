@@ -23,7 +23,7 @@ class AppModule extends MainModule {
           transition: TransitionType.fadeIn,
         ),
         ModularRouter(
-          "/",
+          "/home",
           module: HomeModule(),
           transition: TransitionType.fadeIn,
         ),

@@ -47,3 +47,7 @@ class BindInject<T> extends Bind<T> {
   BindInject(this.inject, {this.singleton = true, this.lazy = true})
       : super(inject, singleton: singleton, lazy: lazy);
 }
+
+class BindEmpty extends Bind<Object> {
+  BindEmpty() : super((e) => Object());
+}

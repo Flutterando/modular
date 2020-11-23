@@ -6,10 +6,10 @@ import 'page_transition.dart';
 PageRouteBuilder<T> fadeInTransition<T>(
     Widget Function(
   BuildContext,
-  ModularArguments,
+  ModularArguments?,
 )
         builder,
-    ModularArguments args,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageRouteBuilder<T>(
@@ -27,8 +27,8 @@ PageRouteBuilder<T> fadeInTransition<T>(
 }
 
 PageRouteBuilder<T> noTransition<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageRouteBuilder(
@@ -40,8 +40,8 @@ PageRouteBuilder<T> noTransition<T>(
 }
 
 PageRouteBuilder<T> rightToLeft<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -55,8 +55,8 @@ PageRouteBuilder<T> rightToLeft<T>(
 }
 
 PageRouteBuilder<T> leftToRight<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -70,8 +70,8 @@ PageRouteBuilder<T> leftToRight<T>(
 }
 
 PageRouteBuilder<T> upToDown<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -85,8 +85,8 @@ PageRouteBuilder<T> upToDown<T>(
 }
 
 PageRouteBuilder<T> downToUp<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -100,8 +100,8 @@ PageRouteBuilder<T> downToUp<T>(
 }
 
 PageRouteBuilder<T> scale<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -115,8 +115,8 @@ PageRouteBuilder<T> scale<T>(
 }
 
 PageRouteBuilder<T> rotate<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -130,8 +130,8 @@ PageRouteBuilder<T> rotate<T>(
 }
 
 PageRouteBuilder<T> size<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -145,8 +145,8 @@ PageRouteBuilder<T> size<T>(
 }
 
 PageRouteBuilder<T> rightToLeftWithFade<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(
@@ -160,8 +160,8 @@ PageRouteBuilder<T> rightToLeftWithFade<T>(
 }
 
 PageRouteBuilder<T> leftToRightWithFade<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings) {
   return PageTransition<T>(

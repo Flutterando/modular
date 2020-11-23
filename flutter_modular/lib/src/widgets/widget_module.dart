@@ -30,7 +30,8 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
+  T? getBind<T>(Map<String, dynamic> params,
+      {List<Type> typesInRequest = const []}) {
     return _fakeModule.getBind<T>(params, typesInRequest: typesInRequest);
   }
 
@@ -48,7 +49,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  List<ModularRouter> get routers => null;
+  List<ModularRouter> get routers => const [];
 
   @override
   Widget build(BuildContext context) {
@@ -60,24 +61,25 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
 }
 
 class _FakeModule extends ChildModule {
-  final List<Bind> bindsInject;
+  final List<Bind>? bindsInject;
 
   _FakeModule({this.bindsInject}) {
     paths.add(runtimeType.toString());
   }
 
   @override
-  List<Bind> get binds => bindsInject;
+  List<Bind> get binds => bindsInject ?? [];
 
   @override
-  List<ModularRouter> get routers => null;
+  List<ModularRouter> get routers => [];
 }
 
 class ModularProvider extends StatefulWidget {
   final ChildModule module;
   final Widget child;
 
-  const ModularProvider({Key key, this.module, this.child}) : super(key: key);
+  const ModularProvider({Key? key, required this.module, required this.child})
+      : super(key: key);
 
   @override
   _ModularProviderState createState() => _ModularProviderState();

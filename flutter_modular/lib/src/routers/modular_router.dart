@@ -13,14 +13,16 @@ import '../utils/modular_arguments.dart';
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
     WidgetBuilder, RouteSettings);
 typedef ModularChild = Widget Function(
-    BuildContext context, ModularArguments args);
+    BuildContext context, ModularArguments? args);
 
 class ModularRouter<T> {
-  final ChildModule currentModule;
+  final ChildModule? currentModule;
 
-  final ModularArguments args;
+  final ModularArguments? args;
 
-  final String path;
+  final List<ModularRouter> children;
+
+  final String? path;
 
   ///
   /// Paramenter name: [routerName]
@@ -43,7 +45,7 @@ class ModularRouter<T> {
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
 
-  final ModularChild child;
+  final ModularChild? child;
 
   ///
   /// Paramenter name: [module]
@@ -54,7 +56,7 @@ class ModularRouter<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final ChildModule module;
+  final ChildModule? module;
 
   ///
   /// Paramenter name: [params]
@@ -65,7 +67,7 @@ class ModularRouter<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final Map<String, String> params;
+  final Map<String, String>? params;
 
   ///
   /// Paramenter name: [guards]
@@ -96,7 +98,7 @@ class ModularRouter<T> {
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
 
-  final List<RouteGuard> guards;
+  final List<RouteGuard>? guards;
 
   ///
   /// Paramenter name: [transition]
@@ -156,7 +158,7 @@ class ModularRouter<T> {
   /// ```
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final CustomTransition customTransition;
+  final CustomTransition? customTransition;
 
   ///
   /// Paramenter name: [transition]
@@ -165,14 +167,14 @@ class ModularRouter<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final RouteBuilder<T> routeGenerator;
-  final String modulePath;
+  final RouteBuilder<T>? routeGenerator;
+  final String? modulePath;
   final Duration duration;
   final Map<
       TransitionType,
       PageRouteBuilder<T> Function(
-    Widget Function(BuildContext, ModularArguments) builder,
-    ModularArguments args,
+    Widget Function(BuildContext, ModularArguments?) builder,
+    ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings,
   )> transitions = {
@@ -192,6 +194,7 @@ class ModularRouter<T> {
   ModularRouter(
     this.routerName, {
     this.path = '/',
+    this.children = const [],
     this.args = const ModularArguments(),
     this.module,
     this.child,
@@ -203,33 +206,35 @@ class ModularRouter<T> {
     this.customTransition,
     this.duration = const Duration(milliseconds: 300),
     this.modulePath = '/',
-  })  : assert(routerName != null),
-        assert(transition != null),
-        assert((transition == TransitionType.custom &&
+  })  : assert((transition == TransitionType.custom &&
                 customTransition != null) ||
             transition != TransitionType.custom && customTransition == null),
         assert((module == null && child != null) ||
-            (module != null && child == null));
+            (module != null && child == null)),
+        assert(module == null ? true : children.isEmpty,
+            'Módulo não pode conter rotas aninhadas (children)');
 
   ModularRouter<T> copyWith(
-      {ModularChild child,
-      String routerName,
-      ChildModule module,
-      ChildModule currentModule,
-      Map<String, String> params,
-      List<RouteGuard> guards,
-      TransitionType transition,
-      RouteBuilder routeGenerator,
-      String modulePath,
-      String path,
-      String duration,
-      Completer<T> popRoute,
-      ModularArguments args,
-      CustomTransition customTransition}) {
+      {ModularChild? child,
+      String? routerName,
+      ChildModule? module,
+      List<ModularRouter>? children,
+      ChildModule? currentModule,
+      Map<String, String>? params,
+      List<RouteGuard>? guards,
+      TransitionType? transition,
+      RouteBuilder<T>? routeGenerator,
+      String? modulePath,
+      String? path,
+      Duration? duration,
+      Completer<T>? popRoute,
+      ModularArguments? args,
+      CustomTransition? customTransition}) {
     return ModularRouter<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
       args: args ?? this.args,
+      children: children ?? this.children,
       module: module ?? this.module,
       currentModule: currentModule ?? this.currentModule,
       params: params ?? this.params,
@@ -244,10 +249,10 @@ class ModularRouter<T> {
   }
 
   static List<ModularRouter> group({
-    @required List<ModularRouter> routes,
-    List<RouteGuard> guards,
-    TransitionType transition,
-    CustomTransition customTransition,
+    required List<ModularRouter> routes,
+    List<RouteGuard>? guards,
+    TransitionType? transition,
+    CustomTransition? customTransition,
   }) {
     return routes.map((r) {
       return r.copyWith(
@@ -258,25 +263,29 @@ class ModularRouter<T> {
     }).toList();
   }
 
-  Route<T> getPageRoute(RouteSettings settings) {
+  Route<T> getPageRoute<T>(RouteSettings settings) {
     if (transition == TransitionType.custom && customTransition != null) {
       return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) {
-          return child(context, args);
+          if (child != null) {
+            return child!(context, args);
+          } else {
+            throw ModularError('Child not be null');
+          }
         },
         settings: settings,
-        transitionsBuilder: customTransition.transitionBuilder,
-        transitionDuration: customTransition.transitionDuration,
+        transitionsBuilder: customTransition!.transitionBuilder,
+        transitionDuration: customTransition!.transitionDuration,
       );
     } else if (transition == TransitionType.defaultTransition) {
       // Helper function
       Widget widgetBuilder(BuildContext context) {
         //return disposablePage;
-        return child(context, args);
+        return child!(context, args);
       }
 
       if (routeGenerator != null) {
-        return routeGenerator(widgetBuilder, settings);
+        return routeGenerator!(widgetBuilder, settings) as Route<T>;
       }
       return MaterialPageRoute<T>(
         settings: settings,
@@ -284,7 +293,11 @@ class ModularRouter<T> {
       );
     } else {
       var selectTransition = transitions[transition];
-      return selectTransition(child, args, duration, settings);
+      if (selectTransition != null) {
+        return selectTransition(child!, args, duration, settings) as Route<T>;
+      } else {
+        throw ModularError('Page Not Found');
+      }
     }
   }
 
@@ -329,6 +342,6 @@ class CustomTransition {
   final Duration transitionDuration;
 
   CustomTransition(
-      {@required this.transitionBuilder,
+      {required this.transitionBuilder,
       this.transitionDuration = const Duration(milliseconds: 300)});
 }

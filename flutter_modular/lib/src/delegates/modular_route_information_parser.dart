@@ -7,7 +7,7 @@ class ModularRouteInformationParser
   @override
   Future<ModularRouter> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final path = routeInformation.location;
+    final path = routeInformation.location ?? '/';
     final route = await selectRoute(path);
     return route;
   }
@@ -17,7 +17,7 @@ class ModularRouteInformationParser
     return RouteInformation(location: router.path);
   }
 
-  ModularRouter _searchInModule(
+  ModularRouter? _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
     final routers =
@@ -25,7 +25,7 @@ class ModularRouteInformationParser
     routers.sort((preview, actual) {
       return preview.routerName.contains('/:') ? 1 : 0;
     });
-    for (var route in routers) {
+    for (ModularRouter? route in routers) {
       route = _searchRoute(route, routerName, path);
       if (route != null) {
         return route;
@@ -34,23 +34,23 @@ class ModularRouteInformationParser
     return null;
   }
 
-  ModularRouter _normalizeRoute(
+  ModularRouter? _normalizeRoute(
       ModularRouter route, String routerName, String path) {
-    ModularRouter router;
+    ModularRouter? router;
     if (routerName == path || routerName == "$path/") {
-      router = route.module.routers[0];
+      router = route.module!.routers[0];
       if (router.module != null) {
         var _routerName =
             (routerName + route.routerName).replaceFirst('//', '/');
-        router = _searchInModule(route.module, _routerName, path);
+        router = _searchInModule(route.module!, _routerName, path);
       }
     } else {
-      router = _searchInModule(route.module, routerName, path);
+      router = _searchInModule(route.module!, routerName, path);
     }
     return router;
   }
 
-  ModularRouter _searchRoute(
+  ModularRouter? _searchRoute(
       ModularRouter route, String routerName, String path) {
     final tempRouteName =
         (routerName + route.routerName).replaceFirst('//', '/');
@@ -71,13 +71,15 @@ class ModularRouteInformationParser
             customTransition: route.customTransition,
           );
         }
-        Modular.bindModule(route.module, path);
+        if (route.module != null) {
+          Modular.bindModule(route.module!, path);
+        }
         return router;
       }
     } else {
-      route = _parseUrlParams(route, tempRouteName, path);
-      if (route != null) {
-        Modular.bindModule(route.currentModule, path);
+      var parseRoute = _parseUrlParams(route, tempRouteName, path);
+      if (parseRoute != null && parseRoute.currentModule != null) {
+        Modular.bindModule(parseRoute.currentModule!, path);
         return route.copyWith(path: path);
       }
     }
@@ -95,7 +97,7 @@ class ModularRouteInformationParser
     return newUrl.join("/");
   }
 
-  ModularRouter _parseUrlParams(
+  ModularRouter? _parseUrlParams(
       ModularRouter router, String routeNamed, String path) {
     if (routeNamed.split('/').length != path.split('/').length) {
       return null;
@@ -121,42 +123,41 @@ class ModularRouteInformationParser
             if (pathParts[paramPos].isNotEmpty) {
               params[paramName] = pathParts[paramPos];
               routeNamed =
-                  routeNamed.replaceFirst(routePart, params[paramName]);
+                  routeNamed.replaceFirst(routePart, params[paramName]!);
             }
           }
           paramPos++;
         }
 
-        params = routeNamed != path ? null : params;
-        return router.copyWith(args: router.args.copyWith(params: params));
+        var _params = routeNamed != path ? null : params;
+        return router.copyWith(args: router.args!.copyWith(params: _params));
       }
 
-      return router.copyWith(args: router.args.copyWith(params: null));
+      return router.copyWith(args: router.args!.copyWith(params: null));
     }
 
     return router;
   }
 
-  Future<ModularRouter> selectRoute(String path, [ChildModule module]) async {
+  Future<ModularRouter> selectRoute(String path, [ChildModule? module]) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
-    final route = _searchInModule(module ?? Modular.initialModule, "", path);
+    var route = _searchInModule(module ?? Modular.initialModule, "", path);
     return canActivate(path, route);
   }
 
-  Future<ModularRouter> canActivate(String path, ModularRouter router) async {
+  Future<ModularRouter> canActivate(String path, ModularRouter? router) async {
     if (router == null) {
-      return null;
+      throw ModularError('Route not found');
     }
 
     if (router.guards?.isNotEmpty == true) {
-      for (var guard in router.guards) {
+      for (var guard in router.guards!) {
         try {
           final result = await guard.canActivate(path, router);
           if (!result) {
-            print('$path is NOT ACTIVATE');
-            return null;
+            throw ModularError('$path is NOT ACTIVATE');
           }
           // ignore: avoid_catches_without_on_clauses
         } catch (e) {

@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../app_bloc.dart';
 import '../../shared/app_info.state.dart';
+import '../forbidden/forbidden_widget.dart';
 import 'home_bloc.dart';
 import 'home_widget.dart';
 
@@ -19,8 +20,13 @@ class HomeModule extends ChildModule {
         ModularRouter(
           "/",
           child: (_, args) => HomeWidget(),
-          transition: TransitionType.fadeIn,
+          children: [
+            ModularRouter('/', child: (context, args) => ForbiddenWidget()),
+            ModularRouter('/product',
+                child: (context, args) => ForbiddenWidget()),
+          ],
         ),
+
         // ModularRouter(
         //   "/forbidden2",
         //   child: (_, args) => ForbiddenWidget(),

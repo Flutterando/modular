@@ -9,7 +9,7 @@ abstract class IModularNavigator {
   /// ```
   /// Modular.to.push(MaterialPageRoute(builder: (context) => HomePage()),);
   /// ```
-  Future<T> push<T extends Object>(Route<T> route);
+  Future<T?> push<T extends Object>(Route<T> route);
 
   /// Pop the current route off the navigator and navigate to a route.
   ///
@@ -20,7 +20,7 @@ abstract class IModularNavigator {
   /// ```
   /// Modular.to.popAndPushNamed('/home', arguments: 10);
   /// ```
-  Future<T> popAndPushNamed<T extends Object, TO extends Object>(
+  Future<T?> popAndPushNamed<T extends Object, TO extends Object>(
       String routeName,
       {TO result,
       Object arguments});
@@ -34,7 +34,7 @@ abstract class IModularNavigator {
   /// ```
   /// Modular.to.pushNamed('/home', arguments: 10);
   /// ```
-  Future<T> pushNamed<T extends Object>(String routeName, {Object arguments});
+  Future<T?> pushNamed<T extends Object>(String routeName, {Object arguments});
 
   /// Push the route with the given name onto the navigator that most tightly
   /// encloses the given context, and then remove all the previous routes until
@@ -47,7 +47,7 @@ abstract class IModularNavigator {
   /// ```
   /// Modular.to.pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'), arguments: 10);
   /// ```
-  Future<T> pushNamedAndRemoveUntil<T extends Object>(
+  Future<T?> pushNamedAndRemoveUntil<T extends Object>(
       String newRouteName, bool Function(Route<dynamic>) predicate,
       {Object arguments});
 
@@ -62,7 +62,7 @@ abstract class IModularNavigator {
   /// ```
   /// Modular.to.pushReplacementNamed('/home', arguments: 10);
   /// ```
-  Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
+  Future<T?> pushReplacementNamed<T extends Object, TO extends Object>(
       String routeName,
       {TO result,
       Object arguments});

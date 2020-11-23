@@ -6,8 +6,8 @@ class ModularApp extends StatefulWidget {
   final MainModule module;
 
   ModularApp({
-    Key key,
-    this.module,
+    Key? key,
+    required this.module,
   }) : super(key: key);
 
   @override

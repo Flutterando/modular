@@ -9,29 +9,29 @@ final Map<int, Completer> _allCompleters = {};
 class ModularPage<T> extends Page<T> {
   final ModularRouter router;
 
-  ModularPage({Key key, this.router})
-      : super(key: key, name: router.path, arguments: router.args.data);
+  ModularPage({LocalKey? key, required this.router})
+      : super(key: key, name: router.path, arguments: router.args?.data);
 
   Future<T> waitPop() {
     if (_allCompleters.containsKey(hashCode)) {
-      return _allCompleters[hashCode].future;
+      return (_allCompleters[hashCode] as Completer<T>).future;
     } else {
       _allCompleters[hashCode] = Completer<T>();
-      return _allCompleters[hashCode].future;
+      return (_allCompleters[hashCode] as Completer<T>).future;
     }
   }
 
   void completePop(T result) {
     if (_allCompleters.containsKey(hashCode) &&
-        !_allCompleters[hashCode].isCompleted) {
-      _allCompleters[hashCode].complete(result);
+        !(_allCompleters[hashCode] as Completer<T>).isCompleted) {
+      (_allCompleters[hashCode] as Completer<T>).complete(result);
       _allCompleters.remove(hashCode);
     }
   }
 
   @override
   Route<T> createRoute(BuildContext context) {
-    return router.getPageRoute(this);
+    return router.getPageRoute<T>(this);
   }
 
   // @override

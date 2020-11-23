@@ -4,7 +4,7 @@ import '../../flutter_modular.dart';
 import '../routers/modular_router.dart';
 
 abstract class ChildModule {
-  List<Bind> _binds;
+  late List<Bind> _binds;
   List<Bind> get binds;
   List<ModularRouter> get routers;
 
@@ -20,7 +20,8 @@ abstract class ChildModule {
 
   final Map<Type, dynamic> _singletonBinds = {};
 
-  T getBind<T>(Map<String, dynamic> params, {List<Type> typesInRequest}) {
+  T? getBind<T>(Map<String, dynamic> params,
+      {required List<Type> typesInRequest}) {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -29,8 +30,8 @@ abstract class ChildModule {
     }
 
     var bind = _binds.firstWhere((b) => b.inject is T Function(Inject),
-        orElse: () => null);
-    if (bind == null) {
+        orElse: () => BindEmpty());
+    if (bind is BindEmpty) {
       typesInRequest.remove(type);
       return null;
     }
@@ -91,13 +92,14 @@ ${typesInRequest.join('\n')}
   }
 
   Type _getInjectType<B>() {
+    var foundType = B;
     _singletonBinds.forEach((key, value) {
       if (value is B) {
-        return key;
+        foundType = key;
       }
     });
 
-    return B;
+    return foundType;
   }
 
   /// Create a instance of all binds isn't lazy Loaded

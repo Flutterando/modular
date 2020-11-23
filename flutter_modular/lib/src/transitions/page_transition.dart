@@ -21,13 +21,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
   final Duration duration;
 
   PageTransition({
-    Key key,
-    @required this.builder,
-    @required this.type,
+    Key? key,
+    required this.builder,
+    required this.type,
     this.curve = Curves.easeInOut,
-    this.alignment,
+    this.alignment = Alignment.center,
     this.duration = const Duration(milliseconds: 600),
-    RouteSettings settings,
+    RouteSettings? settings,
   }) : super(
           pageBuilder: (context, animation, secondaryAnimation) {
             return builder(context);
