@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/inject/bind.dart';
-import 'package:flutter_modular/src/core/modules/child_module.dart';
+
+import '../../flutter_modular.dart';
 
 void initModule(ChildModule module,
     {List<Bind> changeBinds = const [], bool initialModule = false}) {

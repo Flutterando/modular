@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/inject/bind.dart';
-import 'package:flutter_modular/src/core/modules/child_module.dart';
-import 'package:flutter_modular/src/core/modules/main_module.dart';
-
-import 'utils_test.dart';
+import '../../flutter_modular.dart';
+import '../../flutter_modular_test.dart';
 
 enum ModularTestType { resetModules, keepModulesOnMemory }
 
