@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
-
 import '../delegates/modular_router_delegate.dart';
-
 import '../interfaces/modular_navigator_interface.dart';
 
 class ModularLink implements IModularNavigator {

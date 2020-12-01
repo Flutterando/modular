@@ -25,10 +25,10 @@ class ModularRouteInformationParser
     routers.sort((preview, actual) {
       return preview.routerName.contains('/:') ? 1 : 0;
     });
-    for (ModularRouter? route in routers) {
-      route = _searchRoute(route, routerName, path);
-      if (route != null) {
-        return route;
+    for (var route in routers) {
+      var r = _searchRoute(route, routerName, path);
+      if (r != null) {
+        return r;
       }
     }
     return null;
@@ -77,8 +77,16 @@ class ModularRouteInformationParser
         return router;
       }
     } else {
+      if (tempRouteName.split('/').length != path.split('/').length) {
+        return null;
+      }
       var parseRoute = _parseUrlParams(route, tempRouteName, path);
-      if (parseRoute != null && parseRoute.currentModule != null) {
+
+      if (path != parseRoute.path) {
+        return null;
+      }
+
+      if (parseRoute.currentModule != null) {
         Modular.bindModule(parseRoute.currentModule!, path);
         return route.copyWith(path: path);
       }
@@ -97,12 +105,8 @@ class ModularRouteInformationParser
     return newUrl.join("/");
   }
 
-  ModularRouter? _parseUrlParams(
+  ModularRouter _parseUrlParams(
       ModularRouter router, String routeNamed, String path) {
-    if (routeNamed.split('/').length != path.split('/').length) {
-      return null;
-    }
-
     if (routeNamed.contains('/:')) {
       final regExp = RegExp(
         "^${prepareToRegex(routeNamed)}\$",
@@ -114,6 +118,7 @@ class ModularRouteInformationParser
         var paramPos = 0;
         final routeParts = routeNamed.split('/');
         final pathParts = path.split('/');
+        var newPath = router.path!;
 
         //  print('Match! Processing $path as $routeNamed');
 
@@ -121,6 +126,8 @@ class ModularRouteInformationParser
           if (routePart.contains(":")) {
             var paramName = routePart.replaceFirst(':', '');
             if (pathParts[paramPos].isNotEmpty) {
+              newPath =
+                  newPath.replaceFirst(':$paramName', pathParts[paramPos]);
               params[paramName] = pathParts[paramPos];
               routeNamed =
                   routeNamed.replaceFirst(routePart, params[paramName]!);
@@ -130,7 +137,8 @@ class ModularRouteInformationParser
         }
 
         var _params = routeNamed != path ? null : params;
-        return router.copyWith(args: router.args!.copyWith(params: _params));
+        return router.copyWith(
+            args: router.args!.copyWith(params: _params), path: newPath);
       }
 
       return router.copyWith(args: router.args!.copyWith(params: null));
