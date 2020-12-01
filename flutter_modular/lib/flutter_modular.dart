@@ -10,7 +10,7 @@ export 'src/core/models/modular_router.dart';
 export 'src/core/modules/child_module.dart';
 export 'src/core/modules/main_module.dart';
 export 'src/presenters/modular_base.dart';
+export 'src/presenters/router_outlet/router_outlet.dart';
 export 'src/presenters/widgets/modular_app.dart';
 export 'src/presenters/widgets/modular_state.dart';
-export 'src/presenters/widgets/router_outlet.dart';
 export 'src/presenters/widgets/widget_module.dart';

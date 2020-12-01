@@ -1,15 +1,38 @@
 import 'package:flutter/widgets.dart';
 
-import 'widget_module.dart';
+import 'route_outlet_information_parser.dart';
+import 'router_outlet_delegate.dart';
 
 class RouterOutlet extends StatelessWidget {
+  final navigatorKey = GlobalKey<NavigatorState>();
+  final parser = RouterOutletInformationParser();
+  final provider = Providerd();
+  late final delegate = RouterOutletDelegate(navigatorKey, parser, {});
+
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // return Router(
-    //   routerDelegate: null,
-    // );
+    return Router(
+      routeInformationParser: parser,
+      routeInformationProvider: provider,
+      routerDelegate: delegate,
+    );
   }
+}
+
+class Providerd extends RouteInformationProvider {
+  @override
+  void addListener(listener) {
+    // TODO: implement addListener
+  }
+
+  @override
+  void removeListener(listener) {
+    // TODO: implement removeListener
+  }
+
+  @override
+  // TODO: implement value
+  RouteInformation? get value => RouteInformation(location: '/home');
 }
 
 // class RouterOutlet extends StatefulWidget {
