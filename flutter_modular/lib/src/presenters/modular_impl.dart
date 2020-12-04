@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
+import 'package:flutter_modular/src/core/models/modular_arguments.dart';
 import 'package:flutter_modular/src/core/modules/child_module.dart';
 
 import 'interfaces/modular_interface.dart';
@@ -13,6 +14,9 @@ class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, ChildModule> injectMap;
   IModularNavigator? navigatorDelegate;
+
+  @override
+  ModularArguments? get args => routerDelegate.currentConfiguration?.args;
 
   ModularImpl({
     required this.routerDelegate,
@@ -51,9 +55,6 @@ class ModularImpl implements ModularInterface {
 
   @override
   IModularNavigator get to => navigatorDelegate ?? routerDelegate;
-
-  @override
-  IModularNavigator get link => throw UnimplementedError();
 
   @override
   bool get debugMode => !kReleaseMode;

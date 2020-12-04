@@ -11,9 +11,10 @@ class ModuleMock extends ChildModule {
   @override
   List<Bind> binds = [
     Bind((i) => "Test"),
+    Bind<int>.instance(1),
     Bind((i) => true, lazy: false),
     Bind((i) => StreamController(), lazy: false),
-    Bind((i) => ValueNotifier(0), lazy: false),
+    Bind((i) => ValueNotifier<int>(i() ?? 0), lazy: false),
   ];
 
   @override
@@ -45,7 +46,7 @@ main() {
   test('should get bind', () {
     expect(module.getBind<String>(typesInRequest: []), equals('Test'));
     expect(module.getBind<bool>(typesInRequest: []), equals(true));
-    expect(module.getBind<bool>(typesInRequest: []), equals(true));
+    expect(module.getBind<int>(typesInRequest: []), equals(1));
   });
 
   test('should return null if not found bind', () {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/presenters/router_outlet/route_outlet_information_parser.dart';
 import 'package:flutter_modular/src/presenters/router_outlet/router_outlet_delegate.dart';
 import '../core/modules/child_module.dart';
