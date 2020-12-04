@@ -15,7 +15,7 @@ abstract class ModularInterface {
   IModularNavigator get to;
   B? get<B>({
     Map<String, dynamic> params = const {},
-    List<Type> typesInRequest = const [],
+    List<Type>? typesInRequestList,
     B? defaultValue,
   });
 

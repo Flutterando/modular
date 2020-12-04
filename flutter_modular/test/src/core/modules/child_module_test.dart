@@ -14,7 +14,7 @@ class ModuleMock extends ChildModule {
     Bind<int>.instance(1),
     Bind((i) => true, lazy: false),
     Bind((i) => StreamController(), lazy: false),
-    Bind((i) => ValueNotifier<int>(i() ?? 0), lazy: false),
+    Bind((i) => ValueNotifier<int>(0), lazy: false),
   ];
 
   @override

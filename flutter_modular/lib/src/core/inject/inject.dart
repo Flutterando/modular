@@ -18,7 +18,7 @@ class Inject<T> {
     params ??= {};
     return Modular.get<B>(
       params: params,
-      typesInRequest: typesInRequest,
+      typesInRequestList: typesInRequest,
       defaultValue: defaultValue,
     );
   }

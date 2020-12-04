@@ -65,8 +65,9 @@ class ModularImpl implements ModularInterface {
   @override
   B get<B>(
       {Map<String, dynamic> params = const {},
-      List<Type> typesInRequest = const [],
+      List<Type>? typesInRequestList,
       B? defaultValue}) {
+    var typesInRequest = typesInRequestList ?? [];
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
     }
@@ -74,11 +75,11 @@ class ModularImpl implements ModularInterface {
 
     if (typesInRequest.isEmpty) {
       final module = routerDelegate
-              .currentConfiguration?.currentModule.runtimeType
+              .currentConfiguration?.currentModule?.runtimeType
               .toString() ??
           '=global';
       result = _getInjectableObject<B>(module,
-          params: params, typesInRequest: typesInRequest);
+          params: params, typesInRequestList: typesInRequest);
     }
 
     if (result != null) {
@@ -87,7 +88,7 @@ class ModularImpl implements ModularInterface {
 
     for (var key in injectMap.keys) {
       final value = _getInjectableObject<B>(key,
-          params: params, typesInRequest: typesInRequest, checkKey: false);
+          params: params, typesInRequestList: typesInRequest, checkKey: false);
       if (value != null) {
         return value;
       }
@@ -103,10 +104,11 @@ class ModularImpl implements ModularInterface {
   B? _getInjectableObject<B>(
     String tag, {
     Map<String, dynamic> params = const {},
-    List<Type> typesInRequest = const [],
+    List<Type>? typesInRequestList,
     bool checkKey = true,
   }) {
     B? value;
+    var typesInRequest = typesInRequestList ?? [];
     if (!checkKey) {
       value = injectMap[tag]
           ?.getBind<B>(params: params, typesInRequest: typesInRequest);
