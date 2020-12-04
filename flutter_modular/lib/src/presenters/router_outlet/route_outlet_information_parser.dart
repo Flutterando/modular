@@ -83,6 +83,7 @@ class RouterOutletInformationParser
       if (tempRouteName.split('/').length != path.split('/').length) {
         return null;
       }
+
       var parseRoute = _parseUrlParams(route, tempRouteName, path);
 
       if (path != parseRoute.path) {
@@ -91,7 +92,7 @@ class RouterOutletInformationParser
 
       if (parseRoute.currentModule != null) {
         Modular.bindModule(parseRoute.currentModule!, path);
-        return parseRoute.copyWith(path: path);
+        return parseRoute;
       }
     }
 

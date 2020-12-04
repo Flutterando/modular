@@ -10,6 +10,7 @@ class ModularRouteInformationParser
   @override
   Future<ModularRouter> parseRouteInformation(
       RouteInformation routeInformation) async {
+    print(routeInformation);
     final path = routeInformation.location ?? '/';
     final route = await selectRoute(path);
     return route;
@@ -17,7 +18,11 @@ class ModularRouteInformationParser
 
   @override
   RouteInformation restoreRouteInformation(ModularRouter router) {
-    return RouteInformation(location: router.path);
+    return RouteInformation(
+      location: router.routerOutlet.isEmpty
+          ? router.path
+          : router.routerOutlet.last.path,
+    );
   }
 
   ModularRouter? _searchInModule(
@@ -80,6 +85,20 @@ class ModularRouteInformationParser
         return router;
       }
     } else {
+      if (route.children.isNotEmpty) {
+        for (var routeChild in route.children) {
+          var r = _searchRoute(routeChild, route.routerName, path);
+          if (r != null) {
+            route = route.copyWith(routerOutlet: [
+              r.copyWith(
+                  modulePath: resolveOutletModulePath(
+                      tempRouteName, r.modulePath ?? '/'))
+            ], path: tempRouteName);
+            return route;
+          }
+        }
+      }
+
       if (tempRouteName.split('/').length != path.split('/').length) {
         return null;
       }
@@ -91,11 +110,21 @@ class ModularRouteInformationParser
 
       if (parseRoute.currentModule != null) {
         Modular.bindModule(parseRoute.currentModule!, path);
-        return parseRoute.copyWith(path: path);
       }
+      return parseRoute.copyWith(path: path);
     }
 
     return null;
+  }
+
+  String resolveOutletModulePath(
+      String tempRouteName, String outletModulePath) {
+    var temp = '$tempRouteName/$outletModulePath'.replaceAll('//', '/');
+    if (temp.characters.last == '/') {
+      return temp.substring(0, temp.length - 1);
+    } else {
+      return temp;
+    }
   }
 
   String prepareToRegex(String url) {

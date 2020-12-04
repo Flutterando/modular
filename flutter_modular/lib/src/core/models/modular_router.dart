@@ -20,6 +20,8 @@ class ModularRouter<T> {
 
   final List<ModularRouter> children;
 
+  final List<ModularRouter> routerOutlet;
+
   final String? path;
 
   ///
@@ -197,6 +199,7 @@ class ModularRouter<T> {
     this.module,
     this.child,
     this.guards,
+    this.routerOutlet = const [],
     this.params,
     this.currentModule,
     this.transition = TransitionType.defaultTransition,
@@ -217,6 +220,7 @@ class ModularRouter<T> {
       String? routerName,
       ChildModule? module,
       List<ModularRouter>? children,
+      List<ModularRouter>? routerOutlet,
       ChildModule? currentModule,
       Map<String, String>? params,
       List<RouteGuard>? guards,
@@ -234,6 +238,7 @@ class ModularRouter<T> {
       args: args ?? this.args,
       children: children ?? this.children,
       module: module ?? this.module,
+      routerOutlet: routerOutlet ?? this.routerOutlet,
       currentModule: currentModule ?? this.currentModule,
       params: params ?? this.params,
       modulePath: modulePath ?? this.modulePath,

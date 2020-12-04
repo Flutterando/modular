@@ -22,13 +22,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   NavigatorState get navigator => navigatorKey.currentState!;
 
-  ModularRouter? _router;
-
   List<ModularPage> _pages = [];
 
   @override
-  ModularRouter? get currentConfiguration => _router;
-  ModularRouter get lastPage => _pages.last.router;
+  ModularRouter? get currentConfiguration => _pages.last.router;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +40,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   @override
   Future<void> setNewRoutePath(ModularRouter router) async {
+    print('setNewRoutePath: ${router.routerOutlet.length}');
+
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,
@@ -53,14 +52,16 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       _pages.last.completePop(null);
       _pages.last = page;
     }
-    _router = router;
 
     rebuildPages();
   }
 
   @override
-  Future<void> navigate(String path, {arguments}) async {
-    var router = await parser.selectRoute(path);
+  Future<void> navigate(String routeName,
+      {arguments, bool linked = false}) async {
+    print('navigate: $routeName');
+    var router =
+        await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
     setNewRoutePath(router);
   }
@@ -107,8 +108,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   @override
   Future<T> pushNamed<T extends Object>(String routeName,
-      {Object? arguments}) async {
-    var router = await parser.selectRoute(routeName);
+      {Object? arguments, bool linked = false}) async {
+    var router =
+        await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
     final page = ModularPage<T>(
       key: UniqueKey(),
@@ -123,8 +125,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
       String routeName,
       {TO? result,
-      Object? arguments}) async {
-    var router = await parser.selectRoute(routeName);
+      Object? arguments,
+      bool linked = false}) async {
+    var router =
+        await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
     final page = ModularPage(
       key: UniqueKey(),
@@ -141,10 +145,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(
       String routeName,
       {TO? result,
-      Object? arguments}) async {
+      Object? arguments,
+      bool linked = false}) async {
     _pages.last.completePop(result);
     _pages.removeLast();
-    return await pushNamed<T>(routeName, arguments: arguments);
+    return await pushNamed<T>(routeName, arguments: arguments, linked: linked);
   }
 
   @override
@@ -166,16 +171,23 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   @override
   Future<T> pushNamedAndRemoveUntil<T extends Object>(
       String newRouteName, bool Function(Route) predicate,
-      {Object? arguments}) {
+      {Object? arguments, bool linked = false}) {
     popUntil(predicate);
-    return pushNamed<T>(newRouteName, arguments: arguments);
+    return pushNamed<T>(newRouteName, arguments: arguments, linked: linked);
   }
 
   @override
-  String get modulePath => _router!.modulePath ?? '/';
+  String get modulePath => currentConfiguration?.routerOutlet.isEmpty == true
+      ? currentConfiguration?.modulePath ?? '/'
+      : currentConfiguration?.routerOutlet.last.modulePath ?? '/';
 
   @override
-  String get path => _router!.path ?? '/';
+  String get path => currentConfiguration?.routerOutlet.isEmpty == true
+      ? currentConfiguration?.path ?? '/'
+      : currentConfiguration?.routerOutlet.last.path ?? '/';
+
+  @override
+  String get localPath => path.replaceFirst(modulePath, '');
 
   @override
   Future<T?> push<T extends Object>(Route<T> route) {

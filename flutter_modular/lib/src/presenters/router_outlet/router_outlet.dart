@@ -1,38 +1,46 @@
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_modular/src/core/models/modular_router.dart';
+import 'package:flutter_modular/src/presenters/modular_base.dart';
+import 'package:flutter_modular/src/presenters/navigation/modular_router_delegate.dart';
+
 import 'route_outlet_information_parser.dart';
 import 'router_outlet_delegate.dart';
 
-class RouterOutlet extends StatelessWidget {
-  final navigatorKey = GlobalKey<NavigatorState>();
-  final parser = RouterOutletInformationParser();
-  final provider = Providerd();
-  late final delegate = RouterOutletDelegate(navigatorKey, parser, {});
+// class RouterOutlet extends StatelessWidget {
+//   final navigatorKey = GlobalKey<NavigatorState>();
+//   final parser = RouterOutletInformationParser();
+//   final provider = Providerd();
+//   late final delegate = RouterOutletDelegate(navigatorKey, parser, {});
 
-  @override
-  Widget build(BuildContext context) {
-    return Router(
-      routeInformationParser: parser,
-      routeInformationProvider: provider,
-      routerDelegate: delegate,
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+
+//     return Router(
+//       routeInformationProvider: provider,
+//       routeInformationParser: parser,
+//       routerDelegate: delegate,
+//     );
+//   }
+// }
 
 class Providerd extends RouteInformationProvider {
+  final ModularRouterDelegate _delegate;
+  Providerd(this._delegate);
+
   @override
   void addListener(listener) {
-    // TODO: implement addListener
+    print(listener);
+    print(Modular.to.path);
   }
 
   @override
   void removeListener(listener) {
-    // TODO: implement removeListener
+    print('removeListener');
   }
 
   @override
-  // TODO: implement value
-  RouteInformation? get value => RouteInformation(location: '/home');
+  RouteInformation? get value => RouteInformation(location: '/other');
 }
 
 // class RouterOutlet extends StatefulWidget {
