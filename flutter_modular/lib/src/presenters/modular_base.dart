@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/presenters/router_outlet/route_outlet_information_parser.dart';
-import 'package:flutter_modular/src/presenters/router_outlet/router_outlet_delegate.dart';
-import '../core/modules/child_module.dart';
 
+import '../../flutter_modular.dart';
+import '../core/modules/child_module.dart';
 import 'interfaces/modular_interface.dart';
 import 'modular_impl.dart';
 import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
-import 'router_outlet/router_outlet.dart';
+import 'router_outlet/router_outlet_delegate.dart';
 
 final _navigatorKey = GlobalKey<NavigatorState>();
 
