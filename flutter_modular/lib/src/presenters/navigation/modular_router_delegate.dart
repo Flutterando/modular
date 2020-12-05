@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/models/modular_router.dart';
 import '../../core/modules/child_module.dart';
@@ -14,18 +15,25 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
         PopNavigatorRouterDelegateMixin<ModularRouter>
     implements
         IModularNavigator {
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final ModularRouteInformationParser parser;
   final Map<String, ChildModule> injectMap;
 
-  ModularRouterDelegate(this.navigatorKey, this.parser, this.injectMap);
+  ModularRouterDelegate(this.parser, this.injectMap) {
+    SystemChannels.navigation.setMethodCallHandler((call) async {
+      if ('pushRouteInformation' == call.method) {
+        navigate(call.arguments['location']);
+      }
+    });
+  }
 
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
 
   @override
-  ModularRouter? get currentConfiguration => _pages.last.router;
+  ModularRouter? get currentConfiguration =>
+      _pages.isEmpty ? null : _pages.last.router;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +48,6 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
   @override
   Future<void> setNewRoutePath(ModularRouter router) async {
-    print('setNewRoutePath: ${router.routerOutlet.length}');
-
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,
@@ -59,7 +65,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   @override
   Future<void> navigate(String routeName,
       {arguments, bool linked = false}) async {
-    print('navigate: $routeName');
+    if (routeName == path) {
+      return;
+    }
     var router =
         await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));

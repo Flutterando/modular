@@ -10,7 +10,6 @@ class ModularRouteInformationParser
   @override
   Future<ModularRouter> parseRouteInformation(
       RouteInformation routeInformation) async {
-    print(routeInformation);
     final path = routeInformation.location ?? '/';
     final route = await selectRoute(path);
     return route;

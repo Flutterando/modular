@@ -8,13 +8,10 @@ import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
 import 'router_outlet/router_outlet_delegate.dart';
 
-final _navigatorKey = GlobalKey<NavigatorState>();
-
 final Map<String, ChildModule> _injectMap = {};
 
 final _routeInformationParser = ModularRouteInformationParser();
 final _routerDelegate = ModularRouterDelegate(
-  _navigatorKey,
   _routeInformationParser,
   _injectMap,
 );
