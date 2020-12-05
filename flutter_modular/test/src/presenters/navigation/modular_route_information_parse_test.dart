@@ -8,6 +8,7 @@ import 'package:flutter_modular/src/presenters/navigation/modular_route_informat
 import 'package:flutter_test/flutter_test.dart';
 
 main() {
+  WidgetsFlutterBinding.ensureInitialized();
   var parse = ModularRouteInformationParser();
 
   BuildContext context = Container().createElement();
@@ -39,7 +40,7 @@ main() {
       final route = await parse.selectRoute('/mock', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<SizedBox>());
-      expect(route.path, '/mock');
+      expect(route.path, '/mock/');
     });
 
     test('should retrive router /mock/', () async {
@@ -89,6 +90,17 @@ main() {
     test('should throw error if not exist route /home/tab3', () async {
       expect(parse.selectRoute('/home/tab3', ModuleMock()),
           throwsA(isA<ModularError>()));
+    });
+
+    test('should retrive router  (Module)', () async {
+      final route = await parse.selectRoute('/mock/home', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<SizedBox>());
+      expect(route.path, '/mock/');
+      expect(route.modulePath, '/mock');
+      expect(route.routerOutlet.length, 1);
+      expect(route.routerOutlet[0].child!(context, null), isA<Container>());
+      expect(route.routerOutlet[0].path, '/mock/home');
     });
   });
 
@@ -153,10 +165,9 @@ class ModuleMock2 extends ChildModule {
 
   @override
   List<ModularRouter> routers = [
-    ModularRouter(
-      '/',
-      child: (context, args) => SizedBox(),
-    ),
+    ModularRouter('/', child: (context, args) => SizedBox(), children: [
+      ModularRouter('/home', child: (context, args) => Container()),
+    ]),
     ModularRouter(
       '/list',
       child: (context, args) => ListView(),

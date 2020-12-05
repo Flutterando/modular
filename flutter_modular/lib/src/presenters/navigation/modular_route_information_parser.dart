@@ -50,6 +50,8 @@ class ModularRouteInformationParser
         var _routerName =
             (routerName + route.routerName).replaceFirst('//', '/');
         router = _searchInModule(route.module!, _routerName, path);
+      } else {
+        router = router.copyWith(path: routerName);
       }
     } else {
       router = _searchInModule(route.module!, routerName, path);
@@ -69,7 +71,6 @@ class ModularRouteInformationParser
       if (router != null) {
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
-          path: path,
         );
 
         if (router.transition == TransitionType.defaultTransition) {
@@ -86,7 +87,7 @@ class ModularRouteInformationParser
     } else {
       if (route.children.isNotEmpty) {
         for (var routeChild in route.children) {
-          var r = _searchRoute(routeChild, route.routerName, path);
+          var r = _searchRoute(routeChild, tempRouteName, path);
           if (r != null) {
             route = route.copyWith(routerOutlet: [
               r.copyWith(
