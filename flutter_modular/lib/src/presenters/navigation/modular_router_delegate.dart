@@ -55,7 +55,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     if (_pages.isEmpty) {
       _pages.add(page);
     } else {
-      _pages.last.completePop(null);
+      _pages.last.router.completePop(null);
       _pages.last = page;
     }
 
@@ -86,7 +86,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
     final page = route.settings as ModularPage;
     final path = page.router.path;
-    page.completePop(result);
+    page.router.completePop(result);
     _pages.removeLast();
     rebuildPages();
 
@@ -124,9 +124,20 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       key: UniqueKey(),
       router: router,
     );
-    _pages.add(page);
-    rebuildPages();
-    return await page.waitPop();
+
+    if (router.routerOutlet.isNotEmpty && router == _pages.last.router) {
+      _pages.last.router.routerOutlet.add(router.routerOutlet.last.copyWith(
+        args: router.args?.copyWith(data: arguments),
+      ));
+      notifyListeners();
+      final result = await page.router.waitPop();
+      rebuildPages();
+      return result;
+    } else {
+      _pages.add(page);
+      rebuildPages();
+      return await page.router.waitPop();
+    }
   }
 
   @override
@@ -143,10 +154,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       router: router,
     );
 
-    _pages.last.completePop(result);
+    _pages.last.router.completePop(result);
     _pages.last = page;
     rebuildPages();
-    return await page.waitPop();
+    return await page.router.waitPop();
   }
 
   @override
@@ -155,7 +166,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       {TO? result,
       Object? arguments,
       bool linked = false}) async {
-    _pages.last.completePop(result);
+    _pages.last.router.completePop(result);
     _pages.removeLast();
     return await pushNamed<T>(routeName, arguments: arguments, linked: linked);
   }

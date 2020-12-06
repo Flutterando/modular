@@ -186,7 +186,7 @@ class ModularRouteInformationParser
 
   Future<ModularRouter> canActivate(String path, ModularRouter? router) async {
     if (router == null) {
-      throw ModularError('Route not found');
+      throw ModularError('Route \'$path\' not found');
     }
 
     if (router.guards?.isNotEmpty == true) {

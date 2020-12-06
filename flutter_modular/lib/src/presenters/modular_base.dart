@@ -6,7 +6,7 @@ import 'interfaces/modular_interface.dart';
 import 'modular_impl.dart';
 import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
-import 'router_outlet/router_outlet_delegate.dart';
+import 'navigation/router_outlet_delegate.dart';
 
 final Map<String, ChildModule> _injectMap = {};
 

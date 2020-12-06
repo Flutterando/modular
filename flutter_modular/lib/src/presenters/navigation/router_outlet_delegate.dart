@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../core/models/modular_router.dart';
-import '../navigation/modular_page.dart';
-import '../navigation/modular_router_delegate.dart';
+import 'modular_page.dart';
+import 'modular_router_delegate.dart';
 
 class RouterOutletDelegate extends RouterDelegate<ModularRouter>
     with
@@ -47,7 +47,12 @@ class RouterOutletDelegate extends RouterDelegate<ModularRouter>
         : Navigator(
             pages: _getPages(),
             onPopPage: (route, result) {
-              notifyListeners();
+              if (routers.length > 1) {
+                final page = route.settings as ModularPage;
+                routers.removeLast();
+                page.router.completePop(result);
+              }
+
               return route.didPop(result);
             },
           );

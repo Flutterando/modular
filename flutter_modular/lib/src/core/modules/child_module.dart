@@ -7,8 +7,8 @@ import '../interfaces/disposable.dart';
 import '../models/modular_router.dart';
 
 abstract class ChildModule {
-  late List<Bind> binds;
-  late List<ModularRouter> routers;
+  List<Bind> binds = [];
+  List<ModularRouter> routers = [];
 
   @visibleForTesting
   void changeBinds(List<Bind> b) {
