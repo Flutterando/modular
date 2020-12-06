@@ -60,9 +60,20 @@ extension ModularExtension on MaterialApp {
   }
 }
 
-class RouterOutlet extends StatelessWidget {
-  final navigatorKey = GlobalKey<NavigatorState>();
-  late final delegate = RouterOutletDelegate(_routerDelegate);
+class RouterOutlet extends StatefulWidget {
+  @override
+  _RouterOutletState createState() => _RouterOutletState();
+}
+
+class _RouterOutletState extends State<RouterOutlet> {
+  late GlobalKey<NavigatorState> navigatorKey;
+  late RouterOutletDelegate delegate;
+  @override
+  void initState() {
+    super.initState();
+    navigatorKey = GlobalKey<NavigatorState>();
+    delegate = RouterOutletDelegate(_routerDelegate, navigatorKey);
+  }
 
   @override
   Widget build(BuildContext context) {

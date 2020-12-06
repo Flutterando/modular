@@ -12,19 +12,20 @@ class ModularPage<T> extends Page<T> {
   ModularPage({LocalKey? key, required this.router})
       : super(key: key, name: router.path, arguments: router.args?.data);
 
-  Future<T> waitPop() {
+  Future<T?> waitPop() {
     if (_allCompleters.containsKey(hashCode)) {
-      return (_allCompleters[hashCode] as Completer<T>).future;
+      return (_allCompleters[hashCode] as Completer<T?>).future;
     } else {
-      _allCompleters[hashCode] = Completer<T>();
-      return (_allCompleters[hashCode] as Completer<T>).future;
+      _allCompleters[hashCode] = Completer<T?>();
+      return (_allCompleters[hashCode] as Completer<T?>).future;
     }
   }
 
-  void completePop(T result) {
+  void completePop(T? result) {
     if (_allCompleters.containsKey(hashCode) &&
-        !(_allCompleters[hashCode] as Completer<T>).isCompleted) {
-      (_allCompleters[hashCode] as Completer<T>).complete(result);
+        !(_allCompleters[hashCode] as Completer<T?>).isCompleted) {
+      final complete = (_allCompleters[hashCode] as Completer<T?>);
+      complete.complete(result);
       _allCompleters.remove(hashCode);
     }
   }

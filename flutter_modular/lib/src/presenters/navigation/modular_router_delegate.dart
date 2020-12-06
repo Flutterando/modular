@@ -115,7 +115,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<T> pushNamed<T extends Object>(String routeName,
+  Future<T?> pushNamed<T extends Object>(String routeName,
       {Object? arguments, bool linked = false}) async {
     var router =
         await parser.selectRoute(linked ? modulePath + routeName : routeName);
@@ -150,7 +150,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<T> popAndPushNamed<T extends Object, TO extends Object>(
+  Future<T?> popAndPushNamed<T extends Object, TO extends Object>(
       String routeName,
       {TO? result,
       Object? arguments,
@@ -177,7 +177,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       navigator.popUntil(predicate);
 
   @override
-  Future<T> pushNamedAndRemoveUntil<T extends Object>(
+  Future<T?> pushNamedAndRemoveUntil<T extends Object>(
       String newRouteName, bool Function(Route) predicate,
       {Object? arguments, bool linked = false}) {
     popUntil(predicate);
