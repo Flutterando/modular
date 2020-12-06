@@ -4,8 +4,6 @@ import '../../core/models/modular_router.dart';
 import '../navigation/modular_page.dart';
 import '../navigation/modular_router_delegate.dart';
 
-final _pages = <String, List<ModularPage>>{};
-
 class RouterOutletDelegate extends RouterDelegate<ModularRouter>
     with
         // ignore: prefer_mixin
