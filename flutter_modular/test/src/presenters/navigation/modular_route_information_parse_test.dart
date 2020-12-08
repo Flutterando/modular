@@ -85,6 +85,11 @@ main() {
       expect(parse.selectRoute('/mock/listguarded', ModuleMock()),
           throwsA(isA<ModularError>()));
     });
+
+    test('should guard router /guarded/list', () async {
+      expect(parse.selectRoute('/guarded/list', ModuleMock()),
+          throwsA(isA<ModularError>()));
+    });
   });
 
   group('Outlet Module | ', () {
@@ -159,14 +164,10 @@ class ModuleMock extends ChildModule {
         ),
       ],
     ),
-    ModularRouter(
-      '/mock',
-      module: ModuleMock2(),
-    ),
-    ModularRouter(
-      '/list',
-      child: (context, args) => ListView(),
-    ),
+    ModularRouter('/mock', module: ModuleMock2()),
+    ModularRouter('/guarded',
+        guards: [MyGuardModule()], module: ModuleGuarded()),
+    ModularRouter('/list', child: (context, args) => ListView()),
     ModularRouter(
       '/401',
       guards: [MyGuard()],
@@ -215,6 +216,40 @@ class ModuleMock2 extends ChildModule {
   ];
 }
 
+class ModuleGuarded extends ChildModule {
+  @override
+  final List<Bind> binds = [
+    Bind((i) => "Test"),
+    Bind((i) => true, lazy: false),
+    Bind((i) => StreamController(), lazy: false),
+    Bind((i) => ValueNotifier(0), lazy: false),
+  ];
+
+  @override
+  final List<ModularRouter> routers = [
+    ModularRouter('/', child: (context, args) => SizedBox(), children: [
+      ModularRouter('/home', child: (context, args) => Container()),
+      ModularRouter('/guarded', child: (context, args) => Container()),
+    ]),
+    ModularRouter(
+      '/list',
+      child: (context, args) => ListView(),
+    ),
+    ModularRouter(
+      '/listguarded',
+      guards: [MyGuard()],
+      child: (context, args) => ListView(),
+    ),
+    ModularRouter(
+      '/list/:id',
+      child: (context, args) => CustomWidget(
+        text: args?.params!['id'],
+      ),
+    ),
+    ModularRouter('**', child: (context, args) => FlutterLogo())
+  ];
+}
+
 class CustomWidget extends StatelessWidget {
   final String text;
 
@@ -237,6 +272,17 @@ class MyGuard implements RouteGuard {
     if (path == '/401') {
       return false;
     } else if (path == '/mock/listguarded') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
+
+class MyGuardModule implements RouteGuard {
+  @override
+  Future<bool> canActivate(String path, ModularRouter router) async {
+    if (path == '/guarded/list') {
       return false;
     } else {
       return true;

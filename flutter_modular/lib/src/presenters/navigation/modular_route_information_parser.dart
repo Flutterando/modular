@@ -70,8 +70,13 @@ class ModularRouteInformationParser
 
       if (router != null) {
         router = router.copyWith(
-            modulePath: router.modulePath == null ? '/' : tempRouteName,
-            currentModule: route.currentModule);
+          modulePath: router.modulePath == null ? '/' : tempRouteName,
+          currentModule: route.currentModule,
+          guards: [
+            if (route.guards != null) ...route.guards!,
+            if (router.guards != null) ...router.guards!
+          ],
+        );
 
         if (router.transition == TransitionType.defaultTransition) {
           router = router.copyWith(
