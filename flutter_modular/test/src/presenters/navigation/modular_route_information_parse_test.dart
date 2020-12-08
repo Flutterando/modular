@@ -39,6 +39,11 @@ main() {
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<FlutterLogo>());
     });
+
+    test('should guard router /401', () async {
+      expect(parse.selectRoute('/401', ModuleMock()),
+          throwsA(isA<ModularError>()));
+    });
   });
 
   group('Multi Module | ', () {
@@ -68,6 +73,17 @@ main() {
       expect(route, isNotNull);
       expect(route.child!(context, route.args).toString(), '3');
       expect(route.path, '/mock/list/3');
+    });
+
+    test('should retrive Widcard router when not exist path', () async {
+      final route = await parse.selectRoute('/mock/paulo', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<FlutterLogo>());
+    });
+
+    test('should guard router /mock/listguarded', () async {
+      expect(parse.selectRoute('/mock/listguarded', ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
   });
 
@@ -117,7 +133,7 @@ main() {
 
 class ModuleMock extends ChildModule {
   @override
-  List<Bind> binds = [
+  final List<Bind> binds = [
     Bind((i) => "Test"),
     Bind((i) => true, lazy: false),
     Bind((i) => StreamController(), lazy: false),
@@ -125,7 +141,7 @@ class ModuleMock extends ChildModule {
   ];
 
   @override
-  List<ModularRouter> routers = [
+  final List<ModularRouter> routers = [
     ModularRouter(
       '/',
       child: (context, args) => Container(),
@@ -152,6 +168,11 @@ class ModuleMock extends ChildModule {
       child: (context, args) => ListView(),
     ),
     ModularRouter(
+      '/401',
+      guards: [MyGuard()],
+      child: (context, args) => SingleChildScrollView(),
+    ),
+    ModularRouter(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
@@ -163,7 +184,7 @@ class ModuleMock extends ChildModule {
 
 class ModuleMock2 extends ChildModule {
   @override
-  List<Bind> binds = [
+  final List<Bind> binds = [
     Bind((i) => "Test"),
     Bind((i) => true, lazy: false),
     Bind((i) => StreamController(), lazy: false),
@@ -171,7 +192,7 @@ class ModuleMock2 extends ChildModule {
   ];
 
   @override
-  List<ModularRouter> routers = [
+  final List<ModularRouter> routers = [
     ModularRouter('/', child: (context, args) => SizedBox(), children: [
       ModularRouter('/home', child: (context, args) => Container()),
     ]),
@@ -180,11 +201,17 @@ class ModuleMock2 extends ChildModule {
       child: (context, args) => ListView(),
     ),
     ModularRouter(
+      '/listguarded',
+      guards: [MyGuard()],
+      child: (context, args) => ListView(),
+    ),
+    ModularRouter(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
+    ModularRouter('**', child: (context, args) => FlutterLogo())
   ];
 }
 
@@ -201,5 +228,18 @@ class CustomWidget extends StatelessWidget {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return text;
+  }
+}
+
+class MyGuard implements RouteGuard {
+  @override
+  Future<bool> canActivate(String path, ModularRouter router) async {
+    if (path == '/401') {
+      return false;
+    } else if (path == '/mock/listguarded') {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

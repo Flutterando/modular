@@ -6,9 +6,10 @@ import '../inject/inject.dart';
 import '../interfaces/disposable.dart';
 import '../models/modular_router.dart';
 
+@immutable
 abstract class ChildModule {
-  List<Bind> binds = [];
-  List<ModularRouter> routers = [];
+  late final List<Bind> binds;
+  late final List<ModularRouter> routers;
 
   @visibleForTesting
   void changeBinds(List<Bind> b) {

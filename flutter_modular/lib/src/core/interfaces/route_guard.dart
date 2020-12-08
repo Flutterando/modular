@@ -2,6 +2,7 @@
 
 import '../models/modular_router.dart';
 
-mixin RouteGuard {
+// ignore: one_member_abstracts
+abstract class RouteGuard {
   Future<bool> canActivate(String path, ModularRouter router);
 }

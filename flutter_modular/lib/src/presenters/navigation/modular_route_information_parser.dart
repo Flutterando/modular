@@ -70,8 +70,8 @@ class ModularRouteInformationParser
 
       if (router != null) {
         router = router.copyWith(
-          modulePath: router.modulePath == null ? '/' : tempRouteName,
-        );
+            modulePath: router.modulePath == null ? '/' : tempRouteName,
+            currentModule: route.currentModule);
 
         if (router.transition == TransitionType.defaultTransition) {
           router = router.copyWith(
@@ -176,19 +176,53 @@ class ModularRouteInformationParser
     return router.copyWith(path: routeNamed);
   }
 
+  ModularRouter? _searchWildcard(
+    String path,
+    ChildModule module,
+  ) {
+    ModularRouter? finded;
+
+    final segments = path.split('/')..removeLast();
+    final length = segments.length;
+    for (var i = 0; i < length; i++) {
+      final localPath = segments.join('/');
+      final route = _searchInModule(module, "", localPath);
+      if (route != null) {
+        if (route.children.isNotEmpty && route.routerName != '/') {
+          finded = route.children.last.routerName == '**'
+              ? route.children.last
+              : null;
+        } else {
+          finded = route.currentModule?.routers.last.routerName == '**'
+              ? route.currentModule?.routers.last
+              : null;
+        }
+        route.currentModule?.paths.remove(localPath);
+        break;
+      } else {
+        segments.removeLast();
+      }
+    }
+
+    return finded?.routerName == '**' ? finded : null;
+  }
+
   Future<ModularRouter> selectRoute(String path, [ChildModule? module]) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
-    var route = _searchInModule(module ?? Modular.initialModule, "", path);
-    return canActivate(path, route);
+    var router = _searchInModule(module ?? Modular.initialModule, "", path);
+
+    if (router != null) {
+      return canActivate(path, router);
+    } else {
+      router = _searchWildcard(path, module ?? Modular.initialModule);
+      if (router != null) return router;
+    }
+    throw ModularError('Route \'$path\' not found');
   }
 
-  Future<ModularRouter> canActivate(String path, ModularRouter? router) async {
-    if (router == null) {
-      throw ModularError('Route \'$path\' not found');
-    }
-
+  Future<ModularRouter> canActivate(String path, ModularRouter router) async {
     if (router.guards?.isNotEmpty == true) {
       for (var guard in router.guards!) {
         try {
