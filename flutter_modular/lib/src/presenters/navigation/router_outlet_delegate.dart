@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/models/modular_router.dart';
+import '../modular_base.dart';
 import 'modular_page.dart';
 import 'modular_router_delegate.dart';
 
@@ -12,33 +13,27 @@ class RouterOutletDelegate extends RouterDelegate<ModularRouter>
   final GlobalKey<NavigatorState> navigatorKey;
 
   final ModularRouterDelegate modularRouterDelegate;
+  late String path;
 
   RouterOutletDelegate(this.modularRouterDelegate, this.navigatorKey) {
+    path = modularRouterDelegate.currentConfiguration!.path!;
     _getPages();
   }
 
   List<ModularPage> pages = [];
 
   List<ModularPage> _getPages() {
-    final newPages = routers
-        .map(
-            (router) => ModularPage(key: ValueKey(router.path), router: router))
-        .toList();
+    if (modularRouterDelegate.currentConfiguration?.path != path) {
+      return pages;
+    }
 
-    if (pages.isEmpty) {
-      pages = newPages;
-      return pages;
-    } else if (newPages.isNotEmpty &&
-        newPages.last.router.modulePath == pages.last.router.modulePath) {
-      pages = newPages;
-      return pages;
+    if (modularRouterDelegate.routerOutlatPages.containsKey(path)) {
+      final list = modularRouterDelegate.routerOutlatPages[path] ?? [];
+      pages = [...list];
     }
 
     return pages;
   }
-
-  List<ModularRouter> get routers =>
-      modularRouterDelegate.currentConfiguration?.routerOutlet ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +42,24 @@ class RouterOutletDelegate extends RouterDelegate<ModularRouter>
         : Navigator(
             pages: _getPages(),
             onPopPage: (route, result) {
-              if (routers.length > 1) {
+              if (pages.length > 1) {
                 final page = route.settings as ModularPage;
-                routers.removeLast();
-                page.router.completePop(result);
+                final path = page.router.path;
+                page.completePop(result);
+                final trash = <String>[];
+                modularRouterDelegate.injectMap.forEach((key, module) {
+                  module.paths.remove(path);
+                  if (module.paths.length == 0) {
+                    module.cleanInjects();
+                    trash.add(key);
+                    Modular.debugPrintModular(
+                        "-- ${module.runtimeType.toString()} DISPOSED");
+                  }
+                });
+
+                for (final key in trash) {
+                  modularRouterDelegate.injectMap.remove(key);
+                }
               }
 
               return route.didPop(result);

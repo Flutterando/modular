@@ -33,6 +33,12 @@ main() {
       expect(route.child!(context, route.args).toString(), '2');
       expect(route.path, '/list/2');
     });
+
+    test('should retrive Widcard router when not exist path', () async {
+      final route = await parse.selectRoute('/paulo', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<FlutterLogo>());
+    });
   });
 
   group('Multi Module | ', () {
@@ -151,6 +157,7 @@ class ModuleMock extends ChildModule {
         text: args?.params!['id'],
       ),
     ),
+    ModularRouter('**', child: (context, args) => FlutterLogo())
   ];
 }
 

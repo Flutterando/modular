@@ -213,7 +213,8 @@ class ModularRouter<T> {
                 customTransition != null) ||
             transition != TransitionType.custom && customTransition == null),
         assert((module == null && child != null) ||
-            (module != null && child == null));
+            (module != null && child == null)),
+        assert(routerName == '**' ? child != null : true);
 
   ModularRouter<T> copyWith(
       {ModularChild? child,
