@@ -15,8 +15,6 @@
 - **[Modular Structure](#modular-structure)**
 - **[Modular Pillars](#modular-pillars)**
 
-  - [Example](#example)
-
 - **[Getting started with Modular](#getting-started-with-modular)**
 
   - [Installation](#installation)
@@ -25,7 +23,6 @@
   - [Dynamic Routes](#dynamic-routes)
   - [Route Guard](#route-guard)
   - [Route Transition Animation](#route-transition-animation)
-  - [Grouping Routes](#grouping-routes)
   - [Flutter Web url Routes](#flutter-web-url-routes)
   - [Dependency Injection](#dependency-injection)
   - [Retrieving in view using injection](#retrieving-in-view-using-injection)
@@ -37,8 +34,6 @@
   - [Creating Child Modules](#creating-child-modules)
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
-  - [RouterOutletList](#routeroutletlist)
-  - [Lazy Loading](#lazy-loading)
   - [Unit Test](#unit-test)
   - [Modular test helper](#modular-test-helper)
   - [DebugMode](#debugmode)
@@ -516,9 +511,9 @@ class TabModule extends WidgetModule {
 
 ## RouterOutlet
 
-Cada ModularRoute pode ter uma lista de ModularRoutes, para que possa ser exibido dentro do ModularRoute pai.
-O Widget que reflete essas rotas internas é chamado de `RouterOutlet`.
-Você pode ter apenas um `RouterOutlet` por página e ele só é capaz de navegar pelos filhos dessa página.
+Each ModularRoute can have a list of ModularRoutes, so that it can be displayed within the parent ModularRoute.
+The widget that reflects these internal routes is called `RouterOutlet`.
+You can only have one `RouterOutlet` per page and it is only able to browse the children of that page.
 
 ```dart
 
@@ -622,16 +617,16 @@ class InitAppModuleHelper extends IModularTest {
   IModularTest({this.modularTestType: ModularTestType.resetModule});
 
   @override
-  List<Bind> get binds => [
+  List<Bind> binds = [
         Bind<ILocalStorage>((i) => LocalStorageSharePreference()),
       ];
 
   @override
-  ChildModule get module => AppModule();
+  final ChildModule module = AppModule();
   
 
   @override
-  IModularTest get modulardependency => null;
+  final IModularTest modulardependency = null;
 
 }
 
