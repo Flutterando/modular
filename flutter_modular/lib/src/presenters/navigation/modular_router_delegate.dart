@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_modular/src/core/models/modular_route.dart';
 
-import '../../core/models/modular_router.dart';
 import '../../core/modules/child_module.dart';
 import '../interfaces/modular_navigator_interface.dart';
 import '../modular_base.dart';
@@ -9,11 +9,11 @@ import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
 
-class ModularRouterDelegate extends RouterDelegate<ModularRouter>
+class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     with
         // ignore: prefer_mixin
         ChangeNotifier,
-        PopNavigatorRouterDelegateMixin<ModularRouter>
+        PopNavigatorRouterDelegateMixin<ModularRoute>
     implements
         IModularNavigator {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -34,7 +34,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   final routerOutlatPages = <String, List<ModularPage>>{};
 
   @override
-  ModularRouter? get currentConfiguration =>
+  ModularRoute? get currentConfiguration =>
       _pages.isEmpty ? null : _pages.last.router;
 
   @override
@@ -49,7 +49,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRouter router,
+  Future<void> setNewRoutePath(ModularRoute router,
       [bool execRebuild = true]) async {
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),

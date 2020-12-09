@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/models/modular_router.dart';
+import 'package:flutter_modular/src/core/models/modular_route.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../modules/child_module_test.dart';
@@ -7,23 +7,23 @@ import '../modules/child_module_test.dart';
 main() {
   test('should initializa in incorrect form', () {
     expect(
-        () => ModularRouter('/',
+        () => ModularRoute('/',
             child: (context, args) => Container(), module: ModuleMock()),
         throwsAssertionError);
 
     expect(
-        () => ModularRouter('/',
+        () => ModularRoute('/',
             transition: TransitionType.custom, module: ModuleMock()),
         throwsAssertionError);
 
     expect(
-        () => ModularRouter('/',
-            children: [ModularRouter('/')], module: ModuleMock()),
+        () => ModularRoute('/',
+            children: [ModularRoute('/')], module: ModuleMock()),
         throwsAssertionError);
   });
 
   test('should make copy with implementation', () {
-    final model = ModularRouter('/', module: ModuleMock());
+    final model = ModularRoute('/', module: ModuleMock());
     final copy = model.copyWith();
     expect(copy.module, isA<ModuleMock>());
     final copy2 = model.copyWith(path: '/home');
@@ -34,7 +34,7 @@ main() {
   });
 
   test('should normal instance custom transition', () {
-    final model = ModularRouter('/',
+    final model = ModularRoute('/',
         transition: TransitionType.custom, module: ModuleMock(),
         customTransition: CustomTransition(transitionBuilder: (c, a1, a2, w) {
       return FadeTransition(

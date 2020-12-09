@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../core/models/modular_router.dart';
+import '../../core/models/modular_route.dart';
 import '../modular_base.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_router_delegate.dart';
 
-class RouterOutletDelegate extends RouterDelegate<ModularRouter>
+class RouterOutletDelegate extends RouterDelegate<ModularRoute>
     with
         // ignore: prefer_mixin
         ChangeNotifier,
-        PopNavigatorRouterDelegateMixin<ModularRouter> {
+        PopNavigatorRouterDelegateMixin<ModularRoute> {
   final GlobalKey<NavigatorState> navigatorKey;
 
   final ModularRouterDelegate modularRouterDelegate;
@@ -69,7 +69,7 @@ class RouterOutletDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRouter router) async {
+  Future<void> setNewRoutePath(ModularRoute router) async {
     assert(false);
   }
 }

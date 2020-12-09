@@ -7,7 +7,7 @@ import 'interfaces/modular_interface.dart';
 late ChildModule _initialModule;
 
 class ModularImpl implements ModularInterface {
-  final ModularRouterDelegate routerDelegate;
+  final ModularRouteDelegate routerDelegate;
   final Map<String, ChildModule> injectMap;
   IModularNavigator? navigatorDelegate;
 

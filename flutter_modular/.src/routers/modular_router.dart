@@ -14,12 +14,12 @@ typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
 typedef ModularChild = Widget Function(
     BuildContext context, ModularArguments? args);
 
-class ModularRouter<T> {
+class ModularRoute<T> {
   final ChildModule? currentModule;
 
   final ModularArguments? args;
 
-  final List<ModularRouter> children;
+  final List<ModularRoute> children;
 
   final String? path;
 
@@ -83,7 +83,7 @@ class ModularRouter<T> {
   /// ```dart
   ///class MyGuard implements RouteGuard {
   ///  @override
-  ///  Future<bool> canActivate(String url, ModularRouter router) {
+  ///  Future<bool> canActivate(String url, ModularRoute router) {
   ///    if (url != '/admin'){
   ///      // Return `true` to allow access
   ///      return true;
@@ -190,7 +190,7 @@ class ModularRouter<T> {
     TransitionType.leftToRightWithFade: leftToRightWithFade,
   };
 
-  ModularRouter(
+  ModularRoute(
     this.routerName, {
     this.path = '/',
     this.children = const [],
@@ -213,11 +213,11 @@ class ModularRouter<T> {
         assert(module == null ? true : children.isEmpty,
             'Módulo não pode conter rotas aninhadas (children)');
 
-  ModularRouter<T> copyWith(
+  ModularRoute<T> copyWith(
       {ModularChild? child,
       String? routerName,
       ChildModule? module,
-      List<ModularRouter>? children,
+      List<ModularRoute>? children,
       ChildModule? currentModule,
       Map<String, String>? params,
       List<RouteGuard>? guards,
@@ -229,7 +229,7 @@ class ModularRouter<T> {
       Completer<T>? popRoute,
       ModularArguments? args,
       CustomTransition? customTransition}) {
-    return ModularRouter<T>(
+    return ModularRoute<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
       args: args ?? this.args,
@@ -247,8 +247,8 @@ class ModularRouter<T> {
     );
   }
 
-  static List<ModularRouter> group({
-    required List<ModularRouter> routes,
+  static List<ModularRoute> group({
+    required List<ModularRoute> routes,
     List<RouteGuard>? guards,
     TransitionType? transition,
     CustomTransition? customTransition,
@@ -305,7 +305,7 @@ class ModularRouter<T> {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is ModularRouter<T> &&
+    return o is ModularRoute<T> &&
         o.modulePath == modulePath &&
         o.routerName == routerName &&
         o.module == module;

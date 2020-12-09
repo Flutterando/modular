@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
-import '../../core/models/modular_router.dart';
+import '../../core/models/modular_route.dart';
 
 final Map<int, Completer> _allCompleters = {};
 
 class ModularPage<T> extends Page<T> {
-  final ModularRouter router;
+  final ModularRoute router;
 
   ModularPage({LocalKey? key, required this.router})
       : super(key: key, name: router.path, arguments: router.args?.data);
@@ -72,8 +72,8 @@ class ModularPage<T> extends Page<T> {
   }
 }
 
-class ModularRoute extends Route {
+class ModularRouteSettings extends Route {
   final ModularPage page;
 
-  ModularRoute(this.page) : super(settings: page);
+  ModularRouteSettings(this.page) : super(settings: page);
 }

@@ -12,7 +12,7 @@ final _navigatorKey = GlobalKey<NavigatorState>();
 final Map<String, ChildModule> _injectMap = {};
 
 final _routeInformationParser = ModularRouteInformationParser();
-final _routerDelegate = ModularRouterDelegate(
+final _routerDelegate = ModularRouteDelegate(
   _navigatorKey,
   _routeInformationParser,
   _injectMap,

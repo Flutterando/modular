@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import '../../core/inject/bind.dart';
-import '../../core/models/modular_router.dart';
+import '../../core/models/modular_route.dart';
 import '../../core/modules/child_module.dart';
 
 import '../modular_base.dart';
@@ -51,7 +51,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  List<ModularRouter> routers = const [];
+  List<ModularRoute> routers = const [];
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class _FakeModule extends ChildModule {
   List<Bind> get binds => bindsInject ?? [];
 
   @override
-  List<ModularRouter> get routers => [];
+  List<ModularRoute> get routers => [];
 }
 
 class ModularProvider extends StatefulWidget {

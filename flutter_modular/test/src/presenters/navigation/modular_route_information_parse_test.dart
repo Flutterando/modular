@@ -148,17 +148,17 @@ class ModuleMock extends ChildModule {
   ];
 
   @override
-  final List<ModularRouter> routers = [
-    ModularRouter(
+  final List<ModularRoute> routers = [
+    ModularRoute(
       '/',
       child: (context, args) => Container(),
     ),
-    ModularRouter(
+    ModularRoute(
       '/home',
       child: (context, args) => Scaffold(),
       children: [
-        ModularRouter('/tab1', child: (context, args) => TextField()),
-        ModularRouter(
+        ModularRoute('/tab1', child: (context, args) => TextField()),
+        ModularRoute(
           '/tab2/:id',
           child: (context, args) => CustomWidget(
             text: args?.params!['id'],
@@ -166,22 +166,22 @@ class ModuleMock extends ChildModule {
         ),
       ],
     ),
-    ModularRouter('/mock', module: ModuleMock2()),
-    ModularRouter('/guarded',
+    ModularRoute('/mock', module: ModuleMock2()),
+    ModularRoute('/guarded',
         guards: [MyGuardModule()], module: ModuleGuarded()),
-    ModularRouter('/list', child: (context, args) => ListView()),
-    ModularRouter(
+    ModularRoute('/list', child: (context, args) => ListView()),
+    ModularRoute(
       '/401',
       guards: [MyGuard()],
       child: (context, args) => SingleChildScrollView(),
     ),
-    ModularRouter(
+    ModularRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
-    ModularRouter('**', child: (context, args) => FlutterLogo())
+    ModularRoute('**', child: (context, args) => FlutterLogo())
   ];
 }
 
@@ -195,26 +195,26 @@ class ModuleMock2 extends ChildModule {
   ];
 
   @override
-  final List<ModularRouter> routers = [
-    ModularRouter('/', child: (context, args) => SizedBox(), children: [
-      ModularRouter('/home', child: (context, args) => Container()),
+  final List<ModularRoute> routers = [
+    ModularRoute('/', child: (context, args) => SizedBox(), children: [
+      ModularRoute('/home', child: (context, args) => Container()),
     ]),
-    ModularRouter(
+    ModularRoute(
       '/list',
       child: (context, args) => ListView(),
     ),
-    ModularRouter(
+    ModularRoute(
       '/listguarded',
       guards: [MyGuard()],
       child: (context, args) => ListView(),
     ),
-    ModularRouter(
+    ModularRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
-    ModularRouter('**', child: (context, args) => FlutterLogo())
+    ModularRoute('**', child: (context, args) => FlutterLogo())
   ];
 }
 
@@ -228,27 +228,27 @@ class ModuleGuarded extends ChildModule {
   ];
 
   @override
-  final List<ModularRouter> routers = [
-    ModularRouter('/', child: (context, args) => SizedBox(), children: [
-      ModularRouter('/home', child: (context, args) => Container()),
-      ModularRouter('/guarded', child: (context, args) => Container()),
+  final List<ModularRoute> routers = [
+    ModularRoute('/', child: (context, args) => SizedBox(), children: [
+      ModularRoute('/home', child: (context, args) => Container()),
+      ModularRoute('/guarded', child: (context, args) => Container()),
     ]),
-    ModularRouter(
+    ModularRoute(
       '/list',
       child: (context, args) => ListView(),
     ),
-    ModularRouter(
+    ModularRoute(
       '/listguarded',
       guards: [MyGuard()],
       child: (context, args) => ListView(),
     ),
-    ModularRouter(
+    ModularRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
-    ModularRouter('**', child: (context, args) => FlutterLogo())
+    ModularRoute('**', child: (context, args) => FlutterLogo())
   ];
 }
 
@@ -270,7 +270,7 @@ class CustomWidget extends StatelessWidget {
 
 class MyGuard implements RouteGuard {
   @override
-  Future<bool> canActivate(String path, ModularRouter router) async {
+  Future<bool> canActivate(String path, ModularRoute router) async {
     if (path == '/401') {
       return false;
     } else if (path == '/mock/listguarded') {
@@ -283,7 +283,7 @@ class MyGuard implements RouteGuard {
 
 class MyGuardModule implements RouteGuard {
   @override
-  Future<bool> canActivate(String path, ModularRouter router) async {
+  Future<bool> canActivate(String path, ModularRoute router) async {
     if (path == '/guarded/list') {
       return false;
     } else {

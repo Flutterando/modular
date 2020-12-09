@@ -4,28 +4,28 @@ import '../routers/modular_page.dart';
 
 import 'modular_route_information_parser.dart';
 
-class ModularRouterDelegate extends RouterDelegate<ModularRouter>
+class ModularRouteDelegate extends RouterDelegate<ModularRoute>
     with
         // ignore: prefer_mixin
         ChangeNotifier,
-        PopNavigatorRouterDelegateMixin<ModularRouter>
+        PopNavigatorRouterDelegateMixin<ModularRoute>
     implements
         IModularNavigator {
   final GlobalKey<NavigatorState> navigatorKey;
   final ModularRouteInformationParser parser;
   final Map<String, ChildModule> injectMap;
 
-  ModularRouterDelegate(this.navigatorKey, this.parser, this.injectMap);
+  ModularRouteDelegate(this.navigatorKey, this.parser, this.injectMap);
 
   NavigatorState get navigator => navigatorKey.currentState!;
 
-  ModularRouter? _router;
+  ModularRoute? _router;
 
   List<ModularPage> _pages = [];
 
   @override
-  ModularRouter? get currentConfiguration => _router;
-  ModularRouter get lastPage => _pages.last.router;
+  ModularRoute? get currentConfiguration => _router;
+  ModularRoute get lastPage => _pages.last.router;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRouter router) async {
+  Future<void> setNewRoutePath(ModularRoute router) async {
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,

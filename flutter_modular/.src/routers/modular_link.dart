@@ -3,7 +3,7 @@ import '../delegates/modular_router_delegate.dart';
 import '../interfaces/modular_navigator_interface.dart';
 
 class ModularLink implements IModularNavigator {
-  final ModularRouterDelegate delegate;
+  final ModularRouteDelegate delegate;
 
   ModularLink(this.delegate);
 

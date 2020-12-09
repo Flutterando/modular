@@ -6,7 +6,7 @@ export 'src/core/inject/inject.dart';
 export 'src/core/interfaces/disposable.dart';
 export 'src/core/interfaces/route_guard.dart';
 export 'src/core/models/modular_arguments.dart';
-export 'src/core/models/modular_router.dart';
+export 'src/core/models/modular_route.dart';
 export 'src/core/modules/child_module.dart';
 export 'src/core/modules/main_module.dart';
 export 'src/presenters/modular_base.dart';

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
 import 'package:flutter_modular/src/core/inject/bind.dart';
-import 'package:flutter_modular/src/core/models/modular_router.dart';
+import 'package:flutter_modular/src/core/models/modular_route.dart';
 import 'package:flutter_modular/src/core/modules/child_module.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,7 +18,7 @@ class ModuleMock extends ChildModule {
   ];
 
   @override
-  List<ModularRouter> routers = [];
+  List<ModularRoute> routers = [];
 }
 
 main() {

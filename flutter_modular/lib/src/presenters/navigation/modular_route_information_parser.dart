@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../core/errors/errors.dart';
-import '../../core/models/modular_router.dart';
+import '../../core/models/modular_route.dart';
 import '../../core/modules/child_module.dart';
 
 import '../modular_base.dart';
 
 class ModularRouteInformationParser
-    extends RouteInformationParser<ModularRouter> {
+    extends RouteInformationParser<ModularRoute> {
   @override
-  Future<ModularRouter> parseRouteInformation(
+  Future<ModularRoute> parseRouteInformation(
       RouteInformation routeInformation) async {
     final path = routeInformation.location ?? '/';
     final route = await selectRoute(path);
@@ -16,7 +16,7 @@ class ModularRouteInformationParser
   }
 
   @override
-  RouteInformation restoreRouteInformation(ModularRouter router) {
+  RouteInformation restoreRouteInformation(ModularRoute router) {
     return RouteInformation(
       location: router.routerOutlet.isEmpty
           ? router.path
@@ -24,7 +24,7 @@ class ModularRouteInformationParser
     );
   }
 
-  ModularRouter? _searchInModule(
+  ModularRoute? _searchInModule(
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
     final routers =
@@ -41,9 +41,9 @@ class ModularRouteInformationParser
     return null;
   }
 
-  ModularRouter? _normalizeRoute(
-      ModularRouter route, String routerName, String path) {
-    ModularRouter? router;
+  ModularRoute? _normalizeRoute(
+      ModularRoute route, String routerName, String path) {
+    ModularRoute? router;
     if (routerName == path || routerName == "$path/") {
       router = route.module!.routers[0];
       if (router.module != null) {
@@ -59,8 +59,8 @@ class ModularRouteInformationParser
     return router;
   }
 
-  ModularRouter? _searchRoute(
-      ModularRouter route, String routerName, String path) {
+  ModularRoute? _searchRoute(
+      ModularRoute route, String routerName, String path) {
     final tempRouteName =
         (routerName + route.routerName).replaceFirst('//', '/');
     if (route.child == null) {
@@ -144,8 +144,8 @@ class ModularRouteInformationParser
     return newUrl.join("/");
   }
 
-  ModularRouter _parseUrlParams(
-      ModularRouter router, String routeNamed, String path) {
+  ModularRoute _parseUrlParams(
+      ModularRoute router, String routeNamed, String path) {
     if (routeNamed.contains('/:')) {
       final regExp = RegExp(
         "^${prepareToRegex(routeNamed)}\$",
@@ -183,11 +183,11 @@ class ModularRouteInformationParser
     return router.copyWith(path: routeNamed);
   }
 
-  ModularRouter? _searchWildcard(
+  ModularRoute? _searchWildcard(
     String path,
     ChildModule module,
   ) {
-    ModularRouter? finded;
+    ModularRoute? finded;
 
     final segments = path.split('/')..removeLast();
     final length = segments.length;
@@ -214,7 +214,7 @@ class ModularRouteInformationParser
     return finded?.routerName == '**' ? finded : null;
   }
 
-  Future<ModularRouter> selectRoute(String path, [ChildModule? module]) async {
+  Future<ModularRoute> selectRoute(String path, [ChildModule? module]) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
@@ -229,7 +229,7 @@ class ModularRouteInformationParser
     throw ModularError('Route \'$path\' not found');
   }
 
-  Future<ModularRouter> canActivate(String path, ModularRouter router) async {
+  Future<ModularRoute> canActivate(String path, ModularRoute router) async {
     if (router.guards?.isNotEmpty == true) {
       for (var guard in router.guards!) {
         try {
