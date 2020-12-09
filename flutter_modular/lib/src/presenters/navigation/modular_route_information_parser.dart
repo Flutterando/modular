@@ -94,10 +94,12 @@ class ModularRouteInformationParser
         for (var routeChild in route.children) {
           var r = _searchRoute(routeChild, tempRouteName, path);
           if (r != null) {
+            r.currentModule?.paths.remove(path);
             route = route.copyWith(routerOutlet: [
               r.copyWith(
-                  modulePath: resolveOutletModulePath(
-                      tempRouteName, r.modulePath ?? '/'))
+                  modulePath: r.modulePath == route.modulePath
+                      ? tempRouteName
+                      : r.modulePath),
             ], path: tempRouteName);
             return route;
           }

@@ -133,6 +133,8 @@ main() {
 
   test('should resolve Outlet Module Path', () async {
     expect(parse.resolveOutletModulePath('/home', '/'), '/home');
+    expect(
+        parse.resolveOutletModulePath('/home/', '/home/start'), '/home/start');
   });
 }
 

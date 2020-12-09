@@ -5,6 +5,7 @@ import '../../core/models/modular_router.dart';
 import '../../core/modules/child_module.dart';
 import '../interfaces/modular_navigator_interface.dart';
 import '../modular_base.dart';
+import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
 
@@ -40,7 +41,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   Widget build(BuildContext context) {
     return _pages.isEmpty
         ? Material()
-        : Navigator(
+        : CustomNavigator(
             key: navigatorKey,
             pages: _pages,
             onPopPage: _onPopPage,
@@ -59,7 +60,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     } else {
       for (var p in _pages) {
         p.completePop(null);
+        removeInject(p.router.path!);
+        for (var r in p.router.routerOutlet) {
+          removeInject(r.path!);
+        }
       }
+
       _pages = [page];
     }
 
@@ -68,12 +74,20 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
     }
   }
 
+  String resolverPath(String routeName, String path) {
+    final uri = Uri.parse(path);
+    return uri.resolve(routeName).path;
+  }
+
   @override
   Future<void> navigate(String routeName,
       {arguments, bool linked = false}) async {
     if (routeName == path) {
       return;
     }
+
+    routeName = resolverPath(routeName, path);
+
     var router =
         await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
@@ -114,6 +128,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
 
     injectMap.forEach((key, module) {
       module.paths.remove(path);
+      if (path.characters.last == '/') {
+        module.paths.remove('$path/'.replaceAll('//', ''));
+      }
       if (module.paths.length == 0) {
         module.cleanInjects();
         trash.add(key);
@@ -133,8 +150,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<T?> pushNamed<T extends Object>(String routeName,
+  Future<T?> pushNamed<T extends Object?>(String routeName,
       {Object? arguments, bool forRoot = false}) async {
+    routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
 
@@ -153,7 +171,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
         return await page.waitPop();
       } else {
         routerOutlatPages[router.path!]?.add(page);
-        currentConfiguration?.routerOutlet.add(router);
+        currentConfiguration?.routerOutlet.add(outletRouter);
         notifyListeners();
         final result = await page.waitPop();
         routerOutlatPages[router.path!]?.removeLast();
@@ -173,11 +191,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<T?> pushReplacementNamed<T extends Object, TO extends Object>(
+  Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(
       String routeName,
       {TO? result,
       Object? arguments,
       bool forRoot = false}) async {
+    routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
 
@@ -200,7 +219,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       } else {
         final lastPage = routerOutlatPages[router.path!]?.last;
         routerOutlatPages[router.path!]?.last = page;
-        currentConfiguration?.routerOutlet.last = router;
+        currentConfiguration?.routerOutlet.last = outletRouter;
         notifyListeners();
         final result = await page.waitPop();
         lastPage!.completePop(result);
@@ -223,11 +242,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
   }
 
   @override
-  Future<T?> popAndPushNamed<T extends Object, TO extends Object>(
+  Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(
       String routeName,
       {TO? result,
       Object? arguments,
       bool forRoot = false}) async {
+    routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     if (!forRoot && router.routerOutlet.isNotEmpty) {
       routerOutlatPages[router.path!]?.last.completePop(result);
@@ -257,7 +277,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRouter>
       navigator.popUntil(predicate);
 
   @override
-  Future<T?> pushNamedAndRemoveUntil<T extends Object>(
+  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
       String newRouteName, bool Function(Route) predicate,
       {Object? arguments, bool forRoot = false}) {
     popUntil(predicate);

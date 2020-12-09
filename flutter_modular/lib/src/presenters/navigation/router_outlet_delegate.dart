@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/modular_router.dart';
 import '../modular_base.dart';
+import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_router_delegate.dart';
 
@@ -39,7 +40,7 @@ class RouterOutletDelegate extends RouterDelegate<ModularRouter>
   Widget build(BuildContext context) {
     return pages.isEmpty
         ? Material()
-        : Navigator(
+        : CustomNavigator(
             pages: _getPages(),
             onPopPage: (route, result) {
               if (pages.length > 1) {
