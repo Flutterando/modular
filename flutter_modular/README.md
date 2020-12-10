@@ -23,22 +23,23 @@
   - [Dynamic Routes](#dynamic-routes)
   - [Route Guard](#route-guard)
   - [Route Transition Animation](#route-transition-animation)
-  - [Flutter Web url Routes](#flutter-web-url-routes)
+  - [Flutter Web url Routes](#flutter-web-url-routes-deeplink-like)
   - [Dependency Injection](#dependency-injection)
-  - [Retrieving in view using injection](#retrieving-in-view-using-injection)
+  - [Retrieving your injected dependencies in the view](#retrieving-your-injected-dependencies-in-the-view)
 
-- **[Using Modular widgets to retrieve your classes](#using-modular-widgets-to-retrieve-your-classes)**
+- **[Using Modular widgets to retrieve your class](#using-modular-widgets-to-retrieve-your-class)**
 
   - [ModularState](#modularstate)
-  - [Consuming a ChangeNotifier Class](#consuming-a-changenotifier-class)
   - [Creating Child Modules](#creating-child-modules)
   - [WidgetModule](#widgetmodule)
   - [RouterOutlet](#routeroutlet)
   - [Unit Test](#unit-test)
   - [Modular test helper](#modular-test-helper)
-  - [DebugMode](#debugmode)
+  - [Load Modular helper on tests](#load-modular-helper-on-tests)
+  - [Create helper for a child module](#create-helper-for-a-child-module)
+  - [Mocking with mockito](#mocking-with-mockito)
+  - [Mock the navigation system](#mock-the-navigation-system)
 
-- **[Roadmap](#roadmap)**
 - **[Features and bugs](#features-and-bugs)**
 
 ## What is Flutter Modular?
@@ -394,7 +395,7 @@ class AppModule extends MainModule {
 <br><br>
 
 
-### Retrieving your injected dependencies in the view
+## Retrieving your injected dependencies in the view
 
 Let's assume the following BLoC has been defined and injected in our module (as in the previous example):
 
