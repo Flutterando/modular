@@ -243,7 +243,7 @@ For example, the following class will only allow a redirection from `/admin` rou
 ```dart
 class MyGuard implements RouteGuard {
   @override
-  bool canActivate(String url, ModularRoute route) {
+  Future<bool> canActivate(String url, ModularRoute route) {
     if (url != '/admin'){
       // Return `true` to allow access
       return true;
