@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/src/core/models/modular_route.dart';
+import '../../core/models/modular_route.dart';
 
 import '../../core/modules/child_module.dart';
 import '../interfaces/modular_navigator_interface.dart';
