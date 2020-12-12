@@ -41,8 +41,10 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
     return pages.isEmpty
         ? Material()
         : CustomNavigator(
+            key: navigatorKey,
             pages: _getPages(),
             onPopPage: (route, result) {
+              print('Route outlet: $result');
               if (pages.length > 1) {
                 final page = route.settings as ModularPage;
                 final path = page.router.path;

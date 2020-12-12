@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/models/modular_route.dart';
@@ -20,14 +21,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final ModularRouteInformationParser parser;
   final Map<String, ChildModule> injectMap;
 
-  ModularRouterDelegate(this.parser, this.injectMap) {
-    SystemChannels.navigation.setMethodCallHandler((call) async {
-      if ('pushRouteInformation' == call.method) {
-        navigate(call.arguments['location']);
-      }
-    });
-  }
-
+  ModularRouterDelegate(this.parser, this.injectMap);
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
@@ -99,6 +93,13 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     }
     rebuildPages();
   }
+
+  // @override
+  // Future<bool> popRoute() {
+  //   return SynchronousFuture(true);
+
+  //   //   return navigator.maybePop();
+  // }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     if (!route.didPop(result)) {
