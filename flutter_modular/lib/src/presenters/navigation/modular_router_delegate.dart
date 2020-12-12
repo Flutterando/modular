@@ -63,9 +63,13 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       _pages = [page];
     }
 
-    if (execRebuild) {
-      rebuildPages();
+    if (router.routerOutlet.isNotEmpty) {
+      routerOutlatPages[router.path!] = router.routerOutlet
+          .map((e) => ModularPage(key: ValueKey(e.path), router: e))
+          .toList();
     }
+
+    rebuildPages();
   }
 
   String resolverPath(String routeName, String path) {
@@ -86,12 +90,6 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
     setNewRoutePath(router, false);
-    if (router.routerOutlet.isNotEmpty) {
-      routerOutlatPages[router.path!] = router.routerOutlet
-          .map((e) => ModularPage(key: ValueKey(e.path), router: e))
-          .toList();
-    }
-    rebuildPages();
   }
 
   // @override
