@@ -110,12 +110,12 @@ class AppModule extends MainModule {
 
   // Provide all the routes for your module
   @override
-  final List<ModularRoute> routers = [];
+  final List<ModularRoute> routes = [];
 
   // Provide the root widget associated with your module
   // In this case, it's the widget you created in the first step
   @override
-  final Widget bootstrap => AppWidget();
+  final Widget bootstrap = AppWidget();
 }
 ```
 
@@ -136,21 +136,17 @@ void main() => runApp(ModularApp(module: AppModule()));
 
 ## Adding routes
 
-The module routes are provided by overriding the `routers`:
+The module routes are provided by overriding the `routes` property.
 
 ```dart
 // app_module.dart
 class AppModule extends MainModule {
 
-  // Provide a list of dependencies to inject into your project
-  @override
-  final List<Bind> binds = [];
-
   // Provide all the routes for your module
   @override
-  final List<ModularRoute>  routers = [
-      ModularRoute('/', child: (_, __) => HomePage()),
-      ModularRoute('/login', child: (_, __) => LoginPage()),
+  final List<ModularRoute>  routes = [
+      ChildRoute('/', child: (_, __) => HomePage()),
+      ChildRoute('/login', child: (_, __) => LoginPage()),
   ];
 
   // Provide the root widget associated with your module
@@ -158,6 +154,8 @@ class AppModule extends MainModule {
   final Widget bootstrap = AppWidget();
 }
 ```
+
+> **NOTE:** Use the ChildRoute object to create a simple route.  
 
 To navigate between pages, use `Modular.to.navigate`.
 
@@ -202,8 +200,8 @@ You can use dynamic routing system to provide parameters to your `Route`:
 // using square brackets notation (['parameter_name']).
 
 @override
-finalList<ModularRoute> routers = [
-  ModularRoute(
+final List<ModularRoute> routes = [
+  ChildRoute(
     '/product/:id',
     child: (_, args) => Product(id: args.params['id']),
   ),
@@ -227,13 +225,81 @@ And it will be available in the `args.data` property instead of `args.params`:
 
 ```dart
 @override
-final List<ModularRoute> routers = [
-  ModularRoute(
+final List<ModularRoute> routes = [
+  ChildRoute(
     '/product',
     child: (_, args) => Product(model: args.data),
   ),
 ];
 ```
+
+## Route generic types
+
+You can return values from navigation, just like `.pop`.
+To achieve this, pass the type you expect to return as type parameter to `Route`:
+
+```dart
+@override
+final List<ModularRoute> routes = [
+  // This router expects to receive a `String` when popped.
+  ModularRoute<String>('/event', child: (_, __) => EventPage()),
+]
+```
+
+Now, use `.pop` as you use with `Navigator.pop`:
+
+```dart
+// Push route
+String name = await Modular.to.pushNamed<String>();
+
+// And pass the value when popping
+Modular.to.pop('banana');
+```
+
+## Flutter Web URL routes (Deeplink-like)
+
+The routing system can recognize what is in the URL and navigate to a specific part of the application.
+Dynamic routes apply here as well. The following URL, for instance, will open the Product view, with `args.params['id']` set to `1`.
+
+```
+https://flutter-website.com/#/product/1
+```
+
+## Creating child modules
+
+You can create as many modules in your project as you wish, but they will be dependent of the main module. To do so, instead of inheriting from `MainModule`, you should inherit from `ChildModule`:
+
+```dart
+class HomeModule extends ChildModule {
+  @override
+  final List<Bind> binds = [
+    Bind.singleton((i) => HomeBloc()),
+  ];
+
+  @override
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (_, args) => HomeWidget()),
+    ChildRoute('/list', child: (_, args) => ListWidget()),
+  ];
+
+}
+```
+
+You may then pass the submodule to a `Route` in your main module through the `module` parameter:
+
+```dart
+class AppModule extends MainModule {
+
+  @override
+  final List<ModularRoute> routes = [
+    ModuleRoute('/home', module: HomeModule()),
+  ];
+}
+```
+
+We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
+
+> **NOTE:** Use the ModuleRoute object to create a Complex Route.  
 
 ## Route guard
 
@@ -260,9 +326,9 @@ To use your `RouteGuard` in a route, pass it to the `guards` parameter:
 
 ```dart
 @override
-List<ModularRoute> routers = [
-  final ModularRoute('/', module: HomeModule()),
-  final ModularRoute(
+List<ModularRoute> routes = [
+  final ModuleRoute('/', module: HomeModule()),
+  final ModuleRoute(
     '/admin',
     module: AdminModule(),
     guards: [MyGuard()],
@@ -278,7 +344,7 @@ If placed on a module route, `RouterGuard` will be global to that route.
 You can choose which type of animation do you want to be used on your pages transition by setting the `Route` `transition` parameter, providing a `TransitionType`.
 
 ```dart
-ModularRoute('/product',
+ModuleRoute('/product',
   module: AdminModule(),
   transition: TransitionType.fadeIn,
 ), //use for change transition
@@ -291,7 +357,7 @@ If you use transition in a module, all routes in that module will inherit this t
 You can also use a custom transition animation by setting the Router parameters `transition` and `customTransition` with `TransitionType.custom` and your `CustomTransition`, respectively:
 
 ```dart
-ModularRoute('/product',
+ModuleRoute('/product',
   module: AdminModule(),
   transition: TransitionType.custom,
   customTransition: myCustomTransition,
@@ -335,38 +401,6 @@ CustomTransition get myCustomTransition => CustomTransition(
   );
 ```
 
-## Route generic types
-
-You can return values from navigation, just like `.pop`.
-To achieve this, pass the type you expect to return as type parameter to `Route`:
-
-```dart
-@override
-final List<ModularRoute> routers => [
-  // This router expects to receive a `String` when popped.
-  ModularRoute<String>('/event', child: (_, __) => EventPage()),
-]
-```
-
-Now, use `.pop` as you use with `Navigator.pop`:
-
-```dart
-// Push route
-String name = await Modular.to.pushNamed<String>();
-
-// And pass the value when popping
-Modular.to.pop('banana');
-```
-
-## Flutter Web URL routes (Deeplink-like)
-
-The routing system can recognize what is in the URL and navigate to a specific part of the application.
-Dynamic routes apply here as well. The following URL, for instance, will open the Product view, with `args.params['id']` set to `1`.
-
-```
-https://flutter-website.com/#/product/1
-```
-
 ## Dependency Injection
 
 You can inject any class into your module by overriding the `binds` getter of your module. Typical examples to inject are BLoCs, ChangeNotifier classes or stores(MobX).
@@ -378,7 +412,7 @@ class AppModule extends MainModule {
 
   // Provide a list of dependencies to inject into your project
   @override
-  List<Bind> get binds => [
+  final List<Bind> binds = [
     Bind((i) => AppBloc()), 
     Bind.factory((i) => AppBloc()),
     Bind.instance(myObject), 
@@ -457,40 +491,6 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
 }
 ```
 
-## Creating child modules
-
-You can create as many modules in your project as you wish, but they will be dependent of the main module. To do so, instead of inheriting from `MainModule`, you should inherit from `ChildModule`:
-
-```dart
-class HomeModule extends ChildModule {
-  @override
-  final List<Bind> binds = [
-    Bind.singleton((i) => HomeBloc()),
-  ];
-
-  @override
-  final List<ModularRoute> routers = [
-    ModularRoute('/', child: (_, args) => HomeWidget()),
-    ModularRoute('/list', child: (_, args) => ListWidget()),
-  ];
-
-}
-```
-
-You may then pass the submodule to a `Route` in your main module through the `module` parameter:
-
-```dart
-class AppModule extends MainModule {
-
-  @override
-  final List<ModularRoute> routers = [
-    ModularRoute('/home', module: HomeModule()),
-  ];
-}
-```
-
-We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
-
 ### WidgetModule
 
 `WidgetModule` has the same structure as `MainModule`/`ChildModule`. It is very useful if you want to have a TabBar with modular pages.
@@ -523,7 +523,7 @@ You can only have one `RouterOutlet` per page and it is only able to browse the 
       final List<Bind> binds = [];
 
       @override
-      final List<ModularRoute> routers = [
+      final List<ModularRoute> routes = [
         ModularRoute(
           '/start',
           child: (context, args) => StartPage(),
@@ -581,7 +581,7 @@ For example, you can make a repository interface (`ILocalStorage`) that satisfie
 
 ```dart
 @override
-final List<Bind> binds => [
+final List<Bind> binds = [
   Bind<ILocalStorage>((i) => LocalStorageSharePreferences()),
 ];
 ```
