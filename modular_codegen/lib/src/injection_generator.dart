@@ -3,7 +3,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
-import 'package:flutter_modular/flutter_modular_annotations.dart';
+import 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
@@ -37,7 +37,7 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
 }
 
 class ModelVisitor extends SimpleElementVisitor {
-  DartType className;
+  DartType? className;
   List<String> params = [];
   bool isAnnotation = false;
 
@@ -52,11 +52,11 @@ class ModelVisitor extends SimpleElementVisitor {
                   return param.element.displayName == "Data" ||
                       param.element.displayName == "Param" ||
                       param.element.displayName == "Default";
-                }, orElse: () => null) !=
+                }, orElse: (() => null!) as ElementAnnotation Function()?) !=
                 null;
           }
           return false;
-        }, orElse: () => null) !=
+        }, orElse: (() => null!) as ParameterElement Function()?) !=
         null;
     writeParams(element.parameters);
   }
@@ -64,7 +64,7 @@ class ModelVisitor extends SimpleElementVisitor {
   writeParams(List<ParameterElement> parameters) {
     params = parameters.map((param) {
       if (param.metadata.length > 0) {
-        String arg;
+        String? arg;
 
         for (var meta in param.metadata) {
           if (meta.element.displayName == 'Param') {
