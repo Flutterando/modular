@@ -1,6 +1,6 @@
 library flutter_modular;
 
-export 'flutter_modular_annotations.dart';
+export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
 export 'src/core/inject/bind.dart';
 export 'src/core/inject/inject.dart';
 export 'src/core/interfaces/disposable.dart';

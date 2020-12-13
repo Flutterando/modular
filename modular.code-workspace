@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "modular_codegen"
+		},
+		{
+			"path": "flutter_modular_annotations"
 		}
 	],
 	"settings": {

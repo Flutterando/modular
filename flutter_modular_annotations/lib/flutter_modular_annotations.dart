@@ -1,3 +1,5 @@
+library flutter_modular_annotations;
+
 class Injectable {
   final bool singleton;
   final bool lazy;
