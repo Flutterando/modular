@@ -9,7 +9,7 @@ import '../models/modular_route.dart';
 @immutable
 abstract class ChildModule {
   late final List<Bind> binds;
-  late final List<ModularRoute> routers;
+  late final List<ModularRoute> routes;
 
   @visibleForTesting
   void changeBinds(List<Bind> b) {

@@ -28,7 +28,7 @@ class ModularRouteInformationParser
       ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
     final routers =
-        module.routers.map((e) => e.copyWith(currentModule: module)).toList();
+        module.routes.map((e) => e.copyWith(currentModule: module)).toList();
     routers.sort((preview, actual) {
       return preview.routerName.contains('/:') ? 1 : 0;
     });
@@ -45,7 +45,7 @@ class ModularRouteInformationParser
       ModularRoute route, String routerName, String path) {
     ModularRoute? router;
     if (routerName == path || routerName == "$path/") {
-      router = route.module!.routers[0];
+      router = route.module!.routes[0];
       if (router.module != null) {
         var _routerName =
             (routerName + route.routerName).replaceFirst('//', '/');
@@ -200,8 +200,8 @@ class ModularRouteInformationParser
               ? route.children.last
               : null;
         } else {
-          finded = route.currentModule?.routers.last.routerName == '**'
-              ? route.currentModule?.routers.last
+          finded = route.currentModule?.routes.last.routerName == '**'
+              ? route.currentModule?.routes.last
               : null;
         }
         route.currentModule?.paths.remove(localPath);
