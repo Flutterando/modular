@@ -1,6 +1,6 @@
 //ignore:one_member_abstracts
 
-import '../models/modular_route.dart';
+import 'modular_route.dart';
 
 // ignore: one_member_abstracts
 abstract class RouteGuard {

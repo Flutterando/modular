@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_modular/src/core/errors/errors.dart';
-import 'package:flutter_modular/src/core/models/modular_arguments.dart';
-import 'package:flutter_modular/src/core/modules/child_module.dart';
 
+import '../core/errors/errors.dart';
+import '../core/models/modular_arguments.dart';
+import '../core/modules/child_module.dart';
 import 'interfaces/modular_interface.dart';
 import 'interfaces/modular_navigator_interface.dart';
 import 'modular_base.dart';

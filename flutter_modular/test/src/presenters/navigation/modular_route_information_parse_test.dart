@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
-import 'package:flutter_modular/src/core/models/modular_route.dart';
 import 'package:flutter_modular/src/presenters/navigation/modular_route_information_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -148,17 +147,17 @@ class ModuleMock extends ChildModule {
   ];
 
   @override
-  final List<ModularRoute> routers = [
-    ModularRoute(
+  final List<ModularRoute> routes = [
+    ChildRoute(
       '/',
       child: (context, args) => Container(),
     ),
-    ModularRoute(
+    ChildRoute(
       '/home',
       child: (context, args) => Scaffold(),
       children: [
-        ModularRoute('/tab1', child: (context, args) => TextField()),
-        ModularRoute(
+        ChildRoute('/tab1', child: (context, args) => TextField()),
+        ChildRoute(
           '/tab2/:id',
           child: (context, args) => CustomWidget(
             text: args?.params!['id'],
@@ -166,22 +165,21 @@ class ModuleMock extends ChildModule {
         ),
       ],
     ),
-    ModularRoute('/mock', module: ModuleMock2()),
-    ModularRoute('/guarded',
-        guards: [MyGuardModule()], module: ModuleGuarded()),
-    ModularRoute('/list', child: (context, args) => ListView()),
-    ModularRoute(
+    ModuleRoute('/mock', module: ModuleMock2()),
+    ModuleRoute('/guarded', guards: [MyGuardModule()], module: ModuleGuarded()),
+    ChildRoute('/list', child: (context, args) => ListView()),
+    ChildRoute(
       '/401',
       guards: [MyGuard()],
       child: (context, args) => SingleChildScrollView(),
     ),
-    ModularRoute(
+    ChildRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
-    ModularRoute('**', child: (context, args) => FlutterLogo())
+    ChildRoute('**', child: (context, args) => FlutterLogo())
   ];
 }
 
@@ -195,26 +193,26 @@ class ModuleMock2 extends ChildModule {
   ];
 
   @override
-  final List<ModularRoute> routers = [
-    ModularRoute('/', child: (context, args) => SizedBox(), children: [
-      ModularRoute('/home', child: (context, args) => Container()),
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (context, args) => SizedBox(), children: [
+      ChildRoute('/home', child: (context, args) => Container()),
     ]),
-    ModularRoute(
+    ChildRoute(
       '/list',
       child: (context, args) => ListView(),
     ),
-    ModularRoute(
+    ChildRoute(
       '/listguarded',
       guards: [MyGuard()],
       child: (context, args) => ListView(),
     ),
-    ModularRoute(
+    ChildRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
-    ModularRoute('**', child: (context, args) => FlutterLogo())
+    ChildRoute('**', child: (context, args) => FlutterLogo())
   ];
 }
 
@@ -228,27 +226,27 @@ class ModuleGuarded extends ChildModule {
   ];
 
   @override
-  final List<ModularRoute> routers = [
-    ModularRoute('/', child: (context, args) => SizedBox(), children: [
-      ModularRoute('/home', child: (context, args) => Container()),
-      ModularRoute('/guarded', child: (context, args) => Container()),
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (context, args) => SizedBox(), children: [
+      ChildRoute('/home', child: (context, args) => Container()),
+      ChildRoute('/guarded', child: (context, args) => Container()),
     ]),
-    ModularRoute(
+    ChildRoute(
       '/list',
       child: (context, args) => ListView(),
     ),
-    ModularRoute(
+    ChildRoute(
       '/listguarded',
       guards: [MyGuard()],
       child: (context, args) => ListView(),
     ),
-    ModularRoute(
+    ChildRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
         text: args?.params!['id'],
       ),
     ),
-    ModularRoute('**', child: (context, args) => FlutterLogo())
+    ChildRoute('**', child: (context, args) => FlutterLogo())
   ];
 }
 

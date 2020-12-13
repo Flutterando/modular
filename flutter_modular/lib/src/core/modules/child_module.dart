@@ -4,12 +4,12 @@ import '../errors/errors.dart';
 import '../inject/bind.dart';
 import '../inject/inject.dart';
 import '../interfaces/disposable.dart';
-import '../models/modular_route.dart';
+import '../interfaces/modular_route.dart';
 
 @immutable
 abstract class ChildModule {
-  late final List<Bind> binds;
-  late final List<ModularRoute> routes;
+  late final List<Bind> binds = [];
+  late final List<ModularRoute> routes = [];
 
   @visibleForTesting
   void changeBinds(List<Bind> b) {

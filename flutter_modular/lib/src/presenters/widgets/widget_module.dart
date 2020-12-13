@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import '../../core/inject/bind.dart';
-import '../../core/models/modular_route.dart';
-import '../../core/modules/child_module.dart';
 
+import '../../../flutter_modular.dart';
+import '../../core/inject/bind.dart';
+import '../../core/modules/child_module.dart';
 import '../modular_base.dart';
 
 _debugPrintModular(String text) {
@@ -11,17 +11,20 @@ _debugPrintModular(String text) {
   }
 }
 
+// ignore: must_be_immutable
 abstract class WidgetModule extends StatelessWidget implements ChildModule {
   Widget get view;
 
   final _FakeModule _fakeModule = _FakeModule();
 
   WidgetModule() {
+    // ignore: invalid_use_of_visible_for_testing_member
     _fakeModule.changeBinds(binds);
   }
 
   @override
   void changeBinds(List<Bind> b) {
+    // ignore: invalid_use_of_visible_for_testing_member
     _fakeModule.changeBinds(b);
   }
 
@@ -51,7 +54,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  List<ModularRoute> routers = const [];
+  List<ModularRoute> routes = const [];
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +73,10 @@ class _FakeModule extends ChildModule {
   }
 
   @override
-  List<Bind> get binds => bindsInject ?? [];
+  late final List<Bind> binds = bindsInject ?? [];
 
   @override
-  List<ModularRoute> get routers => [];
+  final List<ModularRoute> routes = [];
 }
 
 class ModularProvider extends StatefulWidget {

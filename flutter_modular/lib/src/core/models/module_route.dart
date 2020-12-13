@@ -1,9 +1,10 @@
+import '../interfaces/modular_route.dart';
 import '../interfaces/route_guard.dart';
 import '../modules/child_module.dart';
+import 'custom_transition.dart';
+import 'modular_route_impl.dart';
 
-import 'modular_route.dart';
-
-class ModuleRoute extends ModularRoute {
+class ModuleRoute extends ModularRouteImpl {
   ModuleRoute(
     String routerName, {
     required ChildModule module,

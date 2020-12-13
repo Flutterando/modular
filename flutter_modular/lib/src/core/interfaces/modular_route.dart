@@ -1,28 +1,23 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-import '../interfaces/route_guard.dart';
+import '../models/custom_transition.dart';
+import '../models/modular_arguments.dart';
+import '../models/modular_route_impl.dart';
 import '../modules/child_module.dart';
-import '../transitions/transitions.dart';
-import 'modular_arguments.dart';
+import 'route_guard.dart';
 
-typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
-    WidgetBuilder, RouteSettings);
-typedef ModularChild = Widget Function(
-    BuildContext context, ModularArguments? args);
+abstract class ModularRoute<T> {
+  ChildModule? get currentModule;
 
-class ModularRoute<T> {
-  final ChildModule? currentModule;
+  ModularArguments? get args;
 
-  final ModularArguments? args;
+  List<ModularRoute> get children;
 
-  final List<ModularRoute> children;
+  final List<ModularRoute> routerOutlet = [];
 
-  final List<ModularRoute> routerOutlet;
-
-  final String? path;
+  String? get path;
 
   ///
   /// Paramenter name: [routerName]
@@ -33,7 +28,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final String routerName;
+  String get routerName;
 
   ///
   /// Paramenter name: [child]
@@ -45,7 +40,7 @@ class ModularRoute<T> {
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
 
-  final ModularChild? child;
+  ModularChild? get child;
 
   ///
   /// Paramenter name: [module]
@@ -56,7 +51,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final ChildModule? module;
+  ChildModule? get module;
 
   ///
   /// Paramenter name: [params]
@@ -67,7 +62,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final Map<String, String>? params;
+  Map<String, String>? get params;
 
   ///
   /// Paramenter name: [guards]
@@ -98,7 +93,7 @@ class ModularRoute<T> {
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
 
-  final List<RouteGuard>? guards;
+  List<RouteGuard>? get guards;
 
   ///
   /// Paramenter name: [transition]
@@ -107,7 +102,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final TransitionType transition;
+  TransitionType get transition;
 
   ///
   /// Paramenter name: [customTransiton]
@@ -158,63 +153,18 @@ class ModularRoute<T> {
   /// ```
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  final CustomTransition? customTransition;
-
-  ///
-  /// Paramenter name: [transition]
-  ///
-  /// Used to animate the transition from one screen to another
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
-  final RouteBuilder<T>? routeGenerator;
-  final String? modulePath;
-  final Duration duration;
-  final Map<
+  CustomTransition? get customTransition;
+  String? get modulePath;
+  Duration get duration;
+  RouteBuilder<T>? get routeGenerator;
+  Map<
       TransitionType,
       PageRouteBuilder<T> Function(
     Widget Function(BuildContext, ModularArguments?) builder,
     ModularArguments? args,
     Duration transitionDuration,
     RouteSettings settings,
-  )> transitions = {
-    TransitionType.fadeIn: fadeInTransition,
-    TransitionType.noTransition: noTransition,
-    TransitionType.rightToLeft: rightToLeft,
-    TransitionType.leftToRight: leftToRight,
-    TransitionType.upToDown: upToDown,
-    TransitionType.downToUp: downToUp,
-    TransitionType.scale: scale,
-    TransitionType.rotate: rotate,
-    TransitionType.size: size,
-    TransitionType.rightToLeftWithFade: rightToLeftWithFade,
-    TransitionType.leftToRightWithFade: leftToRightWithFade,
-  };
-
-  ModularRoute(
-    this.routerName, {
-    this.path = '/',
-    this.children = const [],
-    this.args = const ModularArguments(),
-    this.module,
-    this.child,
-    this.guards,
-    this.routerOutlet = const [],
-    this.params,
-    this.currentModule,
-    this.transition = TransitionType.defaultTransition,
-    this.routeGenerator,
-    this.customTransition,
-    this.duration = const Duration(milliseconds: 300),
-    this.modulePath = '/',
-  })  : assert(module == null ? true : children.isEmpty,
-            'Módulo não pode conter rotas aninhadas (children)'),
-        assert((transition == TransitionType.custom &&
-                customTransition != null) ||
-            transition != TransitionType.custom && customTransition == null),
-        assert((module == null && child != null) ||
-            (module != null && child == null)),
-        assert(routerName == '**' ? child != null : true);
+  )> get transitions;
 
   ModularRoute<T> copyWith(
       {ModularChild? child,
@@ -232,25 +182,7 @@ class ModularRoute<T> {
       Duration? duration,
       Completer<T>? popRoute,
       ModularArguments? args,
-      CustomTransition? customTransition}) {
-    return ModularRoute<T>(
-      routerName ?? this.routerName,
-      child: child ?? this.child,
-      args: args ?? this.args,
-      children: children ?? this.children,
-      module: module ?? this.module,
-      routerOutlet: routerOutlet ?? this.routerOutlet,
-      currentModule: currentModule ?? this.currentModule,
-      params: params ?? this.params,
-      modulePath: modulePath ?? this.modulePath,
-      path: path ?? this.path,
-      guards: guards ?? this.guards,
-      duration: duration ?? this.duration,
-      routeGenerator: routeGenerator ?? this.routeGenerator,
-      transition: transition ?? this.transition,
-      customTransition: customTransition ?? this.customTransition,
-    );
-  }
+      CustomTransition? customTransition});
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
@@ -284,15 +216,4 @@ enum TransitionType {
   rightToLeftWithFade,
   leftToRightWithFade,
   custom,
-}
-
-class CustomTransition {
-  final Widget Function(
-          BuildContext, Animation<double>, Animation<double>, Widget)
-      transitionBuilder;
-  final Duration transitionDuration;
-
-  CustomTransition(
-      {required this.transitionBuilder,
-      this.transitionDuration = const Duration(milliseconds: 300)});
 }

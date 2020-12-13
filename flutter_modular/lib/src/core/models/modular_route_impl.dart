@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../interfaces/modular_route.dart';
 
 import '../interfaces/route_guard.dart';
 import '../modules/child_module.dart';
 import '../transitions/transitions.dart';
+import 'custom_transition.dart';
 import 'modular_arguments.dart';
 
 typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
@@ -13,16 +15,19 @@ typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
 typedef ModularChild = Widget Function(
     BuildContext context, ModularArguments? args);
 
-class ModularRoute<T> {
+class ModularRouteImpl<T> extends ModularRoute<T> {
+  @override
   final ChildModule? currentModule;
-
+  @override
   final ModularArguments? args;
-
+  @override
   final List<ModularRoute> children;
-
+  @override
   final List<ModularRoute> routerOutlet;
-
+  @override
   final String? path;
+  @override
+  final String? modulePath;
 
   ///
   /// Paramenter name: [routerName]
@@ -32,7 +37,7 @@ class ModularRoute<T> {
   /// Type: String
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
+  @override
   final String routerName;
 
   ///
@@ -44,7 +49,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-
+  @override
   final ModularChild? child;
 
   ///
@@ -56,6 +61,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
+  @override
   final ChildModule? module;
 
   ///
@@ -67,6 +73,7 @@ class ModularRoute<T> {
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
+  @override
   final Map<String, String>? params;
 
   ///
@@ -97,7 +104,7 @@ class ModularRoute<T> {
   /// ```
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-
+  @override
   final List<RouteGuard>? guards;
 
   ///
@@ -106,7 +113,7 @@ class ModularRoute<T> {
   /// Used to animate the transition from one screen to another
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
+  @override
   final TransitionType transition;
 
   ///
@@ -157,19 +164,16 @@ class ModularRoute<T> {
   /// ),
   /// ```
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
+  @override
   final CustomTransition? customTransition;
 
-  ///
-  /// Paramenter name: [transition]
-  ///
-  /// Used to animate the transition from one screen to another
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
-  final RouteBuilder<T>? routeGenerator;
-  final String? modulePath;
+  @override
   final Duration duration;
+
+  @override
+  final RouteBuilder<T>? routeGenerator;
+
+  @override
   final Map<
       TransitionType,
       PageRouteBuilder<T> Function(
@@ -191,7 +195,7 @@ class ModularRoute<T> {
     TransitionType.leftToRightWithFade: leftToRightWithFade,
   };
 
-  ModularRoute(
+  ModularRouteImpl(
     this.routerName, {
     this.path = '/',
     this.children = const [],
@@ -216,6 +220,7 @@ class ModularRoute<T> {
             (module != null && child == null)),
         assert(routerName == '**' ? child != null : true);
 
+  @override
   ModularRoute<T> copyWith(
       {ModularChild? child,
       String? routerName,
@@ -233,7 +238,7 @@ class ModularRoute<T> {
       Completer<T>? popRoute,
       ModularArguments? args,
       CustomTransition? customTransition}) {
-    return ModularRoute<T>(
+    return ModularRouteImpl<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
       args: args ?? this.args,
@@ -251,48 +256,4 @@ class ModularRoute<T> {
       customTransition: customTransition ?? this.customTransition,
     );
   }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is ModularRoute<T> &&
-        o.modulePath == modulePath &&
-        o.routerName == routerName &&
-        o.module == module;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode {
-    return currentModule.hashCode ^ routerName.hashCode;
-  }
-}
-
-enum TransitionType {
-  defaultTransition,
-  fadeIn,
-  noTransition,
-  rightToLeft,
-  leftToRight,
-  upToDown,
-  downToUp,
-  scale,
-  rotate,
-  size,
-  rightToLeftWithFade,
-  leftToRightWithFade,
-  custom,
-}
-
-class CustomTransition {
-  final Widget Function(
-          BuildContext, Animation<double>, Animation<double>, Widget)
-      transitionBuilder;
-  final Duration transitionDuration;
-
-  CustomTransition(
-      {required this.transitionBuilder,
-      this.transitionDuration = const Duration(milliseconds: 300)});
 }

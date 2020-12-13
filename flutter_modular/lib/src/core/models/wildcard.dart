@@ -6,16 +6,15 @@ import 'custom_transition.dart';
 import 'modular_arguments.dart';
 import 'modular_route_impl.dart';
 
-class ChildRoute extends ModularRouteImpl {
-  ChildRoute(
-    String routerName, {
+class WildCard extends ModularRouteImpl {
+  WildCard({
     List<ModularRoute> children = const [],
     required Widget Function(BuildContext, ModularArguments?) child,
     List<RouteGuard>? guards,
     TransitionType transition = TransitionType.defaultTransition,
     CustomTransition? customTransition,
     Duration duration = const Duration(milliseconds: 300),
-  }) : super(routerName,
+  }) : super('**',
             duration: duration,
             child: child,
             customTransition: customTransition,

@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
 import 'package:flutter_modular/src/core/inject/bind.dart';
-import 'package:flutter_modular/src/core/models/modular_route.dart';
 import 'package:flutter_modular/src/core/modules/child_module.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class ModuleMock extends ChildModule {
   @override
-  List<Bind> binds = [
+  final List<Bind> binds = [
     Bind((i) => "Test"),
     Bind<int>.instance(1),
     Bind((i) => true, lazy: false),
@@ -18,7 +18,7 @@ class ModuleMock extends ChildModule {
   ];
 
   @override
-  List<ModularRoute> routers = [];
+  final List<ModularRoute> routes = [];
 }
 
 main() {

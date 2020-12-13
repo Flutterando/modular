@@ -1,5 +1,4 @@
-import 'package:flutter_modular/flutter_modular.dart';
-
+import '../../core/models/modular_arguments.dart';
 import '../../core/modules/child_module.dart';
 import 'modular_navigator_interface.dart';
 

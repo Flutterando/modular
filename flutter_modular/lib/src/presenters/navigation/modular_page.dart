@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/errors/errors.dart';
-import '../../core/models/modular_route.dart';
+
+import '../../core/errors/errors.dart';
+import '../../core/interfaces/modular_route.dart';
 
 final Map<int, Completer> _allCompleters = {};
 
