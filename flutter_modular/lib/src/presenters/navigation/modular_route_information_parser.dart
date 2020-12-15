@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/core/interfaces/route_guard.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_route.dart';
@@ -95,12 +96,11 @@ class ModularRouteInformationParser
           var r = _searchRoute(routeChild, tempRouteName, path);
           if (r != null) {
             r.currentModule?.paths.remove(path);
-            route = route.copyWith(routerOutlet: [
-              r.copyWith(
-                  modulePath: r.modulePath == route.modulePath
-                      ? tempRouteName
-                      : r.modulePath),
-            ], path: tempRouteName);
+            r = r.copyWith(
+                modulePath: r.modulePath == route.modulePath
+                    ? tempRouteName
+                    : r.modulePath);
+            route = route.copyWith(routerOutlet: [r], path: tempRouteName);
             return route;
           }
         }
@@ -231,19 +231,28 @@ class ModularRouteInformationParser
 
   Future<ModularRoute> canActivate(String path, ModularRoute router) async {
     if (router.guards?.isNotEmpty == true) {
-      for (var guard in router.guards!) {
-        try {
-          final result = await guard.canActivate(path, router);
-          if (!result) {
-            throw ModularError('$path is NOT ACTIVATE');
-          }
-          // ignore: avoid_catches_without_on_clauses
-        } catch (e) {
-          throw ModularError(
-              'RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
-        }
+      await _checkGuard(path, router);
+    } else if (router.routerOutlet.isNotEmpty) {
+      for (final r in router.routerOutlet) {
+        await _checkGuard(path, r);
       }
     }
+
     return router;
+  }
+
+  Future<void> _checkGuard(String path, ModularRoute router) async {
+    for (var guard in router.guards ?? []) {
+      try {
+        final result = await guard.canActivate(path, router);
+        if (!result) {
+          throw ModularError('$path is NOT ACTIVATE');
+        }
+        // ignore: avoid_catches_without_on_clauses
+      } catch (e) {
+        throw ModularError(
+            'RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
+      }
+    }
   }
 }

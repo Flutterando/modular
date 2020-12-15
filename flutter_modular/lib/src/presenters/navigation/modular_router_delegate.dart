@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/core/errors/errors.dart';
 
 import '../../core/interfaces/modular_route.dart';
 import '../../core/modules/child_module.dart';
@@ -202,7 +203,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final outletRouter = router.routerOutlet.last.copyWith(
         args: router.args?.copyWith(data: arguments),
       );
-      final page = ModularPage<T>(
+      var page = ModularPage<T>(
         key: UniqueKey(),
         router: outletRouter,
       );
@@ -215,12 +216,21 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         lastPage.completePop(result);
         return result;
       } else {
-        final lastPage = routerOutlatPages[router.path!]?.last;
-        routerOutlatPages[router.path!]?.last = page;
-        currentConfiguration?.routerOutlet.last = outletRouter;
-        notifyListeners();
+        final routeOutletConf = currentConfiguration?.routerOutlet ?? [];
+        ModularPage? lastPage;
+        if (routeOutletConf.isEmpty) {
+          throw ModularError('Prefer Modular.to.navigate()');
+        } else {
+          lastPage = routerOutlatPages[router.path!]?.last;
+          routerOutlatPages[router.path!]?.last = page;
+          currentConfiguration?.routerOutlet.last = outletRouter;
+          notifyListeners();
+        }
+
         final result = await page.waitPop();
-        lastPage!.completePop(result);
+        if (lastPage != null) {
+          lastPage.completePop(result);
+        }
         notifyListeners();
         return result;
       }

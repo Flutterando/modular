@@ -15,6 +15,7 @@ class WildcardRoute extends ModularRouteImpl {
     CustomTransition? customTransition,
     Duration duration = const Duration(milliseconds: 300),
   }) : super('**',
+            routerOutlet: [],
             duration: duration,
             child: child,
             customTransition: customTransition,

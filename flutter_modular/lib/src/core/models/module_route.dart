@@ -13,6 +13,7 @@ class ModuleRoute extends ModularRouteImpl {
     CustomTransition? customTransition,
     Duration duration = const Duration(milliseconds: 300),
   }) : super(routerName,
+            routerOutlet: [],
             duration: duration,
             module: module,
             customTransition: customTransition,
