@@ -10,7 +10,7 @@ export 'src/core/models/child_route.dart';
 export 'src/core/models/custom_transition.dart';
 export 'src/core/models/modular_arguments.dart';
 export 'src/core/models/module_route.dart';
-export 'src/core/models/wildcard.dart';
+export 'src/core/models/wildcard_route.dart';
 export 'src/core/modules/child_module.dart';
 export 'src/core/modules/main_module.dart';
 export 'src/presenters/modular_base.dart';

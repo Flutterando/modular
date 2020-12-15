@@ -182,7 +182,7 @@ You can use Relative Navigation to navigate like web
 ```dart
 // Modules Home → Product
 Modular.to.navigate('/home/product/list');
-Modular.to.navigate('/home/product/detail/:id');
+Modular.to.navigate('/home/product/detail/3');
 
 // Relative Navigation inside /home/product/list
 Modular.to.navigate('detail/3'); // it's the same as /home/product/detail/3

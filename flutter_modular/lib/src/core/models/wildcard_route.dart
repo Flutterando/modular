@@ -6,8 +6,8 @@ import 'custom_transition.dart';
 import 'modular_arguments.dart';
 import 'modular_route_impl.dart';
 
-class WildCard extends ModularRouteImpl {
-  WildCard({
+class WildcardRoute extends ModularRouteImpl {
+  WildcardRoute({
     List<ModularRoute> children = const [],
     required Widget Function(BuildContext, ModularArguments?) child,
     List<RouteGuard>? guards,
