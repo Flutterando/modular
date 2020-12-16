@@ -14,6 +14,8 @@
 
 - [flutter_modular Documentation](https://github.com/Flutterando/modular/tree/master/flutter_modular)
 
+- [flutter_modular_test Documentation](https://github.com/Flutterando/modular/tree/master/flutter_modular_test)
+
 - [modular_codegen Documentation](https://github.com/Flutterando/modular/tree/master/modular_codegen)
 
 

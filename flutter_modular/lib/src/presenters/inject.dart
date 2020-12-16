@@ -1,5 +1,6 @@
-import '../../presenters/modular_base.dart';
-import '../models/modular_arguments.dart';
+import 'modular_base.dart';
+
+import '../core/models/modular_arguments.dart';
 
 class Inject<T> {
   ///!!!!NOT RECOMMENDED USE!!!!

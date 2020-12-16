@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 
+import '../../presenters/inject.dart';
 import '../errors/errors.dart';
-import '../inject/bind.dart';
-import '../inject/inject.dart';
-import '../interfaces/disposable.dart';
-import '../interfaces/modular_route.dart';
+import '../models/bind.dart';
+import 'disposable.dart';
+import 'modular_route.dart';
 
 @immutable
 abstract class ChildModule {
@@ -21,8 +21,7 @@ abstract class ChildModule {
 
   final Map<Type, dynamic> _singletonBinds = {};
 
-  T? getBind<T>(
-      {Map<String, dynamic>? params, required List<Type> typesInRequest}) {
+  T? getBind<T extends Object>({Map<String, dynamic>? params, required List<Type> typesInRequest}) {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -30,8 +29,7 @@ abstract class ChildModule {
       return bindValue;
     }
 
-    var bind = binds.firstWhere((b) => b.inject is T Function(Inject),
-        orElse: () => BindEmpty());
+    var bind = binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       typesInRequest.remove(type);
       return null;
@@ -50,9 +48,8 @@ ${typesInRequest.join('\n')}
       typesInRequest.add(type);
     }
 
-    bindValue =
-        bind.inject(Inject(params: params, typesInRequest: typesInRequest));
-    if (bind.singleton) {
+    bindValue = bind.inject(Inject(params: params, typesInRequest: typesInRequest)) as T;
+    if (bind.isSingleton) {
       _singletonBinds[type] = bindValue;
     }
 
@@ -74,7 +71,7 @@ ${typesInRequest.join('\n')}
   }
 
   _callDispose(dynamic bind) {
-    if (bind is Disposable || bind is ChangeNotifier) {
+    if (bind is Disposable) {
       bind.dispose();
       return;
     } else if (bind is Sink) {
@@ -106,7 +103,7 @@ ${typesInRequest.join('\n')}
   /// Create a instance of all binds isn't lazy Loaded
   void instance() {
     for (final bindElement in binds) {
-      if (!bindElement.lazy) {
+      if (!bindElement.isLazy) {
         var b = bindElement.inject(Inject());
         _singletonBinds[b.runtimeType] = b;
       }

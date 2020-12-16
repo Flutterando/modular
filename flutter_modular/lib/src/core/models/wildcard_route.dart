@@ -4,7 +4,7 @@ import '../interfaces/modular_route.dart';
 import '../interfaces/route_guard.dart';
 import 'custom_transition.dart';
 import 'modular_arguments.dart';
-import 'modular_route_impl.dart';
+import '../../presenters/modular_route_impl.dart';
 
 class WildcardRoute extends ModularRouteImpl {
   WildcardRoute({

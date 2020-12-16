@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import '../../core/modules/main_module.dart';
+import '../main_module.dart';
 
 import '../modular_base.dart';
 

@@ -40,8 +40,7 @@ main() {
     });
 
     test('should guard router /401', () async {
-      expect(parse.selectRoute('/401', ModuleMock()),
-          throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/401', ModuleMock()), throwsA(isA<ModularError>()));
     });
   });
 
@@ -81,13 +80,11 @@ main() {
     });
 
     test('should guard router /mock/listguarded', () async {
-      expect(parse.selectRoute('/mock/listguarded', ModuleMock()),
-          throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/mock/listguarded', ModuleMock()), throwsA(isA<ModularError>()));
     });
 
     test('should guard router /guarded/list', () async {
-      expect(parse.selectRoute('/guarded/list', ModuleMock()),
-          throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/guarded/list', ModuleMock()), throwsA(isA<ModularError>()));
     });
   });
 
@@ -107,15 +104,11 @@ main() {
       expect(route.child!(context, null), isA<Scaffold>());
       expect(route.path, '/home');
       expect(route.routerOutlet.length, 1);
-      expect(
-          route.routerOutlet[0].child!(context, route.routerOutlet[0].args)
-              .toString(),
-          '3');
+      expect(route.routerOutlet[0].child!(context, route.routerOutlet[0].args).toString(), '3');
       expect(route.routerOutlet[0].path, '/home/tab2/3');
     });
     test('should throw error if not exist route /home/tab3', () async {
-      expect(parse.selectRoute('/home/tab3', ModuleMock()),
-          throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/home/tab3', ModuleMock()), throwsA(isA<ModularError>()));
     });
 
     test('should retrive router  (Module)', () async {
@@ -129,21 +122,15 @@ main() {
       expect(route.routerOutlet[0].path, '/mock/home');
     });
   });
-
-  test('should resolve Outlet Module Path', () async {
-    expect(parse.resolveOutletModulePath('/home', '/'), '/home');
-    expect(
-        parse.resolveOutletModulePath('/home/', '/home/start'), '/home/start');
-  });
 }
 
 class ModuleMock extends ChildModule {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
-    Bind((i) => true, lazy: false),
-    Bind((i) => StreamController(), lazy: false),
-    Bind((i) => ValueNotifier(0), lazy: false),
+    Bind((i) => true, isLazy: false),
+    Bind((i) => StreamController(), isLazy: false),
+    Bind((i) => ValueNotifier(0), isLazy: false),
   ];
 
   @override
@@ -187,9 +174,9 @@ class ModuleMock2 extends ChildModule {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
-    Bind((i) => true, lazy: false),
-    Bind((i) => StreamController(), lazy: false),
-    Bind((i) => ValueNotifier(0), lazy: false),
+    Bind((i) => true, isLazy: false),
+    Bind((i) => StreamController(), isLazy: false),
+    Bind((i) => ValueNotifier(0), isLazy: false),
   ];
 
   @override
@@ -220,9 +207,9 @@ class ModuleGuarded extends ChildModule {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
-    Bind((i) => true, lazy: false),
-    Bind((i) => StreamController(), lazy: false),
-    Bind((i) => ValueNotifier(0), lazy: false),
+    Bind((i) => true, isLazy: false),
+    Bind((i) => StreamController(), isLazy: false),
+    Bind((i) => ValueNotifier(0), isLazy: false),
   ];
 
   @override

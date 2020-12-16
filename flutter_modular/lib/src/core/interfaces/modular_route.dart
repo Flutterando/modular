@@ -1,12 +1,17 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../models/custom_transition.dart';
 import '../models/modular_arguments.dart';
-import '../models/modular_route_impl.dart';
-import '../modules/child_module.dart';
+import 'child_module.dart';
 import 'route_guard.dart';
+
+typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
+    WidgetBuilder, RouteSettings);
+typedef ModularChild = Widget Function(
+    BuildContext context, ModularArguments? args);
 
 abstract class ModularRoute<T> {
   ChildModule? get currentModule;

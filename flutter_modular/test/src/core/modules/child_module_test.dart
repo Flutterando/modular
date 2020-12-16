@@ -3,18 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
-import 'package:flutter_modular/src/core/inject/bind.dart';
-import 'package:flutter_modular/src/core/modules/child_module.dart';
+import 'package:flutter_modular/src/core/models/bind.dart';
+import 'package:flutter_modular/src/core/interfaces/child_module.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class ModuleMock extends ChildModule {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
-    Bind<int>.instance(1),
-    Bind((i) => true, lazy: false),
-    Bind((i) => StreamController(), lazy: false),
-    Bind((i) => ValueNotifier<int>(0), lazy: false),
+    Bind.instance<int>(1),
+    Bind((i) => true, isLazy: false),
+    Bind((i) => StreamController(), isLazy: false),
+    Bind((i) => ValueNotifier<int>(0), isLazy: false),
   ];
 
   @override
@@ -53,10 +53,8 @@ main() {
     expect(module.getBind<List>(typesInRequest: []), null);
   });
 
-  test('should throw exception when exist value over in the injection search',
-      () {
-    expect(() => module.getBind<bool>(typesInRequest: [bool]),
-        throwsA(isA<ModularError>()));
+  test('should throw exception when exist value over in the injection search', () {
+    expect(() => module.getBind<bool>(typesInRequest: [bool]), throwsA(isA<ModularError>()));
   });
 
   test('should Create a instance of all binds isn\'t lazy Loaded', () {
@@ -69,49 +67,33 @@ main() {
     expect(module.getBind<bool>(typesInRequest: [bool]), equals(true));
 
     module.remove<bool>();
-    expect(() => module.getBind<bool>(typesInRequest: [bool]),
-        throwsA(isA<ModularError>()));
+    expect(() => module.getBind<bool>(typesInRequest: [bool]), throwsA(isA<ModularError>()));
 
     //Stream
-    expect(module.getBind<StreamController>(typesInRequest: [StreamController]),
-        isA<StreamController>());
+    expect(module.getBind<StreamController>(typesInRequest: [StreamController]), isA<StreamController>());
 
     module.remove<StreamController>();
-    expect(
-        () => module
-            .getBind<StreamController>(typesInRequest: [StreamController]),
-        throwsA(isA<ModularError>()));
+    expect(() => module.getBind<StreamController>(typesInRequest: [StreamController]), throwsA(isA<ModularError>()));
 
     //ChangeNotifier
-    expect(module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]),
-        isA<ChangeNotifier>());
+    expect(module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]), isA<ChangeNotifier>());
 
     module.remove<ChangeNotifier>();
-    expect(
-        () => module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]),
-        throwsA(isA<ModularError>()));
+    expect(() => module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]), throwsA(isA<ModularError>()));
   });
 
   test('should clean all injections', () {
     module.instance();
     expect(module.getBind<bool>(typesInRequest: [bool]), equals(true));
-    expect(module.getBind<StreamController>(typesInRequest: [StreamController]),
-        isA<StreamController>());
-    expect(module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]),
-        isA<ChangeNotifier>());
+    expect(module.getBind<StreamController>(typesInRequest: [StreamController]), isA<StreamController>());
+    expect(module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]), isA<ChangeNotifier>());
 
     module.cleanInjects();
 
-    expect(() => module.getBind<bool>(typesInRequest: [bool]),
-        throwsA(isA<ModularError>()));
+    expect(() => module.getBind<bool>(typesInRequest: [bool]), throwsA(isA<ModularError>()));
 
-    expect(
-        () => module
-            .getBind<StreamController>(typesInRequest: [StreamController]),
-        throwsA(isA<ModularError>()));
+    expect(() => module.getBind<StreamController>(typesInRequest: [StreamController]), throwsA(isA<ModularError>()));
 
-    expect(
-        () => module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]),
-        throwsA(isA<ModularError>()));
+    expect(() => module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]), throwsA(isA<ModularError>()));
   });
 }

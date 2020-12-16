@@ -1,8 +1,8 @@
+import '../../presenters/modular_route_impl.dart';
+import 'custom_transition.dart';
+import '../interfaces/child_module.dart';
 import '../interfaces/modular_route.dart';
 import '../interfaces/route_guard.dart';
-import '../modules/child_module.dart';
-import 'custom_transition.dart';
-import 'modular_route_impl.dart';
 
 class ModuleRoute extends ModularRouteImpl {
   ModuleRoute(

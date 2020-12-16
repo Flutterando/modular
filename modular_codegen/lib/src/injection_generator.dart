@@ -8,8 +8,7 @@ import 'package:source_gen/source_gen.dart';
 
 class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
   @override
-  FutureOr<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) async {
+  FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) async {
     final singleton = annotation.read('singleton').boolValue;
     final lazy = annotation.read('lazy').boolValue;
 
@@ -30,14 +29,13 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
         break;
       }
     }
-    _write(
-        "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
+    _write("final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), isSingleton: $singleton, isLazy: $lazy,);");
     return _buffer.toString();
   }
 }
 
 class ModelVisitor extends SimpleElementVisitor {
-  DartType? className;
+  DartType className;
   List<String> params = [];
   bool isAnnotation = false;
 
@@ -49,14 +47,12 @@ class ModelVisitor extends SimpleElementVisitor {
     isAnnotation = element.parameters.firstWhere((param) {
           if (param.metadata.length > 0) {
             return param.metadata.firstWhere((param) {
-                  return param.element.displayName == "Data" ||
-                      param.element.displayName == "Param" ||
-                      param.element.displayName == "Default";
-                }, orElse: (() => null!) as ElementAnnotation Function()?) !=
+                  return param.element.displayName == "Data" || param.element.displayName == "Param" || param.element.displayName == "Default";
+                }, orElse: (() => null) as ElementAnnotation Function()) !=
                 null;
           }
           return false;
-        }, orElse: (() => null!) as ParameterElement Function()?) !=
+        }, orElse: (() => null) as ParameterElement Function()) !=
         null;
     writeParams(element.parameters);
   }
@@ -64,7 +60,7 @@ class ModelVisitor extends SimpleElementVisitor {
   writeParams(List<ParameterElement> parameters) {
     params = parameters.map((param) {
       if (param.metadata.length > 0) {
-        String? arg;
+        String arg;
 
         for (var meta in param.metadata) {
           if (meta.element.displayName == 'Param') {

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../flutter_modular.dart';
-import '../../core/inject/bind.dart';
-import '../../core/modules/child_module.dart';
+import '../../core/models/bind.dart';
+import '../../core/interfaces/child_module.dart';
 import '../modular_base.dart';
 
 _debugPrintModular(String text) {
@@ -34,10 +34,8 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  T? getBind<T>(
-      {Map<String, dynamic>? params, List<Type> typesInRequest = const []}) {
-    return _fakeModule.getBind<T>(
-        params: params, typesInRequest: typesInRequest);
+  T? getBind<T extends Object>({Map<String, dynamic>? params, List<Type> typesInRequest = const []}) {
+    return _fakeModule.getBind<T>(params: params, typesInRequest: typesInRequest);
   }
 
   @override
@@ -83,8 +81,7 @@ class ModularProvider extends StatefulWidget {
   final ChildModule module;
   final Widget child;
 
-  const ModularProvider({Key? key, required this.module, required this.child})
-      : super(key: key);
+  const ModularProvider({Key? key, required this.module, required this.child}) : super(key: key);
 
   @override
   _ModularProviderState createState() => _ModularProviderState();

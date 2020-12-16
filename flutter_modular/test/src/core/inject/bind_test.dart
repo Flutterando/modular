@@ -1,10 +1,9 @@
-import 'package:flutter_modular/src/core/inject/bind.dart';
+import 'package:flutter_modular/src/core/models/bind.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 main() {
   test('singleton can\'t be false if \'lazy\' is also false', () {
-    expect(() => Bind((i) => String, lazy: false, singleton: false),
-        throwsAssertionError);
+    expect(() => Bind((i) => String, isLazy: false, isSingleton: false), throwsAssertionError);
   });
 
   test('factories', () {

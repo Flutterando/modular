@@ -2,18 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../interfaces/modular_route.dart';
 
-import '../interfaces/route_guard.dart';
-import '../modules/child_module.dart';
-import '../transitions/transitions.dart';
-import 'custom_transition.dart';
-import 'modular_arguments.dart';
+import '../core/interfaces/child_module.dart';
+import '../core/interfaces/modular_route.dart';
+import '../core/interfaces/route_guard.dart';
+import '../core/models/custom_transition.dart';
+import '../core/models/modular_arguments.dart';
+import 'transitions/transitions.dart';
 
-typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
-    WidgetBuilder, RouteSettings);
-typedef ModularChild = Widget Function(
-    BuildContext context, ModularArguments? args);
+
 
 class ModularRouteImpl<T> extends ModularRoute<T> {
   @override

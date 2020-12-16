@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/core/interfaces/modular_route.dart';
 import 'package:flutter_modular/src/core/models/custom_transition.dart';
-import 'package:flutter_modular/src/core/models/modular_route_impl.dart';
+import 'package:flutter_modular/src/presenters/modular_route_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../modules/child_module_test.dart';

@@ -3,19 +3,16 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
-abstract class CustomGeneratorForAnnotatedField<AnnotationType>
-    extends Generator {
+abstract class CustomGeneratorForAnnotatedField<AnnotationType> extends Generator {
   /// Returns the annotation of type [AnnotationType] of the given [element],
   /// or [null] if it doesn't have any.
-  DartObject? getAnnotation(Element element) {
-    final annotations =
-        TypeChecker.fromRuntime(AnnotationType).annotationsOf(element);
+  DartObject getAnnotation(Element element) {
+    final annotations = TypeChecker.fromRuntime(AnnotationType).annotationsOf(element);
     if (annotations.isEmpty) {
       return null;
     }
     if (annotations.length > 1) {
-      throw Exception(
-          "You tried to add multiple @$AnnotationType() annotations to the "
+      throw Exception("You tried to add multiple @$AnnotationType() annotations to the "
           "same element (${element.name}), but that's not possible.");
     }
     return annotations.single;
@@ -42,6 +39,5 @@ abstract class CustomGeneratorForAnnotatedField<AnnotationType>
     return values.join('\n\n');
   }
 
-  String generateForAnnotatedField(
-      FieldElement field, ConstantReader annotation);
+  String generateForAnnotatedField(FieldElement field, ConstantReader annotation);
 }

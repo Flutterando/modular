@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import '../models/modular_arguments.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'page_transition.dart';
 

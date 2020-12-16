@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "flutter_modular_annotations"
+		},
+		{
+			"path": "flutter_modular_test"
 		}
 	],
 	"settings": {

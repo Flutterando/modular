@@ -1,5 +1,5 @@
-import '../../core/models/modular_arguments.dart';
-import '../../core/modules/child_module.dart';
+import '../models/modular_arguments.dart';
+import 'child_module.dart';
 import 'modular_navigator_interface.dart';
 
 abstract class ModularInterface {

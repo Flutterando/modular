@@ -3,7 +3,7 @@ import 'package:flutter_modular/src/core/interfaces/route_guard.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_route.dart';
-import '../../core/modules/child_module.dart';
+import '../../core/interfaces/child_module.dart';
 import '../modular_base.dart';
 
 class ModularRouteInformationParser

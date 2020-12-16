@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 
 import '../core/errors/errors.dart';
 import '../core/models/modular_arguments.dart';
-import '../core/modules/child_module.dart';
-import 'interfaces/modular_interface.dart';
-import 'interfaces/modular_navigator_interface.dart';
+import '../core/interfaces/child_module.dart';
+import '../core/interfaces/modular_interface.dart';
+import '../core/interfaces/modular_navigator_interface.dart';
 import 'modular_base.dart';
 import 'navigation/modular_router_delegate.dart';
 
@@ -63,10 +63,7 @@ class ModularImpl implements ModularInterface {
   String get initialRoute => '/';
 
   @override
-  B get<B extends Object>(
-      {Map<String, dynamic> params = const {},
-      List<Type>? typesInRequestList,
-      B? defaultValue}) {
+  B get<B extends Object>({Map<String, dynamic> params = const {}, List<Type>? typesInRequestList, B? defaultValue}) {
     var typesInRequest = typesInRequestList ?? [];
     if (B.toString() == 'dynamic') {
       throw ModularError('not allow for dynamic values');
@@ -74,12 +71,8 @@ class ModularImpl implements ModularInterface {
     B? result;
 
     if (typesInRequest.isEmpty) {
-      final module = routerDelegate
-              .currentConfiguration?.currentModule?.runtimeType
-              .toString() ??
-          '=global';
-      result = _getInjectableObject<B>(module,
-          params: params, typesInRequestList: typesInRequest);
+      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? '=global';
+      result = _getInjectableObject<B>(module, params: params, typesInRequestList: typesInRequest);
     }
 
     if (result != null) {
@@ -87,8 +80,7 @@ class ModularImpl implements ModularInterface {
     }
 
     for (var key in injectMap.keys) {
-      final value = _getInjectableObject<B>(key,
-          params: params, typesInRequestList: typesInRequest, checkKey: false);
+      final value = _getInjectableObject<B>(key, params: params, typesInRequestList: typesInRequest, checkKey: false);
       if (value != null) {
         return value;
       }
@@ -101,7 +93,7 @@ class ModularImpl implements ModularInterface {
     throw ModularError('${B.toString()} not found');
   }
 
-  B? _getInjectableObject<B>(
+  B? _getInjectableObject<B extends Object>(
     String tag, {
     Map<String, dynamic> params = const {},
     List<Type>? typesInRequestList,
@@ -110,11 +102,9 @@ class ModularImpl implements ModularInterface {
     B? value;
     var typesInRequest = typesInRequestList ?? [];
     if (!checkKey) {
-      value = injectMap[tag]
-          ?.getBind<B>(params: params, typesInRequest: typesInRequest);
+      value = injectMap[tag]?.getBind<B>(params: params, typesInRequest: typesInRequest);
     } else if (injectMap.containsKey(tag)) {
-      value = injectMap[tag]
-          ?.getBind<B>(params: params, typesInRequest: typesInRequest);
+      value = injectMap[tag]?.getBind<B>(params: params, typesInRequest: typesInRequest);
     }
 
     return value;

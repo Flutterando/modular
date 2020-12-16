@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
 
 import '../../core/interfaces/modular_route.dart';
-import '../../core/modules/child_module.dart';
-import '../interfaces/modular_navigator_interface.dart';
+import '../../core/interfaces/child_module.dart';
+import '../../core/interfaces/modular_navigator_interface.dart';
 import '../modular_base.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
