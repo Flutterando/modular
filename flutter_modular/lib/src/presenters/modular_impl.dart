@@ -63,7 +63,7 @@ class ModularImpl implements ModularInterface {
   String get initialRoute => '/';
 
   @override
-  B get<B>(
+  B get<B extends Object>(
       {Map<String, dynamic> params = const {},
       List<Type>? typesInRequestList,
       B? defaultValue}) {
