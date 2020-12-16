@@ -5,7 +5,15 @@
 		},
 		{
 			"path": "modular_codegen"
+		},
+		{
+			"path": "flutter_modular_annotations"
+		},
+		{
+			"path": "flutter_modular_test"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"dart.flutterSdkPath": "/Users/jacobmoura/fvm/versions/master"
+	}
 }

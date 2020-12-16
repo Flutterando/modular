@@ -1,3 +1,13 @@
+## [2.5.0] - 
+* Navigator 2.0
+* Fixed Modular.link
+* Refactor RouteGuard
+* Added Modular.to.navigate
+* Added 3 new bind factories
+ 1. Bind.factory
+ 2. Bind.singleton
+ 3. Bind.lazySingleton
+
 ## [2.0.1] - 21 Sep 2020
 * added onChangeRoute propety in RouterOutlet
 
