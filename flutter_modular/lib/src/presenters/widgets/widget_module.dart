@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../flutter_modular.dart';
-import '../../core/models/bind.dart';
 import '../../core/interfaces/child_module.dart';
+import '../../core/models/bind.dart';
 import '../modular_base.dart';
 
 _debugPrintModular(String text) {

@@ -1,6 +1,5 @@
-import 'modular_base.dart';
-
 import '../core/models/modular_arguments.dart';
+import 'modular_base.dart';
 
 class Inject<T> {
   ///!!!!NOT RECOMMENDED USE!!!!
@@ -12,8 +11,7 @@ class Inject<T> {
 
   Inject({this.params, this.typesInRequest = const []});
 
-  B? call<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) =>
-      get<B>(params: params, defaultValue: defaultValue);
+  B? call<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) => get<B>(params: params, defaultValue: defaultValue);
 
   B? get<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) {
     params ??= {};

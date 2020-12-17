@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/errors/errors.dart';
 
-import '../../core/interfaces/modular_route.dart';
+import '../../core/errors/errors.dart';
 import '../../core/interfaces/child_module.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
+import '../../core/interfaces/modular_route.dart';
 import '../modular_base.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
@@ -28,8 +28,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final routerOutlatPages = <String, List<ModularPage>>{};
 
   @override
-  ModularRoute? get currentConfiguration =>
-      _pages.isEmpty ? null : _pages.last.router;
+  ModularRoute? get currentConfiguration => _pages.isEmpty ? null : _pages.last.router;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +42,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router,
-      [bool execRebuild = true]) async {
+  Future<void> setNewRoutePath(ModularRoute router, [bool execRebuild = true]) async {
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,
@@ -64,9 +62,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     }
 
     if (router.routerOutlet.isNotEmpty) {
-      routerOutlatPages[router.path!] = router.routerOutlet
-          .map((e) => ModularPage(key: ValueKey(e.path), router: e))
-          .toList();
+      routerOutlatPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
     }
 
     rebuildPages();
@@ -78,16 +74,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> navigate(String routeName,
-      {arguments, bool linked = false}) async {
+  Future<void> navigate(String routeName, {arguments, bool linked = false}) async {
     if (routeName == path) {
       return;
     }
 
     routeName = resolverPath(routeName, path);
 
-    var router =
-        await parser.selectRoute(linked ? modulePath + routeName : routeName);
+    var router = await parser.selectRoute(linked ? modulePath + routeName : routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
     setNewRoutePath(router, false);
   }
@@ -133,8 +127,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       if (module.paths.length == 0) {
         module.cleanInjects();
         trash.add(key);
-        Modular.debugPrintModular(
-            "-- ${module.runtimeType.toString()} DISPOSED");
+        Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
       }
     });
 
@@ -149,8 +142,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> pushNamed<T extends Object?>(String routeName,
-      {Object? arguments, bool forRoot = false}) async {
+  Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
@@ -190,11 +182,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(
-      String routeName,
-      {TO? result,
-      Object? arguments,
-      bool forRoot = false}) async {
+  Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
@@ -250,11 +238,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(
-      String routeName,
-      {TO? result,
-      Object? arguments,
-      bool forRoot = false}) async {
+  Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     if (!forRoot && router.routerOutlet.isNotEmpty) {
@@ -264,8 +248,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       _pages.removeLast();
     }
 
-    return await pushNamed<T>(routeName,
-        arguments: arguments, forRoot: forRoot);
+    return await pushNamed<T>(routeName, arguments: arguments, forRoot: forRoot);
   }
 
   @override
@@ -274,33 +257,25 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<bool> maybePop<T extends Object>([T? result]) =>
-      navigator.maybePop(result);
+  Future<bool> maybePop<T extends Object>([T? result]) => navigator.maybePop(result);
 
   @override
   void pop<T extends Object>([T? result]) => navigator.pop(result);
 
   @override
-  void popUntil(bool Function(Route) predicate) =>
-      navigator.popUntil(predicate);
+  void popUntil(bool Function(Route) predicate) => navigator.popUntil(predicate);
 
   @override
-  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
-      String newRouteName, bool Function(Route) predicate,
-      {Object? arguments, bool forRoot = false}) {
+  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(String newRouteName, bool Function(Route) predicate, {Object? arguments, bool forRoot = false}) {
     popUntil(predicate);
     return pushNamed<T>(newRouteName, arguments: arguments, forRoot: forRoot);
   }
 
   @override
-  String get modulePath => currentConfiguration?.routerOutlet.isEmpty == true
-      ? currentConfiguration?.modulePath ?? '/'
-      : currentConfiguration?.routerOutlet.last.modulePath ?? '/';
+  String get modulePath => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.modulePath ?? '/' : currentConfiguration?.routerOutlet.last.modulePath ?? '/';
 
   @override
-  String get path => currentConfiguration?.routerOutlet.isEmpty == true
-      ? currentConfiguration?.path ?? '/'
-      : currentConfiguration?.routerOutlet.last.path ?? '/';
+  String get path => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.path ?? '/' : currentConfiguration?.routerOutlet.last.path ?? '/';
 
   @override
   String get localPath => path.replaceFirst(modulePath, '');
