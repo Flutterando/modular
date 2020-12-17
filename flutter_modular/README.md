@@ -228,6 +228,17 @@ final List<ModularRoute> routes = [
 ];
 ```
 
+Retrive the arguments from binds directaly too:
+
+```dart
+
+@override
+final List<Bind> binds = [
+  Bind.singleton((i) => MyController(data: i.args.data)),
+];
+
+```
+
 ## Route generic types
 
 You can return values from navigation, just like `.pop`.

@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/errors/errors.dart';
-import '../core/models/modular_arguments.dart';
 import '../core/interfaces/child_module.dart';
 import '../core/interfaces/modular_interface.dart';
 import '../core/interfaces/modular_navigator_interface.dart';
+import '../core/models/modular_arguments.dart';
 import 'modular_base.dart';
 import 'navigation/modular_router_delegate.dart';
 

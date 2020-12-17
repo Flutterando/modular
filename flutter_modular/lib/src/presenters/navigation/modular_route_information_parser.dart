@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/interfaces/route_guard.dart';
 
 import '../../core/errors/errors.dart';
-import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/child_module.dart';
+import '../../core/interfaces/modular_route.dart';
 import '../modular_base.dart';
 
-class ModularRouteInformationParser
-    extends RouteInformationParser<ModularRoute> {
+class ModularRouteInformationParser extends RouteInformationParser<ModularRoute> {
   @override
-  Future<ModularRoute> parseRouteInformation(
-      RouteInformation routeInformation) async {
+  Future<ModularRoute> parseRouteInformation(RouteInformation routeInformation) async {
     final path = routeInformation.location ?? '/';
     final route = await selectRoute(path);
     return route;
@@ -19,17 +16,13 @@ class ModularRouteInformationParser
   @override
   RouteInformation restoreRouteInformation(ModularRoute router) {
     return RouteInformation(
-      location: router.routerOutlet.isEmpty
-          ? router.path
-          : router.routerOutlet.last.path,
+      location: router.routerOutlet.isEmpty ? router.path : router.routerOutlet.last.path,
     );
   }
 
-  ModularRoute? _searchInModule(
-      ChildModule module, String routerName, String path) {
+  ModularRoute? _searchInModule(ChildModule module, String routerName, String path) {
     path = "/$path".replaceAll('//', '/');
-    final routers =
-        module.routes.map((e) => e.copyWith(currentModule: module)).toList();
+    final routers = module.routes.map((e) => e.copyWith(currentModule: module)).toList();
     routers.sort((preview, actual) {
       return preview.routerName.contains('/:') ? 1 : 0;
     });
@@ -42,14 +35,12 @@ class ModularRouteInformationParser
     return null;
   }
 
-  ModularRoute? _normalizeRoute(
-      ModularRoute route, String routerName, String path) {
+  ModularRoute? _normalizeRoute(ModularRoute route, String routerName, String path) {
     ModularRoute? router;
     if (routerName == path || routerName == "$path/") {
       router = route.module!.routes[0];
       if (router.module != null) {
-        var _routerName =
-            (routerName + route.routerName).replaceFirst('//', '/');
+        var _routerName = (routerName + route.routerName).replaceFirst('//', '/');
         router = _searchInModule(route.module!, _routerName, path);
       } else {
         router = router.copyWith(path: routerName);
@@ -60,23 +51,17 @@ class ModularRouteInformationParser
     return router;
   }
 
-  ModularRoute? _searchRoute(
-      ModularRoute route, String routerName, String path) {
-    final tempRouteName =
-        (routerName + route.routerName).replaceFirst('//', '/');
+  ModularRoute? _searchRoute(ModularRoute route, String routerName, String path) {
+    final tempRouteName = (routerName + route.routerName).replaceFirst('//', '/');
     if (route.child == null) {
-      var _routerName =
-          ('$routerName${route.routerName}/').replaceFirst('//', '/');
+      var _routerName = ('$routerName${route.routerName}/').replaceFirst('//', '/');
       var router = _normalizeRoute(route, _routerName, path);
 
       if (router != null) {
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
           currentModule: route.currentModule,
-          guards: [
-            if (route.guards != null) ...route.guards!,
-            if (router.guards != null) ...router.guards!
-          ],
+          guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
         );
 
         if (router.transition == TransitionType.defaultTransition) {
@@ -96,10 +81,7 @@ class ModularRouteInformationParser
           var r = _searchRoute(routeChild, tempRouteName, path);
           if (r != null) {
             r.currentModule?.paths.remove(path);
-            r = r.copyWith(
-                modulePath: r.modulePath == route.modulePath
-                    ? tempRouteName
-                    : r.modulePath);
+            r = r.copyWith(modulePath: r.modulePath == route.modulePath ? tempRouteName : r.modulePath);
             route = route.copyWith(routerOutlet: [r], path: tempRouteName);
             return route;
           }
@@ -124,8 +106,7 @@ class ModularRouteInformationParser
     return null;
   }
 
-  String resolveOutletModulePath(
-      String tempRouteName, String outletModulePath) {
+  String resolveOutletModulePath(String tempRouteName, String outletModulePath) {
     var temp = '$tempRouteName/$outletModulePath'.replaceAll('//', '/');
     if (temp.characters.last == '/') {
       return temp.substring(0, temp.length - 1);
@@ -144,8 +125,7 @@ class ModularRouteInformationParser
     return newUrl.join("/");
   }
 
-  ModularRoute _parseUrlParams(
-      ModularRoute router, String routeNamed, String path) {
+  ModularRoute _parseUrlParams(ModularRoute router, String routeNamed, String path) {
     if (routeNamed.contains('/:')) {
       final regExp = RegExp(
         "^${prepareToRegex(routeNamed)}\$",
@@ -165,19 +145,16 @@ class ModularRouteInformationParser
             var paramName = routePart.replaceFirst(':', '');
             if (pathParts[paramPos].isNotEmpty) {
               params[paramName] = pathParts[paramPos];
-              routeNamed =
-                  routeNamed.replaceFirst(routePart, params[paramName]!);
+              routeNamed = routeNamed.replaceFirst(routePart, params[paramName]!);
             }
           }
           paramPos++;
         }
 
-        return router.copyWith(
-            args: router.args!.copyWith(params: params), path: routeNamed);
+        return router.copyWith(args: router.args!.copyWith(params: params), path: routeNamed);
       }
 
-      return router.copyWith(
-          args: router.args!.copyWith(params: null), path: routeNamed);
+      return router.copyWith(args: router.args!.copyWith(params: null), path: routeNamed);
     }
 
     return router.copyWith(path: routeNamed);
@@ -196,13 +173,9 @@ class ModularRouteInformationParser
       final route = _searchInModule(module, "", localPath);
       if (route != null) {
         if (route.children.isNotEmpty && route.routerName != '/') {
-          finded = route.children.last.routerName == '**'
-              ? route.children.last
-              : null;
+          finded = route.children.last.routerName == '**' ? route.children.last : null;
         } else {
-          finded = route.currentModule?.routes.last.routerName == '**'
-              ? route.currentModule?.routes.last
-              : null;
+          finded = route.currentModule?.routes.last.routerName == '**' ? route.currentModule?.routes.last : null;
         }
         route.currentModule?.paths.remove(localPath);
         break;
@@ -250,8 +223,7 @@ class ModularRouteInformationParser
         }
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
-        throw ModularError(
-            'RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
+        throw ModularError('RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
       }
     }
   }

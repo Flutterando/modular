@@ -6,13 +6,4 @@ main() {
     final bind = Bind.instance('teste');
     expect(bind, isA<Bind<String>>());
   });
-
-  test('check type in list', () {
-    final binds = [
-      Bind.instance('teste'),
-      Bind.instance(true),
-    ];
-
-    //  expect(bind, isA<Bind<String>>());
-  });
 }
