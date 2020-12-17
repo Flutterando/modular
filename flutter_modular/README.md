@@ -63,6 +63,11 @@ These are the main aspects that Modular focus on:
 
 # Getting started with Modular
 
+## Migration Guide: Modular 2.0 to 3.0
+
+[Guide link here!](https://medium.com/flutterando/migration-guide-modular-2-0-to-3-0-24ecf31d5e8b)
+
+
 ## Installation
 
 Open your project's `pubspec.yaml` and add `flutter_modular` as a dependency:
