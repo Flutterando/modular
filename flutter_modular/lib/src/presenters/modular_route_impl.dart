@@ -19,168 +19,32 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   final List<ModularRoute> children;
   @override
   final List<ModularRoute> routerOutlet;
+  
   @override
-  final String? path;
+  final Uri? uri;
+  
   @override
   final String? modulePath;
 
-  ///
-  /// Paramenter name: [routerName]
-  ///
-  /// Name for your route
-  ///
-  /// Type: String
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   @override
   final String routerName;
 
-  ///
-  /// Paramenter name: [child]
-  ///
-  /// The widget will be displayed
-  ///
-  /// Type: Widget
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
+
   @override
   final ModularChild? child;
 
-  ///
-  /// Paramenter name: [module]
-  ///
-  /// The module will be loaded
-  ///
-  /// Type: ChildModule
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
   @override
   final ChildModule? module;
 
-  ///
-  /// Paramenter name: [params]
-  ///
-  /// The parameters that can be transferred to another screen
-  ///
-  /// Type: Map<String, String>
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
   @override
   final Map<String, String>? params;
-  ///
-  /// Paramenter name: [queryParams]
-  ///
-  /// The parameters that can be transferred to another screen
-  ///
-  /// Type: Map<String, String>
-  ///
-  /// For more example http://example.com/help?id=12&rate=22
-  ///
-  @override
-  final Map<String, List<String>>? queryParams;
-  ///
-  /// Paramenter name: [fragment]
-  ///
-  /// A url fragment that can be transferred to another screen mostly useful in flutter web
-  ///
-  /// Type: String
-  ///
-  /// For more example http://example.com/help#1223
-  ///
-  @override
-  final String? fragment;
 
-  ///
-  /// Paramenter name: [guards]
-  ///
-  /// Route guards are middleware-like objects
-  ///
-  /// that allow you to control the access of a given route from other route.
-  ///
-  /// You can implement a route guard by making a class that implements RouteGuard.
-  ///
-  /// Type: List<RouteGuard>
-  ///
-  /// Example:
-  /// ```dart
-  ///class MyGuard implements RouteGuard {
-  ///  @override
-  ///  Future<bool> canActivate(String url, ModularRoute router) {
-  ///    if (url != '/admin'){
-  ///      // Return `true` to allow access
-  ///      return true;
-  ///    } else {
-  ///      // Return `false` to disallow access
-  ///      return false
-  ///    }
-  ///  }
-  ///}
-  /// ```
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
-  ///
+
   @override
   final List<RouteGuard>? guards;
-
-  ///
-  /// Paramenter name: [transition]
-  ///
-  /// Used to animate the transition from one screen to another
-  ///
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   @override
   final TransitionType transition;
 
-  ///
-  /// Paramenter name: [customTransiton]
-  ///
-  /// PS: For [customTransition] to work,
-  ///
-  /// you must set the [transition] parameter for
-  /// ```dart
-  /// transition.custom,
-  /// ```
-  ///
-  /// Example: Using just First Animation
-  /// ```dart
-  /// customTransition: CustomTransition(
-  ///   transitionBuilder: (context, animation, secondaryAnimation, child) {
-  ///     return SlideTransition(
-  ///         transformHitTests: false,
-  ///         position: Tween<Offset>(
-  ///           begin: const Offset(0.0, 1.0),
-  ///           end: Offset.zero,
-  ///         ).chain(CurveTween(curve: Curves.ease)).animate(animation),
-  ///         child: child);
-  ///   },
-  /// ),
-  /// ```
-
-  /// Example: Using just secondaryAnimation
-  /// ```dart
-  /// customTransition: CustomTransition(
-  /// transitionBuilder: (context, animation, secondaryAnimation, child) {
-  ///   return SlideTransition(
-  ///     transformHitTests: false,
-  ///     position: Tween<Offset>(
-  ///       begin: const Offset(0.0, 1.0),
-  ///       end: Offset.zero,
-  ///     ).chain(CurveTween(curve: Curves.ease)).animate(animation),
-  ///     child: SlideTransition(
-  ///       transformHitTests: false,
-  ///       position: Tween<Offset>(
-  ///         begin: Offset.zero,
-  ///         end: const Offset(0.0, -1.0),
-  ///       ).chain(CurveTween(curve: Curves.ease)).animate(secondaryAnimation),
-  ///       child: child,
-  ///     ),
-  ///   );
-  ///   },
-  /// ),
-  /// ```
-  /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   @override
   final CustomTransition? customTransition;
 
@@ -214,16 +78,14 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
 
   ModularRouteImpl(
     this.routerName, {
-    this.path = '/',
     this.children = const [],
     this.args = const ModularArguments(),
     this.module,
     this.child,
+    this.uri,
     this.guards,
     this.routerOutlet = const [],
     this.params,
-    this.queryParams,
-    this.fragment,
     this.currentModule,
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
@@ -248,13 +110,11 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       List<ModularRoute>? routerOutlet,
       ChildModule? currentModule,
       Map<String, String>? params,
-      Map<String, List<String>>? queryParams,
-      String? fragment,
+      Uri? uri,
       List<RouteGuard>? guards,
       TransitionType? transition,
       RouteBuilder<T>? routeGenerator,
       String? modulePath,
-      String? path,
       Duration? duration,
       Completer<T>? popRoute,
       ModularArguments? args,
@@ -268,10 +128,8 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       routerOutlet: routerOutlet ?? this.routerOutlet,
       currentModule: currentModule ?? this.currentModule,
       params: params ?? this.params,
-      queryParams: queryParams ?? this.queryParams,
-      fragment: fragment ?? this.fragment,
+      uri: uri ?? this.uri,
       modulePath: modulePath ?? this.modulePath,
-      path: path ?? this.path,
       guards: guards ?? this.guards,
       duration: duration ?? this.duration,
       routeGenerator: routeGenerator ?? this.routeGenerator,
@@ -279,4 +137,16 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       customTransition: customTransition ?? this.customTransition,
     );
   }
+
+  @override
+  String? get path => uri?.toString() ?? '/';
+
+  @override
+  Map<String, List<String>> get queryParamsAll => uri?.queryParametersAll ?? {};
+  
+  @override
+  Map<String, String> get queryParams => uri?.queryParameters ?? {};
+
+  @override
+  String get fragment => uri?.fragment ?? '';
 }

@@ -276,6 +276,11 @@ Dynamic routes apply here as well. The following URL, for instance, will open th
 https://flutter-website.com/#/product/1
 ```
 
+As well could use query parameters or fragment:
+```
+https://flutter-website.com/#/product?id=1
+```
+
 ## Creating child modules
 
 You can create as many modules in your project as you wish, but they will be dependent of the main module. To do so, instead of inheriting from `MainModule`, you should inherit from `ChildModule`:
