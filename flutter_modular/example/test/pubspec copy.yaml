@@ -22,7 +22,7 @@ environment:
 
 dependencies:
   flutter_modular:
-    path: ../../flutter_modular
+    path: /Users/jacobmoura/Projects/modular/flutter_modular
   http:
     git: https://github.com/dart-lang/http
       

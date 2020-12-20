@@ -3,13 +3,12 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
-import 'package:flutter_modular/flutter_modular_annotations.dart';
+import 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
   @override
-  FutureOr<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) async {
+  FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) async {
     final singleton = annotation.read('singleton').boolValue;
     final lazy = annotation.read('lazy').boolValue;
 
@@ -30,8 +29,7 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
         break;
       }
     }
-    _write(
-        "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), singleton: $singleton, lazy: $lazy,);");
+    _write("final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), isSingleton: $singleton, isLazy: $lazy,);");
     return _buffer.toString();
   }
 }
@@ -49,14 +47,12 @@ class ModelVisitor extends SimpleElementVisitor {
     isAnnotation = element.parameters.firstWhere((param) {
           if (param.metadata.length > 0) {
             return param.metadata.firstWhere((param) {
-                  return param.element.displayName == "Data" ||
-                      param.element.displayName == "Param" ||
-                      param.element.displayName == "Default";
-                }, orElse: () => null) !=
+                  return param.element.displayName == "Data" || param.element.displayName == "Param" || param.element.displayName == "Default";
+                }, orElse: (() => null) as ElementAnnotation Function()) !=
                 null;
           }
           return false;
-        }, orElse: () => null) !=
+        }, orElse: (() => null) as ParameterElement Function()) !=
         null;
     writeParams(element.parameters);
   }
