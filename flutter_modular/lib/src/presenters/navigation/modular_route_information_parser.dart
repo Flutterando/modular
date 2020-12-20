@@ -191,15 +191,35 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
+    var uri = Uri.tryParse(path);
+    Map<String, List<String>>? queryParams;
+    String? fragment;
+    // the fragments and query params are removed from the path so that it doesn't affect route matching etc
+    //i.e /dashboard should also match /dashboard?id=12
+    if (uri != null) {
+      queryParams = uri.queryParametersAll;
+      path = uri.path;
+      fragment = uri.fragment;
+    }
     var router = _searchInModule(module ?? Modular.initialModule, "", path);
 
     if (router != null) {
+      router= _addQueryParamsAndFragment(router, queryParams, fragment);
       return canActivate(path, router);
     } else {
       router = _searchWildcard(path, module ?? Modular.initialModule);
-      if (router != null) return router;
+      if (router != null) {
+        router= _addQueryParamsAndFragment(router, queryParams, fragment);
+        return router;
+      }
     }
     throw ModularError('Route \'$path\' not found');
+  }
+
+  ModularRoute _addQueryParamsAndFragment(ModularRoute router, Map<String, List<String>>? queryParams, String? fragment) {
+    return router.copyWith(queryParams: queryParams, fragment: fragment,
+        args: router.args!.copyWith(
+            queryParams: queryParams, fragment: fragment));
   }
 
   Future<ModularRoute> canActivate(String path, ModularRoute router) async {
