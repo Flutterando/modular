@@ -66,6 +66,33 @@ main() {
       expect(route.path, '/mock/list');
     });
 
+    test('should retrieve router /mock/list?id=1234&type=DYN', () async {
+      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<ListView>());
+      expect(route.path, '/mock/list');
+      expect(route.queryParams, {'id':['1234'],'type':['DYN']});
+      expect(route.fragment, '');
+    });
+
+    test('should retrieve router /mock/list?id=1234&type=DYN#abcd', () async {
+      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN#abcd', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<ListView>());
+      expect(route.path, '/mock/list');
+      expect(route.queryParams, {'id':['1234'],'type':['DYN']});
+      expect(route.fragment, 'abcd');
+    });
+
+    test('should retrieve router /mock/list#abcd', () async {
+      final route = await parse.selectRoute('/mock/list#abcd', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<ListView>());
+      expect(route.path, '/mock/list');
+      expect(route.queryParams, {});
+      expect(route.fragment, 'abcd');
+    });
+
     test('should retrive dynamic router /mock/list/:id', () async {
       final route = await parse.selectRoute('/mock/list/3', ModuleMock());
       expect(route, isNotNull);

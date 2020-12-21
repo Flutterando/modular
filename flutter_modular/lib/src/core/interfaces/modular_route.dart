@@ -70,6 +70,28 @@ abstract class ModularRoute<T> {
   Map<String, String>? get params;
 
   ///
+  /// Paramenter name: [queryParams]
+  ///
+  /// The parameters that can be transferred to another screen
+  ///
+  /// Type: Map<String, String>
+  ///
+  /// For more example http://example.com/help?id=12&rate=22
+  ///
+  Map<String, List<String>>? get queryParams;
+
+  ///
+  /// Paramenter name: [fragment]
+  ///
+  /// A url fragment that can be transferred to another screen mostly useful in flutter web
+  ///
+  /// Type: String
+  ///
+  /// For more example http://example.com/help#1223
+  ///
+  String? get fragment;
+
+  ///
   /// Paramenter name: [guards]
   ///
   /// Route guards are middleware-like objects
@@ -159,35 +181,40 @@ abstract class ModularRoute<T> {
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
   CustomTransition? get customTransition;
+
   String? get modulePath;
+
   Duration get duration;
+
   RouteBuilder<T>? get routeGenerator;
+
   Map<
       TransitionType,
       PageRouteBuilder<T> Function(
-    Widget Function(BuildContext, ModularArguments?) builder,
-    ModularArguments? args,
-    Duration transitionDuration,
-    RouteSettings settings,
-  )> get transitions;
+          Widget Function(BuildContext, ModularArguments?) builder,
+          ModularArguments? args,
+          Duration transitionDuration,
+          RouteSettings settings,
+          )> get transitions;
 
-  ModularRoute<T> copyWith(
-      {ModularChild? child,
-      String? routerName,
-      ChildModule? module,
-      List<ModularRoute>? children,
-      List<ModularRoute>? routerOutlet,
-      ChildModule? currentModule,
-      Map<String, String>? params,
-      List<RouteGuard>? guards,
-      TransitionType? transition,
-      RouteBuilder<T>? routeGenerator,
-      String? modulePath,
-      String? path,
-      Duration? duration,
-      Completer<T>? popRoute,
-      ModularArguments? args,
-      CustomTransition? customTransition});
+  ModularRoute<T> copyWith({ModularChild? child,
+    String? routerName,
+    ChildModule? module,
+    List<ModularRoute>? children,
+    List<ModularRoute>? routerOutlet,
+    ChildModule? currentModule,
+    Map<String, String>? params,
+    Map<String, List<String>>? queryParams,
+    String? fragment,
+    List<RouteGuard>? guards,
+    TransitionType? transition,
+    RouteBuilder<T>? routeGenerator,
+    String? modulePath,
+    String? path,
+    Duration? duration,
+    Completer<T>? popRoute,
+    ModularArguments? args,
+    CustomTransition? customTransition});
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes

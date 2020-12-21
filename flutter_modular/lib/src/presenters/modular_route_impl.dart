@@ -10,8 +10,6 @@ import '../core/models/custom_transition.dart';
 import '../core/models/modular_arguments.dart';
 import 'transitions/transitions.dart';
 
-
-
 class ModularRouteImpl<T> extends ModularRoute<T> {
   @override
   final ChildModule? currentModule;
@@ -72,6 +70,28 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   ///
   @override
   final Map<String, String>? params;
+  ///
+  /// Paramenter name: [queryParams]
+  ///
+  /// The parameters that can be transferred to another screen
+  ///
+  /// Type: Map<String, String>
+  ///
+  /// For more example http://example.com/help?id=12&rate=22
+  ///
+  @override
+  final Map<String, List<String>>? queryParams;
+  ///
+  /// Paramenter name: [fragment]
+  ///
+  /// A url fragment that can be transferred to another screen mostly useful in flutter web
+  ///
+  /// Type: String
+  ///
+  /// For more example http://example.com/help#1223
+  ///
+  @override
+  final String? fragment;
 
   ///
   /// Paramenter name: [guards]
@@ -202,6 +222,8 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
     this.guards,
     this.routerOutlet = const [],
     this.params,
+    this.queryParams,
+    this.fragment,
     this.currentModule,
     this.transition = TransitionType.defaultTransition,
     this.routeGenerator,
@@ -226,6 +248,8 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       List<ModularRoute>? routerOutlet,
       ChildModule? currentModule,
       Map<String, String>? params,
+      Map<String, List<String>>? queryParams,
+      String? fragment,
       List<RouteGuard>? guards,
       TransitionType? transition,
       RouteBuilder<T>? routeGenerator,
@@ -244,6 +268,8 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       routerOutlet: routerOutlet ?? this.routerOutlet,
       currentModule: currentModule ?? this.currentModule,
       params: params ?? this.params,
+      queryParams: queryParams ?? this.queryParams,
+      fragment: fragment ?? this.fragment,
       modulePath: modulePath ?? this.modulePath,
       path: path ?? this.path,
       guards: guards ?? this.guards,
