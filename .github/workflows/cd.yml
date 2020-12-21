@@ -24,3 +24,4 @@ jobs:
         EOF
     - name: Publish package
       run: pub publish -f
+      working-directory: flutter_modular
