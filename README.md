@@ -3,7 +3,7 @@
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -63,6 +63,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
   <tr>
     <td align="center"><a href="http://toshiossada.com"><img src="https://avatars2.githubusercontent.com/u/2637049?v=4" width="100px;" alt=""/><br /><sub><b>Toshi Ossada</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=toshiossada" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=toshiossada" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/allanlucio"><img src="https://avatars0.githubusercontent.com/u/7063932?v=4" width="100px;" alt=""/><br /><sub><b>Allan L.</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=allanlucio" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=allanlucio" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=allanlucio" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://domkar.dev"><img src="https://avatars0.githubusercontent.com/u/7688351?v=4" width="100px;" alt=""/><br /><sub><b>David Domkář</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=DavidDomkar" title="Code">💻</a></td>
   </tr>
 </table>
 
