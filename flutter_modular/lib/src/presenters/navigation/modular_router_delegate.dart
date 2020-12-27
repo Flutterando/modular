@@ -70,7 +70,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
   String resolverPath(String routeName, String path) {
     final uri = Uri.parse(path);
-    return uri.resolve(routeName).path;
+    return '${uri.resolve(routeName).toString()}';
   }
 
   @override
