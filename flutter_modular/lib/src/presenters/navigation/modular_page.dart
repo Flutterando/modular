@@ -61,6 +61,20 @@ class ModularPage<T> extends Page<T> {
         settings: this,
         builder: widgetBuilder,
       );
+    } else if (router.transition == TransitionType.noTransition) {
+      // Helper function
+      Widget widgetBuilder(BuildContext context) {
+        //return disposablePage;
+        return router.child!(context, router.args);
+      }
+
+      if (router.routeGenerator != null) {
+        return router.routeGenerator!(widgetBuilder, this) as Route<T>;
+      }
+      return NoTransitionMaterialPageRoute<T>(
+        settings: this,
+        builder: widgetBuilder,
+      );
     } else {
       var selectTransition = router.transitions[router.transition];
       if (selectTransition != null) {
@@ -77,4 +91,26 @@ class ModularRouteSettings extends Route {
   final ModularPage page;
 
   ModularRouteSettings(this.page) : super(settings: page);
+}
+
+class NoTransitionMaterialPageRoute<T> extends MaterialPageRoute<T> {
+  NoTransitionMaterialPageRoute({
+    required WidgetBuilder builder,
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) : super(
+            builder: builder,
+            maintainState: maintainState,
+            settings: settings,
+            fullscreenDialog: fullscreenDialog);
+
+  @override
+  Duration get transitionDuration => Duration.zero;
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return child;
+  }
 }
