@@ -22,6 +22,8 @@ abstract class ModularRoute<T> {
 
   final List<ModularRoute> routerOutlet = [];
 
+  Uri? get uri;
+
   String? get path;
 
   ///
@@ -78,7 +80,18 @@ abstract class ModularRoute<T> {
   ///
   /// For more example http://example.com/help?id=12&rate=22
   ///
-  Map<String, List<String>>? get queryParams;
+  Map<String, String> get queryParams;
+
+  ///
+  /// Paramenter name: [queryParamsAll]
+  ///
+  /// The parameters that can be transferred to another screen
+  ///
+  /// Type: Map<String, String>
+  ///
+  /// For more example http://example.com/help?id=12&rate=22
+  /// 
+  Map<String, List<String>> get queryParamsAll;
 
   ///
   /// Paramenter name: [fragment]
@@ -89,7 +102,7 @@ abstract class ModularRoute<T> {
   ///
   /// For more example http://example.com/help#1223
   ///
-  String? get fragment;
+  String get fragment;
 
   ///
   /// Paramenter name: [guards]
@@ -204,13 +217,11 @@ abstract class ModularRoute<T> {
     List<ModularRoute>? routerOutlet,
     ChildModule? currentModule,
     Map<String, String>? params,
-    Map<String, List<String>>? queryParams,
-    String? fragment,
     List<RouteGuard>? guards,
     TransitionType? transition,
     RouteBuilder<T>? routeGenerator,
     String? modulePath,
-    String? path,
+    Uri uri,
     Duration? duration,
     Completer<T>? popRoute,
     ModularArguments? args,

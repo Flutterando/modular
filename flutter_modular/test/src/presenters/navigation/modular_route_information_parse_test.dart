@@ -13,110 +13,115 @@ main() {
   BuildContext context = Container().createElement();
 
   group('Single Module | ', () {
-    test('should retrive router /', () async {
+    test('should retrive route /', () async {
       final route = await parse.selectRoute('/', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<Container>());
       expect(route.path, '/');
     });
 
-    test('should retrive router /list', () async {
+    test('should retrive route /list', () async {
       final route = await parse.selectRoute('/list', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/list');
     });
-    test('should retrive dynamic router /list/:id', () async {
+    test('should retrive dynamic route /list/:id', () async {
       final route = await parse.selectRoute('/list/2', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, route.args).toString(), '2');
       expect(route.path, '/list/2');
     });
 
-    test('should retrive Widcard router when not exist path', () async {
+    test('should retrive Widcard route when not exist path', () async {
       final route = await parse.selectRoute('/paulo', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<FlutterLogo>());
     });
 
-    test('should guard router /401', () async {
+    test('should guard route /401', () async {
       expect(parse.selectRoute('/401', ModuleMock()), throwsA(isA<ModularError>()));
     });
   });
 
   group('Multi Module | ', () {
-    test('should retrive router /mock', () async {
+    test('should retrive route /mock', () async {
       final route = await parse.selectRoute('/mock', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<SizedBox>());
       expect(route.path, '/mock/');
     });
 
-    test('should retrive router /mock/', () async {
+    test('should retrive route /mock/', () async {
       final route = await parse.selectRoute('/mock/', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<SizedBox>());
       expect(route.path, '/mock/');
     });
 
-    test('should retrive router /mock/list', () async {
+    test('should retrive route /mock/list', () async {
       final route = await parse.selectRoute('/mock/list', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/mock/list');
     });
 
-    test('should retrieve router /mock/list?id=1234&type=DYN', () async {
+    test('should retrieve route /mock/list?id=1234&type=DYN', () async {
       final route = await parse.selectRoute('/mock/list?id=1234&type=DYN', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<ListView>());
-      expect(route.path, '/mock/list');
-      expect(route.queryParams, {'id':['1234'],'type':['DYN']});
+      expect(route.path, '/mock/list?id=1234&type=DYN');
+      expect(route.uri?.path, '/mock/list');
+      expect(route.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
       expect(route.fragment, '');
     });
 
-    test('should retrieve router /mock/list?id=1234&type=DYN#abcd', () async {
+    test('should retrieve route /mock/list?id=1234&type=DYN#abcd', () async {
       final route = await parse.selectRoute('/mock/list?id=1234&type=DYN#abcd', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<ListView>());
-      expect(route.path, '/mock/list');
-      expect(route.queryParams, {'id':['1234'],'type':['DYN']});
+      expect(route.path, '/mock/list?id=1234&type=DYN#abcd');
+      expect(route.uri?.path, '/mock/list');
+      expect(route.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
       expect(route.fragment, 'abcd');
     });
 
-    test('should retrieve router /mock/list#abcd', () async {
+    test('should retrieve route /mock/list#abcd', () async {
       final route = await parse.selectRoute('/mock/list#abcd', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<ListView>());
-      expect(route.path, '/mock/list');
+      expect(route.path, '/mock/list#abcd');
+      expect(route.uri?.path, '/mock/list');
       expect(route.queryParams, {});
       expect(route.fragment, 'abcd');
     });
 
-    test('should retrive dynamic router /mock/list/:id', () async {
+    test('should retrive dynamic route /mock/list/:id', () async {
       final route = await parse.selectRoute('/mock/list/3', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, route.args).toString(), '3');
       expect(route.path, '/mock/list/3');
     });
 
-    test('should retrive Widcard router when not exist path', () async {
+    test('should retrive Widcard route when not exist path', () async {
       final route = await parse.selectRoute('/mock/paulo', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<FlutterLogo>());
     });
 
-    test('should guard router /mock/listguarded', () async {
+    test('should guard route /mock/listguarded', () async {
       expect(parse.selectRoute('/mock/listguarded', ModuleMock()), throwsA(isA<ModularError>()));
     });
 
-    test('should guard router /guarded/list', () async {
+    test('should guard route /guarded/list', () async {
       expect(parse.selectRoute('/guarded/list', ModuleMock()), throwsA(isA<ModularError>()));
     });
   });
 
   group('Outlet Module | ', () {
-    test('should retrive router /home/tab1', () async {
+    test('should retrive route /home/tab1', () async {
       final route = await parse.selectRoute('/home/tab1', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<Scaffold>());
@@ -125,7 +130,7 @@ main() {
       expect(route.routerOutlet[0].child!(context, null), isA<TextField>());
       expect(route.routerOutlet[0].path, '/home/tab1');
     });
-    test('should retrive router /home/tab2/:id', () async {
+    test('should retrive route /home/tab2/:id', () async {
       final route = await parse.selectRoute('/home/tab2/3', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<Scaffold>());
@@ -138,7 +143,7 @@ main() {
       expect(parse.selectRoute('/home/tab3', ModuleMock()), throwsA(isA<ModularError>()));
     });
 
-    test('should retrive router  (Module)', () async {
+    test('should retrive route  (Module)', () async {
       final route = await parse.selectRoute('/mock/home', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<SizedBox>());
@@ -282,7 +287,7 @@ class CustomWidget extends StatelessWidget {
 
 class MyGuard implements RouteGuard {
   @override
-  Future<bool> canActivate(String path, ModularRoute router) async {
+  Future<bool> canActivate(String path, ModularRoute route) async {
     if (path == '/401') {
       return false;
     } else if (path == '/mock/listguarded') {
@@ -295,7 +300,7 @@ class MyGuard implements RouteGuard {
 
 class MyGuardModule implements RouteGuard {
   @override
-  Future<bool> canActivate(String path, ModularRoute router) async {
+  Future<bool> canActivate(String path, ModularRoute route) async {
     if (path == '/guarded/list') {
       return false;
     } else {

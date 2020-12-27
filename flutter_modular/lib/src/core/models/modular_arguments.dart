@@ -1,21 +1,21 @@
 class ModularArguments {
   final Map<String, dynamic>? params;
-  final Map<String, List<String>>? queryParams;
-  final String? fragment;
+  final Uri? uri;
   final dynamic? data;
 
-  const ModularArguments({this.params, this.data, this.queryParams,this.fragment});
+  const ModularArguments({this.params, this.data, this.uri});
 
-  ModularArguments copyWith({Map<String, dynamic>? params, dynamic? data, Map<
-      String,
-      List<String>>? queryParams, String? fragment}) {
+  ModularArguments copyWith({Map<String, dynamic>? params, dynamic? data, Uri? uri}) {
     return ModularArguments(
       params: params ?? this.params,
       data: data ?? this.data,
-      queryParams: queryParams ?? this.queryParams,
-      fragment: fragment ?? this.fragment,
+      uri: uri ?? this.uri,
     );
   }
+
+  String get fragment => uri?.fragment ?? '';
+  Map<String, String> get queryParams => uri?.queryParameters ?? {};
+  Map<String, List<String>> get queryParamsAll => uri?.queryParametersAll ?? {};
 
   factory ModularArguments.empty() {
     return ModularArguments();
