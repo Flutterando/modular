@@ -464,6 +464,8 @@ class AppBloc extends Disposable {
 }
 ```
 
+> **NOTE**: Modular automatically calls destruction methods Binds of the type: **Sink/Stream**, **ChangeNotifier** e **[Store/Triple** 
+
 There are several ways to retrieve our injected `AppBloc`.
 
 ```dart
@@ -490,10 +492,10 @@ class MyWidget extends StatefulWidget {
   _MyWidgetState createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends ModularState<MyWidget, HomeController> {
+class _MyWidgetState extends ModularState<MyWidget, HomeStore> {
 
-  // Variable controller
-  // Automatic dispose of HomeController
+  // Variable store
+  // Automatic dispose of HomeStore
 
   @override
   Widget build(BuildContext context) {
@@ -501,7 +503,7 @@ class _MyWidgetState extends ModularState<MyWidget, HomeController> {
       appBar: AppBar(
         title: Text("Modular"),
       ),
-      body: Center(child: Text("${controller.counter}"),),
+      body: Center(child: Text("${store.counter}"),),
     );
   }
 }
