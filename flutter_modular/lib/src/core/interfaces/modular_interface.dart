@@ -12,7 +12,7 @@ abstract class ModularInterface {
   void debugPrintModular(String text);
 
   IModularNavigator get to;
-  B? get<B extends Object>({
+  B get<B extends Object>({
     Map<String, dynamic> params = const {},
     List<Type>? typesInRequestList,
     B? defaultValue,
