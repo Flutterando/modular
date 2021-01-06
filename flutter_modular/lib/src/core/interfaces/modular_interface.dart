@@ -18,5 +18,5 @@ abstract class ModularInterface {
     B? defaultValue,
   });
 
-  void dispose<B>();
+  bool dispose<B extends Object>();
 }
