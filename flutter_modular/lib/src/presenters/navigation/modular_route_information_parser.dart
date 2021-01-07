@@ -159,15 +159,15 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           paramPos++;
         }
         uri = uri.replace(path: routeNamed);
-        return router.copyWith(args: router.args!.copyWith(params: params), uri: uri);
+        return router.copyWith(args: router.args!.copyWith(params: params, uri: uri), uri: uri);
       }
 
       uri = uri.replace(path: routeNamed);
-      return router.copyWith(args: router.args!.copyWith(params: null), uri: uri);
+      return router.copyWith(args: router.args!.copyWith(params: null, uri: uri), uri: uri);
     }
 
     uri = uri.replace(path: routeNamed);
-    return router.copyWith(uri: uri);
+    return router.copyWith(uri: uri, args: router.args!.copyWith(uri: uri));
   }
 
   ModularRoute? _searchWildcard(
@@ -205,14 +205,14 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     var router = _searchInModule(module ?? Modular.initialModule, "", uri);
 
     if (router != null) {
-      return canActivate(path, router);
+      return canActivate(uri.path, router);
     } else {
-      router = _searchWildcard(path, module ?? Modular.initialModule);
+      router = _searchWildcard(uri.path, module ?? Modular.initialModule);
       if (router != null) {
         return router;
       }
     }
-    throw ModularError('Route \'$path\' not found');
+    throw ModularError('Route \'${uri.path}\' not found');
   }
 
   Future<ModularRoute> canActivate(String path, ModularRoute router) async {
