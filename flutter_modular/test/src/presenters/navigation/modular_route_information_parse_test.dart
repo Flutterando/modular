@@ -33,8 +33,63 @@ main() {
       expect(route.path, '/list/2');
     });
 
+    test('should retrieve route /list?id=1234&type=DYN', () async {
+      final route = await parse.selectRoute('/list?id=1234&type=DYN', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<ListView>());
+      expect(route.path, '/list?id=1234&type=DYN');
+      expect(route.uri?.path, '/list');
+      expect(route.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.fragment, '');
+      expect(route.args?.uri?.path, '/list');
+      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.fragment, '');
+    });
+
+    test('should retrieve route /list?id=1234&type=DYN#abcd', () async {
+      final route = await parse.selectRoute('/list?id=1234&type=DYN#abcd', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<ListView>());
+      expect(route.path, '/list?id=1234&type=DYN#abcd');
+      expect(route.uri?.path, '/list');
+      expect(route.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.fragment, 'abcd');
+      expect(route.args?.uri?.path, '/list');
+      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.fragment, 'abcd');
+    });
+
+    test('should retrieve route /mock/list#abcd', () async {
+      final route = await parse.selectRoute('/list#abcd', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<ListView>());
+      expect(route.path, '/list#abcd');
+      expect(route.uri?.path, '/list');
+      expect(route.queryParams, {});
+      expect(route.fragment, 'abcd');
+      expect(route.args?.uri?.path, '/list');
+      expect(route.args?.queryParams, {});
+      expect(route.args?.fragment, 'abcd');
+    });
+
     test('should retrive Widcard route when not exist path', () async {
       final route = await parse.selectRoute('/paulo', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<FlutterLogo>());
+    });
+
+    test('should retrive Widcard route when path with query params doesnt exist', () async {
+      final route = await parse.selectRoute('/paulo?adbc=1234', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<FlutterLogo>());
+    });
+
+    test('should retrive Widcard route when path with fragment doesnt exist', () async {
+      final route = await parse.selectRoute('/paulo#adbc=1234', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<FlutterLogo>());
     });
@@ -75,6 +130,10 @@ main() {
       expect(route.queryParams, {'id':'1234','type':'DYN'});
       expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
       expect(route.fragment, '');
+      expect(route.args?.uri?.path, '/mock/list');
+      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.fragment, '');
     });
 
     test('should retrieve route /mock/list?id=1234&type=DYN#abcd', () async {
@@ -86,6 +145,10 @@ main() {
       expect(route.queryParams, {'id':'1234','type':'DYN'});
       expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
       expect(route.fragment, 'abcd');
+      expect(route.args?.uri?.path, '/mock/list');
+      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
+      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.fragment, 'abcd');
     });
 
     test('should retrieve route /mock/list#abcd', () async {
@@ -96,6 +159,9 @@ main() {
       expect(route.uri?.path, '/mock/list');
       expect(route.queryParams, {});
       expect(route.fragment, 'abcd');
+      expect(route.args?.uri?.path, '/mock/list');
+      expect(route.args?.queryParams, {});
+      expect(route.args?.fragment, 'abcd');
     });
 
     test('should retrive dynamic route /mock/list/:id', () async {
@@ -113,6 +179,14 @@ main() {
 
     test('should guard route /mock/listguarded', () async {
       expect(parse.selectRoute('/mock/listguarded', ModuleMock()), throwsA(isA<ModularError>()));
+    });
+
+    test('should guard route /mock/listguarded with params', () async {
+      expect(parse.selectRoute('/mock/listguarded?abc=def', ModuleMock()), throwsA(isA<ModularError>()));
+    });
+
+    test('should guard route /mock/listguarded with fragment', () async {
+      expect(parse.selectRoute('/mock/listguarded#abc=def', ModuleMock()), throwsA(isA<ModularError>()));
     });
 
     test('should guard route /guarded/list', () async {
