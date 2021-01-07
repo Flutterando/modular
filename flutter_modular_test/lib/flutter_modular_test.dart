@@ -11,8 +11,7 @@ void initModule(ChildModule module, {List<Bind<Object>> replaceBinds = const [],
       return item.runtimeType == dep.runtimeType;
     }, orElse: () => BindEmpty());
     if (dep is! BindEmpty) {
-      module.binds.remove(item);
-      module.binds.add(dep);
+      module.binds[module.binds.indexOf(item)] = dep;
     }
   }
   //module.changeBinds(changedList);
