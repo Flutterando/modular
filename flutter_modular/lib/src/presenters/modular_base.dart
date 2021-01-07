@@ -10,8 +10,8 @@ import 'navigation/router_outlet_delegate.dart';
 
 final Map<String, ChildModule> _injectMap = {};
 
-final _routeInformationParser = ModularRouteInformationParser();
-final _routerDelegate = ModularRouterDelegate(
+late final _routeInformationParser = ModularRouteInformationParser();
+late final _routerDelegate = ModularRouterDelegate(
   _routeInformationParser,
   _injectMap,
 );
@@ -22,8 +22,13 @@ final ModularInterface Modular = ModularImpl(
   injectMap: _injectMap,
 );
 
+@visibleForTesting
+String initialRouteDeclaratedInMaterialApp = '/';
+
 extension ModularExtension on MaterialApp {
   MaterialApp modular() {
+    initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
+
     final app = MaterialApp.router(
       key: key,
       scaffoldMessengerKey: scaffoldMessengerKey,
@@ -81,8 +86,7 @@ class _RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final router = Router.of(context);
-    _backButtonDispatcher =
-        router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override
