@@ -42,7 +42,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router, [bool execRebuild = true]) async {
+  Future<void> setNewRoutePath(ModularRoute router, [bool replaceAll = true]) async {
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,
@@ -57,8 +57,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
           removeInject(r.path!);
         }
       }
-
-      _pages = [page];
+      if (replaceAll) {
+        _pages = [page];
+      } else if (_pages.last.router.path != router.path) {
+        _pages.last = page;
+      } else {
+        _pages.last.router.routerOutlet.clear();
+        _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+      }
     }
 
     if (router.routerOutlet.isNotEmpty) {
@@ -74,16 +80,15 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> navigate(String routeName, {arguments, bool linked = false}) async {
+  Future<void> navigate(String routeName, {arguments, bool replaceAll = false}) async {
+    routeName = resolverPath(routeName, path);
     if (routeName == path) {
       return;
     }
 
-    routeName = resolverPath(routeName, path);
-
-    var router = await parser.selectRoute(linked ? modulePath + routeName : routeName);
+    var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
-    setNewRoutePath(router, false);
+    setNewRoutePath(router, replaceAll);
   }
 
   // @override
@@ -160,6 +165,15 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         _pages.add(page);
         rebuildPages();
         return await page.waitPop();
+      } else if (router.routerName != currentConfiguration?.routerName) {
+        routerOutlatPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+        final rootPage = ModularPage<T>(
+          key: UniqueKey(),
+          router: router,
+        );
+        _pages.add(rootPage);
+        rebuildPages();
+        return await rootPage.waitPop();
       } else {
         routerOutlatPages[router.path!]?.add(page);
         currentConfiguration?.routerOutlet.add(outletRouter);

@@ -11,9 +11,9 @@ class Inject<T> {
 
   Inject({this.params, this.typesInRequest = const []});
 
-  B? call<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) => get<B>(params: params, defaultValue: defaultValue);
+  B call<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) => get<B>(params: params, defaultValue: defaultValue);
 
-  B? get<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) {
+  B get<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) {
     params ??= {};
     return Modular.get<B>(
       params: params,
@@ -24,9 +24,7 @@ class Inject<T> {
 
   ModularArguments? get args => Modular.args;
 
-  void dispose<B>() {
-    if (T.runtimeType.toString() != 'dynamic') {
-      Modular.dispose<B>();
-    }
+  bool dispose<B extends Object>() {
+    return Modular.dispose<B>();
   }
 }

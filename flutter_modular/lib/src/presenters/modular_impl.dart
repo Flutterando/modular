@@ -111,16 +111,16 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  void dispose<B>() {
-    if (B.toString() == 'dynamic') {
-      throw ModularError('not allow for dynamic values');
-    }
-
+  bool dispose<B extends Object>() {
+    var isDisposed = false;
     for (var key in injectMap.keys) {
       if (_removeInjectableObject<B>(key)) {
+        isDisposed = true;
         break;
       }
     }
+
+    return isDisposed;
   }
 
   bool _removeInjectableObject<B>(String tag) {

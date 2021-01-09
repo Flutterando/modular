@@ -5,10 +5,18 @@ import '../../core/interfaces/child_module.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../modular_base.dart';
 
+bool _firstParse = false;
+
 class ModularRouteInformationParser extends RouteInformationParser<ModularRoute> {
   @override
   Future<ModularRoute> parseRouteInformation(RouteInformation routeInformation) async {
-    final path = routeInformation.location ?? '/';
+    late final path;
+    if (!_firstParse) {
+      // ignore: invalid_use_of_visible_for_testing_member
+      path = initialRouteDeclaratedInMaterialApp;
+    } else {
+      path = routeInformation.location ?? '/';
+    }
     final route = await selectRoute(path);
     return route;
   }
@@ -151,15 +159,15 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           paramPos++;
         }
         uri = uri.replace(path: routeNamed);
-        return router.copyWith(args: router.args!.copyWith(params: params,uri: uri), uri: uri);
+        return router.copyWith(args: router.args!.copyWith(params: params, uri: uri), uri: uri);
       }
 
       uri = uri.replace(path: routeNamed);
-      return router.copyWith(args: router.args!.copyWith(params: null,uri: uri), uri: uri);
+      return router.copyWith(args: router.args!.copyWith(params: null, uri: uri), uri: uri);
     }
 
     uri = uri.replace(path: routeNamed);
-    return router.copyWith(uri: uri,args: router.args!.copyWith(uri: uri));
+    return router.copyWith(uri: uri, args: router.args!.copyWith(uri: uri));
   }
 
   ModularRoute? _searchWildcard(
@@ -206,8 +214,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     }
     throw ModularError('Route \'${uri.path}\' not found');
   }
-
-
 
   Future<ModularRoute> canActivate(String path, ModularRoute router) async {
     if (router.guards?.isNotEmpty == true) {
