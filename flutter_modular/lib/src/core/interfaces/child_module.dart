@@ -77,10 +77,6 @@ ${typesInRequest.join('\n')}
   _callDispose(dynamic bind) {
     if (bind is Disposable) {
       bind.dispose();
-    }
-
-    if (bind is Disposable) {
-      bind.dispose();
     } else if (bind is ChangeNotifier) {
       bind.dispose();
     } else if (bind is Sink) {
