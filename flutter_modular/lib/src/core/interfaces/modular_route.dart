@@ -8,7 +8,7 @@ import '../models/modular_arguments.dart';
 import 'child_module.dart';
 import 'route_guard.dart';
 
-typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
+typedef RouteBuilder<T> = Route<T> Function(
     WidgetBuilder, RouteSettings);
 typedef ModularChild = Widget Function(
     BuildContext context, ModularArguments? args);

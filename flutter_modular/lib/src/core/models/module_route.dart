@@ -10,8 +10,8 @@ class ModuleRoute extends ModularRouteImpl {
     required ChildModule module,
     List<RouteGuard>? guards,
     TransitionType transition = TransitionType.defaultTransition,
-    CustomTransition? customTransition,
+    CustomTransition? customTransition, RouteBuilder? routeGenerator,
     Duration duration = const Duration(milliseconds: 300),
   })  : assert(!routerName.contains('/:'), 'ModuleRoute should not contain dynamic route'),
-        super(routerName, routerOutlet: [], duration: duration, module: module, customTransition: customTransition, guards: guards, transition: transition);
+        super(routerName, routerOutlet: [], duration: duration,routeGenerator: routeGenerator, module: module, customTransition: customTransition, guards: guards, transition: transition);
 }
