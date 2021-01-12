@@ -16,7 +16,7 @@ class ModularImpl implements ModularInterface {
   IModularNavigator? navigatorDelegate;
 
   @override
-  ModularArguments? get args => routerDelegate.currentConfiguration?.args;
+  ModularArguments? get args => routerDelegate.args;
 
   ModularImpl({
     required this.routerDelegate,

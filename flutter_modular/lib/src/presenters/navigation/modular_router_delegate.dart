@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/core/models/modular_arguments.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/child_module.dart';
@@ -290,6 +291,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
   @override
   String get path => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.path ?? '/' : currentConfiguration?.routerOutlet.last.path ?? '/';
+
+  ModularArguments? get args => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.args : currentConfiguration?.routerOutlet.last.args;
 
   @override
   String get localPath => path.replaceFirst(modulePath, '');
