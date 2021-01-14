@@ -14,6 +14,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     if (!_firstParse) {
       // ignore: invalid_use_of_visible_for_testing_member
       path = initialRouteDeclaratedInMaterialApp;
+      _firstParse = true;
     } else {
       path = routeInformation.location ?? '/';
     }
