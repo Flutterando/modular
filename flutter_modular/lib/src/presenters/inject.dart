@@ -7,9 +7,9 @@ class Inject<T> {
   ///If you need specific access, do it through functions.
   @deprecated
   Map<String, dynamic>? params = {};
-  final List<Type> typesInRequest;
+  final List<Type>? typesInRequest;
 
-  Inject({this.params, this.typesInRequest = const []});
+  Inject({this.params, this.typesInRequest});
 
   B call<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) => get<B>(params: params, defaultValue: defaultValue);
 
