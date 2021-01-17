@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_route.dart';
+import '../modular_base.dart';
 
 final Map<int, Completer> _allCompleters = {};
 
 class ModularPage<T> extends Page<T> {
   final ModularRoute router;
 
-  ModularPage({LocalKey? key, required this.router})
-      : super(key: key, name: router.path, arguments: router.args?.data);
+  ModularPage({LocalKey? key, required this.router}) : super(key: key, name: router.path, arguments: router.args?.data);
 
   Future<T?> waitPop() {
     if (_allCompleters.containsKey(hashCode)) {
@@ -23,8 +23,7 @@ class ModularPage<T> extends Page<T> {
   }
 
   void completePop(T? result) {
-    if (_allCompleters.containsKey(hashCode) &&
-        !(_allCompleters[hashCode] as Completer<T?>).isCompleted) {
+    if (_allCompleters.containsKey(hashCode) && !(_allCompleters[hashCode] as Completer<T?>).isCompleted) {
       final complete = (_allCompleters[hashCode] as Completer<T?>);
       complete.complete(result);
       _allCompleters.remove(hashCode);
@@ -33,12 +32,11 @@ class ModularPage<T> extends Page<T> {
 
   @override
   Route<T> createRoute(BuildContext context) {
-    if (router.transition == TransitionType.custom &&
-        router.customTransition != null) {
+    if (router.transition == TransitionType.custom && router.customTransition != null) {
       return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) {
           if (router.child != null) {
-            return router.child!(context, router.args);
+            return router.child!(context, Modular.args);
           } else {
             throw ModularError('Child not be null');
           }
@@ -51,7 +49,7 @@ class ModularPage<T> extends Page<T> {
       // Helper function
       Widget widgetBuilder(BuildContext context) {
         //return disposablePage;
-        return router.child!(context, router.args);
+        return router.child!(context, Modular.args);
       }
 
       if (router.routeGenerator != null) {
@@ -65,7 +63,7 @@ class ModularPage<T> extends Page<T> {
       // Helper function
       Widget widgetBuilder(BuildContext context) {
         //return disposablePage;
-        return router.child!(context, router.args);
+        return router.child!(context, Modular.args);
       }
 
       if (router.routeGenerator != null) {
@@ -78,8 +76,7 @@ class ModularPage<T> extends Page<T> {
     } else {
       var selectTransition = router.transitions[router.transition];
       if (selectTransition != null) {
-        return selectTransition(
-            router.child!, router.args, router.duration, this) as Route<T>;
+        return selectTransition(router.child!, Modular.args, router.duration, this) as Route<T>;
       } else {
         throw ModularError('Page Not Found');
       }
@@ -99,18 +96,13 @@ class NoTransitionMaterialPageRoute<T> extends MaterialPageRoute<T> {
     RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
-  }) : super(
-            builder: builder,
-            maintainState: maintainState,
-            settings: settings,
-            fullscreenDialog: fullscreenDialog);
+  }) : super(builder: builder, maintainState: maintainState, settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
   Duration get transitionDuration => Duration.zero;
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     return child;
   }
 }

@@ -27,6 +27,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
   List<ModularPage> _pages = [];
   final routerOutlatPages = <String, List<ModularPage>>{};
+  ModularArguments? _arguments;
 
   @override
   ModularRoute? get currentConfiguration => _pages.isEmpty ? null : _pages.last.router;
@@ -89,6 +90,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    _arguments = router.args;
     setNewRoutePath(router, replaceAll);
   }
 
@@ -152,11 +154,13 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
       final outletRouter = router.routerOutlet.last.copyWith(
         args: router.args?.copyWith(data: arguments),
       );
+      _arguments = outletRouter.args;
       final page = ModularPage<T>(
         key: UniqueKey(),
         router: outletRouter,
@@ -201,11 +205,13 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
       final outletRouter = router.routerOutlet.last.copyWith(
         args: router.args?.copyWith(data: arguments),
       );
+      _arguments = outletRouter.args;
       var page = ModularPage<T>(
         key: UniqueKey(),
         router: outletRouter,
@@ -292,7 +298,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   String get path => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.path ?? '/' : currentConfiguration?.routerOutlet.last.path ?? '/';
 
-  ModularArguments? get args => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.args : currentConfiguration?.routerOutlet.last.args;
+  ModularArguments? get args => _arguments;
 
   @override
   String get localPath => path.replaceFirst(modulePath, '');
