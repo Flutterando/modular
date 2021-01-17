@@ -5,11 +5,26 @@ import '../../core/interfaces/child_module.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../modular_base.dart';
 
+bool _firstParse = false;
+
 class ModularRouteInformationParser extends RouteInformationParser<ModularRoute> {
   @override
   Future<ModularRoute> parseRouteInformation(RouteInformation routeInformation) async {
-    // ignore: invalid_use_of_visible_for_testing_member
-    final path = routeInformation.location ?? initialRouteDeclaratedInMaterialApp;
+    late final String path;
+    if (!_firstParse) {
+      if (routeInformation.location == null || routeInformation.location == '/') {
+        // ignore: invalid_use_of_visible_for_testing_member
+        path = initialRouteDeclaratedInMaterialApp;
+      } else {
+        path = routeInformation.location!;
+      }
+
+      _firstParse = true;
+    } else {
+      // ignore: invalid_use_of_visible_for_testing_member
+      path = routeInformation.location ?? initialRouteDeclaratedInMaterialApp;
+    }
+
     final route = await selectRoute(path);
     return route;
   }
