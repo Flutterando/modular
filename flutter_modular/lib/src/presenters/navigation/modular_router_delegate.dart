@@ -45,6 +45,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
   @override
   Future<void> setNewRoutePath(ModularRoute router, [bool replaceAll = true]) async {
+    _arguments = router.args;
     final page = ModularPage(
       key: ValueKey('url:${router.path}'),
       router: router,
