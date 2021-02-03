@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../flutter_modular.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/child_module.dart';
@@ -59,7 +60,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         var _routerName = (routerName + route.routerName).replaceFirst('//', '/');
         router = _searchInModule(route.module!, _routerName, uri);
       } else {
-        router = router.copyWith(uri: Uri.parse(routerName));
+        router = router.copyWith(uri: uri);
       }
     } else {
       router = _searchInModule(route.module!, routerName, uri);
@@ -240,8 +241,10 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
       try {
         final result = await guard.canActivate(path, router);
         if (!result) {
-          throw ModularError('$path is NOT ACTIVATE');
+          throw ModularError('$path is CAN\'T ACTIVATE');
         }
+      } on ModularError {
+        rethrow;
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         throw ModularError('RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/core/models/modular_arguments.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/child_module.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
 import '../../core/interfaces/modular_route.dart';
+import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';

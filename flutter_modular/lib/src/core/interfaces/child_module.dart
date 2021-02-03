@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:triple/triple.dart';
 
 import '../../presenters/inject.dart';
 import '../errors/errors.dart';
 import '../models/bind.dart';
 import 'disposable.dart';
 import 'modular_route.dart';
-import 'package:triple/triple.dart';
 
 @immutable
 abstract class ChildModule {
@@ -22,8 +22,7 @@ abstract class ChildModule {
 
   final Map<Type, dynamic> _singletonBinds = {};
 
-  T? getBind<T extends Object>(
-      {Map<String, dynamic>? params, required List<Type> typesInRequest}) {
+  T? getBind<T extends Object>({Map<String, dynamic>? params, required List<Type> typesInRequest}) {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -31,8 +30,7 @@ abstract class ChildModule {
       return bindValue;
     }
 
-    var bind = binds.firstWhere((b) => b.inject is T Function(Inject),
-        orElse: () => BindEmpty());
+    var bind = binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       typesInRequest.remove(type);
       return null;
@@ -51,8 +49,7 @@ ${typesInRequest.join('\n')}
       typesInRequest.add(type);
     }
 
-    bindValue = bind
-        .inject(Inject(params: params, typesInRequest: typesInRequest)) as T;
+    bindValue = bind.inject(Inject(params: params, typesInRequest: typesInRequest)) as T;
     if (bind.isSingleton) {
       _singletonBinds[type] = bindValue;
     }

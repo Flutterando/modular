@@ -39,12 +39,18 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/list?id=1234&type=DYN');
       expect(route.uri?.path, '/list');
-      expect(route.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.fragment, '');
       expect(route.args?.uri?.path, '/list');
-      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.args?.fragment, '');
     });
 
@@ -54,12 +60,18 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/list?id=1234&type=DYN#abcd');
       expect(route.uri?.path, '/list');
-      expect(route.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.fragment, 'abcd');
       expect(route.args?.uri?.path, '/list');
-      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.args?.fragment, 'abcd');
     });
 
@@ -104,7 +116,7 @@ main() {
       final route = await parse.selectRoute('/mock', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<SizedBox>());
-      expect(route.path, '/mock/');
+      expect(route.path, '/mock');
     });
 
     test('should retrive route /mock/', () async {
@@ -127,12 +139,18 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/mock/list?id=1234&type=DYN');
       expect(route.uri?.path, '/mock/list');
-      expect(route.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.fragment, '');
       expect(route.args?.uri?.path, '/mock/list');
-      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.args?.fragment, '');
     });
 
@@ -142,12 +160,18 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/mock/list?id=1234&type=DYN#abcd');
       expect(route.uri?.path, '/mock/list');
-      expect(route.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.fragment, 'abcd');
       expect(route.args?.uri?.path, '/mock/list');
-      expect(route.args?.queryParams, {'id':'1234','type':'DYN'});
-      expect(route.args?.queryParamsAll, {'id':['1234'],'type':['DYN']});
+      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
       expect(route.args?.fragment, 'abcd');
     });
 
@@ -253,7 +277,7 @@ class ModuleMock extends ChildModule {
         ChildRoute(
           '/tab2/:id',
           child: (context, args) => CustomWidget(
-            text: args?.params!['id'],
+            text: args?.params['id'],
           ),
         ),
       ],
@@ -269,7 +293,7 @@ class ModuleMock extends ChildModule {
     ChildRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
-        text: args?.params!['id'],
+        text: args?.params['id'],
       ),
     ),
     ChildRoute('**', child: (context, args) => FlutterLogo())
@@ -302,7 +326,7 @@ class ModuleMock2 extends ChildModule {
     ChildRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
-        text: args?.params!['id'],
+        text: args?.params['id'],
       ),
     ),
     ChildRoute('**', child: (context, args) => FlutterLogo())
@@ -336,7 +360,7 @@ class ModuleGuarded extends ChildModule {
     ChildRoute(
       '/list/:id',
       child: (context, args) => CustomWidget(
-        text: args?.params!['id'],
+        text: args?.params['id'],
       ),
     ),
     ChildRoute('**', child: (context, args) => FlutterLogo())
