@@ -116,7 +116,7 @@ main() {
       final route = await parse.selectRoute('/mock', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<SizedBox>());
-      expect(route.path, '/mock');
+      expect(route.path, '/mock/');
     });
 
     test('should retrive route /mock/', () async {
@@ -154,25 +154,38 @@ main() {
       expect(route.args?.fragment, '');
     });
 
-    test('should retrieve route /mock/list?id=1234&type=DYN#abcd', () async {
-      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN#abcd', ModuleMock());
+    test('should retrieve route /mock/list?id=1234&type=DYN', () async {
+      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN', ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, null), isA<ListView>());
-      expect(route.path, '/mock/list?id=1234&type=DYN#abcd');
+      expect(route.path, '/mock/list?id=1234&type=DYN');
       expect(route.uri?.path, '/mock/list');
       expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
       expect(route.queryParamsAll, {
         'id': ['1234'],
         'type': ['DYN']
       });
-      expect(route.fragment, 'abcd');
+      expect(route.fragment, '');
       expect(route.args?.uri?.path, '/mock/list');
       expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
       expect(route.args?.queryParamsAll, {
         'id': ['1234'],
         'type': ['DYN']
       });
-      expect(route.args?.fragment, 'abcd');
+      expect(route.args?.fragment, '');
+    });
+
+    test('should retrieve route /mock?id=1234&type=DYN#abcd', () async {
+      final route = await parse.selectRoute('/mock?id=1234&type=DYN#abcd', ModuleMock());
+      expect(route, isNotNull);
+      expect(route.child!(context, null), isA<SizedBox>());
+      expect(route.uri?.path, '/mock/');
+      expect(route.path, '/mock/?id=1234&type=DYN#abcd');
+      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParamsAll, {
+        'id': ['1234'],
+        'type': ['DYN']
+      });
     });
 
     test('should retrieve route /mock/list#abcd', () async {

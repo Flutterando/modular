@@ -60,7 +60,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         var _routerName = (routerName + route.routerName).replaceFirst('//', '/');
         router = _searchInModule(route.module!, _routerName, uri);
       } else {
-        router = router.copyWith(uri: uri);
+        router = router.copyWith(uri: uri.replace(path: routerName));
       }
     } else {
       router = _searchInModule(route.module!, routerName, uri);
@@ -88,7 +88,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           );
         }
         if (route.module != null) {
-          Modular.bindModule(route.module!, uri.toString());
+          Modular.bindModule(route.module!, uri.path);
         }
         return router;
       }
@@ -115,7 +115,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
       }
 
       if (parseRoute.currentModule != null) {
-        Modular.bindModule(parseRoute.currentModule!, uri.toString());
+        Modular.bindModule(parseRoute.currentModule!, uri.path);
       }
       return parseRoute;
     }
@@ -214,7 +214,8 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     var router = _searchInModule(module ?? Modular.initialModule, "", uri);
 
     if (router != null) {
-      return canActivate(uri.path, router);
+      router = router.copyWith(args: router.args?.copyWith(uri: router.uri));
+      return canActivate(router.path!, router);
     } else {
       router = _searchWildcard(uri.path, module ?? Modular.initialModule);
       if (router != null) {
