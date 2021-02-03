@@ -47,7 +47,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   Future<void> setNewRoutePath(ModularRoute router, [bool replaceAll = true]) async {
     _arguments = router.args;
     final page = ModularPage(
-      key: ValueKey('url:${router.path}'),
+      key: ValueKey('url:${router.uri?.path ?? router.path}'),
       router: router,
     );
     if (_pages.isEmpty) {
