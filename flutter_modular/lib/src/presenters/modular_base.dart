@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../flutter_modular.dart';
-import '../core/interfaces/child_module.dart';
+import '../core/interfaces/module.dart';
 import '../core/interfaces/modular_interface.dart';
 import 'modular_impl.dart';
 import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
 import 'navigation/router_outlet_delegate.dart';
 
-final Map<String, ChildModule> _injectMap = {};
+final Map<String, Module> _injectMap = {};
 
 late final _routeInformationParser = ModularRouteInformationParser();
 late final _routerDelegate = ModularRouterDelegate(

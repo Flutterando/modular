@@ -17,7 +17,7 @@ class RepoImpl2 implements IRepo {
   String get name => 'RepoImpl2';
 }
 
-class MyModule extends ChildModule {
+class MyModule extends Module {
   final binds = [
     Bind.instance<String>('teste'),
     Bind.instance<bool>(true),

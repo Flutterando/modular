@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/errors/errors.dart';
-import '../../core/interfaces/child_module.dart';
+import '../../core/interfaces/module.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../../core/models/modular_arguments.dart';
@@ -20,7 +20,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         IModularNavigator {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final ModularRouteInformationParser parser;
-  final Map<String, ChildModule> injectMap;
+  final Map<String, Module> injectMap;
 
   ModularRouterDelegate(this.parser, this.injectMap);
   NavigatorState get navigator => navigatorKey.currentState!;
@@ -61,7 +61,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         }
       }
       if (replaceAll) {
-        _pages = [page];
+        _pages = [
+          page
+        ];
       } else if (_pages.last.router.path != router.path) {
         _pages.last = page;
       } else {

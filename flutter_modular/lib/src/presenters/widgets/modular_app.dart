@@ -1,14 +1,16 @@
 import 'package:flutter/widgets.dart';
-import '../main_module.dart';
+import '../../core/interfaces/module.dart';
 
 import '../modular_base.dart';
 
 class ModularApp extends StatefulWidget {
-  final MainModule module;
+  final Module module;
+  final Widget child;
 
   ModularApp({
     Key? key,
     required this.module,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,6 @@ class _ModularAppState extends State<ModularApp> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.module.bootstrap;
+    return widget.child;
   }
 }

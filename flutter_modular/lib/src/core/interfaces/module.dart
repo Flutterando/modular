@@ -8,7 +8,7 @@ import 'disposable.dart';
 import 'modular_route.dart';
 
 @immutable
-abstract class ChildModule {
+abstract class Module {
   late final List<Bind> binds = [];
   late final List<ModularRoute> routes = [];
 
