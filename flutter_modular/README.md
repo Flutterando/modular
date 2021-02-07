@@ -207,6 +207,31 @@ The parameter will be pattern-matched when calling the given route. For example:
 Modular.to.pushNamed('/product/1');
 ```
 
+You can use it with more than one page too. For example:
+
+```dart
+@override
+final List<ModularRoute> routes = [
+  ChildRoute(
+    '/product/:id/detail',
+    child: (_, args) => DetailPage(id: args.params['id']),
+  ),
+  ChildRoute(
+    '/product/:id/rating',
+    child: (_, args) => RatingPage(id: args.params['id']),
+  ),
+];
+```
+
+As the same of the first example, we just need to call the route. For example:
+```dart
+// In this case, modular will open the page DetailPage with the id of the product equals 1
+Modular.to.pushNamed('/product/1/detail');
+
+// The same here, but with RatingPage
+Modular.to.pushNamed('/product/1/rating');
+```
+
 This notation, however, is only valid for simple literals. If you want to pass a complex object to your route, provide it in `arguments` parameter:
 
 ```dart
@@ -235,7 +260,6 @@ final List<Bind> binds = [
 ];
 
 ```
-
 ## Route generic types
 
 You can return values from navigation, just like `.pop`.
