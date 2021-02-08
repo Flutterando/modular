@@ -99,7 +99,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           if (r != null) {
             r.currentModule?.paths.remove(uri.toString());
             r = r.copyWith(modulePath: r.modulePath == route.modulePath ? tempRouteName : r.modulePath);
-            route = route.copyWith(routerOutlet: [r], uri: uri.replace(path: tempRouteName));
+            route = route.copyWith(args:r.args, routerOutlet: [r], uri: uri.replace(path: tempRouteName));
             return route;
           }
         }

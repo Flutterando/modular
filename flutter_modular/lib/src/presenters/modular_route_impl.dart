@@ -139,7 +139,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   }
 
   @override
-  String? get path => uri?.toString() ?? '/';
+  String? get path => uri?.path ?? '/';
 
   @override
   Map<String, List<String>> get queryParamsAll => uri?.queryParametersAll ?? {};
