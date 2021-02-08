@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/errors/errors.dart';
-import '../core/interfaces/child_module.dart';
+import '../core/interfaces/module.dart';
 import '../core/interfaces/modular_interface.dart';
 import '../core/interfaces/modular_navigator_interface.dart';
 import '../core/models/modular_arguments.dart';
 import 'modular_base.dart';
 import 'navigation/modular_router_delegate.dart';
 
-late ChildModule _initialModule;
+late Module _initialModule;
 
 class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
-  final Map<String, ChildModule> injectMap;
+  final Map<String, Module> injectMap;
   IModularNavigator? navigatorDelegate;
 
   @override
@@ -25,7 +25,7 @@ class ModularImpl implements ModularInterface {
   });
 
   @override
-  ChildModule get initialModule => _initialModule;
+  Module get initialModule => _initialModule;
 
   @override
   void debugPrintModular(String text) {
@@ -35,7 +35,7 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  void bindModule(ChildModule module, [String path = '']) {
+  void bindModule(Module module, [String path = '']) {
     final name = module.runtimeType.toString();
     if (!injectMap.containsKey(name)) {
       module.paths.add(path);
@@ -48,7 +48,7 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  void init(ChildModule module) {
+  void init(Module module) {
     _initialModule = module;
     bindModule(module, "global==");
   }

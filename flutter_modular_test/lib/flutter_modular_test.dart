@@ -3,7 +3,7 @@ library flutter_modular_test;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-void initModule(ChildModule module, {List<Bind<Object>> replaceBinds = const [], bool initialModule = false}) {
+void initModule(Module module, {List<Bind<Object>> replaceBinds = const [], bool initialModule = false}) {
   //Modular.debugMode = false;
   final list = module.binds;
   for (var item in list) {
@@ -22,7 +22,7 @@ void initModule(ChildModule module, {List<Bind<Object>> replaceBinds = const [],
   }
 }
 
-void initModules(List<ChildModule> modules, {List<Bind<Object>> replaceBinds = const []}) {
+void initModules(List<Module> modules, {List<Bind<Object>> replaceBinds = const []}) {
   for (var module in modules) {
     initModule(module, replaceBinds: replaceBinds);
   }

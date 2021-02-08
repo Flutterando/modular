@@ -98,11 +98,11 @@ class AppWidget extends StatelessWidget {
 }
 ```
 
-2. Create your project main module file extending `MainModule`:
+2. Create your project module file extending `Module`:
 
 ```dart
 // app_module.dart
-class AppModule extends MainModule {
+class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
@@ -112,10 +112,6 @@ class AppModule extends MainModule {
   @override
   final List<ModularRoute> routes = [];
 
-  // Provide the root widget associated with your module
-  // In this case, it's the widget you created in the first step
-  @override
-  final Widget bootstrap = AppWidget();
 }
 ```
 
@@ -128,7 +124,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import 'app/app_module.dart';
 
-void main() => runApp(ModularApp(module: AppModule()));
+void main() => runApp(ModularApp(module: AppModule(), child: AppWidget()));
 ```
 
 4. Done! Your app is set and ready to work with Modular!
@@ -140,7 +136,7 @@ The module routes are provided by overriding the `routes` property.
 
 ```dart
 // app_module.dart
-class AppModule extends MainModule {
+class AppModule extends Module {
 
   // Provide all the routes for your module
   @override
@@ -148,10 +144,6 @@ class AppModule extends MainModule {
       ChildRoute('/', child: (_, __) => HomePage()),
       ChildRoute('/login', child: (_, __) => LoginPage()),
   ];
-
-  // Provide the root widget associated with your module
-  @override
-  final Widget bootstrap = AppWidget();
 }
 ```
 
@@ -307,10 +299,10 @@ https://flutter-website.com/#/product?id=1
 
 ## Creating child modules
 
-You can create as many modules in your project as you wish, but they will be dependent of the main module. To do so, instead of inheriting from `MainModule`, you should inherit from `ChildModule`:
+You can create as many modules in your project as you wish:
 
 ```dart
-class HomeModule extends ChildModule {
+class HomeModule extends Module {
   @override
   final List<Bind> binds = [
     Bind.singleton((i) => HomeBloc()),
@@ -328,7 +320,7 @@ class HomeModule extends ChildModule {
 You may then pass the submodule to a `Route` in your main module through the `module` parameter:
 
 ```dart
-class AppModule extends MainModule {
+class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
@@ -448,7 +440,7 @@ You can inject any class into your module by overriding the `binds` getter of yo
 A `Bind` object is responsible for configuring the object injection. We have 4 Bind factory types.
 
 ```dart
-class AppModule extends MainModule {
+class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
@@ -535,7 +527,7 @@ class _MyWidgetState extends ModularState<MyWidget, HomeStore> {
 
 ### WidgetModule
 
-`WidgetModule` has the same structure as `MainModule`/`ChildModule`. It is very useful if you want to have a TabBar with modular pages.
+`WidgetModule` has the same structure as `Module`. It is very useful if you want to have a TabBar with modular pages.
 
 ```dart
 class TabModule extends WidgetModule {
@@ -560,7 +552,7 @@ You can only have one `RouterOutlet` per page and it is only able to browse the 
 
 ```dart
 
-  class StartModule extends ChildModule {
+  class StartModule extends Module {
       @override
       final List<Bind> binds = [];
 

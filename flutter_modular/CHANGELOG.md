@@ -272,7 +272,7 @@ Now you can type your pushNamed and pop
 * Dynamic Router
 * Added Doc Translation
 * Change BrowserModule to MainModule
-* Change CommonModule to ChildModule
+* Change CommonModule to Module
 * Corrigido erro de blink na primeira rota
 * fix routes param
 

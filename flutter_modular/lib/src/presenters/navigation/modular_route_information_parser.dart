@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../flutter_modular.dart';
 
 import '../../core/errors/errors.dart';
-import '../../core/interfaces/child_module.dart';
+import '../../core/interfaces/module.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../modular_base.dart';
 
@@ -37,7 +37,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     );
   }
 
-  ModularRoute? _searchInModule(ChildModule module, String routerName, Uri uri) {
+  ModularRoute? _searchInModule(Module module, String routerName, Uri uri) {
     uri = uri.normalizePath();
     final routers = module.routes.map((e) => e.copyWith(currentModule: module)).toList();
     routers.sort((preview, actual) {
@@ -78,7 +78,10 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
           currentModule: route.currentModule,
-          guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
+          guards: [
+            if (route.guards != null) ...route.guards!,
+            if (router.guards != null) ...router.guards!
+          ],
         );
 
         if (router.transition == TransitionType.defaultTransition) {
@@ -181,7 +184,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
 
   ModularRoute? _searchWildcard(
     String path,
-    ChildModule module,
+    Module module,
   ) {
     ModularRoute? finded;
 
@@ -206,7 +209,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return finded?.routerName == '**' ? finded : null;
   }
 
-  Future<ModularRoute> selectRoute(String path, [ChildModule? module]) async {
+  Future<ModularRoute> selectRoute(String path, [Module? module]) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }

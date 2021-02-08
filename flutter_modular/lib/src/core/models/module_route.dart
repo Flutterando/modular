@@ -1,5 +1,5 @@
 import '../../presenters/modular_route_impl.dart';
-import '../interfaces/child_module.dart';
+import '../interfaces/module.dart';
 import '../interfaces/modular_route.dart';
 import '../interfaces/route_guard.dart';
 import 'custom_transition.dart';
@@ -7,11 +7,12 @@ import 'custom_transition.dart';
 class ModuleRoute extends ModularRouteImpl {
   ModuleRoute(
     String routerName, {
-    required ChildModule module,
+    required Module module,
     List<RouteGuard>? guards,
     TransitionType transition = TransitionType.defaultTransition,
-    CustomTransition? customTransition, RouteBuilder? routeGenerator,
+    CustomTransition? customTransition,
+    RouteBuilder? routeGenerator,
     Duration duration = const Duration(milliseconds: 300),
   })  : assert(!routerName.contains('/:'), 'ModuleRoute should not contain dynamic route'),
-        super(routerName, routerOutlet: [], duration: duration,routeGenerator: routeGenerator, module: module, customTransition: customTransition, guards: guards, transition: transition);
+        super(routerName, routerOutlet: [], duration: duration, routeGenerator: routeGenerator, module: module, customTransition: customTransition, guards: guards, transition: transition);
 }

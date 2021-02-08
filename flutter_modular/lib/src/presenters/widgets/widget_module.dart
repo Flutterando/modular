@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../flutter_modular.dart';
-import '../../core/interfaces/child_module.dart';
+import '../../core/interfaces/module.dart';
 import '../../core/models/bind.dart';
 import '../modular_base.dart';
 
@@ -12,7 +12,7 @@ _debugPrintModular(String text) {
 }
 
 // ignore: must_be_immutable
-abstract class WidgetModule extends StatelessWidget implements ChildModule {
+abstract class WidgetModule extends StatelessWidget implements Module {
   Widget get view;
 
   final _FakeModule _fakeModule = _FakeModule();
@@ -39,7 +39,9 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  List<String> get paths => [runtimeType.toString()];
+  List<String> get paths => [
+        runtimeType.toString()
+      ];
 
   @override
   bool remove<T>() {
@@ -63,7 +65,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 }
 
-class _FakeModule extends ChildModule {
+class _FakeModule extends Module {
   final List<Bind>? bindsInject;
 
   _FakeModule({this.bindsInject}) {
@@ -78,7 +80,7 @@ class _FakeModule extends ChildModule {
 }
 
 class ModularProvider extends StatefulWidget {
-  final ChildModule module;
+  final Module module;
   final Widget child;
 
   const ModularProvider({Key? key, required this.module, required this.child}) : super(key: key);

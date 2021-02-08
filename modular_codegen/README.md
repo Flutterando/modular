@@ -34,7 +34,7 @@ flutter pub run build_runner build
 The generator will provide a `$ClassName` in the generated file, that can be injected in your module `binds`:
 
 ```dart
-class HomeModule extends ChildModule {
+class HomeModule extends Module {
   @override
   List<Bind> get binds => [
         $HomeController, // ← As the class name was `HomeController`, the generated injectable is `$HomeController`

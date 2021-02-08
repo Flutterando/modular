@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../core/interfaces/child_module.dart';
+import '../core/interfaces/module.dart';
 import '../core/interfaces/modular_route.dart';
 import '../core/interfaces/route_guard.dart';
 import '../core/models/custom_transition.dart';
@@ -12,33 +12,31 @@ import 'transitions/transitions.dart';
 
 class ModularRouteImpl<T> extends ModularRoute<T> {
   @override
-  final ChildModule? currentModule;
+  final Module? currentModule;
   @override
   final ModularArguments? args;
   @override
   final List<ModularRoute> children;
   @override
   final List<ModularRoute> routerOutlet;
-  
+
   @override
   final Uri? uri;
-  
+
   @override
   final String? modulePath;
 
   @override
   final String routerName;
 
-
   @override
   final ModularChild? child;
 
   @override
-  final ChildModule? module;
+  final Module? module;
 
   @override
   final Map<String, String>? params;
-
 
   @override
   final List<RouteGuard>? guards;
@@ -92,33 +90,13 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
     this.customTransition,
     this.duration = const Duration(milliseconds: 300),
     this.modulePath = '/',
-  })  : assert(module == null ? true : children.isEmpty,
-            'Módulo não pode conter rotas aninhadas (children)'),
-        assert((transition == TransitionType.custom &&
-                customTransition != null) ||
-            transition != TransitionType.custom && customTransition == null),
-        assert((module == null && child != null) ||
-            (module != null && child == null)),
+  })  : assert(module == null ? true : children.isEmpty, 'Módulo não pode conter rotas aninhadas (children)'),
+        assert((transition == TransitionType.custom && customTransition != null) || transition != TransitionType.custom && customTransition == null),
+        assert((module == null && child != null) || (module != null && child == null)),
         assert(routerName == '**' ? child != null : true);
 
   @override
-  ModularRoute<T> copyWith(
-      {ModularChild? child,
-      String? routerName,
-      ChildModule? module,
-      List<ModularRoute>? children,
-      List<ModularRoute>? routerOutlet,
-      ChildModule? currentModule,
-      Map<String, String>? params,
-      Uri? uri,
-      List<RouteGuard>? guards,
-      TransitionType? transition,
-      RouteBuilder<T>? routeGenerator,
-      String? modulePath,
-      Duration? duration,
-      Completer<T>? popRoute,
-      ModularArguments? args,
-      CustomTransition? customTransition}) {
+  ModularRoute<T> copyWith({ModularChild? child, String? routerName, Module? module, List<ModularRoute>? children, List<ModularRoute>? routerOutlet, Module? currentModule, Map<String, String>? params, Uri? uri, List<RouteGuard>? guards, TransitionType? transition, RouteBuilder<T>? routeGenerator, String? modulePath, Duration? duration, Completer<T>? popRoute, ModularArguments? args, CustomTransition? customTransition}) {
     return ModularRouteImpl<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,
@@ -143,7 +121,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
 
   @override
   Map<String, List<String>> get queryParamsAll => uri?.queryParametersAll ?? {};
-  
+
   @override
   Map<String, String> get queryParams => uri?.queryParameters ?? {};
 

@@ -39,17 +39,31 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/list?id=1234&type=DYN');
       expect(route.uri?.path, '/list');
-      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.fragment, '');
       expect(route.args?.uri?.path, '/list');
-      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.args?.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.args?.fragment, '');
     });
@@ -60,17 +74,31 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/list?id=1234&type=DYN#abcd');
       expect(route.uri?.path, '/list');
-      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.fragment, 'abcd');
       expect(route.args?.uri?.path, '/list');
-      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.args?.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.args?.fragment, 'abcd');
     });
@@ -139,17 +167,31 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/mock/list?id=1234&type=DYN');
       expect(route.uri?.path, '/mock/list');
-      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.fragment, '');
       expect(route.args?.uri?.path, '/mock/list');
-      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.args?.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.args?.fragment, '');
     });
@@ -160,17 +202,31 @@ main() {
       expect(route.child!(context, null), isA<ListView>());
       expect(route.path, '/mock/list?id=1234&type=DYN');
       expect(route.uri?.path, '/mock/list');
-      expect(route.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.fragment, '');
       expect(route.args?.uri?.path, '/mock/list');
-      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.args?.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
       expect(route.args?.fragment, '');
     });
@@ -181,10 +237,17 @@ main() {
       expect(route.child!(context, null), isA<SizedBox>());
       expect(route.uri?.path, '/mock/');
       expect(route.path, '/mock/?id=1234&type=DYN#abcd');
-      expect(route.args?.queryParams, {'id': '1234', 'type': 'DYN'});
+      expect(route.args?.queryParams, {
+        'id': '1234',
+        'type': 'DYN'
+      });
       expect(route.args?.queryParamsAll, {
-        'id': ['1234'],
-        'type': ['DYN']
+        'id': [
+          '1234'
+        ],
+        'type': [
+          'DYN'
+        ]
       });
     });
 
@@ -267,7 +330,7 @@ main() {
   });
 }
 
-class ModuleMock extends ChildModule {
+class ModuleMock extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
@@ -296,11 +359,17 @@ class ModuleMock extends ChildModule {
       ],
     ),
     ModuleRoute('/mock', module: ModuleMock2()),
-    ModuleRoute('/guarded', guards: [MyGuardModule()], module: ModuleGuarded()),
+    ModuleRoute('/guarded',
+        guards: [
+          MyGuardModule()
+        ],
+        module: ModuleGuarded()),
     ChildRoute('/list', child: (context, args) => ListView()),
     ChildRoute(
       '/401',
-      guards: [MyGuard()],
+      guards: [
+        MyGuard()
+      ],
       child: (context, args) => SingleChildScrollView(),
     ),
     ChildRoute(
@@ -313,7 +382,7 @@ class ModuleMock extends ChildModule {
   ];
 }
 
-class ModuleMock2 extends ChildModule {
+class ModuleMock2 extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
@@ -333,7 +402,9 @@ class ModuleMock2 extends ChildModule {
     ),
     ChildRoute(
       '/listguarded',
-      guards: [MyGuard()],
+      guards: [
+        MyGuard()
+      ],
       child: (context, args) => ListView(),
     ),
     ChildRoute(
@@ -346,7 +417,7 @@ class ModuleMock2 extends ChildModule {
   ];
 }
 
-class ModuleGuarded extends ChildModule {
+class ModuleGuarded extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
@@ -367,7 +438,9 @@ class ModuleGuarded extends ChildModule {
     ),
     ChildRoute(
       '/listguarded',
-      guards: [MyGuard()],
+      guards: [
+        MyGuard()
+      ],
       child: (context, args) => ListView(),
     ),
     ChildRoute(
