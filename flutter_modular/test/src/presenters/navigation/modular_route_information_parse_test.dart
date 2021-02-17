@@ -474,7 +474,7 @@ class MyGuard implements RouteGuard {
   Future<bool> canActivate(String path, ModularRoute route) async {
     if (path == '/401') {
       return false;
-    } else if (path == '/mock/listguarded') {
+    } else if (path.startsWith('/mock/listguarded')) {
       return false;
     } else {
       return true;

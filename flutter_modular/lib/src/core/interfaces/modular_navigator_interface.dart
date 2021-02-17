@@ -13,7 +13,7 @@ abstract class IModularNavigator {
   /// ```
   /// Modular.to.push(MaterialPageRoute(builder: (context) => HomePage()),);
   /// ```
-  Future<T?> push<T extends Object>(Route<T> route);
+  Future<T?> push<T extends Object?>(Route<T> route);
 
   /// Pop the current route off the navigator and navigate to a route.
   ///

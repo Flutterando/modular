@@ -307,7 +307,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   String get localPath => path.replaceFirst(modulePath, '');
 
   @override
-  Future<T?> push<T extends Object>(Route<T> route) {
+  Future<T?> push<T extends Object?>(Route<T> route) {
     return navigator.push<T>(route);
   }
 }
