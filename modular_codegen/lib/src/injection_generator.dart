@@ -15,7 +15,7 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
     final _buffer = StringBuffer();
     _write(Object o) => _buffer.write(o);
     final visitor = ModelVisitor();
-    List<Element> listElements = element.library.topLevelElements.toList();
+    List<Element> listElements = element.library!.topLevelElements.toList();
     for (var i = listElements.length - 1; i >= 0; i--) {
       var item = listElements[i];
       item.visitChildren(visitor);
@@ -35,11 +35,9 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
 }
 
 class ModelVisitor extends SimpleElementVisitor {
-  DartType className;
+  DartType? className;
   List<String> params = [];
   bool isAnnotation = false;
-
-  ModelVisitor();
 
   @override
   visitConstructorElement(ConstructorElement element) {
@@ -47,7 +45,7 @@ class ModelVisitor extends SimpleElementVisitor {
     isAnnotation = element.parameters.firstWhere((param) {
           if (param.metadata.length > 0) {
             return param.metadata.firstWhere((param) {
-                  return param.element.displayName == "Data" || param.element.displayName == "Param" || param.element.displayName == "Default";
+                  return param.element?.displayName == "Data" || param.element?.displayName == "Param" || param.element?.displayName == "Default";
                 }, orElse: (() => null) as ElementAnnotation Function()) !=
                 null;
           }
@@ -60,14 +58,14 @@ class ModelVisitor extends SimpleElementVisitor {
   writeParams(List<ParameterElement> parameters) {
     params = parameters.map((param) {
       if (param.metadata.length > 0) {
-        String arg;
+        String? arg;
 
         for (var meta in param.metadata) {
-          if (meta.element.displayName == 'Param') {
+          if (meta.element?.displayName == 'Param') {
             arg = _normalizeParam(param);
-          } else if (meta.element.displayName == 'Data') {
+          } else if (meta.element?.displayName == 'Data') {
             arg = _normalizeData(param);
-          } else if (meta.element.displayName == 'Default') {
+          } else if (meta.element?.displayName == 'Default') {
             arg = _normalizeDefault(param);
           }
         }
@@ -80,9 +78,9 @@ class ModelVisitor extends SimpleElementVisitor {
 
   String _normalize(ParameterElement param) {
     if (param.isNamed) {
-      return "${param.name}: i<${param.type.element.displayName}>()";
+      return "${param.name}: i<${param.type.element?.displayName}>()";
     } else {
-      return "i<${param.type.element.displayName}>()";
+      return "i<${param.type.element?.displayName}>()";
     }
   }
 

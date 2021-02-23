@@ -6,7 +6,7 @@ import 'package:source_gen/source_gen.dart';
 abstract class CustomGeneratorForAnnotatedField<AnnotationType> extends Generator {
   /// Returns the annotation of type [AnnotationType] of the given [element],
   /// or [null] if it doesn't have any.
-  DartObject getAnnotation(Element element) {
+  DartObject? getAnnotation(Element element) {
     final annotations = TypeChecker.fromRuntime(AnnotationType).annotationsOf(element);
     if (annotations.isEmpty) {
       return null;
