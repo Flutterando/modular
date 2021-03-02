@@ -26,7 +26,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
-  final routerOutlatPages = <String, List<ModularPage>>{};
+  final routerOutletPages = <String, List<ModularPage>>{};
   ModularArguments? _arguments;
 
   @override
@@ -73,7 +73,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     }
 
     if (router.routerOutlet.isNotEmpty) {
-      routerOutlatPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+      routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
     }
 
     rebuildPages();
@@ -174,7 +174,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         rebuildPages();
         return await page.waitPop();
       } else if (router.routerName != currentConfiguration?.routerName) {
-        routerOutlatPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+        routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
         final rootPage = ModularPage<T>(
           key: UniqueKey(),
           router: router,
@@ -183,11 +183,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         rebuildPages();
         return await rootPage.waitPop();
       } else {
-        routerOutlatPages[router.path!]?.add(page);
+        routerOutletPages[router.path!]?.add(page);
         currentConfiguration?.routerOutlet.add(outletRouter);
         notifyListeners();
         final result = await page.waitPop();
-        routerOutlatPages[router.path!]?.removeLast();
+        routerOutletPages[router.path!]?.removeLast();
         currentConfiguration?.routerOutlet.removeLast();
         notifyListeners();
         return result;
@@ -233,8 +233,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         if (routeOutletConf.isEmpty) {
           throw ModularError('Prefer Modular.to.navigate()');
         } else {
-          lastPage = routerOutlatPages[router.path!]?.last;
-          routerOutlatPages[router.path!]?.last = page;
+          lastPage = routerOutletPages[router.path!]?.last;
+          routerOutletPages[router.path!]?.last = page;
           currentConfiguration?.routerOutlet.last = outletRouter;
           notifyListeners();
         }
@@ -266,7 +266,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
     if (!forRoot && router.routerOutlet.isNotEmpty) {
-      routerOutlatPages[router.path!]?.last.completePop(result);
+      routerOutletPages[router.path!]?.last.completePop(result);
     } else {
       _pages.last.completePop(result);
       _pages.removeLast();
