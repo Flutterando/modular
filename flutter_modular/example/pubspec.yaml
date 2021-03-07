@@ -30,8 +30,7 @@ dependencies:
   rxdart: ^0.26.0-nullsafety.0
   http:
     git: https://github.com/dart-lang/http
-  flutter_modular: 
-    path: /Users/jacobmoura/Projects/modular/flutter_modular
+  flutter_modular: ^3.0.0
   flutter:
     sdk: flutter
 
@@ -44,6 +43,10 @@ dev_dependencies:
   mocktail: ^0.0.1-dev.3
   flutter_test:
     sdk: flutter
+
+dependency_overrides:
+  flutter_modular:
+    path: /Users/jacobmoura/Projects/modular/flutter_modular
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
