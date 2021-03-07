@@ -28,8 +28,8 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
       return pages;
     }
 
-    if (modularRouterDelegate.routerOutlatPages.containsKey(path)) {
-      final list = modularRouterDelegate.routerOutlatPages[path] ?? [];
+    if (modularRouterDelegate.routerOutletPages.containsKey(path)) {
+      final list = modularRouterDelegate.routerOutletPages[path] ?? [];
       pages = [...list];
     }
 
