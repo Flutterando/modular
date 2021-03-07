@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/errors/errors.dart';
-import '../../core/interfaces/module.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
 import '../../core/interfaces/modular_route.dart';
+import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
 import 'custom_navigator.dart';
@@ -61,9 +61,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         }
       }
       if (replaceAll) {
-        _pages = [
-          page
-        ];
+        _pages = [page];
       } else if (_pages.last.router.path != router.path) {
         _pages.last = page;
       } else {
@@ -92,7 +90,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     }
 
     var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    router = router.copyWith(args: router.args.copyWith(data: arguments));
     _arguments = router.args;
     setNewRoutePath(router, replaceAll);
   }
@@ -156,12 +154,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    router = router.copyWith(args: router.args.copyWith(data: arguments));
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
       final outletRouter = router.routerOutlet.last.copyWith(
-        args: router.args?.copyWith(data: arguments),
+        args: router.args.copyWith(data: arguments),
       );
       _arguments = outletRouter.args;
       final page = ModularPage<T>(
@@ -207,12 +205,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    router = router.copyWith(args: router.args.copyWith(data: arguments));
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
       final outletRouter = router.routerOutlet.last.copyWith(
-        args: router.args?.copyWith(data: arguments),
+        args: router.args.copyWith(data: arguments),
       );
       _arguments = outletRouter.args;
       var page = ModularPage<T>(

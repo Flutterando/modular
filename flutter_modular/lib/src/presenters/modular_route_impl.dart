@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../core/interfaces/module.dart';
 import '../core/interfaces/modular_route.dart';
+import '../core/interfaces/module.dart';
 import '../core/interfaces/route_guard.dart';
 import '../core/models/custom_transition.dart';
 import '../core/models/modular_arguments.dart';
@@ -14,7 +14,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   @override
   final Module? currentModule;
   @override
-  final ModularArguments? args;
+  final ModularArguments args;
   @override
   final List<ModularRoute> children;
   @override
@@ -56,8 +56,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   final Map<
       TransitionType,
       PageRouteBuilder<T> Function(
-    Widget Function(BuildContext, ModularArguments?) builder,
-    ModularArguments? args,
+    Widget Function(BuildContext, ModularArguments) builder,
     Duration transitionDuration,
     RouteSettings settings,
   )> transitions = {
@@ -96,7 +95,23 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
         assert(routerName == '**' ? child != null : true);
 
   @override
-  ModularRoute<T> copyWith({ModularChild? child, String? routerName, Module? module, List<ModularRoute>? children, List<ModularRoute>? routerOutlet, Module? currentModule, Map<String, String>? params, Uri? uri, List<RouteGuard>? guards, TransitionType? transition, RouteBuilder<T>? routeGenerator, String? modulePath, Duration? duration, Completer<T>? popRoute, ModularArguments? args, CustomTransition? customTransition}) {
+  ModularRoute<T> copyWith(
+      {ModularChild? child,
+      String? routerName,
+      Module? module,
+      List<ModularRoute>? children,
+      List<ModularRoute>? routerOutlet,
+      Module? currentModule,
+      Map<String, String>? params,
+      Uri? uri,
+      List<RouteGuard>? guards,
+      TransitionType? transition,
+      RouteBuilder<T>? routeGenerator,
+      String? modulePath,
+      Duration? duration,
+      Completer<T>? popRoute,
+      ModularArguments? args,
+      CustomTransition? customTransition}) {
     return ModularRouteImpl<T>(
       routerName ?? this.routerName,
       child: child ?? this.child,

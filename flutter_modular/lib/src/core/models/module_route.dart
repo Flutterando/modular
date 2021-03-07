@@ -1,6 +1,6 @@
 import '../../presenters/modular_route_impl.dart';
-import '../interfaces/module.dart';
 import '../interfaces/modular_route.dart';
+import '../interfaces/module.dart';
 import '../interfaces/route_guard.dart';
 import 'custom_transition.dart';
 

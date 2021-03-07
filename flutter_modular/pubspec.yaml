@@ -1,14 +1,14 @@
 name: flutter_modular
 description: Smart project structure with dependency injection and route management
-version: 3.0.0-nullsafety.45
+version: 3.0.0
 homepage: https://github.com/Flutterando/modular
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter_modular_annotations: ^0.0.2
-  triple: ">=0.0.18 <1.0.0"
+  triple: ">=1.0.0 <2.0.0"
   flutter:
     sdk: flutter
 

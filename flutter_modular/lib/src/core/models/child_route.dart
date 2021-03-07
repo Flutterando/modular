@@ -10,11 +10,12 @@ class ChildRoute extends ModularRouteImpl {
   ChildRoute(
     String routerName, {
     List<ModularRoute> children = const [],
-    required Widget Function(BuildContext, ModularArguments?) child,
+    required Widget Function(BuildContext, ModularArguments) child,
     List<RouteGuard>? guards,
     TransitionType transition = TransitionType.defaultTransition,
     CustomTransition? customTransition,
     RouteBuilder? routeGenerator,
     Duration duration = const Duration(milliseconds: 300),
-  }) : super(routerName, routerOutlet: [], duration: duration, child: child, routeGenerator: routeGenerator, customTransition: customTransition, children: children, guards: guards, transition: transition);
+  }) : super(routerName,
+            routerOutlet: [], duration: duration, child: child, routeGenerator: routeGenerator, customTransition: customTransition, children: children, guards: guards, transition: transition);
 }

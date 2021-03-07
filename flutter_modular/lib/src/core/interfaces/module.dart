@@ -22,7 +22,7 @@ abstract class Module {
 
   final Map<Type, dynamic> _singletonBinds = {};
 
-  T? getBind<T extends Object>({Map<String, dynamic>? params, required List<Type> typesInRequest}) {
+  T? getBind<T extends Object>({required List<Type> typesInRequest}) {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -49,7 +49,7 @@ ${typesInRequest.join('\n')}
       typesInRequest.add(type);
     }
 
-    bindValue = bind.inject(Inject(params: params, typesInRequest: typesInRequest)) as T;
+    bindValue = bind.inject(Inject(typesInRequest: typesInRequest)) as T;
     if (bind.isSingleton) {
       _singletonBinds[type] = bindValue;
     }

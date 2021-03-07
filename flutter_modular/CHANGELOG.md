@@ -1,3 +1,7 @@
+## [3.0.0] - 2021-03-09
+
+* BIG RELEASE!
+
 ## [2.5.0] - 
 * Navigator 2.0
 * Fixed Modular.link

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../flutter_modular.dart';
-import '../core/interfaces/module.dart';
 import '../core/interfaces/modular_interface.dart';
+import '../core/interfaces/module.dart';
 import 'modular_impl.dart';
 import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';

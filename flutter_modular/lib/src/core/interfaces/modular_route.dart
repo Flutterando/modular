@@ -9,12 +9,12 @@ import 'module.dart';
 import 'route_guard.dart';
 
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
-typedef ModularChild = Widget Function(BuildContext context, ModularArguments? args);
+typedef ModularChild = Widget Function(BuildContext context, ModularArguments args);
 
 abstract class ModularRoute<T> {
   Module? get currentModule;
 
-  ModularArguments? get args;
+  ModularArguments get args;
 
   List<ModularRoute> get children;
 
@@ -202,13 +202,28 @@ abstract class ModularRoute<T> {
   Map<
       TransitionType,
       PageRouteBuilder<T> Function(
-    Widget Function(BuildContext, ModularArguments?) builder,
-    ModularArguments? args,
+    Widget Function(BuildContext, ModularArguments) builder,
     Duration transitionDuration,
     RouteSettings settings,
   )> get transitions;
 
-  ModularRoute<T> copyWith({ModularChild? child, String? routerName, Module? module, List<ModularRoute>? children, List<ModularRoute>? routerOutlet, Module? currentModule, Map<String, String>? params, List<RouteGuard>? guards, TransitionType? transition, RouteBuilder<T>? routeGenerator, String? modulePath, Uri uri, Duration? duration, Completer<T>? popRoute, ModularArguments? args, CustomTransition? customTransition});
+  ModularRoute<T> copyWith(
+      {ModularChild? child,
+      String? routerName,
+      Module? module,
+      List<ModularRoute>? children,
+      List<ModularRoute>? routerOutlet,
+      Module? currentModule,
+      Map<String, String>? params,
+      List<RouteGuard>? guards,
+      TransitionType? transition,
+      RouteBuilder<T>? routeGenerator,
+      String? modulePath,
+      Uri uri,
+      Duration? duration,
+      Completer<T>? popRoute,
+      ModularArguments? args,
+      CustomTransition? customTransition});
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes

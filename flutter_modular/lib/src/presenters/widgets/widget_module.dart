@@ -35,13 +35,11 @@ abstract class WidgetModule extends StatelessWidget implements Module {
 
   @override
   T? getBind<T extends Object>({Map<String, dynamic>? params, List<Type> typesInRequest = const []}) {
-    return _fakeModule.getBind<T>(params: params, typesInRequest: typesInRequest);
+    return _fakeModule.getBind<T>(typesInRequest: typesInRequest);
   }
 
   @override
-  List<String> get paths => [
-        runtimeType.toString()
-      ];
+  List<String> get paths => [runtimeType.toString()];
 
   @override
   bool remove<T>() {

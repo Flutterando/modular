@@ -1,6 +1,8 @@
+import '../models/bind.dart';
+
 import '../models/modular_arguments.dart';
-import 'module.dart';
 import 'modular_navigator_interface.dart';
+import 'module.dart';
 
 abstract class ModularInterface {
   bool get debugMode;
@@ -10,10 +12,10 @@ abstract class ModularInterface {
   void init(Module module);
   void bindModule(Module module, [String path]);
   void debugPrintModular(String text);
+  T read<T extends Object>(Bind<T> bind);
 
   IModularNavigator get to;
   B get<B extends Object>({
-    Map<String, dynamic> params = const {},
     List<Type>? typesInRequestList,
     B? defaultValue,
   });

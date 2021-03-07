@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../flutter_modular.dart';
 
+import '../../../flutter_modular.dart';
 import '../../core/errors/errors.dart';
-import '../../core/interfaces/module.dart';
 import '../../core/interfaces/modular_route.dart';
+import '../../core/interfaces/module.dart';
 import '../modular_base.dart';
 
 bool _firstParse = false;
@@ -78,10 +78,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
           currentModule: route.currentModule,
-          guards: [
-            if (route.guards != null) ...route.guards!,
-            if (router.guards != null) ...router.guards!
-          ],
+          guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
         );
 
         if (router.transition == TransitionType.defaultTransition) {
@@ -102,9 +99,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           if (r != null) {
             r.currentModule?.paths.remove(uri.toString());
             r = r.copyWith(modulePath: r.modulePath == route.modulePath ? tempRouteName : r.modulePath);
-            route = route.copyWith(routerOutlet: [
-              r
-            ], uri: uri.replace(path: tempRouteName));
+            route = route.copyWith(routerOutlet: [r], uri: uri.replace(path: tempRouteName));
             return route;
           }
         }
@@ -173,15 +168,15 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           paramPos++;
         }
         uri = uri.replace(path: routeNamed);
-        return router.copyWith(args: router.args!.copyWith(params: params, uri: uri), uri: uri);
+        return router.copyWith(args: router.args.copyWith(params: params, uri: uri), uri: uri);
       }
 
       uri = uri.replace(path: routeNamed);
-      return router.copyWith(args: router.args!.copyWith(params: null, uri: uri), uri: uri);
+      return router.copyWith(args: router.args.copyWith(params: null, uri: uri), uri: uri);
     }
 
     uri = uri.replace(path: routeNamed);
-    return router.copyWith(uri: uri, args: router.args!.copyWith(uri: uri));
+    return router.copyWith(uri: uri, args: router.args.copyWith(uri: uri));
   }
 
   ModularRoute? _searchWildcard(
@@ -219,7 +214,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     var router = _searchInModule(module ?? Modular.initialModule, "", uri);
 
     if (router != null) {
-      router = router.copyWith(args: router.args?.copyWith(uri: router.uri));
+      router = router.copyWith(args: router.args.copyWith(uri: router.uri));
       return canActivate(router.path!, router);
     } else {
       router = _searchWildcard(uri.path, module ?? Modular.initialModule);
