@@ -250,7 +250,7 @@ final List<ModularRoute> routes = [
 ];
 ```
 
-Retrive the arguments from binds directaly too:
+Retrieve the arguments from binds directly too:
 
 ```dart
 
