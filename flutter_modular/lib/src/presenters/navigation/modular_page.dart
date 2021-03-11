@@ -31,6 +31,12 @@ class ModularPage<T> extends Page<T> {
   }
 
   @override
+  bool canUpdate(Page other) {
+    print(other.key == key);
+    return super.canUpdate(other);
+  }
+
+  @override
   Route<T> createRoute(BuildContext context) {
     if (router.transition == TransitionType.custom && router.customTransition != null) {
       return PageRouteBuilder<T>(
