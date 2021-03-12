@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:search/app/search/domain/entities/result.dart';
+import 'package:example/app/search/domain/entities/result.dart';
 
 class ResultModel extends Result {
   final String image;
@@ -8,12 +8,7 @@ class ResultModel extends Result {
   final String nickname;
   final String url;
 
-  const ResultModel(
-      {required this.image,
-      required this.name,
-      required this.nickname,
-      required this.url})
-      : super(image: image, name: name, nickname: nickname, url: url);
+  const ResultModel({required this.image, required this.name, required this.nickname, required this.url}) : super(image: image, name: name, nickname: nickname, url: url);
 
   Map<String, dynamic> toMap() {
     return {

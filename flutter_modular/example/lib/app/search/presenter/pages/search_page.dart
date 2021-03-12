@@ -1,6 +1,6 @@
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:search/app/search/domain/entities/result.dart';
-import 'package:search/app/search/domain/errors/erros.dart';
+import 'package:example/app/search/domain/entities/result.dart';
+import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

@@ -1,6 +1,6 @@
-import 'package:search/app/app_module.dart';
-import 'package:search/app/search/domain/entities/result.dart';
-import 'package:search/app/search/domain/usecases/search_by_text.dart';
+import 'package:example/app/app_module.dart';
+import 'package:example/app/search/domain/entities/result.dart';
+import 'package:example/app/search/domain/usecases/search_by_text.dart';
 import 'package:http/http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';

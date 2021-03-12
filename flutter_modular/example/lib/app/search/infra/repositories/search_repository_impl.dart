@@ -1,7 +1,7 @@
-import 'package:search/app/search/domain/errors/erros.dart';
-import 'package:search/app/search/domain/entities/result.dart';
-import 'package:search/app/search/domain/repositories/search_repository.dart';
-import 'package:search/app/search/infra/datasources/search_datasource.dart';
+import 'package:example/app/search/domain/errors/erros.dart';
+import 'package:example/app/search/domain/entities/result.dart';
+import 'package:example/app/search/domain/repositories/search_repository.dart';
+import 'package:example/app/search/infra/datasources/search_datasource.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 part 'search_repository_impl.g.dart';

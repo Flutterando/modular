@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:search/app/search/domain/entities/result.dart';
+import 'package:example/app/search/domain/entities/result.dart';
 
 class DetailsPage extends StatefulWidget {
   final Result result;

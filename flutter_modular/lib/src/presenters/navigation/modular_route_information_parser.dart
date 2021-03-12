@@ -56,7 +56,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     ModularRoute? router;
     if (routerName == uri.path || routerName == "${uri.path}/") {
       //router = route.module!.routes[0];
-      router = route.module!.routers.firstWhere((element) => element.routerName == '/', orElse: () => route.module!.routes[0]);
+      router = route.module!.routes.firstWhere((element) => element.routerName == '/', orElse: () => route.module!.routes[0]);
       if (router.module != null) {
         var _routerName = (routerName + route.routerName).replaceFirst('//', '/');
         router = _searchInModule(route.module!, _routerName, uri);

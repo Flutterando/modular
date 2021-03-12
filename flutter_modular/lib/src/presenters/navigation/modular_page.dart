@@ -31,32 +31,23 @@ class ModularPage<T> extends Page<T> {
   }
 
   @override
-  bool canUpdate(Page other) {
-    print(other.key == key);
-    return super.canUpdate(other);
-  }
-
-  @override
   Route<T> createRoute(BuildContext context) {
+    late final Widget page;
+    if (router.child != null) {
+      page = router.child!(context, Modular.args!);
+    } else {
+      throw ModularError('Child not be null');
+    }
     if (router.transition == TransitionType.custom && router.customTransition != null) {
       return PageRouteBuilder<T>(
-        pageBuilder: (context, _, __) {
-          if (router.child != null) {
-            return router.child!(context, Modular.args!);
-          } else {
-            throw ModularError('Child not be null');
-          }
-        },
+        pageBuilder: (context, _, __) => page,
         settings: this,
         transitionsBuilder: router.customTransition!.transitionBuilder,
         transitionDuration: router.customTransition!.transitionDuration,
       );
     } else if (router.transition == TransitionType.defaultTransition) {
       // Helper function
-      Widget widgetBuilder(BuildContext context) {
-        //return disposablePage;
-        return router.child!(context, Modular.args!);
-      }
+      Widget widgetBuilder(BuildContext context) => page;
 
       if (router.routeGenerator != null) {
         return router.routeGenerator!(widgetBuilder, this) as Route<T>;
@@ -69,7 +60,7 @@ class ModularPage<T> extends Page<T> {
       // Helper function
       Widget widgetBuilder(BuildContext context) {
         //return disposablePage;
-        return router.child!(context, Modular.args!);
+        return page;
       }
 
       if (router.routeGenerator != null) {
@@ -82,7 +73,7 @@ class ModularPage<T> extends Page<T> {
     } else {
       var selectTransition = router.transitions[router.transition];
       if (selectTransition != null) {
-        return selectTransition(router.child!, router.duration, this) as Route<T>;
+        return selectTransition((_, __) => page, router.duration, this) as Route<T>;
       } else {
         throw ModularError('Page Not Found');
       }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:search/app/search/infra/datasources/search_datasource.dart';
-import 'package:search/app/search/infra/models/result_model.dart';
+import 'package:example/app/search/infra/datasources/search_datasource.dart';
+import 'package:example/app/search/infra/models/result_model.dart';
 import 'package:http/http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 part 'github_search_datasource.g.dart';
