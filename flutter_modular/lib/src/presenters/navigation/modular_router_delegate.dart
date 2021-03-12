@@ -44,7 +44,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router, [bool replaceAll = true]) async {
+  Future<void> setNewRoutePath(ModularRoute router, [@deprecated bool replaceAll = true]) async {
     _arguments = router.args;
     final page = ModularPage(
       key: ValueKey('url:${router.uri?.path ?? router.path}'),
@@ -83,7 +83,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> navigate(String routeName, {arguments, bool replaceAll = false}) async {
+  Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
     routeName = resolverPath(routeName, path);
     if (routeName == path) {
       return;
@@ -92,15 +92,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     var router = await parser.selectRoute(routeName);
     router = router.copyWith(args: router.args.copyWith(data: arguments));
     _arguments = router.args;
-    setNewRoutePath(router, replaceAll);
+    setNewRoutePath(router);
   }
-
-  // @override
-  // Future<bool> popRoute() {
-  //   return SynchronousFuture(true);
-
-  //   //   return navigator.maybePop();
-  // }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     if (!route.didPop(result)) {

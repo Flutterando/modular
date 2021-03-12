@@ -6,10 +6,12 @@ import '../modular_base.dart';
 
 abstract class ModularState<TWidget extends StatefulWidget, TBind extends Object> extends State<TWidget> {
   final TBind _store = Modular.get<TBind>();
+
+  /// deprecated: use [controller]
+  /// Check [this issue](https://github.com/Flutterando/modular/issues/315) for more details.
+  @deprecated
   TBind get store => _store;
 
-  /// deprecated: use [store]
-  @deprecated
   TBind get controller => _store;
 
   @override

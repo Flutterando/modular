@@ -1,3 +1,9 @@
+## [3.0.0+1] - 2021-03-12
+
+* Fix pushNamed bug
+* Fix parameter bugs
+* navigate replaceAll aways true (@deprecated) 
+
 ## [3.0.0+1] - 2021-03-09
 
 * BIG RELEASE!
