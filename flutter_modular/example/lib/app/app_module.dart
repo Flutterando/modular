@@ -6,6 +6,7 @@ import 'search/infra/repositories/search_repository_impl.dart';
 import 'package:http/http.dart' as http;
 
 import 'search/presenter/pages/details_page.dart';
+import 'search/presenter/pages/guardt.dart';
 import 'search/presenter/pages/search_page.dart';
 import 'search/presenter/stores/search_store.dart';
 
@@ -22,6 +23,6 @@ class AppModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, __) => SearchPage()),
-    ChildRoute('/details', child: (_, args) => DetailsPage(result: args.data)),
+    ChildRoute('/details', child: (_, args) => DetailsPage(result: args.data), guards: [GuardT()]),
   ];
 }

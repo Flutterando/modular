@@ -89,8 +89,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       return;
     }
 
-    var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args.copyWith(data: arguments));
+    var router = await parser.selectRoute(routeName, arguments: arguments);
     _arguments = router.args;
     setNewRoutePath(router);
   }
@@ -146,8 +145,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args.copyWith(data: arguments));
+    var router = await parser.selectRoute(routeName, arguments: arguments);
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
@@ -197,8 +195,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args.copyWith(data: arguments));
+    var router = await parser.selectRoute(routeName, arguments: arguments);
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
@@ -255,7 +252,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName);
+    var router = await parser.selectRoute(routeName, arguments: arguments);
     if (!forRoot && router.routerOutlet.isNotEmpty) {
       routerOutletPages[router.path!]?.last.completePop(result);
     } else {

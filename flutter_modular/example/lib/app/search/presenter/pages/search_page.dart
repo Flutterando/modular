@@ -26,7 +26,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
           ),
           title: Text(item.nickname),
           onTap: () {
-            Modular.to.pushNamed('/details', arguments: item);
+            Modular.to.pushNamed('/details?id=1', arguments: item);
           },
         );
       },

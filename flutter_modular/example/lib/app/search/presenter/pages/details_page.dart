@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:example/app/search/domain/entities/result.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class DetailsPage extends StatefulWidget {
   final Result result;
@@ -15,6 +16,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
+    print(Modular.args?.queryParams['id']);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.result.nickname),

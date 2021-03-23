@@ -207,7 +207,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return finded?.routerName == '**' ? finded : null;
   }
 
-  Future<ModularRoute> selectRoute(String path, [Module? module]) async {
+  Future<ModularRoute> selectRoute(String path, {Module? module, dynamic arguments}) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
@@ -215,7 +215,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     var router = _searchInModule(module ?? Modular.initialModule, "", uri);
 
     if (router != null) {
-      router = router.copyWith(args: router.args.copyWith(uri: router.uri));
+      router = router.copyWith(args: router.args.copyWith(uri: router.uri, data: arguments));
       return canActivate(router.path!, router);
     } else {
       router = _searchWildcard(uri.path, module ?? Modular.initialModule);
