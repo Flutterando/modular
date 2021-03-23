@@ -16,6 +16,12 @@ class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, Module> injectMap;
   IModularNavigator? navigatorDelegate;
+  List<Bind>? _overrideBinds;
+
+  @override
+  void overrideBinds(List<Bind> binds) {
+    _overrideBinds = binds;
+  }
 
   @override
   ModularArguments? get args => routerDelegate.args;
@@ -128,5 +134,5 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  T read<T extends Object>(Bind<T> bind) => bind.inject(Inject());
+  T bind<T extends Object>(Bind<T> bind) => Inject(overrideBinds: _overrideBinds ?? []).get(bind);
 }

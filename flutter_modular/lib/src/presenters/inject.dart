@@ -5,8 +5,9 @@ import 'modular_base.dart';
 
 class Inject<T> {
   final List<Type>? typesInRequest;
+  final List<Bind>? overrideBinds;
 
-  Inject({this.typesInRequest});
+  const Inject({this.typesInRequest, this.overrideBinds = const []});
 
   B call<B extends Object>([Bind<B>? bind]) => get<B>(bind);
 
@@ -14,7 +15,12 @@ class Inject<T> {
     if (bind == null) {
       return Modular.get<B>(typesInRequestList: typesInRequest);
     } else {
-      return bind.inject(this);
+      final candidateId = overrideBinds?.indexWhere((element) => element.runtimeType == bind.runtimeType) ?? -1;
+      if (candidateId == -1) {
+        return bind.inject(this);
+      } else {
+        return overrideBinds![candidateId].inject(this) as B;
+      }
     }
   }
 

@@ -40,6 +40,8 @@ dependencies:
 
 dev_dependencies:
   flutter_modular_test: ^1.0.0-nullsafety.3
+  modular_codegen: ^3.0.0-nullsafety.2
+  build_runner: ^1.12.2
   mocktail: ^0.0.1-dev.3
   flutter_test:
     sdk: flutter

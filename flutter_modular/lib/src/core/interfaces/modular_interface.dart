@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../models/bind.dart';
 
 import '../models/modular_arguments.dart';
@@ -9,10 +11,12 @@ abstract class ModularInterface {
   ModularArguments? get args;
   String get initialRoute;
   Module get initialModule;
+  @visibleForTesting
+  void overrideBinds(List<Bind> binds);
   void init(Module module);
   void bindModule(Module module, [String path]);
   void debugPrintModular(String text);
-  T read<T extends Object>(Bind<T> bind);
+  T bind<T extends Object>(Bind<T> bind);
 
   IModularNavigator get to;
   B get<B extends Object>({
