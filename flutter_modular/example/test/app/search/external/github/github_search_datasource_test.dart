@@ -9,8 +9,11 @@ class ClientMock extends Mock implements Client {}
 main() {
   var client = ClientMock();
   var datasource = GithubSearchDatasource(client);
+
   test('deve retornar um ResultModel', () async {
-    when(client).calls('get').thenAnswer((_) async => Response(jsonResponse, 200));
+    when(() => client
+            .get(Uri.parse("https://api.github.com/search/users?q=textSearch")))
+        .thenAnswer((_) async => Response(jsonResponse, 200));
 
     var result = await datasource.searchText("jacob");
     expect(result, isA<List<ResultModel>>());
