@@ -1,3 +1,9 @@
+## [3.0.2] - 2021-03-22
+
+* Support modular_codegen 3.0.0
+* Added Support to CupertinoApp.modular()
+* Fix bug: Get arguments in RouteGuard
+
 ## [3.0.0+1] - 2021-03-12
 
 * Fix pushNamed bug

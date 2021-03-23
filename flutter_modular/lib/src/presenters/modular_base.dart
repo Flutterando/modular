@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../flutter_modular.dart';
@@ -25,7 +26,7 @@ final ModularInterface Modular = ModularImpl(
 @visibleForTesting
 String initialRouteDeclaratedInMaterialApp = '/';
 
-extension ModularExtension on MaterialApp {
+extension ModularExtensionMaterial on MaterialApp {
   MaterialApp modular() {
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
@@ -49,6 +50,40 @@ extension ModularExtension on MaterialApp {
       localeResolutionCallback: localeResolutionCallback,
       supportedLocales: supportedLocales,
       debugShowMaterialGrid: debugShowMaterialGrid,
+      showPerformanceOverlay: showPerformanceOverlay,
+      checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+      showSemanticsDebugger: showSemanticsDebugger,
+      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+      shortcuts: shortcuts,
+      actions: actions,
+      restorationScopeId: restorationScopeId,
+      routeInformationParser: _routeInformationParser,
+      routerDelegate: _routerDelegate,
+    );
+
+    return app;
+  }
+}
+
+extension ModularExtensionCupertino on CupertinoApp {
+  CupertinoApp modular() {
+    initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
+
+    final app = CupertinoApp.router(
+      key: key,
+      routeInformationProvider: routeInformationProvider,
+      backButtonDispatcher: backButtonDispatcher,
+      builder: builder,
+      title: title,
+      onGenerateTitle: onGenerateTitle,
+      color: color,
+      theme: theme,
+      locale: locale,
+      localizationsDelegates: localizationsDelegates,
+      localeListResolutionCallback: localeListResolutionCallback,
+      localeResolutionCallback: localeResolutionCallback,
+      supportedLocales: supportedLocales,
       showPerformanceOverlay: showPerformanceOverlay,
       checkerboardRasterCacheImages: checkerboardRasterCacheImages,
       checkerboardOffscreenLayers: checkerboardOffscreenLayers,
