@@ -36,15 +36,15 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
   Widget _buildError(Failure error) {
     if (error is EmptyList) {
       return Center(
-        child: Text('Nada encontrado'),
+        child: Text('Nothing has been found'),
       );
     } else if (error is ErrorSearch) {
       return Center(
-        child: Text('Erro no github'),
+        child: Text('Github error'),
       );
     } else {
       return Center(
-        child: Text('Erro interno'),
+        child: Text('Internal error'),
       );
     }
   }
@@ -64,7 +64,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
               onChanged: store.setSearchText,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "Pesquise...",
+                labelText: "Search...",
               ),
             ),
           ),
@@ -78,7 +78,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
                 onState: (_, state) {
                   if (state.isEmpty) {
                     return Center(
-                      child: Text('Digita alguma coisa...'),
+                      child: Text('Please, type something...'),
                     );
                   } else {
                     return _buildList(state);
