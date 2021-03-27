@@ -70,13 +70,24 @@ class ModularImpl implements ModularInterface {
   @override
   String get initialRoute => '/';
 
+  B? _findExistingInstance<B extends Object>() {
+    for (var module in injectMap.values) {
+      final bind = module.getInjectedBind<B>();
+      if (bind != null) {
+        return bind;
+      }
+    }
+    return null;
+  }
+
   @override
   B get<B extends Object>({List<Type>? typesInRequestList, B? defaultValue}) {
     var typesInRequest = typesInRequestList ?? [];
-    if (B.toString() == 'dynamic') {
-      throw ModularError('not allow for dynamic values');
+    var result = _findExistingInstance<B>();
+
+    if (result != null) {
+      return result;
     }
-    B? result;
 
     if (typesInRequest.isEmpty) {
       final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? '=global';

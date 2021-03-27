@@ -9,8 +9,20 @@ import 'modular_route.dart';
 
 @immutable
 abstract class Module {
-  late final List<Bind> binds = [];
-  late final List<ModularRoute> routes = [];
+  final Map<Type, dynamic> _singletonBinds = {};
+
+  final List<Bind> binds = [];
+  final List<ModularRoute> routes = [];
+
+  final List<Module> imports = [];
+
+  Module() {
+    for (var module in imports) {
+      for (var bind in module.binds.where((element) => element.export)) {
+        binds.add(bind);
+      }
+    }
+  }
 
   @visibleForTesting
   void changeBinds(List<Bind> b) {
@@ -20,7 +32,14 @@ abstract class Module {
 
   final List<String> paths = <String>[];
 
-  final Map<Type, dynamic> _singletonBinds = {};
+  T? getInjectedBind<T>([Type? type]) {
+    type = type ?? _getInjectType<T>();
+    if (_singletonBinds.containsKey(type)) {
+      return _singletonBinds[type];
+    } else {
+      return null;
+    }
+  }
 
   T? getBind<T extends Object>({required List<Type> typesInRequest}) {
     T bindValue;

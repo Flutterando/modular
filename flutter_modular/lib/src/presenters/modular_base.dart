@@ -115,6 +115,11 @@ class _RouterOutletState extends State<RouterOutlet> {
     super.initState();
     navigatorKey = GlobalKey<NavigatorState>();
     delegate = RouterOutletDelegate(_routerDelegate, navigatorKey);
+    Modular.to.addListener(_listener);
+  }
+
+  void _listener() {
+    setState(() {});
   }
 
   @override
@@ -122,6 +127,12 @@ class _RouterOutletState extends State<RouterOutlet> {
     super.didChangeDependencies();
     final router = Router.of(context);
     _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Modular.to.removeListener(_listener);
   }
 
   @override
