@@ -89,15 +89,6 @@ class ModularImpl implements ModularInterface {
       return result;
     }
 
-    if (typesInRequest.isEmpty) {
-      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? '=global';
-      result = _getInjectableObject<B>(module, typesInRequestList: typesInRequest);
-    }
-
-    if (result != null) {
-      return result;
-    }
-
     for (var key in injectMap.keys) {
       final value = _getInjectableObject<B>(key, typesInRequestList: typesInRequest, checkKey: false);
       if (value != null) {

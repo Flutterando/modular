@@ -558,13 +558,13 @@ You can only have one `RouterOutlet` per page and it is only able to browse the 
 
       @override
       final List<ModularRoute> routes = [
-        ChildModule(
+        ChildRoute(
           '/start',
           child: (context, args) => StartPage(),
           children: [
-            ChildModule('/home', child: (_, __) => HomePage()),
-            ChildModule('/product', child: (_, __) => ProductPage()),
-            ChildModule('/config', child: (_, __) => ConfigPage()),
+            ChildRoute('/home', child: (_, __) => HomePage()),
+            ChildRoute('/product', child: (_, __) => ProductPage()),
+            ChildRoute('/config', child: (_, __) => ConfigPage()),
           ],
         ),
       ];
