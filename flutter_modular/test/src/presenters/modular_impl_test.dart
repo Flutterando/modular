@@ -28,7 +28,7 @@ main() {
   var navigatorMock = MockIModularNavigator();
 
   test('should override the navigator properly', () async {
-    var routeName = '/test-vavigation';
+    var routeName = '/test-navigation';
     modularImpl.navigatorDelegate = navigatorMock;
     when(navigatorMock.pushNamed(routeName)).thenAnswer((_) async => {});
     modularImpl.to.pushNamed(routeName);
