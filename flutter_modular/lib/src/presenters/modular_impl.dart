@@ -15,6 +15,7 @@ late Module _initialModule;
 class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, Module> injectMap;
+  @override
   IModularNavigator? navigatorDelegate;
   List<Bind>? _overrideBinds;
 
@@ -29,7 +30,6 @@ class ModularImpl implements ModularInterface {
   ModularImpl({
     required this.routerDelegate,
     required this.injectMap,
-    this.navigatorDelegate,
   });
 
   @override

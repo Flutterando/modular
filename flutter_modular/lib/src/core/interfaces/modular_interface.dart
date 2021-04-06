@@ -7,6 +7,8 @@ import 'modular_navigator_interface.dart';
 import 'module.dart';
 
 abstract class ModularInterface {
+  IModularNavigator? navigatorDelegate;
+
   bool get debugMode;
   ModularArguments? get args;
   String get initialRoute;
