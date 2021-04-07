@@ -1,4 +1,3 @@
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/presenters/modular_impl.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_modular/src/presenters/navigation/modular_router_delegat
 import 'package:flutter_test/flutter_test.dart';
 
 
-@GenerateMocks([IModularNavigator])
 main() {
   final injectMap = <String, Module>{};
 
