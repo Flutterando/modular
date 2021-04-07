@@ -5,7 +5,6 @@ import 'package:flutter_modular/src/presenters/modular_impl.dart';
 import 'package:flutter_modular/src/presenters/navigation/modular_route_information_parser.dart';
 import 'package:flutter_modular/src/presenters/navigation/modular_router_delegate.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'modular_impl_test.mocks.dart';
 
 
 @GenerateMocks([IModularNavigator])
@@ -25,7 +24,7 @@ main() {
 
   modularImpl.init(ModuleMock());
 
-  var navigatorMock = MockIModularNavigator();
+  var navigatorMock = NavigatorMock();
 
   test('should override the navigator properly', () async {
     var routeName = '/test-navigation';
@@ -43,4 +42,14 @@ class ModuleMock extends Module {
 
   @override
   final List<ModularRoute> routes = [];
+}
+
+class NavigatorMock extends Mock implements IModularNavigator {
+  @override
+  Future<T?> pushNamed<T extends Object?>(String? routeName,
+      {Object? arguments, bool? forRoot = false}) =>
+      (super.noSuchMethod(
+          Invocation.method(#pushNamed, [routeName],
+              {#arguments: arguments, #forRoot: forRoot}),
+          returnValue: Future.value(null)) as Future<T?>);
 }
