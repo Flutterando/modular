@@ -61,7 +61,7 @@ abstract class WidgetModule extends StatelessWidget implements Module {
   List<ModularRoute> routes = const [];
 
   @override
-  List<Module> get imports => [];
+  List<Module> get imports => const [];
 
   @override
   Widget build(BuildContext context) {
