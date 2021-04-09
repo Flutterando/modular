@@ -122,6 +122,27 @@ class ModularImpl implements ModularInterface {
   @override
   bool dispose<B extends Object>() {
     var isDisposed = false;
+
+    /// Logic to check if bind is in the injectMap
+    /// Cause true -> continue the normal flow
+    /// Otherwise -> returns true to don't make dispose again
+    var check = false;
+
+    for (var key in injectMap.keys) {
+      if (check) break;
+
+      final _binds = injectMap[key]?.binds ?? [];
+
+      for (var element in _binds) {
+        if (element.inject is B Function(Inject<dynamic>)) {
+          check = true;
+          break;
+        }
+      }
+    }
+
+    if (!check) return true;
+
     for (var key in injectMap.keys) {
       if (_removeInjectableObject<B>(key)) {
         isDisposed = true;
