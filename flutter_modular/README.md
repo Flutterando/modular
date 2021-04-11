@@ -358,7 +358,7 @@ To use your `RouteGuard` in a route, pass it to the `guards` parameter:
 
 ```dart
 @override
-List<ModularRoute> routes = [
+final List<ModularRoute> routes = [
   final ModuleRoute('/', module: HomeModule()),
   final ModuleRoute(
     '/admin',
@@ -370,6 +370,25 @@ List<ModularRoute> routes = [
 ```
 
 If placed on a module route, `RouterGuard` will be global to that route.
+
+Add a routing route if `RouteGuard` validation fails by adding the `guardedRoute` property:
+
+```dart
+@override
+final List<ModularRoute> routes = [
+    ChildRoute(
+      '/home',
+      child: (context, args) => HomePage(),
+      guards: [AuthGuard()],
+      guardedRoute: '/login',
+    ),
+    ChildRoute(
+      '/login',
+      child: (context, args) => LoginPage(),
+    ),
+];
+
+```
 
 ## Route transition animation
 

@@ -79,6 +79,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
           currentModule: route.currentModule,
+          guardedRoute: router.guardedRoute ?? route.guardedRoute,
           guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
         );
 
@@ -228,22 +229,26 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
 
   Future<ModularRoute> canActivate(String path, ModularRoute router) async {
     if (router.guards?.isNotEmpty == true) {
-      await _checkGuard(path, router);
+      router = await _checkGuard(path, router);
     } else if (router.routerOutlet.isNotEmpty) {
       for (final r in router.routerOutlet) {
-        await _checkGuard(path, r);
+        await _checkGuard(path, r, true);
       }
     }
 
     return router;
   }
 
-  Future<void> _checkGuard(String path, ModularRoute router) async {
+  Future<ModularRoute> _checkGuard(String path, ModularRoute router, [bool isRouterOutlet = false]) async {
     for (var guard in router.guards ?? []) {
       try {
         final result = await guard.canActivate(path, router);
-        if (!result) {
-          throw ModularError('$path is CAN\'T ACTIVATE');
+        if (!result && router.guardedRoute != null && !isRouterOutlet) {
+          print(ModularError('$path is CAN\'T ACTIVATE'));
+          print('redirect to \'${router.guardedRoute}\'');
+          return await selectRoute(router.guardedRoute!);
+        } else if (!result && router.guardedRoute == null) {
+          throw ModularError('$path is NOT ACTIVATE');
         }
       } on ModularError {
         rethrow;
@@ -252,5 +257,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         throw ModularError('RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
       }
     }
+    return router;
   }
 }

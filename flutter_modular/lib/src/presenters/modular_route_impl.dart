@@ -27,6 +27,9 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   final String? modulePath;
 
   @override
+  final String? guardedRoute;
+
+  @override
   final String routerName;
 
   @override
@@ -76,6 +79,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   ModularRouteImpl(
     this.routerName, {
     this.children = const [],
+    this.guardedRoute,
     this.args = const ModularArguments(),
     this.module,
     this.child,
@@ -99,6 +103,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       {ModularChild? child,
       String? routerName,
       Module? module,
+      String? guardedRoute,
       List<ModularRoute>? children,
       List<ModularRoute>? routerOutlet,
       Module? currentModule,
@@ -117,6 +122,7 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       child: child ?? this.child,
       args: args ?? this.args,
       children: children ?? this.children,
+      guardedRoute: guardedRoute ?? this.guardedRoute,
       module: module ?? this.module,
       routerOutlet: routerOutlet ?? this.routerOutlet,
       currentModule: currentModule ?? this.currentModule,

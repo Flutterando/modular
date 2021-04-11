@@ -14,6 +14,8 @@ typedef ModularChild = Widget Function(BuildContext context, ModularArguments ar
 abstract class ModularRoute<T> {
   Module? get currentModule;
 
+  String? guardedRoute;
+
   ModularArguments get args;
 
   List<ModularRoute> get children;
@@ -211,6 +213,7 @@ abstract class ModularRoute<T> {
       {ModularChild? child,
       String? routerName,
       Module? module,
+      String? guardedRoute,
       List<ModularRoute>? children,
       List<ModularRoute>? routerOutlet,
       Module? currentModule,

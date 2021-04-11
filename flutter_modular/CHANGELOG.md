@@ -1,3 +1,25 @@
+## [3.1.0] - 2021-04-11
+
+* Added redirect route when RouteGuard fails [#351](https://github.com/Flutterando/modular/issues/3510):
+```dart
+@override
+final List<ModularRoute> routes = [
+    ChildRoute(
+      '/home',
+      child: (context, args) => HomePage(),
+      guards: [AuthGuard()],
+      guardedRoute: '/login',
+    ),
+    ChildRoute(
+      '/login',
+      child: (context, args) => LoginPage(),
+    ),
+];
+```
+* Fixed ChildRoute Generic type
+* Dispose errors
+* Fixed WidgetModule bugs
+
 ## [3.0.2] - 2021-03-22
 
 * Support modular_codegen 3.0.0
