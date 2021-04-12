@@ -635,7 +635,7 @@ class MyNavigatorMock extends Mock implements IModularNavigator {
 }
 ```
 
-This example use the manually implementation, but you can use the [code generator](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#code-generation) to create your mocks.
+This example uses the manually implementation, but you can use the [code generator](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#code-generation) to create your mocks.
 
 ## Features and bugs
 
