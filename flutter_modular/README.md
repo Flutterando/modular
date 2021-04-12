@@ -611,10 +611,31 @@ You can only have one `RouterOutlet` per page and it is only able to browse the 
 
 We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
+Example using [Mockito](https://github.com/dart-lang/mockito):
+
 ```dart
-// Modular.to and Modular.link will be called MyNavigatorMock implements!
-Modular.navigatorDelegate = MyNavigatorMock();
+main() {
+    val navigatorMock = MyNavigatorMock();
+
+    // Modular.to and Modular.link will be called MyNavigatorMock implements!
+    Modular.navigatorDelegate = navigatorMock;
+
+    test('test navigator mock', () {
+        when(navigatorMock.pushNamed('/test')).thenAnswer((_) async => {});
+
+        Modular.to.pushNamed('/test');
+        verify(navigatorMock.pushNamed('/test')).called(1);
+    });
+}
+
+class MyNavigatorMock extends Mock implements IModularNavigator {
+  @override
+  Future<T?> pushNamed<T extends Object?>(String? routeName, {Object? arguments, bool? forRoot = false}) =>
+      (super.noSuchMethod(Invocation.method(#pushNamed, [routeName], {#arguments: arguments, #forRoot: forRoot}), returnValue: Future.value(null)) as Future<T?>);
+}
 ```
+
+This example use the manually implementation, but you can use the [code generator](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#code-generation) to create your mocks.
 
 ## Features and bugs
 
