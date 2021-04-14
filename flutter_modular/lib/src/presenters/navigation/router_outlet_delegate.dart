@@ -52,7 +52,7 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
                 final trash = <String>[];
                 modularRouterDelegate.injectMap.forEach((key, module) {
                   module.paths.remove(path);
-                  if (module.paths.length == 0) {
+                  if (module.paths.isEmpty) {
                     module.cleanInjects();
                     trash.add(key);
                     Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");

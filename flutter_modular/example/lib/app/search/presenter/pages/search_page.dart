@@ -61,7 +61,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
           Padding(
             padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
             child: TextField(
-              onChanged: store.setSearchText,
+              onChanged: controller.setSearchText,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Search...",
@@ -70,7 +70,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
           ),
           Expanded(
             child: ScopedBuilder<SearchStore, Failure, List<Result>>(
-                store: store,
+                store: controller,
                 onLoading: (_) => Center(child: CircularProgressIndicator()),
                 onError: (_, error) {
                   return _buildError(error!);
