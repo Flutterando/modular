@@ -125,7 +125,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       if (path.characters.last == '/') {
         module.paths.remove('$path/'.replaceAll('//', ''));
       }
-      if (module.paths.length == 0) {
+      if (module.paths.isEmpty) {
         module.cleanInjects();
         trash.add(key);
         Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");

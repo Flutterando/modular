@@ -634,12 +634,12 @@ Example using [Mockito](https://github.com/dart-lang/mockito):
 
 ```dart
 main() {
-    val navigatorMock = MyNavigatorMock();
+    var navigatorMock = MyNavigatorMock();
 
     // Modular.to and Modular.link will be called MyNavigatorMock implements!
     Modular.navigatorDelegate = navigatorMock;
 
-    test('test navigator mock', () {
+    test('test navigator mock', () async {
         when(navigatorMock.pushNamed('/test')).thenAnswer((_) async => {});
 
         Modular.to.pushNamed('/test');
