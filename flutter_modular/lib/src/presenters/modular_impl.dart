@@ -51,7 +51,9 @@ class ModularImpl implements ModularInterface {
       module.instance();
       debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
-      injectMap[name]?.paths.add(path);
+      // Add the new path only if the last path in paths list is different from the current one
+      final _paths = injectMap[name]?.paths;
+      if (_paths?.last != path) _paths?.add(path);
     }
   }
 

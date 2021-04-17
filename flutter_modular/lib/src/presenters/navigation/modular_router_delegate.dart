@@ -127,8 +127,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     final trash = <String>[];
 
     injectMap.forEach((key, module) {
-      // Removes all duplicate routes
-      module.paths.removeWhere((element) => element == path);
+      module.paths.remove(path);
       if (path.characters.last == '/') {
         module.paths.remove('$path/'.replaceAll('//', ''));
       }
