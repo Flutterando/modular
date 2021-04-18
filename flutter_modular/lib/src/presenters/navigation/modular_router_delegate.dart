@@ -50,7 +50,13 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       key: ValueKey('url:${router.uri?.path ?? router.path}'),
       router: router,
     );
-    if (_pages.isEmpty) {
+
+    // Fix navigate function to don't replace a route of the same module
+    final modulePath = page.router.modulePath;
+    final valideModulePath = modulePath != null;
+    final routeIsInModule = page.router.path?.contains(modulePath!);
+
+    if (_pages.isEmpty || (valideModulePath && (routeIsInModule ?? false))) {
       _pages.add(page);
     } else {
       for (var p in _pages) {
@@ -243,6 +249,16 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final lastPage = _pages.last;
       _pages.last = page;
       rebuildPages();
+
+      // Remove inject of replaced module on pushReplacementNamed()
+      final _lastPagePath = lastPage.router.path;
+      if (_lastPagePath != null) {
+        removeInject(_lastPagePath);
+        for (var r in lastPage.router.routerOutlet) {
+          removeInject(r.path!);
+        }
+      }
+
       final result = await page.waitPop();
       lastPage.completePop(result);
       return result;
