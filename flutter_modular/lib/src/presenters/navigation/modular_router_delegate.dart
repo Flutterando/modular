@@ -51,28 +51,32 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       router: router,
     );
 
-    // Fix navigate function to don't replace a route of the same module
-    final modulePath = page.router.modulePath;
-    final valideModulePath = modulePath != null;
-    final routeIsInModule = page.router.path?.contains(modulePath!);
-
-    if (_pages.isEmpty || (valideModulePath && (routeIsInModule ?? false))) {
+    if (_pages.isEmpty) {
       _pages.add(page);
     } else {
-      for (var p in _pages) {
-        p.completePop(null);
-        removeInject(p.router.path!);
-        for (var r in p.router.routerOutlet) {
-          removeInject(r.path!);
-        }
-      }
-      if (replaceAll) {
-        _pages = [page];
-      } else if (_pages.last.router.path != router.path) {
-        _pages.last = page;
+      // Fix navigate function to don't replace a route of the same module and
+      // replace all external modules
+      final _lastPageModule = _pages.last;
+      final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
+
+      if (routeIsInModule) {
+        _pages.add(page);
       } else {
-        _pages.last.router.routerOutlet.clear();
-        _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+        for (var p in _pages) {
+          p.completePop(null);
+          removeInject(p.router.path!);
+          for (var r in p.router.routerOutlet) {
+            removeInject(r.path!);
+          }
+        }
+        if (replaceAll) {
+          _pages = [page];
+        } else if (_pages.last.router.path != router.path) {
+          _pages.last = page;
+        } else {
+          _pages.last.router.routerOutlet.clear();
+          _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+        }
       }
     }
 
