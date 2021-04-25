@@ -11,7 +11,10 @@ class ModularApp extends StatefulWidget {
     Key? key,
     required this.module,
     required this.child,
-  }) : super(key: key);
+    bool notAllowedParentBinds = false,
+  }) : super(key: key) {
+    Modular.flags.experimentalNotAllowedParentBinds = notAllowedParentBinds;
+  }
 
   @override
   _ModularAppState createState() => _ModularAppState();
