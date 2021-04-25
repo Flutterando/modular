@@ -1,3 +1,9 @@
+## [3.1.1] - 2021-04-25
+
+* EXPERIMENTAL: ModularApp.notAllowedParentBinds. If true, all modules will only have access to their Binds, or Binds of imported modules (Module.imports);
+* Page Transition use CupertinoPageRoute if application use CupertinoApp.
+* A lot of bugs fixeds (Thanks @Mex978)
+
 ## [3.1.0] - 2021-04-11
 
 * Added redirect route when RouteGuard fails [#351](https://github.com/Flutterando/modular/issues/3510):
