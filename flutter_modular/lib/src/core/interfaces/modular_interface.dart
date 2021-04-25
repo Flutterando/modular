@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../flutter_modular.dart';
 
 import '../models/bind.dart';
 
@@ -10,6 +11,7 @@ abstract class ModularInterface {
   IModularNavigator? navigatorDelegate;
 
   bool get debugMode;
+  ModularFlags get flags;
   ModularArguments? get args;
   String get initialRoute;
   Module get initialModule;

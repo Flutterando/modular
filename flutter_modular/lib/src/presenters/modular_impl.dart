@@ -15,8 +15,11 @@ late Module _initialModule;
 class ModularImpl implements ModularInterface {
   final ModularRouterDelegate routerDelegate;
   final Map<String, Module> injectMap;
+  final ModularFlags flags;
+
   @override
   IModularNavigator? navigatorDelegate;
+
   List<Bind>? _overrideBinds;
 
   @override
@@ -28,6 +31,7 @@ class ModularImpl implements ModularInterface {
   ModularArguments? get args => routerDelegate.args;
 
   ModularImpl({
+    required this.flags,
     required this.routerDelegate,
     required this.injectMap,
   });
@@ -85,6 +89,13 @@ class ModularImpl implements ModularInterface {
   @override
   B get<B extends Object>({List<Type>? typesInRequestList, B? defaultValue}) {
     var typesInRequest = typesInRequestList ?? [];
+    if (Modular.flags.experimentalNotAllowedParentBinds) {
+      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? '=global';
+      var bind = injectMap[module]!.binds.firstWhere((b) => b.inject is B Function(Inject), orElse: () => BindEmpty());
+      if (bind is BindEmpty) {
+        throw ModularError('\"${B.toString()}\" not found in \"$module\" module');
+      }
+    }
     var result = _findExistingInstance<B>();
 
     if (result != null) {
@@ -112,9 +123,7 @@ class ModularImpl implements ModularInterface {
   }) {
     B? value;
     var typesInRequest = typesInRequestList ?? [];
-    if (!checkKey) {
-      value = injectMap[tag]?.getBind<B>(typesInRequest: typesInRequest);
-    } else if (injectMap.containsKey(tag)) {
+    if (!checkKey || injectMap.containsKey(tag)) {
       value = injectMap[tag]?.getBind<B>(typesInRequest: typesInRequest);
     }
 

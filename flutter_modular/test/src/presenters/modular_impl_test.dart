@@ -5,7 +5,6 @@ import 'package:flutter_modular/src/presenters/navigation/modular_route_informat
 import 'package:flutter_modular/src/presenters/navigation/modular_router_delegate.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 main() {
   final injectMap = <String, Module>{};
 
@@ -14,14 +13,10 @@ main() {
     routeInformationParser,
     injectMap,
   );
+  final flags = ModularFlags();
 
-  var modularImpl = ModularImpl(
-      routerDelegate: routerDelegate,
-      injectMap: injectMap
-  );
-
+  var modularImpl = ModularImpl(routerDelegate: routerDelegate, injectMap: injectMap, flags: flags);
   modularImpl.init(ModuleMock());
-
   var navigatorMock = NavigatorMock();
 
   test('should override the navigator properly', () async {
@@ -36,7 +31,9 @@ main() {
 
 class ModuleMock extends Module {
   @override
-  final List<Bind> binds = [];
+  final List<Bind> binds = [
+    Bind.factory((i) => true),
+  ];
 
   @override
   final List<ModularRoute> routes = [];
@@ -44,10 +41,6 @@ class ModuleMock extends Module {
 
 class NavigatorMock extends Mock implements IModularNavigator {
   @override
-  Future<T?> pushNamed<T extends Object?>(String? routeName,
-      {Object? arguments, bool? forRoot = false}) =>
-      (super.noSuchMethod(
-          Invocation.method(#pushNamed, [routeName],
-              {#arguments: arguments, #forRoot: forRoot}),
-          returnValue: Future.value(null)) as Future<T?>);
+  Future<T?> pushNamed<T extends Object?>(String? routeName, {Object? arguments, bool? forRoot = false}) =>
+      (super.noSuchMethod(Invocation.method(#pushNamed, [routeName], {#arguments: arguments, #forRoot: forRoot}), returnValue: Future.value(null)) as Future<T?>);
 }

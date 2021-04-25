@@ -9,6 +9,17 @@ import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
 import 'navigation/router_outlet_delegate.dart';
 
+class ModularFlags {
+  bool experimentalNotAllowedParentBinds;
+  bool isCupertino;
+  ModularFlags({
+    this.experimentalNotAllowedParentBinds = false,
+    this.isCupertino = false,
+  });
+}
+
+final _modularFlags = ModularFlags();
+
 final Map<String, Module> _injectMap = {};
 
 late final _routeInformationParser = ModularRouteInformationParser();
@@ -18,10 +29,7 @@ late final _routerDelegate = ModularRouterDelegate(
 );
 
 // ignore: non_constant_identifier_names
-final ModularInterface Modular = ModularImpl(
-  routerDelegate: _routerDelegate,
-  injectMap: _injectMap,
-);
+final ModularInterface Modular = ModularImpl(routerDelegate: _routerDelegate, injectMap: _injectMap, flags: _modularFlags);
 
 @visibleForTesting
 String initialRouteDeclaratedInMaterialApp = '/';
@@ -68,6 +76,7 @@ extension ModularExtensionMaterial on MaterialApp {
 
 extension ModularExtensionCupertino on CupertinoApp {
   CupertinoApp modular() {
+    _modularFlags.isCupertino = true;
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
     final app = CupertinoApp.router(
