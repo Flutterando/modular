@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/errors/errors.dart';
@@ -51,6 +52,12 @@ class ModularPage<T> extends Page<T> {
 
       if (router.routeGenerator != null) {
         return router.routeGenerator!(widgetBuilder, this) as Route<T>;
+      }
+      if (Modular.flags.isCupertino) {
+        return CupertinoPageRoute<T>(
+          settings: this,
+          builder: widgetBuilder,
+        );
       }
       return MaterialPageRoute<T>(
         settings: this,
