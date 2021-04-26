@@ -59,7 +59,16 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final _lastPageModule = _pages.last;
       final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
 
-      if (routeIsInModule) {
+      var duplicatedPage = false;
+
+      for (var p in _pages) {
+        if (p.key == page.key) {
+          duplicatedPage = true;
+          break;
+        }
+      }
+
+      if (routeIsInModule && !duplicatedPage) {
         _pages.add(page);
       } else {
         for (var p in _pages) {
