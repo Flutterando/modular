@@ -44,7 +44,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router, [@deprecated bool replaceAll = true]) async {
+  Future<void> setNewRoutePath(ModularRoute router, {bool fromModular = false, @deprecated bool replaceAll = true}) async {
     _arguments = router.args;
     final page = ModularPage(
       key: ValueKey('url:${router.uri?.path ?? router.path}'),
@@ -59,23 +59,47 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final _lastPageModule = _pages.last;
       final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
 
-      if (routeIsInModule) {
+      var duplicatedPage = false;
+
+      for (var p in _pages) {
+        if (p.key == page.key) {
+          duplicatedPage = true;
+          break;
+        }
+      }
+
+      if (fromModular && (routeIsInModule && !duplicatedPage)) {
         _pages.add(page);
       } else {
-        for (var p in _pages) {
-          p.completePop(null);
-          removeInject(p.router.path!);
-          for (var r in p.router.routerOutlet) {
+        if (fromModular) {
+          for (var p in _pages) {
+            p.completePop(null);
+            removeInject(p.router.path!);
+            for (var r in p.router.routerOutlet) {
+              removeInject(r.path!);
+            }
+          }
+          if (replaceAll) {
+            _pages = [page];
+          } else if (_pages.last.router.path != router.path) {
+            _pages.last = page;
+          } else {
+            _pages.last.router.routerOutlet.clear();
+            _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+          }
+        } else {
+          ///
+          /// The `fromModular` flag prevents all pages in `_pages` from being replaced
+          /// when navigating with the browser's back button
+          ///
+
+          _lastPageModule.completePop(null);
+          removeInject(_lastPageModule.router.path!);
+          for (var r in _lastPageModule.router.routerOutlet) {
             removeInject(r.path!);
           }
-        }
-        if (replaceAll) {
-          _pages = [page];
-        } else if (_pages.last.router.path != router.path) {
-          _pages.last = page;
-        } else {
-          _pages.last.router.routerOutlet.clear();
-          _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+
+          _pages.remove(_lastPageModule);
         }
       }
     }
@@ -101,7 +125,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
     var router = await parser.selectRoute(routeName, arguments: arguments);
     _arguments = router.args;
-    setNewRoutePath(router);
+    setNewRoutePath(router, fromModular: true);
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
