@@ -81,7 +81,7 @@ dependencies:
 
 To use Modular in a new project, you will have to make some initial setup:
 
-1. Create your main widget with a `MaterialApp` and call the ´´´MaterialApp().modular()´´´ method.
+1. Create your main widget with a `MaterialApp` and call the `MaterialApp().modular()` method.
 
 ```dart
 //  app_widget.dart
@@ -138,9 +138,14 @@ The module routes are provided by overriding the `routes` property.
 // app_module.dart
 class AppModule extends Module {
 
+  // Provide a list of dependencies to inject into your project
+  @override
+  final List<Bind> binds = [];
+
   // Provide all the routes for your module
   @override
   final List<ModularRoute>  routes = [
+      // Simple route using the ChildRoute
       ChildRoute('/', child: (_, __) => HomePage()),
       ChildRoute('/login', child: (_, __) => LoginPage()),
   ];
@@ -149,25 +154,13 @@ class AppModule extends Module {
 
 > **NOTE:** Use the ChildRoute object to create a simple route.  
 
+### Relative Navigation
+
 To navigate between pages, use `Modular.to.navigate`.
 
 ```dart
 Modular.to.navigate('/login');
 ```
-
-You can also stack pages still using old Navigator API.
-
-```dart
-Navigator.pushNamed(context, '/login');
-```
-
-Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
-
-```dart
-Modular.to.pushNamed('/login');
-```
-
-### Relative Navigation
 
 You can use Relative Navigation to navigate like web
 
@@ -180,6 +173,18 @@ Modular.to.navigate('/home/product/detail/3');
 Modular.to.navigate('detail/3'); // it's the same as /home/product/detail/3
 Modular.to.navigate('../config'); // it's the same as /home/config
 
+```
+
+You can also stack pages still using old Navigator API.
+
+```dart
+Navigator.pushNamed(context, '/login');
+```
+
+Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
+
+```dart
+Modular.to.pushNamed('/login');
 ```
 
 ## Dynamic routes
@@ -212,10 +217,12 @@ You can use it with more than one page too. For example:
 ```dart
 @override
 final List<ModularRoute> routes = [
+  // We are sending an ID to the DetailPage
   ChildRoute(
     '/product/:id/detail',
     child: (_, args) => DetailPage(id: args.params['id']),
   ),
+  // We are sending an ID to the RatingPage
   ChildRoute(
     '/product/:id/rating',
     child: (_, args) => RatingPage(id: args.params['id']),
@@ -226,16 +233,20 @@ final List<ModularRoute> routes = [
 As the same of the first example, we just need to call the route. For example:
 ```dart
 // In this case, modular will open the page DetailPage with the id of the product equals 1
-Modular.to.pushNamed('/product/1/detail');
+Modular.to.navigate('/product/1/detail');
+// We can use the pushNamed too 
 
 // The same here, but with RatingPage
-Modular.to.pushNamed('/product/1/rating');
-```
+Modular.to.navigate('/product/1/rating');
 
-This notation, however, is only valid for simple literals. If you want to pass a complex object to your route, provide it in `arguments` parameter:
+```
+This notation, however, is only valid for simple literals.
+
+### Sending Objects
+If you want to pass a complex object to your route, provide it in `arguments` parameter:
 
 ```dart
-Modular.to.pushNamed('/product', arguments: ProductModel());
+Modular.to.navigate('/product', arguments: ProductModel());
 ```
 
 And it will be available in the `args.data` property instead of `args.params`:
@@ -250,7 +261,7 @@ final List<ModularRoute> routes = [
 ];
 ```
 
-Retrieve the arguments from binds directly too:
+You can retrieve the arguments from binds directly too:
 
 ```dart
 
