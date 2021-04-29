@@ -21,6 +21,8 @@ abstract class ModularInterface {
   void bindModule(Module module, [String path]);
   void debugPrintModular(String text);
   T bind<T extends Object>(Bind<T> bind);
+  Future<void> isModuleReady<M>();
+  Future<B> getAsync<B extends Object>({List<Type>? typesInRequestList});
 
   IModularNavigator get to;
   B get<B extends Object>({

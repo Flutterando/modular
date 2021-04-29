@@ -1,3 +1,23 @@
+## [3.2.0] - 2021-04-29
+
+* Added **AsyncBind** for Future injection binds.
+```dart
+final List<Bind> binds = [
+  AsyncBind((i) => SharedPreferences.getInstance()),
+];
+
+...
+
+//get async
+final share = await Modular.getAsync<SharedPreferences>();
+//or initalize the module first
+await Modular.isModuleReady<MyModule>();
+final share = Modular.get<SharedPreferences>();
+
+```
+* Bwolf`s commits
+* More bugs fixeds (Thanks @Mex978)
+
 ## [3.1.1] - 2021-04-25
 
 * EXPERIMENTAL: ModularApp.notAllowedParentBinds. If true, all modules will only have access to their Binds, or Binds of imported modules (Module.imports);
