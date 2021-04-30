@@ -9,6 +9,7 @@ import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
+import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
@@ -72,16 +73,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final _lastPageModule = _pages.last;
       final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
 
-      var duplicatedPage = false;
+      final duplicatePage = _pages.firstWhere(
+        (p) => p.key == page.key,
+        orElse: () => ModularPage.empty(),
+      );
 
-      for (var p in _pages) {
-        if (p.key == page.key) {
-          duplicatedPage = true;
-          break;
-        }
-      }
+      var isDuplicatedPage = duplicatePage.router is! ModularRouteEmpty;
 
-      if (fromModular && (routeIsInModule && !duplicatedPage)) {
+      if (fromModular && (routeIsInModule && !isDuplicatedPage)) {
         _pages.add(page);
       } else {
         if (fromModular) {

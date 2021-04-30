@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:triple/triple.dart';
 
@@ -7,6 +9,10 @@ import '../models/bind.dart';
 import 'disposable.dart';
 import 'modular_route.dart';
 
+class _ImmutableValue {
+  var isReadyFlag = false;
+}
+
 @immutable
 abstract class Module {
   final Map<Type, dynamic> _singletonBinds = {};
@@ -15,6 +21,7 @@ abstract class Module {
   final List<ModularRoute> routes = [];
 
   final List<Module> imports = [];
+  final _immutableValue = _ImmutableValue();
 
   Module() {
     for (var module in imports) {
@@ -22,6 +29,20 @@ abstract class Module {
         binds.add(bind);
       }
     }
+  }
+
+  Future<void> isReady() async {
+    if (_immutableValue.isReadyFlag) return;
+    final listResolvedBind = <Bind>[];
+    for (var i = 0; i < binds.length; i++) {
+      final bind = binds[i];
+      if (bind is AsyncBind) {
+        final resolvedBind = await bind.converToAsyncBind();
+        listResolvedBind.add(resolvedBind);
+      }
+    }
+    binds.addAll(listResolvedBind);
+    _immutableValue.isReadyFlag = true;
   }
 
   @visibleForTesting
