@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/presenters/modular_route_impl.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
@@ -9,7 +11,6 @@ import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
-import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
@@ -25,18 +26,36 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final ModularRouteInformationParser parser;
   final Map<String, Module> injectMap;
 
+  final streamActionQueueController = StreamController<RouterStreamparam>(sync: true);
+
   ModularRouterDelegate(this.parser, this.injectMap) {
-    navigateController.stream.asyncMap((param) async {
-      if (param.path == path) {
-        return;
-      }
-
-      var router = await parser.selectRoute(param.path, arguments: param.arguments);
-      _arguments = router.args;
-
-      setNewRoutePath(router, fromModular: true);
-    }).listen((event) {});
+    startListenNavigation();
   }
+
+  void startListenNavigation() {
+    streamActionQueueController.stream
+        .debounceTime(Duration(milliseconds: 100))
+        .asyncMap((param) async {
+          if (param.path == path) {
+            return ModularRouteEmpty();
+          }
+
+          var router = await parser.selectRoute(param.path, arguments: param.arguments);
+          _arguments = router.args;
+
+          return router;
+        })
+        .asyncMap((router) async {
+          if (router is ModularRouteEmpty) {
+            return 'Empty';
+          }
+          await setNewRoutePath(router, fromModular: true);
+          return 'OK';
+        })
+        .switchMap((value) => Stream.value(value))
+        .listen((router) {});
+  }
+
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
@@ -130,20 +149,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     return '${uri.resolve(routeName).toString()}';
   }
 
-  final navigateController = StreamController<RouterStreamparam>(sync: true);
-
   @override
   Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
     routeName = resolverPath(routeName, path);
-    navigateController.add(RouterStreamparam(routeName, arguments));
-    // if (routeName == path) {
-    //   return;
-    // }
-
-    // var router = await parser.selectRoute(routeName, arguments: arguments);
-    // _arguments = router.args;
-
-    // setNewRoutePath(router, fromModular: true);
+    streamActionQueueController.add(RouterStreamparam(routeName, arguments));
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
@@ -185,18 +194,6 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
       }
     }
-
-    // injectMap.forEach((key, module) {
-    //   module.paths.remove(path);
-    //   if (path.characters.last == '/') {
-    //     module.paths.remove('$path/'.replaceAll('//', ''));
-    //   }
-    //   if (module.paths.isEmpty) {
-    //     module.cleanInjects();
-    //     trash.add(key);
-    //     Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
-    //   }
-    // });
 
     for (final key in trash) {
       injectMap.remove(key);

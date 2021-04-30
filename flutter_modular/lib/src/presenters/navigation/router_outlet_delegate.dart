@@ -49,7 +49,6 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
             onPopPage: (route, result) {
               if (pages.length > 1) {
                 final page = route.settings as ModularPage;
-                print("PageDispose: ${page.key}");
                 final path = page.router.path;
                 page.completePop(result);
                 final trash = <String>[];

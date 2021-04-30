@@ -15,6 +15,8 @@ await Modular.isModuleReady<MyModule>();
 final share = Modular.get<SharedPreferences>();
 
 ```
+
+* Fix break navigation on **RouteOutlet** when frenetics tab changes
 * Bwolf`s commits
 * More bugs fixeds (Thanks @Mex978)
 
