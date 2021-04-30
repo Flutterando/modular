@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +24,18 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final ModularRouteInformationParser parser;
   final Map<String, Module> injectMap;
 
-  ModularRouterDelegate(this.parser, this.injectMap);
+  ModularRouterDelegate(this.parser, this.injectMap) {
+    navigateController.stream.asyncMap((param) async {
+      if (param.path == path) {
+        return;
+      }
+
+      var router = await parser.selectRoute(param.path, arguments: param.arguments);
+      _arguments = router.args;
+
+      setNewRoutePath(router, fromModular: true);
+    }).listen((event) {});
+  }
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
@@ -80,7 +93,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
             }
           }
           if (replaceAll) {
-            _pages = [page];
+            _pages = [
+              page
+            ];
           } else if (_pages.last.router.path != router.path) {
             _pages.last = page;
           } else {
@@ -116,16 +131,20 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     return '${uri.resolve(routeName).toString()}';
   }
 
+  final navigateController = StreamController<RouterStreamparam>(sync: true);
+
   @override
   Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
     routeName = resolverPath(routeName, path);
-    if (routeName == path) {
-      return;
-    }
+    navigateController.add(RouterStreamparam(routeName, arguments));
+    // if (routeName == path) {
+    //   return;
+    // }
 
-    var router = await parser.selectRoute(routeName, arguments: arguments);
-    _arguments = router.args;
-    setNewRoutePath(router, fromModular: true);
+    // var router = await parser.selectRoute(routeName, arguments: arguments);
+    // _arguments = router.args;
+
+    // setNewRoutePath(router, fromModular: true);
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
@@ -151,10 +170,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     return true;
   }
 
-  removeInject(String path) {
+  void removeInject(String path) {
     final trash = <String>[];
 
-    injectMap.forEach((key, module) {
+    for (var key in injectMap.keys) {
+      final module = injectMap[key]!;
+
       module.paths.remove(path);
       if (path.characters.last == '/') {
         module.paths.remove('$path/'.replaceAll('//', ''));
@@ -164,7 +185,19 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         trash.add(key);
         Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
       }
-    });
+    }
+
+    // injectMap.forEach((key, module) {
+    //   module.paths.remove(path);
+    //   if (path.characters.last == '/') {
+    //     module.paths.remove('$path/'.replaceAll('//', ''));
+    //   }
+    //   if (module.paths.isEmpty) {
+    //     module.cleanInjects();
+    //     trash.add(key);
+    //     Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
+    //   }
+    // });
 
     for (final key in trash) {
       injectMap.remove(key);
@@ -342,4 +375,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   Future<T?> push<T extends Object?>(Route<T> route) {
     return navigator.push<T>(route);
   }
+}
+
+class RouterStreamparam {
+  final String path;
+  final dynamic arguments;
+
+  RouterStreamparam(this.path, this.arguments);
 }
