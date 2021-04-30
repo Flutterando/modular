@@ -6,13 +6,19 @@ import 'package:flutter/material.dart';
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../modular_base.dart';
+import '../modular_route_impl.dart';
 
 final Map<int, Completer> _allCompleters = {};
 
 class ModularPage<T> extends Page<T> {
   final ModularRoute router;
+  final bool isEmpty;
 
-  ModularPage({LocalKey? key, required this.router}) : super(key: key, name: router.path, arguments: router.args.data);
+  ModularPage({LocalKey? key, required this.router, this.isEmpty = false}) : super(key: key, name: router.path, arguments: router.args.data);
+
+  factory ModularPage.empty() {
+    return ModularPage(isEmpty: true, router: ModularRouteEmpty());
+  }
 
   Future<T?> waitPop() {
     if (_allCompleters.containsKey(hashCode)) {

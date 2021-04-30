@@ -8,7 +8,12 @@ import '../core/interfaces/module.dart';
 import '../core/interfaces/route_guard.dart';
 import '../core/models/custom_transition.dart';
 import '../core/models/modular_arguments.dart';
+
 import 'transitions/transitions.dart';
+
+class ModularRouteEmpty extends ModularRouteImpl {
+  ModularRouteEmpty() : super('fake');
+}
 
 class ModularRouteImpl<T> extends ModularRoute<T> {
   @override
