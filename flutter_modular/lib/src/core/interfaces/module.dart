@@ -26,7 +26,7 @@ abstract class Module {
   Module() {
     for (var module in imports) {
       for (var bind in module.binds.where((element) => element.export)) {
-        binds.add(bind);
+        binds.insert(0, bind);
       }
     }
   }
@@ -41,7 +41,7 @@ abstract class Module {
         listResolvedBind.add(resolvedBind);
       }
     }
-    binds.addAll(listResolvedBind);
+    binds.insertAll(0, listResolvedBind);
     _immutableValue.isReadyFlag = true;
   }
 

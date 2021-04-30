@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/presenters/modular_route_impl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../core/errors/errors.dart';
@@ -11,6 +10,7 @@ import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
+import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
@@ -111,9 +111,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
             }
           }
           if (replaceAll) {
-            _pages = [
-              page
-            ];
+            _pages = [page];
           } else if (_pages.last.router.path != router.path) {
             _pages.last = page;
           } else {
