@@ -33,6 +33,7 @@ abstract class Module {
 
   Future<void> isReady() async {
     if (_immutableValue.isReadyFlag) return;
+    _immutableValue.isReadyFlag = true;
     final listResolvedBind = <Bind>[];
     for (var i = 0; i < binds.length; i++) {
       final bind = binds[i];
@@ -42,7 +43,6 @@ abstract class Module {
       }
     }
     binds.insertAll(0, listResolvedBind);
-    _immutableValue.isReadyFlag = true;
   }
 
   @visibleForTesting

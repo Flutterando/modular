@@ -499,6 +499,9 @@ class AppModule extends Module {
 Some methods from several classes return a Future. To achive this specifics methods you should use AsyncBind instead a normal sync bind.
 Use *Modular.isModuleReady<Module>()* to wait all AsyncBinds to resolve in order to release the module for use.
 
+> IMPORTANT: The order of AsyncBind matters if there are interdependencies of other asynchronous binds.
+For example, if there are two AsyncBinds where **A** depends on **B**, AsyncBind **B** must be declared before **A**. Pay attention to this type of order!
+
 ## Retrieving your injected dependencies in the view
 
 Let's assume the following BLoC has been defined and injected in our module (as in the previous example):

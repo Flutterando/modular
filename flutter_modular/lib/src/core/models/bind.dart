@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter_modular/src/core/errors/errors.dart';
-
 import '../../presenters/inject.dart';
 
 class Bind<T extends Object> {

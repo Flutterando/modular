@@ -96,7 +96,7 @@ class ModularImpl implements ModularInterface {
   B get<B extends Object>({List<Type>? typesInRequestList, B? defaultValue}) {
     var typesInRequest = typesInRequestList ?? [];
     if (Modular.flags.experimentalNotAllowedParentBinds) {
-      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? '=global';
+      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? 'AppModule';
       var bind = injectMap[module]!.binds.firstWhere((b) => b.inject is B Function(Inject), orElse: () => BindEmpty());
       if (bind is BindEmpty) {
         throw ModularError('\"${B.toString()}\" not found in \"$module\" module');
