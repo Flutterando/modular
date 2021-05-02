@@ -30,7 +30,9 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
 
     if (modularRouterDelegate.routerOutletPages.containsKey(path)) {
       final list = modularRouterDelegate.routerOutletPages[path] ?? [];
-      pages = [...list];
+      pages = [
+        ...list
+      ];
     }
 
     return pages;

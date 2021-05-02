@@ -64,7 +64,7 @@ class ModularImpl implements ModularInterface {
   @override
   void init(Module module) {
     _initialModule = module;
-    bindModule(module, "global==");
+    bindModule(module, module.runtimeType.toString());
   }
 
   @override
@@ -87,10 +87,16 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
+  Future<B> getAsync<B extends Object>({List<Type>? typesInRequestList}) async {
+    final bind = get<Future<B>>(typesInRequestList: typesInRequestList);
+    return await bind;
+  }
+
+  @override
   B get<B extends Object>({List<Type>? typesInRequestList, B? defaultValue}) {
     var typesInRequest = typesInRequestList ?? [];
     if (Modular.flags.experimentalNotAllowedParentBinds) {
-      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? '=global';
+      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? 'AppModule';
       var bind = injectMap[module]!.binds.firstWhere((b) => b.inject is B Function(Inject), orElse: () => BindEmpty());
       if (bind is BindEmpty) {
         throw ModularError('\"${B.toString()}\" not found in \"$module\" module');
@@ -169,4 +175,12 @@ class ModularImpl implements ModularInterface {
 
   @override
   T bind<T extends Object>(Bind<T> bind) => Inject(overrideBinds: _overrideBinds ?? []).get(bind);
+
+  @override
+  Future<void> isModuleReady<M>() {
+    if (injectMap.containsKey(M.toString())) {
+      return injectMap[M.toString()]!.isReady();
+    }
+    throw ModularError('Module not exist in injector system');
+  }
 }

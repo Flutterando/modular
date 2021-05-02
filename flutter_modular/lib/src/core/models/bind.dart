@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../presenters/inject.dart';
 
 class Bind<T extends Object> {
@@ -55,4 +57,23 @@ class BindInject<T extends Object> extends Bind<T> {
 
 class BindEmpty extends Bind<Object> {
   BindEmpty() : super((e) => Object());
+}
+
+class AsyncBind<T extends Object> extends Bind<Future<T>> {
+  final Future<T> Function(Inject i) asyncInject;
+
+  ///export bind for others modules
+  final bool export;
+
+  AsyncBind(this.asyncInject, {this.export = false}) : super(asyncInject, export: export);
+
+  Future<T> resolveAsyncBind() async {
+    final bind = await asyncInject(Inject());
+    return bind;
+  }
+
+  Future<Bind<T>> converToAsyncBind() async {
+    final bindValue = await resolveAsyncBind();
+    return Bind<T>((i) => bindValue, export: export);
+  }
 }

@@ -39,7 +39,13 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
 
   ModularRoute? _searchInModule(Module module, String routerName, Uri uri) {
     uri = uri.normalizePath();
-    final routers = module.routes.map((e) => e.copyWith(currentModule: module)).toList();
+    final routers = module.routes.map((e) {
+      if (e is ChildRoute || e is ChildRoute) {
+        return e.copyWith(currentModule: module);
+      } else {
+        return e.copyWith(currentModule: e.module);
+      }
+    }).toList();
     routers.sort((preview, actual) {
       return preview.routerName.contains('/:') ? 1 : 0;
     });

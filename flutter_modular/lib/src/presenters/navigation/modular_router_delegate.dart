@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
@@ -7,6 +10,7 @@ import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
+import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
@@ -22,7 +26,36 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final ModularRouteInformationParser parser;
   final Map<String, Module> injectMap;
 
-  ModularRouterDelegate(this.parser, this.injectMap);
+  final streamActionQueueController = StreamController<RouterStreamparam>(sync: true);
+
+  ModularRouterDelegate(this.parser, this.injectMap) {
+    startListenNavigation();
+  }
+
+  void startListenNavigation() {
+    streamActionQueueController.stream
+        .debounceTime(Duration(milliseconds: 100))
+        .asyncMap((param) async {
+          if (param.path == path) {
+            return ModularRouteEmpty();
+          }
+
+          var router = await parser.selectRoute(param.path, arguments: param.arguments);
+          _arguments = router.args;
+
+          return router;
+        })
+        .asyncMap((router) async {
+          if (router is ModularRouteEmpty) {
+            return 'Empty';
+          }
+          await setNewRoutePath(router, fromModular: true);
+          return 'OK';
+        })
+        .switchMap((value) => Stream.value(value))
+        .listen((router) {});
+  }
+
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
@@ -44,7 +77,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router, [@deprecated bool replaceAll = true]) async {
+  Future<void> setNewRoutePath(ModularRoute router, {bool fromModular = false, @deprecated bool replaceAll = true}) async {
     _arguments = router.args;
     final page = ModularPage(
       key: ValueKey('url:${router.uri?.path ?? router.path}'),
@@ -59,23 +92,45 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final _lastPageModule = _pages.last;
       final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
 
-      if (routeIsInModule) {
+      final duplicatePage = _pages.firstWhere(
+        (p) => p.key == page.key,
+        orElse: () => ModularPage.empty(),
+      );
+
+      var isDuplicatedPage = duplicatePage.router is! ModularRouteEmpty;
+
+      if (fromModular && (routeIsInModule && !isDuplicatedPage)) {
         _pages.add(page);
       } else {
-        for (var p in _pages) {
-          p.completePop(null);
-          removeInject(p.router.path!);
-          for (var r in p.router.routerOutlet) {
+        if (fromModular) {
+          for (var p in _pages) {
+            p.completePop(null);
+            removeInject(p.router.path!);
+            for (var r in p.router.routerOutlet) {
+              removeInject(r.path!);
+            }
+          }
+          if (replaceAll) {
+            _pages = [page];
+          } else if (_pages.last.router.path != router.path) {
+            _pages.last = page;
+          } else {
+            _pages.last.router.routerOutlet.clear();
+            _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+          }
+        } else {
+          ///
+          /// The `fromModular` flag prevents all pages in `_pages` from being replaced
+          /// when navigating with the browser's back button
+          ///
+
+          _lastPageModule.completePop(null);
+          removeInject(_lastPageModule.router.path!);
+          for (var r in _lastPageModule.router.routerOutlet) {
             removeInject(r.path!);
           }
-        }
-        if (replaceAll) {
-          _pages = [page];
-        } else if (_pages.last.router.path != router.path) {
-          _pages.last = page;
-        } else {
-          _pages.last.router.routerOutlet.clear();
-          _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+
+          _pages.remove(_lastPageModule);
         }
       }
     }
@@ -95,13 +150,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
     routeName = resolverPath(routeName, path);
-    if (routeName == path) {
-      return;
-    }
-
-    var router = await parser.selectRoute(routeName, arguments: arguments);
-    _arguments = router.args;
-    setNewRoutePath(router);
+    streamActionQueueController.add(RouterStreamparam(routeName, arguments));
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
@@ -127,10 +176,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     return true;
   }
 
-  removeInject(String path) {
+  void removeInject(String path) {
     final trash = <String>[];
 
-    injectMap.forEach((key, module) {
+    for (var key in injectMap.keys) {
+      final module = injectMap[key]!;
+
       module.paths.remove(path);
       if (path.characters.last == '/') {
         module.paths.remove('$path/'.replaceAll('//', ''));
@@ -140,7 +191,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         trash.add(key);
         Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
       }
-    });
+    }
 
     for (final key in trash) {
       injectMap.remove(key);
@@ -318,4 +369,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   Future<T?> push<T extends Object?>(Route<T> route) {
     return navigator.push<T>(route);
   }
+}
+
+class RouterStreamparam {
+  final String path;
+  final dynamic arguments;
+
+  RouterStreamparam(this.path, this.arguments);
 }

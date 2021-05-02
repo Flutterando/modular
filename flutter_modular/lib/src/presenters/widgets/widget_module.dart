@@ -14,6 +14,11 @@ _debugPrintModular(String text) {
 abstract class WidgetModule extends StatelessWidget implements Module {
   Widget get view;
 
+  @override
+  Future<void> isReady() {
+    return _fakeModule.isReady();
+  }
+
   final List<ModularRoute> routes = const [];
 
   final _FakeModule _fakeModule = _FakeModule();

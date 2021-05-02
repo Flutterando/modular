@@ -25,6 +25,7 @@
   - [Route Transition Animation](#route-transition-animation)
   - [Flutter Web url Routes](#flutter-web-url-routes-deeplink-like)
   - [Dependency Injection](#dependency-injection)
+  - [AsyncBind](#AsyncBind)
   - [Retrieving your injected dependencies in the view](#retrieving-your-injected-dependencies-in-the-view)
 
 - **[Using Modular widgets to retrieve your class](#using-modular-widgets-to-retrieve-your-class)**
@@ -81,7 +82,7 @@ dependencies:
 
 To use Modular in a new project, you will have to make some initial setup:
 
-1. Create your main widget with a `MaterialApp` and call the ´´´MaterialApp().modular()´´´ method.
+1. Create your main widget with a `MaterialApp` and call the `MaterialApp().modular()` method.
 
 ```dart
 //  app_widget.dart
@@ -138,9 +139,14 @@ The module routes are provided by overriding the `routes` property.
 // app_module.dart
 class AppModule extends Module {
 
+  // Provide a list of dependencies to inject into your project
+  @override
+  final List<Bind> binds = [];
+
   // Provide all the routes for your module
   @override
   final List<ModularRoute>  routes = [
+      // Simple route using the ChildRoute
       ChildRoute('/', child: (_, __) => HomePage()),
       ChildRoute('/login', child: (_, __) => LoginPage()),
   ];
@@ -149,25 +155,13 @@ class AppModule extends Module {
 
 > **NOTE:** Use the ChildRoute object to create a simple route.  
 
+### Relative Navigation
+
 To navigate between pages, use `Modular.to.navigate`.
 
 ```dart
 Modular.to.navigate('/login');
 ```
-
-You can also stack pages still using old Navigator API.
-
-```dart
-Navigator.pushNamed(context, '/login');
-```
-
-Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
-
-```dart
-Modular.to.pushNamed('/login');
-```
-
-### Relative Navigation
 
 You can use Relative Navigation to navigate like web
 
@@ -180,6 +174,18 @@ Modular.to.navigate('/home/product/detail/3');
 Modular.to.navigate('detail/3'); // it's the same as /home/product/detail/3
 Modular.to.navigate('../config'); // it's the same as /home/config
 
+```
+
+You can also stack pages still using old Navigator API.
+
+```dart
+Navigator.pushNamed(context, '/login');
+```
+
+Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
+
+```dart
+Modular.to.pushNamed('/login');
 ```
 
 ## Dynamic routes
@@ -212,10 +218,12 @@ You can use it with more than one page too. For example:
 ```dart
 @override
 final List<ModularRoute> routes = [
+  // We are sending an ID to the DetailPage
   ChildRoute(
     '/product/:id/detail',
     child: (_, args) => DetailPage(id: args.params['id']),
   ),
+  // We are sending an ID to the RatingPage
   ChildRoute(
     '/product/:id/rating',
     child: (_, args) => RatingPage(id: args.params['id']),
@@ -226,16 +234,20 @@ final List<ModularRoute> routes = [
 As the same of the first example, we just need to call the route. For example:
 ```dart
 // In this case, modular will open the page DetailPage with the id of the product equals 1
-Modular.to.pushNamed('/product/1/detail');
+Modular.to.navigate('/product/1/detail');
+// We can use the pushNamed too 
 
 // The same here, but with RatingPage
-Modular.to.pushNamed('/product/1/rating');
-```
+Modular.to.navigate('/product/1/rating');
 
-This notation, however, is only valid for simple literals. If you want to pass a complex object to your route, provide it in `arguments` parameter:
+```
+This notation, however, is only valid for simple literals.
+
+### Sending Objects
+If you want to pass a complex object to your route, provide it in `arguments` parameter:
 
 ```dart
-Modular.to.pushNamed('/product', arguments: ProductModel());
+Modular.to.navigate('/product', arguments: ProductModel());
 ```
 
 And it will be available in the `args.data` property instead of `args.params`:
@@ -250,7 +262,7 @@ final List<ModularRoute> routes = [
 ];
 ```
 
-Retrieve the arguments from binds directly too:
+You can retrieve the arguments from binds directly too:
 
 ```dart
 
@@ -456,7 +468,7 @@ CustomTransition get myCustomTransition => CustomTransition(
 
 You can inject any class into your module by overriding the `binds` getter of your module. Typical examples to inject are BLoCs, ChangeNotifier classes or stores(MobX).
 
-A `Bind` object is responsible for configuring the object injection. We have 4 Bind factory types.
+A `Bind` object is responsible for configuring the object injection. We have 4 Bind factory types and one AsyncBind.
 
 ```dart
 class AppModule extends Module {
@@ -469,6 +481,7 @@ class AppModule extends Module {
     Bind.instance(myObject), 
     Bind.singleton((i) => AppBloc()), 
     Bind.lazySingleton((i) => AppBloc()), 
+    AsyncBind((i) => SharedPreferences.getInstance())
   ];
 ...
 }
@@ -477,8 +490,17 @@ class AppModule extends Module {
 **instance**: Use a class that has already been instantiated.<br>
 **singleton**: Create a Global instance of a class.<br>
 **lazySingleton**: Create a Global instance of a class only when it gets called for the first time. <br>
+**AsyncBind**: Create a Async Global instance of a class. The instance is resolved using *Modular.isModuleReady()*. Check the *Async Binds* topic for more.<br>
 <br><br>
 
+
+## AsyncBind
+
+Some methods from several classes return a Future. To achive this specifics methods you should use AsyncBind instead a normal sync bind.
+Use *Modular.isModuleReady<Module>()* to wait all AsyncBinds to resolve in order to release the module for use.
+
+> IMPORTANT: The order of AsyncBind matters if there are interdependencies of other asynchronous binds.
+For example, if there are two AsyncBinds where **A** depends on **B**, AsyncBind **B** must be declared before **A**. Pay attention to this type of order!
 
 ## Retrieving your injected dependencies in the view
 
@@ -512,7 +534,8 @@ class HomePage extends StatelessWidget {
     // You can use the object Inject to retrieve..
 
     final appBloc = Modular.get<AppBloc>();
-    //...
+    //or for no-ready AsyncBinds
+    final share = Modular.getAsync<SharedPreferences>();
   }
 }
 ```
