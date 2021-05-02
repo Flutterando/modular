@@ -19,21 +19,32 @@
 
   - [Installation](#installation)
   - [Using in a New Project](#using-in-a-new-project)
-  - [Adding Routes](#adding-routes)
-  - [Dynamic Routes](#dynamic-routes)
-  - [Route Guard](#route-guard)
-  - [Route Transition Animation](#route-transition-animation)
-  - [Flutter Web url Routes](#flutter-web-url-routes-deeplink-like)
-  - [Dependency Injection](#dependency-injection)
+  - [Creating child modules](#creating-child-modules)
+  - [Adding routes](#adding-routes)
+  - **[Dynamic routes](#dynamic-routes)**
+    - [Sending objects](#sending-objects)
+  - [Route generic types](#route-generic-types)
+  - [Route guard](#route-guard)
+  - **[When and how use navigate or pushNamed](#when-and-how-use-navigate-or-pushNamed)**
+    - [PushNamed](#pushNamed)
+    - [Navigate](#navigate)
+    - [Relative navigation](#relative-navigation)
+  - [Flutter web url routes](#flutter-web-url-routes-deeplink-like)
+  - **[Route transition animation](#route-transition-animation)**
+    - [Custom transition animation route](#custom-transition-animation-route)
+  - **[Dependency Injection](#dependency-injection)**
+    - [Factory](#factory)
+    - [Instance](#instance)
+    - [Singleton](#singleton)
+    - [LazySingleton](#lazySingleton)
   - [Retrieving your injected dependencies in the view](#retrieving-your-injected-dependencies-in-the-view)
 
 - **[Using Modular widgets to retrieve your class](#using-modular-widgets-to-retrieve-your-class)**
 
   - [ModularState](#modularstate)
-  - [Creating Child Modules](#creating-child-modules)
   - [WidgetModule](#widgetmodule)
-  - [RouterOutlet](#routeroutlet)
   - [Mock the navigation system](#mock-the-navigation-system)
+  - [RouterOutlet](#routeroutlet)
 
 - **[Features and bugs](#features-and-bugs)**
 
@@ -129,6 +140,41 @@ void main() => runApp(ModularApp(module: AppModule(), child: AppWidget()));
 
 4. Done! Your app is set and ready to work with Modular!
 
+## Creating child modules
+
+You can create as many modules in your project as you wish:
+
+```dart
+class HomeModule extends Module {
+  @override
+  final List<Bind> binds = [
+    Bind.singleton((i) => HomeBloc()),
+  ];
+
+  @override
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (_, args) => HomeWidget()),
+    ChildRoute('/list', child: (_, args) => ListWidget()),
+  ];
+
+}
+```
+
+You may then pass the submodule to a `Route` in your main module through the `module` parameter:
+
+```dart
+class AppModule extends Module {
+
+  @override
+  final List<ModularRoute> routes = [
+    ModuleRoute('/home', module: HomeModule()),
+  ];
+}
+```
+
+We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
+
+> **NOTE:** Use the ModuleRoute object to create a Complex Route.  
 
 ## Adding routes
 
@@ -153,39 +199,6 @@ class AppModule extends Module {
 ```
 
 > **NOTE:** Use the ChildRoute object to create a simple route.  
-
-### Relative Navigation
-
-To navigate between pages, use `Modular.to.navigate`.
-
-```dart
-Modular.to.navigate('/login');
-```
-
-You can use Relative Navigation to navigate like web
-
-```dart
-// Modules Home → Product
-Modular.to.navigate('/home/product/list');
-Modular.to.navigate('/home/product/detail/3');
-
-// Relative Navigation inside /home/product/list
-Modular.to.navigate('detail/3'); // it's the same as /home/product/detail/3
-Modular.to.navigate('../config'); // it's the same as /home/config
-
-```
-
-You can also stack pages still using old Navigator API.
-
-```dart
-Navigator.pushNamed(context, '/login');
-```
-
-Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
-
-```dart
-Modular.to.pushNamed('/login');
-```
 
 ## Dynamic routes
 
@@ -294,58 +307,7 @@ String name = await Modular.to.pushNamed<String>();
 Modular.to.pop('banana');
 ```
 
-## Flutter Web URL routes (Deeplink-like)
-
-The routing system can recognize what is in the URL and navigate to a specific part of the application.
-Dynamic routes apply here as well. The following URL, for instance, will open the Product view, with `args.params['id']` set to `1`.
-
-```
-https://flutter-website.com/#/product/1
-```
-
-As well could use query parameters or fragment:
-```
-https://flutter-website.com/#/product?id=1
-```
-
-## Creating child modules
-
-You can create as many modules in your project as you wish:
-
-```dart
-class HomeModule extends Module {
-  @override
-  final List<Bind> binds = [
-    Bind.singleton((i) => HomeBloc()),
-  ];
-
-  @override
-  final List<ModularRoute> routes = [
-    ChildRoute('/', child: (_, args) => HomeWidget()),
-    ChildRoute('/list', child: (_, args) => ListWidget()),
-  ];
-
-}
-```
-
-You may then pass the submodule to a `Route` in your main module through the `module` parameter:
-
-```dart
-class AppModule extends Module {
-
-  @override
-  final List<ModularRoute> routes = [
-    ModuleRoute('/home', module: HomeModule()),
-  ];
-}
-```
-
-We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
-
-> **NOTE:** Use the ModuleRoute object to create a Complex Route.  
-
 ## Route guard
-
 Route guards are middleware-like objects that allow you to control the access of a given route from other route. You can implement a route guard by making a class that `implements RouteGuard`.
 
 For example, the following class will only allow a redirection from `/admin` route:
@@ -399,6 +361,87 @@ final List<ModularRoute> routes = [
     ),
 ];
 
+```
+
+## When and How use navigate or pushNamed
+You can use both in your application but need to understand each one.
+
+### pushNamed
+This one makes a route above another route continuously in your stack, but you can go back too to the back page using the back button that you can see on the AppBar, it's like a modal. It's better for `Mobile Applications`.
+
+Imagine that you need to go more deep in your routes for example:
+```dart
+// Initial route
+Modular.to.pushNamed('/home');
+// User route 
+Modular.to.pushNamed('/home/user');
+// User profile route
+Modular.to.pushNamed('/home/user/profile');
+```
+
+In the end, you can see the back button to go to the previous page because of the idea of a modal, that opens another page above the previous page.
+
+### navigate
+This one removes the previous route from the stack and puts the new route on this stack. Because of this, you'll not see the back button on the AppBar, in this case, it's better for `Web Applications`.
+
+Imagine that you need to make a logout from your Mobile application and need to clean all routes directly from the stack.  
+```dart
+// Initial route
+Modular.to.pushNamed('/home');
+// User route 
+Modular.to.pushNamed('/home/user');
+// User profile route
+Modular.to.pushNamed('/home/user/profile');
+
+// Then you need to go again to the Login page, only use the navigation to clean all the stack.
+Modular.to.navigate('/login');
+```
+
+### Relative Navigation
+
+To navigate between pages, use `Modular.to.navigate`.
+
+```dart
+Modular.to.navigate('/login');
+```
+
+You can use Relative Navigation to navigate like web
+
+```dart
+// Modules Home → Product
+Modular.to.navigate('/home/product/list');
+Modular.to.navigate('/home/product/detail/3');
+
+// Relative Navigation inside /home/product/list
+Modular.to.navigate('detail/3'); // it's the same as /home/product/detail/3
+Modular.to.navigate('../config'); // it's the same as /home/config
+
+```
+
+You can also stack pages still using old Navigator API.
+
+```dart
+Navigator.pushNamed(context, '/login');
+```
+
+Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
+
+```dart
+Modular.to.pushNamed('/login');
+```
+
+## Flutter Web URL routes (Deeplink-like)
+
+The routing system can recognize what is in the URL and navigate to a specific part of the application.
+Dynamic routes apply here as well. The following URL, for instance, will open the Product view, with `args.params['id']` set to `1`.
+
+```
+https://flutter-website.com/#/product/1
+```
+
+As well could use query parameters or fragment:
+```
+https://flutter-website.com/#/product?id=1
 ```
 
 ## Route transition animation
@@ -484,12 +527,38 @@ class AppModule extends Module {
 ...
 }
 ```
-**factory**: Instantiate the class whenever it gets called.<br>
-**instance**: Use a class that has already been instantiated.<br>
-**singleton**: Create a Global instance of a class.<br>
-**lazySingleton**: Create a Global instance of a class only when it gets called for the first time. <br>
-<br><br>
-
+### Factory
+Instantiate the class whenever it gets called.
+```dart
+@override
+  final List<Bind> binds = [
+    Bind.factory((i) => AppBloc()),
+  ];
+```
+### Instance
+Use a class that has already been instantiated.
+```dart
+@override
+  final List<Bind> binds = [
+    Bind.instance((i) => AppBloc()),
+  ];
+```
+### Singleton
+Create a Global instance of a class.
+```dart
+@override
+  final List<Bind> binds = [
+    Bind.singleton((i) => AppBloc()),
+  ];
+```
+### LazySingleton
+Create a Global instance of a class only when it gets called for the first time.
+```dart
+@override
+  final List<Bind> binds = [
+    Bind.lazySingleton((i) => AppBloc()),
+  ];
+```
 
 ## Retrieving your injected dependencies in the view
 
@@ -531,7 +600,11 @@ class HomePage extends StatelessWidget {
 ## Using Modular widgets to retrieve your class
 
 ### ModularState
+In this example, we'll use the `MyWidget` like our page because it's a page that needs to be a `StatefulWidget`.
 
+Let's understand the `ModularState`, for example when we are using the `class _MyWidgetState extends ModularState<MyWidget, HomeStore>` we are linking the modular with our Store in this case the `HomeStore`. When we enter on this screen the HomeStore will be created and will provide for us the `store/controller` variable to use inside the `MyWidget`.
+
+After this, we can use the `store/controller` without any problems. Modular will auto dispose of the `HomeStore` after we close the Page.
 ```dart
 class MyWidget extends StatefulWidget {
   @override
@@ -539,9 +612,8 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends ModularState<MyWidget, HomeStore> {
-
-  // Variable store
-  // Automatic dispose of HomeStore
+  store.myVariableInsideStore = 'Hello!';
+  controller.myVariableInsideStore = 'Hello!';
 
   @override
   Widget build(BuildContext context) {
@@ -574,7 +646,35 @@ class TabModule extends WidgetModule {
 
 ```
 
-## RouterOutlet
+### Mock the navigation system
+
+We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
+
+Example using [Mockito](https://github.com/dart-lang/mockito):
+
+```dart
+main() {
+    var navigatorMock = MyNavigatorMock();
+
+    // Modular.to and Modular.link will be called MyNavigatorMock implements!
+    Modular.navigatorDelegate = navigatorMock;
+
+    test('test navigator mock', () async {
+        when(navigatorMock.pushNamed('/test')).thenAnswer((_) async => {});
+
+        Modular.to.pushNamed('/test');
+        verify(navigatorMock.pushNamed('/test')).called(1);
+    });
+}
+
+class MyNavigatorMock extends Mock implements IModularNavigator {
+  @override
+  Future<T?> pushNamed<T extends Object?>(String? routeName, {Object? arguments, bool? forRoot = false}) =>
+      (super.noSuchMethod(Invocation.method(#pushNamed, [routeName], {#arguments: arguments, #forRoot: forRoot}), returnValue: Future.value(null)) as Future<T?>);
+}
+```
+
+### RouterOutlet
 
 Each ModularRoute can have a list of ModularRoutes, so that it can be displayed within the parent ModularRoute.
 The widget that reflects these internal routes is called `RouterOutlet`.
@@ -635,34 +735,6 @@ You can only have one `RouterOutlet` per page and it is only able to browse the 
       ),
     );
   }
-```
-
-### Mock the navigation system
-
-We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
-
-Example using [Mockito](https://github.com/dart-lang/mockito):
-
-```dart
-main() {
-    var navigatorMock = MyNavigatorMock();
-
-    // Modular.to and Modular.link will be called MyNavigatorMock implements!
-    Modular.navigatorDelegate = navigatorMock;
-
-    test('test navigator mock', () async {
-        when(navigatorMock.pushNamed('/test')).thenAnswer((_) async => {});
-
-        Modular.to.pushNamed('/test');
-        verify(navigatorMock.pushNamed('/test')).called(1);
-    });
-}
-
-class MyNavigatorMock extends Mock implements IModularNavigator {
-  @override
-  Future<T?> pushNamed<T extends Object?>(String? routeName, {Object? arguments, bool? forRoot = false}) =>
-      (super.noSuchMethod(Invocation.method(#pushNamed, [routeName], {#arguments: arguments, #forRoot: forRoot}), returnValue: Future.value(null)) as Future<T?>);
-}
 ```
 
 This example uses the manual implementation, but you can use the [code generator](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#code-generation) to create your mocks.
