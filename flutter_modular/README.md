@@ -510,7 +510,7 @@ CustomTransition get myCustomTransition => CustomTransition(
 
 You can inject any class into your module by overriding the `binds` getter of your module. Typical examples to inject are BLoCs, ChangeNotifier classes or stores(MobX).
 
-A `Bind` object is responsible for configuring the object injection. We have 4 Bind factory types.
+A `Bind` object is responsible for configuring the object injection. We have 4 Bind factory types and one AsyncBind.
 
 ```dart
 class AppModule extends Module {
@@ -523,6 +523,7 @@ class AppModule extends Module {
     Bind.instance(myObject), 
     Bind.singleton((i) => AppBloc()), 
     Bind.lazySingleton((i) => AppBloc()), 
+    AsyncBind((i) => SharedPreferences.getInstance())
   ];
 ...
 }
@@ -560,6 +561,11 @@ Create a Global instance of a class only when it gets called for the first time.
   ];
 ```
 
+## AsyncBind
+
+Some methods from several classes return a Future. To achive this specifics methods you should use AsyncBind instead a normal sync bind.
+Use *Modular.isModuleReady<Module>()* to wait all AsyncBinds to resolve in order to release the module for use.
+
 ## Retrieving your injected dependencies in the view
 
 Let's assume the following BLoC has been defined and injected in our module (as in the previous example):
@@ -592,7 +598,8 @@ class HomePage extends StatelessWidget {
     // You can use the object Inject to retrieve..
 
     final appBloc = Modular.get<AppBloc>();
-    //...
+    //or for no-ready AsyncBinds
+    final share = Modular.getAsync<SharedPreferences>();
   }
 }
 ```

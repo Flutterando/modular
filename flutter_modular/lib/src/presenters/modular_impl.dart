@@ -64,7 +64,7 @@ class ModularImpl implements ModularInterface {
   @override
   void init(Module module) {
     _initialModule = module;
-    bindModule(module, "global==");
+    bindModule(module, module.runtimeType.toString());
   }
 
   @override
@@ -84,6 +84,12 @@ class ModularImpl implements ModularInterface {
       }
     }
     return null;
+  }
+
+  @override
+  Future<B> getAsync<B extends Object>({List<Type>? typesInRequestList}) async {
+    final bind = get<Future<B>>(typesInRequestList: typesInRequestList);
+    return await bind;
   }
 
   @override
@@ -169,4 +175,12 @@ class ModularImpl implements ModularInterface {
 
   @override
   T bind<T extends Object>(Bind<T> bind) => Inject(overrideBinds: _overrideBinds ?? []).get(bind);
+
+  @override
+  Future<void> isModuleReady<M>() {
+    if (injectMap.containsKey(M.toString())) {
+      return injectMap[M.toString()]!.isReady();
+    }
+    throw ModularError('Module not exist in injector system');
+  }
 }
