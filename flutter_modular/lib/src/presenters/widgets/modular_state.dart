@@ -5,14 +5,12 @@ import '../../../flutter_modular.dart';
 import '../modular_base.dart';
 
 abstract class ModularState<TWidget extends StatefulWidget, TBind extends Object> extends State<TWidget> {
-  final TBind _store = Modular.get<TBind>();
+  final TBind _scope = Modular.get<TBind>();
 
-  /// deprecated: use [controller]
-  /// Check [this issue](https://github.com/Flutterando/modular/issues/315) for more details.
-  @deprecated
-  TBind get store => _store;
-
-  TBind get controller => _store;
+  TBind get store => _scope;
+  TBind get bloc => _scope;
+  TBind get cubit => _scope;
+  TBind get controller => _scope;
 
   @override
   void dispose() {
@@ -22,16 +20,16 @@ abstract class ModularState<TWidget extends StatefulWidget, TBind extends Object
       return;
     }
 
-    if (_store is Disposable) {
-      (_store as Disposable).dispose();
+    if (_scope is Disposable) {
+      (_scope as Disposable).dispose();
     }
 
-    if (_store is Sink) {
-      (_store as Sink).close();
-    } else if (_store is ChangeNotifier) {
-      (_store as ChangeNotifier).dispose();
-    } else if (_store is Store) {
-      (_store as Store).destroy();
+    if (_scope is Sink) {
+      (_scope as Sink).close();
+    } else if (_scope is ChangeNotifier) {
+      (_scope as ChangeNotifier).dispose();
+    } else if (_scope is Store) {
+      (_scope as Store).destroy();
     }
   }
 }
