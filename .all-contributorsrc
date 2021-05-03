@@ -302,6 +302,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "marcobraghim",
+      "name": "Marco A. Braghim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2068045?v=4",
+      "profile": "https://www.thizer.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
