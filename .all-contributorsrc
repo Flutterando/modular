@@ -293,6 +293,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "isorensen",
+      "name": "Eduardo Sorensen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3399976?v=4",
+      "profile": "http://isorensen.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
