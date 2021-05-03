@@ -1,3 +1,70 @@
+## [3.2.0] - 2021-05-03
+
+* Added **AsyncBind** for Future injection binds.
+```dart
+final List<Bind> binds = [
+  AsyncBind((i) => SharedPreferences.getInstance()),
+];
+
+...
+
+//get async
+final share = await Modular.getAsync<SharedPreferences>();
+//or initalize the module first
+await Modular.isModuleReady<MyModule>();
+final share = Modular.get<SharedPreferences>();
+
+```
+
+* Fix break navigation on **RouteOutlet** when frenetics tab changes
+* Bwolf`s commits
+* More bugs fixeds (Thanks @Mex978)
+* Fix Navigate Flutter Web error.
+
+## [3.1.1] - 2021-04-25
+
+* EXPERIMENTAL: ModularApp.notAllowedParentBinds. If true, all modules will only have access to their Binds, or Binds of imported modules (Module.imports);
+* Page Transition use CupertinoPageRoute if application use CupertinoApp.
+* A lot of bugs fixeds (Thanks @Mex978)
+
+## [3.1.0] - 2021-04-11
+
+* Added redirect route when RouteGuard fails [#351](https://github.com/Flutterando/modular/issues/3510):
+```dart
+@override
+final List<ModularRoute> routes = [
+    ChildRoute(
+      '/home',
+      child: (context, args) => HomePage(),
+      guards: [AuthGuard()],
+      guardedRoute: '/login',
+    ),
+    ChildRoute(
+      '/login',
+      child: (context, args) => LoginPage(),
+    ),
+];
+```
+* Fixed ChildRoute Generic type
+* Dispose errors
+* Fixed WidgetModule bugs
+
+## [3.0.2] - 2021-03-22
+
+* Support modular_codegen 3.0.0
+* Added Support to CupertinoApp.modular()
+* Fix bug: Get arguments in RouteGuard
+
+## [3.0.0+1] - 2021-03-12
+
+* Fix pushNamed bug
+* Fix parameter bugs
+* navigate replaceAll aways true (@deprecated) 
+
+## [3.0.0+1] - 2021-03-09
+
+* BIG RELEASE!
+
 ## [2.5.0] - 
 * Navigator 2.0
 * Fixed Modular.link
@@ -272,7 +339,7 @@ Now you can type your pushNamed and pop
 * Dynamic Router
 * Added Doc Translation
 * Change BrowserModule to MainModule
-* Change CommonModule to ChildModule
+* Change CommonModule to Module
 * Corrigido erro de blink na primeira rota
 * fix routes param
 

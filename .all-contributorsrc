@@ -92,7 +92,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/18069622?v=4",
       "profile": "https://github.com/GUIKAR741",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -101,7 +102,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/14063319?v=4",
       "profile": "https://github.com/lucioeduardo",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -129,7 +131,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/165060?v=4",
       "profile": "https://github.com/maguro",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -234,6 +237,88 @@
       "profile": "https://domkar.dev",
       "contributions": [
         "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "Mex978",
+      "name": "Max Lima",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31356610?v=4",
+      "profile": "https://github.com/mex978",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rogsilva",
+      "name": "Rogério Silva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7675216?v=4",
+      "profile": "https://github.com/rogsilva",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "pablo-threadable",
+      "name": "Pablo Sanchez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32702468?v=4",
+      "profile": "https://github.com/pablo-threadable",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "gibahjoe",
+      "name": "gibahjoe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9147147?v=4",
+      "profile": "https://github.com/gibahjoe",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "raphaelbarbosaqwerty",
+      "name": "Ghost",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15701673?v=4",
+      "profile": "https://cosmicshell.dev/#/home",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "gmcdowell",
+      "name": "Greg McDowell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10100952?v=4",
+      "profile": "https://github.com/gmcdowell",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "saviogrossi",
+      "name": "Savio Grossi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/695296?v=4",
+      "profile": "https://github.com/saviogrossi",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "marcobraghim",
+      "name": "Marco A. Braghim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2068045?v=4",
+      "profile": "https://www.thizer.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "fogaiht",
+      "name": "Thiago Fernandes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16519851?v=4",
+      "profile": "https://github.com/fogaiht",
+      "contributions": [
         "doc"
       ]
     }

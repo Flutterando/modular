@@ -1,9 +1,9 @@
 class ModularArguments {
-  final Map<String, dynamic>? params;
+  final Map<String, dynamic> params;
   final Uri? uri;
   final dynamic? data;
 
-  const ModularArguments({this.params, this.data, this.uri});
+  const ModularArguments({this.params = const {}, this.data, this.uri});
 
   ModularArguments copyWith({Map<String, dynamic>? params, dynamic? data, Uri? uri}) {
     return ModularArguments(

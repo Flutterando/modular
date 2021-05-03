@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../flutter_modular.dart';
-import '../../core/interfaces/child_module.dart';
+import '../../core/interfaces/module.dart';
 import '../../core/models/bind.dart';
 import '../modular_base.dart';
 
@@ -11,15 +11,26 @@ _debugPrintModular(String text) {
   }
 }
 
-// ignore: must_be_immutable
-abstract class WidgetModule extends StatelessWidget implements ChildModule {
+abstract class WidgetModule extends StatelessWidget implements Module {
   Widget get view;
+
+  @override
+  Future<void> isReady() {
+    return _fakeModule.isReady();
+  }
+
+  final List<ModularRoute> routes = const [];
 
   final _FakeModule _fakeModule = _FakeModule();
 
   WidgetModule() {
     // ignore: invalid_use_of_visible_for_testing_member
     _fakeModule.changeBinds(binds);
+  }
+
+  @override
+  T? getInjectedBind<T>([Type? type]) {
+    return _fakeModule.getInjectedBind(type);
   }
 
   @override
@@ -35,7 +46,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
 
   @override
   T? getBind<T extends Object>({Map<String, dynamic>? params, List<Type> typesInRequest = const []}) {
-    return _fakeModule.getBind<T>(params: params, typesInRequest: typesInRequest);
+    return _fakeModule.getBind<T>(typesInRequest: typesInRequest);
   }
 
   @override
@@ -52,7 +63,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 
   @override
-  List<ModularRoute> routes = const [];
+  final List<Module> imports = const [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +74,7 @@ abstract class WidgetModule extends StatelessWidget implements ChildModule {
   }
 }
 
-class _FakeModule extends ChildModule {
+class _FakeModule extends Module {
   final List<Bind>? bindsInject;
 
   _FakeModule({this.bindsInject}) {
@@ -78,7 +89,7 @@ class _FakeModule extends ChildModule {
 }
 
 class ModularProvider extends StatefulWidget {
-  final ChildModule module;
+  final Module module;
   final Widget child;
 
   const ModularProvider({Key? key, required this.module, required this.child}) : super(key: key);

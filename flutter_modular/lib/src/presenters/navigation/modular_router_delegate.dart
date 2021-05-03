@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../core/errors/errors.dart';
-import '../../core/interfaces/child_module.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
 import '../../core/interfaces/modular_route.dart';
+import '../../core/interfaces/module.dart';
+import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
+import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
@@ -19,13 +24,43 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         IModularNavigator {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final ModularRouteInformationParser parser;
-  final Map<String, ChildModule> injectMap;
+  final Map<String, Module> injectMap;
 
-  ModularRouterDelegate(this.parser, this.injectMap);
+  final streamActionQueueController = StreamController<RouterStreamparam>(sync: true);
+
+  ModularRouterDelegate(this.parser, this.injectMap) {
+    startListenNavigation();
+  }
+
+  void startListenNavigation() {
+    streamActionQueueController.stream
+        .debounceTime(Duration(milliseconds: 100))
+        .asyncMap((param) async {
+          if (param.path == path) {
+            return ModularRouteEmpty();
+          }
+
+          var router = await parser.selectRoute(param.path, arguments: param.arguments);
+          _arguments = router.args;
+
+          return router;
+        })
+        .asyncMap((router) async {
+          if (router is ModularRouteEmpty) {
+            return 'Empty';
+          }
+          await setNewRoutePath(router, fromModular: true);
+          return 'OK';
+        })
+        .switchMap((value) => Stream.value(value))
+        .listen((router) {});
+  }
+
   NavigatorState get navigator => navigatorKey.currentState!;
 
   List<ModularPage> _pages = [];
-  final routerOutlatPages = <String, List<ModularPage>>{};
+  final routerOutletPages = <String, List<ModularPage>>{};
+  ModularArguments? _arguments;
 
   @override
   ModularRoute? get currentConfiguration => _pages.isEmpty ? null : _pages.last.router;
@@ -42,27 +77,67 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router, [bool execRebuild = true]) async {
+  Future<void> setNewRoutePath(ModularRoute router, {bool fromModular = false, @deprecated bool replaceAll = true}) async {
+    _arguments = router.args;
     final page = ModularPage(
-      key: ValueKey('url:${router.path}'),
+      key: ValueKey('url:${router.uri?.path ?? router.path}'),
       router: router,
     );
+
     if (_pages.isEmpty) {
       _pages.add(page);
     } else {
-      for (var p in _pages) {
-        p.completePop(null);
-        removeInject(p.router.path!);
-        for (var r in p.router.routerOutlet) {
-          removeInject(r.path!);
+      // Fix navigate function to don't replace a route of the same module and
+      // replace all external modules
+      final _lastPageModule = _pages.last;
+      final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
+
+      final duplicatePage = _pages.firstWhere(
+        (p) => p.key == page.key,
+        orElse: () => ModularPage.empty(),
+      );
+
+      var isDuplicatedPage = duplicatePage.router is! ModularRouteEmpty;
+
+      if (fromModular && (routeIsInModule && !isDuplicatedPage)) {
+        _pages.add(page);
+      } else {
+        if (fromModular) {
+          for (var p in _pages) {
+            p.completePop(null);
+            removeInject(p.router.path!);
+            for (var r in p.router.routerOutlet) {
+              removeInject(r.path!);
+            }
+          }
+          if (replaceAll) {
+            _pages = [page];
+          } else if (_pages.last.router.path != router.path) {
+            _pages.last = page;
+          } else {
+            _pages.last.router.routerOutlet.clear();
+            _pages.last.router.routerOutlet.add(router.routerOutlet.last);
+          }
+        } else {
+          ///
+          /// The `fromModular` flag prevents all pages in `_pages` from being replaced
+          /// when navigating with the browser's back button
+          ///
+
+          _lastPageModule.completePop(null);
+          removeInject(_lastPageModule.router.path!);
+          for (var r in _lastPageModule.router.routerOutlet) {
+            removeInject(r.path!);
+          }
+
+          _pages.remove(_lastPageModule);
+          _pages.add(page);
         }
       }
-
-      _pages = [page];
     }
 
     if (router.routerOutlet.isNotEmpty) {
-      routerOutlatPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+      routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
     }
 
     rebuildPages();
@@ -70,28 +145,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
   String resolverPath(String routeName, String path) {
     final uri = Uri.parse(path);
-    return uri.resolve(routeName).path;
+    return '${uri.resolve(routeName).toString()}';
   }
 
   @override
-  Future<void> navigate(String routeName, {arguments, bool linked = false}) async {
-    if (routeName == path) {
-      return;
-    }
-
+  Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
     routeName = resolverPath(routeName, path);
-
-    var router = await parser.selectRoute(linked ? modulePath + routeName : routeName);
-    router = router.copyWith(args: router.args?.copyWith(data: arguments));
-    setNewRoutePath(router, false);
+    streamActionQueueController.add(RouterStreamparam(routeName, arguments));
   }
-
-  // @override
-  // Future<bool> popRoute() {
-  //   return SynchronousFuture(true);
-
-  //   //   return navigator.maybePop();
-  // }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     if (!route.didPop(result)) {
@@ -116,20 +177,22 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     return true;
   }
 
-  removeInject(String path) {
+  void removeInject(String path) {
     final trash = <String>[];
 
-    injectMap.forEach((key, module) {
+    for (var key in injectMap.keys) {
+      final module = injectMap[key]!;
+
       module.paths.remove(path);
       if (path.characters.last == '/') {
         module.paths.remove('$path/'.replaceAll('//', ''));
       }
-      if (module.paths.length == 0) {
+      if (module.paths.isEmpty) {
         module.cleanInjects();
         trash.add(key);
         Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
       }
-    });
+    }
 
     for (final key in trash) {
       injectMap.remove(key);
@@ -144,13 +207,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    var router = await parser.selectRoute(routeName, arguments: arguments);
+    _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
       final outletRouter = router.routerOutlet.last.copyWith(
-        args: router.args?.copyWith(data: arguments),
+        args: router.args.copyWith(data: arguments),
       );
+      _arguments = outletRouter.args;
       final page = ModularPage<T>(
         key: UniqueKey(),
         router: outletRouter,
@@ -160,12 +224,21 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         _pages.add(page);
         rebuildPages();
         return await page.waitPop();
+      } else if (router.routerName != currentConfiguration?.routerName) {
+        routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+        final rootPage = ModularPage<T>(
+          key: UniqueKey(),
+          router: router,
+        );
+        _pages.add(rootPage);
+        rebuildPages();
+        return await rootPage.waitPop();
       } else {
-        routerOutlatPages[router.path!]?.add(page);
+        routerOutletPages[router.path!]?.add(page);
         currentConfiguration?.routerOutlet.add(outletRouter);
         notifyListeners();
         final result = await page.waitPop();
-        routerOutlatPages[router.path!]?.removeLast();
+        routerOutletPages[router.path!]?.removeLast();
         currentConfiguration?.routerOutlet.removeLast();
         notifyListeners();
         return result;
@@ -184,13 +257,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName);
-    router = router.copyWith(args: router.args?.copyWith(data: arguments));
+    var router = await parser.selectRoute(routeName, arguments: arguments);
+    _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
       final outletRouter = router.routerOutlet.last.copyWith(
-        args: router.args?.copyWith(data: arguments),
+        args: router.args.copyWith(data: arguments),
       );
+      _arguments = outletRouter.args;
       var page = ModularPage<T>(
         key: UniqueKey(),
         router: outletRouter,
@@ -209,8 +283,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         if (routeOutletConf.isEmpty) {
           throw ModularError('Prefer Modular.to.navigate()');
         } else {
-          lastPage = routerOutlatPages[router.path!]?.last;
-          routerOutlatPages[router.path!]?.last = page;
+          lastPage = routerOutletPages[router.path!]?.last;
+          routerOutletPages[router.path!]?.last = page;
           currentConfiguration?.routerOutlet.last = outletRouter;
           notifyListeners();
         }
@@ -231,6 +305,16 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       final lastPage = _pages.last;
       _pages.last = page;
       rebuildPages();
+
+      // Remove inject of replaced module on pushReplacementNamed()
+      final _lastPagePath = lastPage.router.path;
+      if (_lastPagePath != null) {
+        removeInject(_lastPagePath);
+        for (var r in lastPage.router.routerOutlet) {
+          removeInject(r.path!);
+        }
+      }
+
       final result = await page.waitPop();
       lastPage.completePop(result);
       return result;
@@ -240,9 +324,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName);
+    var router = await parser.selectRoute(routeName, arguments: arguments);
     if (!forRoot && router.routerOutlet.isNotEmpty) {
-      routerOutlatPages[router.path!]?.last.completePop(result);
+      routerOutletPages[router.path!]?.last.completePop(result);
     } else {
       _pages.last.completePop(result);
       _pages.removeLast();
@@ -277,11 +361,20 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   String get path => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.path ?? '/' : currentConfiguration?.routerOutlet.last.path ?? '/';
 
+  ModularArguments? get args => _arguments;
+
   @override
   String get localPath => path.replaceFirst(modulePath, '');
 
   @override
-  Future<T?> push<T extends Object>(Route<T> route) {
+  Future<T?> push<T extends Object?>(Route<T> route) {
     return navigator.push<T>(route);
   }
+}
+
+class RouterStreamparam {
+  final String path;
+  final dynamic arguments;
+
+  RouterStreamparam(this.path, this.arguments);
 }

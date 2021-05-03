@@ -1,22 +1,34 @@
+import 'package:flutter/material.dart';
+import '../../../flutter_modular.dart';
+
+import '../models/bind.dart';
+
 import '../models/modular_arguments.dart';
-import 'child_module.dart';
 import 'modular_navigator_interface.dart';
+import 'module.dart';
 
 abstract class ModularInterface {
+  IModularNavigator? navigatorDelegate;
+
   bool get debugMode;
+  ModularFlags get flags;
   ModularArguments? get args;
   String get initialRoute;
-  ChildModule get initialModule;
-  void init(ChildModule module);
-  void bindModule(ChildModule module, [String path]);
+  Module get initialModule;
+  @visibleForTesting
+  void overrideBinds(List<Bind> binds);
+  void init(Module module);
+  void bindModule(Module module, [String path]);
   void debugPrintModular(String text);
+  T bind<T extends Object>(Bind<T> bind);
+  Future<void> isModuleReady<M>();
+  Future<B> getAsync<B extends Object>({List<Type>? typesInRequestList});
 
   IModularNavigator get to;
-  B? get<B extends Object>({
-    Map<String, dynamic> params = const {},
+  B get<B extends Object>({
     List<Type>? typesInRequestList,
     B? defaultValue,
   });
 
-  void dispose<B>();
+  bool dispose<B extends Object>();
 }

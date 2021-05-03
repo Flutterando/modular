@@ -1,32 +1,32 @@
+import '../core/models/bind.dart';
+
 import '../core/models/modular_arguments.dart';
 import 'modular_base.dart';
 
 class Inject<T> {
-  ///!!!!NOT RECOMMENDED USE!!!!
-  ///Bind has access to the arguments coming from the routes.
-  ///If you need specific access, do it through functions.
-  @deprecated
-  Map<String, dynamic>? params = {};
-  final List<Type> typesInRequest;
+  final List<Type>? typesInRequest;
+  final List<Bind>? overrideBinds;
 
-  Inject({this.params, this.typesInRequest = const []});
+  const Inject({this.typesInRequest, this.overrideBinds = const []});
 
-  B? call<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) => get<B>(params: params, defaultValue: defaultValue);
+  B call<B extends Object>([Bind<B>? bind]) => get<B>(bind);
 
-  B? get<B extends Object>({Map<String, dynamic>? params, B? defaultValue}) {
-    params ??= {};
-    return Modular.get<B>(
-      params: params,
-      typesInRequestList: typesInRequest,
-      defaultValue: defaultValue,
-    );
+  B get<B extends Object>([Bind<B>? bind]) {
+    if (bind == null) {
+      return Modular.get<B>(typesInRequestList: typesInRequest);
+    } else {
+      final candidateId = overrideBinds?.indexWhere((element) => element.runtimeType == bind.runtimeType) ?? -1;
+      if (candidateId == -1) {
+        return bind.inject(this);
+      } else {
+        return overrideBinds![candidateId].inject(this) as B;
+      }
+    }
   }
 
   ModularArguments? get args => Modular.args;
 
-  void dispose<B>() {
-    if (T.runtimeType.toString() != 'dynamic') {
-      Modular.dispose<B>();
-    }
+  bool dispose<B extends Object>() {
+    return Modular.dispose<B>();
   }
 }

@@ -5,18 +5,18 @@ import 'package:flutter/widgets.dart';
 
 import '../models/custom_transition.dart';
 import '../models/modular_arguments.dart';
-import 'child_module.dart';
+import 'module.dart';
 import 'route_guard.dart';
 
-typedef RouteBuilder<T> = MaterialPageRoute<T> Function(
-    WidgetBuilder, RouteSettings);
-typedef ModularChild = Widget Function(
-    BuildContext context, ModularArguments? args);
+typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
+typedef ModularChild = Widget Function(BuildContext context, ModularArguments args);
 
 abstract class ModularRoute<T> {
-  ChildModule? get currentModule;
+  Module? get currentModule;
 
-  ModularArguments? get args;
+  String? guardedRoute;
+
+  ModularArguments get args;
 
   List<ModularRoute> get children;
 
@@ -54,11 +54,11 @@ abstract class ModularRoute<T> {
   ///
   /// The module will be loaded
   ///
-  /// Type: ChildModule
+  /// Type: Module
   ///
   /// For more example go to Modular page from gitHub [https://github.com/Flutterando/modular]
   ///
-  ChildModule? get module;
+  Module? get module;
 
   ///
   /// Paramenter name: [params]
@@ -90,7 +90,7 @@ abstract class ModularRoute<T> {
   /// Type: Map<String, String>
   ///
   /// For more example http://example.com/help?id=12&rate=22
-  /// 
+  ///
   Map<String, List<String>> get queryParamsAll;
 
   ///
@@ -204,38 +204,36 @@ abstract class ModularRoute<T> {
   Map<
       TransitionType,
       PageRouteBuilder<T> Function(
-          Widget Function(BuildContext, ModularArguments?) builder,
-          ModularArguments? args,
-          Duration transitionDuration,
-          RouteSettings settings,
-          )> get transitions;
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings,
+  )> get transitions;
 
-  ModularRoute<T> copyWith({ModularChild? child,
-    String? routerName,
-    ChildModule? module,
-    List<ModularRoute>? children,
-    List<ModularRoute>? routerOutlet,
-    ChildModule? currentModule,
-    Map<String, String>? params,
-    List<RouteGuard>? guards,
-    TransitionType? transition,
-    RouteBuilder<T>? routeGenerator,
-    String? modulePath,
-    Uri uri,
-    Duration? duration,
-    Completer<T>? popRoute,
-    ModularArguments? args,
-    CustomTransition? customTransition});
+  ModularRoute<T> copyWith(
+      {ModularChild? child,
+      String? routerName,
+      Module? module,
+      String? guardedRoute,
+      List<ModularRoute>? children,
+      List<ModularRoute>? routerOutlet,
+      Module? currentModule,
+      Map<String, String>? params,
+      List<RouteGuard>? guards,
+      TransitionType? transition,
+      RouteBuilder<T>? routeGenerator,
+      String? modulePath,
+      Uri uri,
+      Duration? duration,
+      Completer<T>? popRoute,
+      ModularArguments? args,
+      CustomTransition? customTransition});
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is ModularRoute<T> &&
-        o.modulePath == modulePath &&
-        o.routerName == routerName &&
-        o.module == module;
+    return o is ModularRoute<T> && o.modulePath == modulePath && o.routerName == routerName && o.module == module;
   }
 
   @override

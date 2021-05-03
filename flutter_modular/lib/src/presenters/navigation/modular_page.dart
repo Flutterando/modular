@@ -1,17 +1,24 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_route.dart';
+import '../modular_base.dart';
+import '../modular_route_impl.dart';
 
 final Map<int, Completer> _allCompleters = {};
 
 class ModularPage<T> extends Page<T> {
   final ModularRoute router;
+  final bool isEmpty;
 
-  ModularPage({LocalKey? key, required this.router})
-      : super(key: key, name: router.path, arguments: router.args?.data);
+  ModularPage({LocalKey? key, required this.router, this.isEmpty = false}) : super(key: key, name: router.path, arguments: router.args.data);
+
+  factory ModularPage.empty() {
+    return ModularPage(isEmpty: true, router: ModularRouteEmpty());
+  }
 
   Future<T?> waitPop() {
     if (_allCompleters.containsKey(hashCode)) {
@@ -23,8 +30,7 @@ class ModularPage<T> extends Page<T> {
   }
 
   void completePop(T? result) {
-    if (_allCompleters.containsKey(hashCode) &&
-        !(_allCompleters[hashCode] as Completer<T?>).isCompleted) {
+    if (_allCompleters.containsKey(hashCode) && !(_allCompleters[hashCode] as Completer<T?>).isCompleted) {
       final complete = (_allCompleters[hashCode] as Completer<T?>);
       complete.complete(result);
       _allCompleters.remove(hashCode);
@@ -33,29 +39,31 @@ class ModularPage<T> extends Page<T> {
 
   @override
   Route<T> createRoute(BuildContext context) {
-    if (router.transition == TransitionType.custom &&
-        router.customTransition != null) {
+    late final Widget page;
+    if (router.child != null) {
+      page = router.child!(context, Modular.args!);
+    } else {
+      throw ModularError('Child not be null');
+    }
+    if (router.transition == TransitionType.custom && router.customTransition != null) {
       return PageRouteBuilder<T>(
-        pageBuilder: (context, _, __) {
-          if (router.child != null) {
-            return router.child!(context, router.args);
-          } else {
-            throw ModularError('Child not be null');
-          }
-        },
+        pageBuilder: (context, _, __) => page,
         settings: this,
         transitionsBuilder: router.customTransition!.transitionBuilder,
         transitionDuration: router.customTransition!.transitionDuration,
       );
     } else if (router.transition == TransitionType.defaultTransition) {
       // Helper function
-      Widget widgetBuilder(BuildContext context) {
-        //return disposablePage;
-        return router.child!(context, router.args);
-      }
+      Widget widgetBuilder(BuildContext context) => page;
 
       if (router.routeGenerator != null) {
         return router.routeGenerator!(widgetBuilder, this) as Route<T>;
+      }
+      if (Modular.flags.isCupertino) {
+        return CupertinoPageRoute<T>(
+          settings: this,
+          builder: widgetBuilder,
+        );
       }
       return MaterialPageRoute<T>(
         settings: this,
@@ -65,7 +73,7 @@ class ModularPage<T> extends Page<T> {
       // Helper function
       Widget widgetBuilder(BuildContext context) {
         //return disposablePage;
-        return router.child!(context, router.args);
+        return page;
       }
 
       if (router.routeGenerator != null) {
@@ -78,8 +86,7 @@ class ModularPage<T> extends Page<T> {
     } else {
       var selectTransition = router.transitions[router.transition];
       if (selectTransition != null) {
-        return selectTransition(
-            router.child!, router.args, router.duration, this) as Route<T>;
+        return selectTransition((_, __) => page, router.duration, this) as Route<T>;
       } else {
         throw ModularError('Page Not Found');
       }
@@ -99,18 +106,13 @@ class NoTransitionMaterialPageRoute<T> extends MaterialPageRoute<T> {
     RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
-  }) : super(
-            builder: builder,
-            maintainState: maintainState,
-            settings: settings,
-            fullscreenDialog: fullscreenDialog);
+  }) : super(builder: builder, maintainState: maintainState, settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
   Duration get transitionDuration => Duration.zero;
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     return child;
   }
 }

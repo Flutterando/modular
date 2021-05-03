@@ -4,10 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/core/errors/errors.dart';
 import 'package:flutter_modular/src/core/models/bind.dart';
-import 'package:flutter_modular/src/core/interfaces/child_module.dart';
+import 'package:flutter_modular/src/core/interfaces/module.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class ModuleMock extends ChildModule {
+class Module2 extends Module {
+  @override
+  final List<Bind<Object>> binds = [
+    Bind.instance<double>(1.0, export: true),
+  ];
+}
+
+class ModuleMock extends Module {
+  @override
+  final List<Module> imports = [
+    Module2(),
+  ];
+
   @override
   final List<Bind> binds = [
     Bind((i) => "Test"),
@@ -32,6 +44,10 @@ main() {
     final list1 = module.binds;
     final list2 = module.binds;
     expect(list1, equals(list2));
+  });
+
+  test('should return imported bind', () {
+    expect(module.getBind<double>(typesInRequest: []), equals(1.0));
   });
 
   test('should change binds into new list of bind', () {

@@ -28,9 +28,11 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
       return pages;
     }
 
-    if (modularRouterDelegate.routerOutlatPages.containsKey(path)) {
-      final list = modularRouterDelegate.routerOutlatPages[path] ?? [];
-      pages = [...list];
+    if (modularRouterDelegate.routerOutletPages.containsKey(path)) {
+      final list = modularRouterDelegate.routerOutletPages[path] ?? [];
+      pages = [
+        ...list
+      ];
     }
 
     return pages;
@@ -38,11 +40,12 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
 
   @override
   Widget build(BuildContext context) {
-    return pages.isEmpty
+    final _pages = _getPages();
+    return _pages.isEmpty
         ? Material()
         : CustomNavigator(
             key: navigatorKey,
-            pages: _getPages(),
+            pages: _pages,
             onPopPage: (route, result) {
               if (pages.length > 1) {
                 final page = route.settings as ModularPage;
@@ -51,11 +54,10 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
                 final trash = <String>[];
                 modularRouterDelegate.injectMap.forEach((key, module) {
                   module.paths.remove(path);
-                  if (module.paths.length == 0) {
+                  if (module.paths.isEmpty) {
                     module.cleanInjects();
                     trash.add(key);
-                    Modular.debugPrintModular(
-                        "-- ${module.runtimeType.toString()} DISPOSED");
+                    Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
                   }
                 });
 
