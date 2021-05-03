@@ -3,7 +3,7 @@
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-25-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -65,6 +65,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
     <td align="center"><a href="https://github.com/allanlucio"><img src="https://avatars0.githubusercontent.com/u/7063932?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Allan L.</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=allanlucio" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=allanlucio" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=allanlucio" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://domkar.dev"><img src="https://avatars0.githubusercontent.com/u/7688351?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Domkář</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=DavidDomkar" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mex978"><img src="https://avatars.githubusercontent.com/u/31356610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Max Lima</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Mex978" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/rogsilva"><img src="https://avatars.githubusercontent.com/u/7675216?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rogério Silva</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=rogsilva" title="Documentation">📖</a></td>
   </tr>
 </table>
 
