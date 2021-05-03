@@ -3,7 +3,7 @@
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-30-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-31-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -72,6 +72,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
   <tr>
     <td align="center"><a href="https://cosmicshell.dev/#/home"><img src="https://avatars.githubusercontent.com/u/15701673?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ghost</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=raphaelbarbosaqwerty" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/gmcdowell"><img src="https://avatars.githubusercontent.com/u/10100952?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Greg McDowell</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=gmcdowell" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/saviogrossi"><img src="https://avatars.githubusercontent.com/u/695296?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Savio Grossi</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=saviogrossi" title="Code">💻</a></td>
   </tr>
 </table>
 
