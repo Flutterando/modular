@@ -3,7 +3,7 @@
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -67,6 +67,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
     <td align="center"><a href="https://github.com/mex978"><img src="https://avatars.githubusercontent.com/u/31356610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Max Lima</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Mex978" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/rogsilva"><img src="https://avatars.githubusercontent.com/u/7675216?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rogério Silva</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=rogsilva" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/pablo-threadable"><img src="https://avatars.githubusercontent.com/u/32702468?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Pablo Sanchez</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=pablo-threadable" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gibahjoe"><img src="https://avatars.githubusercontent.com/u/9147147?v=4?s=100" width="100px;" alt=""/><br /><sub><b>gibahjoe</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=gibahjoe" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=gibahjoe" title="Documentation">📖</a></td>
   </tr>
 </table>
 
