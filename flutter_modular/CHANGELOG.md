@@ -1,4 +1,4 @@
-## [3.2.0] - 2021-04-29
+## [3.2.0] - 2021-05-03
 
 * Added **AsyncBind** for Future injection binds.
 ```dart
@@ -19,6 +19,7 @@ final share = Modular.get<SharedPreferences>();
 * Fix break navigation on **RouteOutlet** when frenetics tab changes
 * Bwolf`s commits
 * More bugs fixeds (Thanks @Mex978)
+* Fix Navigate Flutter Web error.
 
 ## [3.1.1] - 2021-04-25
 

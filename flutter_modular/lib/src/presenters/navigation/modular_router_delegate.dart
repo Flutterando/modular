@@ -131,6 +131,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
           }
 
           _pages.remove(_lastPageModule);
+          _pages.add(page);
         }
       }
     }
