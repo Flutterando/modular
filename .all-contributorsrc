@@ -263,6 +263,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gibahjoe",
+      "name": "gibahjoe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9147147?v=4",
+      "profile": "https://github.com/gibahjoe",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
