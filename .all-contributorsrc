@@ -311,6 +311,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "fogaiht",
+      "name": "Thiago Fernandes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16519851?v=4",
+      "profile": "https://github.com/fogaiht",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
