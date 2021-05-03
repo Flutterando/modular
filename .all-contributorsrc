@@ -244,6 +244,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rogsilva",
+      "name": "Rogério Silva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7675216?v=4",
+      "profile": "https://github.com/rogsilva",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
