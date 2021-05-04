@@ -236,7 +236,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/7688351?v=4",
       "profile": "https://domkar.dev",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -302,6 +303,31 @@
       "contributions": [
         "doc",
         "code"
+      ]
+      "login": "saviogrossi",
+      "name": "Savio Grossi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/695296?v=4",
+      "profile": "https://github.com/saviogrossi",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "marcobraghim",
+      "name": "Marco A. Braghim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2068045?v=4",
+      "profile": "https://www.thizer.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "fogaiht",
+      "name": "Thiago Fernandes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16519851?v=4",
+      "profile": "https://github.com/fogaiht",
+      "contributions": [
+        "doc"
       ]
     }
   ],
