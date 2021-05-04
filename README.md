@@ -72,7 +72,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
   <tr>
     <td align="center"><a href="https://cosmicshell.dev/#/home"><img src="https://avatars.githubusercontent.com/u/15701673?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ghost</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=raphaelbarbosaqwerty" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/gmcdowell"><img src="https://avatars.githubusercontent.com/u/10100952?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Greg McDowell</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=gmcdowell" title="Code">💻</a></td>
-    <td align="center"><a href="http://isorensen.com"><img src="https://avatars.githubusercontent.com/u/3399976?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eduardo Sorensen</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=isorensen" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://isorensen.com"><img src="https://avatars.githubusercontent.com/u/3399976?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eduardo Sorensen</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=isorensen" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=isorensen" title="Code">💻</a></td>
   </tr>
 </table>
 
