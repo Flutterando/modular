@@ -3,7 +3,7 @@
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-35-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-36-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -77,6 +77,9 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
     <td align="center"><a href="https://www.thizer.com"><img src="https://avatars.githubusercontent.com/u/2068045?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marco A. Braghim</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=marcobraghim" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/fogaiht"><img src="https://avatars.githubusercontent.com/u/16519851?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Thiago Fernandes</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=fogaiht" title="Documentation">📖</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/gabriel-roveri-55933a182/"><img src="https://avatars.githubusercontent.com/u/42328188?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gabriel Roveri</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=GabrielCR99" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=GabrielCR99" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/dadagov125"><img src="https://avatars.githubusercontent.com/u/21357657?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Magomed Dadagov</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=dadagov125" title="Code">💻</a></td>
   </tr>
 </table>
 
