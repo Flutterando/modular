@@ -3,7 +3,7 @@
 
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-35-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
@@ -44,11 +44,11 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
   </tr>
   <tr>
     <td align="center"><a href="https://medium.com/@albertomonteiro"><img src="https://avatars2.githubusercontent.com/u/836496?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alberto Monteiro</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=AlbertoMonteiro" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://github.com/GUIKAR741"><img src="https://avatars2.githubusercontent.com/u/18069622?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Nepomuceno de Carvalho</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=GUIKAR741" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/lucioeduardo"><img src="https://avatars1.githubusercontent.com/u/14063319?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eduardo Lúcio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/GUIKAR741"><img src="https://avatars2.githubusercontent.com/u/18069622?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Nepomuceno de Carvalho</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=GUIKAR741" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=GUIKAR741" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/lucioeduardo"><img src="https://avatars1.githubusercontent.com/u/14063319?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eduardo Lúcio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=lucioeduardo" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/Ascenio"><img src="https://avatars1.githubusercontent.com/u/7662016?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ascênio</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=Ascenio" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=Ascenio" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/wemersonrv"><img src="https://avatars3.githubusercontent.com/u/2028673?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Wemerson Couto Guimarães</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=wemersonrv" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/maguro"><img src="https://avatars2.githubusercontent.com/u/165060?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alan D. Cabrera</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=maguro" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/maguro"><img src="https://avatars2.githubusercontent.com/u/165060?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alan D. Cabrera</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=maguro" title="Code">💻</a> <a href="https://github.com/Flutterando/modular/commits?author=maguro" title="Documentation">📖</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/jeanluucas/"><img src="https://avatars1.githubusercontent.com/u/6116799?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jean Lucas</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=jeaanlucas" title="Code">💻</a></td>
   </tr>
   <tr>
@@ -76,6 +76,7 @@ Our thanks goes out to all these wonderful people ([emoji key](https://allcontri
     <td align="center"><a href="https://github.com/saviogrossi"><img src="https://avatars.githubusercontent.com/u/695296?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Savio Grossi</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=saviogrossi" title="Code">💻</a></td>
     <td align="center"><a href="https://www.thizer.com"><img src="https://avatars.githubusercontent.com/u/2068045?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marco A. Braghim</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=marcobraghim" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/fogaiht"><img src="https://avatars.githubusercontent.com/u/16519851?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Thiago Fernandes</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=fogaiht" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/gabriel-roveri-55933a182/"><img src="https://avatars.githubusercontent.com/u/42328188?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gabriel Roveri</b></sub></a><br /><a href="https://github.com/Flutterando/modular/commits?author=GabrielCR99" title="Documentation">📖</a> <a href="https://github.com/Flutterando/modular/commits?author=GabrielCR99" title="Code">💻</a></td>
   </tr>
 </table>
 
