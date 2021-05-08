@@ -51,11 +51,11 @@
 
 ## What is Flutter Modular?
 
-As an application project grows and becomes complex, it's hard to keep your code and project structure mantainable and reusable. Modular provides a bunch of Flutter-suiting solutions to deal with this problem, like dependency injection, routing system and the "disposable singleton" system (that is, Modular disposes the injected module automatically as it is out of scope).
+As an application project grows and becomes complex, it's hard to keep your code and project structure maintainable and reusable. Modular provides a bunch of Flutter-suiting solutions to deal with this problem, like dependency injection, routing system and the "disposable singleton" system (that is, Modular disposes the injected module automatically as it is out of scope).
 
 Modular's dependency injection system has out-of-the-box support for any state management system, managing your application memory usage.
 
-Modular also supports Dynamic and Relative Routing like in the Web.
+Modular also supports Dynamic and Relative Routing like on the Web.
 
 ## Modular Structure
 
@@ -319,10 +319,10 @@ class MyGuard implements RouteGuard {
   Future<bool> canActivate(String url, ModularRoute route) {
     if (url != '/admin'){
       // Return `true` to allow access
-      return true;
+      return Future.value(true);
     } else {
       // Return `false` to disallow access
-      return false
+      return Future.value(false);
     }
   }
 }
@@ -343,7 +343,7 @@ final List<ModularRoute> routes = [
 
 ```
 
-If placed on a module route, `RouterGuard` will be global to that route.
+If placed on a module route, `RouteGuard` will be global to that route.
 
 Add a routing route if `RouteGuard` validation fails by adding the `guardedRoute` property:
 
@@ -447,7 +447,7 @@ https://flutter-website.com/#/product?id=1
 
 ## Route transition animation
 
-You can choose which type of animation do you want to be used on your pages transition by setting the `Route` `transition` parameter, providing a `TransitionType`.
+You can choose which type of animation do you want to be used on your page transition by setting the `Route` `transition` parameter, providing a `TransitionType`.
 
 ```dart
 ModuleRoute('/product',
@@ -564,7 +564,7 @@ Create a Global instance of a class only when it gets called for the first time.
 
 ## AsyncBind
 
-Some methods from several classes return a Future. To achive this specifics methods you should use AsyncBind instead a normal sync bind.
+Some methods from several classes return a Future. To achieve those specific methods you should use AsyncBind instead a normal sync bind.
 Use *Modular.isModuleReady<Module>()* to wait all AsyncBinds to resolve in order to release the module for use.
 
 > IMPORTANT: The order of AsyncBind matters if there are interdependencies of other asynchronous binds.
