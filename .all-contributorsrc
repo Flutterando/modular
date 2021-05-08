@@ -1,4 +1,3 @@
-
 {
   "files": [
     "README.md"
@@ -331,6 +330,16 @@
       "profile": "https://github.com/fogaiht",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "GabrielCR99",
+      "name": "Gabriel Roveri",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42328188?v=4",
+      "profile": "https://www.linkedin.com/in/gabriel-roveri-55933a182/",
+      "contributions": [
+        "doc",
+        "code"
       ]
     }
   ],
