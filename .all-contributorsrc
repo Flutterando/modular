@@ -341,6 +341,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "dadagov125",
+      "name": "Magomed Dadagov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21357657?v=4",
+      "profile": "https://github.com/dadagov125",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
