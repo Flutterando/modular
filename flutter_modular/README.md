@@ -1,15 +1,15 @@
-![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) 
-[![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) 
-
+![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
+[![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-38-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
 
 ![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png)
-
 
 - **[What is Flutter Modular?](#what-is-flutter-modular)**
 - **[Modular Structure](#modular-structure)**
@@ -38,6 +38,7 @@
     - [Singleton](#singleton)
     - [LazySingleton](#lazySingleton)
   - [AsyncBind](#asyncBind)
+  - [Modular.isModuleReady](#isModuleReady)
   - [Retrieving your injected dependencies in the view](#retrieving-your-injected-dependencies-in-the-view)
 
 - **[Using Modular widgets to retrieve your class](#using-modular-widgets-to-retrieve-your-class)**
@@ -72,13 +73,11 @@ These are the main aspects that Modular focus on:
 - Dynamic and Relative Routing.
 - Code Modularization.
 
-
 # Getting started with Modular
 
 ## Migration Guide: Modular 2.0 to 3.0
 
 [Guide link here!](https://medium.com/flutterando/migration-guide-modular-2-0-to-3-0-24ecf31d5e8b)
-
 
 ## Installation
 
@@ -175,7 +174,7 @@ class AppModule extends Module {
 
 We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
 
-> **NOTE:** Use the ModuleRoute object to create a Complex Route.  
+> **NOTE:** Use the ModuleRoute object to create a Complex Route.
 
 ## Adding routes
 
@@ -199,7 +198,7 @@ class AppModule extends Module {
 }
 ```
 
-> **NOTE:** Use the ChildRoute object to create a simple route.  
+> **NOTE:** Use the ChildRoute object to create a simple route.
 
 ## Dynamic routes
 
@@ -245,18 +244,21 @@ final List<ModularRoute> routes = [
 ```
 
 As the same of the first example, we just need to call the route. For example:
+
 ```dart
 // In this case, modular will open the page DetailPage with the id of the product equals 1
 Modular.to.navigate('/product/1/detail');
-// We can use the pushNamed too 
+// We can use the pushNamed too
 
 // The same here, but with RatingPage
 Modular.to.navigate('/product/1/rating');
 
 ```
+
 This notation, however, is only valid for simple literals.
 
 ### Sending Objects
+
 If you want to pass a complex object to your route, provide it in `arguments` parameter:
 
 ```dart
@@ -285,6 +287,7 @@ final List<Bind> binds = [
 ];
 
 ```
+
 ## Route generic types
 
 You can return values from navigation, just like `.pop`.
@@ -309,6 +312,7 @@ Modular.to.pop('banana');
 ```
 
 ## Route guard
+
 Route guards are middleware-like objects that allow you to control the access of a given route from other route. You can implement a route guard by making a class that `implements RouteGuard`.
 
 For example, the following class will only allow a redirection from `/admin` route:
@@ -365,16 +369,19 @@ final List<ModularRoute> routes = [
 ```
 
 ## When and How use navigate or pushNamed
+
 You can use both in your application but need to understand each one.
 
 ### pushNamed
+
 This one makes a route above another route continuously in your stack, but you can go back too to the back page using the back button that you can see on the AppBar, it's like a modal. It's better for `Mobile Applications`.
 
 Imagine that you need to go more deep in your routes for example:
+
 ```dart
 // Initial route
 Modular.to.pushNamed('/home');
-// User route 
+// User route
 Modular.to.pushNamed('/home/user');
 // User profile route
 Modular.to.pushNamed('/home/user/profile');
@@ -383,13 +390,15 @@ Modular.to.pushNamed('/home/user/profile');
 In the end, you can see the back button to go to the previous page because of the idea of a modal, that opens another page above the previous page.
 
 ### navigate
+
 This one removes the previous route from the stack and puts the new route on this stack. Because of this, you'll not see the back button on the AppBar, in this case, it's better for `Web Applications`.
 
-Imagine that you need to make a logout from your Mobile application and need to clean all routes directly from the stack.  
+Imagine that you need to make a logout from your Mobile application and need to clean all routes directly from the stack.
+
 ```dart
 // Initial route
 Modular.to.pushNamed('/home');
-// User route 
+// User route
 Modular.to.pushNamed('/home/user');
 // User profile route
 Modular.to.pushNamed('/home/user/profile');
@@ -441,6 +450,7 @@ https://flutter-website.com/#/product/1
 ```
 
 As well could use query parameters or fragment:
+
 ```
 https://flutter-website.com/#/product?id=1
 ```
@@ -519,42 +529,54 @@ class AppModule extends Module {
   // Provide a list of dependencies to inject into your project
   @override
   final List<Bind> binds = [
-    Bind((i) => AppBloc()), 
+    Bind((i) => AppBloc()),
     Bind.factory((i) => AppBloc()),
-    Bind.instance(myObject), 
-    Bind.singleton((i) => AppBloc()), 
-    Bind.lazySingleton((i) => AppBloc()), 
+    Bind.instance(myObject),
+    Bind.singleton((i) => AppBloc()),
+    Bind.lazySingleton((i) => AppBloc()),
     AsyncBind((i) => SharedPreferences.getInstance())
   ];
 ...
 }
 ```
+
 ### Factory
+
 Instantiate the class whenever it gets called.
+
 ```dart
 @override
   final List<Bind> binds = [
     Bind.factory((i) => AppBloc()),
   ];
 ```
+
 ### Instance
+
 Use a class that has already been instantiated.
+
 ```dart
 @override
   final List<Bind> binds = [
     Bind.instance((i) => AppBloc()),
   ];
 ```
+
 ### Singleton
+
 Create a Global instance of a class.
+
 ```dart
 @override
   final List<Bind> binds = [
     Bind.singleton((i) => AppBloc()),
   ];
 ```
+
 ### LazySingleton
+
 Create a Global instance of a class only when it gets called for the first time.
+
 ```dart
 @override
   final List<Bind> binds = [
@@ -565,10 +587,57 @@ Create a Global instance of a class only when it gets called for the first time.
 ## AsyncBind
 
 Some methods from several classes return a Future. To achieve those specific methods you should use AsyncBind instead a normal sync bind.
-Use *Modular.isModuleReady<Module>()* to wait all AsyncBinds to resolve in order to release the module for use.
+Use _Modular.isModuleReady<Module>()_ to wait all AsyncBinds to resolve in order to release the module for use.
 
 > IMPORTANT: The order of AsyncBind matters if there are interdependencies of other asynchronous binds.
-For example, if there are two AsyncBinds where **A** depends on **B**, AsyncBind **B** must be declared before **A**. Pay attention to this type of order!
+> For example, if there are two AsyncBinds where **A** depends on **B**, AsyncBind **B** must be declared before **A**. Pay attention to this type of order!
+
+```dart
+import 'package:flutter_modular/flutter_modular.dart' show Disposable;
+
+// In Modular, `Disposable` classes are automatically disposed when out of the module scope.
+
+class AppBloc extends Disposable {
+  final controller = StreamController();
+
+  @override
+  void dispose() {
+    controller.close();
+  }
+}
+```
+
+## isModuleReady
+
+If you want to ensure that all `AsyncBinds` are resolved before a Module is loaded into memory: `isModuleReady` is the way to go. One way to use it is with RouteGuard, add the AsyncBind into your AppModule, and a RouteGuard to your ModuleRoute.
+
+```dart
+class AppModule extends Module {
+  @override
+  final List<Bind> binds = [
+    AsyncBind((i)=> SharedPreferences.getInstance()),
+  ];
+
+  @override
+  final List<ModularRoute> routes = [
+    ModuleRoute(Modular.initialRoute, module: HomeModule(), guards: [HomeGuard()]),
+  ];
+}
+```
+
+Then create a RouteGuard like below. This way Modular will evaluate all your async dependencies before going to HomeModule.
+
+```dart
+import 'package:flutter_modular/flutter_modular.dart';
+
+class HomeGuard extends RouteGuard {
+  @override
+  Future<bool> canActivate(String path, ModularRoute router) async {
+    await Modular.isModuleReady<AppModule>();
+    return true;
+  }
+}
+```
 
 ## Retrieving your injected dependencies in the view
 
@@ -589,7 +658,7 @@ class AppBloc extends Disposable {
 }
 ```
 
-> **NOTE**: Modular automatically calls destruction methods Binds of the type: **Sink/Stream**, **ChangeNotifier** e **[Store/Triple** 
+> **NOTE**: Modular automatically calls destruction methods Binds of the type: **Sink/Stream**, **ChangeNotifier** e **[Store/Triple**
 
 There are several ways to retrieve our injected `AppBloc`.
 
@@ -611,11 +680,13 @@ class HomePage extends StatelessWidget {
 ## Using Modular widgets to retrieve your class
 
 ### ModularState
+
 In this example, we'll use the `MyWidget` like our page because it's a page that needs to be a `StatefulWidget`.
 
 Let's understand the `ModularState`, for example when we are using the `class _MyWidgetState extends ModularState<MyWidget, HomeStore>` we are linking the modular with our Store in this case the `HomeStore`. When we enter on this screen the HomeStore will be created and will provide for us the `store/controller` variable to use inside the `MyWidget`.
 
 After this, we can use the `store/controller` without any problems. Modular will auto dispose of the `HomeStore` after we close the Page.
+
 ```dart
 class MyWidget extends StatefulWidget {
   @override
