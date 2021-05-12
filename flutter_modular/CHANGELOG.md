@@ -1,3 +1,7 @@
+## [3.2.1] - 2021-05-11
+
+* Fix AsyncBind (Thanks Ygor and Gil);
+
 ## [3.2.0] - 2021-05-03
 
 * Added **AsyncBind** for Future injection binds.

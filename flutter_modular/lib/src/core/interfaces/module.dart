@@ -25,24 +25,22 @@ abstract class Module {
 
   Module() {
     for (var module in imports) {
+      final list = <Bind>[];
       for (var bind in module.binds.where((element) => element.export)) {
-        binds.insert(0, bind);
+        list.add(bind);
       }
+      binds.insertAll(0, list);
     }
   }
 
   Future<void> isReady() async {
     if (_immutableValue.isReadyFlag) return;
     _immutableValue.isReadyFlag = true;
-    final listResolvedBind = <Bind>[];
-    for (var i = 0; i < binds.length; i++) {
-      final bind = binds[i];
-      if (bind is AsyncBind) {
-        final resolvedBind = await bind.converToAsyncBind();
-        listResolvedBind.add(resolvedBind);
-      }
+    final asyncBindList = binds.whereType<AsyncBind>().toList();
+    for (var bind in asyncBindList) {
+      final resolvedBind = await bind.converToAsyncBind();
+      binds.insert(0, resolvedBind);
     }
-    binds.insertAll(0, listResolvedBind);
   }
 
   @visibleForTesting

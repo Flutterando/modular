@@ -99,6 +99,10 @@ class ModularImpl implements ModularInterface {
       final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? 'AppModule';
       var bind = injectMap[module]!.binds.firstWhere((b) => b.inject is B Function(Inject), orElse: () => BindEmpty());
       if (bind is BindEmpty) {
+        bind = injectMap[module]!.binds.firstWhere((b) => b.inject is Future<B> Function(Inject), orElse: () => BindEmpty());
+      }
+
+      if (bind is BindEmpty) {
         throw ModularError('\"${B.toString()}\" not found in \"$module\" module');
       }
     }
