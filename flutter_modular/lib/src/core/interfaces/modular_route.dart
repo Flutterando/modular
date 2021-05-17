@@ -27,7 +27,7 @@ abstract class ModularRoute<T> {
   String? get path;
 
   ///
-  /// Paramenter name: [routerName]
+  /// Parameter name: [routerName]
   ///
   /// Name for your route
   ///
@@ -38,7 +38,7 @@ abstract class ModularRoute<T> {
   String get routerName;
 
   ///
-  /// Paramenter name: [child]
+  /// Parameter name: [child]
   ///
   /// The widget will be displayed
   ///
@@ -50,7 +50,7 @@ abstract class ModularRoute<T> {
   ModularChild? get child;
 
   ///
-  /// Paramenter name: [module]
+  /// Parameter name: [module]
   ///
   /// The module will be loaded
   ///
@@ -61,7 +61,7 @@ abstract class ModularRoute<T> {
   Module? get module;
 
   ///
-  /// Paramenter name: [params]
+  /// Parameter name: [params]
   ///
   /// The parameters that can be transferred to another screen
   ///
@@ -72,7 +72,7 @@ abstract class ModularRoute<T> {
   Map<String, String>? get params;
 
   ///
-  /// Paramenter name: [queryParams]
+  /// Parameter name: [queryParams]
   ///
   /// The parameters that can be transferred to another screen
   ///
@@ -83,7 +83,7 @@ abstract class ModularRoute<T> {
   Map<String, String> get queryParams;
 
   ///
-  /// Paramenter name: [queryParamsAll]
+  /// Parameter name: [queryParamsAll]
   ///
   /// The parameters that can be transferred to another screen
   ///
@@ -94,7 +94,7 @@ abstract class ModularRoute<T> {
   Map<String, List<String>> get queryParamsAll;
 
   ///
-  /// Paramenter name: [fragment]
+  /// Parameter name: [fragment]
   ///
   /// A url fragment that can be transferred to another screen mostly useful in flutter web
   ///
@@ -105,7 +105,7 @@ abstract class ModularRoute<T> {
   String get fragment;
 
   ///
-  /// Paramenter name: [guards]
+  /// Parameter name: [guards]
   ///
   /// Route guards are middleware-like objects
   ///
@@ -136,7 +136,7 @@ abstract class ModularRoute<T> {
   List<RouteGuard>? get guards;
 
   ///
-  /// Paramenter name: [transition]
+  /// Parameter name: [transition]
   ///
   /// Used to animate the transition from one screen to another
   ///
@@ -145,7 +145,7 @@ abstract class ModularRoute<T> {
   TransitionType get transition;
 
   ///
-  /// Paramenter name: [customTransiton]
+  /// Parameter name: [customTransiton]
   ///
   /// PS: For [customTransition] to work,
   ///
