@@ -249,7 +249,11 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     for (var guard in router.guards ?? []) {
       try {
         final result = await guard.canActivate(path, router);
-        if (!result && router.guardedRoute != null && !isRouterOutlet) {
+        if(!result && guard.guardedRoute != null && !isRouterOutlet){
+          print(ModularError('$path is CAN\'T ACTIVATE'));
+          print('redirect to \'${guard.guardedRoute}\'');
+          return await selectRoute(guard.guardedRoute!);
+        } else if (!result && router.guardedRoute != null && !isRouterOutlet) {
           print(ModularError('$path is CAN\'T ACTIVATE'));
           print('redirect to \'${router.guardedRoute}\'');
           return await selectRoute(router.guardedRoute!);

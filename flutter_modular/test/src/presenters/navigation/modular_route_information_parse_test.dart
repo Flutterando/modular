@@ -396,7 +396,9 @@ class CustomWidget extends StatelessWidget {
   }
 }
 
-class MyGuard implements RouteGuard {
+class MyGuard extends RouteGuard {
+  MyGuard({String? guardedRoute}) : super(guardedRoute);
+
   @override
   Future<bool> canActivate(String path, ModularRoute route) async {
     if (path == '/401') {
@@ -409,7 +411,9 @@ class MyGuard implements RouteGuard {
   }
 }
 
-class MyGuardModule implements RouteGuard {
+class MyGuardModule extends RouteGuard {
+  MyGuardModule({String? guardedRoute}) : super(guardedRoute);
+
   @override
   Future<bool> canActivate(String path, ModularRoute route) async {
     if (path == '/guarded/list') {

@@ -27,8 +27,7 @@ class ModuleMock extends Module {
     ChildRoute(
       '/guarded',
       child: (context, args) => Container(),
-      guards: [MyGuardedRoute()],
-      guardedRoute: guardedRoute,
+      guards: [MyGuardedRoute(guardedRoute: guardedRoute)],
     ),
     ChildRoute(
       '/redirected',
@@ -37,7 +36,9 @@ class ModuleMock extends Module {
   ];
 }
 
-class MyGuardedRoute implements RouteGuard {
+class MyGuardedRoute extends RouteGuard {
+  MyGuardedRoute({String? guardedRoute}) : super(guardedRoute);
+
   @override
   Future<bool> canActivate(String path, ModularRoute route) async {
     if (path == '/guarded') {

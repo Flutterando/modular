@@ -14,6 +14,7 @@ typedef ModularChild = Widget Function(BuildContext context, ModularArguments ar
 abstract class ModularRoute<T> {
   Module? get currentModule;
 
+  @Deprecated('Use RouteGuard.guardedRoute')
   String? guardedRoute;
 
   ModularArguments get args;
