@@ -329,6 +329,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       routerOutletPages[router.path!]?.last.completePop(result);
     } else {
       _pages.last.completePop(result);
+      removeInject(_pages.last.router.path!);
       _pages.removeLast();
     }
 
