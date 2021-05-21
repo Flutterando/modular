@@ -143,12 +143,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
     while (routerPageCandidate.routerOutlet.isNotEmpty) {
       mapPage = {routerPageCandidate.path!: routerPageCandidate.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList()};
+      if (mapPage.isNotEmpty) {
+        routerOutletPages.addAll(mapPage);
+      }
       routerPageCandidate = routerPageCandidate.routerOutlet.last;
     }
 
-    if (mapPage.isNotEmpty) {
-      routerOutletPages.addAll(mapPage);
-    }
     // routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
 
     rebuildPages();
