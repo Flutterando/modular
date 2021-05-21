@@ -33,8 +33,24 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
   @override
   RouteInformation restoreRouteInformation(ModularRoute router) {
     return RouteInformation(
-      location: router.routerOutlet.isEmpty ? router.path : router.routerOutlet.last.path,
+      location: _getRoute(router)?.path ?? '/',
     );
+  }
+
+  ModularRoute? _getRoute(ModularRoute? currentConfiguration) {
+    if (currentConfiguration == null) return null;
+    var candidate = currentConfiguration;
+    var isRunning = true;
+
+    while (isRunning) {
+      if (candidate.routerOutlet.isNotEmpty == true) {
+        candidate = candidate.routerOutlet.last;
+      } else {
+        isRunning = false;
+      }
+    }
+
+    return candidate;
   }
 
   ModularRoute? _searchInModule(Module module, String routerName, Uri uri) {
@@ -249,7 +265,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     for (var guard in router.guards ?? []) {
       try {
         final result = await guard.canActivate(path, router);
-        if(!result && guard.guardedRoute != null && !isRouterOutlet){
+        if (!result && guard.guardedRoute != null && !isRouterOutlet) {
           print(ModularError('$path is CAN\'T ACTIVATE'));
           print('redirect to \'${guard.guardedRoute}\'');
           return await selectRoute(guard.guardedRoute!);

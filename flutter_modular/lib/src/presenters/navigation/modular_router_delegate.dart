@@ -79,6 +79,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<void> setNewRoutePath(ModularRoute router, {bool fromModular = false, @deprecated bool replaceAll = true}) async {
     _arguments = router.args;
+
     final page = ModularPage(
       key: ValueKey('url:${router.uri?.path ?? router.path}'),
       router: router,
@@ -136,9 +137,19 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       }
     }
 
-    if (router.routerOutlet.isNotEmpty) {
-      routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+    var routerPageCandidate = router;
+
+    var mapPage = <String, List<ModularPage<dynamic>>>{};
+
+    while (routerPageCandidate.routerOutlet.isNotEmpty) {
+      mapPage = {routerPageCandidate.path!: routerPageCandidate.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList()};
+      routerPageCandidate = routerPageCandidate.routerOutlet.last;
     }
+
+    if (mapPage.isNotEmpty) {
+      routerOutletPages.addAll(mapPage);
+    }
+    // routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
 
     rebuildPages();
   }
@@ -211,7 +222,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
-      final outletRouter = router.routerOutlet.last.copyWith(
+      final outletRouter = _getRoute(router)!.copyWith(
         args: router.args.copyWith(data: arguments),
       );
       _arguments = outletRouter.args;
@@ -225,7 +236,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         rebuildPages();
         return await page.waitPop();
       } else if (router.routerName != currentConfiguration?.routerName) {
-        routerOutletPages[router.path!] = router.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList();
+        routerOutletPages[outletRouter.modulePath!] = [ModularPage(key: ValueKey(outletRouter.path), router: outletRouter)];
         final rootPage = ModularPage<T>(
           key: UniqueKey(),
           router: router,
@@ -234,12 +245,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         rebuildPages();
         return await rootPage.waitPop();
       } else {
-        routerOutletPages[router.path!]?.add(page);
-        currentConfiguration?.routerOutlet.add(outletRouter);
+        routerOutletPages[outletRouter.modulePath!]?.add(page);
         notifyListeners();
         final result = await page.waitPop();
-        routerOutletPages[router.path!]?.removeLast();
-        currentConfiguration?.routerOutlet.removeLast();
+        routerOutletPages[outletRouter.modulePath!]?.removeLast();
         notifyListeners();
         return result;
       }
@@ -261,7 +270,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
-      final outletRouter = router.routerOutlet.last.copyWith(
+      final outletRouter = _getRoute(router)!.copyWith(
         args: router.args.copyWith(data: arguments),
       );
       _arguments = outletRouter.args;
@@ -284,8 +293,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
           throw ModularError('Prefer Modular.to.navigate()');
         } else {
           lastPage = routerOutletPages[router.path!]?.last;
-          routerOutletPages[router.path!]?.last = page;
-          currentConfiguration?.routerOutlet.last = outletRouter;
+          routerOutletPages[outletRouter.modulePath!]?.last = page;
           notifyListeners();
         }
 
@@ -325,8 +333,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName, arguments: arguments);
-    if (!forRoot && router.routerOutlet.isNotEmpty) {
-      routerOutletPages[router.path!]?.last.completePop(result);
+    final routerOutlet = _getRoute(router);
+    if (!forRoot && routerOutlet != router) {
+      routerOutletPages[routerOutlet?.modulePath]?.last.completePop(result);
     } else {
       _pages.last.completePop(result);
       removeInject(_pages.last.router.path!);
@@ -357,10 +366,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  String get modulePath => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.modulePath ?? '/' : currentConfiguration?.routerOutlet.last.modulePath ?? '/';
+  String get modulePath => _getRoute(currentConfiguration)?.modulePath ?? '/';
 
   @override
-  String get path => currentConfiguration?.routerOutlet.isEmpty == true ? currentConfiguration?.path ?? '/' : currentConfiguration?.routerOutlet.last.path ?? '/';
+  String get path => _getRoute(currentConfiguration)?.path ?? '/';
 
   ModularArguments? get args => _arguments;
 
@@ -370,6 +379,22 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> push<T extends Object?>(Route<T> route) {
     return navigator.push<T>(route);
+  }
+
+  ModularRoute? _getRoute(ModularRoute? currentConfiguration) {
+    if (currentConfiguration == null) return null;
+    ModularRoute? candidate = currentConfiguration;
+    var isRunning = true;
+
+    while (isRunning) {
+      if (candidate?.routerOutlet.isNotEmpty == true) {
+        candidate = candidate?.routerOutlet.last;
+      } else {
+        isRunning = false;
+      }
+    }
+
+    return candidate;
   }
 }
 

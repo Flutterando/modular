@@ -57,7 +57,7 @@ class ModularImpl implements ModularInterface {
     } else {
       // Add the new path only if the last path in paths list is different from the current one
       final _paths = injectMap[name]?.paths;
-      if (_paths?.last != path) _paths?.add(path);
+      if (_paths?.isNotEmpty == true && _paths?.last != path) _paths?.add(path);
     }
   }
 
