@@ -56,7 +56,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
   ModularRoute? _searchInModule(Module module, String routerName, Uri uri) {
     uri = uri.normalizePath();
     final routers = module.routes.map((e) {
-      if (e is ChildRoute || e is ChildRoute) {
+      if (e is ChildRoute || e is WildcardRoute) {
         return e.copyWith(currentModule: module);
       } else {
         return e.copyWith(currentModule: e.module);
@@ -122,7 +122,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           var r = _searchRoute(routeChild, tempRouteName, uri);
           if (r != null) {
             r.currentModule?.paths.remove(uri.toString());
-            r = r.copyWith(modulePath: r.modulePath == route.modulePath ? tempRouteName : r.modulePath);
+            r = r.copyWith(modulePath: tempRouteName);
             route = route.copyWith(args: r.args, routerOutlet: [r], uri: uri.replace(path: tempRouteName));
             return route;
           }

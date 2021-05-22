@@ -11,11 +11,12 @@ void main() {
   late final ModularRouterDelegate delegate;
   late final ModularImpl modular;
   final module = ModuleMock();
+  final module2 = Module2Mock();
   final context = Container().createElement();
 
   setUpAll(() {
-    delegate = ModularRouterDelegate(ModularRouteInformationParser(), {'ModuleMock': module});
-    modular = ModularImpl(routerDelegate: delegate, injectMap: {'ModuleMock': module}, flags: ModularFlags());
+    delegate = ModularRouterDelegate(ModularRouteInformationParser(), {'ModuleMock': module, 'Module2Mock': module2});
+    modular = ModularImpl(routerDelegate: delegate, injectMap: {'ModuleMock': module, 'Module2Mock': module2}, flags: ModularFlags());
     modular.init(module);
   });
 
@@ -29,16 +30,15 @@ void main() {
     modular.to.navigate('/start/chat');
     await Future.delayed(Duration(milliseconds: 500));
     expect(modular.to.path, '/start/chat');
-    final list = delegate.routerOutletPages['/start'];
+    final list = delegate.routerOutletPages['/start/'];
     expect(list?.isNotEmpty, true);
     expect(list?.last.router.path, '/start/chat');
   });
 
-  test('search route  outlet in other outlet', () async {
+  test('search route outlet in other outlet', () async {
     modular.to.navigate('/start/home/tab1');
     await Future.delayed(Duration(milliseconds: 500));
     final list = delegate.routerOutletPages['/start/home'];
-    print(list);
     expect(modular.to.path, '/start/home/tab1');
     expect(list?.isNotEmpty, true);
     expect(list?.last.router.path, '/start/home/tab1');
@@ -49,13 +49,17 @@ void main() {
 class ModuleMock extends Module {
   @override
   final List<ModularRoute> routes = [
+    ChildRoute('/', child: (context, args) => Container()),
+    ModuleRoute('/start', module: Module2Mock()),
+  ];
+}
+
+class Module2Mock extends Module {
+  @override
+  final List<ModularRoute> routes = [
     ChildRoute(
       '/',
-      child: (context, args) => Container(),
-    ),
-    ChildRoute(
-      '/start',
-      child: (context, args) => Scaffold(),
+      child: (context, args) => RouterOutlet(),
       children: [
         ChildRoute('/home', child: (context, args) => TextField(), children: [
           ChildRoute('/tab1', child: (context, args) => const Text('tab1')),

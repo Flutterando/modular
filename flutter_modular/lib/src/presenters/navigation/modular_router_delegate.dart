@@ -139,10 +139,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
     var routerPageCandidate = router;
 
-    var mapPage = <String, List<ModularPage<dynamic>>>{};
-
     while (routerPageCandidate.routerOutlet.isNotEmpty) {
-      mapPage = {routerPageCandidate.path!: routerPageCandidate.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList()};
+      final mapPage = {routerPageCandidate.path!: routerPageCandidate.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList()};
       if (mapPage.isNotEmpty) {
         routerOutletPages.addAll(mapPage);
       }

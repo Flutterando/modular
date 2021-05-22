@@ -14,25 +14,16 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
   final GlobalKey<NavigatorState> navigatorKey;
 
   final ModularRouterDelegate modularRouterDelegate;
-  late String path;
+  String path = '';
 
-  RouterOutletDelegate(this.modularRouterDelegate, this.navigatorKey) {
-    path = modularRouterDelegate.currentConfiguration!.path!;
-    _getPages();
-  }
+  RouterOutletDelegate(this.modularRouterDelegate, this.navigatorKey);
 
   List<ModularPage> pages = [];
 
   List<ModularPage> _getPages() {
-    if (modularRouterDelegate.currentConfiguration?.path != path) {
-      return pages;
-    }
-
     if (modularRouterDelegate.routerOutletPages.containsKey(path)) {
       final list = modularRouterDelegate.routerOutletPages[path] ?? [];
-      pages = [
-        ...list
-      ];
+      pages = [...list];
     }
 
     return pages;
@@ -40,6 +31,10 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
 
   @override
   Widget build(BuildContext context) {
+    if (path.isEmpty) {
+      final modal = (ModalRoute.of(context)?.settings as ModularPage);
+      path = modal.router.path ?? '';
+    }
     final _pages = _getPages();
     return _pages.isEmpty
         ? Material()
