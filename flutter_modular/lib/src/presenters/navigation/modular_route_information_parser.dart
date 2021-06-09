@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../flutter_modular.dart';
-import '../../../flutter_modular.dart';
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
