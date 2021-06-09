@@ -15,7 +15,9 @@ class Inject<T> {
     if (bind == null) {
       return Modular.get<B>(typesInRequestList: typesInRequest);
     } else {
-      final candidateId = overrideBinds?.indexWhere((element) => element.runtimeType == bind.runtimeType) ?? -1;
+      final candidateId = overrideBinds?.indexWhere(
+              (element) => element.runtimeType == bind.runtimeType) ??
+          -1;
       if (candidateId == -1) {
         return bind.inject(this);
       } else {
