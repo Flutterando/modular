@@ -2,22 +2,24 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('test async bind', () async {
-    final module = AsyncModule();
-    final boolVar = module.getBind<bool>(typesInRequest: []);
-    expect(boolVar, equals(true));
-    await module.isReady();
-    final string = module.getBind<String>(typesInRequest: []);
-    expect(string, equals('Async Kuringa'));
-  });
+  group('AsyncBind', () {
+    test('by itself', () async {
+      final module = AsyncModule();
+      final boolVar = module.getBind<bool>(typesInRequest: []);
+      expect(boolVar, isTrue);
+      await module.isReady();
+      final string = module.getBind<String>(typesInRequest: []);
+      expect(string, equals('Async Kuringa'));
+    });
 
-  test('GetAsync', () async {
-    Modular.init(AsyncModule());
-    final boolVar = Modular.get<bool>();
-    expect(boolVar, equals(true));
-    await Modular.isModuleReady<AsyncModule>();
-    final string = Modular.get<String>();
-    expect(string, equals('Async Kuringa'));
+    test('with Modular', () async {
+      Modular.init(AsyncModule());
+      final boolVar = Modular.get<bool>();
+      expect(boolVar, isTrue);
+      await Modular.isModuleReady<AsyncModule>();
+      final string = Modular.get<String>();
+      expect(string, equals('Async Kuringa'));
+    });
   });
 }
 
