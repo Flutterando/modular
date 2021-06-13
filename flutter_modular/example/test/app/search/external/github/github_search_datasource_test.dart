@@ -6,13 +6,18 @@ import 'package:mocktail/mocktail.dart';
 
 class ClientMock extends Mock implements Client {}
 
+class FakeUri extends Fake implements Uri {}
+
 main() {
   var client = ClientMock();
   var datasource = GithubSearchDatasource(client);
 
+  setUpAll(() {
+    registerFallbackValue(FakeUri());
+  });
+
   test('deve retornar um ResultModel', () async {
-    when(() => client
-            .get(Uri.parse("https://api.github.com/search/users?q=textSearch")))
+    when(() => client.get(any()))
         .thenAnswer((_) async => Response(jsonResponse, 200));
 
     var result = await datasource.searchText("jacob");

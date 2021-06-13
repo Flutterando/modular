@@ -9,6 +9,8 @@ import 'package:flutter_modular_test/flutter_modular_test.dart';
 
 class HttpMock extends Mock implements Client {}
 
+class FakeUri extends Fake implements Uri {}
+
 main() {
   var client = HttpMock();
 
@@ -19,9 +21,12 @@ main() {
     ],
   );
 
+  setUpAll(() {
+    registerFallbackValue(FakeUri());
+  });
+
   test('deve executar usecase search_by_text', () async {
-    when(() => client
-            .get(Uri.parse("https://api.github.com/search/users?q=textSearch")))
+    when(() => client.get(any()))
         .thenAnswer((_) async => Response(jsonResponse, 200));
 
     var usecase = Modular.get<SearchByText>();
