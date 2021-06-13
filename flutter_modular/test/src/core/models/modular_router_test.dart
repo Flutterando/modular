@@ -71,17 +71,6 @@ void main() {
       });
     });
 
-    test('should make copy with implementation', () {
-      final model = ModularRouteImpl('/', module: ModuleMock());
-      final copy = model.copyWith();
-      expect(copy.module, isA<ModuleMock>());
-      final copy2 = model.copyWith(uri: Uri.parse('/home'));
-      expect(copy2.module, isA<ModuleMock>());
-      expect(copy2.path, '/home');
-      expect(copy.hashCode, equals(copy2.hashCode));
-      expect(copy == copy2, true);
-    });
-
     group('creates a copy', () {
       test('similar to the original', () {
         final original = ModularRouteImpl('/', module: ModuleMock());
