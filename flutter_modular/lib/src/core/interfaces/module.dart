@@ -17,10 +17,10 @@ class _ImmutableValue {
 abstract class Module {
   final Map<Type, dynamic> _singletonBinds = {};
 
-  List<Bind> get binds => [];
-  List<ModularRoute> get routes => [];
+  List<Bind> get binds => const [];
+  List<ModularRoute> get routes => const [];
 
-  List<Module> get imports => [];
+  List<Module> get imports => const [];
   final _immutableValue = _ImmutableValue();
 
   Module() {
