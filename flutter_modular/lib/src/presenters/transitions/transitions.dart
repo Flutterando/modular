@@ -4,6 +4,7 @@ import '../../core/models/modular_arguments.dart';
 import '../modular_base.dart';
 import 'page_transition.dart';
 
+///Navigation Animate Fade In transition
 PageRouteBuilder<T> fadeInTransition<T>(
     Widget Function(
   BuildContext,
@@ -26,7 +27,11 @@ PageRouteBuilder<T> fadeInTransition<T>(
       });
 }
 
-PageRouteBuilder<T> noTransition<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate No Transition
+PageRouteBuilder<T> noTransition<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageRouteBuilder(
       settings: settings,
       transitionDuration: transitionDuration,
@@ -35,7 +40,11 @@ PageRouteBuilder<T> noTransition<T>(Widget Function(BuildContext, ModularArgumen
       });
 }
 
-PageRouteBuilder<T> rightToLeft<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Rigth to Left
+PageRouteBuilder<T> rightToLeft<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -46,7 +55,11 @@ PageRouteBuilder<T> rightToLeft<T>(Widget Function(BuildContext, ModularArgument
   );
 }
 
-PageRouteBuilder<T> leftToRight<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Left to Rigth
+PageRouteBuilder<T> leftToRight<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -57,7 +70,11 @@ PageRouteBuilder<T> leftToRight<T>(Widget Function(BuildContext, ModularArgument
   );
 }
 
-PageRouteBuilder<T> upToDown<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Up to Down
+PageRouteBuilder<T> upToDown<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -68,7 +85,11 @@ PageRouteBuilder<T> upToDown<T>(Widget Function(BuildContext, ModularArguments) 
   );
 }
 
-PageRouteBuilder<T> downToUp<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Down to Up
+PageRouteBuilder<T> downToUp<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -79,7 +100,11 @@ PageRouteBuilder<T> downToUp<T>(Widget Function(BuildContext, ModularArguments) 
   );
 }
 
-PageRouteBuilder<T> scale<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Scale
+PageRouteBuilder<T> scale<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -90,7 +115,11 @@ PageRouteBuilder<T> scale<T>(Widget Function(BuildContext, ModularArguments) bui
   );
 }
 
-PageRouteBuilder<T> rotate<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Rotate
+PageRouteBuilder<T> rotate<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -101,7 +130,11 @@ PageRouteBuilder<T> rotate<T>(Widget Function(BuildContext, ModularArguments) bu
   );
 }
 
-PageRouteBuilder<T> size<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Size Up
+PageRouteBuilder<T> size<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -112,7 +145,11 @@ PageRouteBuilder<T> size<T>(Widget Function(BuildContext, ModularArguments) buil
   );
 }
 
-PageRouteBuilder<T> rightToLeftWithFade<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Right to Left With Fade
+PageRouteBuilder<T> rightToLeftWithFade<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,
@@ -123,7 +160,11 @@ PageRouteBuilder<T> rightToLeftWithFade<T>(Widget Function(BuildContext, Modular
   );
 }
 
-PageRouteBuilder<T> leftToRightWithFade<T>(Widget Function(BuildContext, ModularArguments) builder, Duration transitionDuration, RouteSettings settings) {
+///Navigation Animate Left to Right With Fade
+PageRouteBuilder<T> leftToRightWithFade<T>(
+    Widget Function(BuildContext, ModularArguments) builder,
+    Duration transitionDuration,
+    RouteSettings settings) {
   return PageTransition<T>(
     settings: settings,
     duration: transitionDuration,

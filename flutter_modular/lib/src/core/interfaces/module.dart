@@ -68,7 +68,8 @@ abstract class Module {
       return bindValue;
     }
 
-    var bind = binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => BindEmpty());
+    var bind = binds.firstWhere((b) => b.inject is T Function(Inject),
+        orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       typesInRequest.remove(type);
       return null;

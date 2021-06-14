@@ -8,12 +8,15 @@ import '../modular_base.dart';
 
 bool _firstParse = false;
 
-class ModularRouteInformationParser extends RouteInformationParser<ModularRoute> {
+class ModularRouteInformationParser
+    extends RouteInformationParser<ModularRoute> {
   @override
-  Future<ModularRoute> parseRouteInformation(RouteInformation routeInformation) async {
+  Future<ModularRoute> parseRouteInformation(
+      RouteInformation routeInformation) async {
     late final String path;
     if (!_firstParse) {
-      if (routeInformation.location == null || routeInformation.location == '/') {
+      if (routeInformation.location == null ||
+          routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = initialRouteDeclaratedInMaterialApp;
       } else {
@@ -74,13 +77,17 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return null;
   }
 
-  ModularRoute? _normalizeRoute(ModularRoute route, String routerName, Uri uri) {
+  ModularRoute? _normalizeRoute(
+      ModularRoute route, String routerName, Uri uri) {
     ModularRoute? router;
     if (routerName == uri.path || routerName == "${uri.path}/") {
       //router = route.module!.routes[0];
-      router = route.module!.routes.firstWhere((element) => element.routerName == '/', orElse: () => route.module!.routes[0]);
+      router = route.module!.routes.firstWhere(
+          (element) => element.routerName == '/',
+          orElse: () => route.module!.routes[0]);
       if (router.module != null) {
-        var _routerName = (routerName + route.routerName).replaceFirst('//', '/');
+        var _routerName =
+            (routerName + route.routerName).replaceFirst('//', '/');
         router = _searchInModule(route.module!, _routerName, uri);
       } else {
         router = router.copyWith(uri: uri.replace(path: routerName));
@@ -92,9 +99,11 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
   }
 
   ModularRoute? _searchRoute(ModularRoute route, String routerName, Uri uri) {
-    final tempRouteName = (routerName + route.routerName).replaceFirst('//', '/');
+    final tempRouteName =
+        (routerName + route.routerName).replaceFirst('//', '/');
     if (route.child == null) {
-      var _routerName = ('$routerName${route.routerName}/').replaceFirst('//', '/');
+      var _routerName =
+          ('$routerName${route.routerName}/').replaceFirst('//', '/');
       var router = _normalizeRoute(route, _routerName, uri);
 
       if (router != null) {
@@ -102,7 +111,10 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           modulePath: router.modulePath == null ? '/' : tempRouteName,
           currentModule: route.currentModule,
           guardedRoute: router.guardedRoute ?? route.guardedRoute,
-          guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
+          guards: [
+            if (route.guards != null) ...route.guards!,
+            if (router.guards != null) ...router.guards!
+          ],
         );
 
         if (router.transition == TransitionType.defaultTransition) {
@@ -123,13 +135,17 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           if (r != null) {
             r.currentModule?.paths.remove(uri.toString());
             r = r.copyWith(modulePath: tempRouteName);
-            route = route.copyWith(args: r.args, routerOutlet: [r], uri: uri.replace(path: tempRouteName));
+            route = route.copyWith(
+                args: r.args,
+                routerOutlet: [r],
+                uri: uri.replace(path: tempRouteName));
             return route;
           }
         }
       }
 
-      if (Uri.parse(tempRouteName).pathSegments.length != uri.pathSegments.length) {
+      if (Uri.parse(tempRouteName).pathSegments.length !=
+          uri.pathSegments.length) {
         return null;
       }
       var parseRoute = _parseUrlParams(route, tempRouteName, uri);
@@ -147,7 +163,8 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return null;
   }
 
-  String resolveOutletModulePath(String tempRouteName, String outletModulePath) {
+  String resolveOutletModulePath(
+      String tempRouteName, String outletModulePath) {
     var temp = '$tempRouteName/$outletModulePath'.replaceAll('//', '/');
     if (temp.characters.last == '/') {
       return temp.substring(0, temp.length - 1);
@@ -166,7 +183,8 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return newUrl.join("/");
   }
 
-  ModularRoute _parseUrlParams(ModularRoute router, String routeNamed, Uri uri) {
+  ModularRoute _parseUrlParams(
+      ModularRoute router, String routeNamed, Uri uri) {
     if (routeNamed.contains('/:')) {
       final regExp = RegExp(
         "^${prepareToRegex(routeNamed)}\$",
@@ -186,17 +204,20 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
             var paramName = routePart.replaceFirst(':', '');
             if (pathParts[paramPos].isNotEmpty) {
               params[paramName] = pathParts[paramPos];
-              routeNamed = routeNamed.replaceFirst(routePart, params[paramName]!);
+              routeNamed =
+                  routeNamed.replaceFirst(routePart, params[paramName]!);
             }
           }
           paramPos++;
         }
         uri = uri.replace(path: routeNamed);
-        return router.copyWith(args: router.args.copyWith(params: params, uri: uri), uri: uri);
+        return router.copyWith(
+            args: router.args.copyWith(params: params, uri: uri), uri: uri);
       }
 
       uri = uri.replace(path: routeNamed);
-      return router.copyWith(args: router.args.copyWith(params: null, uri: uri), uri: uri);
+      return router.copyWith(
+          args: router.args.copyWith(params: null, uri: uri), uri: uri);
     }
 
     uri = uri.replace(path: routeNamed);
@@ -213,12 +234,17 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     final length = segments.length;
     for (var i = 0; i < length; i++) {
       final localPath = segments.join('/');
-      final route = _searchInModule(module, "", Uri.parse(localPath.isEmpty ? '/' : localPath));
+      final route = _searchInModule(
+          module, "", Uri.parse(localPath.isEmpty ? '/' : localPath));
       if (route != null) {
         if (route.children.isNotEmpty && route.routerName != '/') {
-          finded = route.children.last.routerName == '**' ? route.children.last : null;
+          finded = route.children.last.routerName == '**'
+              ? route.children.last
+              : null;
         } else {
-          finded = route.currentModule?.routes.last.routerName == '**' ? route.currentModule?.routes.last : null;
+          finded = route.currentModule?.routes.last.routerName == '**'
+              ? route.currentModule?.routes.last
+              : null;
         }
         route.currentModule?.paths.remove(localPath);
         break;
@@ -230,15 +256,17 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return finded?.routerName == '**' ? finded : null;
   }
 
-  Future<ModularRoute> selectRoute(String path, {Module? module, dynamic arguments}) async {
+  Future<ModularRoute> selectRoute(String path,
+      {Module? module, dynamic arguments}) async {
     if (path.isEmpty) {
-      throw Exception("Router can not be empty");
+      throw Exception("Route can not be empty");
     }
     var uri = Uri.parse(path);
     var router = _searchInModule(module ?? Modular.initialModule, "", uri);
 
     if (router != null) {
-      router = router.copyWith(args: router.args.copyWith(uri: router.uri, data: arguments));
+      router = router.copyWith(
+          args: router.args.copyWith(uri: router.uri, data: arguments));
       return canActivate(router.path!, router);
     } else {
       router = _searchWildcard(uri.path, module ?? Modular.initialModule);
@@ -261,7 +289,8 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return router;
   }
 
-  Future<ModularRoute> _checkGuard(String path, ModularRoute router, [bool isRouterOutlet = false]) async {
+  Future<ModularRoute> _checkGuard(String path, ModularRoute router,
+      [bool isRouterOutlet = false]) async {
     for (var guard in router.guards ?? []) {
       try {
         final result = await guard.canActivate(path, router);
@@ -280,7 +309,8 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         rethrow;
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
-        throw ModularError('RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
+        throw ModularError(
+            'RouteGuard error. Check ($path) in ${router.currentModule.runtimeType}');
       }
     }
     return router;
