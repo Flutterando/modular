@@ -117,11 +117,11 @@ class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
-  final List<Bind> binds = [];
+  List<Bind> get binds => [];
 
   // Provide all the routes for your module
   @override
-  final List<ModularRoute> routes = [];
+  List<ModularRoute> get routes => [];
 
 }
 ```
@@ -147,12 +147,12 @@ You can create as many modules in your project as you wish:
 ```dart
 class HomeModule extends Module {
   @override
-  final List<Bind> binds = [
+  List<Bind> get binds => [
     Bind.singleton((i) => HomeBloc()),
   ];
 
   @override
-  final List<ModularRoute> routes = [
+  List<ModularRoute> get routes => [
     ChildRoute('/', child: (_, args) => HomeWidget()),
     ChildRoute('/list', child: (_, args) => ListWidget()),
   ];
@@ -166,7 +166,7 @@ You may then pass the submodule to a `Route` in your main module through the `mo
 class AppModule extends Module {
 
   @override
-  final List<ModularRoute> routes = [
+  List<ModularRoute> get routes => [
     ModuleRoute('/home', module: HomeModule()),
   ];
 }
@@ -186,11 +186,11 @@ class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
-  final List<Bind> binds = [];
+  List<Bind> get binds => [];
 
   // Provide all the routes for your module
   @override
-  final List<ModularRoute>  routes = [
+  List<ModularRoute> get routes => [
       // Simple route using the ChildRoute
       ChildRoute('/', child: (_, __) => HomePage()),
       ChildRoute('/login', child: (_, __) => LoginPage()),
@@ -210,7 +210,7 @@ You can use dynamic routing system to provide parameters to your `Route`:
 // using square brackets notation (['parameter_name']).
 
 @override
-final List<ModularRoute> routes = [
+List<ModularRoute> get routes => [
   ChildRoute(
     '/product/:id',
     child: (_, args) => Product(id: args.params['id']),
@@ -229,7 +229,7 @@ You can use it with more than one page too. For example:
 
 ```dart
 @override
-final List<ModularRoute> routes = [
+List<ModularRoute> get routes => [
   // We are sending an ID to the DetailPage
   ChildRoute(
     '/product/:id/detail',
@@ -269,7 +269,7 @@ And it will be available in the `args.data` property instead of `args.params`:
 
 ```dart
 @override
-final List<ModularRoute> routes = [
+List<ModularRoute> get routes => [
   ChildRoute(
     '/product',
     child: (_, args) => Product(model: args.data),
@@ -282,7 +282,7 @@ You can retrieve the arguments from binds directly too:
 ```dart
 
 @override
-final List<Bind> binds = [
+List<Bind> get binds => [
   Bind.singleton((i) => MyController(data: i.args.data)),
 ];
 
@@ -295,7 +295,7 @@ To achieve this, pass the type you expect to return as type parameter to `Route`
 
 ```dart
 @override
-final List<ModularRoute> routes = [
+List<ModularRoute> get routes => [
   // This router expects to receive a `String` when popped.
   ChildRoute<String>('/event', child: (_, __) => EventPage()),
 ]
@@ -336,7 +336,7 @@ To use your `RouteGuard` in a route, pass it to the `guards` parameter:
 
 ```dart
 @override
-final List<ModularRoute> routes = [
+List<ModularRoute> get routes => [
   final ModuleRoute('/', module: HomeModule()),
   final ModuleRoute(
     '/admin',
@@ -353,7 +353,7 @@ Add a routing route if `RouteGuard` validation fails by adding the `guardedRoute
 
 ```dart
 @override
-final List<ModularRoute> routes = [
+List<ModularRoute> get routes => [
     ChildRoute(
       '/home',
       child: (context, args) => HomePage(),
@@ -528,7 +528,7 @@ class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
-  final List<Bind> binds = [
+  List<Bind> get binds => [
     Bind((i) => AppBloc()),
     Bind.factory((i) => AppBloc()),
     Bind.instance(myObject),
@@ -545,8 +545,8 @@ class AppModule extends Module {
 Instantiate the class whenever it gets called.
 
 ```dart
-@override
-  final List<Bind> binds = [
+  @override
+  List<Bind> get binds => [
     Bind.factory((i) => AppBloc()),
   ];
 ```
@@ -556,8 +556,8 @@ Instantiate the class whenever it gets called.
 Use a class that has already been instantiated.
 
 ```dart
-@override
-  final List<Bind> binds = [
+  @override
+  List<Bind> get binds => [
     Bind.instance((i) => AppBloc()),
   ];
 ```
@@ -567,8 +567,8 @@ Use a class that has already been instantiated.
 Create a Global instance of a class.
 
 ```dart
-@override
-  final List<Bind> binds = [
+  @override
+  List<Bind> get binds => [
     Bind.singleton((i) => AppBloc()),
   ];
 ```
@@ -579,7 +579,7 @@ Create a Global instance of a class only when it gets called for the first time.
 
 ```dart
 @override
-  final List<Bind> binds = [
+  List<Bind> get binds => [
     Bind.lazySingleton((i) => AppBloc()),
   ];
 ```
@@ -614,12 +614,12 @@ If you want to ensure that all `AsyncBinds` are resolved before a Module is load
 ```dart
 class AppModule extends Module {
   @override
-  final List<Bind> binds = [
+  List<Bind> get binds => [
     AsyncBind((i)=> SharedPreferences.getInstance()),
   ];
 
   @override
-  final List<ModularRoute> routes = [
+  List<ModularRoute> get routes => [
     ModuleRoute(Modular.initialRoute, module: HomeModule(), guards: [HomeGuard()]),
   ];
 }
@@ -717,7 +717,7 @@ class _MyWidgetState extends ModularState<MyWidget, HomeStore> {
 class TabModule extends WidgetModule {
 
   @override
-  final List<Bind> binds => [
+  List<Bind> binds => [
     Bind((i) => TabBloc(repository: i())),
     Bind((i) => TabRepository()),
   ];
@@ -768,10 +768,10 @@ You can only have one `RouterOutlet` per page and it is only able to browse the 
 
   class StartModule extends Module {
       @override
-      final List<Bind> binds = [];
+      List<Bind> get binds => [];
 
       @override
-      final List<ModularRoute> routes = [
+      List<ModularRoute> get routes => [
         ChildRoute(
           '/start',
           child: (context, args) => StartPage(),
