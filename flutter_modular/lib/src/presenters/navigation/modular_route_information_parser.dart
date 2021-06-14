@@ -66,7 +66,7 @@ class ModularRouteInformationParser
       }
     }).toList();
     routers.sort((preview, actual) {
-      return preview.routerName.contains('/:') ? 1 : 0;
+      return preview.routerName.contains('/:string') ? 1 : 0;
     });
     for (var route in routers) {
       var r = _searchRoute(route, routerName, uri);
