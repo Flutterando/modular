@@ -103,36 +103,20 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       if (fromModular && (routeIsInModule && !isDuplicatedPage)) {
         _pages.add(page);
       } else {
-        if (fromModular) {
-          for (var p in _pages) {
-            p.completePop(null);
-            removeInject(p.router.path!);
-            for (var r in p.router.routerOutlet) {
-              removeInject(r.path!);
-            }
-          }
-          if (replaceAll) {
-            _pages = [page];
-          } else if (_pages.last.router.path != router.path) {
-            _pages.last = page;
-          } else {
-            _pages.last.router.routerOutlet.clear();
-            _pages.last.router.routerOutlet.add(router.routerOutlet.last);
-          }
-        } else {
-          ///
-          /// The `fromModular` flag prevents all pages in `_pages` from being replaced
-          /// when navigating with the browser's back button
-          ///
-
-          _lastPageModule.completePop(null);
-          removeInject(_lastPageModule.router.path!);
-          for (var r in _lastPageModule.router.routerOutlet) {
+        for (var p in _pages) {
+          p.completePop(null);
+          removeInject(p.router.path!);
+          for (var r in p.router.routerOutlet) {
             removeInject(r.path!);
           }
-
-          _pages.remove(_lastPageModule);
-          _pages.add(page);
+        }
+        if (replaceAll) {
+          _pages = [page];
+        } else if (_pages.last.router.path != router.path) {
+          _pages.last = page;
+        } else {
+          _pages.last.router.routerOutlet.clear();
+          _pages.last.router.routerOutlet.add(router.routerOutlet.last);
         }
       }
     }
