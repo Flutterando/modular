@@ -60,6 +60,10 @@ vars:
 scripts:
   mobx_build: $clean & $get & $runner build --delete-conflicting-outputs
   mobx_watch: $clean & $get & $runner watch --delete-conflicting-outputs
+  
+  # dependency_overrides: 
+  #   flutter_modular:
+  #     path: /home/diogo/Documentos/estudos/modular/flutter_modular
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
