@@ -46,13 +46,22 @@ class ModularImpl implements ModularInterface {
     }
   }
 
+  List<dynamic> _getAllSingletons() {
+    final list = <dynamic>[];
+    for (var key in injectMap.keys) {
+      final module = injectMap[key]!;
+      list.addAll(module.instanciatedSingletons);
+    }
+    return list;
+  }
+
   @override
   void bindModule(Module module, [String path = '']) {
     final name = module.runtimeType.toString();
     if (!injectMap.containsKey(name)) {
       module.paths.add(path);
       injectMap[name] = module;
-      module.instance();
+      module.instance(_getAllSingletons());
       debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
       // Add the new path only if the last path in paths list is different from the current one
