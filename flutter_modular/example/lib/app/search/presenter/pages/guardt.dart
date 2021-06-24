@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
 class GuardT extends RouteGuard {
-  GuardT(String guardedRoute) : super(guardedRoute);
-
+  final String guardedRoute;
+  GuardT(this.guardedRoute) : super();
 
   @override
   Future<bool> canActivate(String path, ModularRoute router) async {
