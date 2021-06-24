@@ -100,7 +100,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
 
       var isDuplicatedPage = duplicatePage.router is! ModularRouteEmpty;
 
-      if (fromModular && (routeIsInModule && !isDuplicatedPage)) {
+      if (fromModular && routeIsInModule && !isDuplicatedPage && !replaceAll) {
         _pages.add(page);
       } else {
         for (var p in _pages) {
