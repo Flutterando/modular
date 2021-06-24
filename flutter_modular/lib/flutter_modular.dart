@@ -2,6 +2,7 @@ library flutter_modular;
 
 export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
 
+export 'src/core/errors/errors.dart';
 export 'src/core/interfaces/disposable.dart';
 export 'src/core/interfaces/modular_navigator_interface.dart';
 export 'src/core/interfaces/modular_route.dart';
