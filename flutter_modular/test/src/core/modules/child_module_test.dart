@@ -74,12 +74,12 @@ main() {
   });
 
   test('should Create a instance of all binds isn\'t lazy Loaded', () {
-    module.instance();
+    module.instance([]);
     expect(module.getBind<bool>(typesInRequest: [bool]), equals(true));
   });
 
   test('should remove bind', () {
-    module.instance();
+    module.instance([]);
     expect(module.getBind<bool>(typesInRequest: [bool]), equals(true));
 
     module.remove<bool>();
@@ -99,7 +99,7 @@ main() {
   });
 
   test('should clean all injections', () {
-    module.instance();
+    module.instance([]);
     expect(module.getBind<bool>(typesInRequest: [bool]), equals(true));
     expect(module.getBind<StreamController>(typesInRequest: [StreamController]), isA<StreamController>());
     expect(module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]), isA<ChangeNotifier>());
@@ -111,5 +111,10 @@ main() {
     expect(() => module.getBind<StreamController>(typesInRequest: [StreamController]), throwsA(isA<ModularError>()));
 
     expect(() => module.getBind<ChangeNotifier>(typesInRequest: [ChangeNotifier]), throwsA(isA<ModularError>()));
+  });
+
+  test('should instance when container in list of singletons', () {
+    module.instance([true]);
+    expect(() => module.getBind<bool>(typesInRequest: [bool]), throwsA(isA<ModularError>()));
   });
 }

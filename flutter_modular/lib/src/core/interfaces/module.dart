@@ -23,6 +23,8 @@ abstract class Module {
   final List<Module> imports = [];
   final _immutableValue = _ImmutableValue();
 
+  List<dynamic> get instanciatedSingletons => _singletonBinds.values.toList();
+
   Module() {
     for (var module in imports) {
       final list = <Bind>[];
@@ -142,12 +144,32 @@ ${typesInRequest.join('\n')}
   }
 
   /// Create a instance of all binds isn't lazy Loaded
-  void instance() {
-    for (final bindElement in binds) {
+  void instance(List<dynamic> singletons) {
+    final _filtedBinds = List<Bind>.from(binds)..removeWhere((e) => _removeBindFromInstacedSingletons(e, singletons));
+
+    for (final bindElement in _filtedBinds) {
       if (!bindElement.isLazy) {
         var b = bindElement.inject(Inject());
         _singletonBinds[b.runtimeType] = b;
       }
     }
+  }
+
+  bool _removeBindFromInstacedSingletons(Bind<Object> bind, List<dynamic> singletons) {
+    if (bind.isLazy) {
+      return false;
+    }
+    var remove = false;
+    for (var singleton in singletons) {
+      remove = _existBind(singleton, bind.inject);
+      if (remove) {
+        break;
+      }
+    }
+    return remove;
+  }
+
+  bool _existBind<T>(T instance, T Function(Inject<dynamic>) inject) {
+    return inject is T Function(Inject);
   }
 }
