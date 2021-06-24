@@ -156,6 +156,9 @@ ${typesInRequest.join('\n')}
   }
 
   bool _removeBindFromInstacedSingletons(Bind<Object> bind, List<dynamic> singletons) {
+    if (bind.isLazy) {
+      return false;
+    }
     var remove = false;
     for (var singleton in singletons) {
       remove = _existBind(singleton, bind.inject);
