@@ -1,3 +1,13 @@
+## [3.3.0] - 2021-06-25
+
+* Fix popUntil
+* Fix pushNamedAndRemoveUntil
+* Fix premature instanciation of singleton when flag experimentalNotAllowedParentBinds is true
+* Fix back and forward browser buttons navigation
+* Remove RxDart dependency
+* Export ModularError interface
+* Multiples RouterOutlets
+
 ## [3.2.2+1] - 2021-05-19
 
 * Fix popAndPushNamed
