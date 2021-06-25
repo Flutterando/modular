@@ -338,7 +338,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   void pop<T extends Object>([T? result]) => navigator.pop(result);
 
   @override
-  void popUntil(bool Function(Route) predicate) => navigator.popUntil(predicate);
+  void popUntil(bool Function(Route) predicate) {
+    final isFoundedPages = _pages.where((page) => predicate(_CustomRoute(page)));
+    if (isFoundedPages.isEmpty) {
+      navigator.popUntil((route) => route.isFirst);
+    } else {
+      navigator.popUntil(predicate);
+    }
+  }
 
   @override
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(String newRouteName, bool Function(Route) predicate, {Object? arguments, bool forRoot = false}) {
@@ -384,4 +391,31 @@ class RouterStreamparam {
   final dynamic arguments;
 
   RouterStreamparam(this.path, this.arguments);
+}
+
+class _CustomRoute extends ModalRoute {
+  _CustomRoute(RouteSettings settings) : super(settings: settings);
+
+  @override
+  Color? get barrierColor => throw UnimplementedError();
+
+  @override
+  bool get barrierDismissible => throw UnimplementedError();
+
+  @override
+  String? get barrierLabel => throw UnimplementedError();
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    throw UnimplementedError();
+  }
+
+  @override
+  bool get maintainState => throw UnimplementedError();
+
+  @override
+  bool get opaque => throw UnimplementedError();
+
+  @override
+  Duration get transitionDuration => throw UnimplementedError();
 }

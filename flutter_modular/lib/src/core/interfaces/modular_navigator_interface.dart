@@ -1,12 +1,9 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
-abstract class IModularNavigator {
+abstract class IModularNavigator implements Listenable {
   String get path;
   String get localPath;
   String get modulePath;
-
-  void addListener(void Function() listener);
-  void removeListener(void Function() listener);
 
   /// Navigate to a new screen.
   ///
