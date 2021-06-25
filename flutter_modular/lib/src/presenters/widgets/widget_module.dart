@@ -22,6 +22,8 @@ abstract class WidgetModule extends StatelessWidget implements Module {
   @override
   List get instanciatedSingletons => [];
 
+  @visibleForTesting
+  @override
   final List<ModularRoute> routes = const [];
 
   final _FakeModule _fakeModule = _FakeModule();

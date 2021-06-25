@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "flutter_modular_test"
+		},
+		{
+			"path": "..\\testestrouteroutlet"
 		}
 	],
 	"settings": {

@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter_modular_annotations: ^0.0.2
   triple: ">=1.0.0 <2.0.0"
-  rxdart: ^0.26.0 
   flutter:
     sdk: flutter
 

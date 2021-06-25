@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../core/errors/errors.dart';
 import '../../core/interfaces/modular_navigator_interface.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
+import '../../rxdart/local_rxdart.dart';
 import '../modular_base.dart';
 import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
@@ -153,7 +153,6 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     }
 
     if (route.isFirst) {
-      rebuildPages();
       return false;
     }
 
