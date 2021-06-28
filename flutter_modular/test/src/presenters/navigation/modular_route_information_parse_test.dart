@@ -88,19 +88,19 @@ main() {
       expect(route.args.fragment, 'abcd');
     });
 
-    test('should retrive Widcard route when not exist path', () async {
+    test('should retrieve Wildcard route when not exist path', () async {
       final route = await parse.selectRoute('/paulo', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
     });
 
-    test('should retrive Widcard route when path with query params doesnt exist', () async {
+    test('should retrieve Wildcard route when path with query params doesn\'t exist', () async {
       final route = await parse.selectRoute('/paulo?adbc=1234', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
     });
 
-    test('should retrive Widcard route when path with fragment doesnt exist', () async {
+    test('should retrieve Wildcard route when path with fragment doesn\'t exist', () async {
       final route = await parse.selectRoute('/paulo#adbc=1234', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
@@ -112,21 +112,21 @@ main() {
   });
 
   group('Multi Module | ', () {
-    test('should retrive route /mock', () async {
+    test('should retrieve route /mock', () async {
       final route = await parse.selectRoute('/mock', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<SizedBox>());
       expect(route.path, '/mock/');
     });
 
-    test('should retrive route /mock/', () async {
+    test('should retrieve route /mock/', () async {
       final route = await parse.selectRoute('/mock/', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<SizedBox>());
       expect(route.path, '/mock/');
     });
 
-    test('should retrive route /mock/list', () async {
+    test('should retrieve route /mock/list', () async {
       final route = await parse.selectRoute('/mock/list', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<ListView>());
@@ -201,14 +201,14 @@ main() {
       expect(route.args.fragment, 'abcd');
     });
 
-    test('should retrive dynamic route /mock/list/:id', () async {
+    test('should retrieve dynamic route /mock/list/:id', () async {
       final route = await parse.selectRoute('/mock/list/3', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, route.args).toString(), '3');
       expect(route.path, '/mock/list/3');
     });
 
-    test('should retrive Widcard route when not exist path', () async {
+    test('should retrieve Wildcard route when not exist path', () async {
       final route = await parse.selectRoute('/mock/paulo', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
@@ -232,7 +232,7 @@ main() {
   });
 
   group('Outlet Module | ', () {
-    test('should retrive route /home/tab1', () async {
+    test('should retrieve route /home/tab1', () async {
       final route = await parse.selectRoute('/home/tab1', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<Scaffold>());
@@ -241,7 +241,7 @@ main() {
       expect(route.routerOutlet[0].child!(context, ModularArguments()), isA<TextField>());
       expect(route.routerOutlet[0].path, '/home/tab1');
     });
-    test('should retrive route /home/tab2/:id', () async {
+    test('should retrieve route /home/tab2/:id', () async {
       final route = await parse.selectRoute('/home/tab2/3', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<Scaffold>());
@@ -254,7 +254,7 @@ main() {
       expect(parse.selectRoute('/home/tab3', module: ModuleMock()), throwsA(isA<ModularError>()));
     });
 
-    test('should retrive route  (Module)', () async {
+    test('should retrieve route  (Module)', () async {
       final route = await parse.selectRoute('/mock/home', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<SizedBox>());
