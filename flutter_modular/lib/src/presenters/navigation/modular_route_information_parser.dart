@@ -100,7 +100,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
       if (router != null) {
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
-          currentModule: route.currentModule,
+          currentModule: router.currentModule ?? route.currentModule,
           guardedRoute: router.guardedRoute ?? route.guardedRoute,
           guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
         );
@@ -207,27 +207,32 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     String path,
     Module module,
   ) {
-    ModularRoute? finded;
+    ModularRoute? found;
 
-    final segments = path.split('/')..removeLast();
-    final length = segments.length;
-    for (var i = 0; i < length; i++) {
-      final localPath = segments.join('/');
+    var pathSegments = path.split('/')..removeLast();
+    final length = pathSegments.length;
+    for(var i = 0; i < length; i++) {
+      final localPath = pathSegments.join('/');
       final route = _searchInModule(module, "", Uri.parse(localPath.isEmpty ? '/' : localPath));
-      if (route != null) {
-        if (route.children.isNotEmpty && route.routerName != '/') {
-          finded = route.children.last.routerName == '**' ? route.children.last : null;
+
+      if(route != null) {
+        if(route.children.isEmpty) {
+          found = route.currentModule?.routes.last.routerName == '**' ? route.currentModule?.routes.last : null;
         } else {
-          finded = route.currentModule?.routes.last.routerName == '**' ? route.currentModule?.routes.last : null;
+          found = route.children.last.routerName == '**' ? route.children.last : null;
         }
-        route.currentModule?.paths.remove(localPath);
-        break;
-      } else {
-        segments.removeLast();
+        if(route.routerName == '/') {
+          break;
+        }
       }
+
+      if(found != null) {
+        break;
+      }
+      pathSegments.removeLast();
     }
 
-    return finded?.routerName == '**' ? finded : null;
+    return found?.routerName == '**' ? found : null;
   }
 
   Future<ModularRoute> selectRoute(String path, {Module? module, dynamic arguments}) async {
