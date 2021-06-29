@@ -220,9 +220,9 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           found = route.currentModule?.routes.last.routerName == '**' ? route.currentModule?.routes.last : null;
         } else {
           found = route.children.last.routerName == '**' ? route.children.last : null;
-        }
-        if(route.routerName == '/') {
-          break;
+          if(route.routerName != '/') {
+            break;
+          }
         }
       }
 
