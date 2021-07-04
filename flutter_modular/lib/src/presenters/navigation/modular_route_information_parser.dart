@@ -252,12 +252,14 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
   Future<ModularRoute> canActivate(String path, ModularRoute router) async {
     if (router.guards?.isNotEmpty == true) {
       router = await _checkGuard(path, router);
-    } else if (router.routerOutlet.isNotEmpty) {
-      for (final r in router.routerOutlet) {
-        await _checkGuard(path, r, true);
-      }
     }
-
+    if (router.routerOutlet.isNotEmpty) {
+      await Future.forEach(router.routerOutlet.asMap().entries,
+          (MapEntry item) async {
+        router.routerOutlet[item.key] =
+            await _checkGuard(path, item.value, true);
+      });
+    }
     return router;
   }
 
@@ -265,11 +267,11 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     for (var guard in router.guards ?? []) {
       try {
         final result = await guard.canActivate(path, router);
-        if (!result && guard.guardedRoute != null && !isRouterOutlet) {
+        if (!result && guard.guardedRoute != null) {
           print(ModularError('$path is CAN\'T ACTIVATE'));
           print('redirect to \'${guard.guardedRoute}\'');
           return await selectRoute(guard.guardedRoute!);
-        } else if (!result && router.guardedRoute != null && !isRouterOutlet) {
+        } else if (!result && router.guardedRoute != null) {
           print(ModularError('$path is CAN\'T ACTIVATE'));
           print('redirect to \'${router.guardedRoute}\'');
           return await selectRoute(router.guardedRoute!);
