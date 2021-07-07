@@ -52,7 +52,7 @@
 
 ## What is Flutter Modular?
 
-As an application project grows and becomes complex, it's hard to keep your code and project structure maintainable and reusable. Modular provides a bunch of Flutter-suiting solutions to deal with this problem, like dependency injection, routing system and the "disposable singleton" system (that is, Modular disposes the injected module automatically as it is out of scope).
+As an application project grows and becomes complex, it's hard to keep your code and project structure maintainable and reusable. Modular provides a bunch of Flutter-suiting solutions to deal with this problem, like dependency injection, routing system and the "disposable singleton" system (that is, Modular disposes the injected module automatically when it goes out of scope).
 
 Modular's dependency injection system has out-of-the-box support for any state management system, managing your application memory usage.
 
@@ -172,13 +172,13 @@ class AppModule extends Module {
 }
 ```
 
-We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will much easier to maintain and share your code with other projects.
+We recommend that you split your code in various modules, such as `AuthModule`, and place all the routes related to this module within it. By doing so, it will be much easier to maintain and share your code with other projects.
 
-> **NOTE:** Use the ModuleRoute object to create a Complex Route.
+> **NOTE:** Use the `ModuleRoute` object to create a complex Route.
 
 ## Adding routes
 
-The module routes are provided by overriding the `routes` property.
+The module's routes are provided by overriding the `routes` property.
 
 ```dart
 // app_module.dart
@@ -198,7 +198,7 @@ class AppModule extends Module {
 }
 ```
 
-> **NOTE:** Use the ChildRoute object to create a simple route.
+> **NOTE:** Use the `ChildRoute` object to create a simple Route.
 
 ## Dynamic routes
 
@@ -218,7 +218,7 @@ List<ModularRoute> get routes => [
 ];
 ```
 
-The parameter will be pattern-matched when calling the given route. For example:
+The parameters will be pattern-matched when calling the given route. For example:
 
 ```dart
 // In this case, `args.params['id']` will have the value `1`.
@@ -243,7 +243,7 @@ List<ModularRoute> get routes => [
 ];
 ```
 
-As the same of the first example, we just need to call the route. For example:
+The same as in the first example, we just need to call the route. For example:
 
 ```dart
 // In this case, modular will open the page DetailPage with the id of the product equals 1
@@ -259,7 +259,7 @@ This notation, however, is only valid for simple literals.
 
 ### Sending Objects
 
-If you want to pass a complex object to your route, provide it in `arguments` parameter:
+If you want to pass a complex object to your route, provide it in the `arguments` parameter:
 
 ```dart
 Modular.to.navigate('/product', arguments: ProductModel());
@@ -277,7 +277,7 @@ List<ModularRoute> get routes => [
 ];
 ```
 
-You can retrieve the arguments from binds directly too:
+You can also retrieve the arguments directly within binds:
 
 ```dart
 
@@ -290,8 +290,8 @@ List<Bind> get binds => [
 
 ## Route generic types
 
-You can return values from navigation, just like `.pop`.
-To achieve this, pass the type you expect to return as type parameter to `Route`:
+You can return values from navigation, just like with `Navigator.pop`.
+To achieve this, pass the type you expect to return as a type parameter to the `Route`:
 
 ```dart
 @override
@@ -301,7 +301,7 @@ List<ModularRoute> get routes => [
 ]
 ```
 
-Now, use `.pop` as you use with `Navigator.pop`:
+Now, use Modular's `.pop` as you would use `Navigator.pop`:
 
 ```dart
 // Push route
@@ -313,7 +313,7 @@ Modular.to.pop('banana');
 
 ## Route guard
 
-Route guards are middleware-like objects that allow you to control the access of a given route from other route. You can implement a route guard by making a class that `implements RouteGuard`.
+Route guards are middleware-like objects that allow you to control the access of a given route from another route. You can implement a route guard by making a class that `implements RouteGuard`.
 
 For example, the following class will only allow a redirection from `/admin` route:
 
@@ -349,7 +349,7 @@ List<ModularRoute> get routes => [
 
 If placed on a module route, `RouteGuard` will be global to that route.
 
-Add a routing route if `RouteGuard` validation fails by adding the `guardedRoute` property:
+Add a fallback route to be used if `RouteGuard` validation fails by adding the `guardedRoute` property:
 
 ```dart
 @override
@@ -368,15 +368,15 @@ List<ModularRoute> get routes => [
 
 ```
 
-## When and How use navigate or pushNamed
+## When and How to use `navigate` or `pushNamed`
 
 You can use both in your application but need to understand each one.
 
-### pushNamed
+### `pushNamed`
 
-This one makes a route above another route continuously in your stack, but you can go back too to the back page using the back button that you can see on the AppBar, it's like a modal. It's better for `Mobile Applications`.
+This method places the desired route above the current route whenever used, and you can go back to the previous page using the back button that you can see on the `AppBar`. It's like a modal and it's better suited for _Mobile Applications_.
 
-Imagine that you need to go more deep in your routes for example:
+Imagine that you need to go deeper in your routes, for example:
 
 ```dart
 // Initial route
@@ -387,13 +387,13 @@ Modular.to.pushNamed('/home/user');
 Modular.to.pushNamed('/home/user/profile');
 ```
 
-In the end, you can see the back button to go to the previous page because of the idea of a modal, that opens another page above the previous page.
+In the end, you can see the back button to go back to the previous page, reinforcing the idea of a modal page opening on top of the previous page.
 
-### navigate
+### `navigate`
 
-This one removes the previous route from the stack and puts the new route on this stack. Because of this, you'll not see the back button on the AppBar, in this case, it's better for `Web Applications`.
+This one removes all the routes previously in the stack and puts the new route on this stack. Because of this, you'll not see the back button in the `AppBar` in this case. This is better suited for _Web Applications_.
 
-Imagine that you need to make a logout from your Mobile application and need to clean all routes directly from the stack.
+Imagine that you need to make a logout feature for your Mobile Application. As such, you need to clean all routes from the stack.
 
 ```dart
 // Initial route
@@ -415,7 +415,7 @@ To navigate between pages, use `Modular.to.navigate`.
 Modular.to.navigate('/login');
 ```
 
-You can use Relative Navigation to navigate like web
+You can use Relative Navigation to navigate like in the web
 
 ```dart
 // Modules Home → Product
@@ -428,13 +428,13 @@ Modular.to.navigate('../config'); // it's the same as /home/config
 
 ```
 
-You can also stack pages still using old Navigator API.
+You can still stack pages using the old Navigator API.
 
 ```dart
 Navigator.pushNamed(context, '/login');
 ```
 
-Alternatively, you can use `Modular.to.pushNamed`, in which you don't have to provide a `BuildContext`:
+Alternatively, you can use `Modular.to.pushNamed`, to which you don't have to provide a `BuildContext`:
 
 ```dart
 Modular.to.pushNamed('/login');
@@ -445,19 +445,19 @@ Modular.to.pushNamed('/login');
 The routing system can recognize what is in the URL and navigate to a specific part of the application.
 Dynamic routes apply here as well. The following URL, for instance, will open the Product view, with `args.params['id']` set to `1`.
 
-```
+```text
 https://flutter-website.com/#/product/1
 ```
 
-As well could use query parameters or fragment:
+It can deal with query parameters or fragments as well:
 
-```
+```text
 https://flutter-website.com/#/product?id=1
 ```
 
 ## Route transition animation
 
-You can choose which type of animation do you want to be used on your page transition by setting the `Route` `transition` parameter, providing a `TransitionType`.
+You can choose which type of animation you want to be used on your page transition by setting the `Route`'s `transition` parameter, providing a `TransitionType`.
 
 ```dart
 ModuleRoute('/product',
@@ -466,11 +466,11 @@ ModuleRoute('/product',
 ), //use for change transition
 ```
 
-If you use transition in a module, all routes in that module will inherit this transition animation.
+If you specify a transition in a module, all routes within that module will inherit this transition animation.
 
 ### Custom transition animation route
 
-You can also use a custom transition animation by setting the Router parameters `transition` and `customTransition` with `TransitionType.custom` and your `CustomTransition`, respectively:
+You can also use a custom transition animation by setting the Router's `transition` and `customTransition` parameters respectively to `TransitionType.custom` and your `CustomTransition` instance:
 
 ```dart
 ModuleRoute('/product',
@@ -519,9 +519,9 @@ CustomTransition get myCustomTransition => CustomTransition(
 
 ## Dependency Injection
 
-You can inject any class into your module by overriding the `binds` getter of your module. Typical examples to inject are BLoCs, ChangeNotifier classes or stores(MobX).
+You can inject any class into your module by overriding the `binds` getter of your module. Typical examples to inject are BLoCs, `ChangeNotifier` instances or stores (MobX).
 
-A `Bind` object is responsible for configuring the object injection. We have 4 Bind factory types and one AsyncBind.
+A `Bind` object is responsible for configuring the object injection. We have 4 `Bind` factory types and one `AsyncBind`.
 
 ```dart
 class AppModule extends Module {
@@ -553,7 +553,7 @@ Instantiate the class whenever it gets called.
 
 ### Instance
 
-Use a class that has already been instantiated.
+Use an object that has already been instantiated.
 
 ```dart
   @override
@@ -586,11 +586,11 @@ Create a Global instance of a class only when it gets called for the first time.
 
 ## AsyncBind
 
-Some methods from several classes return a Future. To achieve those specific methods you should use AsyncBind instead a normal sync bind.
-Use _Modular.isModuleReady<Module>()_ to wait all AsyncBinds to resolve in order to release the module for use.
+Some methods from several classes return a Future. To inject instances returned by those specific methods you should use `AsyncBind` instead a normal sync bind.
+Use `Modular.isModuleReady<Module>()` to wait for all `AsyncBinds` to resolve in order to release the module for use.
 
-> IMPORTANT: The order of AsyncBind matters if there are interdependencies of other asynchronous binds.
-> For example, if there are two AsyncBinds where **A** depends on **B**, AsyncBind **B** must be declared before **A**. Pay attention to this type of order!
+> IMPORTANT: The order of `AsyncBind` matters if there are interdependencies of other asynchronous binds.
+> For example, if there are two `AsyncBinds` where **A** depends on **B**, `AsyncBind` **B** must be declared before **A**. Pay attention to this type of order!
 
 ```dart
 import 'package:flutter_modular/flutter_modular.dart' show Disposable;
@@ -607,9 +607,9 @@ class AppBloc extends Disposable {
 }
 ```
 
-## isModuleReady
+## `isModuleReady`
 
-If you want to ensure that all `AsyncBinds` are resolved before a Module is loaded into memory: `isModuleReady` is the way to go. One way to use it is with RouteGuard, add the AsyncBind into your AppModule, and a RouteGuard to your ModuleRoute.
+If you want to ensure that all `AsyncBinds` are resolved before a `Module` is loaded into memory, `isModuleReady` is the way to go. One way to use it is with `RouteGuard`, adding an `AsyncBind` into your `AppModule`, and a `RouteGuard` to your `ModuleRoute`.
 
 ```dart
 class AppModule extends Module {
@@ -625,7 +625,7 @@ class AppModule extends Module {
 }
 ```
 
-Then create a RouteGuard like below. This way Modular will evaluate all your async dependencies before going to HomeModule.
+Then, create a `RouteGuard` like follows. This way `Modular` will evaluate all your async dependencies before going to `HomeModule`.
 
 ```dart
 import 'package:flutter_modular/flutter_modular.dart';
@@ -641,7 +641,7 @@ class HomeGuard extends RouteGuard {
 
 ## Retrieving your injected dependencies in the view
 
-Let's assume the following BLoC has been defined and injected in our module (as in the previous example):
+Let's assume the following BLoC has been defined and injected into our module (as in the previous example):
 
 ```dart
 import 'package:flutter_modular/flutter_modular.dart' show Disposable;
@@ -658,7 +658,7 @@ class AppBloc extends Disposable {
 }
 ```
 
-> **NOTE**: Modular automatically calls destruction methods Binds of the type: **Sink/Stream**, **ChangeNotifier** e **[Store/Triple**
+> **NOTE**: Modular automatically calls destruction methods for `Binds` of the types: **Sink/Stream**, **ChangeNotifier** and **[Store/Triple]**
 
 There are several ways to retrieve our injected `AppBloc`.
 
@@ -677,15 +677,15 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## Using Modular widgets to retrieve your class
+## Using `Modular` widgets to retrieve your instances
 
-### ModularState
+### `ModularState`
 
-In this example, we'll use the `MyWidget` like our page because it's a page that needs to be a `StatefulWidget`.
+In this example, we'll use the following `MyWidget` as our page because it's a page that needs to be a `StatefulWidget`.
 
-Let's understand the `ModularState`, for example when we are using the `class _MyWidgetState extends ModularState<MyWidget, HomeStore>` we are linking the modular with our Store in this case the `HomeStore`. When we enter on this screen the HomeStore will be created and will provide for us the `store/controller` variable to use inside the `MyWidget`.
+Let's understand the usage of `ModularState`. When we define `class _MyWidgetState extends ModularState<MyWidget, HomeStore>` we are linking Modular with our Store for this widget (in this case the `HomeStore`). When we enter this page, the `HomeStore` will be created and the `store/controller` variable will be provided to us to be used inside `MyWidget`.
 
-After this, we can use the `store/controller` without any problems. Modular will auto dispose of the `HomeStore` after we close the Page.
+After this, we can use `store/controller` without any problems. Modular will auto dispose of the `HomeStore` after we close the page.
 
 ```dart
 class MyWidget extends StatefulWidget {
@@ -711,7 +711,7 @@ class _MyWidgetState extends ModularState<MyWidget, HomeStore> {
 
 ### WidgetModule
 
-`WidgetModule` has the same structure as `Module`. It is very useful if you want to have a TabBar with modular pages.
+`WidgetModule` has the same structure as `Module`. It is very useful if you want to have a `TabBar` with Modular pages.
 
 ```dart
 class TabModule extends WidgetModule {
@@ -730,7 +730,7 @@ class TabModule extends WidgetModule {
 
 ### Mock the navigation system
 
-We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you may just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
+We though it would be interesting to provide a native way to mock the navigation system when used with `Modular.to` and `Modular.link`. To do this, you can just implement `IModularNavigator` and pass your implementation to `Modular.navigatorDelegate`.
 
 Example using [Mockito](https://github.com/dart-lang/mockito):
 
@@ -756,11 +756,11 @@ class MyNavigatorMock extends Mock implements IModularNavigator {
 }
 ```
 
-This example uses the manual implementation, but you can use the [code generator](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#code-generation) to create your mocks.
+This example uses a manual implementation, but you can also use the [code generator](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#code-generation) to create your mocks.
 
 ### RouterOutlet
 
-Each ModularRoute can have a list of ModularRoutes, so that it can be displayed within the parent ModularRoute.
+Each `ModularRoute` can have a list of `ModularRoutes`, so that it can be displayed within the parent `ModularRoute`.
 The widget that reflects these internal routes is called `RouterOutlet`.
 You can only have one `RouterOutlet` per page and it is only able to browse the children of that page.
 
