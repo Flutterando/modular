@@ -10,8 +10,8 @@ main() {
 
   late final routeInformationParser = ModularRouteInformationParser();
   late final routerDelegate = ModularRouterDelegate(
-    routeInformationParser,
-    injectMap,
+    parser: routeInformationParser,
+    injectMap: injectMap,
   );
   final flags = ModularFlags();
 

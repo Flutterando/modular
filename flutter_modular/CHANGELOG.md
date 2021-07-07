@@ -1,3 +1,8 @@
+## [3.3.1] - 2021-07-07
+
+* Fix popUntil stack overflow
+* Fix navigatorObservers
+
 ## [3.3.0] - 2021-06-25
 
 * Fix popUntil

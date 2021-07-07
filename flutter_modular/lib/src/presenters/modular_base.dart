@@ -23,10 +23,7 @@ final _modularFlags = ModularFlags();
 final Map<String, Module> _injectMap = {};
 
 late final _routeInformationParser = ModularRouteInformationParser();
-late final _routerDelegate = ModularRouterDelegate(
-  _routeInformationParser,
-  _injectMap,
-);
+late final _routerDelegate = ModularRouterDelegate(parser: _routeInformationParser, injectMap: _injectMap);
 
 // ignore: non_constant_identifier_names
 final ModularInterface Modular = ModularImpl(routerDelegate: _routerDelegate, injectMap: _injectMap, flags: _modularFlags);
@@ -36,6 +33,7 @@ String initialRouteDeclaratedInMaterialApp = '/';
 
 extension ModularExtensionMaterial on MaterialApp {
   MaterialApp modular() {
+    _routerDelegate.setObserver(navigatorObservers ?? <NavigatorObserver>[]);
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
     final app = MaterialApp.router(
@@ -76,6 +74,8 @@ extension ModularExtensionMaterial on MaterialApp {
 
 extension ModularExtensionCupertino on CupertinoApp {
   CupertinoApp modular() {
+    _routerDelegate.setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+
     _modularFlags.isCupertino = true;
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 

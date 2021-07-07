@@ -5,9 +5,10 @@ import '../modular_base.dart';
 class CustomNavigator extends Navigator {
   CustomNavigator({
     Key? key,
+    List<NavigatorObserver> observers = const <NavigatorObserver>[],
     List<Page<dynamic>> pages = const <Page<dynamic>>[],
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-  }) : super(key: key, pages: pages, onPopPage: onPopPage);
+  }) : super(key: key, pages: pages, onPopPage: onPopPage, observers: observers);
 
   @override
   _CustomNavigatorState createState() => _CustomNavigatorState();
@@ -32,10 +33,5 @@ class _CustomNavigatorState extends NavigatorState {
   @override
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments}) {
     return Modular.to.pushReplacementNamed<T, TO>(routeName, result: result, arguments: arguments);
-  }
-
-  @override
-  void popUntil(RoutePredicate predicate) {
-    Modular.to.popUntil(predicate);
   }
 }

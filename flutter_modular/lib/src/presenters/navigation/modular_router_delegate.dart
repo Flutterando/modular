@@ -25,10 +25,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final ModularRouteInformationParser parser;
   final Map<String, Module> injectMap;
+  List<NavigatorObserver> observers = [];
 
   final streamActionQueueController = StreamController<RouterStreamparam>(sync: true);
 
-  ModularRouterDelegate(this.parser, this.injectMap) {
+  ModularRouterDelegate({required this.parser, required this.injectMap}) {
     startListenNavigation();
   }
 
@@ -72,8 +73,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         : CustomNavigator(
             key: navigatorKey,
             pages: _pages,
+            observers: observers,
             onPopPage: _onPopPage,
           );
+  }
+
+  void setObserver(List<NavigatorObserver> navigatorObservers) {
+    observers = navigatorObservers;
+    notifyListeners();
   }
 
   @override

@@ -15,7 +15,7 @@ void main() {
   final context = Container().createElement();
 
   setUpAll(() {
-    delegate = ModularRouterDelegate(ModularRouteInformationParser(), {'ModuleMock': module, 'Module2Mock': module2});
+    delegate = ModularRouterDelegate(parser: ModularRouteInformationParser(), injectMap: {'ModuleMock': module, 'Module2Mock': module2});
     modular = ModularImpl(routerDelegate: delegate, injectMap: {'ModuleMock': module, 'Module2Mock': module2}, flags: ModularFlags());
     modular.init(module);
   });
