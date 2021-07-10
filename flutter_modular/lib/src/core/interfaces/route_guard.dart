@@ -4,7 +4,7 @@ import 'modular_route.dart';
 
 // ignore: one_member_abstracts
 abstract class RouteGuard {
-  RouteGuard(this.guardedRoute);
+  RouteGuard([this.guardedRoute]);
 
   final String? guardedRoute;
 
