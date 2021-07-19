@@ -65,7 +65,7 @@ abstract class IModularNavigator implements Listenable {
   /// ```
   /// Modular.to.pop();
   /// ```
-  void pop<T extends Object>([T result]);
+  void pop<T extends Object?>([T result]);
 
   /// The initial route cannot be popped off the navigator, which implies that
   /// this function returns true only if popping the navigator would not remove
@@ -83,7 +83,7 @@ abstract class IModularNavigator implements Listenable {
   /// ```
   /// Modular.to.maybePop();
   /// ```
-  Future<bool> maybePop<T extends Object>([T result]);
+  Future<bool> maybePop<T extends Object?>([T result]);
 
   ///Calls pop repeatedly on the navigator that most tightly encloses the given
   ///context until the predicate returns true.

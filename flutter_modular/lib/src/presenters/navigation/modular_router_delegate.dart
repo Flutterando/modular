@@ -339,10 +339,10 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<bool> maybePop<T extends Object>([T? result]) => navigator.maybePop(result);
+  Future<bool> maybePop<T extends Object?>([T? result]) => navigator.maybePop(result);
 
   @override
-  void pop<T extends Object>([T? result]) => navigator.pop(result);
+  void pop<T extends Object?>([T? result]) => navigator.pop(result);
 
   @override
   void popUntil(bool Function(Route) predicate) {
