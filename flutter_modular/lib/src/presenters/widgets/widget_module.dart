@@ -50,7 +50,8 @@ abstract class WidgetModule extends StatelessWidget implements Module {
   }
 
   @override
-  T? getBind<T extends Object>({Map<String, dynamic>? params, List<Type> typesInRequest = const []}) {
+  T? getBind<T extends Object>(
+      {Map<String, dynamic>? params, List<Type> typesInRequest = const []}) {
     return _fakeModule.getBind<T>(typesInRequest: typesInRequest);
   }
 
@@ -97,7 +98,8 @@ class ModularProvider extends StatefulWidget {
   final Module module;
   final Widget child;
 
-  const ModularProvider({Key? key, required this.module, required this.child}) : super(key: key);
+  const ModularProvider({Key? key, required this.module, required this.child})
+      : super(key: key);
 
   @override
   _ModularProviderState createState() => _ModularProviderState();
@@ -107,8 +109,7 @@ class _ModularProviderState extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
-    // Modular.addCoreInit(widget.module);
-    _debugPrintModular("-- ${widget.module.runtimeType} INITIALIZED");
+    Modular.bindModule(widget.module);
   }
 
   @override
@@ -118,8 +119,8 @@ class _ModularProviderState extends State<ModularProvider> {
 
   @override
   void dispose() {
+    widget.module.cleanInjects();
     super.dispose();
-    // Modular.removeModule(widget.module);
     _debugPrintModular("-- ${widget.module.runtimeType} DISPOSED");
   }
 }
