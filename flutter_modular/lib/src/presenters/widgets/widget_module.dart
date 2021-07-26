@@ -107,7 +107,7 @@ class _ModularProviderState extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
-    Modular.bindModule(widget.module);
+    Modular.bindModule(widget.module, rebindDuplicates: true);
   }
 
   @override

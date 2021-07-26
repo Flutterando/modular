@@ -56,7 +56,8 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  void bindModule(Module module, [String path = '']) {
+  void bindModule(Module module,
+      {String path = '', bool rebindDuplicates = false}) {
     final name = module.runtimeType.toString();
     if (!injectMap.containsKey(name)) {
       module.paths.add(path);
@@ -64,16 +65,32 @@ class ModularImpl implements ModularInterface {
       module.instance(_getAllSingletons());
       debugPrintModular("-- ${module.runtimeType.toString()} INITIALIZED");
     } else {
+      // The same module with default path, so rebind the module
+      if (path.isEmpty && rebindDuplicates) {
+        final oldModule = injectMap[name];
+
+        // Remove old injects
+        oldModule?.cleanInjects();
+        injectMap.remove(name);
+
+        // Install new injects
+        bindModule(module, path: name, rebindDuplicates: false);
+        return;
+      }
+
       // Add the new path only if the last path in paths list is different from the current one
       final _paths = injectMap[name]?.paths;
-      if (_paths?.isNotEmpty == true && _paths?.last != path) _paths?.add(path);
+
+      if (_paths?.isNotEmpty == true && _paths?.last != path) {
+        _paths?.add(path);
+      }
     }
   }
 
   @override
   void init(Module module) {
     _initialModule = module;
-    bindModule(module, module.runtimeType.toString());
+    bindModule(module, path: module.runtimeType.toString());
   }
 
   @override
@@ -105,14 +122,22 @@ class ModularImpl implements ModularInterface {
   B get<B extends Object>({List<Type>? typesInRequestList, B? defaultValue}) {
     var typesInRequest = typesInRequestList ?? [];
     if (Modular.flags.experimentalNotAllowedParentBinds) {
-      final module = routerDelegate.currentConfiguration?.currentModule?.runtimeType.toString() ?? 'AppModule';
-      var bind = injectMap[module]!.binds.firstWhere((b) => b.inject is B Function(Inject), orElse: () => BindEmpty());
+      final module = routerDelegate
+              .currentConfiguration?.currentModule?.runtimeType
+              .toString() ??
+          'AppModule';
+      var bind = injectMap[module]!.binds.firstWhere(
+          (b) => b.inject is B Function(Inject),
+          orElse: () => BindEmpty());
       if (bind is BindEmpty) {
-        bind = injectMap[module]!.binds.firstWhere((b) => b.inject is Future<B> Function(Inject), orElse: () => BindEmpty());
+        bind = injectMap[module]!.binds.firstWhere(
+            (b) => b.inject is Future<B> Function(Inject),
+            orElse: () => BindEmpty());
       }
 
       if (bind is BindEmpty) {
-        throw ModularError('\"${B.toString()}\" not found in \"$module\" module');
+        throw ModularError(
+            '\"${B.toString()}\" not found in \"$module\" module');
       }
     }
     var result = _findExistingInstance<B>();
@@ -122,7 +147,8 @@ class ModularImpl implements ModularInterface {
     }
 
     for (var key in injectMap.keys) {
-      final value = _getInjectableObject<B>(key, typesInRequestList: typesInRequest, checkKey: false);
+      final value = _getInjectableObject<B>(key,
+          typesInRequestList: typesInRequest, checkKey: false);
       if (value != null) {
         return value;
       }
@@ -187,7 +213,8 @@ class ModularImpl implements ModularInterface {
   }
 
   @override
-  T bind<T extends Object>(Bind<T> bind) => Inject(overrideBinds: _overrideBinds ?? []).get(bind);
+  T bind<T extends Object>(Bind<T> bind) =>
+      Inject(overrideBinds: _overrideBinds ?? []).get(bind);
 
   @override
   Future<void> isModuleReady<M>() {

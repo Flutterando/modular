@@ -18,7 +18,7 @@ abstract class ModularInterface {
   @visibleForTesting
   void overrideBinds(List<Bind> binds);
   void init(Module module);
-  void bindModule(Module module, [String path]);
+  void bindModule(Module module, {String path, bool rebindDuplicates});
   void debugPrintModular(String text);
   T bind<T extends Object>(Bind<T> bind);
   Future<void> isModuleReady<M>();
