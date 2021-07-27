@@ -12,6 +12,7 @@ _debugPrintModular(String text) {
 }
 
 abstract class WidgetModule extends StatelessWidget implements Module {
+  
   Widget get view;
 
   @override
@@ -28,7 +29,7 @@ abstract class WidgetModule extends StatelessWidget implements Module {
 
   final _FakeModule _fakeModule = _FakeModule();
 
-  WidgetModule() {
+  WidgetModule({Key? key}): super(key: key) {
     // ignore: invalid_use_of_visible_for_testing_member
     _fakeModule.changeBinds(binds);
   }
