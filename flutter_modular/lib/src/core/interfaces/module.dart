@@ -17,7 +17,7 @@ class _ImmutableValue {
 abstract class Module {
   final Map<Type, dynamic> _singletonBinds = {};
 
-  List<Bind> get binds => const [];
+  List<Bind> get binds => [];
   List<ModularRoute> get routes => const [];
 
   List<Module> get imports => const [];
