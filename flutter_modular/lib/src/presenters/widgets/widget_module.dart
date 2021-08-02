@@ -12,6 +12,7 @@ _debugPrintModular(String text) {
 }
 
 abstract class WidgetModule extends StatelessWidget implements Module {
+  
   Widget get view;
 
   @override
@@ -28,7 +29,7 @@ abstract class WidgetModule extends StatelessWidget implements Module {
 
   final _FakeModule _fakeModule = _FakeModule();
 
-  WidgetModule() {
+  WidgetModule({Key? key}): super(key: key) {
     // ignore: invalid_use_of_visible_for_testing_member
     _fakeModule.changeBinds(binds);
   }
@@ -107,8 +108,7 @@ class _ModularProviderState extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
-    // Modular.addCoreInit(widget.module);
-    _debugPrintModular("-- ${widget.module.runtimeType} INITIALIZED");
+    Modular.bindModule(widget.module, rebindDuplicates: true);
   }
 
   @override
@@ -118,8 +118,8 @@ class _ModularProviderState extends State<ModularProvider> {
 
   @override
   void dispose() {
+    widget.module.cleanInjects();
     super.dispose();
-    // Modular.removeModule(widget.module);
     _debugPrintModular("-- ${widget.module.runtimeType} DISPOSED");
   }
 }

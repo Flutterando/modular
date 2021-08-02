@@ -112,7 +112,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           );
         }
         if (route.module != null) {
-          Modular.bindModule(route.module!, uri.path);
+          Modular.bindModule(route.module!, path: uri.path);
         }
         return router;
       }
@@ -139,7 +139,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
       }
 
       if (parseRoute.currentModule != null) {
-        Modular.bindModule(parseRoute.currentModule!, uri.path);
+        Modular.bindModule(parseRoute.currentModule!, path: uri.path);
       }
       return parseRoute;
     }
