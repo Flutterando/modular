@@ -9,7 +9,7 @@ import '../models/bind.dart';
 import 'disposable.dart';
 import 'modular_route.dart';
 
-class _ImmutableValue {
+class _MutableValue {
   var isReadyFlag = false;
 }
 
@@ -21,7 +21,7 @@ abstract class Module {
   List<ModularRoute> get routes => const [];
 
   List<Module> get imports => const [];
-  final _immutableValue = _ImmutableValue();
+  final _mutableValue = _MutableValue();
 
   List<dynamic> get instanciatedSingletons => _singletonBinds.values.toList();
 
@@ -36,8 +36,8 @@ abstract class Module {
   }
 
   Future<void> isReady() async {
-    if (_immutableValue.isReadyFlag) return;
-    _immutableValue.isReadyFlag = true;
+    if (_mutableValue.isReadyFlag) return;
+    _mutableValue.isReadyFlag = true;
     final asyncBindList = binds.whereType<AsyncBind>().toList();
     for (var bind in asyncBindList) {
       final resolvedBind = await bind.converToAsyncBind();
