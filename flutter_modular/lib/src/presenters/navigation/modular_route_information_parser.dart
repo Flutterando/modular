@@ -56,7 +56,8 @@ class ModularRouteInformationParser
     return candidate;
   }
 
-  ModularRoute? _searchInModule(Module module, String routerName, Uri uri) {
+  ModularRoute? _searchInModule(
+      Module module, String routerName, Uri uri, String? pushStyle) {
     uri = uri.normalizePath();
     final routers = module.routes.map((e) {
       if (e is ChildRoute || e is WildcardRoute) {
@@ -69,7 +70,7 @@ class ModularRouteInformationParser
       return preview.routerName.contains('/:') ? 1 : 0;
     });
     for (var route in routers) {
-      var r = _searchRoute(route, routerName, uri);
+      var r = _searchRoute(route, routerName, uri, pushStyle);
       if (r != null) {
         return r;
       }
@@ -78,7 +79,7 @@ class ModularRouteInformationParser
   }
 
   ModularRoute? _normalizeRoute(
-      ModularRoute route, String routerName, Uri uri) {
+      ModularRoute route, String routerName, Uri uri, String? pushStyle) {
     ModularRoute? router;
     if (routerName == uri.path || routerName == "${uri.path}/") {
       //router = route.module!.routes[0];
@@ -88,23 +89,24 @@ class ModularRouteInformationParser
       if (router.module != null) {
         var _routerName =
             (routerName + route.routerName).replaceFirst('//', '/');
-        router = _searchInModule(route.module!, _routerName, uri);
+        router = _searchInModule(route.module!, _routerName, uri, pushStyle);
       } else {
         router = router.copyWith(uri: uri.replace(path: routerName));
       }
     } else {
-      router = _searchInModule(route.module!, routerName, uri);
+      router = _searchInModule(route.module!, routerName, uri, pushStyle);
     }
     return router;
   }
 
-  ModularRoute? _searchRoute(ModularRoute route, String routerName, Uri uri) {
+  ModularRoute? _searchRoute(
+      ModularRoute route, String routerName, Uri uri, String? pushStyle) {
     final tempRouteName =
         (routerName + route.routerName).replaceFirst('//', '/');
     if (route.child == null) {
       var _routerName =
           ('$routerName${route.routerName}/').replaceFirst('//', '/');
-      var router = _normalizeRoute(route, _routerName, uri);
+      var router = _normalizeRoute(route, _routerName, uri, pushStyle);
 
       if (router != null) {
         router = router.copyWith(
@@ -124,14 +126,15 @@ class ModularRouteInformationParser
           );
         }
         if (route.module != null) {
-          Modular.bindModule(route.module!, path: uri.path);
+          Modular.bindModule(route.module!,
+              path: pushStyle == null ? uri.path : '${uri.path}@$pushStyle');
         }
         return router;
       }
     } else {
       if (route.children.isNotEmpty) {
         for (var routeChild in route.children) {
-          var r = _searchRoute(routeChild, tempRouteName, uri);
+          var r = _searchRoute(routeChild, tempRouteName, uri, pushStyle);
           if (r != null) {
             // r.currentModule?.paths.remove(uri.toString());
             r = r.copyWith(modulePath: tempRouteName);
@@ -155,7 +158,8 @@ class ModularRouteInformationParser
       }
 
       if (parseRoute.currentModule != null) {
-        Modular.bindModule(parseRoute.currentModule!, path: uri.path);
+        Modular.bindModule(parseRoute.currentModule!,
+            path: pushStyle == null ? uri.path : '${uri.path}@$pushStyle');
       }
       return parseRoute;
     }
@@ -227,6 +231,7 @@ class ModularRouteInformationParser
   ModularRoute? _searchWildcard(
     String path,
     Module module,
+    String? pushStyle,
   ) {
     ModularRoute? found;
 
@@ -234,8 +239,8 @@ class ModularRouteInformationParser
     final length = pathSegments.length;
     for (var i = 0; i < length; i++) {
       final localPath = pathSegments.join('/');
-      final route = _searchInModule(
-          module, "", Uri.parse(localPath.isEmpty ? '/' : localPath));
+      final route = _searchInModule(module, "",
+          Uri.parse(localPath.isEmpty ? '/' : localPath), pushStyle);
 
       if (route != null) {
         if (route.children.isEmpty) {
@@ -262,43 +267,41 @@ class ModularRouteInformationParser
   }
 
   Future<ModularRoute> selectRoute(String path,
-      {Module? module, dynamic arguments, String? pushedStyle}) async {
+      {Module? module, dynamic arguments, String? pushStyle}) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
     var uri = Uri.parse(path);
-    var router = _searchInModule(module ?? Modular.initialModule, "", uri);
+    var router =
+        _searchInModule(module ?? Modular.initialModule, "", uri, pushStyle);
 
     if (router != null) {
-      router = router.copyWith(
-          args: router.args.copyWith(uri: router.uri, data: arguments));
-      if (pushedStyle != null) {
+      if (pushStyle != null) {
         if (router.routerOutlet.isEmpty) {
-          router = router.copyWith(uri: Uri.parse('${uri.path}@$pushedStyle'));
-          Modular.setPathInActiveModules(uri.path, router.path!);
+          router = router.copyWith(uri: Uri.parse('${uri.path}@$pushStyle'));
         } else {
           var miniRoute = router.routerOutlet.last;
           miniRoute = miniRoute.copyWith(
-              uri: Uri.parse('${miniRoute.path}@$pushedStyle'));
+              uri: Uri.parse('${miniRoute.path}@$pushStyle'));
           router = router.copyWith(routerOutlet: [miniRoute]);
-          Modular.setPathInActiveModules(uri.path, miniRoute.path!);
         }
+      } else {
+        router = router.copyWith(
+            args: router.args.copyWith(uri: router.uri, data: arguments));
       }
       return canActivate(router.path!, router);
     } else {
-      router = _searchWildcard(uri.path, module ?? Modular.initialModule);
+      router =
+          _searchWildcard(uri.path, module ?? Modular.initialModule, pushStyle);
       if (router != null) {
-        if (pushedStyle != null) {
+        if (pushStyle != null) {
           if (router.routerOutlet.isEmpty) {
-            router =
-                router.copyWith(uri: Uri.parse('${uri.path}@$pushedStyle'));
-            Modular.setPathInActiveModules(uri.path, router.path!);
+            router = router.copyWith(uri: Uri.parse('${uri.path}@$pushStyle'));
           } else {
             var miniRoute = router.routerOutlet.last;
             miniRoute = miniRoute.copyWith(
-                uri: Uri.parse('${miniRoute.path}@$pushedStyle'));
+                uri: Uri.parse('${miniRoute.path}@$pushStyle'));
             router = router.copyWith(routerOutlet: [miniRoute]);
-            Modular.setPathInActiveModules(uri.path, miniRoute.path!);
           }
         }
         return router;

@@ -227,12 +227,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     notifyListeners();
   }
 
+  var _pageCount = 0;
+
   @override
   Future<T?> pushNamed<T extends Object?>(String routeName,
       {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName,
-        arguments: arguments, pushedStyle: '${_pages.length}');
+        arguments: arguments, pushStyle: '${_pageCount++}');
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
@@ -287,7 +289,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName,
-        arguments: arguments, pushedStyle: '${_pages.length - 1}');
+        arguments: arguments, pushStyle: '$_pageCount');
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
