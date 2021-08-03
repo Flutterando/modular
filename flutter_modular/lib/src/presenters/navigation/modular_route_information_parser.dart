@@ -276,6 +276,8 @@ class ModularRouteInformationParser
         _searchInModule(module ?? Modular.initialModule, "", uri, pushStyle);
 
     if (router != null) {
+      router = router.copyWith(
+          args: router.args.copyWith(uri: router.uri, data: arguments));
       if (pushStyle != null) {
         if (router.routerOutlet.isEmpty) {
           router = router.copyWith(uri: Uri.parse('${uri.path}@$pushStyle'));
@@ -285,9 +287,6 @@ class ModularRouteInformationParser
               uri: Uri.parse('${miniRoute.path}@$pushStyle'));
           router = router.copyWith(routerOutlet: [miniRoute]);
         }
-      } else {
-        router = router.copyWith(
-            args: router.args.copyWith(uri: router.uri, data: arguments));
       }
       return canActivate(router.path!, router);
     } else {
