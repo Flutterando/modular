@@ -4,7 +4,8 @@ import 'package:triple/triple.dart';
 import '../../../flutter_modular.dart';
 import '../modular_base.dart';
 
-abstract class ModularState<TWidget extends StatefulWidget, TBind extends Object> extends State<TWidget> {
+abstract class ModularState<TWidget extends StatefulWidget,
+    TBind extends Object> extends State<TWidget> {
   final TBind _scope = Modular.get<TBind>();
 
   TBind get store => _scope;

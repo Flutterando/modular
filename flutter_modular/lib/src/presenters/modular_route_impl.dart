@@ -98,9 +98,13 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
     this.customTransition,
     this.duration = const Duration(milliseconds: 300),
     this.modulePath = '/',
-  })  : assert(module == null || children.isEmpty, "can't have both module and nested routes(children)"),
-        assert((transition == TransitionType.custom && customTransition != null) || transition != TransitionType.custom && customTransition == null),
-        assert((module == null && child != null) || (module != null && child == null)),
+  })  : assert(module == null || children.isEmpty,
+            "can't have both module and nested routes(children)"),
+        assert((transition == TransitionType.custom &&
+                customTransition != null) ||
+            transition != TransitionType.custom && customTransition == null),
+        assert((module == null && child != null) ||
+            (module != null && child == null)),
         assert(routerName == '**' ? child != null : true);
 
   @override

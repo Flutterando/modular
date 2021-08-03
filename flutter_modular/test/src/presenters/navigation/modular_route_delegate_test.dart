@@ -6,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final delegate = ModularRouterDelegate(parser: ModularRouteInformationParser(), injectMap: {});
+  final delegate = ModularRouterDelegate(
+      parser: ModularRouteInformationParser(), injectMap: {});
 
   test('should resolve relative path', () {
     expect(delegate.resolverPath('tab2', '/home/tab1'), '/home/tab2');

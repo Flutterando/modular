@@ -23,10 +23,14 @@ final _modularFlags = ModularFlags();
 final Map<String, Module> _injectMap = {};
 
 late final _routeInformationParser = ModularRouteInformationParser();
-late final _routerDelegate = ModularRouterDelegate(parser: _routeInformationParser, injectMap: _injectMap);
+late final _routerDelegate = ModularRouterDelegate(
+    parser: _routeInformationParser, injectMap: _injectMap);
 
 // ignore: non_constant_identifier_names
-final ModularInterface Modular = ModularImpl(routerDelegate: _routerDelegate, injectMap: _injectMap, flags: _modularFlags);
+final ModularInterface Modular = ModularImpl(
+    routerDelegate: _routerDelegate,
+    injectMap: _injectMap,
+    flags: _modularFlags);
 
 @visibleForTesting
 String initialRouteDeclaratedInMaterialApp = '/';
@@ -135,7 +139,8 @@ class _RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final router = Router.of(context);
-    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher =
+        router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override

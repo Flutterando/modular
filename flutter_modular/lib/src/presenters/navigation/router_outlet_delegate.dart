@@ -52,7 +52,8 @@ class RouterOutletDelegate extends RouterDelegate<ModularRoute>
                   if (module.paths.isEmpty) {
                     module.cleanInjects();
                     trash.add(key);
-                    Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
+                    Modular.debugPrintModular(
+                        "-- ${module.runtimeType.toString()} DISPOSED");
                   }
                 });
 

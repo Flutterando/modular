@@ -15,8 +15,13 @@ void main() {
   final context = Container().createElement();
 
   setUpAll(() {
-    delegate = ModularRouterDelegate(parser: ModularRouteInformationParser(), injectMap: {'ModuleMock': module, 'Module2Mock': module2});
-    modular = ModularImpl(routerDelegate: delegate, injectMap: {'ModuleMock': module, 'Module2Mock': module2}, flags: ModularFlags());
+    delegate = ModularRouterDelegate(
+        parser: ModularRouteInformationParser(),
+        injectMap: {'ModuleMock': module, 'Module2Mock': module2});
+    modular = ModularImpl(
+        routerDelegate: delegate,
+        injectMap: {'ModuleMock': module, 'Module2Mock': module2},
+        flags: ModularFlags());
     modular.init(module);
   });
 
@@ -42,7 +47,8 @@ void main() {
     expect(modular.to.path, '/start/home/tab1');
     expect(list?.isNotEmpty, true);
     expect(list?.last.router.path, '/start/home/tab1');
-    expect(list?.last.router.child?.call(context, ModularArguments()), isA<Text>());
+    expect(list?.last.router.child?.call(context, ModularArguments()),
+        isA<Text>());
   });
 
   test('search route outlet in other outlet - redirect', () async {
@@ -53,7 +59,8 @@ void main() {
     expect(modular.to.path, '/start/home/tab1');
     expect(list?.isNotEmpty, true);
     expect(list?.last.router.path, '/start/home/tab1');
-    expect(list?.last.router.child?.call(context, ModularArguments()), isA<Text>());
+    expect(list?.last.router.child?.call(context, ModularArguments()),
+        isA<Text>());
   });
 }
 

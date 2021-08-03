@@ -60,7 +60,8 @@ extension DebounceExtensions<T> on Stream<T> {
   ///     Stream.fromIterable([1, 2, 3, 4])
   ///       .debounce((_) => TimerStream(true, Duration(seconds: 1)))
   ///       .listen(print); // prints 4
-  Stream<T> debounce(Stream Function(T event) window) => transform(DebounceStreamTransformer<T>(window));
+  Stream<T> debounce(Stream Function(T event) window) =>
+      transform(DebounceStreamTransformer<T>(window));
 
   /// Transforms a [Stream] so that will only emit items from the source
   /// sequence whenever the time span defined by [duration] passes, without the
@@ -78,5 +79,6 @@ extension DebounceExtensions<T> on Stream<T> {
   ///     Stream.fromIterable([1, 2, 3, 4])
   ///       .debounceTime(Duration(seconds: 1))
   ///       .listen(print); // prints 4
-  Stream<T> debounceTime(Duration duration) => transform(DebounceStreamTransformer<T>((_) => TimerStream<void>(null, duration)));
+  Stream<T> debounceTime(Duration duration) => transform(
+      DebounceStreamTransformer<T>((_) => TimerStream<void>(null, duration)));
 }

@@ -15,7 +15,8 @@ main() {
   );
   final flags = ModularFlags();
 
-  var modularImpl = ModularImpl(routerDelegate: routerDelegate, injectMap: injectMap, flags: flags);
+  var modularImpl = ModularImpl(
+      routerDelegate: routerDelegate, injectMap: injectMap, flags: flags);
   modularImpl.init(ModuleMock());
   var navigatorMock = NavigatorMock();
 
@@ -41,6 +42,10 @@ class ModuleMock extends Module {
 
 class NavigatorMock extends Mock implements IModularNavigator {
   @override
-  Future<T?> pushNamed<T extends Object?>(String? routeName, {Object? arguments, bool? forRoot = false}) =>
-      (super.noSuchMethod(Invocation.method(#pushNamed, [routeName], {#arguments: arguments, #forRoot: forRoot}), returnValue: Future.value(null)) as Future<T?>);
+  Future<T?> pushNamed<T extends Object?>(String? routeName,
+          {Object? arguments, bool? forRoot = false}) =>
+      (super.noSuchMethod(
+          Invocation.method(#pushNamed, [routeName],
+              {#arguments: arguments, #forRoot: forRoot}),
+          returnValue: Future.value(null)) as Future<T?>);
 }

@@ -27,7 +27,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final Map<String, Module> injectMap;
   List<NavigatorObserver> observers = [];
 
-  final streamActionQueueController = StreamController<RouterStreamparam>(sync: true);
+  final streamActionQueueController =
+      StreamController<RouterStreamparam>(sync: true);
 
   ModularRouterDelegate({required this.parser, required this.injectMap}) {
     //startListenNavigation();
@@ -64,7 +65,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   ModularArguments? _arguments;
 
   @override
-  ModularRoute? get currentConfiguration => _pages.isEmpty ? null : _pages.last.router;
+  ModularRoute? get currentConfiguration =>
+      _pages.isEmpty ? null : _pages.last.router;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularRoute router, {bool fromModular = false, @deprecated bool replaceAll = true}) async {
+  Future<void> setNewRoutePath(ModularRoute router,
+      {bool fromModular = false, @deprecated bool replaceAll = true}) async {
     _arguments = router.args;
 
     final page = ModularPage(
@@ -98,7 +101,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       // Fix navigate function to don't replace a route of the same module and
       // replace all external modules
       final _lastPageModule = _pages.last;
-      final routeIsInModule = _lastPageModule.router.modulePath == page.router.modulePath;
+      final routeIsInModule =
+          _lastPageModule.router.modulePath == page.router.modulePath;
 
       final duplicatePage = _pages.firstWhere(
         (p) => p.key == page.key,
@@ -113,7 +117,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         for (var p in _pages) {
           p.completePop(null);
           removeInject(p.router.path!);
-          for (var r in routerOutletPages[p.router.path]!.map((e) => e.router)) {
+          for (var r
+              in routerOutletPages[p.router.path]!.map((e) => e.router)) {
             removeInject(r.path!);
           }
         }
@@ -131,7 +136,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     var routerPageCandidate = router;
 
     while (routerPageCandidate.routerOutlet.isNotEmpty) {
-      final mapPage = {routerPageCandidate.path!: routerPageCandidate.routerOutlet.map((e) => ModularPage(key: ValueKey(e.path), router: e)).toList()};
+      final mapPage = {
+        routerPageCandidate.path!: routerPageCandidate.routerOutlet
+            .map((e) => ModularPage(key: ValueKey(e.path), router: e))
+            .toList()
+      };
       if (mapPage.isNotEmpty) {
         routerOutletPages.addAll(mapPage);
       }
@@ -151,7 +160,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   var _lastClick = DateTime.now();
 
   @override
-  Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
+  Future<void> navigate(String routeName,
+      {arguments, @deprecated bool replaceAll = true}) async {
     final currentTime = DateTime.now();
     if (currentTime.difference(_lastClick).inMilliseconds < 500) {
       return;
@@ -202,7 +212,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       if (module.paths.isEmpty) {
         module.cleanInjects();
         trash.add(key);
-        Modular.debugPrintModular("-- ${module.runtimeType.toString()} DISPOSED");
+        Modular.debugPrintModular(
+            "-- ${module.runtimeType.toString()} DISPOSED");
       }
     }
 
@@ -217,9 +228,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments, bool forRoot = false}) async {
+  Future<T?> pushNamed<T extends Object?>(String routeName,
+      {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName, arguments: arguments, pushedStyle: '${_pages.length}');
+    var router = await parser.selectRoute(routeName,
+        arguments: arguments, pushedStyle: '${_pages.length}');
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
@@ -237,7 +250,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         rebuildPages();
         return await page.waitPop();
       } else if (router.routerName != currentConfiguration?.routerName) {
-        routerOutletPages[outletRouter.modulePath!] = [ModularPage(key: ValueKey(outletRouter.path), router: outletRouter)];
+        routerOutletPages[outletRouter.modulePath!] = [
+          ModularPage(key: ValueKey(outletRouter.path), router: outletRouter)
+        ];
         final rootPage = ModularPage<T>(
           key: UniqueKey(),
           router: router,
@@ -265,9 +280,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
+  Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(
+      String routeName,
+      {TO? result,
+      Object? arguments,
+      bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName, arguments: arguments, pushedStyle: '${_pages.length - 1}');
+    var router = await parser.selectRoute(routeName,
+        arguments: arguments, pushedStyle: '${_pages.length - 1}');
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
@@ -331,7 +351,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
+  Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(
+      String routeName,
+      {TO? result,
+      Object? arguments,
+      bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
     var router = await parser.selectRoute(routeName, arguments: arguments);
     final routerOutlet = _getRoute(router);
@@ -343,7 +367,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
       _pages.removeLast();
     }
 
-    return await pushNamed<T>(routeName, arguments: arguments, forRoot: forRoot);
+    return await pushNamed<T>(routeName,
+        arguments: arguments, forRoot: forRoot);
   }
 
   @override
@@ -352,14 +377,16 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<bool> maybePop<T extends Object?>([T? result]) => navigator.maybePop(result);
+  Future<bool> maybePop<T extends Object?>([T? result]) =>
+      navigator.maybePop(result);
 
   @override
   void pop<T extends Object?>([T? result]) => navigator.pop(result);
 
   @override
   void popUntil(bool Function(Route) predicate) {
-    final isFoundedPages = _pages.where((page) => predicate(_CustomRoute(page)));
+    final isFoundedPages =
+        _pages.where((page) => predicate(_CustomRoute(page)));
     if (isFoundedPages.isEmpty) {
       navigator.popUntil((route) => route.isFirst);
     } else {
@@ -368,7 +395,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   @override
-  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(String newRouteName, bool Function(Route) predicate, {Object? arguments, bool forRoot = false}) {
+  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
+      String newRouteName, bool Function(Route) predicate,
+      {Object? arguments, bool forRoot = false}) {
     popUntil(predicate);
     return pushNamed<T>(newRouteName, arguments: arguments, forRoot: forRoot);
   }
@@ -426,7 +455,8 @@ class _CustomRoute extends ModalRoute {
   String? get barrierLabel => throw UnimplementedError();
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
     throw UnimplementedError();
   }
 

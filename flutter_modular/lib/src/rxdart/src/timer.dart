@@ -10,10 +10,12 @@ class TimerStream<T> extends Stream<T> {
   final StreamController<T> _controller;
 
   /// Constructs a [Stream] which emits [value] after the specified [Duration].
-  TimerStream(T value, Duration duration) : _controller = _buildController(value, duration);
+  TimerStream(T value, Duration duration)
+      : _controller = _buildController(value, duration);
 
   @override
-  StreamSubscription<T> listen(void Function(T event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<T> listen(void Function(T event)? onData,
+      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     return _controller.stream.listen(
       onData,
       onError: onError,

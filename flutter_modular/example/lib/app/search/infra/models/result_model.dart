@@ -8,7 +8,12 @@ class ResultModel extends Result {
   final String nickname;
   final String url;
 
-  const ResultModel({required this.image, required this.name, required this.nickname, required this.url}) : super(image: image, name: name, nickname: nickname, url: url);
+  const ResultModel(
+      {required this.image,
+      required this.name,
+      required this.nickname,
+      required this.url})
+      : super(image: image, name: name, nickname: nickname, url: url);
 
   Map<String, dynamic> toMap() {
     return {

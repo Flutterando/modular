@@ -9,7 +9,8 @@ void main() {
   Modular.init(ModuleMock('/redirected'));
   final context = Container().createElement();
   test('Check Route is guarded', () async {
-    expect(parse.selectRoute('/guarded', module: ModuleMock()), throwsA(isA<ModularError>()));
+    expect(parse.selectRoute('/guarded', module: ModuleMock()),
+        throwsA(isA<ModularError>()));
   });
 
   test('Check Route is guarded and redirect', () async {

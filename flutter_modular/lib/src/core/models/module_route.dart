@@ -14,7 +14,8 @@ class ModuleRoute extends ModularRouteImpl {
     String? guardedRoute,
     RouteBuilder? routeGenerator,
     Duration duration = const Duration(milliseconds: 300),
-  })  : assert(!routerName.contains('/:'), 'ModuleRoute should not contain dynamic route'),
+  })  : assert(!routerName.contains('/:'),
+            'ModuleRoute should not contain dynamic route'),
         super(
           routerName,
           routerOutlet: [],

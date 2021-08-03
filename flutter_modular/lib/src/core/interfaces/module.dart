@@ -70,7 +70,8 @@ abstract class Module {
       return bindValue;
     }
 
-    var bind = binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => BindEmpty());
+    var bind = binds.firstWhere((b) => b.inject is T Function(Inject),
+        orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       typesInRequest.remove(type);
       return null;
@@ -145,7 +146,8 @@ ${typesInRequest.join('\n')}
 
   /// Create a instance of all binds isn't lazy Loaded
   void instance(List<dynamic> singletons) {
-    final _filtedBinds = List<Bind>.from(binds)..removeWhere((e) => _removeBindFromInstacedSingletons(e, singletons));
+    final _filtedBinds = List<Bind>.from(binds)
+      ..removeWhere((e) => _removeBindFromInstacedSingletons(e, singletons));
 
     for (final bindElement in _filtedBinds) {
       if (!bindElement.isLazy) {
@@ -155,7 +157,8 @@ ${typesInRequest.join('\n')}
     }
   }
 
-  bool _removeBindFromInstacedSingletons(Bind<Object> bind, List<dynamic> singletons) {
+  bool _removeBindFromInstacedSingletons(
+      Bind<Object> bind, List<dynamic> singletons) {
     if (bind.isLazy) {
       return false;
     }

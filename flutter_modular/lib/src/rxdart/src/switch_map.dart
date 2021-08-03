@@ -30,7 +30,8 @@ class _SwitchMapStreamSink<S, T> implements ForwardingSink<S, T> {
   }
 
   @override
-  void addError(EventSink<T> sink, Object e, [StackTrace? st]) => sink.addError(e, st);
+  void addError(EventSink<T> sink, Object e, [StackTrace? st]) =>
+      sink.addError(e, st);
 
   @override
   void close(EventSink<T> sink) {
@@ -81,7 +82,8 @@ class SwitchMapStreamTransformer<S, T> extends StreamTransformerBase<S, T> {
   SwitchMapStreamTransformer(this.mapper);
 
   @override
-  Stream<T> bind(Stream<S> stream) => forwardStream(stream, _SwitchMapStreamSink(mapper));
+  Stream<T> bind(Stream<S> stream) =>
+      forwardStream(stream, _SwitchMapStreamSink(mapper));
 }
 
 /// Extends the Stream with the ability to convert one stream into a new Stream
@@ -104,5 +106,6 @@ extension SwitchMapExtension<T> on Stream<T> {
   ///       .switchMap((i) =>
   ///         TimerStream(i, Duration(minutes: i)))
   ///       .listen(print); // prints 1
-  Stream<S> switchMap<S>(Stream<S> Function(T value) mapper) => transform(SwitchMapStreamTransformer<T, S>(mapper));
+  Stream<S> switchMap<S>(Stream<S> Function(T value) mapper) =>
+      transform(SwitchMapStreamTransformer<T, S>(mapper));
 }

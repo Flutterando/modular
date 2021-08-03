@@ -71,7 +71,8 @@ class _BackpressureStreamSink<S, T> implements ForwardingSink<S, T> {
   }
 
   @override
-  void addError(EventSink<T> sink, Object e, [StackTrace? st]) => sink.addError(e, st);
+  void addError(EventSink<T> sink, Object e, [StackTrace? st]) =>
+      sink.addError(e, st);
 
   @override
   void close(EventSink<T> sink) {
@@ -147,15 +148,17 @@ class _BackpressureStreamSink<S, T> implements ForwardingSink<S, T> {
     }
   }
 
-  StreamSubscription<dynamic> singleWindow(S event, EventSink<T> sink) => buildStream(event, sink).take(1).listen(
-        null,
-        onError: sink.addError,
-        onDone: () => resolveWindowEnd(sink, _mainClosed),
-      );
+  StreamSubscription<dynamic> singleWindow(S event, EventSink<T> sink) =>
+      buildStream(event, sink).take(1).listen(
+            null,
+            onError: sink.addError,
+            onDone: () => resolveWindowEnd(sink, _mainClosed),
+          );
 
   // opens a new Window which is kept open until the main Stream
   // closes.
-  StreamSubscription<dynamic> multiWindow(S event, EventSink<T> sink) => buildStream(event, sink).listen(
+  StreamSubscription<dynamic> multiWindow(S event, EventSink<T> sink) =>
+      buildStream(event, sink).listen(
         (dynamic _) => resolveWindowEnd(sink),
         onError: sink.addError,
         onDone: () => resolveWindowEnd(sink),
@@ -178,8 +181,12 @@ class _BackpressureStreamSink<S, T> implements ForwardingSink<S, T> {
   }
 
   void resolveWindowEnd(EventSink<T> sink, [bool isControllerClosing = false]) {
-    if (isControllerClosing && _strategy == WindowStrategy.eventAfterLastWindow) {
-      if (_dispatchOnClose && _hasData && queue.length > 1 && _onWindowEnd != null) {
+    if (isControllerClosing &&
+        _strategy == WindowStrategy.eventAfterLastWindow) {
+      if (_dispatchOnClose &&
+          _hasData &&
+          queue.length > 1 &&
+          _onWindowEnd != null) {
         sink.add(_onWindowEnd!(unmodifiableQueue));
       }
 
@@ -191,7 +198,9 @@ class _BackpressureStreamSink<S, T> implements ForwardingSink<S, T> {
       return;
     }
 
-    if (isControllerClosing || _strategy == WindowStrategy.eventAfterLastWindow || _strategy == WindowStrategy.everyEvent) {
+    if (isControllerClosing ||
+        _strategy == WindowStrategy.eventAfterLastWindow ||
+        _strategy == WindowStrategy.everyEvent) {
       _windowSubscription?.cancel();
       _windowSubscription = null;
     }
@@ -208,7 +217,9 @@ class _BackpressureStreamSink<S, T> implements ForwardingSink<S, T> {
       // prepare the buffer for the next window.
       // by default, this is just a cleared buffer
       if (!isControllerClosing && _startBufferEvery > 0) {
-        skip = _startBufferEvery > queue.length ? _startBufferEvery - queue.length : 0;
+        skip = _startBufferEvery > queue.length
+            ? _startBufferEvery - queue.length
+            : 0;
 
         // ...unless startBufferEvery is provided.
         // here we backtrack to the first event of the last buffer

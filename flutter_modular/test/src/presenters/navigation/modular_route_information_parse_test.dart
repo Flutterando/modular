@@ -34,7 +34,8 @@ main() {
     });
 
     test('should retrieve route /list?id=1234&type=DYN', () async {
-      final route = await parse.selectRoute('/list?id=1234&type=DYN', module: ModuleMock());
+      final route = await parse.selectRoute('/list?id=1234&type=DYN',
+          module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<ListView>());
       expect(route.path, '/list?id=1234&type=DYN');
@@ -55,7 +56,8 @@ main() {
     });
 
     test('should retrieve route /list?id=1234&type=DYN#abcd', () async {
-      final route = await parse.selectRoute('/list?id=1234&type=DYN#abcd', module: ModuleMock());
+      final route = await parse.selectRoute('/list?id=1234&type=DYN#abcd',
+          module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<ListView>());
       expect(route.path, '/list?id=1234&type=DYN#abcd');
@@ -94,20 +96,27 @@ main() {
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
     });
 
-    test('should retrieve Wildcard route when path with query params doesn\'t exist', () async {
-      final route = await parse.selectRoute('/paulo?adbc=1234', module: ModuleMock());
+    test(
+        'should retrieve Wildcard route when path with query params doesn\'t exist',
+        () async {
+      final route =
+          await parse.selectRoute('/paulo?adbc=1234', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
     });
 
-    test('should retrieve Wildcard route when path with fragment doesn\'t exist', () async {
-      final route = await parse.selectRoute('/paulo#adbc=1234', module: ModuleMock());
+    test(
+        'should retrieve Wildcard route when path with fragment doesn\'t exist',
+        () async {
+      final route =
+          await parse.selectRoute('/paulo#adbc=1234', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
     });
 
     test('should guard route /401', () async {
-      expect(parse.selectRoute('/401', module: ModuleMock()), throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/401', module: ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
   });
 
@@ -134,7 +143,8 @@ main() {
     });
 
     test('should retrieve route /mock/list?id=1234&type=DYN', () async {
-      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN', module: ModuleMock());
+      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN',
+          module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<ListView>());
       expect(route.path, '/mock/list?id=1234&type=DYN');
@@ -155,7 +165,8 @@ main() {
     });
 
     test('should retrieve route /mock/list?id=1234&type=DYN', () async {
-      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN', module: ModuleMock());
+      final route = await parse.selectRoute('/mock/list?id=1234&type=DYN',
+          module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<ListView>());
       expect(route.path, '/mock/list?id=1234&type=DYN');
@@ -176,7 +187,8 @@ main() {
     });
 
     test('should retrieve route /mock?id=1234&type=DYN#abcd', () async {
-      final route = await parse.selectRoute('/mock?id=1234&type=DYN#abcd', module: ModuleMock());
+      final route = await parse.selectRoute('/mock?id=1234&type=DYN#abcd',
+          module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<SizedBox>());
       expect(route.uri?.path, '/mock/');
@@ -189,7 +201,8 @@ main() {
     });
 
     test('should retrieve route /mock/list#abcd', () async {
-      final route = await parse.selectRoute('/mock/list#abcd', module: ModuleMock());
+      final route =
+          await parse.selectRoute('/mock/list#abcd', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<ListView>());
       expect(route.path, '/mock/list#abcd');
@@ -202,32 +215,40 @@ main() {
     });
 
     test('should retrieve dynamic route /mock/list/:id', () async {
-      final route = await parse.selectRoute('/mock/list/3', module: ModuleMock());
+      final route =
+          await parse.selectRoute('/mock/list/3', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, route.args).toString(), '3');
       expect(route.path, '/mock/list/3');
     });
 
     test('should retrieve Wildcard route when not exist path', () async {
-      final route = await parse.selectRoute('/mock/paulo', module: ModuleMock());
+      final route =
+          await parse.selectRoute('/mock/paulo', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<FlutterLogo>());
     });
 
     test('should guard route /mock/listguarded', () async {
-      expect(parse.selectRoute('/mock/listguarded', module: ModuleMock()), throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/mock/listguarded', module: ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
 
     test('should guard route /mock/listguarded with params', () async {
-      expect(parse.selectRoute('/mock/listguarded?abc=def', module: ModuleMock()), throwsA(isA<ModularError>()));
+      expect(
+          parse.selectRoute('/mock/listguarded?abc=def', module: ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
 
     test('should guard route /mock/listguarded with fragment', () async {
-      expect(parse.selectRoute('/mock/listguarded#abc=def', module: ModuleMock()), throwsA(isA<ModularError>()));
+      expect(
+          parse.selectRoute('/mock/listguarded#abc=def', module: ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
 
     test('should guard route /guarded/list', () async {
-      expect(parse.selectRoute('/guarded/list', module: ModuleMock()), throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/guarded/list', module: ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
   });
 
@@ -238,20 +259,26 @@ main() {
       expect(route.child!(context, ModularArguments()), isA<Scaffold>());
       expect(route.path, '/home');
       expect(route.routerOutlet.length, 1);
-      expect(route.routerOutlet[0].child!(context, ModularArguments()), isA<TextField>());
+      expect(route.routerOutlet[0].child!(context, ModularArguments()),
+          isA<TextField>());
       expect(route.routerOutlet[0].path, '/home/tab1');
     });
     test('should retrieve route /home/tab2/:id', () async {
-      final route = await parse.selectRoute('/home/tab2/3', module: ModuleMock());
+      final route =
+          await parse.selectRoute('/home/tab2/3', module: ModuleMock());
       expect(route, isNotNull);
       expect(route.child!(context, ModularArguments()), isA<Scaffold>());
       expect(route.path, '/home');
       expect(route.routerOutlet.length, 1);
-      expect(route.routerOutlet[0].child!(context, route.routerOutlet[0].args).toString(), '3');
+      expect(
+          route.routerOutlet[0].child!(context, route.routerOutlet[0].args)
+              .toString(),
+          '3');
       expect(route.routerOutlet[0].path, '/home/tab2/3');
     });
     test('should throw error if not exist route /home/tab3', () async {
-      expect(parse.selectRoute('/home/tab3', module: ModuleMock()), throwsA(isA<ModularError>()));
+      expect(parse.selectRoute('/home/tab3', module: ModuleMock()),
+          throwsA(isA<ModularError>()));
     });
 
     test('should retrieve route  (Module)', () async {
@@ -261,7 +288,8 @@ main() {
       expect(route.path, '/mock/');
       expect(route.modulePath, '/mock');
       expect(route.routerOutlet.length, 1);
-      expect(route.routerOutlet[0].child!(context, ModularArguments()), isA<Container>());
+      expect(route.routerOutlet[0].child!(context, ModularArguments()),
+          isA<Container>());
       expect(route.routerOutlet[0].path, '/mock/home');
     });
   });
