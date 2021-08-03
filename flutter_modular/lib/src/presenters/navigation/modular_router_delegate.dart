@@ -117,8 +117,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         for (var p in _pages) {
           p.completePop(null);
           removeInject(p.router.path!);
-          for (var r
-              in routerOutletPages[p.router.path]!.map((e) => e.router)) {
+          final _localRoutePages =
+              routerOutletPages[p.router.path]?.map((e) => e.router).toList();
+          for (var r in _localRoutePages ?? []) {
             removeInject(r.path!);
           }
         }
