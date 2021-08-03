@@ -21,26 +21,27 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  dartz: ^0.10.0-nullsafety.0
-  async: ^2.5.0-nullsafety.3
-  flutter_mobx: ^2.0.0-nullsafety.0
-  flutter_triple: ^1.0.0
-  mobx_triple: ^1.0.0
-  mobx: ^2.0.0-nullsafety.2
+  dartz: ^0.10.0-nullsafety.2
+  async: ^2.6.1
+  flutter_mobx: ^2.0.1
+  flutter_triple: ^1.2.3+2
+  mobx_triple: ^1.1.1+3
+  mobx: ^2.0.3
   rxdart: ^0.26.0
   http: ^0.13.0
-  flutter_modular: ^3.0.1
+  flutter_modular: ^3.3.1
   flutter:
     sdk: flutter
+  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
 dev_dependencies:
-  flutter_modular_test: ^1.0.0-nullsafety.3
-  modular_codegen: ^3.0.0-nullsafety.2
-  build_runner: ^1.12.2
-  mocktail: ^0.1.1
+  flutter_modular_test: ^1.0.1
+  modular_codegen: ^3.0.1
+  build_runner: ^2.1.0
+  mocktail: ^0.1.4
   flutter_test:
     sdk: flutter
 

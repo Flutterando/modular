@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:example/app/core/dartz_adapter/dartz_adapter.dart';
 import 'package:example/app/search/domain/entities/result.dart';
 import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:example/app/search/domain/usecases/search_by_text.dart';
@@ -13,7 +15,9 @@ class SearchStore extends MobXStore<Failure, List<Result>> {
   SearchStore(this.searchByText) : super([]);
 
   void setSearchText(String value) {
-    executeEither(() => searchByText(value), delay: Duration(milliseconds: 500));
+    executeEither(() async {
+      return DartzEitherAdapter(await searchByText(value));
+    }, delay: Duration(milliseconds: 500));
   }
 
   @override
