@@ -15,6 +15,7 @@ abstract class ModularInterface {
   ModularArguments? get args;
   String get initialRoute;
   Module get initialModule;
+  void setPathInActiveModules(String currentValue, String newValue);
   @visibleForTesting
   void overrideBinds(List<Bind> binds);
   void init(Module module);

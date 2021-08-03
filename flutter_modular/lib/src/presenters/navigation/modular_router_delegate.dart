@@ -8,7 +8,7 @@ import '../../core/interfaces/modular_navigator_interface.dart';
 import '../../core/interfaces/modular_route.dart';
 import '../../core/interfaces/module.dart';
 import '../../core/models/modular_arguments.dart';
-import '../../rxdart/local_rxdart.dart';
+// import '../../rxdart/local_rxdart.dart';
 import '../modular_base.dart';
 import '../modular_route_impl.dart';
 import 'custom_navigator.dart';
@@ -30,32 +30,32 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   final streamActionQueueController = StreamController<RouterStreamparam>(sync: true);
 
   ModularRouterDelegate({required this.parser, required this.injectMap}) {
-    startListenNavigation();
+    //startListenNavigation();
   }
 
-  void startListenNavigation() {
-    streamActionQueueController.stream
-        .debounceTime(Duration(milliseconds: 100))
-        .asyncMap((param) async {
-          if (param.path == path) {
-            return ModularRouteEmpty();
-          }
+  // void startListenNavigation() {
+  //   streamActionQueueController.stream
+  //       .debounceTime(Duration(milliseconds: 100))
+  //       .asyncMap((param) async {
+  //         if (param.path == path) {
+  //           return ModularRouteEmpty();
+  //         }
 
-          var router = await parser.selectRoute(param.path, arguments: param.arguments);
-          _arguments = router.args;
+  //         var router = await parser.selectRoute(param.path, arguments: param.arguments);
+  //         _arguments = router.args;
 
-          return router;
-        })
-        .asyncMap((router) async {
-          if (router is ModularRouteEmpty) {
-            return 'Empty';
-          }
-          await setNewRoutePath(router, fromModular: true);
-          return 'OK';
-        })
-        .switchMap((value) => Stream.value(value))
-        .listen((router) {});
-  }
+  //         return router;
+  //       })
+  //       .asyncMap((router) async {
+  //         if (router is ModularRouteEmpty) {
+  //           return 'Empty';
+  //         }
+  //         await setNewRoutePath(router, fromModular: true);
+  //         return 'OK';
+  //       })
+  //       .switchMap((value) => Stream.value(value))
+  //       .listen((router) {});
+  // }
 
   NavigatorState get navigator => navigatorKey.currentState!;
 
@@ -113,7 +113,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
         for (var p in _pages) {
           p.completePop(null);
           removeInject(p.router.path!);
-          for (var r in p.router.routerOutlet) {
+          for (var r in routerOutletPages[p.router.path]!.map((e) => e.router)) {
             removeInject(r.path!);
           }
         }
@@ -148,10 +148,23 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
     return '${uri.resolve(routeName).toString()}';
   }
 
+  var _lastClick = DateTime.now();
+
   @override
   Future<void> navigate(String routeName, {arguments, @deprecated bool replaceAll = true}) async {
+    final currentTime = DateTime.now();
+    if (currentTime.difference(_lastClick).inMilliseconds < 500) {
+      return;
+    }
+    if (routeName == path) {
+      return;
+    }
+    _lastClick = currentTime;
     routeName = resolverPath(routeName, path);
-    streamActionQueueController.add(RouterStreamparam(routeName, arguments));
+    final router = await parser.selectRoute(routeName, arguments: arguments);
+    _arguments = router.args;
+    setNewRoutePath(router);
+    // streamActionQueueController.add(RouterStreamparam(routeName, arguments));
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
@@ -206,7 +219,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName, arguments: arguments);
+    var router = await parser.selectRoute(routeName, arguments: arguments, pushedStyle: '${_pages.length}');
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {
@@ -254,7 +267,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   @override
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(String routeName, {TO? result, Object? arguments, bool forRoot = false}) async {
     routeName = resolverPath(routeName, path);
-    var router = await parser.selectRoute(routeName, arguments: arguments);
+    var router = await parser.selectRoute(routeName, arguments: arguments, pushedStyle: '${_pages.length - 1}');
     _arguments = router.args;
 
     if (router.routerOutlet.isNotEmpty) {

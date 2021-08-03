@@ -51,7 +51,7 @@ abstract class Module {
     binds.addAll(b);
   }
 
-  final List<String> paths = <String>[];
+  final Set<String> paths = <String>{};
 
   T? getInjectedBind<T>([Type? type]) {
     type = type ?? _getInjectType<T>();

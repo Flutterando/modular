@@ -121,7 +121,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         for (var routeChild in route.children) {
           var r = _searchRoute(routeChild, tempRouteName, uri);
           if (r != null) {
-            r.currentModule?.paths.remove(uri.toString());
+            // r.currentModule?.paths.remove(uri.toString());
             r = r.copyWith(modulePath: tempRouteName);
             route = route.copyWith(args: r.args, routerOutlet: [r], uri: uri.replace(path: tempRouteName));
             return route;
@@ -211,22 +211,22 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
 
     var pathSegments = path.split('/')..removeLast();
     final length = pathSegments.length;
-    for(var i = 0; i < length; i++) {
+    for (var i = 0; i < length; i++) {
       final localPath = pathSegments.join('/');
       final route = _searchInModule(module, "", Uri.parse(localPath.isEmpty ? '/' : localPath));
 
-      if(route != null) {
-        if(route.children.isEmpty) {
+      if (route != null) {
+        if (route.children.isEmpty) {
           found = route.currentModule?.routes.last.routerName == '**' ? route.currentModule?.routes.last : null;
         } else {
           found = route.children.last.routerName == '**' ? route.children.last : null;
-          if(route.routerName != '/') {
+          if (route.routerName != '/') {
             break;
           }
         }
       }
 
-      if(found != null) {
+      if (found != null) {
         break;
       }
       pathSegments.removeLast();
@@ -235,7 +235,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
     return found?.routerName == '**' ? found : null;
   }
 
-  Future<ModularRoute> selectRoute(String path, {Module? module, dynamic arguments}) async {
+  Future<ModularRoute> selectRoute(String path, {Module? module, dynamic arguments, String? pushedStyle}) async {
     if (path.isEmpty) {
       throw Exception("Router can not be empty");
     }
@@ -244,10 +244,32 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
 
     if (router != null) {
       router = router.copyWith(args: router.args.copyWith(uri: router.uri, data: arguments));
+      if (pushedStyle != null) {
+        if (router.routerOutlet.isEmpty) {
+          router = router.copyWith(uri: Uri.parse('${uri.path}@$pushedStyle'));
+          Modular.setPathInActiveModules(uri.path, router.path!);
+        } else {
+          var miniRoute = router.routerOutlet.last;
+          miniRoute = miniRoute.copyWith(uri: Uri.parse('${miniRoute.path}@$pushedStyle'));
+          router = router.copyWith(routerOutlet: [miniRoute]);
+          Modular.setPathInActiveModules(uri.path, miniRoute.path!);
+        }
+      }
       return canActivate(router.path!, router);
     } else {
       router = _searchWildcard(uri.path, module ?? Modular.initialModule);
       if (router != null) {
+        if (pushedStyle != null) {
+          if (router.routerOutlet.isEmpty) {
+            router = router.copyWith(uri: Uri.parse('${uri.path}@$pushedStyle'));
+            Modular.setPathInActiveModules(uri.path, router.path!);
+          } else {
+            var miniRoute = router.routerOutlet.last;
+            miniRoute = miniRoute.copyWith(uri: Uri.parse('${miniRoute.path}@$pushedStyle'));
+            router = router.copyWith(routerOutlet: [miniRoute]);
+            Modular.setPathInActiveModules(uri.path, miniRoute.path!);
+          }
+        }
         return router;
       }
     }
