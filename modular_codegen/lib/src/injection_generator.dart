@@ -39,19 +39,20 @@ class ModelVisitor extends SimpleElementVisitor {
   List<String> params = [];
   bool isAnnotation = false;
 
+  bool _isAnnotation(ConstructorElement element) {
+    return element.parameters
+        .map((parameter) => parameter.metadata)
+        .expand((annotations) => annotations)
+        .map((annotation) => annotation.element?.displayName ?? '')
+        .where(
+            (displayName) => ['Data', 'Param', 'Default'].contains(displayName))
+        .isNotEmpty;
+  }
+
   @override
   visitConstructorElement(ConstructorElement element) {
     className = element.type.returnType;
-    isAnnotation = element.parameters.firstWhere((param) {
-          if (param.metadata.length > 0) {
-            return param.metadata.firstWhere((param) {
-                  return param.element?.displayName == "Data" || param.element?.displayName == "Param" || param.element?.displayName == "Default";
-                }, orElse: (() => null) as ElementAnnotation Function()) !=
-                null;
-          }
-          return false;
-        }, orElse: (() => null) as ParameterElement Function()) !=
-        null;
+    isAnnotation = _isAnnotation(element);
     writeParams(element.parameters);
   }
 
