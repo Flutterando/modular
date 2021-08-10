@@ -1,6 +1,7 @@
 ## [3.4.0] - 2021-08-03
 
 * Navigation Transition now is more responsive!
+* Triple integration
 * Fix Bind when you only have Imports. 
 
 ## [3.3.1] - 2021-07-07

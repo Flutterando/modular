@@ -154,6 +154,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularRoute>
   }
 
   String resolverPath(String routeName, String path) {
+    if (path.contains('@')) {
+      path = path.split('@').first;
+    }
     final uri = Uri.parse(path);
     return '${uri.resolve(routeName).toString()}';
   }

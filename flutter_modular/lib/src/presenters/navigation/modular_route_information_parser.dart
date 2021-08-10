@@ -275,6 +275,8 @@ class ModularRouteInformationParser
     var router =
         _searchInModule(module ?? Modular.initialModule, "", uri, pushStyle);
 
+    uri = router?.uri ?? uri;
+
     if (router != null) {
       router = router.copyWith(
           args: router.args.copyWith(uri: router.uri, data: arguments));

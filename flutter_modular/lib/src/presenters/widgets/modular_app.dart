@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:triple/triple.dart';
 import '../../core/interfaces/module.dart';
 
 import '../modular_base.dart';
@@ -25,6 +26,9 @@ class _ModularAppState extends State<ModularApp> {
   void initState() {
     super.initState();
     Modular.init(widget.module);
+    setTripleResolver(<T extends Object>() {
+      return Modular.get<T>();
+    });
   }
 
   @override
