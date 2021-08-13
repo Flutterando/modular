@@ -15,10 +15,13 @@ class _MutableValue {
 
 @immutable
 abstract class Module {
-  final Map<Type, dynamic> _singletonBinds = {};
+  final _singletonBinds = <Type, dynamic>{};
 
   final List<Bind> _binds = [];
   List<Bind> get binds => const [];
+
+  @visibleForTesting
+  List<Bind> getProcessBinds() => _binds;
   List<ModularRoute> get routes => const [];
 
   List<Module> get imports => const [];
