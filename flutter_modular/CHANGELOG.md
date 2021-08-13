@@ -1,5 +1,6 @@
-## [3.4.0] - 2021-08-03
+## [3.4.0-dev.7] - 2021-08-13
 
+* Added **RedirectRoute**.
 * Navigation Transition now is more responsive!
 * Triple integration
 * Fix Bind when you only have Imports. 
