@@ -9,14 +9,10 @@ import 'module.dart';
 import 'route_guard.dart';
 
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
-typedef ModularChild = Widget Function(
-    BuildContext context, ModularArguments args);
+typedef ModularChild = Widget Function(BuildContext context, ModularArguments args);
 
 abstract class ModularRoute<T> {
   Module? get currentModule;
-
-  @Deprecated('Use RouteGuard.guardedRoute')
-  String? guardedRoute;
 
   ModularArguments get args;
 
@@ -235,10 +231,7 @@ abstract class ModularRoute<T> {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is ModularRoute<T> &&
-        o.modulePath == modulePath &&
-        o.routerName == routerName &&
-        o.module == module;
+    return o is ModularRoute<T> && o.modulePath == modulePath && o.routerName == routerName && o.module == module;
   }
 
   @override

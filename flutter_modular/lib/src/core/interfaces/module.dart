@@ -17,7 +17,8 @@ class _MutableValue {
 abstract class Module {
   final Map<Type, dynamic> _singletonBinds = {};
 
-  List<Bind> get binds => [];
+  final List<Bind> _binds = [];
+  List<Bind> get binds => const [];
   List<ModularRoute> get routes => const [];
 
   List<Module> get imports => const [];
@@ -26,12 +27,13 @@ abstract class Module {
   List<dynamic> get instanciatedSingletons => _singletonBinds.values.toList();
 
   Module() {
+    _binds.addAll(binds);
     for (var module in imports) {
       final list = <Bind>[];
-      for (var bind in module.binds.where((element) => element.export)) {
+      for (var bind in module._binds.where((element) => element.export)) {
         list.add(bind);
       }
-      binds.insertAll(0, list);
+      _binds.insertAll(0, list);
     }
   }
 
@@ -41,14 +43,14 @@ abstract class Module {
     final asyncBindList = binds.whereType<AsyncBind>().toList();
     for (var bind in asyncBindList) {
       final resolvedBind = await bind.converToAsyncBind();
-      binds.insert(0, resolvedBind);
+      _binds.insert(0, resolvedBind);
     }
   }
 
   @visibleForTesting
   void changeBinds(List<Bind> b) {
-    binds.clear();
-    binds.addAll(b);
+    _binds.clear();
+    _binds.addAll(b);
   }
 
   final Set<String> paths = <String>{};
@@ -70,8 +72,7 @@ abstract class Module {
       return bindValue;
     }
 
-    var bind = binds.firstWhere((b) => b.inject is T Function(Inject),
-        orElse: () => BindEmpty());
+    var bind = _binds.firstWhere((b) => b.inject is T Function(Inject), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       typesInRequest.remove(type);
       return null;
@@ -146,8 +147,7 @@ ${typesInRequest.join('\n')}
 
   /// Create a instance of all binds isn't lazy Loaded
   void instance(List<dynamic> singletons) {
-    final _filtedBinds = List<Bind>.from(binds)
-      ..removeWhere((e) => _removeBindFromInstacedSingletons(e, singletons));
+    final _filtedBinds = List<Bind>.from(binds)..removeWhere((e) => _removeBindFromInstacedSingletons(e, singletons));
 
     for (final bindElement in _filtedBinds) {
       if (!bindElement.isLazy) {
@@ -157,8 +157,7 @@ ${typesInRequest.join('\n')}
     }
   }
 
-  bool _removeBindFromInstacedSingletons(
-      Bind<Object> bind, List<dynamic> singletons) {
+  bool _removeBindFromInstacedSingletons(Bind<Object> bind, List<dynamic> singletons) {
     if (bind.isLazy) {
       return false;
     }

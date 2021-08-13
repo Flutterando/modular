@@ -101,7 +101,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
         router = router.copyWith(
           modulePath: router.modulePath == null ? '/' : tempRouteName,
           currentModule: router.currentModule ?? route.currentModule,
-          guardedRoute: router.guardedRoute ?? route.guardedRoute,
           guards: [if (route.guards != null) ...route.guards!, if (router.guards != null) ...router.guards!],
         );
 
@@ -300,11 +299,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           print(ModularError('$path is CAN\'T ACTIVATE'));
           print('redirect to \'${guard.guardedRoute}\'');
           return await selectRoute(guard.guardedRoute!);
-        } else if (!result && router.guardedRoute != null && !isRouterOutlet) {
-          print(ModularError('$path is CAN\'T ACTIVATE'));
-          print('redirect to \'${router.guardedRoute}\'');
-          return await selectRoute(router.guardedRoute!);
-        } else if (!result && router.guardedRoute == null) {
+        } else {
           throw ModularError('$path is NOT ACTIVATE');
         }
       } on ModularError {
