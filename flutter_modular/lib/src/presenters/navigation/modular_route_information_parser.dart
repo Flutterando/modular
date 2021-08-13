@@ -299,8 +299,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
           print(ModularError('$path is CAN\'T ACTIVATE'));
           print('redirect to \'${guard.guardedRoute}\'');
           return await selectRoute(guard.guardedRoute!);
-        } else {
-          throw ModularError('$path is NOT ACTIVATE');
         }
       } on ModularError {
         rethrow;

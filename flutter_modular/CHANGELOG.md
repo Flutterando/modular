@@ -1,4 +1,4 @@
-## [3.4.0-dev.7] - 2021-08-13
+## [3.4.0-dev.8] - 2021-08-13
 
 * Added **RedirectRoute**.
 * Navigation Transition now is more responsive!
