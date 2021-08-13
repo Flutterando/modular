@@ -22,6 +22,6 @@ class SearchByTextImpl implements SearchByText {
     if (textSearch?.isEmpty ?? true) {
       return Left(InvalidSearchText());
     }
-    return repository.getUsers(textSearch!);
+    return await repository.getUsers(textSearch!);
   }
 }
