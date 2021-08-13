@@ -13,6 +13,7 @@ export 'src/core/models/child_route.dart';
 export 'src/core/models/custom_transition.dart';
 export 'src/core/models/modular_arguments.dart';
 export 'src/core/models/module_route.dart';
+export 'src/core/models/redirect_to_route.dart';
 export 'src/core/models/wildcard_route.dart';
 export 'src/presenters/inject.dart';
 export 'src/presenters/modular_base.dart';
