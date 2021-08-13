@@ -117,11 +117,11 @@ class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
-  List<Bind> get binds => [];
+  final List<Bind> binds = [];
 
   // Provide all the routes for your module
   @override
-  List<ModularRoute> get routes => [];
+  final List<ModularRoute> routes = [];
 
 }
 ```
@@ -147,12 +147,12 @@ You can create as many modules in your project as you wish:
 ```dart
 class HomeModule extends Module {
   @override
-  List<Bind> get binds => [
+  final List<Bind> binds = [
     Bind.singleton((i) => HomeBloc()),
   ];
 
   @override
-  List<ModularRoute> get routes => [
+  final List<ModularRoute> routes = [
     ChildRoute('/', child: (_, args) => HomeWidget()),
     ChildRoute('/list', child: (_, args) => ListWidget()),
   ];
@@ -166,7 +166,7 @@ You may then pass the submodule to a `Route` in your main module through the `mo
 class AppModule extends Module {
 
   @override
-  List<ModularRoute> get routes => [
+  final List<ModularRoute> routes = [
     ModuleRoute('/home', module: HomeModule()),
   ];
 }
@@ -186,11 +186,11 @@ class AppModule extends Module {
 
   // Provide a list of dependencies to inject into your project
   @override
-  List<Bind> get binds => [];
+  final List<Bind> binds = [];
 
   // Provide all the routes for your module
   @override
-  List<ModularRoute> get routes => [
+  final List<ModularRoute> routes = [
       // Simple route using the ChildRoute
       ChildRoute('/', child: (_, __) => HomePage()),
       ChildRoute('/login', child: (_, __) => LoginPage()),
@@ -210,7 +210,7 @@ You can use dynamic routing system to provide parameters to your `Route`:
 // using square brackets notation (['parameter_name']).
 
 @override
-List<ModularRoute> get routes => [
+final List<ModularRoute> routes = [
   ChildRoute(
     '/product/:id',
     child: (_, args) => Product(id: args.params['id']),
@@ -229,7 +229,7 @@ You can use it with more than one page too. For example:
 
 ```dart
 @override
-List<ModularRoute> get routes => [
+final List<ModularRoute> routes = [
   // We are sending an ID to the DetailPage
   ChildRoute(
     '/product/:id/detail',
@@ -295,7 +295,7 @@ To achieve this, pass the type you expect to return as a type parameter to the `
 
 ```dart
 @override
-List<ModularRoute> get routes => [
+final List<ModularRoute> routes = [
   // This router expects to receive a `String` when popped.
   ChildRoute<String>('/event', child: (_, __) => EventPage()),
 ]
@@ -336,7 +336,7 @@ To use your `RouteGuard` in a route, pass it to the `guards` parameter:
 
 ```dart
 @override
-List<ModularRoute> get routes => [
+final List<ModularRoute> routes = [
   final ModuleRoute('/', module: HomeModule()),
   final ModuleRoute(
     '/admin',
@@ -353,7 +353,7 @@ Add a fallback route to be used if `RouteGuard` validation fails by adding the `
 
 ```dart
 @override
-List<ModularRoute> get routes => [
+final List<ModularRoute> routes = [
     ChildRoute(
       '/home',
       child: (context, args) => HomePage(),
