@@ -32,9 +32,6 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   final String? modulePath;
 
   @override
-  final String? guardedRoute;
-
-  @override
   final String routerName;
 
   @override
@@ -84,7 +81,6 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
   ModularRouteImpl(
     this.routerName, {
     this.children = const [],
-    this.guardedRoute,
     this.args = const ModularArguments(),
     this.module,
     this.child,
@@ -98,13 +94,9 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
     this.customTransition,
     this.duration = const Duration(milliseconds: 300),
     this.modulePath = '/',
-  })  : assert(module == null || children.isEmpty,
-            "can't have both module and nested routes(children)"),
-        assert((transition == TransitionType.custom &&
-                customTransition != null) ||
-            transition != TransitionType.custom && customTransition == null),
-        assert((module == null && child != null) ||
-            (module != null && child == null)),
+  })  : assert(module == null || children.isEmpty, "can't have both module and nested routes(children)"),
+        assert((transition == TransitionType.custom && customTransition != null) || transition != TransitionType.custom && customTransition == null),
+        assert((module == null && child != null) || (module != null && child == null)),
         assert(routerName == '**' ? child != null : true);
 
   @override
@@ -131,7 +123,6 @@ class ModularRouteImpl<T> extends ModularRoute<T> {
       child: child ?? this.child,
       args: args ?? this.args,
       children: children ?? this.children,
-      guardedRoute: guardedRoute ?? this.guardedRoute,
       module: module ?? this.module,
       routerOutlet: routerOutlet ?? this.routerOutlet,
       currentModule: currentModule ?? this.currentModule,

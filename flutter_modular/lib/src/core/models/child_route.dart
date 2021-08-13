@@ -22,7 +22,6 @@ class ChildRoute<T> extends ModularRouteImpl<T> {
           routerOutlet: [],
           duration: duration,
           child: child,
-          guardedRoute: guardedRoute,
           routeGenerator: routeGenerator,
           customTransition: customTransition,
           children: children,
