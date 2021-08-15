@@ -40,8 +40,6 @@ abstract class ModularRoute {
     }
   }
 
-  String get path => uri.path;
-
   ModularRoute addModule(String name, {required RouteContext module}) {
     final bindContextEntries = {module.runtimeType: module};
     final routeMap = module.routeMap.map<String, ModularRoute>(

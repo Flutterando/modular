@@ -1,27 +1,14 @@
 library modular_core;
 
-import 'package:meta/meta.dart';
-import 'src/route/tracker.dart' as t;
+import 'package:modular_core/src/di/injector.dart';
 
-import 'src/route/modular_route.dart';
-import 'src/route/route_context.dart';
-import 'src/di/bind.dart';
+import 'src/route/tracker.dart' as t;
 
 export 'src/di/bind.dart';
 export 'src/di/resolvers.dart';
 export 'src/route/modular_route.dart';
+export 'src/route/module.dart';
+export 'src/di/injector.dart';
+export 'src/route/modular_arguments.dart';
 
-abstract class Module extends RouteContext {
-  @visibleForOverriding
-  @override
-  List<Module> get imports => const [];
-
-  @visibleForOverriding
-  @override
-  List<Bind> get binds => const [];
-
-  @override
-  List<ModularRoute> get routes => const [];
-}
-
-final Tracker = t.Tracker();
+final Tracker = t.Tracker(Injector());

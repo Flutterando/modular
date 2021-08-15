@@ -36,16 +36,25 @@ class Injector<T> {
   }
 
   bool dispose<B extends Object>() {
-    final module = _allBindContexts.remove(_getType<B>());
-    if (module != null) {
-      module.dispose();
-      return true;
+    for (var binds in _allBindContexts.values) {
+      final r = binds.remove<B>();
+      if (r) return r;
     }
     return false;
   }
 
+  void destroy() {
+    for (var binds in _allBindContexts.values) {
+      binds.dispose();
+    }
+    _allBindContexts.clear();
+  }
+
   void removeBindContext<T extends BindContext>() {
-    _allBindContexts.remove(_getType<T>());
+    final module = _allBindContexts.remove(_getType<T>());
+    if (module != null) {
+      module.dispose();
+    }
   }
 
   Type _getType<T>() => T;
