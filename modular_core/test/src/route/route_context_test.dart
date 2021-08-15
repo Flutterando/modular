@@ -1,5 +1,5 @@
 import 'package:modular_core/src/di/bind_context.dart';
-import 'package:modular_core/src/route/route.dart';
+import 'package:modular_core/src/route/modular_route.dart';
 import 'package:modular_core/src/route/route_context.dart';
 import 'package:test/test.dart';
 
