@@ -4,10 +4,6 @@ import 'resolvers.dart';
 
 class Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
-  static Injector instance = Injector._();
-  static Injector newScope() => Injector._();
-
-  Injector._();
 
   B call<B extends Object>([Bind<B>? bind]) => get<B>(bind);
 

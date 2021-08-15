@@ -4,11 +4,14 @@ import 'injector.dart';
 import 'resolvers.dart';
 
 abstract class BindContext {
-  final List<Bind> _binds = [];
+  @visibleForOverriding
   List<Bind> get binds => const [];
+  @visibleForOverriding
+  List<BindContext> get imports => const [];
+
+  final List<Bind> _binds = [];
   final Set<String> tags = {};
   final _singletonBinds = <Type, dynamic>{};
-  List<BindContext> get imports => const [];
   List<dynamic> get instanciatedSingletons => _singletonBinds.values.toList();
 
   @visibleForTesting
@@ -39,7 +42,7 @@ abstract class BindContext {
       return null;
     }
 
-    bindValue = bind.factoryFunction(Injector.instance) as T;
+    bindValue = bind.factoryFunction(Injector()) as T;
     if (bind.isSingleton) {
       _singletonBinds[type] = bindValue;
     }
@@ -72,7 +75,7 @@ abstract class BindContext {
   void instantiateSingletonBinds(List<dynamic> singletons) {
     final filteredList = _binds.where((bind) => !bind.isLazy || !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
-      var b = bindElement.factoryFunction(Injector.instance);
+      var b = bindElement.factoryFunction(Injector());
       _singletonBinds[b.runtimeType] = b;
     }
   }

@@ -68,7 +68,7 @@ class AsyncBind<T extends Object> extends Bind<Future<T>> {
   AsyncBind(this.asyncInject, {this.export = false}) : super(asyncInject, export: export);
 
   Future<T> resolveAsyncBind() async {
-    final bind = await asyncInject(Injector.instance);
+    final bind = await asyncInject(Injector());
     return bind;
   }
 

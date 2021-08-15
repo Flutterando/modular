@@ -1,22 +1,25 @@
 import 'package:modular_core/modular_core.dart';
+import 'package:modular_core/src/di/bind_context.dart';
+import 'package:modular_core/src/di/injector.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Injector.instance.bindContext(MyInjectModule());
+  final instance = Injector();
+  instance.bindContext(MyInjectModule());
 
   test('get injections', () {
-    final bindString = Injector.instance.get<String>();
+    final bindString = instance.get<String>();
     expect(bindString, 'Jacob');
 
-    final bindDouble = Injector.instance.get<double>();
+    final bindDouble = instance.get<double>();
     expect(bindDouble, 0.0);
 
-    final bindInt = Injector.instance.get<Map>();
+    final bindInt = instance.get<Map>();
     expect(bindInt, isA<Map>());
   });
 
   test('throw error when try get bind with export false', () {
-    expect(() => Injector.instance.get<List>(), throwsA(isException));
+    expect(() => instance.get<List>(), throwsA(isException));
   });
 }
 
