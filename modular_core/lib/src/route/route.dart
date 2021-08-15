@@ -1,22 +1,24 @@
 import 'package:modular_core/src/di/bind_context.dart';
 
-abstract class Route {
+import 'route_context.dart';
+
+abstract class ModularRoute {
   final String name;
   final String tag;
-  final Route? parent;
-  late final List<Route> children;
+  final ModularRoute? parent;
+  late final List<ModularRoute> children;
   final Uri uri;
   final Map<Type, BindContext> bindContextEntries;
-  late final Map<String, Route> routeMap;
+  late final Map<String, ModularRoute> routeMap;
 
-  Route({
+  ModularRoute({
     required this.name,
     this.tag = '',
-    List<Route> children = const [],
+    List<ModularRoute> children = const [],
     this.parent,
     required this.uri,
     this.bindContextEntries = const {},
-    Map<String, Route>? routeMap,
+    Map<String, ModularRoute>? routeMap,
   }) {
     if (routeMap == null) {
       this.routeMap = {};
@@ -40,13 +42,30 @@ abstract class Route {
 
   String get path => uri.path;
 
-  Route copyWith({
+  ModularRoute addModule(String name, {required RouteContext module}) {
+    final bindContextEntries = {module.runtimeType: module};
+    final routeMap = module.routeMap.map<String, ModularRoute>(
+      (key, route) => MapEntry(
+        name + key,
+        route.copyWith(bindContextEntries: bindContextEntries),
+      ),
+    );
+
+    return copyWith(
+      name: name,
+      uri: Uri.parse(name),
+      bindContextEntries: bindContextEntries,
+      routeMap: routeMap,
+    );
+  }
+
+  ModularRoute copyWith({
     String? name,
     String? tag,
-    List<Route>? children,
-    Route? parent,
+    List<ModularRoute>? children,
+    ModularRoute? parent,
     Uri? uri,
-    Map<String, Route>? routeMap,
+    Map<String, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
   });
 }

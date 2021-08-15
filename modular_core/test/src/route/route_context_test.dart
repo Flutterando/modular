@@ -26,7 +26,7 @@ void main() {
 
 class ModuleForRoute extends RouteContext {
   @override
-  List<Route> get routes => [
+  List<ModularRoute> get routes => [
         CustomRoute(name: '/', uri: Uri.parse('/'), children: [
           CustomRoute(name: '/', uri: Uri.parse('/')),
           CustomRoute(name: '/2', uri: Uri.parse('/2')),
@@ -38,21 +38,21 @@ class ModuleForRoute extends RouteContext {
 
 class OtherModule extends RouteContext {
   @override
-  List<Route> get routes {
+  List<ModularRoute> get routes {
     return [
       CustomRoute(name: '/', uri: Uri.parse('/first')),
     ];
   }
 }
 
-class CustomRoute extends Route {
+class CustomRoute extends ModularRoute {
   CustomRoute({
     required String name,
     String tag = '',
-    List<Route> children = const [],
+    List<ModularRoute> children = const [],
     required Uri uri,
-    Map<String, Route>? routeMap,
-    Route? parent,
+    Map<String, ModularRoute>? routeMap,
+    ModularRoute? parent,
     Map<Type, BindContext> bindContextEntries = const {},
   }) : super(
           name: name,
@@ -65,29 +65,18 @@ class CustomRoute extends Route {
         );
 
   factory CustomRoute.module(String name, {required RouteContext module}) {
-    final bindContextEntries = {module.runtimeType: module};
-    final routeMap = module.routeMap.map<String, Route>(
-      (key, route) => MapEntry(
-        name + key,
-        route.copyWith(name: '$name${route.name}', bindContextEntries: bindContextEntries),
-      ),
-    );
-    return CustomRoute(
-      name: name,
-      uri: Uri.parse(name),
-      bindContextEntries: bindContextEntries,
-      routeMap: routeMap,
-    );
+    final route = CustomRoute(name: name, uri: Uri.parse('uri'));
+    return route.addModule(name, module: module) as CustomRoute;
   }
 
   @override
-  Route copyWith({
+  ModularRoute copyWith({
     String? name,
     String? tag,
-    List<Route>? children,
-    Route? parent,
+    List<ModularRoute>? children,
+    ModularRoute? parent,
     Uri? uri,
-    Map<String, Route>? routeMap,
+    Map<String, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
   }) {
     return CustomRoute(
