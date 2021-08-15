@@ -12,23 +12,71 @@ class Tracker {
       return _nullableModule!;
     }
 
-    throw TrackerNotInitiate('Execute Tracker.runApp()');
+    throw TrackerNotInitiated('Execute Tracker.runApp()');
   }
 
   Tracker(this.injector);
 
-  var args = ModularArguments.empty();
+  var arguments = ModularArguments.empty();
 
-  Uri get uri => args.uri;
-
-  String _resolverPath(String path) {
-    return '${uri.resolve(path).toString()}';
+  Uri _resolverPath(String path) {
+    return arguments.uri.resolve(path);
   }
 
-  ModularRoute? findRoute(String path) {
-    path = _resolverPath(path);
-    final route = module.routeMap[path];
-    return route?.copyWith(uri: uri);
+  ModularRoute? findRoute(String path, [dynamic data]) {
+    var uri = _resolverPath(path);
+
+    ModularRoute? route;
+    var params = <String, String>{};
+
+    for (var key in module.routeMap.keys) {
+      var uriCandidate = Uri.parse(key);
+      if (key == uri.path) {
+        route = module.routeMap[key];
+        break;
+      }
+      if (uriCandidate.pathSegments.length != uri.pathSegments.length) {
+        continue;
+      }
+
+      final nomalizedCandidatePath = _prepareToRegex(uriCandidate.path);
+      final regExp = RegExp("^${nomalizedCandidatePath}\$", caseSensitive: true);
+      var result = regExp.firstMatch(uri.path);
+      if (result != null) {
+        var paramPos = 0;
+        final candidateSegments = uriCandidate.pathSegments;
+        final pathSegments = uri.pathSegments;
+
+        for (var candidateSegment in candidateSegments) {
+          if (candidateSegment.contains(":")) {
+            var paramName = candidateSegment.replaceFirst(':', '');
+            if (pathSegments[paramPos].isNotEmpty) {
+              params[paramName] = pathSegments[paramPos];
+            }
+          }
+          paramPos++;
+        }
+        route = module.routeMap[key];
+      }
+    }
+
+    if (route == null) return null;
+    arguments = arguments.copyWith(data: data, uri: uri, params: params);
+    return route.copyWith(uri: uri);
+  }
+
+  // Map<String, String> _getParams() {
+  //   var params = <String, String>{};
+  // }
+
+  String _prepareToRegex(String url) {
+    final newUrl = <String>[];
+    for (var part in url.split('/')) {
+      var url = part.contains(":") ? "(.*?)" : part;
+      newUrl.add(url);
+    }
+
+    return newUrl.join("/");
   }
 
   void runApp(Module module) {
@@ -42,11 +90,11 @@ class Tracker {
   }
 }
 
-class TrackerNotInitiate implements NullThrownError {
+class TrackerNotInitiated implements NullThrownError {
   final String message;
   final StackTrace? stackTrace;
 
-  const TrackerNotInitiate(this.message, [this.stackTrace]);
+  const TrackerNotInitiated(this.message, [this.stackTrace]);
 
   @override
   String toString() {
