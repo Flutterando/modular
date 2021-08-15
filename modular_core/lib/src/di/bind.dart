@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'injection.dart';
+import 'injector.dart';
 
 class Bind<T extends Object> {
   final T Function(Inject i) factoryFunction;

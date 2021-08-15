@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'bind.dart';
-import 'injection.dart';
+import 'injector.dart';
 import 'resolvers.dart';
 
 abstract class BindContext {
