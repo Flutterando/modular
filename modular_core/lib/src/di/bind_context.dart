@@ -34,12 +34,12 @@ abstract class BindContext {
       return bindValue;
     }
 
-    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Inject), orElse: () => BindEmpty());
+    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       return null;
     }
 
-    bindValue = bind.factoryFunction(Inject.instance) as T;
+    bindValue = bind.factoryFunction(Injector.instance) as T;
     if (bind.isSingleton) {
       _singletonBinds[type] = bindValue;
     }
@@ -72,7 +72,7 @@ abstract class BindContext {
   void instantiateSingletonBinds(List<dynamic> singletons) {
     final filteredList = _binds.where((bind) => !bind.isLazy || !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
-      var b = bindElement.factoryFunction(Inject.instance);
+      var b = bindElement.factoryFunction(Injector.instance);
       _singletonBinds[b.runtimeType] = b;
     }
   }
@@ -81,8 +81,8 @@ abstract class BindContext {
     return singletons.indexWhere((element) => _existBind(element, bind.factoryFunction)) >= 0;
   }
 
-  bool _existBind<T>(T instance, T Function(Inject<dynamic>) inject) {
-    return inject is T Function(Inject);
+  bool _existBind<T>(T instance, T Function(Injector<dynamic>) inject) {
+    return inject is T Function(Injector);
   }
 
   Type _getInjectType<B>() {

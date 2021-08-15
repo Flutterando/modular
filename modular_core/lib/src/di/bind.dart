@@ -3,7 +3,7 @@ import 'dart:async';
 import 'injector.dart';
 
 class Bind<T extends Object> {
-  final T Function(Inject i) factoryFunction;
+  final T Function(Injector i) factoryFunction;
 
   ///single instance object?
   final bool isSingleton;
@@ -25,25 +25,25 @@ class Bind<T extends Object> {
   ///Bind a 'Singleton' class.
   ///Built together with the module.
   ///The instance will always be the same.
-  static Bind<T> singleton<T extends Object>(T Function(Inject i) inject, {bool export = false}) {
+  static Bind<T> singleton<T extends Object>(T Function(Injector i) inject, {bool export = false}) {
     return Bind<T>(inject, isSingleton: true, isLazy: false, export: export);
   }
 
   ///Bind a 'Lazy Singleton' class.
   ///Built only when called the first time using Modular.get.
   ///The instance will always be the same.
-  static Bind<T> lazySingleton<T extends Object>(T Function(Inject i) inject, {bool export = false}) {
+  static Bind<T> lazySingleton<T extends Object>(T Function(Injector i) inject, {bool export = false}) {
     return Bind<T>(inject, isSingleton: true, isLazy: true, export: export);
   }
 
   ///Bind a factory. Always a new constructor when calling Modular.get
-  static Bind<T> factory<T extends Object>(T Function(Inject i) inject, {bool export = false}) {
+  static Bind<T> factory<T extends Object>(T Function(Injector i) inject, {bool export = false}) {
     return Bind<T>(inject, isSingleton: false, isLazy: true, export: export);
   }
 }
 
 class BindInject<T extends Object> extends Bind<T> {
-  final T Function(Inject i) inject;
+  final T Function(Injector i) inject;
 
   ///single instance object?
   final bool isSingleton;
@@ -60,7 +60,7 @@ class BindEmpty extends Bind<Object> {
 }
 
 class AsyncBind<T extends Object> extends Bind<Future<T>> {
-  final Future<T> Function(Inject i) asyncInject;
+  final Future<T> Function(Injector i) asyncInject;
 
   ///export bind for others modules
   final bool export;
@@ -68,7 +68,7 @@ class AsyncBind<T extends Object> extends Bind<Future<T>> {
   AsyncBind(this.asyncInject, {this.export = false}) : super(asyncInject, export: export);
 
   Future<T> resolveAsyncBind() async {
-    final bind = await asyncInject(Inject.instance);
+    final bind = await asyncInject(Injector.instance);
     return bind;
   }
 

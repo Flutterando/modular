@@ -2,21 +2,21 @@ import 'package:modular_core/modular_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Inject.instance.bindContext(MyInjectModule());
+  Injector.instance.bindContext(MyInjectModule());
 
   test('get injections', () {
-    final bindString = Inject.instance.get<String>();
+    final bindString = Injector.instance.get<String>();
     expect(bindString, 'Jacob');
 
-    final bindDouble = Inject.instance.get<double>();
+    final bindDouble = Injector.instance.get<double>();
     expect(bindDouble, 0.0);
 
-    final bindInt = Inject.instance.get<Map>();
+    final bindInt = Injector.instance.get<Map>();
     expect(bindInt, isA<Map>());
   });
 
   test('throw error when try get bind with export false', () {
-    expect(() => Inject.instance.get<List>(), throwsA(isException));
+    expect(() => Injector.instance.get<List>(), throwsA(isException));
   });
 }
 
