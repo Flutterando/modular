@@ -1,22 +1,14 @@
 import '../di/bind_context.dart';
 
-import 'modular_route.dart';
-
-typedef RouteResolver = ModularRoute Function(dynamic arg);
+import 'route.dart';
 
 abstract class RouteContext extends BindContext {
-  List<ModularRoute> get routes => const [];
-  final _routeMap = <String, ModularRoute>{};
+  List<Route> get routes => const [];
+  final routeMap = <String, Route>{};
 
   RouteContext() {
     for (var route in routes) {
-      if (route.children.isEmpty) {
-        _routeMap[route.name] = route;
-      } else {
-        for (var child in route.children) {
-          _routeMap[route.name];
-        }
-      }
+      routeMap.addAll(route.routeMap);
     }
   }
 }
