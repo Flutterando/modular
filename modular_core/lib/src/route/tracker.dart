@@ -23,7 +23,7 @@ class Tracker {
 
   String get currentPath => arguments.uri.toString();
 
-  FutureOr<ModularRoute?> findRoute(String path, [dynamic data]) {
+  FutureOr<ModularRoute?> findRoute(String path, [dynamic data]) async {
     var uri = _resolverPath(path);
 
     ModularRoute? route;
@@ -53,8 +53,15 @@ class Tracker {
 
     if (route == null) return null;
 
-    arguments = arguments.copyWith(data: data, uri: uri, params: params);
     route = route.copyWith(uri: uri);
+
+    for (var middleware in route.middlewares) {
+      route = await middleware.call(route!);
+    }
+
+    if (route == null) return null;
+
+    arguments = arguments.copyWith(data: data, uri: uri, params: params);
     _injectBindContext(route);
     return route;
   }

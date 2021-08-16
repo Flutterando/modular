@@ -19,7 +19,7 @@ abstract class RouteGuard extends Middleware {
     if (await canActivate(route.uri.toString(), route)) {
       return route;
     } else if (guardedRoute != null) {
-      final redirect = Tracker.findRoute(guardedRoute!);
+      final redirect = await Tracker.findRoute(guardedRoute!);
       if (redirect != null) {
         return redirect;
       }
