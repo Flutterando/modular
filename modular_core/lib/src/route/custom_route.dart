@@ -5,18 +5,19 @@ import 'modular_route.dart';
 import 'route_context.dart';
 
 class CustomRoute extends ModularRoute {
+  final dynamic data;
+
   CustomRoute({
     required String name,
-    String tag = '',
+    this.data,
+    String parent = '',
     List<ModularRoute> children = const [],
     Uri? uri,
     List<Middleware> middlewares = const [],
     Map<String, ModularRoute>? routeMap,
-    ModularRoute? parent,
     Map<Type, BindContext> bindContextEntries = const {},
   }) : super(
           name: name,
-          tag: tag,
           children: children,
           uri: uri ?? Uri.parse('/'),
           parent: parent,
@@ -33,16 +34,15 @@ class CustomRoute extends ModularRoute {
   ModularRoute copyWith({
     String? name,
     List<Middleware>? middlewares,
-    String? tag,
+    String? parent,
     List<ModularRoute>? children,
-    ModularRoute? parent,
     Uri? uri,
     Map<String, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
   }) {
     return CustomRoute(
+      data: data,
       name: name ?? this.name,
-      tag: tag ?? this.tag,
       children: children ?? this.children,
       middlewares: middlewares ?? this.middlewares,
       uri: uri ?? this.uri,

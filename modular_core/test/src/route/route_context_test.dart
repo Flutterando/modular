@@ -8,11 +8,11 @@ void main() {
   test('process route maps', () {
     final initial = routeContext.routeMap['/']!;
     expect(initial.name, '/');
-    expect(initial.tag, '/');
+    expect(initial.parent, '/');
 
     final initial2 = routeContext.routeMap['/2']!;
     expect(initial2.name, '/2');
-    expect(initial2.tag, '/');
+    expect(initial2.parent, '/');
 
     expect(routeContext.routeMap['/home']?.name, '/home');
   });

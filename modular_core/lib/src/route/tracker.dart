@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:modular_core/src/di/injector.dart';
 
 import 'modular_arguments.dart';
@@ -21,7 +23,7 @@ class Tracker {
 
   String get currentPath => arguments.uri.toString();
 
-  ModularRoute? findRoute(String path, [dynamic data]) {
+  FutureOr<ModularRoute?> findRoute(String path, [dynamic data]) {
     var uri = _resolverPath(path);
 
     ModularRoute? route;

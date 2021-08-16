@@ -5,8 +5,7 @@ import 'route_context.dart';
 
 abstract class ModularRoute {
   final String name;
-  final String tag;
-  final ModularRoute? parent;
+  final String parent;
   late final List<ModularRoute> children;
   final List<Middleware> middlewares;
   final Uri uri;
@@ -15,9 +14,8 @@ abstract class ModularRoute {
 
   ModularRoute({
     required this.name,
-    this.tag = '',
+    this.parent = '',
     List<ModularRoute> children = const [],
-    this.parent,
     required this.uri,
     this.bindContextEntries = const {},
     this.middlewares = const [],
@@ -25,19 +23,17 @@ abstract class ModularRoute {
   }) {
     if (routeMap == null) {
       this.routeMap = {};
+      this.routeMap[name] = this;
       this.children = children
           .map(
             (e) => e.copyWith(
-              parent: this,
-              //TODO: ver concatenacao de nomes
-              name: '$name${e.name}',
-              tag: uri.path,
+              parent: name,
+              name: '$name${e.name}'.replaceAll('//', '/'),
               middlewares: [...middlewares, ...e.middlewares],
               bindContextEntries: Map.from(bindContextEntries)..addAll(e.bindContextEntries),
             ),
           )
           .toList();
-      this.routeMap[name] = this;
       for (var child in this.children) {
         this.routeMap[child.name] = child;
       }
@@ -53,7 +49,9 @@ abstract class ModularRoute {
       (key, route) => MapEntry(
         name + key,
         route.copyWith(
-          bindContextEntries: bindContextEntries,
+          name: '$name$key'.replaceAll('//', '/'),
+          parent: route.parent != '' ? '$name${route.parent}'.replaceAll('//', '/') : route.parent,
+          bindContextEntries: {...route.bindContextEntries, ...bindContextEntries},
           middlewares: [...middlewares, ...route.middlewares],
         ),
       ),
@@ -69,10 +67,9 @@ abstract class ModularRoute {
 
   ModularRoute copyWith({
     String? name,
-    String? tag,
     List<Middleware> middlewares,
     List<ModularRoute>? children,
-    ModularRoute? parent,
+    String? parent,
     Uri? uri,
     Map<String, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
