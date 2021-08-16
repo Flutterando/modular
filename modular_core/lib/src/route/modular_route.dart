@@ -1,3 +1,4 @@
+import 'package:modular_core/modular_core.dart';
 import 'package:modular_core/src/di/bind_context.dart';
 
 import 'route_context.dart';
@@ -7,6 +8,7 @@ abstract class ModularRoute {
   final String tag;
   final ModularRoute? parent;
   late final List<ModularRoute> children;
+  final List<Middleware> middlewares;
   final Uri uri;
   final Map<Type, BindContext> bindContextEntries;
   late final Map<String, ModularRoute> routeMap;
@@ -18,6 +20,7 @@ abstract class ModularRoute {
     this.parent,
     required this.uri,
     this.bindContextEntries = const {},
+    this.middlewares = const [],
     Map<String, ModularRoute>? routeMap,
   }) {
     if (routeMap == null) {
@@ -27,6 +30,7 @@ abstract class ModularRoute {
             (e) => e.copyWith(
               parent: this,
               tag: uri.path,
+              middlewares: [...middlewares, ...e.middlewares],
               bindContextEntries: Map.from(bindContextEntries)..addAll(e.bindContextEntries),
             ),
           )
@@ -46,7 +50,10 @@ abstract class ModularRoute {
     final routeMap = module.routeMap.map<String, ModularRoute>(
       (key, route) => MapEntry(
         name + key,
-        route.copyWith(bindContextEntries: bindContextEntries),
+        route.copyWith(
+          bindContextEntries: bindContextEntries,
+          middlewares: [...middlewares, ...route.middlewares],
+        ),
       ),
     );
 
@@ -61,6 +68,7 @@ abstract class ModularRoute {
   ModularRoute copyWith({
     String? name,
     String? tag,
+    List<Middleware> middlewares,
     List<ModularRoute>? children,
     ModularRoute? parent,
     Uri? uri,
