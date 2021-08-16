@@ -1,6 +1,7 @@
 import 'bind.dart';
 import 'bind_context.dart';
 import 'resolvers.dart';
+import 'package:characters/characters.dart';
 
 class Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
@@ -24,14 +25,39 @@ class Injector<T> {
     }
   }
 
+  bool isModuleAlive<T extends BindContext>() => _allBindContexts.containsKey(_getType<T>());
+
   void bindContext(BindContext module, {String tag = ''}) {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       module.instantiateSingletonBinds(_getAllSingletons());
+      module.tags.add(tag);
       _allBindContexts[typeModule] = module;
       printResolverFunc?.call("-- $typeModule INITIALIZED");
     } else {
       _allBindContexts[typeModule]?.tags.add(tag);
+    }
+  }
+
+  void disposeModuleByTag(String tag) {
+    final trash = <Type>[];
+
+    for (var key in _allBindContexts.keys) {
+      final module = _allBindContexts[key]!;
+
+      module.tags.remove(tag);
+      if (tag.characters.last == '/') {
+        module.tags.remove('$tag/'.replaceAll('//', ''));
+      }
+      if (module.tags.isEmpty) {
+        module.dispose();
+        trash.add(key);
+      }
+    }
+
+    for (final key in trash) {
+      _allBindContexts.remove(key);
+      printResolverFunc?.call("-- $key DISPOSED");
     }
   }
 
@@ -54,6 +80,7 @@ class Injector<T> {
     final module = _allBindContexts.remove(_getType<T>());
     if (module != null) {
       module.dispose();
+      printResolverFunc?.call("-- ${module.runtimeType} DISPOSED");
     }
   }
 

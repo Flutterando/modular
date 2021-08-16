@@ -37,6 +37,7 @@ abstract class ModularRoute {
       }
     } else {
       this.routeMap = routeMap;
+      this.children = children;
     }
   }
 

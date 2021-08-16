@@ -12,7 +12,11 @@ abstract class RouteContext extends BindContext {
   Map<String, ModularRoute> get routeMap => _routeMap;
 
   RouteContext() {
-    for (var route in routes) {
+    List<ModularRoute> ordenateRoutes = [...routes];
+    ordenateRoutes.sort((preview, actual) {
+      return preview.name.contains('/:') ? 1 : 0;
+    });
+    for (var route in ordenateRoutes) {
       _routeMap.addAll(route.routeMap);
     }
   }

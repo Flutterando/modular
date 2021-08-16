@@ -19,8 +19,10 @@ class Tracker {
 
   var arguments = ModularArguments.empty();
 
-  Uri _resolverPath(String path) {
-    return arguments.uri.resolve(path);
+  String get currentPath => arguments.uri.toString();
+
+  void reportPopRoute(ModularRoute route) {
+    injector.disposeModuleByTag(route.uri.toString());
   }
 
   ModularRoute? findRoute(String path, [dynamic data]) {
@@ -39,49 +41,61 @@ class Tracker {
         continue;
       }
 
-      final nomalizedCandidatePath = _prepareToRegex(uriCandidate.path);
-      final regExp = RegExp("^${nomalizedCandidatePath}\$", caseSensitive: true);
-      var result = regExp.firstMatch(uri.path);
+      var result = _extractParams(uriCandidate, uri);
       if (result != null) {
-        var paramPos = 0;
-        final candidateSegments = uriCandidate.pathSegments;
-        final pathSegments = uri.pathSegments;
-
-        for (var candidateSegment in candidateSegments) {
-          if (candidateSegment.contains(":")) {
-            var paramName = candidateSegment.replaceFirst(':', '');
-            if (pathSegments[paramPos].isNotEmpty) {
-              params[paramName] = pathSegments[paramPos];
-            }
-          }
-          paramPos++;
-        }
+        params = result;
         route = module.routeMap[key];
+        break;
       }
     }
 
     if (route == null) return null;
     arguments = arguments.copyWith(data: data, uri: uri, params: params);
-    return route.copyWith(uri: uri);
+    route = route.copyWith(uri: uri);
+    _injectBindContext(route);
+    return route;
   }
 
-  // Map<String, String> _getParams() {
-  //   var params = <String, String>{};
-  // }
+  Uri _resolverPath(String path) {
+    return arguments.uri.resolve(path);
+  }
 
-  String _prepareToRegex(String url) {
+  void _injectBindContext(ModularRoute route) {
+    for (var module in [...route.bindContextEntries.values, module]) {
+      injector.bindContext(module, tag: route.uri.toString());
+    }
+  }
+
+  Map<String, String>? _extractParams(Uri candidate, Uri match) {
     final newUrl = <String>[];
-    for (var part in url.split('/')) {
+    for (var part in candidate.path.split('/')) {
       var url = part.contains(":") ? "(.*?)" : part;
       newUrl.add(url);
     }
 
-    return newUrl.join("/");
+    final url = newUrl.join("/");
+    final regExp = RegExp("^${url}\$", caseSensitive: true);
+    final result = regExp.firstMatch(match.path);
+    if (result != null) {
+      final params = <String, String>{};
+      var paramPos = 0;
+
+      for (var candidateSegment in candidate.pathSegments) {
+        if (candidateSegment.contains(":")) {
+          var paramName = candidateSegment.replaceFirst(':', '');
+          if (match.pathSegments[paramPos].isNotEmpty) {
+            params[paramName] = match.pathSegments[paramPos];
+          }
+        }
+        paramPos++;
+      }
+      return params;
+    }
   }
 
   void runApp(Module module) {
     _nullableModule = module;
-    injector.bindContext(module);
+    injector.bindContext(module, tag: '/');
   }
 
   void finishApp() {
