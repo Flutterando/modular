@@ -6,7 +6,7 @@ import 'modular_route.dart';
 abstract class Middleware {
   FutureOr<String> pre(String path);
 
-  FutureOr<ModularRoute> pos(ModularRoute route);
+  FutureOr<ModularRoute?> pos(ModularRoute route);
 }
 
 abstract class RouteGuard extends Middleware {
@@ -20,7 +20,7 @@ abstract class RouteGuard extends Middleware {
   FutureOr<String> pre(String path) => path;
 
   @override
-  FutureOr<ModularRoute> pos(ModularRoute route) async {
+  FutureOr<ModularRoute?> pos(ModularRoute route) async {
     if (await canActivate(route.uri.toString(), route)) {
       return route;
     } else if (guardedRoute != null) {

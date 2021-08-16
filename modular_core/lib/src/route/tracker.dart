@@ -21,10 +21,6 @@ class Tracker {
 
   String get currentPath => arguments.uri.toString();
 
-  void reportPopRoute(ModularRoute route) {
-    injector.disposeModuleByTag(route.uri.toString());
-  }
-
   ModularRoute? findRoute(String path, [dynamic data]) {
     var uri = _resolverPath(path);
 
@@ -33,11 +29,15 @@ class Tracker {
 
     for (var key in module.routeMap.keys) {
       var uriCandidate = Uri.parse(key);
-      if (key == uri.path) {
+      if (uriCandidate.path == uri.path) {
         route = module.routeMap[key];
         break;
       }
       if (uriCandidate.pathSegments.length != uri.pathSegments.length) {
+        continue;
+      }
+
+      if (!uriCandidate.path.contains(':')) {
         continue;
       }
 
@@ -50,10 +50,15 @@ class Tracker {
     }
 
     if (route == null) return null;
+
     arguments = arguments.copyWith(data: data, uri: uri, params: params);
     route = route.copyWith(uri: uri);
     _injectBindContext(route);
     return route;
+  }
+
+  void reportPopRoute(ModularRoute route) {
+    injector.disposeModuleByTag(route.uri.toString());
   }
 
   Uri _resolverPath(String path) {
@@ -69,25 +74,18 @@ class Tracker {
   Map<String, String>? _extractParams(Uri candidate, Uri match) {
     final newUrl = <String>[];
     for (var part in candidate.path.split('/')) {
-      var url = part.contains(":") ? "(.*?)" : part;
+      var url = part.contains(":") ? "(?<${part.substring(1)}>.*)" : part;
       newUrl.add(url);
     }
 
     final url = newUrl.join("/");
     final regExp = RegExp("^${url}\$", caseSensitive: true);
     final result = regExp.firstMatch(match.path);
+
     if (result != null) {
       final params = <String, String>{};
-      var paramPos = 0;
-
-      for (var candidateSegment in candidate.pathSegments) {
-        if (candidateSegment.contains(":")) {
-          var paramName = candidateSegment.replaceFirst(':', '');
-          if (match.pathSegments[paramPos].isNotEmpty) {
-            params[paramName] = match.pathSegments[paramPos];
-          }
-        }
-        paramPos++;
+      for (var name in result.groupNames) {
+        params[name] = result.namedGroup(name)!;
       }
       return params;
     }

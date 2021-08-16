@@ -16,6 +16,7 @@ abstract class RouteContext extends BindContext {
     ordenateRoutes.sort((preview, actual) {
       return preview.name.contains('/:') ? 1 : 0;
     });
+
     for (var route in ordenateRoutes) {
       _routeMap.addAll(route.routeMap);
     }

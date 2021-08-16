@@ -54,7 +54,7 @@ main(){
     final route = Tracker.findRoute('/product/1', data: MyArgs());
 
     //get binds
-    final controller = instance.get<MyController>();
+    final controller = Tracker.injector.get<MyController>();
 
     //finishApp
     Tracker.finishApp();

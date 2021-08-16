@@ -10,6 +10,7 @@ abstract class BindContext {
   List<BindContext> get imports => const [];
 
   final List<Bind> _binds = [];
+  @internal
   final Set<String> tags = {};
   final _singletonBinds = <Type, dynamic>{};
   List<dynamic> get instanciatedSingletons => _singletonBinds.values.toList();

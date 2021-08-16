@@ -29,6 +29,8 @@ abstract class ModularRoute {
           .map(
             (e) => e.copyWith(
               parent: this,
+              //TODO: ver concatenacao de nomes
+              name: '$name${e.name}',
               tag: uri.path,
               middlewares: [...middlewares, ...e.middlewares],
               bindContextEntries: Map.from(bindContextEntries)..addAll(e.bindContextEntries),
