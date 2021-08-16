@@ -8,7 +8,7 @@ void main() {
   test('process route maps', () {
     final initial = routeContext.routeMap['/']!;
     expect(initial.name, '/');
-    expect(initial.parent, '/');
+    expect(initial.parent, '');
 
     final initial2 = routeContext.routeMap['/2']!;
     expect(initial2.name, '/2');
@@ -28,7 +28,6 @@ class ModuleForRoute extends RouteContext {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/', uri: Uri.parse('/'), children: [
-          CustomRoute(name: '/', uri: Uri.parse('/')),
           CustomRoute(name: '/2', uri: Uri.parse('/2')),
         ]),
         CustomRoute(name: '/home', uri: Uri.parse('/home')),

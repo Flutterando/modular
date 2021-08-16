@@ -8,6 +8,14 @@ void main() {
   // setPrintResolver(print);
   Tracker.runApp(MyModule());
 
+  test('thwow error if child has same name of parent', () {
+    expect(
+        () => CustomRoute(name: '/', data: 'first', children: [
+              CustomRoute(name: '/', data: 'second'),
+            ]),
+        throwsA(isA<AssertionError>()));
+  });
+
   test('find route', () async {
     final route = await Tracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');
@@ -83,7 +91,9 @@ void main() {
 class MyModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'first'),
+        CustomRoute(name: '/', data: 'first', children: [
+          CustomRoute(name: '/second', data: 'second'),
+        ]),
         CustomRoute(name: '/product/:id', data: 'withParams'),
         CustomRoute(name: '/product/test', data: 'test'),
         CustomRoute.module('/other', module: OtherModule()),

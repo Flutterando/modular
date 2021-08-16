@@ -35,6 +35,7 @@ abstract class ModularRoute {
           )
           .toList();
       for (var child in this.children) {
+        assert(name != child.name, 'Children can\'t have same name of parent. (parent: $name == child: ${child.name}');
         this.routeMap[child.name] = child;
       }
     } else {
