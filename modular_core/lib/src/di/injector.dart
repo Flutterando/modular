@@ -21,7 +21,7 @@ class Injector<T> {
     if (bind != null) {
       return bind;
     } else {
-      throw Exception('bind not found');
+      throw BindNotFound();
     }
   }
 
@@ -92,5 +92,12 @@ class Injector<T> {
       list.addAll(module.instanciatedSingletons);
     }
     return list;
+  }
+}
+
+class BindNotFound implements Exception {
+  @override
+  String toString() {
+    return 'BindNotFound';
   }
 }

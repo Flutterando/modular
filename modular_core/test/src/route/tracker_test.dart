@@ -1,7 +1,6 @@
+import 'package:modular_core/src/route/custom_route.dart';
 import 'package:test/test.dart';
 import 'package:modular_core/modular_core.dart';
-
-import 'route_context_test.dart';
 
 void main() {
   setPrintResolver(print);
