@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:modular_core/src/route/custom_route.dart';
 import 'package:test/test.dart';
 import 'package:modular_core/modular_core.dart';
 
 void main() {
-  setPrintResolver(print);
+  // setPrintResolver(print);
   Tracker.runApp(MyModule());
 
   test('find route', () async {
@@ -66,6 +68,16 @@ void main() {
     expect(Tracker.injector.isModuleAlive<OtherModule>(), false);
     expect(Tracker.injector.isModuleAlive<MyModule>(), true);
   });
+
+  test('not access route with guard', () async {
+    final futureRoute = Tracker.findRoute('/other/internal/block');
+    expect(() async => await futureRoute, throwsA(isA<GuardedRouteException>()));
+  });
+
+  test('not access route with guard in module', () async {
+    expect(() async => await Tracker.findRoute('/block/'), throwsA(isA<GuardedRouteException>()));
+    expect(() async => await Tracker.findRoute('/block/again'), throwsA(isA<GuardedRouteException>()));
+  });
 }
 
 class MyModule extends Module {
@@ -75,6 +87,7 @@ class MyModule extends Module {
         CustomRoute(name: '/product/:id', data: 'withParams'),
         CustomRoute(name: '/product/test', data: 'test'),
         CustomRoute.module('/other', module: OtherModule()),
+        CustomRoute.module('/block', module: BlockedModule(), middlewares: [MyGuard()]),
       ];
 }
 
@@ -94,5 +107,21 @@ class DeepModule extends Module {
         CustomRoute(name: '/', data: 'internal', children: [
           CustomRoute(name: '/deep', data: 'deep'),
         ]),
+        CustomRoute(name: '/block', middlewares: [MyGuard()]),
       ];
+}
+
+class BlockedModule extends Module {
+  @override
+  List<ModularRoute> get routes => [
+        CustomRoute(name: '/'),
+        CustomRoute(name: '/again'),
+      ];
+}
+
+class MyGuard extends RouteGuard {
+  @override
+  FutureOr<bool> canActivate(String path, ModularRoute router) {
+    return false;
+  }
 }

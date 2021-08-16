@@ -20,6 +20,7 @@ class CustomRoute extends ModularRoute {
           name: name,
           children: children,
           uri: uri ?? Uri.parse('/'),
+          middlewares: middlewares,
           parent: parent,
           routeMap: routeMap,
           bindContextEntries: bindContextEntries,

@@ -25,17 +25,17 @@ abstract class RouteGuard extends Middleware {
       }
     }
 
-    throw GuardedRoute(route.uri.toString());
+    throw GuardedRouteException(route.uri.toString());
   }
 }
 
-class GuardedRoute implements Exception {
+class GuardedRouteException implements Exception {
   final String path;
 
-  GuardedRoute(this.path);
+  GuardedRouteException(this.path);
 
   @override
   String toString() {
-    return 'GuardedRoute: $path';
+    return 'GuardedRouteException: $path';
   }
 }
