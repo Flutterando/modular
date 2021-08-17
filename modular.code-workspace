@@ -5,6 +5,10 @@
 			"path": "modular_core"
 		},
 		{
+			"name": "dart_modular",
+			"path": "dart_modular"
+		},
+		{
 			"name": "flutter_modular",
 			"path": "flutter_modular"
 		},

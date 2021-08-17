@@ -1,0 +1,14 @@
+name: dart_modular
+description: A web server built using the shelf package.
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  args: ^2.0.0
+  shelf: ^1.1.0
+
+dev_dependencies:
+  pedantic: ^1.10.0
