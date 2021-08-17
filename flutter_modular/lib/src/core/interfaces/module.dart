@@ -43,7 +43,7 @@ abstract class Module {
   Future<void> isReady() async {
     if (_mutableValue.isReadyFlag) return;
     _mutableValue.isReadyFlag = true;
-    final asyncBindList = binds.whereType<AsyncBind>().toList();
+    final asyncBindList = _binds.whereType<AsyncBind>().toList();
     for (var bind in asyncBindList) {
       final resolvedBind = await bind.converToAsyncBind();
       _binds.insert(0, resolvedBind);

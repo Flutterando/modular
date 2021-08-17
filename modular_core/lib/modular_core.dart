@@ -13,5 +13,8 @@ export 'src/route/module.dart';
 export 'src/route/modular_arguments.dart';
 export 'src/route/custom_route.dart';
 export 'src/route/middleware.dart';
+export 'src/route/modular_key.dart';
 
 final Tracker = t.Tracker(Injector());
+
+class Test {}

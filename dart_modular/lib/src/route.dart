@@ -12,14 +12,16 @@ class Route extends ModularRoute {
     this.handler,
     required String name,
     String parent = '',
+    String schema = '',
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
     Uri? uri,
-    Map<String, ModularRoute>? routeMap,
+    Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext> bindContextEntries = const {},
   }) : super(
           name: name,
           parent: parent,
+          schema: schema,
           children: children,
           middlewares: middlewares,
           routeMap: routeMap,
@@ -34,7 +36,8 @@ class Route extends ModularRoute {
   }) {
     return Route._(
       handler: handler,
-      name: '$name@GET',
+      name: name,
+      schema: 'GET',
       middlewares: middlewares,
     );
   }
@@ -46,7 +49,8 @@ class Route extends ModularRoute {
   }) {
     return Route._(
       handler: handler,
-      name: '$name@POST',
+      name: name,
+      schema: 'POST',
       middlewares: middlewares,
     );
   }
@@ -58,7 +62,8 @@ class Route extends ModularRoute {
   }) {
     return Route._(
       handler: handler,
-      name: '$name@DELETE',
+      name: name,
+      schema: 'DELETE',
       middlewares: middlewares,
     );
   }
@@ -69,7 +74,8 @@ class Route extends ModularRoute {
   }) {
     return Route._(
       handler: handler,
-      name: '$name@PATH',
+      name: name,
+      schema: 'PATCH',
       middlewares: middlewares,
     );
   }
@@ -81,7 +87,8 @@ class Route extends ModularRoute {
   }) {
     return Route._(
       handler: handler,
-      name: '$name@PUT',
+      name: name,
+      schema: 'PUT',
       middlewares: middlewares,
     );
   }
@@ -107,16 +114,18 @@ class Route extends ModularRoute {
   Route copyWith({
     Handler? handler,
     String? name,
+    String? schema,
     List<Middleware>? middlewares,
     List<ModularRoute>? children,
     String? parent,
     Uri? uri,
-    Map<String, ModularRoute>? routeMap,
+    Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
   }) {
     return Route._(
       handler: handler ?? this.handler,
       name: name ?? this.name,
+      schema: schema ?? this.schema,
       middlewares: middlewares ?? this.middlewares,
       children: children ?? this.children,
       parent: parent ?? this.parent,

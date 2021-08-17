@@ -56,8 +56,6 @@ class Tracker {
           params = result;
           break;
         }
-
-        break;
       }
     }
 
@@ -67,6 +65,9 @@ class Tracker {
 
     for (var middleware in route.middlewares) {
       route = await middleware.call(route!);
+      if (route == null) {
+        break;
+      }
     }
 
     if (route == null) return null;
@@ -91,14 +92,9 @@ class Tracker {
   }
 
   Map<String, String>? _extractParams(Uri candidate, Uri match) {
-    final newUrl = <String>[];
-    for (var part in candidate.path.split('/')) {
-      var url = part.contains(":") ? "(?<${part.substring(1)}>.*)" : part;
-      newUrl.add(url);
-    }
+    final settledUrl = _processUrl(candidate.path);
 
-    final url = newUrl.join("/");
-    final regExp = RegExp("^${url}\$", caseSensitive: true);
+    final regExp = RegExp("^${settledUrl}\$", caseSensitive: true);
     final result = regExp.firstMatch(match.path);
 
     if (result != null) {
@@ -108,6 +104,15 @@ class Tracker {
       }
       return params;
     }
+  }
+
+  String _processUrl(String url) {
+    final newUrl = <String>[];
+    for (var part in url.split('/')) {
+      part = part.contains(":") ? "(?<${part.substring(1)}>.*)" : part;
+      newUrl.add(part);
+    }
+    return newUrl.join("/");
   }
 
   void runApp(Module module) {
