@@ -61,3 +61,11 @@ main(){
 }
 
 ```
+
+## Auxiliary classes
+
+- **Middleware** - abstract.
+- **RouteGuard** - extends Middleware.
+- **ModularRoute** - abstract for create route.
+- **Bind** - encapsulate injection.
+- **Module** - abstract extends BindContext and RouteContext. 
