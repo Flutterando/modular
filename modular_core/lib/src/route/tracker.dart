@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:modular_core/src/di/injector.dart';
+import 'package:modular_core/src/route/modular_key.dart';
 
 import 'modular_arguments.dart';
 import 'modular_route.dart';
@@ -23,17 +24,21 @@ class Tracker {
 
   String get currentPath => arguments.uri.toString();
 
-  FutureOr<ModularRoute?> findRoute(String path, [dynamic data]) async {
+  FutureOr<ModularRoute?> findRoute(String path, {dynamic data, String schema = ''}) async {
     var uri = _resolverPath(path);
+    final modularKey = ModularKey(schema: schema, name: uri.path);
 
     ModularRoute? route;
     var params = <String, String>{};
 
     for (var key in module.routeMap.keys) {
-      var uriCandidate = Uri.parse(key);
+      var uriCandidate = Uri.parse(key.name);
       if (uriCandidate.path == uri.path) {
-        route = module.routeMap[key];
-        break;
+        final candidate = module.routeMap[key];
+        if (key.copyWith(name: uri.path) == modularKey) {
+          route = candidate;
+          break;
+        }
       }
       if (uriCandidate.pathSegments.length != uri.pathSegments.length) {
         continue;
@@ -45,8 +50,13 @@ class Tracker {
 
       var result = _extractParams(uriCandidate, uri);
       if (result != null) {
-        params = result;
-        route = module.routeMap[key];
+        final candidate = module.routeMap[key];
+        if (key.copyWith(name: uri.path) == modularKey) {
+          route = candidate;
+          params = result;
+          break;
+        }
+
         break;
       }
     }

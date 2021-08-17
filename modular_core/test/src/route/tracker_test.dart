@@ -86,6 +86,13 @@ void main() {
     expect(() async => await Tracker.findRoute('/block/'), throwsA(isA<GuardedRouteException>()));
     expect(() async => await Tracker.findRoute('/block/again'), throwsA(isA<GuardedRouteException>()));
   });
+
+  test('find route with schema', () async {
+    expect(await Tracker.findRoute('/schema'), isNull);
+    final route = await Tracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
+    expect(route?.uri.path, '/schema');
+    expect(route?.data, 'withSchema');
+  });
 }
 
 class MyModule extends Module {
@@ -94,6 +101,7 @@ class MyModule extends Module {
         CustomRoute(name: '/', data: 'first', children: [
           CustomRoute(name: '/second', data: 'second'),
         ]),
+        CustomRoute(name: '/schema', data: 'withSchema', schema: 'tag'),
         CustomRoute(name: '/product/:id', data: 'withParams'),
         CustomRoute(name: '/product/test', data: 'test'),
         CustomRoute.module('/other', module: OtherModule()),

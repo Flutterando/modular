@@ -2,14 +2,15 @@ import 'package:meta/meta.dart';
 
 import '../di/bind_context.dart';
 
+import 'modular_key.dart';
 import 'modular_route.dart';
 
 abstract class RouteContext extends BindContext {
   List<ModularRoute> get routes => const [];
-  final _routeMap = <String, ModularRoute>{};
+  final _routeMap = <ModularKey, ModularRoute>{};
 
   @internal
-  Map<String, ModularRoute> get routeMap => _routeMap;
+  Map<ModularKey, ModularRoute> get routeMap => _routeMap;
 
   RouteContext() {
     List<ModularRoute> ordenateRoutes = [...routes];

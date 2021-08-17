@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "dart_modular",
+            "type": "dart",
+            "cwd": "../dart_modular",
+            "request": "launch",
+            "program": "bin/server.dart"
+        },
+        {
             "name": "flutter_modular",
             "request": "launch",
             "type": "dart"

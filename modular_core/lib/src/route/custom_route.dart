@@ -1,5 +1,6 @@
 import 'package:modular_core/modular_core.dart';
 import 'package:modular_core/src/di/bind_context.dart';
+import 'package:modular_core/src/route/modular_key.dart';
 
 import 'modular_route.dart';
 import 'route_context.dart';
@@ -11,13 +12,15 @@ class CustomRoute extends ModularRoute {
     required String name,
     this.data,
     String parent = '',
+    String schema = '',
     List<ModularRoute> children = const [],
     Uri? uri,
     List<Middleware> middlewares = const [],
-    Map<String, ModularRoute>? routeMap,
+    Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext> bindContextEntries = const {},
   }) : super(
           name: name,
+          schema: schema,
           children: children,
           uri: uri ?? Uri.parse('/'),
           middlewares: middlewares,
@@ -36,9 +39,10 @@ class CustomRoute extends ModularRoute {
     String? name,
     List<Middleware>? middlewares,
     String? parent,
+    String? schema,
     List<ModularRoute>? children,
     Uri? uri,
-    Map<String, ModularRoute>? routeMap,
+    Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
   }) {
     return CustomRoute(
@@ -47,6 +51,7 @@ class CustomRoute extends ModularRoute {
       children: children ?? this.children,
       middlewares: middlewares ?? this.middlewares,
       uri: uri ?? this.uri,
+      schema: schema ?? this.schema,
       routeMap: routeMap ?? this.routeMap,
       parent: parent ?? this.parent,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
