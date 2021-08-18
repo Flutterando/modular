@@ -25,13 +25,3 @@ Future<HttpServer> createServer() async {
 
   return io.serve(pipelipe, 'localhost', 8080);
 }
-
-class AppModule extends Module {
-  @override
-  List<ModularRoute> get routes => [
-        Route.post(
-          '/:name',
-          (Request request, ModularArguments args) => Response.ok('modular get ${args.data?['name']}'),
-        ),
-      ];
-}

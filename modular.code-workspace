@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "modular_interfaces",
+			"path": "modular_interfaces"
+		},
+		{
 			"name": "modular_core",
 			"path": "modular_core"
 		},
