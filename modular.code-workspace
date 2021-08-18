@@ -5,8 +5,8 @@
 			"path": "modular_core"
 		},
 		{
-			"name": "dart_modular",
-			"path": "dart_modular"
+			"name": "shelf_modular",
+			"path": "shelf_modular"
 		},
 		{
 			"name": "flutter_modular",

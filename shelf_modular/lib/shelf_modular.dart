@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_modular/src/route.dart';
+import 'package:shelf_modular/src/route.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 import 'src/request_extension.dart';
@@ -33,6 +33,7 @@ FutureOr<Response> _handler(Request request) async {
 
 Future<Map?> tryJsonDecode(Request request) async {
   if (request.method == 'GET') return null;
+  print(request.isMultipart);
 
   if (!request.isMultipart) {
     try {

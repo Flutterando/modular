@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_modular/dart_modular.dart';
-import 'package:dart_modular/src/route.dart';
+import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular/src/route.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 
