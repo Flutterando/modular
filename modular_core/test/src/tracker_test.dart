@@ -7,7 +7,7 @@ import 'package:modular_core/modular_core.dart';
 
 void main() {
   // setPrintResolver(print);
-  Tracker.runApp(MyModule());
+  ModularTracker.runApp(MyModule());
 
   test('thwow error if child has same name of parent', () {
     expect(
@@ -18,79 +18,79 @@ void main() {
   });
 
   test('find route', () async {
-    final route = await Tracker.findRoute('/') as CustomRoute?;
+    final route = await ModularTracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');
     expect(route?.data, 'first');
   });
 
   test('find route with params', () async {
-    var route = await Tracker.findRoute('/product/1') as CustomRoute?;
+    var route = await ModularTracker.findRoute('/product/1') as CustomRoute?;
     expect(route?.uri.path, '/product/1');
-    expect(Tracker.arguments.params['id'], '1');
+    expect(ModularTracker.arguments.params['id'], '1');
 
-    route = await Tracker.findRoute('/product/test') as CustomRoute?;
+    route = await ModularTracker.findRoute('/product/test') as CustomRoute?;
     expect(route?.uri.path, '/product/test');
   });
 
   test('find route with queries', () async {
-    var route = await Tracker.findRoute('/?q=banana') as CustomRoute?;
+    var route = await ModularTracker.findRoute('/?q=banana') as CustomRoute?;
     expect(route?.uri.path, '/');
-    expect(Tracker.arguments.queryParams['q'], 'banana');
+    expect(ModularTracker.arguments.queryParams['q'], 'banana');
   });
 
   test('find route in other module', () async {
-    var route = await Tracker.findRoute('/other/') as CustomRoute?;
+    var route = await ModularTracker.findRoute('/other/') as CustomRoute?;
     expect(route?.uri.path, '/other/');
     expect(route?.data, 'other');
-    Tracker.reportPopRoute(route!);
-    expect(Tracker.injector.isModuleAlive<OtherModule>(), false);
-    expect(Tracker.injector.isModuleAlive<MyModule>(), true);
+    ModularTracker.reportPopRoute(route!);
+    expect(ModularTracker.injector.isModuleAlive<OtherModule>(), false);
+    expect(ModularTracker.injector.isModuleAlive<MyModule>(), true);
   });
 
   test('find child route in other module', () async {
-    var route = await Tracker.findRoute('/other/details') as CustomRoute?;
+    var route = await ModularTracker.findRoute('/other/details') as CustomRoute?;
     expect(route?.uri.path, '/other/details');
     expect(route?.parent, '/other/');
     expect(route?.data, 'otherWithDetails');
-    Tracker.reportPopRoute(route!);
-    expect(Tracker.injector.isModuleAlive<OtherModule>(), false);
-    expect(Tracker.injector.isModuleAlive<MyModule>(), true);
+    ModularTracker.reportPopRoute(route!);
+    expect(ModularTracker.injector.isModuleAlive<OtherModule>(), false);
+    expect(ModularTracker.injector.isModuleAlive<MyModule>(), true);
   });
 
   test('find child route in deep module', () async {
-    var route = await Tracker.findRoute('/other/internal/') as CustomRoute?;
-    expect(Tracker.injector.isModuleAlive<DeepModule>(), true);
+    var route = await ModularTracker.findRoute('/other/internal/') as CustomRoute?;
+    expect(ModularTracker.injector.isModuleAlive<DeepModule>(), true);
     expect(route?.uri.path, '/other/internal/');
     expect(route?.data, 'internal');
 
-    Tracker.reportPopRoute(route!);
-    expect(Tracker.injector.isModuleAlive<DeepModule>(), false);
+    ModularTracker.reportPopRoute(route!);
+    expect(ModularTracker.injector.isModuleAlive<DeepModule>(), false);
 
-    route = await Tracker.findRoute('/other/internal/deep') as CustomRoute?;
-    expect(Tracker.injector.isModuleAlive<DeepModule>(), true);
+    route = await ModularTracker.findRoute('/other/internal/deep') as CustomRoute?;
+    expect(ModularTracker.injector.isModuleAlive<DeepModule>(), true);
     expect(route?.uri.path, '/other/internal/deep');
     expect(route?.parent, '/other/internal/');
     expect(route?.data, 'deep');
-    Tracker.reportPopRoute(route!);
+    ModularTracker.reportPopRoute(route!);
 
-    expect(Tracker.injector.isModuleAlive<DeepModule>(), false);
-    expect(Tracker.injector.isModuleAlive<OtherModule>(), false);
-    expect(Tracker.injector.isModuleAlive<MyModule>(), true);
+    expect(ModularTracker.injector.isModuleAlive<DeepModule>(), false);
+    expect(ModularTracker.injector.isModuleAlive<OtherModule>(), false);
+    expect(ModularTracker.injector.isModuleAlive<MyModule>(), true);
   });
 
   test('not access route with guard', () async {
-    final futureRoute = Tracker.findRoute('/other/internal/block');
+    final futureRoute = ModularTracker.findRoute('/other/internal/block');
     expect(() async => await futureRoute, throwsA(isA<GuardedRouteException>()));
   });
 
   test('not access route with guard in module', () async {
-    expect(() async => await Tracker.findRoute('/block/'), throwsA(isA<GuardedRouteException>()));
-    expect(() async => await Tracker.findRoute('/block/again'), throwsA(isA<GuardedRouteException>()));
+    expect(() async => await ModularTracker.findRoute('/block/'), throwsA(isA<GuardedRouteException>()));
+    expect(() async => await ModularTracker.findRoute('/block/again'), throwsA(isA<GuardedRouteException>()));
   });
 
   test('find route with schema', () async {
-    expect(await Tracker.findRoute('/schema'), isNull);
-    final route = await Tracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
+    expect(await ModularTracker.findRoute('/schema'), isNull);
+    final route = await ModularTracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
     expect(route?.uri.path, '/schema');
     expect(route?.data, 'withSchema');
   });

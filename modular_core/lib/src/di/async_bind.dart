@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:modular_interfaces/modular_interfaces.dart';
 
-import '../../modular_core.dart' show Tracker;
+import '../../modular_core.dart' show ModularTracker;
 
 class AsyncBind<T extends Object> extends Bind<Future<T>> {
   final Future<T> Function(Injector i) asyncInject;
@@ -13,7 +13,7 @@ class AsyncBind<T extends Object> extends Bind<Future<T>> {
   AsyncBind(this.asyncInject, {this.export = false}) : super(asyncInject, export: export);
 
   Future<T> resolveAsyncBind() async {
-    final bind = await asyncInject(Tracker.injector);
+    final bind = await asyncInject(ModularTracker.injector);
     return bind;
   }
 

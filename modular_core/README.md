@@ -46,7 +46,7 @@ class MyModule extends Module {
 
 main(){
     // start module
-    Tracker.runApp(MyModule());
+    ModularTracker.runApp(MyModule());
 
     //get routes
     final route = Tracker.findRoute('/');
@@ -57,7 +57,7 @@ main(){
     final controller = Tracker.injector.get<MyController>();
 
     //finishApp
-    Tracker.finishApp();
+    ModularTracker.finishApp();
 }
 
 ```

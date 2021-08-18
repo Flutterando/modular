@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:modular_core/modular_core.dart';
-import 'package:modular_core/src/di/bind_context.dart';
 import 'package:shelf/shelf.dart' hide Middleware;
 
 typedef HandlerWithArgs = FutureOr<Response> Function(Request request, ModularArguments args);
 
-class Route extends ModularRoute {
+class Route extends ModularRouteImpl {
   final Function? handler;
   Route._({
     this.handler,

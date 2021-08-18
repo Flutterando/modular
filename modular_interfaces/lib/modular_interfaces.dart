@@ -8,3 +8,5 @@ export 'src/route/middleware.dart';
 export 'src/route/modular_key.dart';
 export 'src/route/modular_route.dart';
 export 'src/route/route_context.dart';
+export 'src/route/modular_arguments.dart';
+export 'src/route/tracker.dart';

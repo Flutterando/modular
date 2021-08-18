@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:modular_interfaces/modular_interfaces.dart';
 
-import 'route/modular_arguments.dart';
-import 'route/module.dart';
+import 'route_context.dart';
 
-class Tracker {
+class TrackerImpl implements Tracker {
   final Injector injector;
-  Module? _nullableModule;
-  Module get module {
+  RouteContext? _nullableModule;
+  RouteContext get module {
     if (_nullableModule != null) {
       return _nullableModule!;
     }
@@ -16,7 +15,7 @@ class Tracker {
     throw TrackerNotInitiated('Execute Tracker.runApp()');
   }
 
-  Tracker(this.injector);
+  TrackerImpl(this.injector);
 
   var arguments = ModularArguments.empty();
 
@@ -29,10 +28,10 @@ class Tracker {
     ModularRoute? route;
     var params = <String, String>{};
 
-    for (var key in module.routeMap.keys) {
+    for (var key in (module as RouteContextImpl).routeMap.keys) {
       var uriCandidate = Uri.parse(key.name);
       if (uriCandidate.path == uri.path) {
-        final candidate = module.routeMap[key];
+        final candidate = (module as RouteContextImpl).routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
           route = candidate;
           break;
@@ -48,7 +47,7 @@ class Tracker {
 
       var result = _extractParams(uriCandidate, uri);
       if (result != null) {
-        final candidate = module.routeMap[key];
+        final candidate = (module as RouteContextImpl).routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
           route = candidate;
           params = result;
@@ -113,7 +112,7 @@ class Tracker {
     return newUrl.join("/");
   }
 
-  void runApp(Module module) {
+  void runApp(RouteContext module) {
     _nullableModule = module;
     injector.bindContext(module, tag: '/');
   }
