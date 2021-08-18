@@ -33,7 +33,6 @@ FutureOr<Response> _handler(Request request) async {
 
 Future<Map?> tryJsonDecode(Request request) async {
   if (request.method == 'GET') return null;
-  print(request.isMultipart);
 
   if (!request.isMultipart) {
     try {
@@ -44,17 +43,28 @@ Future<Map?> tryJsonDecode(Request request) async {
       } else if (e.message == 'Missing expected digit') {}
       return null;
     }
-  }
-
-  await for (final part in request.parts) {
-    var header = HeaderValue.parse(request.headers['content-type']!);
-    if (part.headers.containsKey('content-disposition')) {
-      header = HeaderValue.parse(part.headers['content-disposition']!);
-      var filename = header.parameters['filename']!;
-      final file = File(filename);
-      final fileSink = file.openWrite();
-      await part.pipe(fileSink);
-      await fileSink.close();
+  } else {
+    await for (final part in request.parts) {
+      final params = <String, dynamic>{};
+      var header = HeaderValue.parse(request.headers['content-type']!);
+      if (part.headers.containsKey('content-disposition')) {
+        header = HeaderValue.parse(part.headers['content-disposition']!);
+        final key = header.parameters['name'];
+        if (key == null) {
+          continue;
+        }
+        if (!header.parameters.containsKey('filename')) {
+          final value = await utf8.decodeStream(part);
+          params[key] = value;
+        } else {
+          final file = File(header.parameters['filename']!);
+          final fileSink = file.openWrite();
+          await part.pipe(fileSink);
+          await fileSink.close();
+          params[key] = file;
+        }
+      }
+      print(params);
     }
   }
 }

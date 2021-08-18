@@ -20,7 +20,7 @@ Future<HttpServer> createServer() async {
         logRequests(),
       )
       .addHandler(
-        ModularApp(module: AppModule()),
+        ModularApp(module: TestModule()),
       );
 
   return io.serve(pipelipe, 'localhost', 8080);

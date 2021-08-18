@@ -5,9 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "dart_modular",
+            "name": "shelf_modular",
             "type": "dart",
-            "cwd": "../dart_modular",
+            "cwd": "../shelf_modular",
             "request": "launch",
             "program": "bin/server.dart"
         },
