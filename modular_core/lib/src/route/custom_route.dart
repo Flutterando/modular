@@ -1,11 +1,10 @@
 import 'package:modular_core/modular_core.dart';
 import 'package:modular_core/src/di/bind_context.dart';
-import 'package:modular_core/src/route/modular_key.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
 import 'modular_route.dart';
-import 'route_context.dart';
 
-class CustomRoute extends ModularRoute {
+class CustomRoute extends ModularRouteImpl {
   final dynamic data;
 
   CustomRoute({
@@ -55,6 +54,6 @@ class CustomRoute extends ModularRoute {
       routeMap: routeMap ?? this.routeMap,
       parent: parent ?? this.parent,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
-    );
+    ) as ModularRoute;
   }
 }

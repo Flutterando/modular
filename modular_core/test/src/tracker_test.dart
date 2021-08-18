@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:modular_core/src/route/custom_route.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 import 'package:test/test.dart';
 import 'package:modular_core/modular_core.dart';
 

@@ -1,9 +1,10 @@
-import 'bind.dart';
+import 'package:meta/meta.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 import 'bind_context.dart';
 import 'resolvers.dart';
 import 'package:characters/characters.dart';
 
-class Injector<T> {
+class InjectorImpl<T> implements Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
   B call<B extends Object>([Bind<B>? bind]) => get<B>(bind);
@@ -27,7 +28,8 @@ class Injector<T> {
 
   bool isModuleAlive<T extends BindContext>() => _allBindContexts.containsKey(_getType<T>());
 
-  void bindContext(BindContext module, {String tag = ''}) {
+  @mustCallSuper
+  void bindContext(covariant BindContextImpl module, {String tag = ''}) {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       module.instantiateSingletonBinds(_getAllSingletons());
@@ -35,17 +37,18 @@ class Injector<T> {
       _allBindContexts[typeModule] = module;
       printResolverFunc?.call("-- $typeModule INITIALIZED");
     } else {
-      _allBindContexts[typeModule]?.tags.add(tag);
+      (_allBindContexts[typeModule] as BindContextImpl?)?.tags.add(tag);
     }
   }
 
+  @mustCallSuper
   void disposeModuleByTag(String tag) {
     final trash = <Type>[];
 
     for (var key in _allBindContexts.keys) {
       final module = _allBindContexts[key]!;
 
-      module.tags.remove(tag);
+      (module as BindContextImpl).tags.remove(tag);
       if (tag.characters.last == '/') {
         module.tags.remove('$tag/'.replaceAll('//', ''));
       }
@@ -89,7 +92,7 @@ class Injector<T> {
   List<dynamic> _getAllSingletons() {
     final list = <dynamic>[];
     for (var module in _allBindContexts.values) {
-      list.addAll(module.instanciatedSingletons);
+      list.addAll((module as BindContextImpl).instanciatedSingletons);
     }
     return list;
   }

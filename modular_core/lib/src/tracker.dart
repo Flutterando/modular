@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:modular_core/src/di/injector.dart';
-import 'package:modular_core/src/route/modular_key.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
-import 'modular_arguments.dart';
-import 'modular_route.dart';
-import 'module.dart';
+import 'route/modular_arguments.dart';
+import 'route/module.dart';
 
 class Tracker {
   final Injector injector;

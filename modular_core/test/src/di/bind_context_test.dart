@@ -1,10 +1,11 @@
 import 'package:modular_core/modular_core.dart';
 import 'package:modular_core/src/di/bind_context.dart';
 import 'package:modular_core/src/di/injector.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final instance = Injector();
+  final instance = InjectorImpl();
   instance.bindContext(MyInjectModule());
 
   test('get injections', () {
@@ -23,7 +24,7 @@ void main() {
   });
 }
 
-class MyInjectModule extends BindContext {
+class MyInjectModule extends BindContextImpl {
   @override
   List<BindContext> get imports => [
         MyInjectModule2(),
@@ -37,7 +38,7 @@ class MyInjectModule extends BindContext {
       ];
 }
 
-class MyInjectModule2 extends BindContext {
+class MyInjectModule2 extends BindContextImpl {
   @override
   List<Bind> get binds => [
         Bind.singleton<Map>((i) => {}, export: true),

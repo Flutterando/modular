@@ -1,7 +1,6 @@
 import 'package:modular_core/src/route/custom_route.dart';
-import 'package:modular_core/src/route/modular_key.dart';
-import 'package:modular_core/src/route/modular_route.dart';
 import 'package:modular_core/src/route/route_context.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -25,7 +24,7 @@ void main() {
   });
 }
 
-class ModuleForRoute extends RouteContext {
+class ModuleForRoute extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/', uri: Uri.parse('/'), children: [
@@ -36,7 +35,7 @@ class ModuleForRoute extends RouteContext {
       ];
 }
 
-class OtherModule extends RouteContext {
+class OtherModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes {
     return [

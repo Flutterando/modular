@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
-import '../../modular_core.dart';
 import 'route_context.dart';
 
-abstract class Module extends RouteContext {
+abstract class Module extends RouteContextImpl {
   @visibleForOverriding
   @override
   List<Module> get imports => const [];

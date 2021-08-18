@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
-import 'bind.dart';
-import 'injector.dart';
+import 'package:modular_core/modular_core.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 import 'resolvers.dart';
 
-abstract class BindContext {
+abstract class BindContextImpl implements BindContext {
   @visibleForOverriding
   List<Bind> get binds => const [];
   @visibleForOverriding
@@ -18,10 +18,10 @@ abstract class BindContext {
   @visibleForTesting
   List<Bind> getProcessBinds() => _binds;
 
-  BindContext() {
+  BindContextImpl() {
     _binds.addAll(binds);
     for (var module in imports) {
-      _addExportBinds(module._binds);
+      _addExportBinds((module as BindContextImpl)._binds);
     }
   }
 
@@ -43,7 +43,7 @@ abstract class BindContext {
       return null;
     }
 
-    bindValue = bind.factoryFunction(Injector()) as T;
+    bindValue = bind.factoryFunction(InjectorImpl()) as T;
     if (bind.isSingleton) {
       _singletonBinds[type] = bindValue;
     }
@@ -52,6 +52,7 @@ abstract class BindContext {
   }
 
   /// Dispose bind from the memory
+  @mustCallSuper
   bool remove<T>() {
     final type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -65,6 +66,7 @@ abstract class BindContext {
   }
 
   /// Dispose all bind from the memory
+  @mustCallSuper
   void dispose() {
     for (final key in _singletonBinds.keys) {
       var _bind = _singletonBinds[key];
@@ -73,10 +75,11 @@ abstract class BindContext {
     _singletonBinds.clear();
   }
 
+  @mustCallSuper
   void instantiateSingletonBinds(List<dynamic> singletons) {
     final filteredList = _binds.where((bind) => !bind.isLazy || !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
-      var b = bindElement.factoryFunction(Injector());
+      var b = bindElement.factoryFunction(InjectorImpl());
       _singletonBinds[b.runtimeType] = b;
     }
   }

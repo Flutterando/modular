@@ -1,10 +1,7 @@
-import 'package:modular_core/modular_core.dart';
-import 'package:modular_core/src/di/bind_context.dart';
+import 'package:modular_core/src/route/route_context.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
-import 'modular_key.dart';
-import 'route_context.dart';
-
-abstract class ModularRoute {
+abstract class ModularRouteImpl implements ModularRoute {
   final String name;
   final String schema;
   final String parent;
@@ -15,7 +12,7 @@ abstract class ModularRoute {
   late final Map<ModularKey, ModularRoute> routeMap;
   late final ModularKey key;
 
-  ModularRoute({
+  ModularRouteImpl({
     required this.name,
     this.parent = '',
     this.schema = '',
@@ -51,17 +48,17 @@ abstract class ModularRoute {
 
   ModularRoute addModule(String name, {required RouteContext module}) {
     final bindContextEntries = {module.runtimeType: module};
-    final routeMap = module.routeMap.map<ModularKey, ModularRoute>(
-      (key, route) => MapEntry(
-        key.copyWith(name: name + key.name),
-        route.copyWith(
-          name: '$name$key'.replaceAll('//', '/'),
-          parent: route.parent != '' ? '$name${route.parent}'.replaceAll('//', '/') : route.parent,
-          bindContextEntries: {...route.bindContextEntries, ...bindContextEntries},
-          middlewares: [...middlewares, ...route.middlewares],
-        ),
-      ),
-    );
+    final routeMap = (module as RouteContextImpl).routeMap.map<ModularKey, ModularRoute>(
+          (key, route) => MapEntry(
+            key.copyWith(name: name + key.name),
+            route.copyWith(
+              name: '$name$key'.replaceAll('//', '/'),
+              parent: route.parent != '' ? '$name${route.parent}'.replaceAll('//', '/') : route.parent,
+              bindContextEntries: {...route.bindContextEntries, ...bindContextEntries},
+              middlewares: [...middlewares, ...route.middlewares],
+            ),
+          ),
+        );
 
     return copyWith(
       name: name,

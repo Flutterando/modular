@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import '../../modular_core.dart';
-import 'modular_route.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
-abstract class Middleware {
-  FutureOr<ModularRoute?> call(ModularRoute route);
-}
+import '../../modular_core.dart';
 
 abstract class RouteGuard extends Middleware {
   RouteGuard([this.guardedRoute]);
