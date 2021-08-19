@@ -13,7 +13,7 @@ class InjectorImpl<T> implements Injector<T> {
     B? bind;
 
     for (var module in _allBindContexts.values) {
-      bind = module.getBind<B>();
+      bind = module.getBind<B>(this);
       if (bind != null) {
         break;
       }
@@ -28,13 +28,21 @@ class InjectorImpl<T> implements Injector<T> {
 
   bool isModuleAlive<T extends BindContext>() => _allBindContexts.containsKey(_getType<T>());
 
+  Future<bool> isModuleReady<M extends BindContext>() async {
+    if (isModuleAlive<M>()) {
+      _allBindContexts[_getType<M>()]!.isReady();
+      return true;
+    }
+    return false;
+  }
+
   @mustCallSuper
   void bindContext(covariant BindContextImpl module, {String tag = ''}) {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
-      module.instantiateSingletonBinds(_getAllSingletons());
-      module.tags.add(tag);
       _allBindContexts[typeModule] = module;
+      (_allBindContexts[typeModule] as BindContextImpl).instantiateSingletonBinds(_getAllSingletons(), this);
+      (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
       printResolverFunc?.call("-- $typeModule INITIALIZED");
     } else {
       (_allBindContexts[typeModule] as BindContextImpl?)?.tags.add(tag);

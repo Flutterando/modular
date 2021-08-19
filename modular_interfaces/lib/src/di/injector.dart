@@ -17,4 +17,6 @@ abstract class Injector<T> {
   void destroy();
 
   void removeBindContext<T extends BindContext>();
+
+  Future<bool> isModuleReady<M extends BindContext>();
 }

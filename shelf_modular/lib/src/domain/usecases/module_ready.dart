@@ -3,17 +3,17 @@ import 'package:shelf_modular/src/core/either.dart';
 import 'package:shelf_modular/src/domain/errors/errors.dart';
 import 'package:shelf_modular/src/domain/services/module_service.dart';
 
-abstract class StartModule {
-  Either<ModularError, Unit> call(RouteContext context);
+abstract class IsModuleReady {
+  Future<Either<ModularError, bool>> call<T extends Module>();
 }
 
-class StartModuleImpl implements StartModule {
+class IsModuleReadyImpl implements IsModuleReady {
   final ModuleService moduleService;
 
-  StartModuleImpl(this.moduleService);
+  IsModuleReadyImpl(this.moduleService);
 
   @override
-  Either<ModularError, Unit> call(RouteContext context) {
-    return moduleService.start(context);
+  Future<Either<ModularError, bool>> call<T extends Module>() {
+    return moduleService.isModuleReady<T>();
   }
 }

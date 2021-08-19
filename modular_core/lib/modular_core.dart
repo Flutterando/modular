@@ -13,7 +13,6 @@ export 'src/route/module.dart';
 export 'src/route/custom_route.dart';
 export 'src/route/route_guard.dart';
 export 'package:modular_interfaces/modular_interfaces.dart';
+export 'src/route/tracker.dart';
 
 final ModularTracker = t.TrackerImpl(InjectorImpl());
-
-class Test {}

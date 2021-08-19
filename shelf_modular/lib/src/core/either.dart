@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 abstract class Either<TLeft, TRight> {
   bool get isLeft;
   bool get isRight;
@@ -12,6 +14,10 @@ abstract class Either<TLeft, TRight> {
 
   Future<Either<TLeft, T>> asyncBind<T>(Future<Either<TLeft, T>> Function(TRight right) fn) {
     return fold((l) async => left(l), fn);
+  }
+
+  Either<T, TRight> leftBind<T>(Either<T, TRight> Function(TLeft left) fn) {
+    return fold(fn, right);
   }
 }
 
@@ -41,10 +47,10 @@ class _Right<TLeft, TRight> extends Either<TLeft, TRight> {
   final TRight _value;
 
   @override
-  final bool isLeft = true;
+  final bool isLeft = false;
 
   @override
-  final bool isRight = false;
+  final bool isRight = true;
 
   _Right(this._value);
 
@@ -61,3 +67,14 @@ class _Right<TLeft, TRight> extends Either<TLeft, TRight> {
 
 Either<TLeft, TRight> right<TLeft, TRight>(TRight right) => _Right<TLeft, TRight>(right);
 Either<TLeft, TRight> left<TLeft, TRight>(TLeft left) => _Left<TLeft, TRight>(left);
+
+T id<T>(T value) => value;
+
+@sealed
+abstract class Unit {}
+
+class _Unit implements Unit {
+  const _Unit();
+}
+
+const unit = _Unit();
