@@ -5,6 +5,7 @@ import 'domain/services/module_service.dart';
 import 'domain/services/route_service.dart';
 import 'domain/usecases/dispose_bind.dart';
 import 'domain/usecases/finish_module.dart';
+import 'domain/usecases/get_arguments.dart';
 import 'domain/usecases/get_bind.dart';
 import 'domain/usecases/get_route.dart';
 import 'domain/usecases/module_ready.dart';
@@ -33,7 +34,8 @@ class ShelfModularModule extends Module {
         Bind.factory<GetRoute>((i) => GetRouteImpl(i())),
         Bind.factory<StartModule>((i) => StartModuleImpl(i())),
         Bind.factory<IsModuleReady>((i) => IsModuleReadyImpl(i())),
+        Bind.factory<GetArguments>((i) => GetArgumentsImpl(i())),
         //presenter
-        Bind.singleton<IModularBase>((i) => ModularBase(i(), i(), i(), i(), i())),
+        Bind.singleton<IModularBase>((i) => ModularBase(i(), i(), i(), i(), i(), i(), i())),
       ];
 }

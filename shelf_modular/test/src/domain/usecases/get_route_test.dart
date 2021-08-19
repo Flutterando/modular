@@ -1,5 +1,5 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:shelf_modular/src/core/either.dart';
+import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
 import 'package:shelf_modular/src/domain/usecases/get_route.dart';
 import 'package:test/test.dart';

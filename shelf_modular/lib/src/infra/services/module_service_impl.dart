@@ -1,5 +1,5 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/src/core/either.dart';
+import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/domain/errors/errors.dart';
 import 'package:shelf_modular/src/domain/services/module_service.dart';
 
