@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart' hide Middleware;
 
-typedef HandlerWithArgs = FutureOr<Response> Function(Request request, ModularArguments args);
+import 'module.dart';
 
 class Route extends ModularRouteImpl {
   final Function? handler;
@@ -94,12 +92,12 @@ class Route extends ModularRouteImpl {
 
   factory Route.resource(
     String name, {
-    required List<ModularRoute> children,
+    required Resource resource,
     List<Middleware> middlewares = const [],
   }) {
     return Route._(
       name: name,
-      children: children,
+      children: resource.routes,
       middlewares: middlewares,
     );
   }
@@ -133,4 +131,8 @@ class Route extends ModularRouteImpl {
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
     );
   }
+}
+
+abstract class Resource {
+  List<Route> get routes;
 }

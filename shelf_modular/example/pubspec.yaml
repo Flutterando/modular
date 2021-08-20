@@ -1,0 +1,17 @@
+name: example
+description: A web server built using the shelf package.
+version: 1.0.0
+publish_to: none
+# homepage: https://www.example.com
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  args: ^2.0.0
+  shelf: ^1.1.0
+  shelf_modular:
+    path: ../
+
+dev_dependencies:
+  pedantic: ^1.10.0

@@ -7,9 +7,9 @@ import 'package:characters/characters.dart';
 class InjectorImpl<T> implements Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
-  B call<B extends Object>([Bind<B>? bind]) => get<B>(bind);
+  B call<B extends Object>([BindContract<B>? bind]) => get<B>(bind);
 
-  B get<B extends Object>([Bind<B>? bind]) {
+  B get<B extends Object>([BindContract<B>? bind]) {
     B? bind;
 
     for (var module in _allBindContexts.values) {
@@ -26,8 +26,10 @@ class InjectorImpl<T> implements Injector<T> {
     }
   }
 
+  @mustCallSuper
   bool isModuleAlive<T extends BindContext>() => _allBindContexts.containsKey(_getType<T>());
 
+  @mustCallSuper
   Future<bool> isModuleReady<M extends BindContext>() async {
     if (isModuleAlive<M>()) {
       _allBindContexts[_getType<M>()]!.isReady();
@@ -72,6 +74,7 @@ class InjectorImpl<T> implements Injector<T> {
     }
   }
 
+  @mustCallSuper
   bool dispose<B extends Object>() {
     for (var binds in _allBindContexts.values) {
       final r = binds.remove<B>();
@@ -80,6 +83,7 @@ class InjectorImpl<T> implements Injector<T> {
     return false;
   }
 
+  @mustCallSuper
   void destroy() {
     for (var binds in _allBindContexts.values) {
       binds.dispose();
@@ -87,6 +91,7 @@ class InjectorImpl<T> implements Injector<T> {
     _allBindContexts.clear();
   }
 
+  @mustCallSuper
   void removeBindContext<T extends BindContext>() {
     final module = _allBindContexts.remove(_getType<T>());
     if (module != null) {
@@ -103,6 +108,14 @@ class InjectorImpl<T> implements Injector<T> {
       list.addAll((module as BindContextImpl).instanciatedSingletons);
     }
     return list;
+  }
+
+  @mustCallSuper
+  @override
+  void removeScopedBinds() {
+    for (var context in _allBindContexts.values.cast<BindContextImpl>()) {
+      context.removeScopedBind();
+    }
   }
 }
 

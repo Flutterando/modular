@@ -1,5 +1,4 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:modular_core/src/di/bind_context.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
 
 import 'modular_route.dart';
@@ -54,6 +53,6 @@ class CustomRoute extends ModularRouteImpl {
       routeMap: routeMap ?? this.routeMap,
       parent: parent ?? this.parent,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
-    ) as ModularRoute;
+    );
   }
 }

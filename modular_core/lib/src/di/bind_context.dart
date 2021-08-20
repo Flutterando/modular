@@ -7,19 +7,26 @@ class _MutableValue {
   var isReadyFlag = false;
 }
 
+class SingletonBind<T extends Object> {
+  final BindContract<T> bind;
+  final T value;
+
+  SingletonBind({required this.bind, required this.value});
+}
+
 abstract class BindContextImpl implements BindContext {
   @visibleForOverriding
-  List<Bind> get binds => const [];
+  List<BindContract> get binds => const [];
   @visibleForOverriding
   List<BindContext> get imports => const [];
 
   final _mutableValue = _MutableValue();
 
-  final List<Bind> _binds = [];
+  final List<BindContract> _binds = [];
   @internal
   final Set<String> tags = {};
-  final _singletonBinds = <Type, dynamic>{};
-  List<dynamic> get instanciatedSingletons => _singletonBinds.values.toList();
+  final _singletonBinds = <Type, SingletonBind>{};
+  List<dynamic> get instanciatedSingletons => _singletonBinds.values.map((e) => e.value).toList();
 
   BindContextImpl() {
     _binds.addAll(binds);
@@ -28,7 +35,7 @@ abstract class BindContextImpl implements BindContext {
     }
   }
 
-  void _addExportBinds(List<Bind> bindsForOtherModule) {
+  void _addExportBinds(List<BindContract> bindsForOtherModule) {
     final filteredList = bindsForOtherModule.where((element) => element.export);
     _binds.insertAll(0, filteredList);
   }
@@ -37,18 +44,18 @@ abstract class BindContextImpl implements BindContext {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
-      bindValue = _singletonBinds[type];
+      bindValue = _singletonBinds[type]!.value as T;
       return bindValue;
     }
 
-    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
+    var bind = _binds.firstWhere((b) => b.bindType == _getType<T>(), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       return null;
     }
 
     bindValue = bind.factoryFunction(injector) as T;
     if (bind.isSingleton) {
-      _singletonBinds[type] = bindValue;
+      _singletonBinds[type] = SingletonBind(value: bindValue, bind: bind);
     }
 
     return bindValue;
@@ -58,13 +65,23 @@ abstract class BindContextImpl implements BindContext {
   bool remove<T>() {
     final type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
-      var singletonBind = _singletonBinds[type];
+      var singletonBind = _singletonBinds[type]!.value;
       disposeResolverFunc?.call(singletonBind);
       _singletonBinds.remove(type);
       return true;
     } else {
       return false;
     }
+  }
+
+  void removeScopedBind() {
+    _singletonBinds.removeWhere((key, bind) {
+      if (bind.bind.isScoped) {
+        disposeResolverFunc?.call(bind);
+        return true;
+      }
+      return false;
+    });
   }
 
   @mustCallSuper
@@ -81,7 +98,7 @@ abstract class BindContextImpl implements BindContext {
     final filteredList = _binds.where((bind) => !bind.isLazy || !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
       var b = bindElement.factoryFunction(injector);
-      _singletonBinds[b.runtimeType] = b;
+      _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
     }
   }
 
@@ -96,13 +113,15 @@ abstract class BindContextImpl implements BindContext {
     }
   }
 
-  bool _containBind(List<dynamic> singletons, Bind bind) {
+  bool _containBind(List<dynamic> singletons, BindContract bind) {
     return singletons.indexWhere((element) => _existBind(element, bind.factoryFunction)) >= 0;
   }
 
   bool _existBind<T>(T instance, T Function(Injector<dynamic>) inject) {
     return inject is T Function(Injector);
   }
+
+  Type _getType<T>() => T;
 
   Type _getInjectType<B>() {
     var foundType = B;

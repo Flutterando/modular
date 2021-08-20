@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:modular_core/src/route/custom_route.dart';
+import 'package:modular_core/src/route/route_context.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
 import 'package:test/test.dart';
 import 'package:modular_core/modular_core.dart';
@@ -96,7 +97,7 @@ void main() {
   });
 }
 
-class MyModule extends Module {
+class MyModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/', data: 'first', children: [
@@ -110,7 +111,7 @@ class MyModule extends Module {
       ];
 }
 
-class OtherModule extends Module {
+class OtherModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/', data: 'other', children: [
@@ -120,7 +121,7 @@ class OtherModule extends Module {
       ];
 }
 
-class DeepModule extends Module {
+class DeepModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/', data: 'internal', children: [
@@ -130,7 +131,7 @@ class DeepModule extends Module {
       ];
 }
 
-class BlockedModule extends Module {
+class BlockedModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/'),

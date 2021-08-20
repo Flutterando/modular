@@ -23,4 +23,10 @@ class BindServiceImpl extends BindService {
       return left(BindNotFoundException('$T not found.', s));
     }
   }
+
+  @override
+  Either<ModularError, Unit> releaseScopedBinds() {
+    injector.removeScopedBinds();
+    return right(unit);
+  }
 }

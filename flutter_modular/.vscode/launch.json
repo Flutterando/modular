@@ -9,7 +9,7 @@
             "type": "dart",
             "cwd": "../shelf_modular",
             "request": "launch",
-            "program": "bin/server.dart"
+            "program": "example/bin/server.dart"
         },
         {
             "name": "flutter_modular",

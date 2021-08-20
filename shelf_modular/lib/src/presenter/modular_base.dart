@@ -12,12 +12,15 @@ import 'package:shelf_modular/src/domain/usecases/get_arguments.dart';
 import 'package:shelf_modular/src/domain/usecases/get_bind.dart';
 import 'package:shelf_modular/src/domain/usecases/get_route.dart';
 import 'package:shelf_modular/src/domain/usecases/module_ready.dart';
+import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
-import 'request_extension.dart';
+import 'package:shelf_modular/src/shelf_modular_module.dart';
+import 'models/module.dart';
+import 'utils/handlers.dart';
+import 'utils/request_extension.dart';
 import 'models/route.dart';
 
 abstract class IModularBase {
-  void init(Module module);
   void destroy();
   Future<void> isModuleReady<M extends Module>();
   Handler call({required Module module});
@@ -37,11 +40,12 @@ class ModularBase implements IModularBase {
   final GetBind getBind;
   final StartModule startModule;
   final GetRoute getRoute;
+  final ReleaseScopedBinds releaseScopedBinds;
   final IsModuleReadyImpl isModuleReadyImpl;
 
   bool _moduleHasBeenStarted = false;
 
-  ModularBase(this.disposeBind, this.finishModule, this.getBind, this.startModule, this.isModuleReadyImpl, this.getRoute, this.getArguments);
+  ModularBase(this.disposeBind, this.finishModule, this.getBind, this.startModule, this.isModuleReadyImpl, this.getRoute, this.getArguments, this.releaseScopedBinds);
 
   @override
   bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
@@ -67,16 +71,6 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  void init(Module module) {
-    if (!_moduleHasBeenStarted) {
-      startModule(module);
-      _moduleHasBeenStarted = true;
-    } else {
-      throw ModuleStartedException('Module ${module.runtimeType} is already started');
-    }
-  }
-
-  @override
   Future<void> isModuleReady<M extends Module>() => isModuleReadyImpl<M>();
 
   @override
@@ -84,23 +78,39 @@ class ModularBase implements IModularBase {
 
   @override
   Handler call({required Module module}) {
-    startModule(module);
-    return _handler;
+    if (!_moduleHasBeenStarted) {
+      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      _moduleHasBeenStarted = true;
+      return _handler;
+    } else {
+      throw ModuleStartedException('Module ${module.runtimeType} is already started');
+    }
   }
 
   FutureOr<Response> _handler(Request request) async {
-    final data = await tryJsonDecode(request);
-    final result = await getRoute.call(RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data));
-    return result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
+    late FutureOr<Response> response;
+    try {
+      final data = await tryJsonDecode(request);
+      final result = await getRoute.call(RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data));
+      response = result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
+    } catch (e, s) {
+      response = Response.internalServerError(body: '${e.toString()}\n$s');
+    } finally {
+      releaseScopedBinds();
+      return response;
+    }
   }
 
   FutureOr<Response> _routeSuccess(ModularRoute route, Request request) {
     if (route is Route) {
-      final handler = route.handler;
-      if (handler is Handler) {
-        return handler(request);
-      } else if (handler is HandlerWithArgs) {
-        return handler(request, getArguments().getOrElse((left) => ModularArguments.empty()));
+      final response = applyHandler(
+        route.handler!,
+        request: request,
+        arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
+        injector: injector<Injector>(),
+      );
+      if (response != null) {
+        return response;
       } else {
         Response.internalServerError(body: 'Handler not correct');
       }

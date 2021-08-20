@@ -11,11 +11,11 @@ class RouteServiceImpl implements RouteService {
 
   @override
   Future<Either<ModularError, ModularRoute>> getRoute(RouteParmsDTO params) async {
-    var route = await tracker.findRoute(params.url);
+    var route = await tracker.findRoute(params.url, data: params.arguments, schema: params.schema);
     if (route != null) {
       return right(route);
     } else {
-      return left(RouteNotFoundException('Route (${params.url})'));
+      return left(RouteNotFoundException('Route (${params.url}) not found'));
     }
   }
 

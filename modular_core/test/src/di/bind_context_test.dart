@@ -31,17 +31,21 @@ class MyInjectModule extends BindContextImpl {
       ];
 
   @override
-  List<Bind> get binds => [
-        Bind.instance('Jacob'),
-        Bind.instance(true),
-        Bind.singleton((i) => 0.0),
+  List<BindContract> get binds => [
+        _Bind((i) => 'Jacob'),
+        _Bind((i) => true),
+        _Bind((i) => 0.0),
       ];
 }
 
 class MyInjectModule2 extends BindContextImpl {
   @override
-  List<Bind> get binds => [
-        Bind.singleton<Map>((i) => {}, export: true),
-        Bind.singleton<List>((i) => []),
+  List<BindContract> get binds => [
+        _Bind<Map>((i) => {}, export: true),
+        _Bind<List>((i) => []),
       ];
+}
+
+class _Bind<T extends Object> extends BindContract<T> {
+  _Bind(T Function(Injector i) factoryFunction, {bool export = false}) : super(factoryFunction, export: export);
 }
