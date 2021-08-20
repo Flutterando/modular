@@ -34,7 +34,7 @@ void main(List<String> args) async {
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind.factory((i) => Controller()),
+        Bind.scoped((i) => Controller()),
       ];
 
   @override
@@ -62,4 +62,8 @@ class MyResource implements Resource {
 
 class Controller {
   final String name = 'Jacob';
+
+  Controller() {
+    print('it is controller!!');
+  }
 }
