@@ -1,7 +1,6 @@
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
-import 'package:shelf_modular/src/domain/errors/errors.dart';
 import 'package:shelf_modular/src/domain/services/route_service.dart';
 
 abstract class GetRoute {
