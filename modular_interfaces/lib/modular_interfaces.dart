@@ -9,3 +9,4 @@ export 'src/route/modular_route.dart';
 export 'src/route/route_context.dart';
 export 'src/route/modular_arguments.dart';
 export 'src/route/tracker.dart';
+export 'src/errors/modular_errors.dart';

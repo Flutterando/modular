@@ -18,6 +18,11 @@ void main() {
         throwsA(isA<AssertionError>()));
   });
 
+  test('thwow error if runApp not iniciate module', () {
+    final tracker = TrackerImpl(InjectorImpl());
+    expect(() => tracker.module, throwsA(isA<TrackerNotInitiated>()));
+  });
+
   test('find route', () async {
     final route = await ModularTracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');
@@ -27,6 +32,7 @@ void main() {
   test('find route with params', () async {
     var route = await ModularTracker.findRoute('/product/1') as CustomRoute?;
     expect(route?.uri.path, '/product/1');
+    expect(ModularTracker.currentPath, '/product/1');
     expect(ModularTracker.arguments.params['id'], '1');
 
     route = await ModularTracker.findRoute('/product/test') as CustomRoute?;
@@ -94,6 +100,11 @@ void main() {
     final route = await ModularTracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
     expect(route?.uri.path, '/schema');
     expect(route?.data, 'withSchema');
+  });
+
+  test('finishApp', () async {
+    ModularTracker.finishApp();
+    expect(() => ModularTracker.module, throwsA(isA<TrackerNotInitiated>()));
   });
 }
 

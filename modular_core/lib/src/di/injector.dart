@@ -22,7 +22,7 @@ class InjectorImpl<T> implements Injector<T> {
     if (bind != null) {
       return bind;
     } else {
-      throw BindNotFound();
+      throw BindNotFound(T.toString());
     }
   }
 
@@ -119,9 +119,6 @@ class InjectorImpl<T> implements Injector<T> {
   }
 }
 
-class BindNotFound implements Exception {
-  @override
-  String toString() {
-    return 'BindNotFound';
-  }
+class BindNotFound extends ModularError {
+  BindNotFound(String message) : super(message);
 }

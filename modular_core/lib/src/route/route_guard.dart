@@ -26,13 +26,6 @@ abstract class RouteGuard extends Middleware {
   }
 }
 
-class GuardedRouteException implements Exception {
-  final String path;
-
-  GuardedRouteException(this.path);
-
-  @override
-  String toString() {
-    return 'GuardedRouteException: $path';
-  }
+class GuardedRouteException extends ModularError {
+  GuardedRouteException(String path) : super(path);
 }

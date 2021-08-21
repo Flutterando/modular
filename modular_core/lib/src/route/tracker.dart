@@ -17,7 +17,8 @@ class TrackerImpl implements Tracker {
 
   TrackerImpl(this.injector);
 
-  var arguments = ModularArguments.empty();
+  var _arguments = ModularArguments.empty();
+  ModularArguments get arguments => _arguments;
 
   String get currentPath => arguments.uri.toString();
 
@@ -69,7 +70,7 @@ class TrackerImpl implements Tracker {
 
     if (route == null) return null;
 
-    arguments = arguments.copyWith(data: data, uri: uri, params: params);
+    _arguments = arguments.copyWith(data: data, uri: uri, params: params);
     _injectBindContext(route);
     return route;
   }
@@ -123,18 +124,6 @@ class TrackerImpl implements Tracker {
   }
 }
 
-class TrackerNotInitiated implements NullThrownError {
-  final String message;
-  final StackTrace? stackTrace;
-
-  const TrackerNotInitiated(this.message, [this.stackTrace]);
-
-  @override
-  String toString() {
-    return ''' 
-$runtimeType: $message
-
-${stackTrace != null ? stackTrace : ''}
-    ''';
-  }
+class TrackerNotInitiated extends ModularError {
+  const TrackerNotInitiated(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
 }
