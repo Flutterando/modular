@@ -35,4 +35,15 @@ void main() {
     final newEither = await rightEither.asyncBind((r) async => right(1));
     expect(newEither.getOrElse((left) => 0), 1);
   });
+
+  test('map', () async {
+    final rightEither = right(0);
+    final newEither = rightEither.map((r) => 1);
+    expect(newEither.getOrElse((left) => 0), 1);
+  });
+  test('leftMap', () async {
+    final leftEither = left(0);
+    final newEither = leftEither.leftMap((r) => 1);
+    expect(newEither.getOrElse(id), 1);
+  });
 }
