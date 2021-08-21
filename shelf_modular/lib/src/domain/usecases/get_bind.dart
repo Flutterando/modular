@@ -1,3 +1,4 @@
+import 'package:modular_core/modular_core.dart';
 import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/domain/errors/errors.dart';
 import 'package:shelf_modular/src/domain/services/bind_service.dart';
