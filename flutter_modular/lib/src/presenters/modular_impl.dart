@@ -138,7 +138,7 @@ class ModularImpl implements ModularInterface {
       }
 
       if (bind is BindEmpty) {
-        throw ModularError('\"${B.toString()}\" not found in \"$module\" module');
+        throw ModularError('/"${B.toString()}/" not found in /"$module/" module');
       }
     }
     var result = _findExistingInstance<B>();

@@ -12,6 +12,4 @@ class Module extends RouteContextImpl {
 
   @override
   List<ModularRoute> get routes => const [];
-
-  T i<T extends Object>() => Modular.get<T>();
 }

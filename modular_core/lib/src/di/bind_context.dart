@@ -48,7 +48,7 @@ abstract class BindContextImpl implements BindContext {
       return bindValue;
     }
 
-    var bind = _binds.firstWhere((b) => b.bindType == _getType<T>(), orElse: () => BindEmpty());
+    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       return null;
     }
@@ -120,8 +120,6 @@ abstract class BindContextImpl implements BindContext {
   bool _existBind<T>(T instance, T Function(Injector<dynamic>) inject) {
     return inject is T Function(Injector);
   }
-
-  Type _getType<T>() => T;
 
   Type _getInjectType<B>() {
     var foundType = B;

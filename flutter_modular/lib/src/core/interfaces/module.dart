@@ -86,7 +86,7 @@ abstract class Module {
 Recursive calls detected. This can cause StackOverflow.
 Check the Binds of the $runtimeType module:
 ***
-${typesInRequest.join('\n')}
+${typesInRequest.join('/n')}
 ***
       
       ''');

@@ -1,6 +1,6 @@
 name: modular_core
 description: Smart project structure with dependency injection and route management
-version: 0.0.14
+version: 0.0.15
 homepage: https://github.com/Flutterando/modular
 
 environment:
@@ -14,3 +14,5 @@ dependencies:
 dev_dependencies:
   test: ^1.17.10
 
+scripts:
+  coverage: wsl genhtml -o coverage/html coverage/lcov.info

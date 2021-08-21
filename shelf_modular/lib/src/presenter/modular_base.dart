@@ -94,7 +94,7 @@ class ModularBase implements IModularBase {
       final result = await getRoute.call(RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data));
       response = result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
     } catch (e, s) {
-      response = Response.internalServerError(body: '${e.toString()}\n$s');
+      response = Response.internalServerError(body: '${e.toString()}/n$s');
     } finally {
       releaseScopedBinds();
       return response;
@@ -159,7 +159,7 @@ class ModularBase implements IModularBase {
             params[key] = file;
           }
         }
-        print(params);
+        return params;
       }
     }
   }

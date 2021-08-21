@@ -44,8 +44,7 @@ class ModelVisitor extends SimpleElementVisitor {
         .map((parameter) => parameter.metadata)
         .expand((annotations) => annotations)
         .map((annotation) => annotation.element?.displayName ?? '')
-        .where(
-            (displayName) => ['Data', 'Param', 'Default'].contains(displayName))
+        .where((displayName) => ['Data', 'Param', 'Default'].contains(displayName))
         .isNotEmpty;
   }
 

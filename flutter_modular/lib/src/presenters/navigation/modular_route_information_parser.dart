@@ -33,7 +33,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularRoute>
   @override
   RouteInformation restoreRouteInformation(ModularRoute router) {
     return RouteInformation(
-      location: _getRoute(router)?.path ?? '/',
+      location: (_getRoute(router)?.path ?? '/').split('@').last,
     );
   }
 

@@ -36,7 +36,7 @@ abstract class CustomGeneratorForAnnotatedField<AnnotationType> extends Generato
       }
     }
 
-    return values.join('\n\n');
+    return values.join('/n/n');
   }
 
   String generateForAnnotatedField(FieldElement field, ConstantReader annotation);
