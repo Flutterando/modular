@@ -5,6 +5,10 @@ import 'package:test/test.dart';
 
 void main() {
   final routeContext = ModuleForRoute();
+
+  test('instanciate', () {
+    expect(ImplementationTest().routes, const []);
+  });
   test('process route maps', () {
     final initial = routeContext.routeMap[const ModularKey(name: '/')]!;
     expect(initial.name, '/');
@@ -23,6 +27,8 @@ void main() {
     expect(other?.bindContextEntries.containsKey(OtherModule), true);
   });
 }
+
+class ImplementationTest extends RouteContextImpl {}
 
 class ModuleForRoute extends RouteContextImpl {
   @override

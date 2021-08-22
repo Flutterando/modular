@@ -6,6 +6,6 @@ setDisposeResolver(void Function(dynamic bind) fn) {
 
 void Function(String text)? printResolverFunc;
 
-setPrintResolver(void Function(dynamic bind) fn) {
+setPrintResolver(void Function(String text) fn) {
   printResolverFunc = fn;
 }

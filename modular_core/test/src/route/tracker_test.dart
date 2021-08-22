@@ -94,6 +94,10 @@ void main() {
     expect(() async => await ModularTracker.findRoute('/block/'), throwsA(isA<GuardedRouteException>()));
     expect(() async => await ModularTracker.findRoute('/block/again'), throwsA(isA<GuardedRouteException>()));
   });
+  test('not access route with guard redirect', () async {
+    final route = await ModularTracker.findRoute('/other/internal/blockREDIRECT');
+    expect(route?.name, '/');
+  });
 
   test('find route with schema', () async {
     expect(await ModularTracker.findRoute('/schema'), isNull);
@@ -139,6 +143,7 @@ class DeepModule extends RouteContextImpl {
           CustomRoute(name: '/deep', data: 'deep'),
         ]),
         CustomRoute(name: '/block', middlewares: [MyGuard()]),
+        CustomRoute(name: '/blockREDIRECT', middlewares: [MyGuardREDIRECT()]),
       ];
 }
 
@@ -151,6 +156,15 @@ class BlockedModule extends RouteContextImpl {
 }
 
 class MyGuard extends RouteGuard {
+  @override
+  FutureOr<bool> canActivate(String path, ModularRoute router) {
+    return false;
+  }
+}
+
+class MyGuardREDIRECT extends RouteGuard {
+  MyGuardREDIRECT() : super('/');
+
   @override
   FutureOr<bool> canActivate(String path, ModularRoute router) {
     return false;

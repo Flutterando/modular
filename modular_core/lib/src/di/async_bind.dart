@@ -14,7 +14,7 @@ class AsyncBind<T extends Object> extends BindContract<Future<T>> {
     return bind;
   }
 
-  Future<BindContract<T>> converToAsyncBind() async {
+  Future<BindContract<T>> convertToAsyncBind() async {
     final bindValue = await resolveAsyncBind();
     return _Bind<T>((i) => bindValue, export: export);
   }

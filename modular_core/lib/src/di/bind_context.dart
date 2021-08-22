@@ -108,7 +108,7 @@ abstract class BindContextImpl implements BindContext {
     _mutableValue.isReadyFlag = true;
     final asyncBindList = _binds.whereType<AsyncBind>().toList();
     for (var bind in asyncBindList) {
-      final resolvedBind = await bind.converToAsyncBind();
+      final resolvedBind = await bind.convertToAsyncBind();
       _binds.insert(0, resolvedBind);
     }
   }
