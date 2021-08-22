@@ -2,18 +2,17 @@ import 'dart:convert';
 
 import 'package:example/app/search/domain/entities/result.dart';
 
-class ResultModel extends Result {
+class ResultModel implements Result {
+  @override
   final String image;
+  @override
   final String name;
+  @override
   final String nickname;
+  @override
   final String url;
 
-  const ResultModel(
-      {required this.image,
-      required this.name,
-      required this.nickname,
-      required this.url})
-      : super(image: image, name: name, nickname: nickname, url: url);
+  const ResultModel({required this.image, required this.name, required this.nickname, required this.url});
 
   Map<String, dynamic> toMap() {
     return {
