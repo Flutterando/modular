@@ -9,7 +9,7 @@ environment:
 dependencies:
   characters: ^1.1.0
   meta: ^1.3.0
-  modular_interfaces: ">=0.0.11 <1.0.0"
+  modular_interfaces: ">=0.0.12 <1.0.0"
 
 dev_dependencies:
   test: ^1.17.10

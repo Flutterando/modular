@@ -10,7 +10,7 @@ abstract class Tracker {
 
   Tracker(this.injector);
 
-  var arguments = ModularArguments.empty();
+  ModularArguments get arguments;
 
   String get currentPath => arguments.uri.toString();
 
