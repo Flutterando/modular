@@ -10,7 +10,7 @@ void initModule(Module module, {List<Bind<Object>> replaceBinds = const [], bool
       return item.runtimeType == dep.runtimeType;
     }, orElse: () => BindEmpty());
     if (dep is! BindEmpty) {
-      module.binds[i] = dep;
+      module.getProcessBinds()[i] = dep;
     }
   }
   //module.changeBinds(changedList);
