@@ -7,13 +7,6 @@ class _MutableValue {
   var isReadyFlag = false;
 }
 
-class SingletonBind<T extends Object> {
-  final BindContract<T> bind;
-  final T value;
-
-  SingletonBind({required this.bind, required this.value});
-}
-
 abstract class BindContextImpl implements BindContext {
   @visibleForOverriding
   List<BindContract> get binds => const [];
@@ -26,7 +19,7 @@ abstract class BindContextImpl implements BindContext {
   @internal
   final Set<String> tags = {};
   final _singletonBinds = <Type, SingletonBind>{};
-  List<dynamic> get instanciatedSingletons => _singletonBinds.values.map((e) => e.value).toList();
+  List<SingletonBind> get instanciatedSingletons => _singletonBinds.values.toList();
 
   BindContextImpl() {
     _binds.addAll(binds);
@@ -74,7 +67,8 @@ abstract class BindContextImpl implements BindContext {
     }
   }
 
-  void removeScopedBind() {
+  bool removeScopedBind() {
+    final totalBind = _singletonBinds.length;
     _singletonBinds.removeWhere((key, bind) {
       if (bind.bind.isScoped) {
         disposeResolverFunc?.call(bind);
@@ -82,6 +76,8 @@ abstract class BindContextImpl implements BindContext {
       }
       return false;
     });
+
+    return totalBind != _singletonBinds.length;
   }
 
   @mustCallSuper
@@ -91,15 +87,6 @@ abstract class BindContextImpl implements BindContext {
       disposeResolverFunc?.call(_bind);
     }
     _singletonBinds.clear();
-  }
-
-  @mustCallSuper
-  void instantiateSingletonBinds(List<dynamic> singletons, Injector injector) {
-    final filteredList = _binds.where((bind) => !bind.isLazy || !_containBind(singletons, bind));
-    for (final bindElement in filteredList) {
-      var b = bindElement.factoryFunction(injector);
-      _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
-    }
   }
 
   @mustCallSuper
@@ -113,20 +100,25 @@ abstract class BindContextImpl implements BindContext {
     }
   }
 
-  bool _containBind(List<dynamic> singletons, BindContract bind) {
-    return singletons.indexWhere((element) => _existBind(element, bind.factoryFunction)) >= 0;
+  @mustCallSuper
+  void instantiateSingletonBinds(List<SingletonBind> singletons, Injector injector) {
+    final filteredList = _binds.where((bind) => !bind.isLazy && !_containBind(singletons, bind));
+    for (final bindElement in filteredList) {
+      var b = bindElement.factoryFunction(injector);
+      _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
+    }
   }
 
-  bool _existBind<T>(T instance, T Function(Injector<dynamic>) inject) {
-    return inject is T Function(Injector);
+  bool _containBind(List<SingletonBind> singletons, BindContract bind) {
+    return singletons.indexWhere((element) => element.bind.factoryFunction == bind.factoryFunction) != -1;
   }
 
   Type _getInjectType<B>() {
     var foundType = B;
 
-    for (var value in _singletonBinds.values) {
-      if (value is B) {
-        foundType = _singletonBinds.entries.firstWhere((map) => map.value == value).key;
+    for (var singleton in _singletonBinds.values) {
+      if (singleton.value is B) {
+        foundType = _singletonBinds.entries.firstWhere((map) => map.value.value == singleton.value).key;
         break;
       }
     }

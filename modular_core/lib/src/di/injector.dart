@@ -45,10 +45,15 @@ class InjectorImpl<T> implements Injector<T> {
       _allBindContexts[typeModule] = module;
       (_allBindContexts[typeModule] as BindContextImpl).instantiateSingletonBinds(_getAllSingletons(), this);
       (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
-      printResolverFunc?.call("-- $typeModule INITIALIZED");
+      debugPrint("-- $typeModule INITIALIZED");
     } else {
       (_allBindContexts[typeModule] as BindContextImpl?)?.tags.add(tag);
     }
+  }
+
+  @visibleForTesting
+  void debugPrint(String text) {
+    printResolverFunc?.call(text);
   }
 
   @mustCallSuper
@@ -70,7 +75,7 @@ class InjectorImpl<T> implements Injector<T> {
 
     for (final key in trash) {
       _allBindContexts.remove(key);
-      printResolverFunc?.call("-- $key DISPOSED");
+      debugPrint("-- $key DISPOSED");
     }
   }
 
@@ -96,14 +101,14 @@ class InjectorImpl<T> implements Injector<T> {
     final module = _allBindContexts.remove(_getType<T>());
     if (module != null) {
       module.dispose();
-      printResolverFunc?.call("-- ${module.runtimeType} DISPOSED");
+      debugPrint("-- ${module.runtimeType} DISPOSED");
     }
   }
 
   Type _getType<T>() => T;
 
-  List<dynamic> _getAllSingletons() {
-    final list = <dynamic>[];
+  List<SingletonBind> _getAllSingletons() {
+    final list = <SingletonBind>[];
     for (var module in _allBindContexts.values) {
       list.addAll((module as BindContextImpl).instanciatedSingletons);
     }

@@ -68,3 +68,10 @@ class BindInject<T extends Object> extends BindContract<T> {
 class BindEmpty extends BindContract<Object> {
   BindEmpty() : super((e) => Object());
 }
+
+class SingletonBind<T extends Object> {
+  final BindContract<T> bind;
+  final T value;
+
+  SingletonBind({required this.bind, required this.value});
+}
