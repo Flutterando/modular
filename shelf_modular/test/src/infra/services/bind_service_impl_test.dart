@@ -28,4 +28,11 @@ void main() {
       expect(service.disposeBind<String>().getOrElse((left) => false), true);
     });
   });
+
+  group('releaseScopedBinds', () {
+    test('should return true', () {
+      when(() => injector.removeScopedBinds());
+      expect(service.releaseScopedBinds().getOrElse((left) => throw left), unit);
+    });
+  });
 }

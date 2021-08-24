@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:shelf_modular/shelf_modular.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
 import 'package:shelf_modular/src/infra/services/route_service_impl.dart';
 import 'package:test/test.dart';
@@ -10,8 +11,8 @@ void main() {
   final service = RouteServiceImpl(tracker);
   final params = RouteParmsDTO(url: '/');
 
-  group('getBind', () {
-    test('should get bind', () async {
+  group('getRoute', () {
+    test('should get route', () async {
       when(() => tracker.findRoute(params.url)).thenAnswer((_) async => ModularRouteMock());
       final result = await service.getRoute(params);
       expect(result.isRight, true);
@@ -20,6 +21,14 @@ void main() {
       when(() => tracker.findRoute(params.url)).thenAnswer((_) async => null);
       final result = await service.getRoute(params);
       expect(result.isLeft, true);
+    });
+  });
+
+  group('getArguments', () {
+    test('should return args', () async {
+      when(() => tracker.arguments).thenReturn(ModularArguments.empty());
+      final result = service.getArguments();
+      expect(result.isRight, true);
     });
   });
 }

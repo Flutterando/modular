@@ -7,7 +7,3 @@ class BindNotFoundException extends ModularError {
 class RouteNotFoundException extends ModularError {
   const RouteNotFoundException(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
 }
-
-class ModuleStartedException extends ModularError {
-  const ModuleStartedException(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
-}

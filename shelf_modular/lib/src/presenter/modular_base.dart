@@ -15,6 +15,7 @@ import 'package:shelf_modular/src/domain/usecases/module_ready.dart';
 import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
 import 'package:shelf_modular/src/shelf_modular_module.dart';
+import 'errors/errors.dart';
 import 'models/module.dart';
 import 'utils/handlers.dart';
 import 'utils/request_extension.dart';
