@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
@@ -20,7 +21,6 @@ import 'package:shelf_modular/src/presenter/modular_base.dart';
 import 'package:shelf_modular/src/shared/either.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-import 'package:shelf_modular/src/presenter/utils/request_extension.dart';
 
 import '../mocks/mocks.dart';
 
@@ -190,7 +190,7 @@ void main() {
     when(() => request.headers).thenReturn({});
     when(() => request.readAsString()).thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
-    expect(result?['name'], 'Jacob');
+    expect(result['name'], 'Jacob');
   });
 
   test('tryJsonDecode isMultipart false with FormatException', () async {
@@ -200,6 +200,16 @@ void main() {
 
     when(() => request.readAsString()).thenThrow(FormatException());
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
-    expect(result, isNull);
+    expect(result, {});
+  });
+
+  test('tryJsonDecode isMultipart true return {}', () async {
+    final request = RequestMock();
+    when(() => request.method).thenReturn('POST');
+    when(() => request.headers).thenReturn({
+      'Content-Type': MediaType('multipart', 'form-data', {'boundary': 'boundary'}).toString()
+    });
+    final result = await (modularBase as ModularBase).tryJsonDecode(request);
+    expect(result.isEmpty, true);
   });
 }
