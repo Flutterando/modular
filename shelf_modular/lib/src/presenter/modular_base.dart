@@ -20,11 +20,13 @@ import 'models/module.dart';
 import 'utils/handlers.dart';
 import 'utils/request_extension.dart';
 import 'models/route.dart';
+import 'package:meta/meta.dart';
 
 abstract class IModularBase {
   void destroy();
   Future<void> isModuleReady<M extends Module>();
-  Handler call({required Module module});
+  Handler call({required RouteContext module});
+  Handler start({required RouteContext module});
   Future<B> getAsync<B extends Object>({B? defaultValue});
 
   B get<B extends Object>({
@@ -78,28 +80,32 @@ class ModularBase implements IModularBase {
   void destroy() => finishModule();
 
   @override
-  Handler call({required Module module}) {
+  Handler call({required RouteContext module}) {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
-      return _handler;
+      return handler;
     } else {
       throw ModuleStartedException('Module ${module.runtimeType} is already started');
     }
   }
 
-  FutureOr<Response> _handler(Request request) async {
-    late FutureOr<Response> response;
+  @override
+  Handler start({required RouteContext module}) => call(module: module);
+
+  @visibleForTesting
+  FutureOr<Response> handler(Request request) async {
+    FutureOr<Response> response;
     try {
       final data = await tryJsonDecode(request);
-      final result = await getRoute.call(RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data));
+      final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
+      final result = await getRoute.call(params);
       response = result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
     } catch (e, s) {
       response = Response.internalServerError(body: '${e.toString()}/n$s');
-    } finally {
-      releaseScopedBinds();
-      return response;
     }
+    releaseScopedBinds();
+    return await response;
   }
 
   FutureOr<Response> _routeSuccess(ModularRoute route, Request request) {
@@ -113,7 +119,7 @@ class ModularBase implements IModularBase {
       if (response != null) {
         return response;
       } else {
-        Response.internalServerError(body: 'Handler not correct');
+        return Response.internalServerError(body: 'Handler not correct');
       }
     }
     return Response.notFound('');
@@ -127,6 +133,7 @@ class ModularBase implements IModularBase {
     return Response.internalServerError(body: error.toString());
   }
 
+  @visibleForTesting
   Future<Map?> tryJsonDecode(Request request) async {
     if (request.method == 'GET') return null;
 
@@ -135,8 +142,7 @@ class ModularBase implements IModularBase {
         final data = await request.readAsString();
         return jsonDecode(data);
       } on FormatException catch (e) {
-        if (e.message == 'Unexpected extension byte') {
-        } else if (e.message == 'Missing expected digit') {}
+        print(e);
         return null;
       }
     } else {

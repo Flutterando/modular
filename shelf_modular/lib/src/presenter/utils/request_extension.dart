@@ -7,15 +7,6 @@ import 'package:shelf/shelf.dart';
 extension ReadMultipartRequestExtension on Request {
   bool get isMultipart => _extractMultipartBoundary() != null;
 
-  Stream<MimeMultipart> get parts {
-    final boundary = _extractMultipartBoundary();
-    if (boundary == null) {
-      throw StateError('Not a multipart request.');
-    }
-
-    return MimeMultipartTransformer(boundary).bind(read()).map((part) => _CaseInsensitiveMultipart(part));
-  }
-
   /// Extracts the `boundary` paramete from the content-type header, if this is
   /// a multipart request.
   String? _extractMultipartBoundary() {
@@ -25,6 +16,15 @@ extension ReadMultipartRequestExtension on Request {
     if (contentType.type != 'multipart') return null;
 
     return contentType.parameters['boundary'];
+  }
+
+  Stream<MimeMultipart> get parts {
+    final boundary = _extractMultipartBoundary();
+    if (boundary == null) {
+      throw StateError('Not a multipart request.');
+    }
+
+    return MimeMultipartTransformer(boundary).bind(read()).map((part) => _CaseInsensitiveMultipart(part));
   }
 }
 
