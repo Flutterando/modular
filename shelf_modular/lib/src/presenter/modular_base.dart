@@ -85,6 +85,14 @@ class ModularBase implements IModularBase {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
+
+      setDisposeResolver((bindValue) {
+        if (bindValue is Disposable) {
+          bindValue.dispose();
+        }
+      });
+
+      setPrintResolver(print);
       return handler;
     } else {
       throw ModuleStartedException('Module ${module.runtimeType} is already started');
