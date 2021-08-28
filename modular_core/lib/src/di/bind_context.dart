@@ -69,9 +69,9 @@ abstract class BindContextImpl implements BindContext {
 
   bool removeScopedBind() {
     final totalBind = _singletonBinds.length;
-    _singletonBinds.removeWhere((key, bind) {
-      if (bind.bind.isScoped) {
-        disposeResolverFunc?.call(bind);
+    _singletonBinds.removeWhere((key, singletonBind) {
+      if (singletonBind.bind.isScoped) {
+        disposeResolverFunc?.call(singletonBind.value);
         return true;
       }
       return false;

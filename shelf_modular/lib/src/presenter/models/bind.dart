@@ -23,7 +23,7 @@ class Bind<T extends Object> extends BindContract<T> {
 
   ///Create single instance for request.
   static Bind<T> scoped<T extends Object>(T Function(Injector i) inject, {bool export = false}) {
-    return Bind<T>._(inject, isSingleton: true, isLazy: false, isScoped: true, export: export);
+    return Bind<T>._(inject, isSingleton: true, isLazy: true, isScoped: true, export: export);
   }
 
   ///Bind a factory. Always a new constructor when calling Modular.get

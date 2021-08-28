@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
@@ -104,41 +102,45 @@ class ModularBase implements IModularBase {
 
   @visibleForTesting
   FutureOr<Response> handler(Request request) async {
-    FutureOr<Response> response;
+    Response response;
     try {
       final data = await tryJsonDecode(request);
       final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
       final result = await getRoute.call(params);
-      response = result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
+      response = await result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
     } catch (e, s) {
       response = Response.internalServerError(body: '${e.toString()}/n$s');
     }
     releaseScopedBinds();
-    return await response;
+    return response;
   }
 
   FutureOr<Response> _routeSuccess(ModularRoute? route, Request request) async {
-    for (var middleware in route!.middlewares) {
-      route = await middleware.pos(route!, request);
-      if (route == null) {
-        break;
+    try {
+      for (var middleware in route!.middlewares) {
+        route = await middleware.pos(route!, request);
+        if (route == null) {
+          break;
+        }
       }
-    }
 
-    if (route is Route) {
-      final response = applyHandler(
-        route.handler!,
-        request: request,
-        arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
-        injector: injector<Injector>(),
-      );
-      if (response != null) {
-        return response;
-      } else {
-        return Response.internalServerError(body: 'Handler not correct');
+      if (route is Route) {
+        final response = applyHandler(
+          route.handler!,
+          request: request,
+          arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
+          injector: injector<Injector>(),
+        );
+        if (response != null) {
+          return response;
+        } else {
+          return Response.internalServerError(body: 'Handler not correct');
+        }
       }
+      return Response.notFound('');
+    } on GuardedRouteException catch (e) {
+      return Response.forbidden(jsonEncode({'error': e.toString()}));
     }
-    return Response.notFound('');
   }
 
   FutureOr<Response> _routeError(ModularError error) {
