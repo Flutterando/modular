@@ -6,9 +6,9 @@ import 'user_extension.dart';
 extension UserExtension on Tokenization {
   Map<String, dynamic> toMap() {
     return {
-      'expires': expires,
-      'token': token,
-      'user': user.toMap(),
+      'expires_id': expiresIn,
+      'access_token': accessToken,
+      'refresh_token': refreshToken,
     };
   }
 

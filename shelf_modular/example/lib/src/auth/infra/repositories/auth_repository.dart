@@ -19,4 +19,24 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(e);
     }
   }
+
+  @override
+  Future<Either<AuthException, Tokenization>> refresh({required String refreshToken}) async {
+    try {
+      final result = await datasource.refresh(refreshToken: refreshToken);
+      return Right(result);
+    } on AuthException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<AuthException, Unit>> checkToken({required String accessToken}) async {
+    try {
+      await datasource.checkToken(accessToken: accessToken);
+      return Right(unit);
+    } on AuthException catch (e) {
+      return Left(e);
+    }
+  }
 }

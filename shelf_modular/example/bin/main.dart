@@ -1,4 +1,5 @@
 import 'package:example/src/app_module.dart';
+import 'package:redis_dart/redis_dart.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_modular/shelf_modular.dart';

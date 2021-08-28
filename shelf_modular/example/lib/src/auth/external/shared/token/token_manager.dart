@@ -1,3 +1,4 @@
+import 'package:example/src/auth/external/errors/errors.dart';
 import 'package:jose/jose.dart';
 
 class TokenManager {
@@ -27,26 +28,18 @@ class TokenManager {
     return jws.toCompactSerialization();
   }
 
-  Future<bool> validateToken(String encoded) async {
-    // decode the jwt, note: this constructor can only be used for JWT inside JWS
-    // structures
-    var jwt = JsonWebToken.unverified(encoded);
-
+  Future<void> validateToken(String encoded) async {
     // create key store to verify the signature
     var keyStore = JsonWebKeyStore()..addKey(key);
 
-    var verified = await jwt.verify(keyStore);
-
-    // alternatively, create and verify the JsonWebToken together, this is also
     // applicable for JWT inside JWE
-    jwt = await JsonWebToken.decodeAndVerify(encoded, keyStore);
+    var jwt = await JsonWebToken.decodeAndVerify(encoded, keyStore);
 
     var violations = jwt.claims.validate();
 
     if (violations.isNotEmpty) {
-      throw violations;
+      final list = violations.map((e) => e.toString()).toList();
+      throw JWTViolations('One or more violations in current access token', list);
     }
-
-    return verified;
   }
 }

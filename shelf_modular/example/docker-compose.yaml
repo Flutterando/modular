@@ -1,5 +1,9 @@
 version: '3.7'
 services:
+  redis:
+    image: redis:latest
+    ports:
+    - 6379:6379
   postgres:
     image: postgres:10.5
     restart: always
