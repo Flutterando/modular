@@ -62,7 +62,7 @@ class TrackerImpl implements Tracker {
     route = route.copyWith(uri: uri);
 
     for (var middleware in route.middlewares) {
-      route = await middleware.call(route!);
+      route = await middleware.pre(route!);
       if (route == null) {
         break;
       }

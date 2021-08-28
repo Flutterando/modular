@@ -117,7 +117,14 @@ class ModularBase implements IModularBase {
     return await response;
   }
 
-  FutureOr<Response> _routeSuccess(ModularRoute route, Request request) {
+  FutureOr<Response> _routeSuccess(ModularRoute? route, Request request) async {
+    for (var middleware in route!.middlewares) {
+      route = await middleware.pos(route!, request);
+      if (route == null) {
+        break;
+      }
+    }
+
     if (route is Route) {
       final response = applyHandler(
         route.handler!,

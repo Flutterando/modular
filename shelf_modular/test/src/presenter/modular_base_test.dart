@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
@@ -109,6 +108,8 @@ void main() {
 
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
+
+    when(() => route.middlewares).thenReturn([]);
     when(() => route.handler).thenReturn(() => response);
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
@@ -129,6 +130,7 @@ void main() {
   test('handler not found because is not Route', () async {
     final request = RequestMock();
     final route = ModularRouteMock();
+    when(() => route.middlewares).thenReturn([]);
 
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
@@ -146,6 +148,8 @@ void main() {
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
     when(() => route.handler).thenReturn(() {});
+    when(() => route.middlewares).thenReturn([]);
+
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
@@ -161,6 +165,8 @@ void main() {
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
     when(() => route.handler).thenReturn(() {});
+    when(() => route.middlewares).thenReturn([]);
+
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => left(RouteNotFoundException('')));
@@ -176,6 +182,8 @@ void main() {
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
     when(() => route.handler).thenReturn(() {});
+    when(() => route.middlewares).thenReturn([]);
+
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => left(ModuleStartedException('')));

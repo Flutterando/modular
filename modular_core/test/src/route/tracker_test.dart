@@ -85,20 +85,6 @@ void main() {
     expect(ModularTracker.injector.isModuleAlive<MyModule>(), true);
   });
 
-  test('not access route with guard', () async {
-    final futureRoute = ModularTracker.findRoute('/other/internal/block');
-    expect(() async => await futureRoute, throwsA(isA<GuardedRouteException>()));
-  });
-
-  test('not access route with guard in module', () async {
-    expect(() async => await ModularTracker.findRoute('/block/'), throwsA(isA<GuardedRouteException>()));
-    expect(() async => await ModularTracker.findRoute('/block/again'), throwsA(isA<GuardedRouteException>()));
-  });
-  test('not access route with guard redirect', () async {
-    final route = await ModularTracker.findRoute('/other/internal/blockREDIRECT');
-    expect(route?.name, '/');
-  });
-
   test('find route with schema', () async {
     expect(await ModularTracker.findRoute('/schema'), isNull);
     final route = await ModularTracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
@@ -115,14 +101,15 @@ void main() {
 class MyModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'first', children: [
+        CustomRoute(name: '/', data: 'first', middlewares: [
+          CustomMidleware()
+        ], children: [
           CustomRoute(name: '/second', data: 'second'),
         ]),
         CustomRoute(name: '/schema', data: 'withSchema', schema: 'tag'),
         CustomRoute(name: '/product/:id', data: 'withParams'),
         CustomRoute(name: '/product/test', data: 'test'),
         CustomRoute.module('/other', module: OtherModule()),
-        CustomRoute.module('/block', module: BlockedModule(), middlewares: [MyGuard()]),
       ];
 }
 
@@ -142,8 +129,6 @@ class DeepModule extends RouteContextImpl {
         CustomRoute(name: '/', data: 'internal', children: [
           CustomRoute(name: '/deep', data: 'deep'),
         ]),
-        CustomRoute(name: '/block', middlewares: [MyGuard()]),
-        CustomRoute(name: '/blockREDIRECT', middlewares: [MyGuardREDIRECT()]),
       ];
 }
 
@@ -155,18 +140,13 @@ class BlockedModule extends RouteContextImpl {
       ];
 }
 
-class MyGuard extends RouteGuard {
+class CustomMidleware implements Middleware {
   @override
-  FutureOr<bool> canActivate(String path, ModularRoute router) {
-    return false;
+  FutureOr<ModularRoute?> pre(ModularRoute route) {
+    pos(route, '');
+    return route;
   }
-}
-
-class MyGuardREDIRECT extends RouteGuard {
-  MyGuardREDIRECT() : super('/');
 
   @override
-  FutureOr<bool> canActivate(String path, ModularRoute router) {
-    return false;
-  }
+  FutureOr<ModularRoute?> pos(route, data) => route;
 }
