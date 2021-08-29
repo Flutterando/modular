@@ -1,5 +1,6 @@
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart' hide Middleware;
+import 'package:shelf_modular/shelf_modular.dart';
 
 import 'module.dart';
 
@@ -105,6 +106,19 @@ class Route extends ModularRouteImpl {
   factory Route.module(String name, {required Module module, List<Middleware> middlewares = const []}) {
     final route = Route._(name: name, middlewares: middlewares);
     return route.addModule(name, module: module) as Route;
+  }
+
+  factory Route.websocket(
+    String name, {
+    required WebSocketResource websocket,
+    List<Middleware> middlewares = const [],
+  }) {
+    return Route._(
+      handler: websocket.handler,
+      name: name,
+      schema: 'GET',
+      middlewares: middlewares,
+    );
   }
 
   @override

@@ -108,6 +108,12 @@ class ModularBase implements IModularBase {
       final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
       final result = await getRoute.call(params);
       response = await result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
+    } on Exception catch (e) {
+      if (e.toString().contains('Exception: Got a response for hijacked request')) {
+        response = Response.ok('');
+      } else {
+        rethrow;
+      }
     } catch (e, s) {
       response = Response.internalServerError(body: '${e.toString()}/n$s');
     }
