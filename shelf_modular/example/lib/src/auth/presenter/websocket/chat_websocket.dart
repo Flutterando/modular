@@ -24,7 +24,7 @@ class ChatWebSocket extends WebSocketResource {
       socket.sink.add('Agora seu nome é $name');
       socket.tag = name;
     } else if (socket.enteredRooms.isNotEmpty) {
-      socket.emitToRooms('${socket.tag} disse: $data');
+      socket.emitToRooms('${socket.tag}: $data');
     } else {
       socket.sink.add('Entre em uma sala pra tc');
     }

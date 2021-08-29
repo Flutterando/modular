@@ -14,7 +14,7 @@ void main() {
     expect(bind.isLazy, false);
   });
 
-  test('bind lazySingleton', () {
+  test('bind factory', () {
     final bind = Bind.factory((i) => 'instance');
     expect(bind.isSingleton, false);
     expect(bind.isLazy, true);
@@ -24,6 +24,6 @@ void main() {
     final bind = Bind.scoped((i) => 'instance');
     expect(bind.isSingleton, true);
     expect(bind.isScoped, true);
-    expect(bind.isLazy, false);
+    expect(bind.isLazy, true);
   });
 }
