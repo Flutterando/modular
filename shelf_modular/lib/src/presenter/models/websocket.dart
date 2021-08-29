@@ -22,7 +22,7 @@ abstract class WebSocketResource {
 
     _websockets.add(socket);
     connect(socket);
-    socketChannel.stream.listen((message) {
+    socket.stream.listen((message) {
       onMessage(message, socket);
     }, onDone: () {
       _websockets.remove(socket);
@@ -30,31 +30,36 @@ abstract class WebSocketResource {
     });
   }
 
-  void _broadcast(dynamic message, WebSocket currentSocket, String? room) {
-    var list = _websockets.where((socket) => currentSocket != socket);
-    if (room != null) {
-      list = list.where((socket) => socket._rooms.contains(room));
-    }
+  void _broadcast(dynamic message, WebSocket currentSocket, Iterable<String> rooms) {
+    for (var room in rooms.isEmpty ? [''] : rooms) {
+      var list = _websockets.where((socket) => currentSocket != socket);
+      if (room.isNotEmpty) {
+        list = list.where((socket) => socket._enteredRooms.contains(room));
+      }
 
-    for (var websocket in list) {
-      websocket.sink.add(message);
+      for (var websocket in list) {
+        websocket.sink.add(message);
+      }
     }
   }
 }
 
 class WebSocket {
   final WebSocketChannel _channel;
-  final Set<String> _rooms = {};
-  Set<String> get rooms => Set<String>.unmodifiable(_rooms);
-  final void Function(dynamic message, WebSocket currentWebSocket, String? room) _broadcast;
+  final Set<String> _enteredRooms = {};
+  late final Stream _stream = _channel.stream.asBroadcastStream();
+  Set<String> get enteredRooms => Set<String>.unmodifiable(_enteredRooms);
+  final void Function(dynamic message, WebSocket currentWebSocket, Iterable<String> room) _broadcast;
+  dynamic tag;
 
-  Stream get stream => _channel.stream;
+  Stream get stream => _stream;
   Sink get sink => _channel.sink;
 
-  void joinRoom(String room) => _rooms.add(room);
-  bool leaveRoom(String room) => _rooms.remove(room);
+  void joinRoom(String room) => _enteredRooms.add(room);
+  bool leaveRoom(String room) => _enteredRooms.remove(room);
 
-  void emit(dynamic data, {String? room}) => _broadcast(data, this, room);
+  void emit(dynamic data, [Iterable<String> rooms = const []]) => _broadcast(data, this, rooms);
+  void emitToRooms(dynamic data) => _broadcast(data, this, _enteredRooms);
 
   WebSocket._(this._channel, this._broadcast);
 }
