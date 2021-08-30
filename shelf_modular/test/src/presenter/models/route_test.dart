@@ -36,6 +36,11 @@ void main() {
     final route = Route.resource('/', resource: MyResource());
     expect(route.name, '/');
   });
+
+  test('route resource', () {
+    final route = Route.websocket('/', websocket: MyWebsocketResource());
+    expect(route.name, '/');
+  });
   test('route copyWith', () {
     final route = Route.resource('/', resource: MyResource()).copyWith();
     expect(route.name, '/');
@@ -47,4 +52,15 @@ class MyModule extends Module {}
 class MyResource extends Resource {
   @override
   List<Route> get routes => [];
+}
+
+class MyWebsocketResource extends WebSocketResource {
+  @override
+  void connect(WebSocket socket) {}
+
+  @override
+  void disconnect(WebSocket socket) {}
+
+  @override
+  void onMessage(data, WebSocket socket) {}
 }

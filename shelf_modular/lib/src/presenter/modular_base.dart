@@ -78,17 +78,20 @@ class ModularBase implements IModularBase {
   @override
   void destroy() => finishModule();
 
+  @visibleForTesting
+  void disposeBindFunction(bindValue) {
+    if (bindValue is Disposable) {
+      bindValue.dispose();
+    }
+  }
+
   @override
   Handler call({required RouteContext module}) {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
-      setDisposeResolver((bindValue) {
-        if (bindValue is Disposable) {
-          bindValue.dispose();
-        }
-      });
+      setDisposeResolver(disposeBindFunction);
 
       setPrintResolver(print);
       return handler;

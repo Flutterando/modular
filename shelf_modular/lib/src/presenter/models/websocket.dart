@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:meta/meta.dart';
 
 abstract class WebSocketResource {
-  FutureOr<Response> handler(Request request) async {
-    final response = await webSocketHandler(_connect)(request);
-    return response;
+  FutureOr<Response> handler(Request request) {
+    return webSocketHandler(connectSocket)(request);
   }
 
   final List<WebSocket> _websockets = [];
@@ -17,7 +17,8 @@ abstract class WebSocketResource {
   void connect(WebSocket socket);
   void disconnect(WebSocket socket);
 
-  void _connect(WebSocketChannel socketChannel) {
+  @visibleForTesting
+  void connectSocket(WebSocketChannel socketChannel) {
     final socket = WebSocket._(socketChannel, _broadcast);
 
     _websockets.add(socket);

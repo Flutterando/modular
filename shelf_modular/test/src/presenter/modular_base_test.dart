@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
@@ -42,6 +43,8 @@ class IsModuleReadyImplMock extends Mock implements IsModuleReadyImpl {}
 class RequestMock extends Mock implements Request {}
 
 class RouteMock extends Mock implements Route {}
+
+class DisposableMock extends Mock implements Disposable {}
 
 void main() {
   final disposeBind = DisposeBindMock();
@@ -119,12 +122,26 @@ void main() {
     expect(result.statusCode, 200);
   });
 
+  test('disposeBindFunction', () {
+    final disposableMock = DisposableMock();
+    (modularBase as ModularBase).disposeBindFunction(disposableMock);
+    verify(() => disposableMock.dispose()).called(1);
+  });
+
   test('handler with error', () async {
     final request = RequestMock();
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
+  });
+  test('handler with  hijacked request', () async {
+    final request = RequestMock();
+    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+    when(() => request.method).thenThrow(Exception('Got a response for hijacked request'));
+
+    final result = await (modularBase as ModularBase).handler(request);
+    expect(result.statusCode, 200);
   });
 
   test('handler not found because is not Route', () async {
@@ -192,6 +209,27 @@ void main() {
     expect(result.statusCode, 500);
   });
 
+  test('handler with guard', () async {
+    final request = RequestMock();
+    final response = Response.ok('test');
+    final route = RouteMock();
+
+    when(() => request.method).thenReturn('GET');
+    when(() => request.url).thenReturn(Uri.parse(''));
+    when(() => route.uri).thenReturn(Uri.parse('/'));
+
+    when(() => route.middlewares).thenReturn([MyGuard(true), MyGuard(false)]);
+    when(() => route.handler).thenReturn(() => response);
+    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+
+    final result = await (modularBase as ModularBase).handler(request);
+    expect(result.statusCode, 403);
+
+    expect(MyGuard(true).pre(route), route);
+  });
+
   test('tryJsonDecode isMultipart false', () async {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
@@ -220,4 +258,15 @@ void main() {
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result.isEmpty, true);
   });
+}
+
+class MyGuard extends RouteGuard {
+  final bool activate;
+
+  MyGuard(this.activate);
+
+  @override
+  FutureOr<bool> canActivate(Request request, Route route) {
+    return activate;
+  }
 }
