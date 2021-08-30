@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:shelf_modular/src/presenter/models/websocket.dart';
+import 'package:shelf_modular/src/presenter/resources/websocket_resource.dart';
 import 'package:test/test.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

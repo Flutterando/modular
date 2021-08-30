@@ -8,7 +8,8 @@ export 'src/presenter/models/route.dart';
 export 'src/presenter/models/bind.dart';
 export 'src/presenter/guards/route_guard.dart';
 export 'src/presenter/models/module.dart';
-export 'src/presenter/models/websocket.dart';
+export 'src/presenter/resources/websocket_resource.dart';
+export 'src/presenter/resources/resource.dart';
 export 'package:modular_core/modular_core.dart' show ModularRoute, AsyncBind, ModularArguments, Injector, Disposable;
 
 final Modular = injector<IModularBase>();

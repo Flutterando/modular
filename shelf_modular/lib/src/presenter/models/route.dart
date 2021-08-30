@@ -1,6 +1,7 @@
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart' hide Middleware;
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular/src/presenter/resources/resource.dart';
 
 import 'module.dart';
 
@@ -145,8 +146,4 @@ class Route extends ModularRouteImpl {
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
     );
   }
-}
-
-abstract class Resource {
-  List<Route> get routes;
 }
