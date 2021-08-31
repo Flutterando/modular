@@ -92,6 +92,12 @@ void main() {
     expect(route?.data, 'withSchema');
   });
 
+  test('find route with wildcard', () async {
+    final route = await ModularTracker.findRoute('/wildcard/test/2') as CustomRoute?;
+    expect(route?.uri.path, '/wildcard/test/2');
+    expect(route?.data, 'wildcard');
+  });
+
   test('finishApp', () async {
     ModularTracker.finishApp();
     expect(() => ModularTracker.module, throwsA(isA<TrackerNotInitiated>()));
@@ -107,6 +113,7 @@ class MyModule extends RouteContextImpl {
           CustomRoute(name: '/second', data: 'second'),
         ]),
         CustomRoute(name: '/schema', data: 'withSchema', schema: 'tag'),
+        CustomRoute(name: '/wildcard/**', data: 'wildcard'),
         CustomRoute(name: '/product/:id', data: 'withParams'),
         CustomRoute(name: '/product/test', data: 'test'),
         CustomRoute.module('/other', module: OtherModule()),

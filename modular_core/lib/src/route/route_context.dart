@@ -11,14 +11,36 @@ abstract class RouteContextImpl extends BindContextImpl implements RouteContext 
   @internal
   Map<ModularKey, ModularRoute> get routeMap => _routeMap;
 
-  RouteContextImpl() {
-    List<ModularRoute> ordenateRoutes = [...routes];
-    ordenateRoutes.sort((preview, actual) {
-      return preview.name.contains('/:') ? 1 : 0;
-    });
+  @visibleForTesting
+  List<ModularKey> orderRouteKeys(List<ModularKey> keys) {
+    List<ModularKey> ordenatekeys = [...keys];
+    ordenatekeys.sort((preview, actual) {
+      if (preview.name.contains('/:') && !actual.name.contains('**')) {
+        return 1;
+      }
 
-    for (var route in ordenateRoutes) {
-      _routeMap.addAll(route.routeMap);
+      if (preview.name.contains('**')) {
+        if (!actual.name.contains('**')) {
+          return 1;
+        } else if (actual.name.split('/').length > preview.name.split('/').length) {
+          return 1;
+        }
+      }
+
+      return 0;
+    });
+    return ordenatekeys;
+  }
+
+  RouteContextImpl() {
+    final localRouteMap = <ModularKey, ModularRoute>{};
+    for (var route in routes) {
+      localRouteMap.addAll(route.routeMap);
+    }
+
+    final keyList = orderRouteKeys(localRouteMap.keys.toList());
+    for (var key in keyList) {
+      _routeMap[key] = localRouteMap[key]!;
     }
   }
 }

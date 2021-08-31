@@ -26,6 +26,24 @@ void main() {
     expect(other?.uri.path, '/first');
     expect(other?.bindContextEntries.containsKey(OtherModule), true);
   });
+
+  test('order route', () {
+    final list = [
+      ModularKey(name: '/event/n/**'),
+      ModularKey(name: '/:id'),
+      ModularKey(name: '/event/**'),
+      ModularKey(name: '/**'),
+      ModularKey(name: '/route'),
+      ModularKey(name: '/route/id'),
+    ];
+    final keys = routeContext.orderRouteKeys(list);
+    expect(keys[0].name, '/route');
+    expect(keys[1].name, '/route/id');
+    expect(keys[2].name, '/:id');
+    expect(keys[3].name, '/event/n/**');
+    expect(keys[4].name, '/event/**');
+    expect(keys[5].name, '/**');
+  });
 }
 
 class ImplementationTest extends RouteContextImpl {}
@@ -37,7 +55,8 @@ class ModuleForRoute extends RouteContextImpl {
           CustomRoute(name: '/2', uri: Uri.parse('/2')),
         ]),
         CustomRoute(name: '/home', uri: Uri.parse('/home')),
-        CustomRoute.module('/other', module: OtherModule())
+        CustomRoute.module('/other', module: OtherModule()),
+        CustomRoute(name: '/wildcard/**', uri: Uri.parse('/wildcard')),
       ];
 }
 

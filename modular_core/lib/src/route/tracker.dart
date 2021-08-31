@@ -38,11 +38,11 @@ class TrackerImpl implements Tracker {
           break;
         }
       }
-      if (uriCandidate.pathSegments.length != uri.pathSegments.length) {
+      if (uriCandidate.pathSegments.length != uri.pathSegments.length && !uriCandidate.path.contains('**')) {
         continue;
       }
 
-      if (!uriCandidate.path.contains(':')) {
+      if (!(uriCandidate.path.contains(':') || uriCandidate.path.contains('**'))) {
         continue;
       }
 
@@ -105,6 +105,10 @@ class TrackerImpl implements Tracker {
   }
 
   String _processUrl(String url) {
+    if (url.endsWith('**')) {
+      return url.replaceFirst('**', '(?<w>.*)');
+    }
+
     final newUrl = <String>[];
     for (var part in url.split('/')) {
       part = part.contains(":") ? "(?<${part.substring(1)}>.*)" : part;

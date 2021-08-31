@@ -13,9 +13,6 @@ class AuthGuard extends RouteGuard {
       return false;
     }
     final result = await Modular.get<CheckToken>().call(accessToken: accessToken);
-    return result.fold((l) {
-      print(l);
-      return false;
-    }, (r) => true);
+    return result.fold((l) => false, (r) => true);
   }
 }
