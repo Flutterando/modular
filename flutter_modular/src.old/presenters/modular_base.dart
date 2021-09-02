@@ -1,33 +1,38 @@
-library flutter_modular;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/flutter_modular_module.dart';
 
-import 'src/presenter/models/modular_navigator.dart';
-import 'src/presenter/modular_base.dart';
-import 'src/presenter/navigation/modular_page.dart';
-import 'src/presenter/navigation/modular_route_information_parser.dart';
-import 'src/presenter/navigation/modular_router_delegate.dart';
-import 'src/presenter/navigation/router_outlet_delegate.dart';
+import '../core/interfaces/modular_interface.dart';
+import '../core/interfaces/module.dart';
+import 'modular_impl.dart';
+import 'navigation/modular_route_information_parser.dart';
+import 'navigation/modular_router_delegate.dart';
+import 'navigation/router_outlet_delegate.dart';
 
-export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
-export 'src/presenter/guards/route_guard.dart';
-export 'src/presenter/models/bind.dart';
-export 'src/presenter/models/child_route.dart';
-export 'src/presenter/models/module_route.dart';
-export 'src/presenter/models/modular_args.dart';
-export 'src/presenter/models/module.dart';
-export 'src/presenter/models/modular_navigator.dart';
+class ModularFlags {
+  bool experimentalNotAllowedParentBinds;
+  bool isCupertino;
+  ModularFlags({
+    this.experimentalNotAllowedParentBinds = false,
+    this.isCupertino = false,
+  });
+}
 
-final Modular = injector<IModularBase>();
+final _modularFlags = ModularFlags();
+
+final Map<String, Module> _injectMap = {};
+
+late final _routeInformationParser = ModularRouteInformationParser();
+late final _routerDelegate = ModularRouterDelegate(parser: _routeInformationParser, injectMap: _injectMap);
+
+// ignore: non_constant_identifier_names
+final ModularInterface Modular = ModularImpl(routerDelegate: _routerDelegate, injectMap: _injectMap, flags: _modularFlags);
 
 @visibleForTesting
 String initialRouteDeclaratedInMaterialApp = '/';
 
 extension ModularExtensionMaterial on MaterialApp {
   MaterialApp modular() {
-    injector.get<IModularNavigator>().setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+    _routerDelegate.setObserver(navigatorObservers ?? <NavigatorObserver>[]);
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
     final app = MaterialApp.router(
@@ -58,8 +63,8 @@ extension ModularExtensionMaterial on MaterialApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: injector.get<ModularRouteInformationParser>(),
-      routerDelegate: injector.get<ModularRouterDelegate>(),
+      routeInformationParser: _routeInformationParser,
+      routerDelegate: _routerDelegate,
     );
 
     return app;
@@ -68,8 +73,9 @@ extension ModularExtensionMaterial on MaterialApp {
 
 extension ModularExtensionCupertino on CupertinoApp {
   CupertinoApp modular() {
-    injector.get<IModularNavigator>().setObserver(navigatorObservers ?? <NavigatorObserver>[]);
-    (injector.get<IModularBase>() as ModularBase).flags.isCupertino = true;
+    _routerDelegate.setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+
+    _modularFlags.isCupertino = true;
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
     final app = CupertinoApp.router(
@@ -94,8 +100,8 @@ extension ModularExtensionCupertino on CupertinoApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: injector.get<ModularRouteInformationParser>(),
-      routerDelegate: injector.get<ModularRouterDelegate>(),
+      routeInformationParser: _routeInformationParser,
+      routerDelegate: _routerDelegate,
     );
 
     return app;
@@ -103,35 +109,30 @@ extension ModularExtensionCupertino on CupertinoApp {
 }
 
 class RouterOutlet extends StatefulWidget {
-  RouterOutlet({Key? key}) : super(key: key);
-
   @override
-  RouterOutletState createState() => RouterOutletState();
+  _RouterOutletState createState() => _RouterOutletState();
 }
 
-class RouterOutletState extends State<RouterOutlet> {
+class _RouterOutletState extends State<RouterOutlet> {
   late GlobalKey<NavigatorState> navigatorKey;
-  RouterOutletDelegate? delegate;
+  late RouterOutletDelegate delegate;
   late ChildBackButtonDispatcher _backButtonDispatcher;
 
   @override
   void initState() {
     super.initState();
     navigatorKey = GlobalKey<NavigatorState>();
-
-    Modular.to.addListener(listener);
+    delegate = RouterOutletDelegate(_routerDelegate, navigatorKey);
+    Modular.to.addListener(_listener);
   }
 
-  @visibleForTesting
-  void listener() {
+  void _listener() {
     setState(() {});
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final modal = (ModalRoute.of(context)?.settings as ModularPage);
-    delegate ??= RouterOutletDelegate(modal.route.uri.toString(), injector.get<ModularRouterDelegate>(), navigatorKey);
     final router = Router.of(context);
     _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
@@ -139,14 +140,14 @@ class RouterOutletState extends State<RouterOutlet> {
   @override
   void dispose() {
     super.dispose();
-    Modular.to.removeListener(listener);
+    Modular.to.removeListener(_listener);
   }
 
   @override
   Widget build(BuildContext context) {
     _backButtonDispatcher.takePriority();
     return Router(
-      routerDelegate: delegate!,
+      routerDelegate: delegate,
       backButtonDispatcher: _backButtonDispatcher,
     );
   }

@@ -126,6 +126,9 @@ class TrackerImpl implements Tracker {
     injector.destroy();
     _nullableModule = null;
   }
+
+  @override
+  void setArguments(ModularArguments args) => _arguments = args;
 }
 
 class TrackerNotInitiated extends ModularError {
