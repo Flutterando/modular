@@ -16,6 +16,8 @@ export 'src/presenter/guards/route_guard.dart';
 export 'src/presenter/models/bind.dart';
 export 'src/presenter/models/child_route.dart';
 export 'src/presenter/models/module_route.dart';
+export 'src/presenter/models/wildcard_route.dart';
+export 'src/presenter/models/redirect_to_route.dart';
 export 'src/presenter/models/modular_args.dart';
 export 'src/presenter/models/module.dart';
 export 'src/presenter/models/route.dart' hide ParallelRoute;

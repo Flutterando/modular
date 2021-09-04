@@ -1,19 +1,11 @@
 import 'package:flutter/widgets.dart';
 
-// import '../../presenters/modular_route_impl.dart';
-// import '../interfaces/modular_route.dart';
+import 'child_route.dart';
 
-// class RedirectRoute extends ModularRouteImpl {
-//   final String to;
-//   RedirectRoute(
-//     String routerName, {
-//     required this.to,
-//   }) : super(
-//           routerName,
-//           routerOutlet: [],
-//           duration: const Duration(milliseconds: 300),
-//           child: (_, __) => Container(),
-//           children: const [],
-//           transition: TransitionType.defaultTransition,
-//         );
-// }
+class RedirectRoute extends ChildRoute {
+  final String to;
+  RedirectRoute(
+    String name, {
+    required this.to,
+  }) : super(name, child: (_, __) => SizedBox());
+}

@@ -21,9 +21,8 @@ void main() {
   });
 
   test('bind scoped', () {
-    final bind = Bind.scoped((i) => 'instance');
+    final bind = Bind.lazySingleton((i) => 'instance');
     expect(bind.isSingleton, true);
-    expect(bind.isScoped, true);
     expect(bind.isLazy, true);
   });
 }

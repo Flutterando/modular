@@ -56,8 +56,20 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
 
   @override
   Future<void> setNewRoutePath(ModularBook book) async {
+    final disposableRoutes = <ParallelRoute>[];
+
+    for (var route in currentConfiguration?.routes ?? <ParallelRoute<dynamic>>[]) {
+      if (book.routes.indexWhere((element) => element.uri.path == route.uri.path) == -1) {
+        disposableRoutes.add(route);
+      }
+    }
+
     currentConfiguration = book;
     notifyListeners();
+
+    for (var disposableRoute in disposableRoutes) {
+      reportPop.call(disposableRoute);
+    }
   }
 
   var _lastClick = DateTime.now();

@@ -6,6 +6,7 @@ import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
+import 'package:flutter_modular/src/presenter/models/redirect_to_route.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
@@ -16,12 +17,26 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   final GetArguments getArguments;
   final SetArguments setArguments;
 
+  bool _firstParse = false;
+
   ModularRouteInformationParser({required this.getRoute, required this.getArguments, required this.setArguments});
 
   @override
   Future<ModularBook> parseRouteInformation(RouteInformation routeInformation) async {
-    // ignore: invalid_use_of_visible_for_testing_member
-    final path = routeInformation.location ?? initialRouteDeclaratedInMaterialApp;
+    late final String path;
+    if (!_firstParse) {
+      if (routeInformation.location == null || routeInformation.location == '/') {
+        // ignore: invalid_use_of_visible_for_testing_member
+        path = initialRouteDeclaratedInMaterialApp;
+      } else {
+        path = routeInformation.location!;
+      }
+
+      _firstParse = true;
+    } else {
+      // ignore: invalid_use_of_visible_for_testing_member
+      path = routeInformation.location ?? initialRouteDeclaratedInMaterialApp;
+    }
 
     return await selectBook(path);
   }
@@ -33,6 +48,11 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
 
   Future<ModularBook> selectBook(String path, {dynamic arguments, void Function(dynamic)? popCallback}) async {
     var route = await selectRoute(path, arguments: arguments);
+
+    if (route is RedirectRoute) {
+      route = await selectRoute(route.to, arguments: arguments);
+    }
+
     final modularArgs = getArguments().getOrElse((l) => ModularArguments.empty());
     if (popCallback != null) {
       route = route.copyWith(popCallback: popCallback);

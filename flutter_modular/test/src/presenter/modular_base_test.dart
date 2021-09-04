@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
 import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
@@ -75,7 +73,7 @@ void main() {
       finishModule: finishModule,
       getArguments: getArguments,
       getBind: getBind,
-      isModuleReadyImpl: isModuleReadyImpl,
+      isModuleReadyUsecase: isModuleReadyImpl,
       navigator: modularNavigator,
       startModule: startModule,
     );

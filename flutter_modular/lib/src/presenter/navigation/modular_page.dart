@@ -25,14 +25,17 @@ class ModularPage<T> extends Page<T> {
     } else {
       throw ModularPageException('Child not be null');
     }
-    if (route.transition == TransitionType.custom && route.customTransition != null) {
+
+    final transitionType = route.transition ?? TransitionType.defaultTransition;
+
+    if (transitionType == TransitionType.custom && route.customTransition != null) {
       return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) => page,
         settings: this,
         transitionsBuilder: route.customTransition!.transitionBuilder,
         transitionDuration: route.customTransition!.transitionDuration,
       );
-    } else if (route.transition == TransitionType.defaultTransition) {
+    } else if (transitionType == TransitionType.defaultTransition) {
       // Helper function
       Widget widgetBuilder(BuildContext context) => page;
 
@@ -46,13 +49,13 @@ class ModularPage<T> extends Page<T> {
         settings: this,
         builder: widgetBuilder,
       );
-    } else if (route.transition == TransitionType.noTransition) {
+    } else if (transitionType == TransitionType.noTransition) {
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
         builder: (_) => page,
       );
     } else {
-      var selectTransition = route.transitions[route.transition ?? TransitionType.defaultTransition];
+      var selectTransition = route.transitions[transitionType];
       return selectTransition!((_, __) => page, route.duration ?? const Duration(milliseconds: 300), this) as Route<T>;
     }
   }
