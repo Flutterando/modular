@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:modular_core/modular_core.dart';
 
 import '../../mocks/mocks.dart';
+import '../../presenter/modular_base_test.dart';
 
 void main() {
   final tracker = TrackerMock();
@@ -28,6 +29,24 @@ void main() {
     test('should return args', () async {
       when(() => tracker.arguments).thenReturn(ModularArguments.empty());
       final result = service.getArguments();
+      expect(result.isRight, true);
+    });
+  });
+
+  group('setArguments', () {
+    test('should set args', () async {
+      final args = ModularArguments.empty();
+      when(() => tracker.setArguments(args)).thenReturn('');
+      final result = service.setArguments(args);
+      expect(result.isRight, true);
+    });
+  });
+
+  group('reportPop', () {
+    test('should send route', () async {
+      final route = ParallelRouteMock();
+      when(() => tracker.reportPopRoute(route)).thenReturn('');
+      final result = service.reportPop(route);
       expect(result.isRight, true);
     });
   });

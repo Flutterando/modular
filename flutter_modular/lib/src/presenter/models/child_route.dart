@@ -10,7 +10,8 @@ class ChildRoute<T> extends ParallelRoute<T> {
     Duration duration = const Duration(milliseconds: 300),
     TransitionType transition = TransitionType.defaultTransition,
     List<RouteGuard> guards = const [],
-  }) : super(
+  })  : assert(children.where((e) => e.name == name).isEmpty, 'Don\'t use name "/" in route\'s children when parent be "/" too'),
+        super(
           name: name,
           child: child,
           customTransition: customTransition,

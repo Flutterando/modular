@@ -33,4 +33,22 @@ void main() {
       expect(result.isRight, true);
     });
   });
+
+  group('bind', () {
+    test('should execute', () async {
+      when(() => tracker.injector).thenReturn(injectorMock);
+      when(() => injectorMock.bindContext(module)).thenReturn(true);
+      final result = service.bind(module);
+      expect(result.isRight, true);
+    });
+  });
+
+  group('unbind', () {
+    test('should execute', () async {
+      when(() => tracker.injector).thenReturn(injectorMock);
+      when(() => injectorMock.removeBindContext()).thenReturn(true);
+      final result = service.unbind();
+      expect(result.isRight, true);
+    });
+  });
 }

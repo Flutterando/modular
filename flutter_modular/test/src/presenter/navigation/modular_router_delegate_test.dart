@@ -154,6 +154,8 @@ void main() {
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
 
+    when(() => reportPopMock.call(route1)).thenReturn(right(unit));
+
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
     when(() => parser.selectBook('/pushForce', popCallback: any(named: 'popCallback'))).thenAnswer((_) async => ModularBook(routes: [route2]));
@@ -175,6 +177,8 @@ void main() {
     when(() => route2.uri).thenReturn(Uri.parse('/pushForce'));
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
+
+    when(() => reportPopMock.call(route1)).thenReturn(right(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
