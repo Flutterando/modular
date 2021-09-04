@@ -32,4 +32,10 @@ void main() {
     expect(bind.isSingleton, true);
     expect(bind.isLazy, true);
   });
+
+  test('BindInject', () async {
+    final bind = BindInject((i) => 'instance');
+    expect(bind.isSingleton, true);
+    expect(bind.isLazy, true);
+  });
 }

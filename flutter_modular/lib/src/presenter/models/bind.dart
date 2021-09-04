@@ -49,3 +49,20 @@ class AsyncBind<T extends Object> extends Bind<Future<T>> implements AsyncBindCo
     return Bind<T>((i) => bindValue, export: export);
   }
 }
+
+class BindInject<T extends Object> extends Bind<T> {
+  final T Function(Injector i) inject;
+
+  @override
+
+  ///single instance object?
+  final bool isSingleton;
+
+  @override
+
+  ///When 'true', the object is instantiated only the first time it is called.
+  ///When 'false', the object is instantiated along with the module.
+  final bool isLazy;
+
+  BindInject(this.inject, {this.isSingleton = true, this.isLazy = true}) : super(inject, isSingleton: isSingleton, isLazy: isLazy);
+}
