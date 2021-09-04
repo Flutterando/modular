@@ -138,3 +138,22 @@ class _Bind<T extends Object> extends BindContract<T> {
 abstract class IRepository {}
 
 class Repository extends IRepository {}
+
+class AsyncBind<T extends Object> extends _Bind<Future<T>> implements AsyncBindContract<T> {
+  @override
+  final Future<T> Function(Injector i) asyncInject;
+
+  AsyncBind(this.asyncInject, {bool export = false}) : super(asyncInject, export: export);
+
+  @override
+  Future<T> resolveAsyncBind() async {
+    final bind = await asyncInject(ModularTracker.injector);
+    return bind;
+  }
+
+  @override
+  Future<BindContract<T>> convertToAsyncBind() async {
+    final bindValue = await resolveAsyncBind();
+    return _Bind<T>((i) => bindValue, export: export);
+  }
+}

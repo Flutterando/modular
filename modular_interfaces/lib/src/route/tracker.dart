@@ -12,6 +12,8 @@ abstract class Tracker {
 
   ModularArguments get arguments;
 
+  void setArguments(ModularArguments arguments);
+
   String get currentPath => arguments.uri.toString();
 
   FutureOr<ModularRoute?> findRoute(String path, {dynamic data, String schema = ''});

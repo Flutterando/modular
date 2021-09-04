@@ -6,7 +6,7 @@ part of 'search_repository_impl.dart';
 // InjectionGenerator
 // **************************************************************************
 
-final $SearchRepositoryImpl = BindInject(
+final $SearchRepositoryImpl = Bind(
   (i) => SearchRepositoryImpl(i<SearchDatasource>()),
   isSingleton: false,
   isLazy: true,

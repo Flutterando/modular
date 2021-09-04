@@ -22,7 +22,7 @@ class InjectorImpl<T> implements Injector<T> {
     if (bind != null) {
       return bind;
     } else {
-      throw BindNotFound(T.toString());
+      throw BindNotFound(B.toString());
     }
   }
 

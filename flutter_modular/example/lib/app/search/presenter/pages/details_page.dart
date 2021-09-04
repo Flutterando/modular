@@ -15,11 +15,10 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
-    print(Modular.args?.queryParams['id']);
+    print(Modular.args.queryParams['id']);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            widget.result != null ? widget.result!.nickname : 'Make a search'),
+        title: Text(widget.result != null ? widget.result!.nickname : 'Make a search'),
       ),
       body: widget.result != null
           ? Center(

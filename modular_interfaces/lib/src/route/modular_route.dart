@@ -9,10 +9,10 @@ abstract class ModularRoute {
   String get schema;
   String get parent;
   List<ModularRoute> get children;
+  RouteContext? get context;
   List<Middleware> get middlewares;
   Uri get uri;
   Map<Type, BindContext> get bindContextEntries;
-  Map<ModularKey, ModularRoute> get routeMap;
   ModularKey get key;
 
   ModularRoute addModule(String name, {required RouteContext module});
@@ -23,6 +23,7 @@ abstract class ModularRoute {
     List<ModularRoute>? children,
     String? parent,
     String? schema,
+    RouteContext? context,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,

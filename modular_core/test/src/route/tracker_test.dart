@@ -10,17 +10,15 @@ void main() {
   // setPrintResolver(print);
   ModularTracker.runApp(MyModule());
 
-  test('thwow error if child has same name of parent', () {
-    expect(
-        () => CustomRoute(name: '/', data: 'first', children: [
-              CustomRoute(name: '/', data: 'second'),
-            ]),
-        throwsA(isA<AssertionError>()));
-  });
-
   test('thwow error if runApp not iniciate module', () {
     final tracker = TrackerImpl(InjectorImpl());
     expect(() => tracker.module, throwsA(isA<TrackerNotInitiated>()));
+  });
+
+  test('setArguments', () {
+    final args = ModularArguments.empty();
+    ModularTracker.setArguments(args);
+    expect(ModularTracker.arguments, args);
   });
 
   test('find route', () async {

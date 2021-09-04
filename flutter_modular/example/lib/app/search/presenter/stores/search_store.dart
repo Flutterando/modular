@@ -21,11 +21,11 @@ class SearchStore extends NotifierStore<Failure, List<Result>> {
   }
 
   @override
-  Triple<Failure, List<Result>> middleware(
-      Triple<Failure, List<Result>> newTriple) {
+  Triple<Failure, List<Result>> middleware(Triple<Failure, List<Result>> newTriple) {
     if (newTriple.event == TripleEvent.state) {
-      if (newTriple.state.isEmpty)
+      if (newTriple.state.isEmpty) {
         return newTriple.copyWith(event: TripleEvent.error, error: EmptyList());
+      }
     }
 
     return newTriple;

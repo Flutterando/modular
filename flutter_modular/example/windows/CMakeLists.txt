@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(search LANGUAGES CXX)
+project(example LANGUAGES CXX)
 
-set(BINARY_NAME "search")
+set(BINARY_NAME "example")
 
 cmake_policy(SET CMP0063 NEW)
 
@@ -84,7 +84,7 @@ endif()
 # from a previous install.
 set(FLUTTER_ASSET_DIR_NAME "flutter_assets")
 install(CODE "
-  file(REMOVE_RECURSE /"${INSTALL_BUNDLE_DATA_DIR}/${FLUTTER_ASSET_DIR_NAME}/")
+  file(REMOVE_RECURSE \"${INSTALL_BUNDLE_DATA_DIR}/${FLUTTER_ASSET_DIR_NAME}\")
   " COMPONENT Runtime)
 install(DIRECTORY "${PROJECT_BUILD_DIR}/${FLUTTER_ASSET_DIR_NAME}"
   DESTINATION "${INSTALL_BUNDLE_DATA_DIR}" COMPONENT Runtime)

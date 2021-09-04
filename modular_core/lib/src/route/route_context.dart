@@ -6,10 +6,6 @@ import '../di/bind_context.dart';
 abstract class RouteContextImpl extends BindContextImpl implements RouteContext {
   @override
   List<ModularRoute> get routes => const [];
-  final _routeMap = <ModularKey, ModularRoute>{};
-
-  @internal
-  Map<ModularKey, ModularRoute> get routeMap => _routeMap;
 
   @visibleForTesting
   List<ModularKey> orderRouteKeys(List<ModularKey> keys) {
@@ -32,15 +28,74 @@ abstract class RouteContextImpl extends BindContextImpl implements RouteContext 
     return ordenatekeys;
   }
 
-  RouteContextImpl() {
-    final localRouteMap = <ModularKey, ModularRoute>{};
+  @override
+  Map<ModularKey, ModularRoute> init() {
+    final _routeMap = <ModularKey, ModularRoute>{};
     for (var route in routes) {
-      localRouteMap.addAll(route.routeMap);
+      _routeMap.addAll(assembleRoute(route));
     }
 
-    final keyList = orderRouteKeys(localRouteMap.keys.toList());
-    for (var key in keyList) {
-      _routeMap[key] = localRouteMap[key]!;
+    return _routeMap;
+  }
+
+  @visibleForTesting
+  Map<ModularKey, ModularRoute> assembleRoute(ModularRoute route) {
+    final Map<ModularKey, ModularRoute> map = {};
+
+    if (route.context == null) {
+      map[route.key] = route;
+      map.addAll(addChildren(route));
+    } else {
+      map.addAll(addModule(route));
     }
+
+    return map;
+  }
+
+  @visibleForTesting
+  Map<ModularKey, ModularRoute> addModule(ModularRoute route) {
+    final Map<ModularKey, ModularRoute> map = {};
+    final module = route.context!;
+    for (var child in module.routes) {
+      child = child.copyWith(bindContextEntries: {module.runtimeType: module}, parent: route.parent);
+      child = copy(route, child);
+      map.addAll(assembleRoute(child));
+    }
+
+    final replicationKey = map.keys.firstWhere((key) => key.name == '${route.name}/', orElse: () => ModularKey(name: ''));
+    if (replicationKey.name.isNotEmpty) {
+      map[replicationKey.copyWith(name: route.name)] = map[replicationKey]!;
+    }
+
+    return map;
+  }
+
+  @visibleForTesting
+  Map<ModularKey, ModularRoute> addChildren(ModularRoute route) {
+    final Map<ModularKey, ModularRoute> map = {};
+
+    for (var child in route.children) {
+      child = child.copyWith(parent: route.name);
+      child = copy(route, child);
+      map.addAll(assembleRoute(child));
+    }
+
+    return map;
+  }
+
+  @visibleForOverriding
+  ModularRoute copy(ModularRoute parent, ModularRoute route) {
+    final newName = '${parent.name}${route.name}'.replaceFirst('//', '/');
+    return route.copyWith(
+      name: newName,
+      middlewares: [
+        ...parent.middlewares,
+        ...route.middlewares,
+      ],
+      bindContextEntries: {
+        ...parent.bindContextEntries,
+        ...route.bindContextEntries,
+      },
+    );
   }
 }

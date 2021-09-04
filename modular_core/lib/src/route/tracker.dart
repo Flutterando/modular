@@ -1,8 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
-
-import 'route_context.dart';
 
 class TrackerImpl implements Tracker {
   final Injector injector;
@@ -14,6 +13,9 @@ class TrackerImpl implements Tracker {
 
     throw TrackerNotInitiated('Execute Tracker.runApp()');
   }
+
+  @visibleForTesting
+  final routeMap = <ModularKey, ModularRoute>{};
 
   TrackerImpl(this.injector);
 
@@ -29,10 +31,10 @@ class TrackerImpl implements Tracker {
     ModularRoute? route;
     var params = <String, String>{};
 
-    for (var key in (module as RouteContextImpl).routeMap.keys) {
+    for (var key in routeMap.keys) {
       var uriCandidate = Uri.parse(key.name);
       if (uriCandidate.path == uri.path) {
-        final candidate = (module as RouteContextImpl).routeMap[key];
+        final candidate = routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
           route = candidate;
           break;
@@ -48,7 +50,7 @@ class TrackerImpl implements Tracker {
 
       var result = _extractParams(uriCandidate, uri);
       if (result != null) {
-        final candidate = (module as RouteContextImpl).routeMap[key];
+        final candidate = routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
           route = candidate;
           params = result;
@@ -120,12 +122,16 @@ class TrackerImpl implements Tracker {
   void runApp(RouteContext module) {
     _nullableModule = module;
     injector.bindContext(module, tag: '/');
+    routeMap.addAll(module.init());
   }
 
   void finishApp() {
     injector.destroy();
     _nullableModule = null;
   }
+
+  @override
+  void setArguments(ModularArguments args) => _arguments = args;
 }
 
 class TrackerNotInitiated extends ModularError {

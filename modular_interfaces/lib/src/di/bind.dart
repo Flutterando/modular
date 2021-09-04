@@ -52,19 +52,6 @@ abstract class BindContract<T extends Object> {
 
 }
 
-class BindInject<T extends Object> extends BindContract<T> {
-  final T Function(Injector i) inject;
-
-  ///single instance object?
-  final bool isSingleton;
-
-  ///When 'true', the object is instantiated only the first time it is called.
-  ///When 'false', the object is instantiated along with the module.
-  final bool isLazy;
-
-  BindInject(this.inject, {this.isSingleton = true, this.isLazy = true}) : super(inject, isSingleton: isSingleton, isLazy: isLazy);
-}
-
 class BindEmpty extends BindContract<Object> {
   BindEmpty() : super((e) => Object());
 }
