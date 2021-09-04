@@ -1,6 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:modular_core/modular_core.dart';
-import 'package:triple/triple.dart';
 
 import '../../../flutter_modular.dart';
 
@@ -14,22 +12,7 @@ abstract class ModularState<TWidget extends StatefulWidget, TBind extends Object
 
   @override
   void dispose() {
+    Modular.dispose<TBind>();
     super.dispose();
-    final isDisposed = Modular.dispose<TBind>();
-    if (isDisposed) {
-      return;
-    }
-
-    if (_scope is Disposable) {
-      (_scope as Disposable).dispose();
-    }
-
-    if (_scope is Sink) {
-      (_scope as Sink).close();
-    } else if (_scope is ChangeNotifier) {
-      (_scope as ChangeNotifier).dispose();
-    } else if (_scope is Store) {
-      (_scope as Store).destroy();
-    }
   }
 }

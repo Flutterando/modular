@@ -6,11 +6,11 @@ import 'package:flutter_modular/src/presenter/models/bind.dart';
 import 'package:flutter_modular/src/presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
 
-abstract class WidgetModule extends StatelessWidget implements BindContext {
+abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   Widget get view;
 
   @override
-  List<Bind> get binds => const [];
+  List<Bind> get binds;
 
   @override
   Future<void> isReady() {
@@ -33,6 +33,28 @@ abstract class WidgetModule extends StatelessWidget implements BindContext {
 
   @override
   final List<Module> imports = const [];
+
+  @override
+  List<SingletonBind> get instanciatedSingletons => _fakeModule.instanciatedSingletons;
+
+  @override
+  void instantiateSingletonBinds(List<SingletonBind<Object>> singletons, Injector injector) {
+    _fakeModule.instantiateSingletonBinds(singletons, injector);
+  }
+
+  @override
+  bool removeScopedBind() {
+    return _fakeModule.removeScopedBind();
+  }
+
+  @override
+  // ignore: invalid_use_of_internal_member
+  Set<String> get tags => _fakeModule.tags;
+
+  @override
+  void dispose() {
+    _fakeModule.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

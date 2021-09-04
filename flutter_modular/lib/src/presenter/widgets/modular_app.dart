@@ -22,10 +22,10 @@ class ModularApp extends StatefulWidget {
   }
 
   @override
-  _ModularAppState createState() => _ModularAppState();
+  ModularAppState createState() => ModularAppState();
 }
 
-class _ModularAppState extends State<ModularApp> {
+class ModularAppState extends State<ModularApp> {
   @override
   void initState() {
     super.initState();
