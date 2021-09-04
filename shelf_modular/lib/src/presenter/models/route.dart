@@ -15,15 +15,15 @@ class Route extends ModularRouteImpl {
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
     Uri? uri,
-    Map<ModularKey, ModularRoute>? routeMap,
+    RouteContext? context,
     Map<Type, BindContext> bindContextEntries = const {},
   }) : super(
           name: name,
           parent: parent,
           schema: schema,
           children: children,
+          context: context,
           middlewares: middlewares,
-          routeMap: routeMap,
           uri: uri ?? Uri.parse('/'),
           bindContextEntries: bindContextEntries,
         );
@@ -127,6 +127,7 @@ class Route extends ModularRouteImpl {
     Handler? handler,
     String? name,
     String? schema,
+    RouteContext? context,
     List<Middleware>? middlewares,
     List<ModularRoute>? children,
     String? parent,
@@ -141,8 +142,8 @@ class Route extends ModularRouteImpl {
       middlewares: middlewares ?? this.middlewares,
       children: children ?? this.children,
       parent: parent ?? this.parent,
+      context: context ?? this.context,
       uri: uri ?? uri,
-      routeMap: routeMap ?? routeMap,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
     );
   }
