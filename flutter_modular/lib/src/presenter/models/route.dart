@@ -9,22 +9,23 @@ typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
 
 class ParallelRoute<T> extends ModularRouteImpl {
   final ModularChild? child;
-  final TransitionType transition;
+  final TransitionType? transition;
   final CustomTransition? customTransition;
-  final Duration duration;
+  final Duration? duration;
   final void Function(dynamic)? popCallback;
 
-  ParallelRoute._({
+  ParallelRoute({
     this.child,
     required String name,
     this.popCallback,
     String parent = '',
     String schema = '',
-    this.transition = TransitionType.defaultTransition,
+    this.transition,
     this.customTransition,
-    this.duration = const Duration(milliseconds: 300),
+    this.duration,
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
+    RouteContext? context,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext> bindContextEntries = const {},
@@ -34,7 +35,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
           schema: schema,
           children: children,
           middlewares: middlewares,
-          routeMap: routeMap,
+          context: context,
           uri: uri ?? Uri.parse('/'),
           bindContextEntries: bindContextEntries,
         );
@@ -44,11 +45,11 @@ class ParallelRoute<T> extends ModularRouteImpl {
     required ModularChild child,
     CustomTransition? customTransition,
     List<ParallelRoute> children = const [],
-    Duration duration = const Duration(milliseconds: 300),
-    TransitionType transition = TransitionType.defaultTransition,
+    Duration? duration,
+    TransitionType? transition,
     List<Middleware> middlewares = const [],
   }) {
-    return ParallelRoute<T>._(
+    return ParallelRoute<T>(
       child: child,
       name: name,
       children: children,
@@ -59,17 +60,18 @@ class ParallelRoute<T> extends ModularRouteImpl {
     );
   }
   factory ParallelRoute.empty() {
-    return ParallelRoute<T>._(name: '');
+    return ParallelRoute<T>(name: '');
   }
 
   factory ParallelRoute.module(String name, {required Module module, List<Middleware> middlewares = const []}) {
-    final route = ParallelRoute<T>._(name: name, middlewares: middlewares);
+    final route = ParallelRoute<T>(name: name, middlewares: middlewares);
     return route.addModule(name, module: module) as ParallelRoute<T>;
   }
 
   @override
   ParallelRoute<T> copyWith({
     ModularChild? child,
+    RouteContext? context,
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
@@ -83,9 +85,10 @@ class ParallelRoute<T> extends ModularRouteImpl {
     Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
   }) {
-    return ParallelRoute<T>._(
+    return ParallelRoute<T>(
       child: child ?? this.child,
       transition: transition ?? this.transition,
+      context: context ?? this.context,
       customTransition: customTransition ?? this.customTransition,
       duration: duration ?? this.duration,
       name: name ?? this.name,
@@ -94,8 +97,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
       middlewares: middlewares ?? this.middlewares,
       children: children ?? this.children,
       parent: parent ?? this.parent,
-      uri: uri ?? uri,
-      routeMap: routeMap ?? routeMap,
+      uri: uri ?? this.uri,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
     );
   }

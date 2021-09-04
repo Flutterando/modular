@@ -47,7 +47,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
 
     while (parent != '') {
       var child = await selectRoute(parent, arguments: arguments);
-      child = child.copyWith(schema: parent);
       book.routes.insert(0, child);
       parent = child.parent;
     }

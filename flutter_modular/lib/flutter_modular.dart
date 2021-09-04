@@ -18,7 +18,15 @@ export 'src/presenter/models/child_route.dart';
 export 'src/presenter/models/module_route.dart';
 export 'src/presenter/models/modular_args.dart';
 export 'src/presenter/models/module.dart';
+export 'src/presenter/models/route.dart' hide ParallelRoute;
 export 'src/presenter/models/modular_navigator.dart';
+export 'src/presenter/widgets/modular_app.dart';
+export 'src/presenter/widgets/modular_state.dart';
+export 'src/presenter/widgets/navigation_listener.dart';
+export 'src/presenter/widgets/widget_module.dart';
+export 'src/presenter/navigation/transitions/page_transition.dart';
+export 'src/presenter/navigation/transitions/transitions.dart';
+export 'package:modular_core/modular_core.dart' show ModularRoute;
 
 final Modular = injector<IModularBase>();
 

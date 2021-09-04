@@ -1,8 +1,8 @@
 import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';
 
-class ChildRoute extends ParallelRoute {
-  factory ChildRoute(
+class ChildRoute<T> extends ParallelRoute<T> {
+  ChildRoute(
     String name, {
     required ModularChild child,
     CustomTransition? customTransition,
@@ -10,14 +10,13 @@ class ChildRoute extends ParallelRoute {
     Duration duration = const Duration(milliseconds: 300),
     TransitionType transition = TransitionType.defaultTransition,
     List<RouteGuard> guards = const [],
-  }) {
-    return ParallelRoute.child(
-      name,
-      child: child,
-      children: children,
-      duration: duration,
-      transition: transition,
-      middlewares: guards,
-    ) as ChildRoute;
-  }
+  }) : super(
+          name: name,
+          child: child,
+          customTransition: customTransition,
+          children: children,
+          duration: duration,
+          transition: transition,
+          middlewares: guards,
+        );
 }

@@ -11,6 +11,7 @@ class CustomRoute extends ModularRouteImpl {
     this.data,
     String parent = '',
     String schema = '',
+    RouteContext? context,
     List<ModularRoute> children = const [],
     Uri? uri,
     List<Middleware> middlewares = const [],
@@ -23,7 +24,7 @@ class CustomRoute extends ModularRouteImpl {
           uri: uri ?? Uri.parse('/'),
           middlewares: middlewares,
           parent: parent,
-          routeMap: routeMap,
+          context: context,
           bindContextEntries: bindContextEntries,
         );
 
@@ -38,6 +39,7 @@ class CustomRoute extends ModularRouteImpl {
     List<Middleware>? middlewares,
     String? parent,
     String? schema,
+    RouteContext? context,
     List<ModularRoute>? children,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
@@ -50,7 +52,7 @@ class CustomRoute extends ModularRouteImpl {
       middlewares: middlewares ?? this.middlewares,
       uri: uri ?? this.uri,
       schema: schema ?? this.schema,
-      routeMap: routeMap ?? this.routeMap,
+      context: context ?? this.context,
       parent: parent ?? this.parent,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
     );

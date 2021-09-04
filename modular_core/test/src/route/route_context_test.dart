@@ -9,22 +9,49 @@ void main() {
   test('instanciate', () {
     expect(ImplementationTest().routes, const []);
   });
-  test('process route maps', () {
-    final initial = routeContext.routeMap[const ModularKey(name: '/')]!;
-    expect(initial.name, '/');
-    expect(initial.parent, '');
 
-    final initial2 = routeContext.routeMap[const ModularKey(name: '/2')]!;
-    expect(initial2.name, '/2');
-    expect(initial2.parent, '/');
-
-    expect(routeContext.routeMap[const ModularKey(name: '/home')]?.name, '/home');
+  test('assembleRoute', () {
+    final map = routeContext.assembleRoute(CustomRoute(name: '/route'));
+    expect(map[ModularKey(name: '/route')]?.name, '/route');
   });
 
-  test('get module route', () {
-    final other = routeContext.routeMap[const ModularKey(name: '/other/')];
-    expect(other?.uri.path, '/first');
-    expect(other?.bindContextEntries.containsKey(OtherModule), true);
+  test('addModule', () {
+    final map = routeContext.assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
+    expect(map[ModularKey(name: '/route')]?.uri.toString(), '/first');
+    expect(map[ModularKey(name: '/route/')]?.uri.toString(), '/first');
+  });
+
+  test('addChildren', () {
+    final map = routeContext.addChildren(CustomRoute(name: '/route', children: [
+      CustomRoute(name: '/2'),
+      CustomRoute(name: '/3'),
+      CustomRoute.module('/module', module: OtherModule()),
+      CustomRoute(name: '/4', children: [
+        CustomRoute(name: '/5'),
+        CustomRoute(name: '/6'),
+      ]),
+    ]));
+
+    expect(map[ModularKey(name: '/route/2')]?.name, '/route/2');
+    expect(map[ModularKey(name: '/route/2')]?.parent, '/route');
+
+    expect(map[ModularKey(name: '/route/3')]?.name, '/route/3');
+    expect(map[ModularKey(name: '/route/3')]?.parent, '/route');
+
+    expect(map[ModularKey(name: '/route/module/')]?.name, '/route/module/');
+    expect(map[ModularKey(name: '/route/module/')]?.parent, '/route');
+
+    expect(map[ModularKey(name: '/route/module')]?.name, '/route/module/');
+    expect(map[ModularKey(name: '/route/module')]?.parent, '/route');
+
+    expect(map[ModularKey(name: '/route/4')]?.name, '/route/4');
+    expect(map[ModularKey(name: '/route/4')]?.parent, '/route');
+
+    expect(map[ModularKey(name: '/route/4/5')]?.name, '/route/4/5');
+    expect(map[ModularKey(name: '/route/4/5')]?.parent, '/route/4');
+
+    expect(map[ModularKey(name: '/route/4/6')]?.name, '/route/4/6');
+    expect(map[ModularKey(name: '/route/4/6')]?.parent, '/route/4');
   });
 
   test('order route', () {
@@ -62,9 +89,7 @@ class ModuleForRoute extends RouteContextImpl {
 
 class OtherModule extends RouteContextImpl {
   @override
-  List<ModularRoute> get routes {
-    return [
-      CustomRoute(name: '/', uri: Uri.parse('/first')),
-    ];
-  }
+  List<ModularRoute> get routes => [
+        CustomRoute(name: '/', uri: Uri.parse('/first')),
+      ];
 }

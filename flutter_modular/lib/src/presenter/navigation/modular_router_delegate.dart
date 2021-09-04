@@ -96,7 +96,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     final popComplete = Completer();
     var book = await parser.selectBook(routeName, arguments: arguments, popCallback: popComplete.complete);
     if (forRoot) {
-      book = currentConfiguration!.copyWith(routes: [...currentConfiguration!.routes, book.routes.first.copyWith(schema: '')]);
+      book = currentConfiguration!.copyWith(routes: [...currentConfiguration!.routes, book.routes.last.copyWith(schema: '')]);
       await setNewRoutePath(book);
     } else {
       final list = [...currentConfiguration!.routes];

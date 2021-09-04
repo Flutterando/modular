@@ -22,7 +22,7 @@ class ModuleServiceImpl extends ModuleService {
 
   @override
   Future<Either<ModularError, bool>> isModuleReady<M extends Module>() {
-    return tracker.injector.isModuleReady().then((value) => right(value));
+    return tracker.injector.isModuleReady<M>().then((value) => right(value));
   }
 
   @override

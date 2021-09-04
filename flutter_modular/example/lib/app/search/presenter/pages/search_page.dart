@@ -54,7 +54,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
     print('setState');
     return Scaffold(
       appBar: AppBar(
-        title: Text("Github Search"),
+        title: Text('Github Search'),
       ),
       body: Column(
         children: <Widget>[
@@ -64,7 +64,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
               onChanged: controller.setSearchText,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "Search...",
+                labelText: 'Search...',
               ),
             ),
           ),

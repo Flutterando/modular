@@ -6,7 +6,7 @@ part of 'search_by_text.dart';
 // InjectionGenerator
 // **************************************************************************
 
-final $SearchByTextImpl = BindInject(
+final $SearchByTextImpl = Bind(
   (i) => SearchByTextImpl(i<SearchRepository>()),
   isSingleton: false,
   isLazy: true,

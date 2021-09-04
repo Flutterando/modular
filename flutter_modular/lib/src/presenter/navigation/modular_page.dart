@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
@@ -54,8 +52,8 @@ class ModularPage<T> extends Page<T> {
         builder: (_) => page,
       );
     } else {
-      var selectTransition = route.transitions[route.transition];
-      return selectTransition!((_, __) => page, route.duration, this) as Route<T>;
+      var selectTransition = route.transitions[route.transition ?? TransitionType.defaultTransition];
+      return selectTransition!((_, __) => page, route.duration ?? const Duration(milliseconds: 300), this) as Route<T>;
     }
   }
 }

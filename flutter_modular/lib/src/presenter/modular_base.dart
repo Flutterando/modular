@@ -20,6 +20,7 @@ abstract class IModularBase {
   void destroy();
   Future<void> isModuleReady<M extends Module>();
   void init(Module module);
+  String get initialRoute;
   ModularArguments get args;
   IModularNavigator get to;
   IModularNavigator? navigatorDelegate;
@@ -39,7 +40,7 @@ class ModularBase implements IModularBase {
   final GetBind getBind;
   final GetArguments getArguments;
   final StartModule startModule;
-  final IsModuleReadyImpl isModuleReadyImpl;
+  final IsModuleReady isModuleReadyUsecase;
   final IModularNavigator navigator;
 
   @override
@@ -48,7 +49,13 @@ class ModularBase implements IModularBase {
   bool _moduleHasBeenStarted = false;
 
   ModularBase(
-      {required this.disposeBind, required this.getArguments, required this.finishModule, required this.getBind, required this.startModule, required this.isModuleReadyImpl, required this.navigator});
+      {required this.disposeBind,
+      required this.getArguments,
+      required this.finishModule,
+      required this.getBind,
+      required this.startModule,
+      required this.isModuleReadyUsecase,
+      required this.navigator});
 
   @override
   bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
@@ -74,7 +81,7 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  Future<void> isModuleReady<M extends Module>() => isModuleReadyImpl<M>();
+  Future<void> isModuleReady<M extends Module>() => isModuleReadyUsecase.call<M>();
 
   @override
   void destroy() => finishModule();
@@ -120,4 +127,7 @@ class ModularBase implements IModularBase {
       print(text);
     }
   }
+
+  @override
+  final String initialRoute = '/';
 }

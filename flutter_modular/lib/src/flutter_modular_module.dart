@@ -53,6 +53,6 @@ class FlutterModularModule extends Module {
         //presenter
         Bind.singleton<ModularRouteInformationParser>((i) => ModularRouteInformationParser(getRoute: i(), getArguments: i(), setArguments: i())),
         Bind.singleton<ModularRouterDelegate>((i) => ModularRouterDelegate(parser: i(), navigatorKey: GlobalKey<NavigatorState>(), reportPop: i())),
-        Bind.singleton<IModularBase>((i) => ModularBase(disposeBind: i(), finishModule: i(), getBind: i(), isModuleReadyImpl: i(), navigator: i(), startModule: i(), getArguments: i())),
+        Bind.singleton<IModularBase>((i) => ModularBase(disposeBind: i(), finishModule: i(), getBind: i(), isModuleReadyUsecase: i(), navigator: i(), startModule: i(), getArguments: i())),
       ];
 }

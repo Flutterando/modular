@@ -14,7 +14,7 @@ class IsModuleReadyImpl implements IsModuleReady {
   IsModuleReadyImpl(this.moduleService);
 
   @override
-  Future<Either<ModularError, bool>> call<T extends Module>() {
-    return moduleService.isModuleReady<T>();
+  Future<Either<ModularError, bool>> call<T extends Module>() async {
+    return await moduleService.isModuleReady<T>();
   }
 }
