@@ -25,4 +25,11 @@ void main() {
     expect(bind.isSingleton, true);
     expect(bind.isLazy, true);
   });
+
+  test('AsyncBind', () async {
+    final asyncBind = AsyncBind((i) async => 'instance');
+    final bind = await asyncBind.convertToAsyncBind();
+    expect(bind.isSingleton, true);
+    expect(bind.isLazy, true);
+  });
 }
