@@ -23,7 +23,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
 
   @override
   Future<ModularBook> parseRouteInformation(RouteInformation routeInformation) async {
-    late final String path;
+    var path = '';
     if (!_firstParse) {
       if (routeInformation.location == null || routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member

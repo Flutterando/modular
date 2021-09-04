@@ -85,6 +85,36 @@ void main() {
     expect(book.chapters('/').first.name, '/test');
   });
 
+  test('selectBook with RedirectRoute', () async {
+    final redirect = RedirectRoute('/oo', to: '/test');
+
+    final routeMock = ParallelRouteMock();
+    when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
+    when(() => routeMock.parent).thenReturn('/');
+    when(() => routeMock.schema).thenReturn('/');
+    when(() => routeMock.middlewares).thenReturn([Guard()]);
+    when(() => routeMock.copyWith(schema: any(named: 'schema'))).thenReturn(routeMock);
+
+    final routeParent = ParallelRouteMock();
+    when(() => routeParent.uri).thenReturn(Uri.parse('/'));
+    when(() => routeParent.parent).thenReturn('');
+    when(() => routeParent.schema).thenReturn('');
+    when(() => routeParent.middlewares).thenReturn([Guard()]);
+    when(() => routeParent.copyWith(schema: any(named: 'schema'))).thenReturn(routeParent);
+
+    when(() => getRoute.call(RouteParmsDTO(url: '/oo'))).thenAnswer((_) async => right(redirect));
+    when(() => getRoute.call(RouteParmsDTO(url: '/test'))).thenAnswer((_) async => right(routeMock));
+    when(() => getRoute.call(RouteParmsDTO(url: '/'))).thenAnswer((_) async => right(routeParent));
+    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+
+    when(() => setArguments.call(any())).thenReturn(right(unit));
+
+    final book = await parser.selectBook('/oo');
+    expect(book.uri.toString(), '/test');
+    expect(book.chapters().first.name, '/');
+    expect(book.chapters('/').first.name, '/test');
+  });
+
   test('restoreRouteInformation', () {
     final route = ParallelRouteMock();
     when(() => route.uri).thenReturn(Uri.parse('/test'));
@@ -101,7 +131,8 @@ void main() {
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
-    expect(parser.parseRouteInformation(RouteInformation()), completion(isA<ModularBook>()));
+    expect(parser.parseRouteInformation(RouteInformation(location: '/test')), completion(isA<ModularBook>()));
+    expect(parser.parseRouteInformation(RouteInformation(location: '/test')), completion(isA<ModularBook>()));
     expect(Guard().pre(routeMock), routeMock);
   });
 
