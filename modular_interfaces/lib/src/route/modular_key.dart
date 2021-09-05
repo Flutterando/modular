@@ -1,3 +1,4 @@
+/// Object used as a reference to find a ModularRoute in the RouteContext tree.
 class ModularKey {
   final String schema;
   final String name;

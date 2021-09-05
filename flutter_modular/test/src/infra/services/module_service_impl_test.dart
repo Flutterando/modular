@@ -37,7 +37,7 @@ void main() {
   group('bind', () {
     test('should execute', () async {
       when(() => tracker.injector).thenReturn(injectorMock);
-      when(() => injectorMock.bindContext(module)).thenReturn(true);
+      when(() => injectorMock.addBindContext(module)).thenReturn(true);
       final result = service.bind(module);
       expect(result.isRight, true);
     });

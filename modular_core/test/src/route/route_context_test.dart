@@ -16,7 +16,8 @@ void main() {
   });
 
   test('addModule', () {
-    final map = routeContext.assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
+    final map = routeContext
+        .assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
     expect(map[ModularKey(name: '/route')]?.uri.toString(), '/first');
     expect(map[ModularKey(name: '/route/')]?.uri.toString(), '/first');
   });

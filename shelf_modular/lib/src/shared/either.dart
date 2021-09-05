@@ -12,7 +12,8 @@ abstract class Either<TLeft, TRight> {
     return fold(left, fn);
   }
 
-  Future<Either<TLeft, T>> asyncBind<T>(Future<Either<TLeft, T>> Function(TRight r) fn) {
+  Future<Either<TLeft, T>> asyncBind<T>(
+      Future<Either<TLeft, T>> Function(TRight r) fn) {
     return fold((l) async => left(l), fn);
   }
 
@@ -73,7 +74,8 @@ class _Right<TLeft, TRight> extends Either<TLeft, TRight> {
   }
 }
 
-Either<TLeft, TRight> right<TLeft, TRight>(TRight r) => _Right<TLeft, TRight>(r);
+Either<TLeft, TRight> right<TLeft, TRight>(TRight r) =>
+    _Right<TLeft, TRight>(r);
 Either<TLeft, TRight> left<TLeft, TRight>(TLeft l) => _Left<TLeft, TRight>(l);
 
 T id<T>(T value) => value;

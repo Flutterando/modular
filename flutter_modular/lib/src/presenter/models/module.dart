@@ -4,6 +4,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import 'bind.dart';
 
+/// A Module gathers all Binds and Routes referring to this context.
+/// They are usually distributed in the form of features or a monolithic representation of the app.
+/// At least one module is needed to start a Modular project.
 class Module extends RouteContextImpl {
   @override
   List<Module> get imports => const [];

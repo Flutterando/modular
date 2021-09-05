@@ -28,7 +28,8 @@ class CustomRoute extends ModularRouteImpl {
           bindContextEntries: bindContextEntries,
         );
 
-  factory CustomRoute.module(String name, {required RouteContext module, List<Middleware> middlewares = const []}) {
+  factory CustomRoute.module(String name,
+      {required RouteContext module, List<Middleware> middlewares = const []}) {
     final route = CustomRoute(name: name, middlewares: middlewares);
     return route.addModule(name, module: module) as CustomRoute;
   }

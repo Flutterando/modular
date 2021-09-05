@@ -4,7 +4,8 @@ import 'package:example/src/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract class RefreshToken {
-  Future<Either<AuthException, Tokenization>> call({required String refreshToken});
+  Future<Either<AuthException, Tokenization>> call(
+      {required String refreshToken});
 }
 
 class RefreshTokenImpl implements RefreshToken {
@@ -13,7 +14,8 @@ class RefreshTokenImpl implements RefreshToken {
   RefreshTokenImpl(this.repository);
 
   @override
-  Future<Either<AuthException, Tokenization>> call({required String refreshToken}) async {
+  Future<Either<AuthException, Tokenization>> call(
+      {required String refreshToken}) async {
     return await repository.refresh(refreshToken: refreshToken);
   }
 }

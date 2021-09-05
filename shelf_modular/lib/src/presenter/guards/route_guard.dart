@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:modular_interfaces/modular_interfaces.dart';
+import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf_modular/src/presenter/errors/errors.dart';
 import 'package:shelf_modular/src/presenter/models/route.dart';

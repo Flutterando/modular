@@ -12,10 +12,12 @@ class AuthDatasourceImpl implements AuthDatasource {
   final IRedisService redis;
   final IPostgresConnect pg;
 
-  AuthDatasourceImpl({required this.tokenManager, required this.redis, required this.pg});
+  AuthDatasourceImpl(
+      {required this.tokenManager, required this.redis, required this.pg});
 
   @override
-  Future<Tokenization> fromCredentials({required String email, required String password}) async {
+  Future<Tokenization> fromCredentials(
+      {required String email, required String password}) async {
     final connection = await pg.connection;
     final results = await connection.mappedResultsQuery(
       'SELECT id FROM users WHERE email=@email AND password=@password',
@@ -24,7 +26,9 @@ class AuthDatasourceImpl implements AuthDatasource {
         'password': password,
       },
     );
-    final userList = results.where((element) => element.containsKey('users')).map((e) => e['users']!);
+    final userList = results
+        .where((element) => element.containsKey('users'))
+        .map((e) => e['users']!);
 
     if (userList.isEmpty) {
       throw NotAuthorized('acesso negado');
@@ -65,7 +69,10 @@ class AuthDatasourceImpl implements AuthDatasource {
       ...claims,
     });
 
-    final tokenization = Tokenization(expiresIn: expiresIn.inSeconds, accessToken: accessToken, refreshToken: newRefreshToken);
+    final tokenization = Tokenization(
+        expiresIn: expiresIn.inSeconds,
+        accessToken: accessToken,
+        refreshToken: newRefreshToken);
     return tokenization;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:modular_core/modular_core.dart';
 
+/// Represents and manufactures an object instance that can be injected.
 class Bind<T extends Object> extends BindContract<T> {
   Bind(
     T Function(Injector i) factoryFunction, {
@@ -31,6 +32,7 @@ class Bind<T extends Object> extends BindContract<T> {
   }
 }
 
+/// AsyncBind represents an asynchronous Bind that can be resolved before module initialization by calling Modular.isModuleReady() or called with Modular.getAsync()
 class AsyncBind<T extends Object> extends Bind<Future<T>> implements AsyncBindContract<T> {
   @override
   final Future<T> Function(Injector i) asyncInject;
@@ -50,6 +52,7 @@ class AsyncBind<T extends Object> extends Bind<Future<T>> implements AsyncBindCo
   }
 }
 
+/// Specific instance for modular_codegen
 class BindInject<T extends Object> extends Bind<T> {
   final T Function(Injector i) inject;
 

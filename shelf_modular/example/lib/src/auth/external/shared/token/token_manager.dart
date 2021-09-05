@@ -4,10 +4,13 @@ import 'package:jose/jose.dart';
 class TokenManager {
   final key = JsonWebKey.fromJson({
     'kty': 'oct',
-    'k': 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
+    'k':
+        'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
   });
 
-  int expireTime([Duration duration = const Duration(hours: 3)]) => Duration(milliseconds: DateTime.now().add(duration).millisecondsSinceEpoch).inSeconds;
+  int expireTime([Duration duration = const Duration(hours: 3)]) => Duration(
+          milliseconds: DateTime.now().add(duration).millisecondsSinceEpoch)
+      .inSeconds;
 
   String generateToken(Map<String, dynamic> claimsMap) {
     var claims = JsonWebTokenClaims.fromJson(claimsMap);
@@ -39,7 +42,8 @@ class TokenManager {
 
     if (violations.isNotEmpty) {
       final list = violations.map((e) => e.toString()).toList();
-      throw JWTViolations('One or more violations in current access token', list);
+      throw JWTViolations(
+          'One or more violations in current access token', list);
     }
   }
 }

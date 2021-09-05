@@ -104,7 +104,8 @@ class Route extends ModularRouteImpl {
     );
   }
 
-  factory Route.module(String name, {required Module module, List<Middleware> middlewares = const []}) {
+  factory Route.module(String name,
+      {required Module module, List<Middleware> middlewares = const []}) {
     final route = Route._(name: name, middlewares: middlewares);
     return route.addModule(name, module: module) as Route;
   }

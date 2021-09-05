@@ -15,7 +15,8 @@ class PostgresConnect implements IPostgresConnect {
   }
 
   Future<PostgreSQLConnection> _openConection() async {
-    final connection = PostgreSQLConnection('localhost', 5432, 'postgres', username: 'postgres', password: 'postgres');
+    final connection = PostgreSQLConnection('localhost', 5432, 'postgres',
+        username: 'postgres', password: 'postgres');
     await connection.open();
     return connection;
   }

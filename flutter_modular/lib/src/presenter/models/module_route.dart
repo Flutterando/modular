@@ -5,6 +5,7 @@ import 'package:modular_core/modular_core.dart';
 
 import 'module.dart';
 
+/// This route represents a cluster of routes from another module that will be concatenated to the context of the parent module.
 class ModuleRoute<T> extends ParallelRoute<T> {
   ModuleRoute._start({
     ModularChild? child,

@@ -12,7 +12,8 @@ class AuthGuard extends RouteGuard {
     if (accessToken == null || accessToken.isEmpty) {
       return false;
     }
-    final result = await Modular.get<CheckToken>().call(accessToken: accessToken);
+    final result =
+        await Modular.get<CheckToken>().call(accessToken: accessToken);
     return result.fold((l) => false, (r) => true);
   }
 }

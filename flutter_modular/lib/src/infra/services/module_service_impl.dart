@@ -27,7 +27,7 @@ class ModuleServiceImpl extends ModuleService {
 
   @override
   Either<ModularError, Unit> bind(BindContext module) {
-    tracker.injector.bindContext(module);
+    tracker.injector.addBindContext(module);
     return right(unit);
   }
 

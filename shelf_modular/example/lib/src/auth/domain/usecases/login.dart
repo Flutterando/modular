@@ -6,7 +6,8 @@ import 'package:example/src/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract class Login {
-  Future<Either<AuthException, Tokenization>> call({required String credentials});
+  Future<Either<AuthException, Tokenization>> call(
+      {required String credentials});
 }
 
 class LoginImpl implements Login {
@@ -15,7 +16,8 @@ class LoginImpl implements Login {
   LoginImpl(this.repository);
 
   @override
-  Future<Either<AuthException, Tokenization>> call({required String credentials}) async {
+  Future<Either<AuthException, Tokenization>> call(
+      {required String credentials}) async {
     final decoded = String.fromCharCodes(base64Decode(credentials));
     final splited = decoded.split(':');
     final email = splited[0];

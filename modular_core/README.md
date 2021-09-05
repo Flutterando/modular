@@ -6,7 +6,7 @@ Injector and Tracker.
 
 ```dart
 
-class OnlyRouteModule extends Module {
+class OnlyRouteModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/'),
@@ -20,7 +20,7 @@ class OnlyBindModule extends Module {
 }
 
 
-class MyModule extends Module {
+class MyModule extends RouteContextImpl {
 
   List<Module> get imports => [OnlyBindModule()];
 
@@ -49,12 +49,12 @@ main(){
     ModularTracker.runApp(MyModule());
 
     //get routes
-    final route = Tracker.findRoute('/');
-    final routeForOnlyRoute = Tracker.findRoute('/only/');
-    final route = Tracker.findRoute('/product/1', data: MyArgs());
+    final route = ModularTracker.findRoute('/');
+    final routeForOnlyRoute = ModularTracker.findRoute('/only/');
+    final route = ModularTracker.findRoute('/product/1', data: MyArgs());
 
     //get binds
-    final controller = Tracker.injector.get<MyController>();
+    final controller = ModularTracker.injector.get<MyController>();
 
     //finishApp
     ModularTracker.finishApp();
@@ -64,8 +64,6 @@ main(){
 
 ## Auxiliary classes
 
-- **Middleware** - abstract.
-- **RouteGuard** - extends Middleware.
+- **CustomRoute** - ModularRoute Implementation.
 - **ModularRoute** - abstract for create route.
-- **Bind** - encapsulate injection.
-- **Module** - abstract extends BindContext and RouteContext. 
+- **Middleware** - abstract.

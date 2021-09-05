@@ -14,4 +14,5 @@ export 'src/route/route_context.dart';
 export 'package:modular_interfaces/modular_interfaces.dart';
 export 'src/route/tracker.dart';
 
+/// Starting object to get routes and binds.
 final ModularTracker = t.TrackerImpl(InjectorImpl());

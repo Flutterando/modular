@@ -29,7 +29,8 @@ void main() {
   });
 
   test('Handler1', () {
-    expect(_applyHandler((ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler((ModularArguments args) => Response.ok('')), isNotNull);
   });
 
   test('Handler2', () {
@@ -37,47 +38,89 @@ void main() {
   });
 
   test('HandlerTwoParams', () {
-    expect(_applyHandler((Request request, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, ModularArguments args) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams1', () {
-    expect(_applyHandler((Request request, Injector<dynamic> i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, Injector<dynamic> i) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams2', () {
-    expect(_applyHandler((ModularArguments args, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, Request request) => Response.ok('')),
+        isNotNull);
   });
   test('HandlerTwoParams3', () {
-    expect(_applyHandler((ModularArguments args, Injector<dynamic> i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, Injector<dynamic> i) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams4', () {
-    expect(_applyHandler((Injector<dynamic> i, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Injector<dynamic> i, ModularArguments args) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams5', () {
-    expect(_applyHandler((Injector<dynamic> i, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Injector<dynamic> i, Request request) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams', () {
-    expect(_applyHandler((Request request, ModularArguments args, Injector<dynamic> i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, ModularArguments args, Injector<dynamic> i) =>
+                Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams1', () {
-    expect(_applyHandler((Request request, Injector<dynamic> i, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, Injector<dynamic> i, ModularArguments args) =>
+                Response.ok('')),
+        isNotNull);
   });
   test('HandlerThreeParams2', () {
-    expect(_applyHandler((ModularArguments args, Request request, Injector<dynamic> i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, Request request, Injector<dynamic> i) =>
+                Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams3', () {
-    expect(_applyHandler((ModularArguments args, Injector<dynamic> i, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, Injector<dynamic> i, Request request) =>
+                Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams4', () {
-    expect(_applyHandler((Injector<dynamic> i, ModularArguments args, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Injector<dynamic> i, ModularArguments args, Request request) =>
+                Response.ok('')),
+        isNotNull);
   });
   test('HandlerThreeParams5', () {
-    expect(_applyHandler((Injector<dynamic> i, Request request, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Injector<dynamic> i, Request request, ModularArguments args) =>
+                Response.ok('')),
+        isNotNull);
   });
 }

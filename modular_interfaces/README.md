@@ -1,1 +1,3 @@
-A simple command-line application.
+# Modular Interface
+
+Set of interfaces made for modular_core.

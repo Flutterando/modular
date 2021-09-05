@@ -11,9 +11,11 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.datasource);
 
   @override
-  Future<Either<AuthException, Tokenization>> fromCredentials({required String email, required String password}) async {
+  Future<Either<AuthException, Tokenization>> fromCredentials(
+      {required String email, required String password}) async {
     try {
-      final result = await datasource.fromCredentials(email: email, password: password);
+      final result =
+          await datasource.fromCredentials(email: email, password: password);
       return Right(result);
     } on AuthException catch (e) {
       return Left(e);
@@ -21,7 +23,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthException, Tokenization>> refresh({required String refreshToken}) async {
+  Future<Either<AuthException, Tokenization>> refresh(
+      {required String refreshToken}) async {
     try {
       final result = await datasource.refresh(refreshToken: refreshToken);
       return Right(result);
@@ -31,7 +34,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthException, Unit>> checkToken({required String accessToken}) async {
+  Future<Either<AuthException, Unit>> checkToken(
+      {required String accessToken}) async {
     try {
       await datasource.checkToken(accessToken: accessToken);
       return Right(unit);

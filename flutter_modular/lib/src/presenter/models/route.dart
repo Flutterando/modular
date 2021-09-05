@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/presenter/navigation/transitions/transitions.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:meta/meta.dart';
 
 import 'module.dart';
 
@@ -8,10 +9,22 @@ typedef ModularChild = Widget Function(BuildContext context, ModularArguments ar
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
 
 class ParallelRoute<T> extends ModularRouteImpl {
+  /// Widget Builder that will be called when prompted in navigation.
   final ModularChild? child;
+
+  /// Transition performed when one page overlaps another.
+  /// default is TransitionType.defaultTransition;
   final TransitionType? transition;
+
+  /// Defines a custom transition.
+  /// If the transition is TransitionType.custom, it becomes mandatory to add a CustomTransition() object.
   final CustomTransition? customTransition;
+
+  /// define the Transition duration
+  /// Default is 300 milliseconds
   final Duration? duration;
+
+  @internal
   final void Function(dynamic)? popCallback;
 
   ParallelRoute({
@@ -65,7 +78,19 @@ class ParallelRoute<T> extends ModularRouteImpl {
 
   factory ParallelRoute.module(String name, {required Module module, List<Middleware> middlewares = const []}) {
     final route = ParallelRoute<T>(name: name, middlewares: middlewares);
-    return route.addModule(name, module: module) as ParallelRoute<T>;
+    return route.addModule(name, module: module);
+  }
+
+  @override
+  ParallelRoute<T> addModule(String name, {required RouteContext module}) {
+    final bindContextEntries = {module.runtimeType: module};
+
+    return copyWith(
+      name: name,
+      uri: Uri.parse(name),
+      bindContextEntries: bindContextEntries,
+      context: module,
+    );
   }
 
   @override

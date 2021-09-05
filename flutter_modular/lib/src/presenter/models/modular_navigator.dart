@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class IModularNavigator implements Listenable {
+  ///  Actual path
   String get path;
 
   /// Navigate to a new screen.
@@ -91,6 +92,12 @@ abstract class IModularNavigator implements Listenable {
   /// ```
   void popUntil(bool Function(Route<dynamic>) predicate);
 
+  /// Navigate to a new screen.
+  /// This action replaces all past routes.
+  ///
+  /// ```
+  /// Modular.to.navigate('/home');
+  /// ```
   void navigate(String path, {dynamic arguments});
 
   void setObserver(List<NavigatorObserver> navigatorObservers);

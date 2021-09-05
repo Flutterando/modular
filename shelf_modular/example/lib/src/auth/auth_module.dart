@@ -17,7 +17,8 @@ class AuthModule extends Module {
         Bind.scoped((i) => RedisService()),
         Bind.scoped((i) => PostgresConnect()),
         Bind.factory((i) => TokenManager()),
-        Bind.factory((i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
+        Bind.factory(
+            (i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
         //infra
         Bind.factory((i) => AuthRepositoryImpl(i())),
         //domain

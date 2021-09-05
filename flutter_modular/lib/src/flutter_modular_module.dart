@@ -26,7 +26,7 @@ import 'presenter/modular_base.dart';
 import 'presenter/navigation/modular_route_information_parser.dart';
 import 'presenter/navigation/modular_router_delegate.dart';
 
-final injector = InjectorImpl()..bindContext(FlutterModularModule());
+final injector = InjectorImpl()..addBindContext(FlutterModularModule());
 
 class FlutterModularModule extends Module {
   @override

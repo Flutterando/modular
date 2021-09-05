@@ -30,6 +30,7 @@ export 'src/presenter/navigation/transitions/page_transition.dart';
 export 'src/presenter/navigation/transitions/transitions.dart';
 export 'package:modular_core/modular_core.dart' show ModularRoute;
 
+/// Instance of Modular for search binds and route.
 final Modular = injector<IModularBase>();
 
 @visibleForTesting
@@ -112,6 +113,7 @@ extension ModularExtensionCupertino on CupertinoApp {
   }
 }
 
+/// It acts as a Nested Browser that will be populated by the children of this route.
 class RouterOutlet extends StatefulWidget {
   RouterOutlet({Key? key}) : super(key: key);
 

@@ -23,16 +23,29 @@ import 'models/route.dart';
 import 'package:meta/meta.dart';
 
 abstract class IModularBase {
+  /// Finishes all trees(BindContext and RouteContext).
   void destroy();
+
+  /// checks if all asynchronous binds are ready to be used synchronously of all BindContext of Tree.
   Future<void> isModuleReady<M extends Module>();
+
+  /// Responsible for starting the app.
+  /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
   Handler call({required RouteContext module});
+
+  /// Responsible for starting the app.
+  /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
   Handler start({required RouteContext module});
+
+  /// Request an async instance by [Type]
   Future<B> getAsync<B extends Object>({B? defaultValue});
 
+  /// Request an instance by [Type]
   B get<B extends Object>({
     B? defaultValue,
   });
 
+  /// Dispose a [Bind] by [Type]
   bool dispose<B extends Object>();
 }
 
@@ -49,10 +62,20 @@ class ModularBase implements IModularBase {
 
   bool _moduleHasBeenStarted = false;
 
-  ModularBase(this.disposeBind, this.finishModule, this.getBind, this.startModule, this.isModuleReadyImpl, this.getRoute, this.getArguments, this.releaseScopedBinds, this.reportPush);
+  ModularBase(
+      this.disposeBind,
+      this.finishModule,
+      this.getBind,
+      this.startModule,
+      this.isModuleReadyImpl,
+      this.getRoute,
+      this.getArguments,
+      this.releaseScopedBinds,
+      this.reportPush);
 
   @override
-  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() =>
+      disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>({B? defaultValue}) {
@@ -90,7 +113,8 @@ class ModularBase implements IModularBase {
   @override
   Handler call({required RouteContext module}) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module)
+          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setDisposeResolver(disposeBindFunction);
@@ -98,7 +122,8 @@ class ModularBase implements IModularBase {
       setPrintResolver(print);
       return handler;
     } else {
-      throw ModuleStartedException('Module ${module.runtimeType} is already started');
+      throw ModuleStartedException(
+          'Module ${module.runtimeType} is already started');
     }
   }
 
@@ -110,11 +135,17 @@ class ModularBase implements IModularBase {
     Response response;
     try {
       final data = await tryJsonDecode(request);
-      final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
+      final params = RouteParmsDTO(
+          url: '/${request.url.toString()}',
+          schema: request.method,
+          arguments: data);
       final result = await getRoute.call(params);
-      response = await result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
+      response = await result.fold<FutureOr<Response>>(
+          _routeError, (r) => _routeSuccess(r, request));
     } on Exception catch (e) {
-      if (e.toString().contains('Exception: Got a response for hijacked request')) {
+      if (e
+          .toString()
+          .contains('Exception: Got a response for hijacked request')) {
         response = Response.ok('');
       } else {
         rethrow;
@@ -139,7 +170,8 @@ class ModularBase implements IModularBase {
         final response = applyHandler(
           route.handler!,
           request: request,
-          arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
+          arguments:
+              getArguments().getOrElse((left) => ModularArguments.empty()),
           injector: injector<Injector>(),
         );
         if (response != null) {
@@ -204,7 +236,8 @@ class ModularBase implements IModularBase {
     // }
   }
 
-  bool _isMultipart(Request request) => _extractMultipartBoundary(request) != null;
+  bool _isMultipart(Request request) =>
+      _extractMultipartBoundary(request) != null;
 
   String? _extractMultipartBoundary(Request request) {
     if (!request.headers.containsKey('Content-Type')) return null;

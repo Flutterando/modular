@@ -53,7 +53,8 @@ void main() {
   });
 
   test('find child route in other module', () async {
-    var route = await ModularTracker.findRoute('/other/details') as CustomRoute?;
+    var route =
+        await ModularTracker.findRoute('/other/details') as CustomRoute?;
     expect(route?.uri.path, '/other/details');
     expect(route?.parent, '/other/');
     expect(route?.data, 'otherWithDetails');
@@ -63,7 +64,8 @@ void main() {
   });
 
   test('find child route in deep module', () async {
-    var route = await ModularTracker.findRoute('/other/internal/') as CustomRoute?;
+    var route =
+        await ModularTracker.findRoute('/other/internal/') as CustomRoute?;
     expect(route, isNotNull);
     ModularTracker.reportPushRoute(route!);
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), true);
@@ -73,7 +75,8 @@ void main() {
     ModularTracker.reportPopRoute(route);
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), false);
 
-    route = await ModularTracker.findRoute('/other/internal/deep') as CustomRoute?;
+    route =
+        await ModularTracker.findRoute('/other/internal/deep') as CustomRoute?;
     expect(route, isNotNull);
     ModularTracker.reportPushRoute(route!);
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), true);
@@ -89,13 +92,15 @@ void main() {
 
   test('find route with schema', () async {
     expect(await ModularTracker.findRoute('/schema'), isNull);
-    final route = await ModularTracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
+    final route = await ModularTracker.findRoute('/schema', schema: 'tag')
+        as CustomRoute?;
     expect(route?.uri.path, '/schema');
     expect(route?.data, 'withSchema');
   });
 
   test('find route with wildcard', () async {
-    final route = await ModularTracker.findRoute('/wildcard/test/2') as CustomRoute?;
+    final route =
+        await ModularTracker.findRoute('/wildcard/test/2') as CustomRoute?;
     expect(route?.uri.path, '/wildcard/test/2');
     expect(route?.data, 'wildcard');
   });

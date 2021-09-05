@@ -8,7 +8,11 @@ void main() {
   });
 
   test('generateToken', () {
-    final exp = Duration(milliseconds: DateTime.now().add(Duration(seconds: 20)).millisecondsSinceEpoch).inSeconds;
+    final exp = Duration(
+            milliseconds: DateTime.now()
+                .add(Duration(seconds: 20))
+                .millisecondsSinceEpoch)
+        .inSeconds;
     print(exp);
 
     final token = manager.generateToken({
@@ -19,7 +23,8 @@ void main() {
   });
 
   test('validateToken', () async {
-    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Mjk5OTI1MTl9.-uReOTXchL_-vQnhKwVw4zulDRWXEavyWCp71fZp99o';
+    final token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Mjk5OTI1MTl9.-uReOTXchL_-vQnhKwVw4zulDRWXEavyWCp71fZp99o';
     await manager.validateToken(token);
   });
 }

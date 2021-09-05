@@ -10,7 +10,7 @@ void main() {
   setUp(() {
     injector = InjectorImpl();
     module = MyInjectModule();
-    injector.bindContext(module);
+    injector.addBindContext(module);
   });
 
   test('debugPrint', () async {

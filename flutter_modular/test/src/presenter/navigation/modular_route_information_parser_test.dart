@@ -149,6 +149,8 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
 
+    when(() => reportPush(routeMock)).thenReturn(right(unit));
+
     when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
@@ -186,6 +188,7 @@ void main() {
 
   test('selectBook with popCallback', () {
     final routeMock = ParallelRouteMock();
+    when(() => reportPush(routeMock)).thenReturn(right(unit));
     when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([]);
