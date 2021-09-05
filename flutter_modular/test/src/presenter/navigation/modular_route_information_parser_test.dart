@@ -85,8 +85,9 @@ void main() {
     expect(book.chapters('/').first.name, '/test');
   });
 
-  test('selectBook with RedirectRoute', () async {
+  test('selectRoute with RedirectRoute', () async {
     final redirect = RedirectRoute('/oo', to: '/test');
+    final args = ModularArguments.empty();
 
     final routeMock = ParallelRouteMock();
     when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
@@ -103,9 +104,9 @@ void main() {
     when(() => routeParent.copyWith(schema: any(named: 'schema'))).thenReturn(routeParent);
 
     when(() => getRoute.call(RouteParmsDTO(url: '/oo'))).thenAnswer((_) async => right(redirect));
-    when(() => getRoute.call(RouteParmsDTO(url: '/test'))).thenAnswer((_) async => right(routeMock));
+    when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args))).thenAnswer((_) async => right(routeMock));
     when(() => getRoute.call(RouteParmsDTO(url: '/'))).thenAnswer((_) async => right(routeParent));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getArguments.call()).thenReturn(right(args));
 
     when(() => setArguments.call(any())).thenReturn(right(unit));
 

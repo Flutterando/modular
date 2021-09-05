@@ -49,10 +49,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   Future<ModularBook> selectBook(String path, {dynamic arguments, void Function(dynamic)? popCallback}) async {
     var route = await selectRoute(path, arguments: arguments);
 
-    if (route is RedirectRoute) {
-      route = await selectRoute(route.to, arguments: arguments);
-    }
-
     final modularArgs = getArguments().getOrElse((l) => ModularArguments.empty());
     if (popCallback != null) {
       route = route.copyWith(popCallback: popCallback);
@@ -86,12 +82,16 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {
+    final arguments = getArguments().getOrElse((l) => ModularArguments.empty());
     for (var middleware in route!.middlewares) {
-      final args = getArguments().getOrElse((l) => ModularArguments.empty());
-      route = await middleware.pos(route!, args);
+      route = await middleware.pos(route!, arguments);
       if (route == null) {
         break;
       }
+    }
+
+    if (route is RedirectRoute) {
+      route = await selectRoute(route.to, arguments: arguments);
     }
 
     if (route != null) {
