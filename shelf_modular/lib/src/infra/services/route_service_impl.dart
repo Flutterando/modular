@@ -23,4 +23,10 @@ class RouteServiceImpl implements RouteService {
   Either<ModularError, ModularArguments> getArguments() {
     return right(tracker.arguments);
   }
+
+  @override
+  Either<ModularError, Unit> reportPush(ModularRoute route) {
+    tracker.reportPushRoute(route);
+    return right(unit);
+  }
 }

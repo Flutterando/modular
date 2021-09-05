@@ -73,7 +73,7 @@ class TrackerImpl implements Tracker {
     if (route == null) return null;
 
     _arguments = arguments.copyWith(data: data, uri: uri, params: params);
-    _injectBindContext(route);
+
     return route;
   }
 
@@ -81,14 +81,15 @@ class TrackerImpl implements Tracker {
     injector.disposeModuleByTag(route.uri.toString());
   }
 
-  Uri _resolverPath(String path) {
-    return arguments.uri.resolve(path);
-  }
-
-  void _injectBindContext(ModularRoute route) {
+  @override
+  void reportPushRoute(ModularRoute route) {
     for (var module in [...route.bindContextEntries.values, module]) {
       injector.bindContext(module, tag: route.uri.toString());
     }
+  }
+
+  Uri _resolverPath(String path) {
+    return arguments.uri.resolve(path);
   }
 
   Map<String, String>? _extractParams(Uri candidate, Uri match) {

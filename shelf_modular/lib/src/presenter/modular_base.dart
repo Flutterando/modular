@@ -13,6 +13,7 @@ import 'package:shelf_modular/src/domain/usecases/get_bind.dart';
 import 'package:shelf_modular/src/domain/usecases/get_route.dart';
 import 'package:shelf_modular/src/domain/usecases/module_ready.dart';
 import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
+import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
 import 'package:shelf_modular/src/shelf_modular_module.dart';
 import 'errors/errors.dart';
@@ -44,10 +45,11 @@ class ModularBase implements IModularBase {
   final GetRoute getRoute;
   final ReleaseScopedBinds releaseScopedBinds;
   final IsModuleReadyImpl isModuleReadyImpl;
+  final ReportPush reportPush;
 
   bool _moduleHasBeenStarted = false;
 
-  ModularBase(this.disposeBind, this.finishModule, this.getBind, this.startModule, this.isModuleReadyImpl, this.getRoute, this.getArguments, this.releaseScopedBinds);
+  ModularBase(this.disposeBind, this.finishModule, this.getBind, this.startModule, this.isModuleReadyImpl, this.getRoute, this.getArguments, this.releaseScopedBinds, this.reportPush);
 
   @override
   bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
@@ -141,6 +143,7 @@ class ModularBase implements IModularBase {
           injector: injector<Injector>(),
         );
         if (response != null) {
+          reportPush(route);
           return response;
         } else {
           return Response.internalServerError(body: 'Handler not correct');

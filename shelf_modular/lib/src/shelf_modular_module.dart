@@ -1,4 +1,5 @@
 import 'package:modular_core/modular_core.dart';
+import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 
 import 'domain/services/bind_service.dart';
 import 'domain/services/module_service.dart';
@@ -39,7 +40,8 @@ class ShelfModularModule extends Module {
         Bind.factory<IsModuleReady>((i) => IsModuleReadyImpl(i())),
         Bind.factory<GetArguments>((i) => GetArgumentsImpl(i())),
         Bind.factory<ReleaseScopedBinds>((i) => ReleaseScopedBindsImpl(i())),
+        Bind.factory<ReportPush>((i) => ReportPushImpl(i())),
         //presenter
-        Bind.singleton<IModularBase>((i) => ModularBase(i(), i(), i(), i(), i(), i(), i(), i())),
+        Bind.singleton<IModularBase>((i) => ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i())),
       ];
 }

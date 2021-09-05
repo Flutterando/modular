@@ -5,6 +5,7 @@ import 'package:shelf_modular/src/infra/services/route_service_impl.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/mocks.dart';
+import '../../presenter/modular_base_test.dart';
 
 void main() {
   final tracker = TrackerMock();
@@ -28,6 +29,15 @@ void main() {
     test('should return args', () async {
       when(() => tracker.arguments).thenReturn(ModularArguments.empty());
       final result = service.getArguments();
+      expect(result.isRight, true);
+    });
+  });
+
+  group('reportPush', () {
+    test('report pushroute', () async {
+      final route = RouteMock();
+      when(() => tracker.reportPopRoute(route)).thenReturn('');
+      final result = service.reportPush(route);
       expect(result.isRight, true);
     });
   });

@@ -64,19 +64,23 @@ void main() {
 
   test('find child route in deep module', () async {
     var route = await ModularTracker.findRoute('/other/internal/') as CustomRoute?;
+    expect(route, isNotNull);
+    ModularTracker.reportPushRoute(route!);
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), true);
-    expect(route?.uri.path, '/other/internal/');
-    expect(route?.data, 'internal');
+    expect(route.uri.path, '/other/internal/');
+    expect(route.data, 'internal');
 
-    ModularTracker.reportPopRoute(route!);
+    ModularTracker.reportPopRoute(route);
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), false);
 
     route = await ModularTracker.findRoute('/other/internal/deep') as CustomRoute?;
+    expect(route, isNotNull);
+    ModularTracker.reportPushRoute(route!);
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), true);
-    expect(route?.uri.path, '/other/internal/deep');
-    expect(route?.parent, '/other/internal/');
-    expect(route?.data, 'deep');
-    ModularTracker.reportPopRoute(route!);
+    expect(route.uri.path, '/other/internal/deep');
+    expect(route.parent, '/other/internal/');
+    expect(route.data, 'deep');
+    ModularTracker.reportPopRoute(route);
 
     expect(ModularTracker.injector.isModuleAlive<DeepModule>(), false);
     expect(ModularTracker.injector.isModuleAlive<OtherModule>(), false);

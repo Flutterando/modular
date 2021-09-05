@@ -20,6 +20,8 @@ abstract class Tracker {
 
   void reportPopRoute(ModularRoute route);
 
+  void reportPushRoute(ModularRoute route);
+
   void runApp(RouteContext module);
 
   void finishApp();

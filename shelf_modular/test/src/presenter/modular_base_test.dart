@@ -15,6 +15,7 @@ import 'package:shelf_modular/src/domain/usecases/get_bind.dart';
 import 'package:shelf_modular/src/domain/usecases/get_route.dart';
 import 'package:shelf_modular/src/domain/usecases/module_ready.dart';
 import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
+import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
 import 'package:shelf_modular/src/presenter/errors/errors.dart';
 import 'package:shelf_modular/src/presenter/modular_base.dart';
@@ -46,6 +47,8 @@ class RouteMock extends Mock implements Route {}
 
 class DisposableMock extends Mock implements Disposable {}
 
+class ReportPushMock extends Mock implements ReportPush {}
+
 void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
@@ -55,6 +58,7 @@ void main() {
   final getRoute = GetRouteMock();
   final releaseScopedBinds = ReleaseScopedBindsMock();
   final isModuleReadyImpl = IsModuleReadyImplMock();
+  final reportPush = ReportPushMock();
 
   late IModularBase modularBase;
 
@@ -63,7 +67,7 @@ void main() {
   });
 
   setUp(() {
-    modularBase = ModularBase(disposeBind, finishModule, getBind, startModule, isModuleReadyImpl, getRoute, getArguments, releaseScopedBinds);
+    modularBase = ModularBase(disposeBind, finishModule, getBind, startModule, isModuleReadyImpl, getRoute, getArguments, releaseScopedBinds, reportPush);
   });
 
   test('dispose', () {
@@ -117,6 +121,7 @@ void main() {
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+    when(() => reportPush.call(route)).thenReturn(right(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 200);
