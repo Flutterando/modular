@@ -50,4 +50,13 @@ void main() {
       expect(result.isRight, true);
     });
   });
+
+  group('reportPush', () {
+    test('should send route', () async {
+      final route = ParallelRouteMock();
+      when(() => tracker.reportPushRoute(route)).thenReturn('');
+      final result = service.reportPush(route);
+      expect(result.isRight, true);
+    });
+  });
 }

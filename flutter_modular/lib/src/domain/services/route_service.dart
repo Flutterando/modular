@@ -7,4 +7,5 @@ abstract class RouteService {
   Either<ModularError, ModularArguments> getArguments();
   Either<ModularError, Unit> setArguments(ModularArguments args);
   Either<ModularError, Unit> reportPop(ModularRoute route);
+  Either<ModularError, Unit> reportPush(ModularRoute route);
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
+import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'package:flutter_modular/src/domain/usecases/dispose_bind.dart';
@@ -48,14 +49,15 @@ class ModularBase implements IModularBase {
 
   bool _moduleHasBeenStarted = false;
 
-  ModularBase(
-      {required this.disposeBind,
-      required this.getArguments,
-      required this.finishModule,
-      required this.getBind,
-      required this.startModule,
-      required this.isModuleReadyUsecase,
-      required this.navigator});
+  ModularBase({
+    required this.disposeBind,
+    required this.getArguments,
+    required this.finishModule,
+    required this.getBind,
+    required this.startModule,
+    required this.isModuleReadyUsecase,
+    required this.navigator,
+  });
 
   @override
   bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);

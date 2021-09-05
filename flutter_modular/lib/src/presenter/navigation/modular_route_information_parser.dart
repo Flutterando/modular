@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
+import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/presenter/models/redirect_to_route.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';
@@ -16,10 +17,16 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   final GetRoute getRoute;
   final GetArguments getArguments;
   final SetArguments setArguments;
+  final ReportPush reportPush;
 
   bool _firstParse = false;
 
-  ModularRouteInformationParser({required this.getRoute, required this.getArguments, required this.setArguments});
+  ModularRouteInformationParser({
+    required this.getRoute,
+    required this.getArguments,
+    required this.setArguments,
+    required this.reportPush,
+  });
 
   @override
   Future<ModularBook> parseRouteInformation(RouteInformation routeInformation) async {
@@ -55,6 +62,7 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
     }
 
     if (route.parent.isEmpty) {
+      reportPush(route);
       return ModularBook(routes: [route]);
     }
 
@@ -68,6 +76,10 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
     }
 
     setArguments(modularArgs);
+
+    for (var booksRoute in book.routes) {
+      reportPush(booksRoute);
+    }
     return book;
   }
 

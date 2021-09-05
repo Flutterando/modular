@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
 import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
@@ -60,7 +61,6 @@ void main() {
   final startModule = StartModuleMock();
   final isModuleReadyImpl = IsModuleReadyImplMock();
   final modularNavigator = IModularNavigatorMock();
-
   late IModularBase modularBase;
 
   setUpAll(() {

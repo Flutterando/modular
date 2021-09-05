@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
 import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
+import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'domain/services/bind_service.dart';
@@ -50,8 +51,9 @@ class FlutterModularModule extends Module {
         Bind.factory<ReportPop>((i) => ReportPopImpl(i())),
         Bind.factory<SetArguments>((i) => SetArgumentsImpl(i())),
         Bind.factory<UnbindModule>((i) => UnbindModuleImpl(i())),
+        Bind.factory<ReportPush>((i) => ReportPushImpl(i())),
         //presenter
-        Bind.singleton<ModularRouteInformationParser>((i) => ModularRouteInformationParser(getRoute: i(), getArguments: i(), setArguments: i())),
+        Bind.singleton<ModularRouteInformationParser>((i) => ModularRouteInformationParser(getRoute: i(), getArguments: i(), setArguments: i(), reportPush: i())),
         Bind.singleton<ModularRouterDelegate>((i) => ModularRouterDelegate(parser: i(), navigatorKey: GlobalKey<NavigatorState>(), reportPop: i())),
         Bind.singleton<IModularBase>((i) => ModularBase(disposeBind: i(), finishModule: i(), getBind: i(), isModuleReadyUsecase: i(), navigator: i(), startModule: i(), getArguments: i())),
       ];

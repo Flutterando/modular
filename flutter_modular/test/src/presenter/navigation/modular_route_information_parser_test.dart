@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
+import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
@@ -25,22 +26,34 @@ class GetArgumentsMock extends Mock implements GetArguments {}
 
 class SetArgumentsMock extends Mock implements SetArguments {}
 
+class ReportPushMock extends Mock implements ReportPush {}
+
+class ParallelRouteFake extends Fake implements ModularRoute {}
+
 void main() {
   late ModularRouteInformationParser parser;
   late GetRouteMock getRoute;
   late GetArgumentsMock getArguments;
   late SetArgumentsMock setArguments;
+  late ReportPush reportPush;
 
   setUp(() {
     getRoute = GetRouteMock();
     getArguments = GetArgumentsMock();
     setArguments = SetArgumentsMock();
-    parser = ModularRouteInformationParser(getArguments: getArguments, getRoute: getRoute, setArguments: setArguments);
+    reportPush = ReportPushMock();
+    parser = ModularRouteInformationParser(
+      getArguments: getArguments,
+      getRoute: getRoute,
+      setArguments: setArguments,
+      reportPush: reportPush,
+    );
   });
 
   setUpAll(() {
     registerFallbackValue(RouteParmsDTO(url: '/test'));
     registerFallbackValue(ModularArguments.empty());
+    registerFallbackValue(ParallelRouteFake());
   });
 
   test('selectBook one', () async {
@@ -51,6 +64,8 @@ void main() {
     when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
+
+    when(() => reportPush(routeMock)).thenReturn(right(unit));
 
     final book = await parser.selectBook('/');
     expect(book.uri.toString(), '/');
@@ -72,6 +87,9 @@ void main() {
     when(() => routeParent.schema).thenReturn('');
     when(() => routeParent.middlewares).thenReturn([Guard()]);
     when(() => routeParent.copyWith(schema: any(named: 'schema'))).thenReturn(routeParent);
+
+    when(() => reportPush(routeMock)).thenReturn(right(unit));
+    when(() => reportPush(routeParent)).thenReturn(right(unit));
 
     when(() => getRoute.call(RouteParmsDTO(url: '/test'))).thenAnswer((_) async => right(routeMock));
     when(() => getRoute.call(RouteParmsDTO(url: '/'))).thenAnswer((_) async => right(routeParent));
@@ -102,6 +120,9 @@ void main() {
     when(() => routeParent.schema).thenReturn('');
     when(() => routeParent.middlewares).thenReturn([Guard()]);
     when(() => routeParent.copyWith(schema: any(named: 'schema'))).thenReturn(routeParent);
+
+    when(() => reportPush(routeMock)).thenReturn(right(unit));
+    when(() => reportPush(routeParent)).thenReturn(right(unit));
 
     when(() => getRoute.call(RouteParmsDTO(url: '/oo'))).thenAnswer((_) async => right(redirect));
     when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args))).thenAnswer((_) async => right(routeMock));
