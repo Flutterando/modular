@@ -12,7 +12,7 @@ foram presevardos.
 O **flutter_modular** adiciona o comando **navigate** para se aproximar mais da web, substituindo todas as Páginas
 pela solicitada. Vamos adicionar mais uma **ChildRoute** ao nosso projeto inicial:
 
-```dart title="lib/main.dart" {24,33-35,42-55}
+```dart title="lib/main.dart" {24,33-36,42-55}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -137,7 +137,6 @@ ChildRoute('/second', child: (context, args) => SecondPage(person: args.data)),
 Modular.to.navigate('/second', arguments: Person());
 ```
 
-
 ## Adicionando transições
 
 Quando navegamos de uma tela a outra, experimentamos uma transição de tela padrão, mas temos a possiblidade de usar
@@ -215,6 +214,10 @@ um comportamento para quando não for encontrado nenhuma rota no módulo. Chamam
 WildcardRoute(child: (context, args) => NotFoundPage()),
 ```
 
+:::danger ATENÇÃO
+
+Tenha apenas **WildcardRoute** por módulo e, se possível, que seja o último elemento.
+:::
 
 ## Guarda de Rotas
 
@@ -244,5 +247,111 @@ ChildRoute('/', child: (context, args) => HomePage(), guards: [AuthGuard()]),
 :::tip DICA
 
 Definir redirecionamento não é obrigatório, mas caso não haja, será lançado um erro.
+
+:::
+
+## RouterOutlet
+
+Até agora usamos um Navigator global, e na maioria dos casos será o suficiente apenas um. Mas existe
+contextos onde precisaremos de mais um navegador aninhado. Para isso usamos o **RouterOutlet**.
+
+Cada **ChildRoute** tem direito a um **RouterOutlet** para seus filhos, e podemos adiciona-lo em
+qualquer lugar da arvore de Widgets, pois o **RouterOutlet** é um widget. Vejamos um exemplo:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+void main() {
+  return runApp(ModularApp(module: AppModule(), child: AppWidget()));
+}
+
+class AppWidget extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My Smart App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      initialRoute: '/page1',
+    ).modular();
+  }
+}
+
+class AppModule extends Module {
+  @override
+  List<Bind> get binds => [];
+
+  @override
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => HomePage(), children: [
+      ChildRoute('/page1', child: (context, args) => InternalPage(title: 'page 1', color: Colors.red)),
+      ChildRoute('/page2', child: (context, args) => InternalPage(title: 'page 2', color: Colors.amber)),
+      ChildRoute('/page3', child: (context, args) => InternalPage(title: 'page 3', color: Colors.green)),
+    ]),
+  ];
+}
+
+class HomePage extends StatelessWidget {
+  Widget build(BuildContext context) {
+    final leading = SizedBox(
+      width: MediaQuery.of(context).size.width * 0.3,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text('Page 1'),
+            onTap: () => Modular.to.navigate('/page1'),
+          ),
+          ListTile(
+            title: Text('Page 2'),
+            onTap: () => Modular.to.navigate('/page2'),
+          ),
+          ListTile(
+            title: Text('Page 3'),
+            onTap: () => Modular.to.navigate('/page3'),
+          ),
+        ],
+      ),
+    );
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Home Page')),
+      body: Row(
+        children: [
+          leading,
+          Container(width: 2, color: Colors.black45),
+          Expanded(child: RouterOutlet()),
+        ],
+      ),
+    );
+  }
+}
+
+class InternalPage extends StatelessWidget {
+  final String title;
+  final Color color;
+  const InternalPage({Key? key, required this.title, required this.color}) : super(key: key);
+
+  Widget build(BuildContext context) {
+    return Material(
+      color: color,
+      child: Center(child: Text(title)),
+    );
+  }
+}
+```
+
+O resultado será esse:
+
+![Example banner](/img/routeroutlet.gif)
+
+:::danger ATENÇÃO
+
+O **RouterOutlet** é uma navegação aninhada, por tanto, não existe um cache da página.
+
+:::
+
+:::danger ATENÇÃO
+
+Uma **ChildRoute** nomeada como `/` não pode ter um filho `/`. É uma boa prática ter um nome melhor
+para o seguimento das rotas filhas.
 
 :::
