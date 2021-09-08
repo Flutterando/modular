@@ -21,7 +21,8 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     List<Middleware> middlewares = const [],
     Uri? uri,
     Map<Type, BindContext> bindContextEntries = const {},
-  }) : super(
+  })  : assert(!name.contains('/:'), 'ModuleRoute should not contain dynamic route'),
+        super(
           name: name,
           child: child,
           popCallback: popCallback,

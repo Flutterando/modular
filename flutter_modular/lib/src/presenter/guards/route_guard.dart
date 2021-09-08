@@ -14,9 +14,9 @@ abstract class RouteGuard extends Middleware<ModularArguments> {
   FutureOr<bool> canActivate(String path, ParallelRoute route);
 
   /// If the route is not allowed then the Guard will redirect to that route.
-  final String? redirectPath;
+  final String? redirectTo;
 
-  RouteGuard([this.redirectPath]);
+  RouteGuard({this.redirectTo});
 
   @override
   FutureOr<ModularRoute?> pre(ModularRoute route) => route;
@@ -25,8 +25,8 @@ abstract class RouteGuard extends Middleware<ModularArguments> {
   FutureOr<ParallelRoute?> pos(route, args) async {
     if (await canActivate(args.uri.toString(), route as ParallelRoute)) {
       return route;
-    } else if (redirectPath != null) {
-      return RedirectRoute(route.name, to: redirectPath!);
+    } else if (redirectTo != null) {
+      return RedirectRoute(route.name, to: redirectTo!);
     }
 
     throw GuardedRouteException(route.uri.toString().trim());

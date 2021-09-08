@@ -15,7 +15,7 @@ void main() {
 }
 
 class MyGuard extends RouteGuard {
-  MyGuard() : super('/');
+  MyGuard() : super(redirectTo: '/');
 
   @override
   FutureOr<bool> canActivate(String path, ParallelRoute route) {
