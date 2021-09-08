@@ -45,7 +45,8 @@ abstract class IModularBase {
   /// replaces the default ModularNavigator with a custom instance:
   /// Ideal for Unit Testing.
   /// Modular.navigatorDelegate = MyNavigatorDelegate()
-  /// IModularNavigator? navigatorDelegate;
+  IModularNavigator? navigatorDelegate;
+
   void debugPrintModular(String text);
 
   /// Request an instance by [Type]

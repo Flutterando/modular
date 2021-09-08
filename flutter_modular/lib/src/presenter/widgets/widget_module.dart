@@ -63,6 +63,13 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
       child: view,
     );
   }
+
+  @override
+  void changeBinds(List<BindContract<Object>> newBinds) => _fakeModule.changeBinds(newBinds);
+
+  @override
+  // ignore: invalid_use_of_visible_for_testing_member
+  List<BindContract<Object>> getProcessBinds() => _fakeModule.getProcessBinds();
 }
 
 class _FakeModule extends BindContextImpl {

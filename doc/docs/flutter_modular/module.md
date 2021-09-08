@@ -85,7 +85,7 @@ O que vemos aqui:
 
 - Criamos o módulo **HomeModule** e adicionamos o widget **HomePage** com o **ChildRoute**.
 - Depois adicionamos o **HomeModule** ao **AppModule** usando o **ModuleRoute**.
-- Aqui, juntamos as rotas do **HomeModule** no **AppModule**.
+- Por fim, juntamos as rotas do **HomeModule** no **AppModule**.
 
 Entraremos agora em um assunto fundamental para entender o roteamento quando um módulo 
 é filiado a outro.

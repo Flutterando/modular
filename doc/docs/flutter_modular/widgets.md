@@ -43,6 +43,13 @@ class _HomePageState extends ModularState<HomePage, MyController>{
 }
 ```
 
+:::danger ATENÇÃO
+
+O **ModularState** só deve ser utilizado pela página principal da feature. Caso seja usado em um widget interno, 
+poderá causar erros inesperados. 
+
+:::
+
 ## NavigationListener
 
 Esse widget é na verdade um *Builder* que reconstroe seu escopo quando houver uma navegação.

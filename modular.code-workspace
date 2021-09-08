@@ -27,6 +27,9 @@
 		{
 			"name": "flutter_modular_test",
 			"path": "flutter_modular_test"
+		},
+		{
+			"path": "modular_test"
 		}
 	],
 	"settings": {

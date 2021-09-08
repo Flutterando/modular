@@ -1,15 +1,13 @@
-name: modular_core
+name: modular_test
 description: Smart project structure with dependency injection and route management
-version: 1.0.0+2
+version: 1.0.1
 homepage: https://github.com/Flutterando/modular
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  characters: ">=1.1.0 <2.0.0"
-  meta: ">=1.3.0 <2.0.0"
-  modular_interfaces: ">=1.0.0+1 <2.0.0"
+  modular_core: ">=1.0.0+2 <2.0.0"
 
 dev_dependencies:
   test: ^1.17.10

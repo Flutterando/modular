@@ -4,12 +4,12 @@ sidebar_position: 1
 
 # Inicio
 
-O **flutter_modular** foi construido usando o motor do **modular_core** que é responsável pelo sistema de injeção de dependências e gerência de rotas. A implementação do sistema de Rotas simula uma Árvore de Módulos, tal qual como o Flutter faz em suas árvores de Widgets, Elementos e Redenrização. Por isso, podemos adicionar um módulo dentro de outro criando vínculos de paternidade.
+O **flutter_modular** foi construído usando o motor do **modular_core** que é responsável pelo sistema de injeção de dependências e gerência de rotas. A implementação do sistema de Rotas simula uma árvore de módulos, tal qual como o Flutter faz em suas árvores de widgets, elementos e redenrização. Por isso, podemos adicionar um módulo dentro de outro criando vínculos de paternidade.
 
 
 ## Inspirações do Angular
 
-Todo sistema do **flutter_modular** veio de estudos realizado no Angular (outro framework da Google) e adaptado para o mundo do Flutter. Por isso existe muitas semelhanças entre o **flutter_modular** e o Sistema de Rotas e Injeção de Dependências do Angular.
+Todo sistema do **flutter_modular** veio de estudos realizado no Angular (outro framework da Google) e adaptado para o mundo do Flutter. Por isso, existe muitas semelhanças entre o **flutter_modular** e o Sistema de Rotas e Injeção de Dependências do Angular.
 
 As rotas são refletidas no Aplicativo usando as features do novo Navigator 2.0, permitindo assim o uso de multiplos navegadores aninhados. Chamamos essa feature de RouterOutlet, assim como no Angular.
 
@@ -35,6 +35,14 @@ dependencies:
 
 Se tudo der certo, então estamos pronto para seguir em frente!
 
+:::tip DICA
+
+A CLI do Flutter tem uma ferramenta que facilita a inclusão dos packages no projeto. Use o comando:
+
+`flutter pub add flutter_modular`
+
+:::
+
 ## O ModularApp
 
 Precisamos adicionar o Widget ModularApp na raiz do nosso projeto. Vamos alterar nosso arquivo **main.dart**:
@@ -50,7 +58,7 @@ void main(){
 ```
 
 O **ModularApp** nos obriga a adicionar um módulo principal e um widget principal. O que iremos fazer a seguir.
-Esse Widget faz a configuração inicial para que tudo funcione bem. Para mais detalhes acesse a doc do **ModularApp**
+Esse Widget faz a configuração inicial para que tudo funcione bem. Para mais detalhes acesse a doc do **ModularApp**.
 
 :::tip DICA
 
@@ -86,13 +94,13 @@ class AppModule extends Module {
 ```
 
 Observer que o módulo é apenas uma classe que herda da classe **Module**, sobreescrevendo as propriedades **binds** e **routes**.
-Com isso temos um mecanismo de rotas e binds separado da aplicação podendo ser aplicado tanto em um contexto global(como estamos fazendo) como em um contexto local, como por exemplo, criar um módulo contendo apenas os binds e rotas
+Com isso temos um mecanismo de rotas e injeções0 separado da aplicação podendo ser aplicado tanto em um contexto global(como estamos fazendo) como em um contexto local, como por exemplo, criar um módulo contendo apenas os binds e rotas
 de uma feature específica!
 
 Adicionamos o **AppModule** no ModularApp. Agora precisamos de uma rota inicial, então vamos criar um StatelessWidget
 para servir como página inicial.
 
-```dart title="lib/main.dart" {13,18-27}
+```dart title="lib/main.dart" {14,18-27}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -133,7 +141,7 @@ O **ChildRoute** server para construir um Widget enquanto o **ModuleRoute** conc
 ## Criando o Widget Principal
 
 A função do Widget principal é instanciar o MaterialApp ou CupertinoApp.
-Nesses Widgets principais também é necessário configurar o sistema customizado de rotas. Para isso, o **flutter_modular** uma extension que automatiza esse processo. Para esse próximo código iremos usar
+Nesses Widgets principais também é necessário configurar o sistema customizado de rotas. Para isso, o **flutter_modular** possui uma extension que automatiza esse processo. Para esse próximo código iremos usar
 o **MaterialApp**, porém o processo é exatamente o mesmo para o CupertinoApp.
 
 

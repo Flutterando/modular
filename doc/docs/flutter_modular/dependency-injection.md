@@ -93,11 +93,11 @@ final service = XPTOEmailService(xpto)
 final client = Client(service);
 ```
 
-Esse tipo de criação de objeto resolve o acoplamento mas pode aumentar a complexidade de criação de instância, como podemos ver na classe **Client**. O Sistema de injeção de dependência do **flutter_modular** resolve esse problema.
+Esse tipo de criação de objeto resolve o acoplamento mas pode aumentar a complexidade de criação de instância, como podemos ver na classe **Client**. O Sistema de injeção de dependência do **flutter_modular** resolve esse problema de forma simples e eficaz.
 
 ## Registro de instâncias
 
-A estratégia para resolver uma instância e suas dependência consiste em registrar todos os objetos em um módulo e 
+A estratégia para construir uma instância com suas dependências consiste em registrar todos os objetos em um módulo e 
 fabrica-los sobre demanda ou em forma de instância única(singleton). A esse registro damos o nome de **Bind**.
 Existe algumas formas de construir um Bind para registrar as instâncias de objetos:
 
@@ -170,8 +170,8 @@ Podemos pegar a instância assíncrona diretamente também sem precisar converte
 
 ## Dispose automático
 
-A vida útil de um Bind singleton finaliza quando seu módulo morre. Mas existe alguns objetos que, por padrão, é 
-executado uma rotina de destruição da instância e removidos da memória automáticamente. São eles:
+A vida útil de um Bind singleton finaliza quando seu módulo morre. Mas existem alguns objetos que, por padrão, são 
+executados por uma rotina de destruição da instância e removidos da memória automáticamente. São eles:
 
 - Stream/Sink (Dart Native).
 - ChangeNotifier/ValueNotifier (Flutter Native).

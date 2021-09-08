@@ -4,22 +4,21 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Route Management',
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Modular grow up the system route to the next level, working with the scope of
+        resource routes by features.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Dependency Injection',
     Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+       keep dependencies in a modularized way and guarantees memory deallocation when it is no longer needed.
       </>
     ),
   },

@@ -216,7 +216,7 @@ WildcardRoute(child: (context, args) => NotFoundPage()),
 
 :::danger ATENÇÃO
 
-Tenha apenas **WildcardRoute** por módulo e, se possível, que seja o último elemento.
+Tenha apenas um **WildcardRoute** por módulo e, se possível, que seja o último elemento.
 :::
 
 ## Guarda de Rotas

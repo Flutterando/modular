@@ -77,15 +77,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Flutterando',
+                href: 'https://flutterando.com.br',
               },
               {
                 label: 'Discord',
                 href: 'https://discordapp.com/invite/docusaurus',
               },
               {
-                label: 'Twitter',
+                label: 'Telegram',
                 href: 'https://twitter.com/docusaurus',
               },
             ],
@@ -93,10 +93,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
           {
             title: 'More',
             items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
+    
               {
                 label: 'GitHub',
                 href: 'https://github.com/facebook/docusaurus',
