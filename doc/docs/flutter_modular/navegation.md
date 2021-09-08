@@ -258,7 +258,7 @@ contextos onde precisaremos de mais um navegador aninhado. Para isso usamos o **
 Cada **ChildRoute** tem direito a um **RouterOutlet** para seus filhos, e podemos adiciona-lo em
 qualquer lugar da arvore de Widgets, pois o **RouterOutlet** é um widget. Vejamos um exemplo:
 
-```dart
+```dart title="lib/main.dart"
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
