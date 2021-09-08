@@ -22,13 +22,13 @@ function HomepageHeader() {
           <div className={styles.space}></div>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/flutter_modular">
+            to="/docs/flutter_modular/start">
             flutter_modular
           </Link>
           <div className={styles.space}></div>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/shelf_modular">
+            to="/docs/shelf_modular/start">
             shelf_modular
           </Link>
         </div>

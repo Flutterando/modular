@@ -22,13 +22,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/facebook/docusaurus/edit/main/website/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/main/website/blog/',
+          editUrl: 'https://github.com/Flutterando/modular/tree/master/doc',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -51,11 +45,10 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
             type: 'doc',
             docId: 'intro',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Getting Started',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/Flutterando/modular',
             label: 'GitHub',
             position: 'right',
           },
@@ -68,8 +61,16 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Getting Started',
                 to: '/docs/intro',
+              },
+              {
+                label: 'flutter_modular',
+                to: '/docs/flutter_modular/start',
+              },
+              {
+                label: 'shelf_modular',
+                to: '/docs/shelf_modular/start',
               },
             ],
           },
@@ -77,26 +78,33 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
             title: 'Community',
             items: [
               {
-                label: 'Flutterando',
-                href: 'https://flutterando.com.br',
+                label: 'Telegram',
+                href: 'https://t.me/flutterando',
               },
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                href: 'https://discord.com/invite/x7X4uA9',
               },
               {
-                label: 'Telegram',
-                href: 'https://twitter.com/docusaurus',
+                label: 'Facebook',
+                href: 'https://www.facebook.com/groups/flutterando',
               },
             ],
           },
           {
             title: 'More',
             items: [
-    
+              {
+                label: 'Flutterando',
+                href: 'https://flutterando.com.br',
+              },
+              {
+                label: 'Medium Flutterando',
+                href: 'https://medium.com/flutterando',
+              },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/Flutterando/modular',
               },
             ],
           },

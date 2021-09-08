@@ -5,7 +5,7 @@ import styles from './HomepageFeatures.module.css';
 const FeatureList = [
   {
     title: 'Route Management',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('../../static/img/undraw_route.svg').default,
     description: (
       <>
         Modular grow up the system route to the next level, working with the scope of
@@ -15,7 +15,7 @@ const FeatureList = [
   },
   {
     title: 'Dependency Injection',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('../../static/img/undraw_di.svg').default,
     description: (
       <>
        keep dependencies in a modularized way and guarantees memory deallocation when it is no longer needed.
@@ -24,7 +24,7 @@ const FeatureList = [
   },
   {
     title: 'Open source',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('../../static/img/undraw_community.svg').default,
     description: (
       <>
         Created and maintained by the largest Flutter community in Brazil and free for everyone!
