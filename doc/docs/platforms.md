@@ -2,16 +2,16 @@
 sidebar_position: 2
 ---
 
-# Abordagens
+# Approaches
 
-Se estiver usando Dart, o Modular poderá te ajudar.
-Temos 3 abordagens de packages para ajudar nos cénarios de uso no Flutter, Dart no backend ou Uso direto em scripts Dart.
+If you are using Dart, Modular can help you.
+We have 3 package approaches to help with usage scenarios in Flutter, backend Dart or Direct usage in Dart scripts.
 
-## Escolhendo uma abordagem
+## Choosing an approach
 
-- Para aplicações Flutter, utilize o package **flutter_modular**. 
-- Para aplicações utilizando o Shelf no backend, utilize o package **shelf_modular**
-- Para aplicações usando Dart puro, utilize o package **modular_core**
+- For Flutter applications, use the **flutter_modular** package.
+- For applications using Shelf in the backend, use the **shelf_modular** package
+- For applications using pure Dart, use the **modular_core** package
 
-Cada abordagem contém ferramentas específicas e helpers para melhor adaptar a ideia de "Estrutura Inteligente".
+Each approach contains specific tools and helpers to better adapt the idea of "Smart Framework".
 

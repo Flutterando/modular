@@ -2,12 +2,12 @@
 sidebar_position: 7
 ---
 
-# Integração com o Triple
+# Triple Pattern integration
 
-O [Triple](https://triple.flutterando.com.br/docs/getting-started/using-flutter-triple) está integrado ao **flutter_modular**,
-e isso facilita o reconhecimento do **Bind** nos Builders do **flutter_triple** (**ScopedBuilder**, **TripleBuilder**).
+The [Triple](https://triple.flutterando.com.br/docs/getting-started/using-flutter-triple) is integrated into **flutter_modular**,
+and this makes it easier to recognize the **Bind** in the **flutter_triple** Builders (**ScopedBuilder**, **TripleBuilder**).
 
-Exemplo sem o **flutter_modular**:
+Exemple without **flutter_modular**:
 ```dart
 ScopedBuilder<MyStore, Exception, String>(
     store: counter,
@@ -16,7 +16,7 @@ ScopedBuilder<MyStore, Exception, String>(
     onLoading: (context) => CircularProgressIndicator(),
 );
 ```
-Exemplo com o **flutter_modular**:
+Exemple with **flutter_modular**:
 ```dart
 ScopedBuilder<MyStore, Exception, String>(
     onState: (context, state) => Text('$state'),
@@ -27,8 +27,8 @@ ScopedBuilder<MyStore, Exception, String>(
 
 :::info INFO
 
-O Triple(SSP) é um padrão de gerenciamento de estado criado e mantido pela Flutterando.
+Triple(SSP) is a state management standard created and maintained by Flutterando.
 
-[Click aqui](https://triple.flutterando.com.br) para conhecer!
+[Click here](https://triple.flutterando.com.br) to know more!
 
 :::

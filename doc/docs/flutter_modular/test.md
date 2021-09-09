@@ -2,14 +2,14 @@
 sidebar_position: 6
 ---
 
-# Testes
+# Tests
 
-O Modular fornece ferramentas e meio para facilitar os testes de unidade e integração de rotas e injeção.
-Nessa sessão iremos aprender como fazer isso.
+Modular provides tools and means to facilitate unit testing and route and injection integration.
+In this session we will learn how to do this.
 
-## Teste de rotas
+## Route Test 
 
-Podemos substituir o objeto de navegação por um Mock/Fake injetando na propriedade **Modular.navigatorDelegate**:
+We can replace the navigation object with a Mock/Fake by injecting the **Modular.navigatorDelegate** property:
 
 ```dart
 class ModularNavigateMock extends Mock implements IModularNavigate {}
@@ -22,17 +22,17 @@ void main(){
 
 :::tip TIP
 
-Prefira usar o Mockito ou Mocktail para criar mocks.
+Prefer to use Mockito or Mocktail to create mocks.
 
 :::
 
-## Teste de Injeção
+## Injection Test
 
-A forma segura de injetar dependências é testar se a construção do **Bind** acontece como se espera, então
-precisaremos verificar isso atraves de testes.
+The safe way to inject dependencies is to test if the **Bind** construction goes as expected, then
+we will need to verify this through testing.
 
-O pacote **modular_test** entrega algumas ferramentas de inicialização de módulos e substituição de binds por
-mock. Vejamos um exemplo:
+The **modular_test** package delivers some tools for initializing modules and replacing binds with
+mock. Let's look at an example:
 
 ```dart {4,18}
 class MyModule extends Module {
@@ -60,7 +60,7 @@ main(){
 
 :::danger ATTENTION
 
-Para que um bind possa está elegível para substituição, O **Bind** deve OBRIGATORIAMENTE ter
-o tipo declarado no construtor do **Bind**. (ex: Bind<MyObjectType\>());
+In order for a bind to be eligible for replacement, the **Bind** must MUST have
+the type declared in the **Bind** constructor. (ex: Bind<MyObjectType\>());
 
 :::

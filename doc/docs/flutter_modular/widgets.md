@@ -4,13 +4,13 @@ sidebar_position: 5
 
 # Widgets
 
-O **flutter_modular** dispõe de widgets para auxiliar no desenvolvimento do seu app inteligente.
+The **flutter_modular** has widgets to help you develop your smart app.
 
 ## WidgetModule
 
-Se houver a necessidade de instanciar um módulo como aplicativo, use o **WidgetModule** para tal.
-Os **Binds** injetados irão respeitar o ciclo de vida desse widget, ou seja, assim que esse widget for
-destruido, o módulo que ele representa também será. Sua implementação é bem simples:
+If there is a need to instantiate a module as an application, use the **WidgetModule** to do so.
+The injected **Binds** will respect the lifecycle of this widget, that is, as soon as this widget goes
+destroyed, the module it represents will also be. Its implementation is very simple:
 
 ```dart
 class LocalModule extends WidgetModule{
@@ -26,11 +26,11 @@ class LocalModule extends WidgetModule{
 
 ## ModularState
 
-Outra maneira de fazer um link do Bind com o ciclo de vida do Widget é implementando o **ModularState**
-no **State** de um **StatefulWidget**. Assim, o Bind irá respeitar o cíclo de vida do widget, ou seja,
-irá ser destruido assim que o widget for desmontado, mesmo que o módulo ainda esteja ativo.
-O **ModularState** também já resolve a dependencia e adiciona ao widget 4 getters: *controller*, *store*,
-*bloc* e *cubit*. Todos possue a mesma instância do bind e usam nomes diferentes por clichê.
+Another way to make a Bind link with the Widget's lifecycle is to implement **ModularState**
+in the **State** of a **StatefulWidget**. Thus, Bind will respect the widget's lifecycle, that is,
+will be destroyed once the widget is unmounted, even if the module is still active.
+**ModularState** also solves the dependency and adds 4 getters to the widget: *controller*, *store*,
+*bloc* and *cubit*. They all have the same bind instance and use different boilerplate names.
 
 ```dart {6}
 class HomePage extends StatefulWidget {
@@ -45,16 +45,16 @@ class _HomePageState extends ModularState<HomePage, MyController>{
 
 :::danger ATTENTION
 
-O **ModularState** só deve ser utilizado pela página principal da feature. Caso seja usado em um widget interno, 
-poderá causar erros inesperados. 
+**ModularState** should only be used by the feature's main page. If used in an internal widget,
+may cause unexpected errors.
 
 :::
 
 ## NavigationListener
 
-Esse widget é na verdade um *Builder* que reconstroe seu escopo quando houver uma navegação.
-Vejamos o exemplo do **RouterOutlet**, mas dessa vez implementando o **NavigationListener**
-para marcar como selecionado o item da lista que represente a rota:
+This widget is actually a *Builder* that rebuilds its scope when there is navigation.
+Let's look at the **RouterOutlet** example, but this time implementing the **NavigationListener**
+to mark the list item that represents the route as selected:
 
 ```dart title="lib/main.dart" {36-56}
 import 'package:flutter/material.dart';
