@@ -1,10 +1,8 @@
 [![codecov](https://codecov.io/gh/Flutterando/modular/branch/master/graph/badge.svg?token=uO4x25wWuU)](https://codecov.io/gh/Flutterando/modular)
 ![CI](https://github.com/Flutterando/modular/workflows/CI/badge.svg) 
 [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) 
-
-
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-36-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-46-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Flutter Modular
