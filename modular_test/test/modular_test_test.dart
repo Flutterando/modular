@@ -1,4 +1,4 @@
-import 'package:modular_test/modular_test.dart';
+import 'package:modular_test/modular_test.dart' as modular_test;
 import 'package:test/test.dart';
 
 import 'package:modular_core/modular_core.dart';
@@ -28,7 +28,9 @@ class MyModule extends RouteContextImpl {
 void main() {
   final repo = RepoImpl2();
 
-  initModules(
+  modular_test.main();
+
+  modular_test.initModules(
     [MyModule()],
     replaceBinds: [
       _Bind<bool>((i) => false),
