@@ -43,7 +43,7 @@ class _HomePageState extends ModularState<HomePage, MyController>{
 }
 ```
 
-:::danger ATENÇÃO
+:::danger ATTENTION
 
 O **ModularState** só deve ser utilizado pela página principal da feature. Caso seja usado em um widget interno, 
 poderá causar erros inesperados. 

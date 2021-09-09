@@ -72,7 +72,7 @@ class SecondPage extends StatelessWidget {
 Usamos o **Modular.to.navigate()** para uma navegação direta e sem vínculos, isso significa que as rotas anteriores
 serão destruidas.
 
-:::tip DICA
+:::tip TIP
 
 Caso queira manter a rota anterior, não utilize o **Modular.to.navigate**, em vez disso use o **Modular.to.pushNamed**, assim poderá usar o **Modular.to.pop** para retornar a rota anterior.
 
@@ -97,7 +97,7 @@ Modular.to.navigate('/second/sara');   // args.params['name'] -> 'sara'
 Modular.to.navigate('/second/rie');    // args.params['name'] -> 'rie'
 ```
 
-:::tip DICA
+:::tip TIP
 
 Use *:parameter_name* syntax to provide a parameter in your route.
 Route arguments will be available through `args`, and may be accessed in `params` property,
@@ -118,7 +118,7 @@ Modular.to.navigate('/second?name=sara');   // args.query['name'] -> 'sara'
 Modular.to.navigate('/second?name=rie');    // args.query['name'] -> 'rie'
 ```
 
-:::tip DICA
+:::tip TIP
 
 Podemos continuar a query separando por `&` assim como na web, como por exemplo: `/second?name=jacob&lastname=moura`.
 
@@ -167,7 +167,7 @@ Escolha um preset e adicione na propriedade **Transition** de um ModularRoute:
 ChildRoute('/second', child: (context, args) => SecondPage(), transition: TransitionType.fadeIn),
 ```
 
-:::tip DICA
+:::tip TIP
 
 Você também pode diminuir ou aumentar a duração da transição adicionando a propriedade `duration`.;
 
@@ -200,7 +200,7 @@ List<ModularRoute> get routes => [
   RedirectRoute('/redirect', to: '/'),
 ];
 ```
-:::tip DICA
+:::tip TIP
 
 **RedirectRoute** é muito útil para trabalhar como um atalho para rotas longas.
 
@@ -214,7 +214,7 @@ um comportamento para quando não for encontrado nenhuma rota no módulo. Chamam
 WildcardRoute(child: (context, args) => NotFoundPage()),
 ```
 
-:::danger ATENÇÃO
+:::danger ATTENTION
 
 Tenha apenas um **WildcardRoute** por módulo e, se possível, que seja o último elemento.
 :::
@@ -244,7 +244,7 @@ Para usar um guard basta adiciona-lo a uma rota:
 ```dart
 ChildRoute('/', child: (context, args) => HomePage(), guards: [AuthGuard()]),
 ```
-:::tip DICA
+:::tip TIP
 
 Definir redirecionamento não é obrigatório, mas caso não haja, será lançado um erro.
 
@@ -343,13 +343,13 @@ O resultado será esse:
 
 ![Example banner](/img/routeroutlet.gif)
 
-:::danger ATENÇÃO
+:::danger ATTENTION
 
 O **RouterOutlet** é uma navegação aninhada, por tanto, não existe um cache da página.
 
 :::
 
-:::danger ATENÇÃO
+:::danger ATTENTION
 
 Uma **ChildRoute** nomeada como `/` não pode ter um filho `/`. É uma boa prática ter um nome melhor
 para o seguimento das rotas filhas.

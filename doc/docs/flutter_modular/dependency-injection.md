@@ -133,7 +133,7 @@ final client = Modular.get<Client>();
 final client = Modular.get<Client>(defaultValue: Client());
 ```
 
-:::tip DICA
+:::tip TIP
 
 Um construtor padrão **Bind()** é o mesmo que **Bind.lazySingleton()**;
 
@@ -161,7 +161,7 @@ await Modular.isModuleReady<AppModule>();
 ```
 Essa ação converterá todos os AsyncBinds em Binds síncronos e singletons.
 
-:::tip DICA
+:::tip TIP
 
 Podemos pegar a instância assíncrona diretamente também sem precisar converter em um bind sincrono usando
 **Modular.getAsync()**;
@@ -190,7 +190,7 @@ class MyController implements Disposable {
 }
 ```
 
-:::tip DICA
+:::tip TIP
 
 Como o BLoC é baseado em Streams, o memory release já efeito automaticamente.
 

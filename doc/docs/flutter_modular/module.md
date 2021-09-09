@@ -4,33 +4,23 @@ sidebar_position: 4
 
 # Module
 
-Um módulo aglomera todas as rotas e binds referente a um escopo/feature da aplicação e pode
-conter sub-módulos formando uma composição. Isso significa que para ter acesso a um Bind, ele
-precisa está em um módulo pai já iniciado, caso o contrário, o Bind não será visível para ser
-recuperado usando o sistema de injeção. O ciclo de vida de um módulo finaliza quando a ultima página do módulo for fechada.
+A module clusters all rotes and binds relative to an scope or feature of the application and may contain sub modules forming one composition. 
+It means that to access a bind, it needs to be in a parent module already started, otherwise, the bind will not be visible to be recovered using a system of injection. 
+Module’s lifetime ends when the last page is closed.
 
+## The ModuleRoute
 
+It is a kind of **ModularRoute** and contains some properties existing in **ChildRoute** such as *transition*, *customTransition*, *duration* and *guards*.
 
-## O ModuleRoute
+:::tip TIP
 
-É do tipo **ModularRoute** e contém algumas propriedades existentes no **ChildRoute** como,
-*transition*, *customTransition*, *duration* e *guards*.
-
-:::tip DICA
-
-É importante lembrar que ao adicionar uma propriedade no **ModuleRoute**, TODAS suas rotas
-filhas herdaram esse comportamento.
-
-Por exemplo, se adicionar na propriedade *transition* o valor *TransitionType.fadeIn*, as
-rotas filhas também terão sua propriedade *transition* alterada para o mesmo tipo de transição.
-
-Porém, se definir uma propriedade na rota filha de um **ModuleRoute**, a rota filha ignorará
-a alteração do seu módulo e manterá o valor definida no filho.
+It is important to remember that when adding a property in **ModuleRoute**, ALL the child routes inherited this behavior.
+For example, if you add *TransitionType.fadeIn* to the *transition* property, the child routes will also have their *transition* property changed to the same *transition* type.
+Although, if you define a property on the child route of a **ModuleRoute**, the child route will ignore its module change and keep the value defined in the child.
 
 :::
 
-No *Modular*, tudo é feito observando as rotas, então vamos criar um segundo módulo para incluir
-usando o **ModuleRoute**:
+In **Modular**, everything is done observing the routes, so let’s create a second module to include using ***ModuleRoute***:
 
 ```dart title="lib/main.dart" {23,27-35}
 import 'package:flutter/material.dart';
@@ -81,41 +71,35 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-O que vemos aqui:
+What we see here:
 
-- Criamos o módulo **HomeModule** e adicionamos o widget **HomePage** com o **ChildRoute**.
-- Depois adicionamos o **HomeModule** ao **AppModule** usando o **ModuleRoute**.
-- Por fim, juntamos as rotas do **HomeModule** no **AppModule**.
+-	We created the **HomeModule** module and added the **HomePage** widget with the **ChildRoute**.
+-	Then we added the **HomeModule** to **AppModule** using the **ModuleRoute**.
+-	Finally, we merge the **HomeModule** routes into the **AppModule**.
 
-Entraremos agora em um assunto fundamental para entender o roteamento quando um módulo 
-é filiado a outro.
+Now, we Will enter into a fundamental issue to understand routing when one module is affiliated with another.
 
-:::danger ATENÇÃO
+:::danger ATTENTION
 
-Não é permitido usar rotas dinâmicas como nome de um **ModuleRoute**, pois compremeteria
-a semântica e o objetivo desse tipo de rota.
-A ponta final de uma rota deve ser sempre referênciada com o **ChildRoute**.
+It is not allowed to use dynamic routes as the name of a **ModuleRoute**, because it would compromise the semantics and the purpose of this kind of route. 
+The ending point of a route must always be referenced with **ChildRoute**.
 
 :::
 
-## Roteamento entre módulos
+## Routing between modules
 
-O **flutter_modular** trabalha com "rotas nomeadas", com segmentos, query, fragments, muito
-semelhante ao que vemos na Web. Vamos observar a anatomia de uma "path"
-Para acessar uma rota dentro de um sub-módulo, precisaremos levar em consideração os segmentos
-do caminho de rota representado por URI(Uniform Resource Identifier) Ex:
+The **flutter_modular** works with “named routes”, with segments, query, fragments, very similar to what we see on the web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
 ```
 /home/user/1
 ```
 
-:::tip DICA
+:::tip TIP
 
-Chamamos de "segmento" o texto separado por `/`.
-Por exemplo, a URI `/home/user/1` tem 3 segmentos, sendo eles: ['home', 'user', '1'];
+We call “segment” the text separated by `/`. For example, the URI `/home/user/1` has three segment, being them [‘home’, ‘user’, ‘1’];
 
 :::
 
-A composição de uma rota deve conter o nome da rota (Declarada no **ModuleRoute**) e em seguida a rota filha. Veja o seguinte caso de uso:
+The composition of a route must contain the route’s name (declared in **ModuleRoute**) and then the child route. See the following use case:
 
 ```dart
 class AModule extends Module {
@@ -134,14 +118,13 @@ class BModule extends Module {
   ];
 }
 ```
+In this scenario, there are two routes in **AModule**, a **ChildRoute** called `/` and a **ModuleRoute** called `/b-module`.
 
-Nesse cenário, existe duas rotas no **AModule**, um **ChildRoute** nomeado de `/` e um
-**ModuleRoute** nomeado de `/b-module`.
+The **BModule** contains another two **ChildRoute** called `/` and `/other`, respectively. 
 
-O **BModule** contém outras duas **ChildRoute** nomeadas de `/` e `/other` respectivamente.
+What would you call **ChildRoute** `/other`? The answer is in follow up. Assuming that AModule is the application’s root module, 
+then the initial segment will be the name of the **BModule**, because we need to get a route that is within it.
 
-Como faria para chamar a **ChildRoute** `/other`? A resposta está no seguimento.
-Partindo do princípio que **AModule** é o módulo raiz do aplicativo, então o segmento inicial será o nome do **BModule**, pois precisamos pegar uma rota que está dentro do mesmo:
 ```
 /b-module
 ```
@@ -150,72 +133,64 @@ O próximo segmento será o nome da rota que queremos, a `/other`.
 ```
 /b-module/other
 ```
-PRONTO! Ao executar o **Modular.to.navigate('/b-module/other')** a página que irá aparecer
-será o widget **OtherPage()**.
+READY! When you execute the `Modular.to.navigate(‘/b-module/other’)` the page that will appear will be the **OtherPage()** widget.
 
-A lógica é a mesma quando o submódulo contém uma rota nomeada como `/`.
-Entendendo isso, constatamos que as rotas disponíveis nesse exemplo são:
+The logic is the same when the submodule contains a route named as `/`. Understanding this, we find that the available routes in this example are:
 ```
 /                  =>  APage() 
 /b-module/         =>  BPage() 
 /b-module/other    =>  OtherPage() 
 ```
 
-:::tip DICA
+:::tip TIP
 
-Quando a concatenação de rotas nomeadas acontece e gerá um `//`, essa rota é normalizada
-para `/`.
-Isso explica o primeiro exemplo da sessão.
+When the concatenation of named routes takes place and generates a `//`, this route is normalized to `/`. This explains the first example of the session.
 
 :::
 
-:::tip DICA
+:::tip TIP
 
-Se existir uma rota chamada `/` no sub-módulo, o **flutter_modular** entenderá como rota
-"default" caso não sejá colocado outro segmento após ao do módulo.
-Exemplo:
+If there is a route called `/` in the submodule **flutter_modular** will understand it as “default” route, if no other segment is already placed after the module. For example:
 
 `/b-module`  =>  BPage()
 
-O mesmo que:
+Same as:
 
 `/b-module/` =>  BPage() 
 
 :::
 
-## Caminho Relativo vs Absoluto
+## Relative Vs Absolute paths
 
-Quando um caminho de rota é descrito de forma literal, então dizemos que se trata de um
-caminho Absoluto, como por exemplo `/foo/bar`. Mas podemos nos basear no caminho atual vigente e usar a noção de POSIX para entrar
-em uma rota. Por exemplo:
+When a route path is literally described, then we say it is an absolute path, such as `/foo/bar`. But we can based on the current path and use the notion of POSIX to enter on a route. For example:
 
 Estamos na rota `/foo/bar` e queremos ir para a rota `/foo/baz`. Usando o POSIX, basta
 informar **Modular.navigate('./bar')**.
 
-Note que existe um `./` no começo do caminho. Isso faz com que apenas o segmento final
-seja trocado.
+We are on the `/foo/bar` route and we want to go to the `/foo/baz` route. Using POSIX, just inform **Modular.navigate(‘./bar’)**
 
-:::tip DICA
+Note that there is a `./` at the beginning of the path. This causes only the end segment to be swapped.
 
-O conceito de caminho relativo é aplicado nos terminais, CMD e import de arquivos.
+:::tip TIP
 
-Expressões como `../` faria a substituição do penultimo segmento em diante.
+The concept of relative path is applied in terminals, CMD and file import.
 
-:::
-
-:::tip DICA
-
-Utilize o conceito de rotas relativas para otimizar as navegações entre páginas do mesmo módulo.
-Isso favorece o desacoplamento completo do módulo, pois não necessitará dos segmentos anteriores.
+Expressions like `../` would replace the penultimate segment onwards.
 
 :::
 
+:::tip TIP
 
-## Importação de Módulo
+Use the concept of relative routes to optimize navigation between pages in the same module. 
+This favors the complete decoupling of the module, as it will not need the previous segments.
 
-Um módulo pode ser criado para armazenar apenas os binds. Um caso de uso nesse sentido seria quando
-temos um Modulo Shared ou Core contendo todos os Binds principais e distribuidos entre todos os módulos.
-Para usar um módulo unicamente com Binds, devemos importa-lo em um módulo contendo rotas. Vejamos um exemplo:
+:::
+
+
+## Module import
+
+A module can be created to store only the binds. A use case in this sense would be when we have a Shared or Core Module containing all 
+the main binds and distributed among all the modules. To use a module only with binds, we must import it into a module containing routes. See the next example:
 
 ```dart {10-13}
 class CoreModule extends Module {
@@ -241,9 +216,10 @@ class AppModule extends Module {
 Note que os binds do **CoreModule** estão marcados com a flag `export: true`, isso significa que o **Bind** pode
 ser importado em outro módulo.
 
-:::danger ATENÇÃO
+Note that **CoreModule** binds are marked with the export flag: true, this means that the bind can be imported into another module.
 
-A importação de módulos serve apenas para **Binds**.
-Rotas não serão importadas nessa modalidade.
+:::danger ATTENTION
+
+The module import is only for **Binds**. **Routes** will not be imported on this modality.
 
 :::

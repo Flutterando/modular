@@ -20,7 +20,7 @@ void main(){
 }
 ```
 
-:::tip DICA
+:::tip TIP
 
 Prefira usar o Mockito ou Mocktail para criar mocks.
 
@@ -58,7 +58,7 @@ main(){
 }
 ```
 
-:::danger ATENÇÃO
+:::danger ATTENTION
 
 Para que um bind possa está elegível para substituição, O **Bind** deve OBRIGATORIAMENTE ter
 o tipo declarado no construtor do **Bind**. (ex: Bind<MyObjectType\>());
