@@ -2,11 +2,11 @@
 sidebar_position: 3
 ---
 
-# Injeção de dependências
+# Dependency Injection
 
-Geralmente escrevemos código pensando em manutenção e escalabilidade, aplicando padrões de projetos específicos
-para determinada função e melhorando a estrutura do nosso código. Temos que nos atentar sempre pois, sorrateiramente,
-o código pode ficar problemático. Vejamos o exemplo prático:
+We generally code with maintenance and scalability in mind, applying project-specific patterns
+to a given function and improving the structure of our code. We must to pay attention on our code, 
+or else it can be a covertly problem. Let's look at the practical example:
 
 ```dart
 class Client {
@@ -17,20 +17,19 @@ class Client {
 }
 ```
 
-Aqui temos uma classe **Client** com um método chamado **sendEmail()** executando a rotina de envio instanciando a
-classe **XPTOEmail**.
-Apesar de ser uma abordagem simples e funcional, ter uma classe instanciada dentro do método apresenta alguns problemas:
+Here we have a **Client** class with a method called **sendEmail()** running the send routine on **XPTOEmail** class instance.
+Despite being a simple and functional approach, having a class instance within the method, it presents some problems:
 
-- Torna impossível a substituição da instancia `xpto`.
-- Dificulta os Testes de unidade, pois não teria como criar uma instancia Fake/Mock do `XPTOEmail()`.
-- Inteiramente dependente do funcionamento de uma classe externa.
+- Makes it impossible to replace the instance `xpto`.
+- Makes the Unit Tests difficult, as you would not be able to create `XPTOEmail()` Fake/Mock instance.
+- Entirely dependent on the functioning of an external class.
 
-Chamamos de "Acoplamento de dependências" quando usamos uma classe externa dessa forma, pois a classe *Client* 
-depende totalmente do funcionamento do objeto **XPTOEmail**.
+We call it "Dependency Coupling" when we use an outer class in this way, because the *Client* class
+is totally dependent on the functioning of the **XPTOEmail** object.
 
-Para quebrar o vínculo de uma classe com sua dependência, geralmente preferimos "injetar" as instancias de dependências via construtor, setters ou métodos, e é isso que chamamos de "Injeção de Dependências".
+To break a class's bond with its dependency, we generally prefer to "inject" the dependency instances by constructor, setters or methods. That's what we call "Dependency Injection".
 
-Vamos corrigir a classe **Cliente** injetando via construtor a instancia de **XPTOEmail**:
+Let's fix the **Customer** class by injecting the **XPTOEmail** instance by constructor:
 
 ```dart
 class Client {
@@ -43,13 +42,12 @@ class Client {
   }
 }
 ```
-Dessa forma, diminuímos o acoplamento que o objeto **XPTOEmail** fazia no objeto **Client**.
+Thereway, we reduce the coupling **XPTOEmail** object did to the **Client** object.
 
-Ainda temos um problema nessa implementação. Apesar a *coesão*, a classe Cliente tem uma dependência a uma fonte
-externa, e mesmo sendo injetada via construtor, substituir por outro serviço de email não seria uma tarefa simples.
-Ainda temos acomplamento nesse código, mas podemos melhorar isso usando `interfaces`. Vamos criar uma interface
-que assine o método **sendEmail**. Com isso, toda classe que implementar essa interface pode ser injetada na class
-**Client**:
+We still have a problem with this implementation. Despite *cohesion*, the Client class has a dependency on an external source,
+and even being injected by constructor, replacing it with another email service would not be a simple task.
+Our code still have coupling, but we can improve this using `interfaces`. Let's create an interface
+to sign the **sendEmail** method. With this any class that implements this interface can be injected into the class **Client**:
 
 ```dart
 abstract class EmailService {
@@ -67,8 +65,8 @@ class XPTOEmailService implements EmailService {
 }
 ```
 
-Assim podemos criar implementações de quaisquer serviços de email. Para finalizar, vamos substituir a dependência do
-XPTOEmail pela da interface EmailService:
+So we can create implementations of any email services. Finally, let's replace the dependency on
+XPTOEmail by the EmailService interface:
 
 ```dart
 class Client {
@@ -82,7 +80,7 @@ class Client {
 }
 ```
 
-Criamos agora a instância do **Client**:
+Then We create the **Client** instance:
 
 ```dart
 //dependencies
@@ -93,20 +91,23 @@ final service = XPTOEmailService(xpto)
 final client = Client(service);
 ```
 
-Esse tipo de criação de objeto resolve o acoplamento mas pode aumentar a complexidade de criação de instância, como podemos ver na classe **Client**. O Sistema de injeção de dependência do **flutter_modular** resolve esse problema de forma simples e eficaz.
+This type of object creation solves the coupling but can increase the instance creation complexity, as we can see in the **Client** class. The **flutter_modular** Dependency Injection System solves this problem simply and effectively.
 
-## Registro de instâncias
+## Instance registration
+
+The strategy for building an instance with its dependencies comprise register all objects in a module and
+manufactures them on demand or in single-instance form(singleton).
 
 A estratégia para construir uma instância com suas dependências consiste em registrar todos os objetos em um módulo e 
-fabrica-los sobre demanda ou em forma de instância única(singleton). A esse registro damos o nome de **Bind**.
-Existe algumas formas de construir um Bind para registrar as instâncias de objetos:
+fabrica-los sobre demanda ou em forma de instância única(singleton). This 'registration' is called **Bind**.
+There are a few ways to build a Bind to register object instances:
 
-- *Bind.singleton*: Constroi uma instância apenas uma vez quando o módulo inciar.
-- *Bind.lazySingleton*: Constroi uma instância apenas uma vez quando for solicitado.
-- *Bind.factory*: Constroi uma instância sobre demanda.
-- *Bind.instance*: Adiciona uma instância já existente.
+- *Bind.singleton*: Build an instance only once when the module starts.
+- *Bind.lazySingleton*: Build an instance only once when prompted.
+- *Bind.factory*: Build an instance on demand.
+- *Bind.instance*: Adds an existing instance.
 
-Registraremos os binds no **AppModule**:
+We register the binds in **AppModule**:
 
 ```dart
 class AppModule extends Module {
@@ -120,11 +121,10 @@ class AppModule extends Module {
   ...
 }
 ```
+Note that we placed an `i()` instead of the dependencies instance. This will be responsible for resolving the
+dependencies automatically.
 
-Note que em vez da instância das dependências foi colocado um `i()`. Isso será responsável por resolver as
-dependências automáticamente.
-
-Para pegar uma instância resolvida use o `Modular.get`:
+To get a resolved instance use `Modular.get`:
 
 ```dart
 final client = Modular.get<Client>();
@@ -133,15 +133,15 @@ final client = Modular.get<Client>();
 final client = Modular.get<Client>(defaultValue: Client());
 ```
 
-:::tip TIP
+:::tip DICA
 
-Um construtor padrão **Bind()** é o mesmo que **Bind.lazySingleton()**;
+A default constructor **Bind()** is the same as **Bind.lazySingleton()**;
 
 :::
 
 ## AsyncBind
 
-O **flutter_modular** também consegue resolver dependências assincronas. Para isso, use **AsyncBind** em vez de **Bind**:
+**flutter_modular** can also resolve asynchronous dependencies. To do this, use **AsyncBind** instead of **Bind**:
 
 ```dart
 class AppModule extends Module {
@@ -154,30 +154,31 @@ class AppModule extends Module {
 }
 ```
 
-Precisamos agora transformar os AsyncBind em Bind síncronos para pode resolver as outras instâncias. Para isso,
-usamos o **Modular.isModuleReady()** passando o tipo do módulo nas generics;
+By now we need to transform the AsyncBind into synchronous Bind in order to resolve the other instances. Thereunto 
+we use **Modular.isModuleReady()** passing the module type in generics;
+
 ```dart
 await Modular.isModuleReady<AppModule>();
 ```
-Essa ação converterá todos os AsyncBinds em Binds síncronos e singletons.
+This action will convert all AsyncBinds to synchronous Binds and singletons.
 
-:::tip TIP
+:::tip DICA
 
-Podemos pegar a instância assíncrona diretamente também sem precisar converter em um bind sincrono usando
+We can get the asynchronous instance directly too without having to convert to a synchronous bind using
 **Modular.getAsync()**;
 
 :::
 
-## Dispose automático
+## Auto Dispose
 
-A vida útil de um Bind singleton finaliza quando seu módulo morre. Mas existem alguns objetos que, por padrão, são 
-executados por uma rotina de destruição da instância e removidos da memória automáticamente. São eles:
+The lifetime of a Bind singleton ends when its module 'dies'. But there are some objects that, by default, 
+runs by an instance destruction routine and automatically removed from memory. Here they are:
 
 - Stream/Sink (Dart Native).
 - ChangeNotifier/ValueNotifier (Flutter Native).
 - Store (Triple Pattern).
 
-Para objetos registrados que não fazem parte dessa lista, podemos implementar a interface **Disposable** na instância que queremos executar um algoritimo antes do dispose:
+For registered objects that are not part of this list, we can implement a **Disposable** interface on the instance where we want to run an algorithm before dispose:
 
 ```dart
 class MyController implements Disposable {
@@ -190,14 +191,14 @@ class MyController implements Disposable {
 }
 ```
 
-:::tip TIP
+:::tip DICA
 
-Como o BLoC é baseado em Streams, o memory release já efeito automaticamente.
+As BLoC is based on Streams, the memory release takes effect automatically.
 
 :::
 
-O **flutter_modular** também oferece uma opcão de remoção de singleton do sistema de injeção de dependência
-mesmo com o módulo ativo chamando o método **Modular.dispose**():
+**flutter_modular** also offers a singleton removal option from the dependency injection system 
+calling the **Modular.dispose**() method even with a active module:
 
 ```dart
 Modular.dispose<MySingletonBind>();

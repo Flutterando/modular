@@ -20,7 +20,7 @@ Although, if you define a property on the child route of a **ModuleRoute**, the 
 
 :::
 
-In **Modular**, everything is done observing the routes, so let’s create a second module to include using ***ModuleRoute***:
+In **Modular**, everything is done observing the routes, so let’s create a second module to include using **ModuleRoute**:
 
 ```dart title="lib/main.dart" {23,27-35}
 import 'package:flutter/material.dart';
