@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/Flutterando/modular/branch/master/graph/badge.svg?token=uO4x25wWuU)](https://codecov.io/gh/Flutterando/modular)
 ![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg) 
 [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular) 
 
