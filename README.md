@@ -2,6 +2,7 @@
 ![CI](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
 ![LICENSE](https://img.shields.io/hexpm/l/modular)
 [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular)
+[![GitHub stars](https://badgen.net/github/stars/Flutterando/modular)](https://GitHub.com/Flutterando/modular/stargazers/)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-46-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
