@@ -12,7 +12,11 @@ class ResultModel implements Result {
   @override
   final String url;
 
-  const ResultModel({required this.image, required this.name, required this.nickname, required this.url});
+  const ResultModel(
+      {required this.image,
+      required this.name,
+      required this.nickname,
+      required this.url});
 
   Map<String, dynamic> toMap() {
     return {

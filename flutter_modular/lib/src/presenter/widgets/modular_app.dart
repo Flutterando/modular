@@ -26,7 +26,8 @@ class ModularApp extends StatefulWidget {
     /// Prohibits taking any bind of parent modules, forcing the imports of the same in the current module to be accessed. This is the same behavior as the system. Default is false;
     bool notAllowedParentBinds = false,
   }) : super(key: key) {
-    (Modular as ModularBase).flags.experimentalNotAllowedParentBinds = notAllowedParentBinds;
+    (Modular as ModularBase).flags.experimentalNotAllowedParentBinds =
+        notAllowedParentBinds;
     (Modular as ModularBase).flags.isDebug = debugMode;
   }
 
@@ -50,7 +51,8 @@ class ModularAppState extends State<ModularApp> {
   @override
   void dispose() {
     Modular.destroy();
-    Modular.debugPrintModular('-- ${widget.module.runtimeType.toString()} DISPOSED');
+    Modular.debugPrintModular(
+        '-- ${widget.module.runtimeType.toString()} DISPOSED');
     super.dispose();
   }
 

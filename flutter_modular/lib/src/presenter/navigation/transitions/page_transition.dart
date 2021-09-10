@@ -46,7 +46,8 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                     position: Tween<Offset>(
                       begin: Offset.zero,
                       end: Offset(-1.0, 0.0),
-                    ).animate(CurvedAnimation(parent: secondaryAnimation, curve: curve)),
+                    ).animate(CurvedAnimation(
+                        parent: secondaryAnimation, curve: curve)),
                     child: child,
                   ),
                 );
@@ -62,7 +63,8 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                     position: Tween<Offset>(
                       begin: Offset.zero,
                       end: Offset(1.0, 0.0),
-                    ).animate(CurvedAnimation(parent: secondaryAnimation, curve: curve)),
+                    ).animate(CurvedAnimation(
+                        parent: secondaryAnimation, curve: curve)),
                     child: child,
                   ),
                 );
@@ -77,7 +79,8 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                     position: Tween<Offset>(
                       begin: Offset.zero,
                       end: Offset(0.0, 1.0),
-                    ).animate(CurvedAnimation(parent: secondaryAnimation, curve: curve)),
+                    ).animate(CurvedAnimation(
+                        parent: secondaryAnimation, curve: curve)),
                     child: child,
                   ),
                 );
@@ -92,7 +95,8 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                     position: Tween<Offset>(
                       begin: Offset.zero,
                       end: Offset(0.0, -1.0),
-                    ).animate(CurvedAnimation(parent: secondaryAnimation, curve: curve)),
+                    ).animate(CurvedAnimation(
+                        parent: secondaryAnimation, curve: curve)),
                     child: child,
                   ),
                 );
@@ -145,7 +149,8 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                       position: Tween<Offset>(
                         begin: Offset.zero,
                         end: Offset(-1.0, 0.0),
-                      ).animate(CurvedAnimation(parent: secondaryAnimation, curve: curve)),
+                      ).animate(CurvedAnimation(
+                          parent: secondaryAnimation, curve: curve)),
                       child: child,
                     ),
                   ),
@@ -162,7 +167,8 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                       position: Tween<Offset>(
                         begin: Offset.zero,
                         end: Offset(1.0, 0.0),
-                      ).animate(CurvedAnimation(parent: secondaryAnimation, curve: curve)),
+                      ).animate(CurvedAnimation(
+                          parent: secondaryAnimation, curve: curve)),
                       child: child,
                     ),
                   ),

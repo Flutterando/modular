@@ -25,18 +25,21 @@ void main() {
   });
 
   test('popAndPushNamed', () {
-    when(() => navigator.popAndPushNamed(any())).thenAnswer((_) => Future.value());
+    when(() => navigator.popAndPushNamed(any()))
+        .thenAnswer((_) => Future.value());
     expect(state.popAndPushNamed('/'), completes);
   });
 
   test('pushNamedAndRemoveUntil', () {
     final predicate = ModalRoute.withName('/');
-    when(() => navigator.pushNamedAndRemoveUntil(any(), predicate)).thenAnswer((_) => Future.value());
+    when(() => navigator.pushNamedAndRemoveUntil(any(), predicate))
+        .thenAnswer((_) => Future.value());
     expect(state.pushNamedAndRemoveUntil('/', predicate), completes);
   });
 
   test('pushReplacementNamed', () {
-    when(() => navigator.pushReplacementNamed(any())).thenAnswer((_) => Future.value());
+    when(() => navigator.pushReplacementNamed(any()))
+        .thenAnswer((_) => Future.value());
     expect(state.pushReplacementNamed('/'), completes);
   });
 }

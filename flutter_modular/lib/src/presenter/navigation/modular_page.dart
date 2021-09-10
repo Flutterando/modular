@@ -11,10 +11,20 @@ class ModularPage<T> extends Page<T> {
   final ModularFlags flags;
   final ModularArguments args;
 
-  ModularPage({LocalKey? key, required this.route, this.isEmpty = false, required this.args, required this.flags}) : super(key: key, name: route.uri.toString(), arguments: args.data);
+  ModularPage(
+      {LocalKey? key,
+      required this.route,
+      this.isEmpty = false,
+      required this.args,
+      required this.flags})
+      : super(key: key, name: route.uri.toString(), arguments: args.data);
 
   factory ModularPage.empty() {
-    return ModularPage(isEmpty: true, route: ParallelRoute.empty(), args: ModularArguments.empty(), flags: ModularFlags());
+    return ModularPage(
+        isEmpty: true,
+        route: ParallelRoute.empty(),
+        args: ModularArguments.empty(),
+        flags: ModularFlags());
   }
 
   @override
@@ -28,7 +38,8 @@ class ModularPage<T> extends Page<T> {
 
     final transitionType = route.transition ?? TransitionType.defaultTransition;
 
-    if (transitionType == TransitionType.custom && route.customTransition != null) {
+    if (transitionType == TransitionType.custom &&
+        route.customTransition != null) {
       return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) => page,
         settings: this,
@@ -56,7 +67,10 @@ class ModularPage<T> extends Page<T> {
       );
     } else {
       var selectTransition = route.transitions[transitionType];
-      return selectTransition!((_, __) => page, route.duration ?? const Duration(milliseconds: 300), this) as Route<T>;
+      return selectTransition!(
+          (_, __) => page,
+          route.duration ?? const Duration(milliseconds: 300),
+          this) as Route<T>;
     }
   }
 }
@@ -73,13 +87,18 @@ class NoTransitionMaterialPageRoute<T> extends MaterialPageRoute<T> {
     RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
-  }) : super(builder: builder, maintainState: maintainState, settings: settings, fullscreenDialog: fullscreenDialog);
+  }) : super(
+            builder: builder,
+            maintainState: maintainState,
+            settings: settings,
+            fullscreenDialog: fullscreenDialog);
 
   @override
   Duration get transitionDuration => Duration.zero;
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
     return child;
   }
 }

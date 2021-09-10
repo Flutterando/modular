@@ -11,7 +11,8 @@ class DartzEitherAdapter<L, R> extends EitherAdapter<L, R> {
     return usecase.fold(leftF, rightF);
   }
 
-  static Future<EitherAdapter<L, R>> adapter<L, R>(Future<Either<L, R>> usecase) {
+  static Future<EitherAdapter<L, R>> adapter<L, R>(
+      Future<Either<L, R>> usecase) {
     return usecase.then((value) => DartzEitherAdapter(value));
   }
 }

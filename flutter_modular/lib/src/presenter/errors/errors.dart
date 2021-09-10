@@ -1,7 +1,8 @@
 import 'package:modular_core/modular_core.dart';
 
 class ModuleStartedException extends ModularError {
-  const ModuleStartedException(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
+  const ModuleStartedException(String message, [StackTrace? stackTrace])
+      : super(message, stackTrace);
 }
 
 class GuardedRouteException extends ModularError {
@@ -9,5 +10,6 @@ class GuardedRouteException extends ModularError {
 }
 
 class ModularPageException extends ModularError {
-  ModularPageException(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
+  ModularPageException(String message, [StackTrace? stackTrace])
+      : super(message, stackTrace);
 }

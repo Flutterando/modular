@@ -13,7 +13,8 @@ void main() {
     expect(finder, findsOneWidget);
     expect(Modular.get<double>(), 0.0);
 
-    final result = tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
+    final result =
+        tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
 
     await result.isReady();
     result.remove();

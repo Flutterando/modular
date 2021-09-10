@@ -10,10 +10,14 @@ void main() {
 
   test('Don\'t use name "/" in route\'s children when parent be "/" too', () {
     var route = ChildRoute('/', child: (context, args) => Container());
-    expect(() => ChildRoute('/', child: (context, args) => Container(), children: [route]), throwsAssertionError);
+    expect(
+        () => ChildRoute('/',
+            child: (context, args) => Container(), children: [route]),
+        throwsAssertionError);
   });
 
   test('The name must always start with a /', () {
-    expect(() => ChildRoute('test', child: (context, args) => Container()), throwsAssertionError);
+    expect(() => ChildRoute('test', child: (context, args) => Container()),
+        throwsAssertionError);
   });
 }

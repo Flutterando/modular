@@ -21,7 +21,8 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     List<Middleware> middlewares = const [],
     Uri? uri,
     Map<Type, BindContext> bindContextEntries = const {},
-  })  : assert(!name.contains('/:'), 'ModuleRoute should not contain dynamic route'),
+  })  : assert(!name.contains('/:'),
+            'ModuleRoute should not contain dynamic route'),
         super(
           name: name,
           child: child,
@@ -46,7 +47,12 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     Duration duration = const Duration(milliseconds: 300),
     List<RouteGuard> guards = const [],
   }) {
-    final route = ModuleRoute<T>._start(name: name, middlewares: guards, transition: transition, customTransition: customTransition, duration: duration);
+    final route = ModuleRoute<T>._start(
+        name: name,
+        middlewares: guards,
+        transition: transition,
+        customTransition: customTransition,
+        duration: duration);
     return route.addModule(name, module: module) as ModuleRoute<T>;
   }
 

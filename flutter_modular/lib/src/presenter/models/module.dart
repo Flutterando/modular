@@ -18,7 +18,8 @@ class Module extends RouteContextImpl {
   List<ModularRoute> get routes => const [];
 
   @override
-  ModularRoute copy(covariant ParallelRoute parent, covariant ParallelRoute route) {
+  ModularRoute copy(
+      covariant ParallelRoute parent, covariant ParallelRoute route) {
     final newRoute = super.copy(parent, route) as ParallelRoute;
     return newRoute.copyWith(
       customTransition: route.customTransition ?? parent.customTransition,

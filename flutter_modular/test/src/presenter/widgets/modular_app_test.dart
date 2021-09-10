@@ -5,7 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   testWidgets('ModularApp', (tester) async {
     final modularKey = UniqueKey();
-    final modularApp = ModularApp(key: modularKey, module: CustomModule(), child: AppWidget());
+    final modularApp =
+        ModularApp(key: modularKey, module: CustomModule(), child: AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();

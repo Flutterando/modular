@@ -36,7 +36,8 @@ void main() {
   });
 
   test('setNewRoutePath...', () {
-    expect(() async => await outlet.setNewRoutePath(ParallelRoute.empty()), throwsA(isAssertionError));
+    expect(() async => await outlet.setNewRoutePath(ParallelRoute.empty()),
+        throwsA(isAssertionError));
   });
 
   test('build', () {
@@ -53,7 +54,8 @@ void main() {
     when(() => route2.copyWith(schema: 'outlet')).thenReturn(route2);
     when(() => route2.schema).thenReturn('outlet');
 
-    when(() => modularRouterDelegateMock.currentConfiguration).thenReturn(ModularBook(routes: [route1, route2]));
+    when(() => modularRouterDelegateMock.currentConfiguration)
+        .thenReturn(ModularBook(routes: [route1, route2]));
     widget = outlet.build(BuildContextMock());
     expect(widget, isA<CustomNavigator>());
   });

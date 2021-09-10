@@ -14,5 +14,9 @@ class WildcardRoute<T> extends ChildRoute<T> {
     TransitionType transition = TransitionType.defaultTransition,
     CustomTransition? customTransition,
     Duration duration = const Duration(milliseconds: 300),
-  }) : super('/**', duration: duration, child: child, customTransition: customTransition, transition: transition);
+  }) : super('/**',
+            duration: duration,
+            child: child,
+            customTransition: customTransition,
+            transition: transition);
 }

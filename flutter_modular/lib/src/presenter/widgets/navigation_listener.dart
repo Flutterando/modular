@@ -5,7 +5,8 @@ class NavigationListener extends StatefulWidget {
   final Widget Function(BuildContext context, Widget? child) builder;
   final Widget? child;
 
-  const NavigationListener({Key? key, required this.builder, this.child}) : super(key: key);
+  const NavigationListener({Key? key, required this.builder, this.child})
+      : super(key: key);
 
   @override
   NavigationListenerState createState() => NavigationListenerState();

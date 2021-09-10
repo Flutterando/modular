@@ -84,7 +84,8 @@ class ModularBase implements IModularBase {
   });
 
   @override
-  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() =>
+      disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>({B? defaultValue}) {
@@ -107,7 +108,8 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  Future<void> isModuleReady<M extends Module>() => isModuleReadyUsecase.call<M>();
+  Future<void> isModuleReady<M extends Module>() =>
+      isModuleReadyUsecase.call<M>();
 
   @override
   void destroy() => finishModule();
@@ -128,14 +130,16 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module)
+          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setDisposeResolver(disposeBindFunction);
 
       setPrintResolver(print);
     } else {
-      throw ModuleStartedException('Module ${module.runtimeType} is already started');
+      throw ModuleStartedException(
+          'Module ${module.runtimeType} is already started');
     }
   }
 
@@ -143,7 +147,8 @@ class ModularBase implements IModularBase {
   IModularNavigator get to => navigatorDelegate ?? navigator;
 
   @override
-  ModularArguments get args => getArguments().getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args =>
+      getArguments().getOrElse((l) => ModularArguments.empty());
 
   final flags = ModularFlags();
 

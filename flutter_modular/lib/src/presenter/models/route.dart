@@ -5,7 +5,8 @@ import 'package:meta/meta.dart';
 
 import 'module.dart';
 
-typedef ModularChild = Widget Function(BuildContext context, ModularArguments args);
+typedef ModularChild = Widget Function(
+    BuildContext context, ModularArguments args);
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
 
 class ParallelRoute<T> extends ModularRouteImpl {
@@ -76,7 +77,8 @@ class ParallelRoute<T> extends ModularRouteImpl {
     return ParallelRoute<T>(name: '');
   }
 
-  factory ParallelRoute.module(String name, {required Module module, List<Middleware> middlewares = const []}) {
+  factory ParallelRoute.module(String name,
+      {required Module module, List<Middleware> middlewares = const []}) {
     final route = ParallelRoute<T>(name: name, middlewares: middlewares);
     return route.addModule(name, module: module);
   }
@@ -164,8 +166,12 @@ enum TransitionType {
 }
 
 class CustomTransition {
-  final Widget Function(BuildContext, Animation<double>, Animation<double>, Widget) transitionBuilder;
+  final Widget Function(
+          BuildContext, Animation<double>, Animation<double>, Widget)
+      transitionBuilder;
   final Duration transitionDuration;
 
-  CustomTransition({required this.transitionBuilder, this.transitionDuration = const Duration(milliseconds: 300)});
+  CustomTransition(
+      {required this.transitionBuilder,
+      this.transitionDuration = const Duration(milliseconds: 300)});
 }

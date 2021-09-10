@@ -35,6 +35,7 @@ final keyOutlet = ValueKey('keyOutlet');
 class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        ParallelRoute.child('/', child: (_, __) => RouterOutlet(key: keyOutlet)),
+        ParallelRoute.child('/',
+            child: (_, __) => RouterOutlet(key: keyOutlet)),
       ];
 }
