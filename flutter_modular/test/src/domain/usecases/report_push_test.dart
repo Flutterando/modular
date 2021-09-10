@@ -1,8 +1,7 @@
 import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/shared/either.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-
-import 'package:test/test.dart';
 
 import '../../mocks/mocks.dart';
 import '../../presenter/modular_base_test.dart';
