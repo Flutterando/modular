@@ -1,4 +1,4 @@
-# flutter_modular_test
+# modular_test
 
 Init Modules and test the integration
 

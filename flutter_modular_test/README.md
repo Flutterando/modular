@@ -1,5 +1,8 @@
 # flutter_modular_test
 
+@DEPRECATED: This package will be discontinued. Use [modular_test](https://pub.dev/packages/modular_test) instead
+
+
 Init Modules and test the integration
 
 ## Getting Started
