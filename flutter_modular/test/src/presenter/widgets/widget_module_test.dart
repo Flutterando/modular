@@ -14,6 +14,8 @@ void main() {
 
     final result = tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
 
+    result.changeBinds(result.getProcessBinds());
+
     await result.isReady();
     result.remove();
     result.removeScopedBind();

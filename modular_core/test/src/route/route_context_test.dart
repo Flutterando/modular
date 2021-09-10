@@ -16,10 +16,13 @@ void main() {
   });
 
   test('addModule', () {
-    final map = routeContext
-        .assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
+    var map = routeContext.assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
     expect(map[ModularKey(name: '/route')]?.uri.toString(), '/first');
     expect(map[ModularKey(name: '/route/')]?.uri.toString(), '/first');
+
+    map = routeContext.assembleRoute(CustomRoute(name: '/route', context: OtherModuleWithlessSlash()));
+    expect(map[ModularKey(name: '/route')]?.uri.toString(), isNull);
+    expect(map[ModularKey(name: '/route/second')]?.uri.toString(), '/second');
   });
 
   test('addChildren', () {
@@ -92,5 +95,12 @@ class OtherModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
         CustomRoute(name: '/', uri: Uri.parse('/first')),
+      ];
+}
+
+class OtherModuleWithlessSlash extends RouteContextImpl {
+  @override
+  List<ModularRoute> get routes => [
+        CustomRoute(name: '/second', uri: Uri.parse('/second')),
       ];
 }
