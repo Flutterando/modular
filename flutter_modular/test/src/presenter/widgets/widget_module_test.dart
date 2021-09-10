@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:modular_interfaces/src/di/bind.dart';
 
 void main() {
   testWidgets('WidgetModule', (tester) async {
@@ -13,8 +12,7 @@ void main() {
     expect(finder, findsOneWidget);
     expect(Modular.get<double>(), 0.0);
 
-    final result =
-        tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
+    final result = tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
 
     await result.isReady();
     result.remove();
