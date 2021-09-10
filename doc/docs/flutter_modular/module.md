@@ -128,7 +128,7 @@ then the initial segment will be the name of the **BModule**, because we need to
 ```
 /b-module
 ```
-O próximo segmento será o nome da rota que queremos, a `/other`.
+The next segment will be the name of the route we want, the `/other`.
 
 ```
 /b-module/other
@@ -163,9 +163,6 @@ Same as:
 ## Relative Vs Absolute paths
 
 When a route path is literally described, then we say it is an absolute path, such as `/foo/bar`. But we can based on the current path and use the notion of POSIX to enter on a route. For example:
-
-Estamos na rota `/foo/bar` e queremos ir para a rota `/foo/baz`. Usando o POSIX, basta
-informar **Modular.navigate('./bar')**.
 
 We are on the `/foo/bar` route and we want to go to the `/foo/baz` route. Using POSIX, just inform **Modular.navigate(‘./bar’)**
 
@@ -213,10 +210,7 @@ class AppModule extends Module {
   ];
 }
 ```
-Note que os binds do **CoreModule** estão marcados com a flag `export: true`, isso significa que o **Bind** pode
-ser importado em outro módulo.
-
-Note that **CoreModule** binds are marked with the export flag: true, this means that the bind can be imported into another module.
+Note that **CoreModule** binds are marked with the export flag `export: true`, this means that the bind can be imported into another module.
 
 :::danger ATTENTION
 
