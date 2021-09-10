@@ -2,15 +2,16 @@
 sidebar_position: 2
 ---
 
-# Navegação
+# Navigation
 
-No Flutter já temos um poderoso sistema de navegação baseado em pilhas, por isso decidimos adicionar novas funcões sem perder a compatibilidade com a versão atual do SDK. Por tanto, comandos como **pushNamed**, **popUntil** entre outros 
-foram presevardos.
+On flutter we already have a powerful navigation system based on stacks, that is what we
+decided to add new functions without losing the compatibility with the new version of SDK.
+Therefore, commands like **pushNamed**, **popUntil**, among others were preserved.
 
-## Usando o Modular.to.navigate()
+## Using Modular.to.navigate()
 
-O **flutter_modular** adiciona o comando **navigate** para se aproximar mais da web, substituindo todas as Páginas
-pela solicitada. Vamos adicionar mais uma **ChildRoute** ao nosso projeto inicial:
+The **flutter_modular** adds the command **navigate** to get closer to the web, replacing all the pages
+for the requested. Let’s add one more **ChildRoute** to our initial project:
 
 ```dart title="lib/main.dart" {24,33-36,42-55}
 import 'package:flutter/material.dart';
@@ -69,28 +70,34 @@ class SecondPage extends StatelessWidget {
 }
 ```
 
-Usamos o **Modular.to.navigate()** para uma navegação direta e sem vínculos, isso significa que as rotas anteriores
-serão destruidas.
+We used the **Modular.to.navigate()** for a direct navigation and without bonds, it means that
+the previous routes will be destroyed
 
 :::tip TIP
 
-Caso queira manter a rota anterior, não utilize o **Modular.to.navigate**, em vez disso use o **Modular.to.pushNamed**, assim poderá usar o **Modular.to.pop** para retornar a rota anterior.
+In case you want to keep the previous route, do not use the Modular.to.navigate, instead use
+the **Modular.to.pushNamed**, so you can use the **Modular.to.pop** to return to the previous
+route.
 
 :::
 
 
 
-## Passagem de parametros
+## Passing parameters
 
-Comumente temos que enviar dados como parametros a outra página. O **flutter_modular** oferece algumas de fazer isso:
+It is common that we have to send data as parameters to other page. The **flutter_modular**
+offers some ways to do this:
 
-- *Rotas dinâmicas*: Consiste em ter um segmento da rota dinâmico, podendo ser recuperado como um parametro:
+- *Dynamic routes*: consists on having a dynamic route segment, can be retrieved as a
+parameter:
 
 ```dart
 ChildRoute('/second/:name', child: (context, args) => SecondPage(name: args.params['name'])),
 ```
-Adicionamos um segundo segmento ao nome da rota começando com `:`. Essa é uma sintaxe especial para indicar que a rota agora corresponde
-a qualquer valor nessa parte do segmento, e esse valor será considerado um parametro, podendo ser recuperado usando `Modular.args`;
+Adding a second segment to the route’s name starting with `:`. This is a special syntax to
+indicate that the route now matches any value in that part of the segment, and this value will
+be considered a parameter and can be retrieved using `Modular.args`;
+
 ```dart
 Modular.to.navigate('/second/jacob');  // args.params['name'] -> 'jacob'
 Modular.to.navigate('/second/sara');   // args.params['name'] -> 'sara'
@@ -105,13 +112,15 @@ using square brackets notation (['parameter_name']).
 
 :::
 
-- *Query*: Como na web, podemos enviar parametros usando query. Isso não tem o poder de deixar a rota dinâmica, mas tem o mesmo efeito
-ao recuperar um parametro;
+- *Query*: like on the web, we can send parameters using query. This do not has the
+power of letting the route dynamic, but it has the same effect when recovering a
+parameter;
 
 ```dart
 ChildRoute('/second', child: (context, args) => SecondPage(name: args.query['name'])),
 ```
-Note que o *name* da rota é o mesmo, então usamos o **Modular.args.query** para pegar o parametro. Vejamos como navegar usando queries:
+Note that the route name is the same, so we use **Modular.args.query** to get the parameter.
+Let’s see how we can navigate using queries:
 ```dart
 Modular.to.navigate('/second?name=jacob');  // args.query['name'] -> 'jacob'
 Modular.to.navigate('/second?name=sara');   // args.query['name'] -> 'sara'
@@ -120,12 +129,12 @@ Modular.to.navigate('/second?name=rie');    // args.query['name'] -> 'rie'
 
 :::tip TIP
 
-Podemos continuar a query separando por `&` assim como na web, como por exemplo: `/second?name=jacob&lastname=moura`.
+We can continue the query separating by `&` like on web, for example: `/second?name=jacob&lastname=moura`.
 
 :::
 
-- *Argumento Direto*: As vezes, precisamos enviar um objeto complexo e não apenas uma String como parametro. Para isso, enviamos o objeto
-inteiro direto na navegação:
+- *Direct arguments*: Sometimes, we need to send a complex object and not only a
+String as parameter. For that, we send the whole object directly in the navigation:
 
 ```dart
 class Person {}
@@ -137,13 +146,13 @@ ChildRoute('/second', child: (context, args) => SecondPage(person: args.data)),
 Modular.to.navigate('/second', arguments: Person());
 ```
 
-## Adicionando transições
+## Adding transitions
 
-Quando navegamos de uma tela a outra, experimentamos uma transição de tela padrão, mas temos a possiblidade de usar
-presets de transições ou criar uma totalmente customizada. 
+When we navigate from one screen to another, we experienced a standard screen transition,
+but we have the possibility of using transition presets or create one completely customized.
 
-Tanto o **ChildRoute** quanto o **ModuleRoute** tem a propriedade **Transition**, que recebe um **enum** com presets de animações.
-As animações disponíveis são:
+Both **ChildRoute** and **ModuleRoute** have the **Transition** property, which receives an **enum**
+with animation presets. The available animations are:
 
 ```dart
 TransitionType.defaultTransition,
@@ -161,7 +170,7 @@ TransitionType.leftToRightWithFade,
 TransitionType.custom,
 ```
 
-Escolha um preset e adicione na propriedade **Transition** de um ModularRoute:
+Choose an preset and add one **Transiton** property of an ModularRoute:
 
 ```dart
 ChildRoute('/second', child: (context, args) => SecondPage(), transition: TransitionType.fadeIn),
@@ -169,11 +178,11 @@ ChildRoute('/second', child: (context, args) => SecondPage(), transition: Transi
 
 :::tip TIP
 
-Você também pode diminuir ou aumentar a duração da transição adicionando a propriedade `duration`.;
+You can also decrease or increase the transition duration by adding the property `duration`;
 
 :::
 
-Se nenhum preset for útil, podemos criar uma transição customizada usando o `CustomTransition()`:
+If no preset is useful, we can create a custom transition using the `CustomTransition()`: 
 ```dart {4-12}
 ChildRoute(
   '/second',
@@ -192,7 +201,7 @@ ChildRoute(
 
 ## RedirectRoute
 
-Se for necessário definir uma rota para redirecionamento, utilize o **RedirectRoute** como rota:
+If it is necessary to define a route for redirection, you can use **RedirectRoute** as a route:
 ```dart
 @override
 List<ModularRoute> get routes => [
@@ -202,31 +211,34 @@ List<ModularRoute> get routes => [
 ```
 :::tip TIP
 
-**RedirectRoute** é muito útil para trabalhar como um atalho para rotas longas.
+**RedirectRoute** is very useful to work as a shortcut for long routes.
 
 :::
 
 ## WildcardRoute
 
-Quando uma rota não é encontrada é lançado um erro informando que o caminho da rota não existe. Porém podemos adicionar
-um comportamento para quando não for encontrado nenhuma rota no módulo. Chamamos essa rota de **WildcardRoute**:
+When a route is not found, an error is sent informing that the route path does not exist.
+Although we can add a behavior when no route is found in the module. We call this route
+**WildcardRoute**:
 ```dart
 WildcardRoute(child: (context, args) => NotFoundPage()),
 ```
 
 :::danger ATTENTION
 
-Tenha apenas um **WildcardRoute** por módulo e, se possível, que seja o último elemento.
+Have only one **WildcardRoute** per module and, if possible, let it be the last element.
+
 :::
 
-## Guarda de Rotas
+## Route guard
 
-Algumas páginas podem conter informações que não podem ser acessiveis a todos os usuários que usam a aplicação, e,
-com um App Web, o usuário pode digitar uma url restrita. Para resolver esse problema devemos implementar um **RouteGuard**.
+Some pages can contain information that can not be accessible to all users who use the
+application, and, like a web app, the user can type a restricted url. To solve this problem we
+should implement a **RouteGuard**.
 
-O **ChildRoute** pode receber um ou mais guarda de rotas que interceptam e executam um código de decisão antes que
-a página seja lançada. A partir de um **RouteGuard** podemos proibir o acesso a rota ou redirecionar a requisição para
-outra página. Vejamos como criar um **RouteGuard**:
+The **ChildRoute** can receive one or more route guards that intercept and execute a decision
+code before the page is launched. From a **RouteGuard** we can forbid the access to the route
+or redirect the request to another page. Let’s see how to create a **RouteGuard**:
 
 ```dart
 class AuthGuard extends RouteGuard {
@@ -239,24 +251,24 @@ class AuthGuard extends RouteGuard {
 }
 ```
 
-Para usar um guard basta adiciona-lo a uma rota:
+To use a guard just add it to a route:
 
 ```dart
 ChildRoute('/', child: (context, args) => HomePage(), guards: [AuthGuard()]),
 ```
 :::tip TIP
 
-Definir redirecionamento não é obrigatório, mas caso não haja, será lançado um erro.
+Setting redirection is not an obligation, but if not, an error will be raised.
 
 :::
 
 ## RouterOutlet
 
-Até agora usamos um Navigator global, e na maioria dos casos será o suficiente apenas um. Mas existe
-contextos onde precisaremos de mais um navegador aninhado. Para isso usamos o **RouterOutlet**.
+Until now, we used a global Navigation and in most cases only one will be enough. But there
+are contexts that we will need another nested browser. For that we use **RouterOutlet**.
 
-Cada **ChildRoute** tem direito a um **RouterOutlet** para seus filhos, e podemos adiciona-lo em
-qualquer lugar da arvore de Widgets, pois o **RouterOutlet** é um widget. Vejamos um exemplo:
+Each **ChildRoute** is entitled to a **RouterOutlet** for its children, and we can add it anywhere in
+the Widgets tree, as the **RouterOutlet** is a widget. For example:
 
 ```dart title="lib/main.dart"
 import 'package:flutter/material.dart';
@@ -339,19 +351,19 @@ class InternalPage extends StatelessWidget {
 }
 ```
 
-O resultado será esse:
+The result will be:
 
 ![Example banner](/img/routeroutlet.gif)
 
 :::danger ATTENTION
 
-O **RouterOutlet** é uma navegação aninhada, por tanto, não existe um cache da página.
+The **RouterOutlet** is a nested navigation, so there is no page cache.
 
 :::
 
 :::danger ATTENTION
 
-Uma **ChildRoute** nomeada como `/` não pode ter um filho `/`. É uma boa prática ter um nome melhor
-para o seguimento das rotas filhas.
+A **ChildRoute** named as `/` can not have a child `/`. It is a good practice to have a better name
+for following child route.
 
 :::

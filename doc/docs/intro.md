@@ -4,27 +4,27 @@ sidebar_position: 1
 
 # Welcome to Modular
 
-Vamos descobrir como implementar uma estrutura Modular em seu projeto.
+Let's find out how to implement a Modular structure in your project.
 
-## O que é o Modular?
+## What is Modular?
 
-O Modular se propõem a resolver dois problemas:
-- Rotas modularizadas.
-- Injeção de Dependências modularizadas.
+The Modular proposes to solve two problems:
+- Modularized routes.
+- Modularized Dependency Injection.
 
-Em um cenário monolítico, onde temos toda a nossa aplicação como um único módulo, concebemos nosso software de forma rápida e
-elegante aproveitando todos os incríveis recursos do Flutter💙. Porém, produzir um app com um porte maior de forma "monolítica"
-pode gerar débito técnicos tanto na parte de manutenção quanto na escalabilidade. Pensando nisso, os desenvolvedores adotaram estratégias arquiteturais para dividir melhor o código, minimizando os impactos negativos na manutenabilidade e escalabilidade do projeto.
+In a monolithic, where we have our entire application as a single module, we design our software quickly and
+elegant taking advantage of all the amazing features of Flutter💙. However, producing a larger app in a "monolithic" way
+can generate technical debt in both maintenance and scalability. With this in mind, the developers adopted architectural strategies to better divide the code, minimizing the negative impacts on the project's maintainability and scalability..
 
-Ao dividir melhor o escopo das features ganhamos:
+By better dividing the scope of features, we gain:
 
-- Melhora no entendimento das features.
-- Menos break changes (Modificações que quebram outras partes do código).
-- Adicionar novas features não conflitantes.
-- Menos pontos cegos na regra de negócio principal do projeto
-- Melhor rotatividade de desenvolvedores.
+- Improved understanding of features.
+- Less break changes.
+- Add new non-conflicting features.
+- Less blind spots in the project's main business rule.
+- Improved developer turnover.
 
-Com o código mais legível, prolongamos a vida do projeto. Veja o exemplo de um MVC padrão com 3 features(Auth, Home, Product):
+With the most readable code, we extend the life of the project. See example of a standard MVC with 3 features(Auth, Home, Product):
 
 ### A typical MVC
 
@@ -46,63 +46,63 @@ Com o código mais legível, prolongamos a vida do projeto. Veja o exemplo de um
     └── main.dart                               # runApp 
 
 
-Aqui temos uma estrutura padrão usando MVC. Isso é incrivelmente útil em quase todas as aplicações.
+Here we have a default structure using MVC. This is incredibly useful in almost every application.
 
-Vejamos como fica a estrutura quando dividimos por escopo: 
+Let's see how the structure looks when we divide by scope: 
 
 
 ### Structure divided by scope
 
     .                  
-    ├── features                                # All features or Modules 
-    ├─── auth                                  # Auth's MVC       
-    │     ├── auth_model.dart   
-    │     ├── auth_controller.dart  
-    │     └── auth_page.dart                      
-    ├──── home                                  # Home's MVC       
-    │     ├── home_model.dart   
-    │     ├── home_controller.dart  
-    │     └── home_page.dart                        
-    ├──── product                               # Product's MVC     
-    │     ├── product_model.dart   
-    │     ├── product_controller.dart
-    │     └── product_page.dart                    
-    ├── core                                    # Tools and utilities
-    ├── app_widget.dart                         # Main Widget containing MaterialApp 
-    └── main.dart                               # runApp 
+    ├── features                                 # All features or Modules 
+    │   ├─ auth                                  # Auth's MVC       
+    │   │  ├── auth_model.dart   
+    │   │  ├── auth_controller.dart  
+    │   │  └── auth_page.dart                      
+    │   ├─ home                                  # Home's MVC       
+    │   │  ├── home_model.dart   
+    │   │  ├── home_controller.dart  
+    │   │  └── home_page.dart                        
+    │   └─ product                               # Product's MVC     
+    │      ├── product_model.dart   
+    │      ├── product_controller.dart
+    │      └── product_page.dart                    
+    ├── core                                     # Tools and utilities
+    ├── app_widget.dart                          # Main Widget containing MaterialApp 
+    └── main.dart                                # runApp 
 
 
 
-O que fizemos nessa estrutura foi continuar usando o MVC, mas dessa vez de forma escopada. Isso significa que
-cada feature tem seu próprio MVC, e essa simples abordagem resolve muitos problemas de escalabilidade e manutenabilidade.
-Chamamos essa abordagem de "Estrutura Inteligente". Ainda existiam duas coisas que ficavam Globais e isso destoava da estrutura em sí e então criamos o Modular para resolver esse impasse.
+What we did in this structure was to continue using MVC, but this time in scope. This means that
+each feature has its own MVC, and this simple approach solves many scalability and maintainability issues.
+We call this approach "Smart Structure". There were still two things that were Global and that clashed with the structure itself and so we created Modular to solve this impasse.
 
-Resumindo: O Modular é uma solução para modularizar o sistema de injeção de dependências e rotas, fazendo com que cada escopo tenha
-suas proprias rotas e injeções independente de qualquer outro fator da estrutura.
-Criamos um objeto para agrupar as Rotas e Injeções e chamamos de **Módulos**.
+In short: Modular is a solution to modularize the route and dependency injection system, making each scope have
+its own routes and injections independent of any other factor in the structure.
+We create an object to group the Routes and Injections and call it **Modules**.
 
 
 
-## Pronto para começar?
+## Ready to get started?
 
-Modular não é só engenhoso por fazer algo incrível como componentizar Rotas e Injeções de Dependências, ele é incrível
-por conseguir fazer tudo isso de forma simples!
+Modular is not only ingenious for doing something amazing like componentizing Routes and Dependency Injections, it's amazing.
+for being able to do all this simply!
 
-Siga para o próximo tópico e inicie sua jornada rumo a uma estrutura inteligente.
+Go to the next topic and start your journey towards an intelligent structure.
 
-## Perguntas frequentes
+## Common questions
 
-- O Modular trabalha com qualquer abordage de gerência de estado?
-    - Sim, o sistema de injeção de dependências é agnóstico a qualquer tipo de classe
-    inclusive das reatividades que compõem as gerência de estado.
+- Does Modular work with any state management approach?
+    - Yes, the dependency injection system is agnostic to any kind of class
+     including the reactivity that make up state management.
 
-- Posso usar rotas dinâmicas ou Wildcards?
-    - Sim! Toda a árvore de rotas responde como na Web. Portando, você pode usar parametros dinâmicos,
-    query, fragments ou simplesmente incluir um coringa como wildcard para possibilitar um redirecionamento
-    para uma página 404 por exemplo.
+- Can I use dynamic routes or Wildcards?
+    - Yes! The entire route tree responds as on the Web. Therefore, you can use dynamic parameters,
+     query, fragments or simply include a wildcard to enable a redirect
+     to a 404 page for example.
 
-- Preciso criar um Módulo para todas as features?
-    - Não. Você pode criar um módulo apenas quando achar necessário ou quando a feature não fizer mais parte
-    do escopo em que está sendo trabalhado.
+- Do I need to create a Module for all features?
+    - No. You can create a module only when you think it's necessary or when the feature is no longer a part
+    the scope in which it is being worked.
 
 
