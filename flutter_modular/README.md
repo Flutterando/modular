@@ -7,6 +7,10 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+## Flutter Modular
+
+![flutter_modular](https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png)
+
 # Getting started with Modular
 
 - [flutter_modular Documentation](https://modular.flutterando.com.br/docs/flutter_modular/start)

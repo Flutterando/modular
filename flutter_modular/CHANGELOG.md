@@ -1,3 +1,10 @@
+## [4.0.0-dev.0] - 2021-09-10
+
+* New documentation is here! [https://modular.flutterando.com.br](https://modular.flutterando.com.br).
+* Modular design now uses Layered Architecture (Clean Architecture) with 100% code coverage.
+* Up to 30% improvement in obtaining routes.
+* BREAK CHANGE: **RouteGuard([redirectTo])** -> **RouteGuard({String? redirectTo})**.
+
 ## [3.4.1+1] - 2021-08-20
 
 * Fix path(remove @)
