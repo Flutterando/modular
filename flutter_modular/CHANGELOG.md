@@ -1,4 +1,4 @@
-## [4.0.0-dev.2] - 2021-09-11
+## [4.0.0-dev.3] - 2021-09-11
 
 * New documentation is here! [https://modular.flutterando.com.br](https://modular.flutterando.com.br).
 * Modular design now uses Layered Architecture (Clean Architecture) with 100% code coverage.
