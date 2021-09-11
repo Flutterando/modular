@@ -132,7 +132,7 @@ final client = Modular.get<Client>();
 final client = Modular.get<Client>(defaultValue: Client());
 ```
 
-:::tip DICA
+:::tip TIP
 
 A default constructor **Bind()** is the same as **Bind.lazySingleton()**;
 
@@ -153,7 +153,7 @@ class AppModule extends Module {
 }
 ```
 
-By now we need to transform the AsyncBind into synchronous Bind in order to resolve the other instances. Thereunto 
+By now we need to transform the AsyncBind into synchronous Bind in order to resolve the other instances. Therefore, 
 we use **Modular.isModuleReady()** passing the module type in generics;
 
 ```dart
@@ -161,7 +161,7 @@ await Modular.isModuleReady<AppModule>();
 ```
 This action will convert all AsyncBinds to synchronous Binds and singletons.
 
-:::tip DICA
+:::tip TIP
 
 We can get the asynchronous instance directly too without having to convert to a synchronous bind using
 **Modular.getAsync()**;
@@ -190,7 +190,7 @@ class MyController implements Disposable {
 }
 ```
 
-:::tip DICA
+:::tip TIP
 
 As BLoC is based on Streams, the memory release takes effect automatically.
 
