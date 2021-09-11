@@ -54,6 +54,12 @@ void main() {
     expect(delegate.observers.length, 1);
   });
 
+  test('setNavigatorKey', () {
+    final key = GlobalKey<NavigatorState>();
+    delegate.setNavigatorKey(key);
+    expect(delegate.navigatorKey, key);
+  });
+
   test('build', () {
     final context = BuildContextMock();
     var widget = delegate.build(context);

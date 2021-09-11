@@ -38,9 +38,10 @@ String initialRouteDeclaratedInMaterialApp = '/';
 
 extension ModularExtensionMaterial on MaterialApp {
   MaterialApp modular() {
-    injector
-        .get<IModularNavigator>()
-        .setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+    injector.get<IModularNavigator>().setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+
+    injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
+
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
     final app = MaterialApp.router(
@@ -81,10 +82,12 @@ extension ModularExtensionMaterial on MaterialApp {
 
 extension ModularExtensionCupertino on CupertinoApp {
   CupertinoApp modular() {
-    injector
-        .get<IModularNavigator>()
-        .setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+    injector.get<IModularNavigator>().setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+
+    injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
+
     (injector.get<IModularBase>() as ModularBase).flags.isCupertino = true;
+
     initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
 
     final app = CupertinoApp.router(
@@ -147,11 +150,9 @@ class RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
-    delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
-        injector.get<ModularRouterDelegate>(), navigatorKey);
+    delegate ??= RouterOutletDelegate(modal.route.uri.toString(), injector.get<ModularRouterDelegate>(), navigatorKey);
     final router = Router.of(context);
-    _backButtonDispatcher =
-        router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override
