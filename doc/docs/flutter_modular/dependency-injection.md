@@ -96,11 +96,10 @@ This type of object creation solves the coupling but can increase the instance c
 ## Instance registration
 
 The strategy for building an instance with its dependencies comprise register all objects in a module and
-manufactures them on demand or in single-instance form(singleton).
+manufactures them on demand or in single-instance form(singleton). This 'registration' is called **Bind**.
 
-A estratégia para construir uma instância com suas dependências consiste em registrar todos os objetos em um módulo e 
-fabrica-los sobre demanda ou em forma de instância única(singleton). This 'registration' is called **Bind**.
 There are a few ways to build a Bind to register object instances:
+
 
 - *Bind.singleton*: Build an instance only once when the module starts.
 - *Bind.lazySingleton*: Build an instance only once when prompted.

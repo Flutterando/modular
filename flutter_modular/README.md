@@ -1,11 +1,9 @@
-![CI & Coverage](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/Flutterando/modular/branch/master/graph/badge.svg?token=uO4x25wWuU)](https://codecov.io/gh/Flutterando/modular)
+![CI](https://github.com/Flutterando/modular/workflows/CI/badge.svg)
+![LICENSE](https://img.shields.io/hexpm/l/modular)
 [![pub package](https://img.shields.io/pub/v/flutter_modular.svg)](https://pub.dev/packages/flutter_modular)
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-38-orange.svg?style=flat-square)](#contributors-)
-
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![GitHub stars](https://badgen.net/github/stars/Flutterando/modular)](https://GitHub.com/Flutterando/modular/stargazers/)
+[![All Contributors](https://img.shields.io/badge/all_contributors-46-orange.svg?style=flat-square)](#contributors-)
 
 ## Flutter Modular
 
