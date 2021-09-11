@@ -153,7 +153,7 @@ class AppModule extends Module {
 }
 ```
 
-By now we need to transform the AsyncBind into synchronous Bind in order to resolve the other instances. Thereunto 
+By now we need to transform the AsyncBind into synchronous Bind in order to resolve the other instances. Therefore, 
 we use **Modular.isModuleReady()** passing the module type in generics;
 
 ```dart
