@@ -4,8 +4,8 @@ sidebar_position: 7
 
 # Triple Pattern integration
 
-The [Triple](https://triple.flutterando.com.br/docs/getting-started/using-flutter-triple) is integrated into **flutter_modular**,
-and this makes it easier to recognize the **Bind** in the **flutter_triple** Builders (**ScopedBuilder**, **TripleBuilder**).
+The [Triple](https://triple.flutterando.com.br/docs/getting-started/using-flutter-triple) is integrated with **flutter_modular**,
+and makes it easier to recognize the **Bind** in the **flutter_triple** Builders (**ScopedBuilder**, **TripleBuilder**).
 
 Exemple without **flutter_modular**:
 ```dart
