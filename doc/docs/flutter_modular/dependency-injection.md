@@ -6,7 +6,7 @@ sidebar_position: 3
 
 We generally code with maintenance and scalability in mind, applying project-specific patterns
 to a given function and improving the structure of our code. We must to pay attention on our code, 
-or else it can be a covertly problem. Let's look at the practical example:
+otherwise it can be a covertly problem. Let's look at the practical example:
 
 ```dart
 class Client {
@@ -21,13 +21,13 @@ Here we have a **Client** class with a method called **sendEmail()** running the
 Despite being a simple and functional approach, having a class instance within the method, it presents some problems:
 
 - Makes it impossible to replace the instance `xpto`.
-- Makes the Unit Tests difficult, as you would not be able to create `XPTOEmail()` Fake/Mock instance.
+- Makes Unit Tests more difficult, as you would not be able to create `XPTOEmail()` Fake/Mock instance.
 - Entirely dependent on the functioning of an external class.
 
 We call it "Dependency Coupling" when we use an outer class in this way, because the *Client* class
 is totally dependent on the functioning of the **XPTOEmail** object.
 
-To break a class's bond with its dependency, we generally prefer to "inject" the dependency instances by constructor, setters or methods. That's what we call "Dependency Injection".
+To break a class's bond with its dependency, we generally prefer to "inject" the dependency instances through constructor, setters or methods. That's what we call "Dependency Injection".
 
 Let's fix the **Customer** class by injecting the **XPTOEmail** instance by constructor:
 
@@ -42,12 +42,11 @@ class Client {
   }
 }
 ```
-Thereway, we reduce the coupling **XPTOEmail** object did to the **Client** object.
+Thereway, we reduce the coupling **XPTOEmail** object has to the **Client** object.
 
-We still have a problem with this implementation. Despite *cohesion*, the Client class has a dependency on an external source,
-and even being injected by constructor, replacing it with another email service would not be a simple task.
+We still have a problem with this implementation. Despite *cohesion*, the Client class has a dependency on an external source, and even being injected by constructor, replacing it with another email service would not be a simple task.
 Our code still have coupling, but we can improve this using `interfaces`. Let's create an interface
-to sign the **sendEmail** method. With this any class that implements this interface can be injected into the class **Client**:
+to sign the **sendEmail** method. With this, any class that implements this interface can be injected into the class **Client**:
 
 ```dart
 abstract class EmailService {
@@ -91,7 +90,7 @@ final service = XPTOEmailService(xpto)
 final client = Client(service);
 ```
 
-This type of object creation solves the coupling but can increase the instance creation complexity, as we can see in the **Client** class. The **flutter_modular** Dependency Injection System solves this problem simply and effectively.
+This object creation method solves coupling issues but may increase instance creation complexity, as we can see in the **Client** class. The **flutter_modular** Dependency Injection System solves this problem simply and effectively.
 
 ## Instance registration
 
@@ -120,7 +119,7 @@ class AppModule extends Module {
   ...
 }
 ```
-Note that we placed an `i()` instead of the dependencies instance. This will be responsible for resolving the
+Note that we placed an `i()` instead of the dependencies instance. This will be responsible to allocate the
 dependencies automatically.
 
 To get a resolved instance use `Modular.get`:
