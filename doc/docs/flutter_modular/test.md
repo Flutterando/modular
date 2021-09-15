@@ -4,8 +4,8 @@ sidebar_position: 6
 
 # Tests
 
-Modular provides tools and means to facilitate unit testing and route and injection integration.
-In this session we will learn how to do this.
+Modular provides tools make unit testing and route and injection integration easier.
+In this session we'll learn how to do this.
 
 ## Route Test 
 
@@ -28,11 +28,11 @@ Prefer to use Mockito or Mocktail to create mocks.
 
 ## Injection Test
 
-The safe way to inject dependencies is to test if the **Bind** construction goes as expected, then
-we will need to verify this through testing.
+The safest way possible to inject dependencies is to test if the **Bind** construction happens as expected, then
+we'll need to check this through the test.
 
-The **modular_test** package delivers some tools for initializing modules and replacing binds with
-mock. Let's look at an example:
+The **modular_test** package has some tools to initializing modules and replacing binds with
+mock. Let's take look at the example below:
 
 ```dart {4,18}
 class MyModule extends Module {
@@ -60,7 +60,7 @@ main(){
 
 :::danger ATTENTION
 
-In order for a bind to be eligible for replacement, the **Bind** must MUST have
+In order for a bind to be eligible for replacement, the **Bind** MUST have
 the type declared in the **Bind** constructor. (ex: Bind<MyObjectType\>());
 
 :::
