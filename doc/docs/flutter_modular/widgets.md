@@ -8,8 +8,8 @@ The **flutter_modular** has widgets to help you develop your smart app.
 
 ## WidgetModule
 
-If there is a need to instantiate a module as an application, use the **WidgetModule** to do so.
-The injected **Binds** will respect the lifecycle of this widget, that is, as soon as this widget goes
+If there's a need to instantiate a module as an application, use the **WidgetModule** to do it.
+The injected **Binds** will follow throughout widget's lifecycle, that is, as soon as this widget is
 destroyed, the module it represents will also be. Its implementation is very simple:
 
 ```dart
@@ -29,7 +29,7 @@ class LocalModule extends WidgetModule{
 Another way to make a Bind link with the Widget's lifecycle is to implement **ModularState**
 in the **State** of a **StatefulWidget**. Thus, Bind will respect the widget's lifecycle, that is,
 will be destroyed once the widget is unmounted, even if the module is still active.
-**ModularState** also solves the dependency and adds 4 getters to the widget: *controller*, *store*,
+**ModularState** also solves dependency and adds 4 getters to the widget: *controller*, *store*,
 *bloc* and *cubit*. They all have the same bind instance and use different boilerplate names.
 
 ```dart {6}
@@ -53,7 +53,7 @@ may cause unexpected errors.
 ## NavigationListener
 
 This widget is actually a *Builder* that rebuilds its scope when there is navigation.
-Let's look at the **RouterOutlet** example, but this time implementing the **NavigationListener**
+Let's take a look at the **RouterOutlet** example, but implementing the **NavigationListener**
 to mark the list item that represents the route as selected:
 
 ```dart title="lib/main.dart" {36-56}
