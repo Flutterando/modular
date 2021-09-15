@@ -4,9 +4,9 @@ sidebar_position: 4
 
 # Module
 
-A module clusters all rotes and binds relative to an scope or feature of the application and may contain sub modules forming one composition. 
-It means that to access a bind, it needs to be in a parent module already started, otherwise, the bind will not be visible to be recovered using a system of injection. 
-Module’s lifetime ends when the last page is closed.
+A module clusters all rotes and binds relative to an scope or feature of the application and may contain sub modules forming one single composition. 
+It means that to access a bind, it needs to be in a parent module that's already started, otherwise, the bind will not be visible to be recovered using a system injection. 
+A Module’s lifetime ends when the last page is closed.
 
 ## The ModuleRoute
 
@@ -14,7 +14,7 @@ It is a kind of **ModularRoute** and contains some properties existing in **Chil
 
 :::tip TIP
 
-It is important to remember that when adding a property in **ModuleRoute**, ALL the child routes inherited this behavior.
+It's important to remember that when adding a property in **ModuleRoute**, ALL child routes inherited this behavior.
 For example, if you add *TransitionType.fadeIn* to the *transition* property, the child routes will also have their *transition* property changed to the same *transition* type.
 Although, if you define a property on the child route of a **ModuleRoute**, the child route will ignore its module change and keep the value defined in the child.
 
@@ -73,22 +73,22 @@ class HomePage extends StatelessWidget {
 
 What we see here:
 
--	We created the **HomeModule** module and added the **HomePage** widget with the **ChildRoute**.
--	Then we added the **HomeModule** to **AppModule** using the **ModuleRoute**.
--	Finally, we merge the **HomeModule** routes into the **AppModule**.
+-	We created **HomeModule** module and added **HomePage** widget with **ChildRoute**.
+-	Then we added **HomeModule** to **AppModule** using **ModuleRoute**.
+-	Finally, we merged **HomeModule** routes into **AppModule**.
 
-Now, we Will enter into a fundamental issue to understand routing when one module is affiliated with another.
+Now, we'll head into a fundamental issue to understand routing when one module is affiliated to another.
 
 :::danger ATTENTION
 
-It is not allowed to use dynamic routes as the name of a **ModuleRoute**, because it would compromise the semantics and the purpose of this kind of route. 
+It's not allowed to use dynamic routes as the name of a **ModuleRoute**, because it would compromise the semantics and the purpose of this kind of route. 
 The ending point of a route must always be referenced with **ChildRoute**.
 
 :::
 
 ## Routing between modules
 
-The **flutter_modular** works with “named routes”, with segments, query, fragments, very similar to what we see on the web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
+The **flutter_modular** works with “named routes”, with segments, query, fragments, very similar to what we see on web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
 ```
 /home/user/1
 ```
@@ -133,9 +133,9 @@ The next segment will be the name of the route we want, the `/other`.
 ```
 /b-module/other
 ```
-READY! When you execute the `Modular.to.navigate(‘/b-module/other’)` the page that will appear will be the **OtherPage()** widget.
+READY! When you execute the `Modular.to.navigate(‘/b-module/other’)` the page that will appear will be **OtherPage()** widget.
 
-The logic is the same when the submodule contains a route named as `/`. Understanding this, we find that the available routes in this example are:
+The logic is the same when the submodule contains a route named as `/`. Understanding this, we assume that the available routes in this example are:
 ```
 /                  =>  APage() 
 /b-module/         =>  BPage() 
@@ -162,7 +162,7 @@ Same as:
 
 ## Relative Vs Absolute paths
 
-When a route path is literally described, then we say it is an absolute path, such as `/foo/bar`. But we can based on the current path and use the notion of POSIX to enter on a route. For example:
+When a route path is literally described, then we say it is an absolute path, such as `/foo/bar`. But we can consider the current path and use the notion of POSIX to enter on a route. For example:
 
 We are on the `/foo/bar` route and we want to go to the `/foo/baz` route. Using POSIX, just inform **Modular.navigate(‘./bar’)**
 
@@ -186,8 +186,7 @@ This favors the complete decoupling of the module, as it will not need the previ
 
 ## Module import
 
-A module can be created to store only the binds. A use case in this sense would be when we have a Shared or Core Module containing all 
-the main binds and distributed among all the modules. To use a module only with binds, we must import it into a module containing routes. See the next example:
+A module can be created only to store binds. A use case would be established when we have a Shared or Core Module containing all the main binds and distributed among all modules. To use a module only with binds, we must import it into a module containing routes. See the next example:
 
 ```dart {10-13}
 class CoreModule extends Module {
@@ -214,6 +213,6 @@ Note that **CoreModule** binds are marked with the export flag `export: true`, t
 
 :::danger ATTENTION
 
-The module import is only for **Binds**. **Routes** will not be imported on this modality.
+The module import is only for **Binds**. **Routes** won't be imported.
 
 :::
