@@ -4,20 +4,20 @@ sidebar_position: 1
 
 # Start
 
-The **flutter_modular** was build using the engine of **modular_core**  that's responsible for the dependency injection system and route management. The routing system emulates a tree of modules, just like Flutter does in its widget trees. Because of it, we can add one module inside another by creating paternity links.
+The **flutter_modular** was built using the engine of **modular_core** that's responsible for dependency injection system and route management. The routing system emulates a tree of modules, just like Flutter does in it's widget trees. Therefor we can add one module inside another one by creating paternity links.
 
 ## Inspirations from the Angular
 
-The entire **flutter_modular** system came from studies carried out in Angular (another Google framework) and adapted to the world of Flutter. Therefore, there are many similarities between the **flutter_modular** and the Angular Routes and Dependency Injection System.
+The entire **flutter_modular** system came from studies carried out in Angular (another Google framework) and adapted to the Flutter world. Therefore, there are many similarities between the **flutter_modular** and Angular Routes and Dependency Injection System.
 
-Routes are reflected in the Application using the features of the new Navigator 2.0, thus allowing the use of multiple nested browsers. We call this feature RouterOutlet, just like in Angular.
+Routes are reflected in the Application using the the new Navigator 2.0 features alonside the use of multiple nested browsers. We call this feature RouterOutlet, just like in Angular.
 
-As with Angular, each module can be completely independent, so the same module can be used in multiple products. By dividing modules into packages, we can get close to a structure of micro-frontends.
+Each module can be completely independent, so the same module can be used in multiple products. By dividing modules into packages, we can reach to a micro-frontend application structure.
 
 
 ## Starting a project
 
-Our initial goal will be to create an initial app, still without a defined structure or architecture, so that we can study the start components of **flutter_modular**
+Our initial goal will be the creation of an initial app with no defined structure or architecture yet, so that we can study the initial components of **flutter_modular**
 
 Create a new Flutter project:
 ```
@@ -32,11 +32,11 @@ dependencies:
 
 ```
 
-If all goes well, then we are ready to move on!
+If succeeded, we are ready to move on!
 
 :::tip TIP
 
-Flutter's CLI has a tool that facilitates the inclusion of packages in the project. Use the command:
+Flutter's CLI has a tool that makes package installation easier in the project. Use the command:
 
 `flutter pub add flutter_modular`
 
@@ -44,7 +44,7 @@ Flutter's CLI has a tool that facilitates the inclusion of packages in the proje
 
 ## The ModularApp
 
-We need to add the ModularApp Widget to the root of our project. Let's change our **main.dart** file:
+We need to add ModularApp Widget in the root of our project. Let's change our **main.dart** file:
 
 ```dart title="lib/main.dart"
 
@@ -57,7 +57,7 @@ void main(){
 ```
 
 **ModularApp** forces us to add a main Module and the Main Widget. What are we going to do next?
-This Widget does the initial setup so that everything works fine. For more details go to **ModularApp** doc.
+This Widget does the initial setup so everything can work as expected. For more details go to **ModularApp** doc.
 
 :::tip TIP
 
@@ -67,13 +67,13 @@ It's important that **ModularApp** is the first widget in your app!
 
 ## Creating the Main Module
 
-A module represents the agglomeration of Routes and Binds.
+A module represents a set of Routes and Binds.
 - **ROUTE**: Page setup eligible for navigation.
 - **BIND**: Represents an object that will be available for injection to other dependencies.
 
-We'll talk more about the front.
+We'll see more info about this topics further.
 
-We can have several modules, but for noew, let's create a main module called **AppModule**:
+We can have several modules, but for now let's just create a main module called **AppModule**:
 
 ```dart title="lib/main.dart" {8-16}
 import 'package:flutter/material.dart';
@@ -93,7 +93,7 @@ class AppModule extends Module {
 ```
 
 Note that the module is just a class that inherits from the **Module** class, overriding the **binds** and **routes** properties.
-With this we have a routes and injections mechanism separate from the application and can be applied both in a global context (as we are doing) and in a local context, for example, creating a module containing only the binds and routes of a specific feature!
+With this we have a route and injection mechanism separate from the application and can be both applied in a global context (as we are doing) or in a local context, for example, creating a module that contains only binds and routes only for a specific feature!
 
 We've added **AppModule** to ModularApp. Now we need an initial route, so let's create a StatelessWidget to serve as the home page.
 
@@ -127,11 +127,11 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-We created a Widget called **HomePage** and added its instance in a route called **ChildRoute**.
+We created a Widget called **HomePage** and added it's instances in a route called **ChildRoute**.
 
 :::tip TIP
 
-There are two types of ModularRoute, **ChildRoute** and **ModuleRoute**.
+There are two types of ModularRoute: **ChildRoute** and **ModuleRoute**.
 
 **ChildRoute** serve to build a Widget while **ModuleRoute** concatenates another module.
 
@@ -140,7 +140,7 @@ There are two types of ModularRoute, **ChildRoute** and **ModuleRoute**.
 ## Creating the Main Widget
 
 The main Widget's function is to instantiate the MaterialApp or CupertinoApp.   
-In these main Widgets it is also necessary to configure the custom route system. For this, the **flutter_modular** has an extension that automates this process. For this next code we will use **MaterialApp**, but the process is exactly the same for CupertinoApp.
+In these main Widgets it's also necessary to set the custom route system. For this, **flutter_modular** has an extension that automates the process. For this next snippet we'll use **MaterialApp**, but the process is exactly the same for CupertinoApp.
 
 ```dart title="lib/main.dart" {8-15}
 import 'package:flutter/material.dart';
@@ -181,6 +181,6 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-Here we create a Widget called **AppWidget** containing an instance of **MaterialApp**. Note that in the end, we call the **.modular()** method that was added to **MaterialApp** by extension.
+Here we create a Widget called **AppWidget** containing an instance of **MaterialApp**. Note that in the end, we call **.modular()** method that was added to **MaterialApp** through an extension.
 
 That's enough to run a Modular app. In the next steps let's explore navigation.
