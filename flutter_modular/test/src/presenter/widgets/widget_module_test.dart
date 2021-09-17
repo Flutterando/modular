@@ -52,7 +52,10 @@ class AppWidget extends StatelessWidget {
 class CustomWidgetModule extends WidgetModule {
   @override
   List<Bind> get binds => [
-        Bind.instance<double>(0.0),
+        Bind.factory<double>((i) {
+          print(i.args);
+          return 0.0;
+        }),
       ];
 
   @override

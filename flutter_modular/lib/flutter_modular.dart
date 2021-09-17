@@ -3,7 +3,9 @@ library flutter_modular;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/flutter_modular_module.dart';
+import 'package:modular_core/modular_core.dart';
 
+import 'src/domain/usecases/get_arguments.dart';
 import 'src/presenter/models/modular_navigator.dart';
 import 'src/presenter/modular_base.dart';
 import 'src/presenter/navigation/modular_page.dart';
@@ -122,6 +124,14 @@ extension ModularExtensionCupertino on CupertinoApp {
 
     return app;
   }
+}
+
+extension InjectorExtends on Injector {
+  /// get arguments
+  ModularArguments get args => injector
+      .get<GetArguments>()
+      .call()
+      .getOrElse((l) => ModularArguments.empty());
 }
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
