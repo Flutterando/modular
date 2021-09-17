@@ -76,8 +76,9 @@ class ModularRouteInformationParser
 
     while (parent != '') {
       var child = await selectRoute(parent, arguments: arguments);
-      book.routes.insert(0, child);
       parent = child.parent;
+      child = child.copyWith(schema: parent);
+      book.routes.insert(0, child);
     }
 
     setArguments(modularArgs);
