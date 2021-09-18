@@ -16,10 +16,12 @@ void main() {
   });
 
   test('addModule', () {
-    var map = routeContext.assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
+    var map = routeContext
+        .assembleRoute(CustomRoute(name: '/route', context: OtherModule()));
     expect(map[ModularKey(name: '/route/')]?.uri.toString(), '/first');
 
-    map = routeContext.assembleRoute(CustomRoute(name: '/route', context: OtherModuleWithlessSlash()));
+    map = routeContext.assembleRoute(
+        CustomRoute(name: '/route', context: OtherModuleWithlessSlash()));
     expect(map[ModularKey(name: '/route')]?.uri.toString(), isNull);
     expect(map[ModularKey(name: '/route/second')]?.uri.toString(), '/second');
   });
