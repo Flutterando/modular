@@ -12,13 +12,12 @@ class ModularBook {
   ModularBook({required this.routes});
 
   Iterable<ModularPage> chapters([String chapter = '']) {
-    final filteredRoutes =
-        routes.where((route) => route.schema == chapter).toList();
+    final filteredRoutes = routes.where((route) => route.schema == chapter).toList();
     final pages = <ModularPage>[];
     for (var i = 0; i < filteredRoutes.length; i++) {
       final route = filteredRoutes[i];
       pages.add(ModularPage(
-        key: ValueKey('${route.uri.toString()}@$i'),
+        key: ValueKey('${route.uri.toString()}@${route.schema}@$i'),
         route: route,
         args: Modular.args,
         flags: (Modular as ModularBase).flags,
