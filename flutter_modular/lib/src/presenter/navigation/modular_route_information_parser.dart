@@ -13,8 +13,7 @@ import 'package:modular_core/modular_core.dart';
 
 import 'modular_book.dart';
 
-class ModularRouteInformationParser
-    extends RouteInformationParser<ModularBook> {
+class ModularRouteInformationParser extends RouteInformationParser<ModularBook> {
   final GetRoute getRoute;
   final GetArguments getArguments;
   final SetArguments setArguments;
@@ -30,12 +29,10 @@ class ModularRouteInformationParser
   });
 
   @override
-  Future<ModularBook> parseRouteInformation(
-      RouteInformation routeInformation) async {
+  Future<ModularBook> parseRouteInformation(RouteInformation routeInformation) async {
     var path = '';
     if (!_firstParse) {
-      if (routeInformation.location == null ||
-          routeInformation.location == '/') {
+      if (routeInformation.location == null || routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = initialRouteDeclaratedInMaterialApp;
       } else {
@@ -56,12 +53,10 @@ class ModularRouteInformationParser
     return RouteInformation(location: book.uri.toString());
   }
 
-  Future<ModularBook> selectBook(String path,
-      {dynamic arguments, void Function(dynamic)? popCallback}) async {
+  Future<ModularBook> selectBook(String path, {dynamic arguments, void Function(dynamic)? popCallback}) async {
     var route = await selectRoute(path, arguments: arguments);
 
-    final modularArgs =
-        getArguments().getOrElse((l) => ModularArguments.empty());
+    final modularArgs = getArguments().getOrElse((l) => ModularArguments.empty());
     if (popCallback != null) {
       route = route.copyWith(popCallback: popCallback);
     }
@@ -104,8 +99,17 @@ class ModularRouteInformationParser
 
     final params = RouteParmsDTO(url: path, arguments: arguments);
     final result = await getRoute.call(params);
-    return await result.fold<FutureOr<ParallelRoute>>(
-        (l) => throw l, (route) => _routeSuccess(route));
+    return await result.fold<FutureOr<ParallelRoute>>((modularError) async {
+      if (path.endsWith('/')) {
+        throw modularError;
+      }
+      final params = RouteParmsDTO(url: '$path/', arguments: arguments);
+      final result = await getRoute.call(params);
+      return await result.fold((l) => throw modularError, (route) {
+        print('[MODULAR WARNING] - Please, use $path/ instead of $path.');
+        return _routeSuccess(route);
+      });
+    }, (route) => _routeSuccess(route));
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {
