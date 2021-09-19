@@ -42,9 +42,9 @@ class ModuleRoute<T> extends ParallelRoute<T> {
   factory ModuleRoute(
     String name, {
     required Module module,
-    TransitionType transition = TransitionType.defaultTransition,
+    TransitionType? transition,
     CustomTransition? customTransition,
-    Duration duration = const Duration(milliseconds: 300),
+    Duration? duration,
     List<RouteGuard> guards = const [],
   }) {
     final route = ModuleRoute<T>._start(
