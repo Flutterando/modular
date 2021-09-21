@@ -115,7 +115,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     reportPop.call(parallel);
     final arguments =
         parser.getArguments().getOrElse((l) => ModularArguments.empty());
-    parser.setArguments(arguments);
+    parser.setArguments(arguments.copyWith(uri: currentConfiguration!.uri));
     notifyListeners();
 
     return true;

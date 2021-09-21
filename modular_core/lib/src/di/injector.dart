@@ -27,13 +27,12 @@ class InjectorImpl<T> implements Injector<T> {
   }
 
   @mustCallSuper
-  bool isModuleAlive<T extends BindContext>() =>
-      _allBindContexts.containsKey(_getType<T>());
+  bool isModuleAlive<T extends BindContext>() => _allBindContexts.containsKey(_getType<T>());
 
   @mustCallSuper
   Future<bool> isModuleReady<M extends BindContext>() async {
     if (isModuleAlive<M>()) {
-      _allBindContexts[_getType<M>()]!.isReady();
+      await _allBindContexts[_getType<M>()]!.isReady();
       return true;
     }
     return false;
@@ -44,8 +43,7 @@ class InjectorImpl<T> implements Injector<T> {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       _allBindContexts[typeModule] = module;
-      (_allBindContexts[typeModule] as BindContextImpl)
-          .instantiateSingletonBinds(_getAllSingletons(), this);
+      (_allBindContexts[typeModule] as BindContextImpl).instantiateSingletonBinds(_getAllSingletons(), this);
       (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
       debugPrint("-- $typeModule INITIALIZED");
     } else {
