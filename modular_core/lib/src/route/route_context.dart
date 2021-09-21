@@ -9,7 +9,7 @@ abstract class RouteContextImpl extends BindContextImpl
   List<ModularRoute> get routes => const [];
 
   @visibleForTesting
-  List<ModularKey> orderRouteKeys(List<ModularKey> keys) {
+  List<ModularKey> orderRouteKeys(Iterable<ModularKey> keys) {
     List<ModularKey> ordenatekeys = [...keys];
     ordenatekeys.sort((preview, actual) {
       if (preview.name.contains('/:') && !actual.name.contains('**')) {
@@ -37,7 +37,11 @@ abstract class RouteContextImpl extends BindContextImpl
       _routeMap.addAll(assembleRoute(route));
     }
 
-    return _routeMap;
+    final _odernatedMap = <ModularKey, ModularRoute>{};
+    for (var key in orderRouteKeys(_routeMap.keys)) {
+      _odernatedMap[key] = _routeMap[key]!;
+    }
+    return _odernatedMap;
   }
 
   @visibleForTesting

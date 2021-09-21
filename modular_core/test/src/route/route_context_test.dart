@@ -62,16 +62,18 @@ void main() {
       ModularKey(name: '/:id'),
       ModularKey(name: '/event/**'),
       ModularKey(name: '/**'),
-      ModularKey(name: '/route'),
+      ModularKey(name: '/route/:id'),
+      ModularKey(name: '/route/other'),
       ModularKey(name: '/route/id'),
     ];
     final keys = routeContext.orderRouteKeys(list);
-    expect(keys[0].name, '/route');
+    expect(keys[0].name, '/route/other');
     expect(keys[1].name, '/route/id');
-    expect(keys[2].name, '/:id');
-    expect(keys[3].name, '/event/n/**');
-    expect(keys[4].name, '/event/**');
-    expect(keys[5].name, '/**');
+    expect(keys[2].name, '/route/:id');
+    expect(keys[3].name, '/:id');
+    expect(keys[4].name, '/event/n/**');
+    expect(keys[5].name, '/event/**');
+    expect(keys[6].name, '/**');
   });
 }
 
