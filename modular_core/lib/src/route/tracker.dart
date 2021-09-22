@@ -24,8 +24,7 @@ class TrackerImpl implements Tracker {
 
   String get currentPath => arguments.uri.toString();
 
-  FutureOr<ModularRoute?> findRoute(String path,
-      {dynamic data, String schema = ''}) async {
+  FutureOr<ModularRoute?> findRoute(String path, {dynamic data, String schema = ''}) async {
     var uri = _resolverPath(path);
     final modularKey = ModularKey(schema: schema, name: uri.path);
 
@@ -41,13 +40,11 @@ class TrackerImpl implements Tracker {
           break;
         }
       }
-      if (uriCandidate.pathSegments.length != uri.pathSegments.length &&
-          !uriCandidate.path.contains('**')) {
+      if (uriCandidate.pathSegments.length != uri.pathSegments.length && !uriCandidate.path.contains('**')) {
         continue;
       }
 
-      if (!(uriCandidate.path.contains(':') ||
-          uriCandidate.path.contains('**'))) {
+      if (!(uriCandidate.path.contains(':') || uriCandidate.path.contains('**'))) {
         continue;
       }
 
@@ -75,7 +72,7 @@ class TrackerImpl implements Tracker {
 
     if (route == null) return null;
 
-    _arguments = arguments.copyWith(data: data, uri: uri, params: params);
+    _arguments = ModularArguments(uri: uri, data: data, params: params);
 
     return route;
   }
@@ -139,6 +136,5 @@ class TrackerImpl implements Tracker {
 }
 
 class TrackerNotInitiated extends ModularError {
-  const TrackerNotInitiated(String message, [StackTrace? stackTrace])
-      : super(message, stackTrace);
+  const TrackerNotInitiated(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
 }
