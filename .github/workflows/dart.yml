@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   flutter_modular:
-    name: flutter modular tests
+    name: flutter modular
     runs-on: ubuntu-latest
     
     steps:
@@ -23,7 +23,7 @@ jobs:
       working-directory: flutter_modular
     
     - name: Flutter Test
-      run: flutter test --coverage --coverage-path ../coverage/lcov.info .
+      run: flutter test --coverage --coverage-path ../coverage/lcov.info
       working-directory: flutter_modular
       
     - name: Codecov GitHub Action
@@ -32,7 +32,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
 
   modular_core:
-    name: modular core tests
+    name: modular core
     runs-on: ubuntu-latest
     
     steps:
@@ -49,7 +49,7 @@ jobs:
       working-directory: modular_core
     
     - name: Flutter Test
-      run: flutter test --coverage --coverage-path ../coverage/lcov.info .
+      run: flutter test --coverage --coverage-path ../coverage/lcov.info
       working-directory: modular_core
       
     - name: Codecov GitHub Action
@@ -58,7 +58,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         
   shelf_modular:
-    name: shelf modular tests
+    name: shelf modular
     runs-on: ubuntu-latest
     
     steps:
@@ -75,7 +75,7 @@ jobs:
       working-directory: shelf_modular
     
     - name: Flutter Test
-      run: flutter test --coverage --coverage-path ../coverage/lcov.info .
+      run: flutter test --coverage --coverage-path ../coverage/lcov.info
       working-directory: shelf_modular
       
     - name: Codecov GitHub Action
@@ -84,7 +84,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
 
   modular_test:
-    name: modular_test tests
+    name: modular_test
     runs-on: ubuntu-latest
     
     steps:
@@ -101,7 +101,7 @@ jobs:
       working-directory: modular_test
     
     - name: Flutter Test
-      run: flutter test --coverage --coverage-path ../coverage/lcov.info .
+      run: flutter test --coverage --coverage-path ../coverage/lcov.info
       working-directory: modular_test
       
     - name: Codecov GitHub Action
