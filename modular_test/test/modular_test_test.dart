@@ -28,8 +28,6 @@ class MyModule extends RouteContextImpl {
 void main() {
   final repo = RepoImpl2();
 
-  modular_test.main();
-
   modular_test.initModules(
     [MyModule()],
     replaceBinds: [
