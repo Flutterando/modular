@@ -2,8 +2,6 @@ library modular_test;
 
 import 'package:modular_core/modular_core.dart';
 
-void main() {}
-
 void initModule(BindContext module, {List<BindContract> replaceBinds = const []}) {
   // ignore: invalid_use_of_visible_for_testing_member
   final bindModules = module.getProcessBinds();

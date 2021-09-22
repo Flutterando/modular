@@ -85,10 +85,6 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     for (var disposableRoute in disposableRoutes) {
       reportPop.call(disposableRoute);
     }
-
-    final arguments =
-        parser.getArguments().getOrElse((l) => ModularArguments.empty());
-    parser.setArguments(arguments.copyWith(params: {}, data: null));
   }
 
   var _lastClick = DateTime.now();
@@ -116,7 +112,11 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     final parallel = page.route;
     parallel.popCallback?.call(result);
     currentConfiguration?.routes.remove(parallel);
-    reportPop.call(parallel);
+    if (currentConfiguration?.routes.indexWhere(
+            (element) => element.uri.toString() == parallel.uri.toString()) ==
+        -1) {
+      reportPop.call(parallel);
+    }
     final arguments =
         parser.getArguments().getOrElse((l) => ModularArguments.empty());
     parser.setArguments(arguments.copyWith(uri: currentConfiguration!.uri));

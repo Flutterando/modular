@@ -1,5 +1,5 @@
-## 1.0.0+1 - 2021/09/21
-* Fix ordenation routes
+## 1.0.4 - 2021/09/22
+* Rebuild modularArguments after get route
 ## 1.0.0+1 - 2021/09/05
 * Stable version
 

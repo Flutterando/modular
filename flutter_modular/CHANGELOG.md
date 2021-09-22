@@ -1,4 +1,9 @@
-## [4.0.0+11] - 2021-09-16
+## [4.0.1] - 2021-09-22
+* Fixed pushNamed.
+* Fixed bug that allowed access to parameters and arguments in other modules.
+* Fixed transitions bug.
+
+## [4.0.0+12] - 2021-09-16
 
 * New documentation is here! [https://modular.flutterando.com.br](https://modular.flutterando.com.br).
 * Modular design now uses Layered Architecture (Clean Architecture) with 100% code coverage.
