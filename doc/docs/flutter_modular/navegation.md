@@ -255,6 +255,12 @@ Setting redirection is not an obligation, but if not, an error will be raised.
 
 :::
 
+:::danger ATTENTION
+
+Always use **Modular.get()** inside the **canActivate** method.
+
+:::
+
 ## RouterOutlet
 
 Until now, we used a global Navigation and in most cases only one will be enough. But there
