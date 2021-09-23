@@ -1,0 +1,131 @@
+import 'package:meta/meta.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
+import 'bind_context.dart';
+import 'resolvers.dart';
+import 'package:characters/characters.dart';
+
+class InjectorImpl<T> implements Injector<T> {
+  final _allBindContexts = <Type, BindContext>{};
+
+  B call<B extends Object>([BindContract<B>? bind]) => get<B>(bind);
+
+  B get<B extends Object>([BindContract<B>? bind]) {
+    B? bind;
+
+    for (var module in _allBindContexts.values) {
+      bind = module.getBind<B>(this);
+      if (bind != null) {
+        break;
+      }
+    }
+
+    if (bind != null) {
+      return bind;
+    } else {
+      throw BindNotFound(B.toString());
+    }
+  }
+
+  @mustCallSuper
+  bool isModuleAlive<T extends BindContext>() =>
+      _allBindContexts.containsKey(_getType<T>());
+
+  @mustCallSuper
+  Future<bool> isModuleReady<M extends BindContext>() async {
+    if (isModuleAlive<M>()) {
+      await _allBindContexts[_getType<M>()]!.isReady();
+      return true;
+    }
+    return false;
+  }
+
+  @mustCallSuper
+  void addBindContext(covariant BindContextImpl module, {String tag = ''}) {
+    final typeModule = module.runtimeType;
+    if (!_allBindContexts.containsKey(typeModule)) {
+      _allBindContexts[typeModule] = module;
+      (_allBindContexts[typeModule] as BindContextImpl)
+          .instantiateSingletonBinds(_getAllSingletons(), this);
+      (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
+      debugPrint("-- $typeModule INITIALIZED");
+    } else {
+      (_allBindContexts[typeModule] as BindContextImpl?)?.tags.add(tag);
+    }
+  }
+
+  @visibleForTesting
+  void debugPrint(String text) {
+    printResolverFunc?.call(text);
+  }
+
+  @mustCallSuper
+  void disposeModuleByTag(String tag) {
+    final trash = <Type>[];
+
+    for (var key in _allBindContexts.keys) {
+      final module = _allBindContexts[key]!;
+
+      (module as BindContextImpl).tags.remove(tag);
+      if (tag.characters.last == '/') {
+        module.tags.remove('$tag/'.replaceAll('//', ''));
+      }
+      if (module.tags.isEmpty) {
+        module.dispose();
+        trash.add(key);
+      }
+    }
+
+    for (final key in trash) {
+      _allBindContexts.remove(key);
+      debugPrint("-- $key DISPOSED");
+    }
+  }
+
+  @mustCallSuper
+  bool dispose<B extends Object>() {
+    for (var binds in _allBindContexts.values) {
+      final r = binds.remove<B>();
+      if (r) return r;
+    }
+    return false;
+  }
+
+  @mustCallSuper
+  void destroy() {
+    for (var binds in _allBindContexts.values) {
+      binds.dispose();
+    }
+    _allBindContexts.clear();
+  }
+
+  @mustCallSuper
+  void removeBindContext<T extends BindContext>() {
+    final module = _allBindContexts.remove(_getType<T>());
+    if (module != null) {
+      module.dispose();
+      debugPrint("-- ${module.runtimeType} DISPOSED");
+    }
+  }
+
+  Type _getType<T>() => T;
+
+  List<SingletonBind> _getAllSingletons() {
+    final list = <SingletonBind>[];
+    for (var module in _allBindContexts.values) {
+      list.addAll((module as BindContextImpl).instanciatedSingletons);
+    }
+    return list;
+  }
+
+  @mustCallSuper
+  @override
+  void removeScopedBinds() {
+    for (var context in _allBindContexts.values.cast<BindContextImpl>()) {
+      context.removeScopedBind();
+    }
+  }
+}
+
+class BindNotFound extends ModularError {
+  BindNotFound(String message) : super(message);
+}

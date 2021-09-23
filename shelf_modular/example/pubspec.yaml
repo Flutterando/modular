@@ -1,0 +1,24 @@
+name: example
+description: A web server built using the shelf package.
+version: 1.0.0
+publish_to: none
+# homepage: https://www.example.com
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  args: ^2.0.0
+  shelf: ^1.1.0
+  fpdart: ^0.0.10
+  postgres: ^2.4.1+2
+  jose: ^0.3.2
+  redis_dart: ^0.1.0+4
+  uuid: ^3.0.4
+  shelf_modular:
+    path: ../
+
+dev_dependencies:
+  pedantic: ^1.10.0
+  test: ^1.17.10
+

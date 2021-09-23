@@ -1,0 +1,14 @@
+name: modular_interfaces
+description: Smart project structure with dependency injection and route management
+version: 1.0.0+1
+homepage: https://github.com/Flutterando/modular
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+# dependencies:
+#   path: ^1.8.0
+
+# dev_dependencies:
+#   pedantic: ^1.10.0

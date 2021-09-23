@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+    - 6379:6379
+  postgres:
+    image: postgres:10.5
+    restart: always
+    environment: 
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    ports:
+    - '5432:5432'
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    # copy the sql script to create tables
+    - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    # copy the sql script to fill tables
+    - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+volumes: 
+  postgres-data:
