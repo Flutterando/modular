@@ -85,6 +85,21 @@ void main() {
     expect(ModularBook(routes: []).copyWith(), isA<ModularBook>());
   });
 
+  test('navigate blink', () async {
+    final route1 = ParallelRouteMock();
+    when(() => route1.uri).thenReturn(Uri.parse('/test2'));
+    when(() => parser.selectBook('/test2'))
+        .thenAnswer((_) async => ModularBook(routes: [route1]));
+
+    delegate.navigate('/test');
+    delegate.navigate('/test2');
+    delegate.navigate('/test');
+    delegate.navigate('/test2');
+
+    await Future.delayed(Duration(seconds: 1));
+    expect(delegate.currentConfiguration?.uri.toString(), '/test2');
+  });
+
   test('navigate', () async {
     final route1 = ParallelRouteMock();
     when(() => route1.uri).thenReturn(Uri.parse('/test'));
