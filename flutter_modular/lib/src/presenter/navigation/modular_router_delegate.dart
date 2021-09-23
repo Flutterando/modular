@@ -88,17 +88,25 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   }
 
   var _lastClick = DateTime.now();
+  var _lastRouteName = '';
 
   @override
   Future<void> navigate(String routeName, {arguments}) async {
+    _lastRouteName = routeName;
     final currentTime = DateTime.now();
-    if (currentTime.difference(_lastClick).inMilliseconds < 500) {
-      return;
-    }
     if (routeName == path) {
       return;
     }
+
+    var diffTimes = currentTime.difference(_lastClick).inMilliseconds;
+    if (diffTimes < 500) {
+      await Future.delayed(Duration(milliseconds: 500 - diffTimes));
+      if (_lastRouteName != routeName) {
+        return;
+      }
+    }
     _lastClick = currentTime;
+
     final book = await parser.selectBook(routeName, arguments: arguments);
     return await setNewRoutePath(book);
   }
