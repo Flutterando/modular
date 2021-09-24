@@ -1,6 +1,6 @@
 name: flutter_modular
 description: Smart project structure with dependency injection and route management
-version: 4.0.1
+version: 4.0.1+2
 homepage: https://github.com/Flutterando/modular
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter_modular_annotations: ^0.0.2
   triple: ">=1.3.0+2 <2.0.0"
-  modular_core: ">=1.0.4 <=2.0.0"
+  modular_core: ">=1.0.5 <=2.0.0"
   meta: ">=1.3.0 <2.0.0"
   flutter:
     sdk: flutter

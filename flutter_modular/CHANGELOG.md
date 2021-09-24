@@ -1,7 +1,8 @@
-## [4.0.1] - 2021-09-22
+## [4.0.1+1] - 2021-09-22
 * Fixed pushNamed.
 * Fixed bug that allowed access to parameters and arguments in other modules.
 * Fixed transitions bug.
+* Fixed navigation blink.
 
 ## [4.0.0+12] - 2021-09-16
 

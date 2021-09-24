@@ -128,6 +128,7 @@ class TrackerImpl implements Tracker {
 
   void finishApp() {
     injector.destroy();
+    routeMap.clear();
     _nullableModule = null;
   }
 

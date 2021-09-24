@@ -1,3 +1,5 @@
+## 1.0.5 - 2021/09/24
+* Fixed destroy
 ## 1.0.4 - 2021/09/22
 * Rebuild modularArguments after get route
 ## 1.0.0+1 - 2021/09/05
