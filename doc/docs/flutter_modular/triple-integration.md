@@ -7,7 +7,7 @@ sidebar_position: 7
 The [Triple](https://triple.flutterando.com.br/docs/getting-started/using-flutter-triple) is integrated with **flutter_modular**,
 and makes it easier to recognize the **Bind** in the **flutter_triple** Builders (**ScopedBuilder**, **TripleBuilder**).
 
-Exemple without **flutter_modular**:
+Example without **flutter_modular**:
 ```dart
 ScopedBuilder<MyStore, Exception, String>(
     store: counter,
