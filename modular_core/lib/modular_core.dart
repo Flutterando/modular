@@ -9,6 +9,7 @@ export 'src/di/resolvers.dart';
 export 'src/di/injector.dart';
 export 'src/di/disposable.dart';
 export 'src/di/bind_context.dart';
+export 'src/di/reassemble_mixin.dart';
 export 'src/route/modular_route.dart';
 export 'src/route/route_context.dart';
 export 'package:modular_interfaces/modular_interfaces.dart';

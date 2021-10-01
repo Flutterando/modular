@@ -30,7 +30,8 @@ export 'src/presenter/widgets/navigation_listener.dart';
 export 'src/presenter/widgets/widget_module.dart';
 export 'src/presenter/navigation/transitions/page_transition.dart';
 export 'src/presenter/navigation/transitions/transitions.dart';
-export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable;
+export 'package:modular_core/modular_core.dart'
+    show ModularRoute, Disposable, ReassembleMixin;
 
 /// Instance of Modular for search binds and route.
 final Modular = injector<IModularBase>();

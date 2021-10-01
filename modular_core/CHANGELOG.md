@@ -1,3 +1,6 @@
+## 1.1.3 - 2021/10/01
+* Added reassemble method for routes and binds.
+
 ## 1.0.5 - 2021/09/24
 * Fixed destroy
 ## 1.0.4 - 2021/09/22

@@ -31,4 +31,11 @@ abstract class Injector<T> {
 
   /// checks if all asynchronous binds are ready to be used synchronously of all BindContext of Tree.
   Future<bool> isModuleReady<M extends BindContext>();
+
+  /// used for reassemble all singleton injections
+  void reassemble();
+
+  /// internal
+  /// used for reassemble bind list
+  void updateBinds(BindContext context);
 }

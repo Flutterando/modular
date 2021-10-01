@@ -7,11 +7,13 @@ class Bind<T extends Object> extends BindContract<T> {
     bool isSingleton = true,
     bool isLazy = true,
     bool export = false,
+    bool alwaysSerialized = false,
   }) : super(factoryFunction,
             isSingleton: isSingleton,
             isLazy: isLazy,
             export: export,
-            isScoped: false);
+            isScoped: false,
+            alwaysSerialized: alwaysSerialized);
 
   ///Bind  an already exist 'Instance' of object..
   static Bind<T> instance<T extends Object>(T instance, {bool export = false}) {
@@ -56,9 +58,9 @@ class AsyncBind<T extends Object> extends Bind<Future<T>>
   }
 
   @override
-  Future<BindContract<T>> convertToAsyncBind() async {
+  Future<BindContract<T>> convertToBind() async {
     final bindValue = await resolveAsyncBind();
-    return Bind<T>((i) => bindValue, export: export);
+    return Bind<T>((i) => bindValue, export: export, alwaysSerialized: true);
   }
 }
 

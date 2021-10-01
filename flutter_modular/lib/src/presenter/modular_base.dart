@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
+import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'package:flutter_modular/src/domain/usecases/dispose_bind.dart';
@@ -56,6 +57,9 @@ abstract class IModularBase {
 
   /// Dispose a [Bind] by [Type]
   bool dispose<B extends Object>();
+
+  /// called whennever throw hot-reload
+  void reassemble();
 }
 
 class ModularBase implements IModularBase {
@@ -63,6 +67,7 @@ class ModularBase implements IModularBase {
   final FinishModule finishModule;
   final GetBind getBind;
   final GetArguments getArguments;
+  final ReassembleTracker reassembleTracker;
   final StartModule startModule;
   final IsModuleReady isModuleReadyUsecase;
   final IModularNavigator navigator;
@@ -74,6 +79,7 @@ class ModularBase implements IModularBase {
 
   ModularBase({
     required this.disposeBind,
+    required this.reassembleTracker,
     required this.getArguments,
     required this.finishModule,
     required this.getBind,
@@ -163,4 +169,10 @@ class ModularBase implements IModularBase {
 
   @override
   final String initialRoute = '/';
+
+  @internal
+  @override
+  void reassemble() {
+    reassembleTracker();
+  }
 }

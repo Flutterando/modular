@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
 import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
@@ -34,6 +35,8 @@ class StoreMock extends Mock implements Store {}
 
 class GetArgumentsMock extends Mock implements GetArguments {}
 
+class ReassembleTrackerMock extends Mock implements ReassembleTracker {}
+
 class FinishModuleMock extends Mock implements FinishModule {}
 
 class GetBindMock extends Mock implements GetBind {}
@@ -56,6 +59,7 @@ void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
   final getArguments = GetArgumentsMock();
+  final reassembleTracker = ReassembleTrackerMock();
   final finishModule = FinishModuleMock();
   final startModule = StartModuleMock();
   final isModuleReadyImpl = IsModuleReadyImplMock();
@@ -68,6 +72,7 @@ void main() {
 
   setUp(() {
     modularBase = ModularBase(
+      reassembleTracker: reassembleTracker,
       disposeBind: disposeBind,
       finishModule: finishModule,
       getArguments: getArguments,
@@ -102,6 +107,11 @@ void main() {
   test('dispose', () {
     when(() => disposeBind.call()).thenReturn(right(true));
     expect(modularBase.dispose(), true);
+  });
+
+  test('reassemble', () {
+    when(() => reassembleTracker.call()).thenReturn(right(unit));
+    modularBase.reassemble();
   });
 
   test('get', () {

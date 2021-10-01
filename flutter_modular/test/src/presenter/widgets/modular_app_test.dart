@@ -15,6 +15,7 @@ void main() {
 
     final state = tester.state<ModularAppState>(find.byKey(modularKey));
     final result = state.tripleResolverCallback<String>();
+    state.reassemble();
     expect(result, 'test');
   });
 }

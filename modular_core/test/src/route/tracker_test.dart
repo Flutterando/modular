@@ -25,6 +25,7 @@ void main() {
     final route = await ModularTracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');
     expect(route?.data, 'first');
+    ModularTracker.reassemble();
   });
 
   test('find route with params', () async {

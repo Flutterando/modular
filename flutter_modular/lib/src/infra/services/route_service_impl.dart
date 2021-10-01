@@ -43,4 +43,10 @@ class RouteServiceImpl implements RouteService {
     tracker.reportPushRoute(route);
     return right(unit);
   }
+
+  @override
+  Either<ModularError, Unit> reassemble() {
+    tracker.reassemble();
+    return right(unit);
+  }
 }

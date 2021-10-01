@@ -1,0 +1,3 @@
+mixin ReassembleMixin {
+  void reassemble();
+}
