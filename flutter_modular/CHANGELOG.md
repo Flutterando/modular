@@ -1,5 +1,6 @@
 ## [4.1.0] - 2021-10-01
 * Modular is now HOT-RELOAD friendly!
+* Added ReassembleMixin.
 
 ## [4.0.1+1] - 2021-09-22
 * Fixed pushNamed.

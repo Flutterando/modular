@@ -201,3 +201,21 @@ calling the **Modular.dispose**() method even with a active module:
 ```dart
 Modular.dispose<MySingletonBind>();
 ```
+
+## Hot Reload
+
+The modular is hot-reload friendly, but, singleton binds they are not notified.
+Use ReassembleMixin for this:
+
+```dart
+import 'package:flutter_modular/flutter_modular.dart';
+
+class ProductController with ReassembleMixin {
+  @override
+  void reassemble() {
+    //called when happens the hot reload.
+    print('reassemble');
+  }
+}
+```
+
