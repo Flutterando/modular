@@ -108,7 +108,7 @@ class InjectorImpl<T> implements Injector<T> {
       return;
     }
     final module = _allBindContexts[key]!;
-    module.changeBinds(context.getProcessBinds());
+    module.changeBinds(List<BindContract>.from(context.getProcessBinds()));
   }
 
   @mustCallSuper
