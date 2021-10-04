@@ -33,6 +33,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
           },
           transitionDuration: duration,
           settings: settings,
+          maintainState: true,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             switch (type) {
               case PageTransitionType.rightToLeft:

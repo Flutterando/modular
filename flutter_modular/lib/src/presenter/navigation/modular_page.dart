@@ -43,6 +43,7 @@ class ModularPage<T> extends Page<T> {
       return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) => page,
         settings: this,
+        maintainState: true,
         transitionsBuilder: route.customTransition!.transitionBuilder,
         transitionDuration: route.customTransition!.transitionDuration,
       );
@@ -53,16 +54,19 @@ class ModularPage<T> extends Page<T> {
       if (flags.isCupertino) {
         return CupertinoPageRoute<T>(
           settings: this,
+          maintainState: true,
           builder: widgetBuilder,
         );
       }
       return MaterialPageRoute<T>(
         settings: this,
+        maintainState: true,
         builder: widgetBuilder,
       );
     } else if (transitionType == TransitionType.noTransition) {
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
+        maintainState: true,
         builder: (_) => page,
       );
     } else {

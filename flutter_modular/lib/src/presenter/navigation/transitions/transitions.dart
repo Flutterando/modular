@@ -15,6 +15,7 @@ PageRouteBuilder<T> fadeInTransition<T>(
   return PageRouteBuilder<T>(
     settings: settings,
     transitionDuration: transitionDuration,
+    maintainState: true,
     pageBuilder: (context, __, ___) {
       return builder(context, Modular.args);
     },
