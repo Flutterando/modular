@@ -8,6 +8,9 @@ abstract class BindContract<T extends Object> {
   ///single instance
   final bool isSingleton;
 
+  /// flag for indicate serialization
+  final bool alwaysSerialized;
+
   ///create single instance for request
   final bool isScoped;
 
@@ -24,8 +27,8 @@ abstract class BindContract<T extends Object> {
     this.isLazy = true,
     this.export = false,
     this.isScoped = false,
-  }) : assert((isSingleton || isLazy),
-            r"'singleton' can't be false if 'lazy' is also false");
+    this.alwaysSerialized = false,
+  }) : assert((isSingleton || isLazy), r"'singleton' can't be false if 'lazy' is also false");
 }
 
 /// For empty instance binds.

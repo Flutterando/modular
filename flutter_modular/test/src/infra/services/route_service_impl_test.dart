@@ -60,4 +60,11 @@ void main() {
       expect(result.isRight, true);
     });
   });
+  group('reassemble', () {
+    test('should call reassemble', () async {
+      when(() => tracker.reassemble()).thenReturn('');
+      final result = service.reassemble();
+      expect(result.isRight, true);
+    });
+  });
 }

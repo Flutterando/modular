@@ -126,8 +126,19 @@ class TrackerImpl implements Tracker {
     routeMap.addAll(module.init());
   }
 
+  @override
+  void reassemble() {
+    routeMap.clear();
+    routeMap.addAll(module.init());
+    for (var childModule in module.modules) {
+      injector.updateBinds(childModule);
+    }
+    injector.reassemble();
+  }
+
   void finishApp() {
     injector.destroy();
+    routeMap.clear();
     _nullableModule = null;
   }
 

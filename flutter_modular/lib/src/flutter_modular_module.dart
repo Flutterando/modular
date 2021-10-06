@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
+import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
 import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
 import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:modular_core/modular_core.dart';
@@ -52,6 +53,7 @@ class FlutterModularModule extends Module {
         Bind.factory<SetArguments>((i) => SetArgumentsImpl(i())),
         Bind.factory<UnbindModule>((i) => UnbindModuleImpl(i())),
         Bind.factory<ReportPush>((i) => ReportPushImpl(i())),
+        Bind.factory<ReassembleTracker>((i) => ReassembleTrackerImpl(i())),
         //presenter
         Bind.singleton<ModularRouteInformationParser>((i) =>
             ModularRouteInformationParser(
@@ -64,6 +66,7 @@ class FlutterModularModule extends Module {
             navigatorKey: GlobalKey<NavigatorState>(),
             reportPop: i())),
         Bind.lazySingleton<IModularBase>((i) => ModularBase(
+            reassembleTracker: i(),
             disposeBind: i(),
             finishModule: i(),
             getBind: i(),

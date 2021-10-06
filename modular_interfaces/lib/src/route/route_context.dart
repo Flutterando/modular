@@ -9,4 +9,7 @@ abstract class RouteContext extends BindContext {
 
   /// Used to return a route map at the start of the application.
   Map<ModularKey, ModularRoute> init();
+
+  /// store all módules
+  List<RouteContext> get modules;
 }

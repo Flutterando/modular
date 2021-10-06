@@ -28,7 +28,7 @@ void main() {
 
   test('AsyncBind', () async {
     final asyncBind = AsyncBind((i) async => 'instance');
-    final bind = await asyncBind.convertToAsyncBind();
+    final bind = await asyncBind.convertToBind();
     expect(bind.isSingleton, true);
     expect(bind.isLazy, true);
   });

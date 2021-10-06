@@ -57,6 +57,12 @@ class ModularAppState extends State<ModularApp> {
   }
 
   @override
+  void reassemble() {
+    super.reassemble();
+    Modular.reassemble();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return widget.child;
   }

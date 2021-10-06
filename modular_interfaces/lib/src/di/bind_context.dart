@@ -26,4 +26,7 @@ abstract class BindContext {
 
   /// Change binds
   void changeBinds(List<BindContract> newBinds);
+
+  /// Bind ready as singleton
+  List<SingletonBind> get instanciatedSingletons;
 }
