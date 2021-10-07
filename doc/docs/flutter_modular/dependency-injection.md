@@ -4,9 +4,9 @@ sidebar_position: 3
 
 # Dependency Injection
 
-We generally code with maintenance and scalability in mind, applying project-specific patterns
-to a given function and improving the structure of our code. We must to pay attention on our code, 
-otherwise it can be a covertly problem. Let's look at the practical example:
+We generally code with maintainability and scalability in mind, applying project-specific patterns
+to a given function and improving the structure of our code. We must pay attention to our code, 
+otherwise it can become a hidden problem. Let's look at a practical example:
 
 ```dart
 class Client {
@@ -27,7 +27,7 @@ Despite being a simple and functional approach, having a class instance within t
 We call it "Dependency Coupling" when we use an outer class in this way, because the *Client* class
 is totally dependent on the functioning of the **XPTOEmail** object.
 
-To break a class's bond with its dependency, we generally prefer to "inject" the dependency instances through constructor, setters or methods. That's what we call "Dependency Injection".
+To break a class's bond with its dependency, we generally prefer to "inject" the dependency instances through a constructor, setters, or methods. That's what we call "Dependency Injection".
 
 Let's fix the **Customer** class by injecting the **XPTOEmail** instance by constructor:
 
@@ -42,11 +42,11 @@ class Client {
   }
 }
 ```
-Thereway, we reduce the coupling **XPTOEmail** object has to the **Client** object.
+This way, we reduce the coupling **XPTOEmail** object has to the **Client** object.
 
 We still have a problem with this implementation. Despite *cohesion*, the Client class has a dependency on an external source, and even being injected by constructor, replacing it with another email service would not be a simple task.
-Our code still have coupling, but we can improve this using `interfaces`. Let's create an interface
-to sign the **sendEmail** method. With this, any class that implements this interface can be injected into the class **Client**:
+Our code still has coupling, but we can improve this using `interfaces`. Let's create an interface
+to define a signature, or "contract" for the **sendEmail** method. With this in place, any class that implements this interface can be injected into the class **Client**:
 
 ```dart
 abstract class EmailService {
@@ -170,7 +170,7 @@ We can get the asynchronous instance directly too without having to convert to a
 ## Auto Dispose
 
 The lifetime of a Bind singleton ends when its module 'dies'. But there are some objects that, by default, 
-runs by an instance destruction routine and automatically removed from memory. Here they are:
+run an instance destruction routine and are automatically removed from memory. Here they are:
 
 - Stream/Sink (Dart Native).
 - ChangeNotifier/ValueNotifier (Flutter Native).
@@ -196,7 +196,7 @@ As BLoC is based on Streams, the memory release takes effect automatically.
 :::
 
 **flutter_modular** also offers a singleton removal option from the dependency injection system 
-calling the **Modular.dispose**() method even with a active module:
+by calling the **Modular.dispose**() method even with an active module:
 
 ```dart
 Modular.dispose<MySingletonBind>();
@@ -204,8 +204,8 @@ Modular.dispose<MySingletonBind>();
 
 ## Hot Reload
 
-The modular is hot-reload friendly, but, singleton binds they are not notified.
-Use ReassembleMixin for this:
+The modular is hot-reload friendly, but, singleton binds are not notified.
+Use the ReassembleMixin for this:
 
 ```dart
 import 'package:flutter_modular/flutter_modular.dart';
@@ -213,7 +213,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class ProductController with ReassembleMixin {
   @override
   void reassemble() {
-    //called when happens the hot reload.
+    //called when the hot reload happens.
     print('reassemble');
   }
 }
