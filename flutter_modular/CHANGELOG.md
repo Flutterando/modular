@@ -1,5 +1,6 @@
-## [4.1.1] - 2021-10-04
+## [4.1.2] - 2021-10-08
 * Added "maintainState" in routes. [#572](https://github.com/Flutterando/modular/issues/572)
+* Fixed pushReplacementNamed
 
 ## [4.1.0+1] - 2021-10-01
 * Modular is now HOT-RELOAD friendly!

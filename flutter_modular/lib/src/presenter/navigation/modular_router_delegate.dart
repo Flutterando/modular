@@ -180,13 +180,14 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
         arguments: arguments, popCallback: popComplete.complete);
     final currentRoutes = [...currentConfiguration!.routes];
     if (forRoot) {
-      currentRoutes.removeWhere((element) => element.schema != '');
-      currentRoutes.removeLast();
-      book = currentConfiguration!.copyWith(
-          routes: [...currentRoutes, book.routes.first.copyWith(schema: '')]);
+      //;currentRoutes.removeWhere((element) => element.schema != '');
+      final indexLast =
+          currentRoutes.lastIndexWhere((element) => element.schema == '');
+      currentRoutes[indexLast] = book.routes.first.copyWith(schema: '');
+      book = currentConfiguration!.copyWith(routes: [...currentRoutes]);
       await setNewRoutePath(book);
     } else {
-      final list = [...currentConfiguration!.routes]..removeLast();
+      final list = currentRoutes..removeLast();
 
       for (var route in book.routes.reversed) {
         if (list
