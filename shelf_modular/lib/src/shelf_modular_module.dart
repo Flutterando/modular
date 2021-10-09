@@ -42,6 +42,7 @@ class ShelfModularModule extends Module {
         Bind.factory<ReleaseScopedBinds>((i) => ReleaseScopedBindsImpl(i())),
         Bind.factory<ReportPush>((i) => ReportPushImpl(i())),
         //presenter
-        Bind.singleton<IModularBase>((i) => ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i())),
+        Bind.singleton<IModularBase>(
+            (i) => ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i())),
       ];
 }

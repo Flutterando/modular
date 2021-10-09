@@ -21,16 +21,24 @@ class AuthResource implements Resource {
     final credentials = request.headers['Authorization']?.split(' ').last;
 
     if (credentials == null || credentials.isEmpty) {
-      return Response.forbidden(jsonEncode({'error': 'Authorization not found'}));
+      return Response.forbidden(
+          jsonEncode({'error': 'Authorization not found'}));
     }
 
     final result = await injector.get<Login>().call(credentials: credentials);
-    return result.fold((l) => Response.forbidden(jsonEncode({'error': l.message})), (r) => Response.ok(r.toJson()));
+    return result.fold(
+        (l) => Response.forbidden(jsonEncode({'error': l.message})),
+        (r) => Response.ok(r.toJson()));
   }
 
-  FutureOr<Response> refreshToken(Request request, ModularArguments args, Injector injector) async {
-    final result = await injector.get<RefreshToken>().call(refreshToken: args.params['token']);
-    return result.fold((l) => Response.forbidden(jsonEncode({'error': l.message})), (r) => Response.ok(r.toJson()));
+  FutureOr<Response> refreshToken(
+      Request request, ModularArguments args, Injector injector) async {
+    final result = await injector
+        .get<RefreshToken>()
+        .call(refreshToken: args.params['token']);
+    return result.fold(
+        (l) => Response.forbidden(jsonEncode({'error': l.message})),
+        (r) => Response.ok(r.toJson()));
   }
 
   FutureOr<Response> checkToken() {
