@@ -165,7 +165,7 @@ TransitionType.leftToRightWithFade,
 TransitionType.custom,
 ```
 
-Choose the one you want and add the **Transiton** property of an ModularRoute:
+Choose the one you want and add the **Transition** property of an ModularRoute:
 
 ```dart
 ChildRoute('/second', child: (context, args) => SecondPage(), transition: TransitionType.fadeIn),

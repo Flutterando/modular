@@ -10,7 +10,7 @@ The **flutter_modular** was built using the engine of **modular_core** that's re
 
 The entire **flutter_modular** system came from studies carried out in Angular (another Google framework) and adapted to the Flutter world. Therefore, there are many similarities between the **flutter_modular** and Angular Routes and Dependency Injection System.
 
-Routes are reflected in the Application using the the new Navigator 2.0 features alonside the use of multiple nested browsers. We call this feature RouterOutlet, just like in Angular.
+Routes are reflected in the Application using the the new Navigator 2.0 features alongside the use of multiple nested browsers. We call this feature RouterOutlet, just like in Angular.
 
 Each module can be completely independent, so the same module can be used in multiple products. By dividing modules into packages, we can reach to a micro-frontend application structure.
 
