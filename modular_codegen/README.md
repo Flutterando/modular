@@ -2,9 +2,9 @@
 
 # modular_codegen
 
-Code geneeration for `flutter_modular`. Injection automation. Annotations `Injectable`, `Param` and `Data`.
+Code generation for `flutter_modular`. Injection automation. Annotations `Injectable`, `Param` and `Data`.
 
-## Instalation
+## Installation
 
 Open your project's `pubspec.yaml` and add `modular_codegen` and `build_runner` as a dev dependency:
 
@@ -52,7 +52,7 @@ part 'home_controller.g.dart'; // ← part directive with your_file_name.g.dart
 class HomeController {
     final ApiRepository repository;
     HomeController({
-        this.repository, // ← The parameters of the constructur will define the generated binding
+        this.repository, // ← The parameters of the constructor will define the generated binding
     })
 
     ...

@@ -8,7 +8,7 @@ Add in your pubspec.yaml
 
 ```yaml
 
-dev_dependecies:
+dev_dependencies:
  modular_test:
 
 ```
