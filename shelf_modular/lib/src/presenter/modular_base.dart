@@ -151,6 +151,8 @@ class ModularBase implements IModularBase {
         rethrow;
       }
     } catch (e, s) {
+      print(e.toString());
+      print('STACK TRACE \n $s');
       response = Response.internalServerError(body: '${e.toString()}/n$s');
     }
     releaseScopedBinds();
