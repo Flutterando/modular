@@ -4,61 +4,61 @@ sidebar_position: 1
 
 # Start
 
-O **shelf_modular** usa o **modular_core** para desenhar APIs!
-Isso significa usar a estrutura do Modular no backend também, mantendo o sistema de injeção de dependências
-e rotas trabalhar com REST e Websocket.
+The **shelf_modular** uses **modular_core** to draw APIs!
+This means using the Modular framework in the backend as well, keeping the dependency injection system
+and routes work with REST and Websocket.
 
 ## The Shelf
 
-O **shelf** é um middleware feito para o Dart inspirado no **Connect** do Javascript tendo também alguma
-semelhança com o **express.js**. 
+The **shelf** is a middleware made for Dart inspired by the **Connect** of Javascript and also has some
+similarity to **express.js**. 
 
-O **shelf_modular** usa o **shelf** para lidar com as requisições e respostas, o que o torna compatível com qualquer outro package feito para o **shelf** como o **shelf_proxy** ou **shelf_static**.
+The **shelf_modular** uses **shelf** to handle requests and responses, which makes it compatible with any other package made for **shelf** like **shelf_proxy** or **shelf_static* *.
 
 
 ## **shelf_modular** VS **flutter_modular**
 
-Temos poucas diferenças entre os dois packages, a principal é que o **flutter_modular** só funcionana em um ambiente Flutter enquanto o **shelf_modular** depende do **shelf**, por isso os dois packages são nomeados
-com sua dependência principal a frente: **flutter_**, **shelf_**.
+We have few differences between the two packages, the main one is that **flutter_modular** only works in a Flutter environment while **shelf_modular** depends on **shelf**, so the two packages are named
+with its main dependency in front: **flutter_**, **shelf_**.
 
-Na prática, o **shelf_modular** é um clone do **flutter_modular**, retornando um objeto **Response** nas rotas
-em vez de um Widget.
+In practice, **shelf_modular** is a clone of **flutter_modular**, returning a **Response** object in routes
+instead of a Widget.
 
-Foi adicionado um novo construtor no sistema de injeção de dependências chamado **Bind.scoped**, para manter a instância de um **Bind** durante a requisição e destruindo-o ao final da requisição. Veramos melhor o seu funcionanmento mais a frente.
+A new constructor has been added to the dependency injection system called **Bind.scoped**, to keep the instance of a **Bind** during the request and destroy it at the end of the request. We will see how it works better later on.
 
 ## Start a project
 
-Para começar, criaremos um novo projeto **Dart** usando o comando ``` dart create backend_app``` ou diretamente 
-pela IDE que preferir.
+To get started, we'll create a new **Dart** project using the ``` dart create backend_app``` command or directly
+by the IDE you prefer.
 
 :::danger ATTENTION
 
-NÃO CRIE UM PROJETO FLUTTER!
+DO NOT CREATE A FLUTTER PROJECT!
 
 :::
 
 :::info TIP
 
-Uma versão do Dart vem acoplada ao SDK do Flutter, por tanto, não é necessário baixar o Dart separadamente.
+A version of Dart comes bundled with the Flutter SDK, so there is no need to download Dart separately.
 
 :::
 
 :::info TIP
 
-Talvez seu novo projeto Dart não tenha os códigos na pasta **lib/**.
-Esse é um padrão de projetos do Dart, mas isso pode incomodar desenvolvedores Flutter, então podemos criar a pasta **lib/** e colocar seus códigos lá.
+Maybe your new Dart project doesn't have the codes in the **lib/** folder.
+This is default for Dart projects, but this might annoy Flutter developers, so we can create the **lib/** folder and put your code there.
 
-Mesmo assim é recomendado iniciar manter o arquivo de inicialização na pasta **bin/**. Sendo assim, podemos deixar apenas o arquivo que contém a **main()** na pasta **bin/**.
+It is still recommended to start keeping the initialization file in the **bin/** folder. So, we can just leave the file containing **main()** in the **bin/** folder.
 
 :::
 
-Agora vamos adicionar o **shelf** e o **shelf_modular** diretamente no **pubspec.yaml ou usando o comando abaixo:
+Now let's add **shelf** and **shelf_modular** directly into **pubspec.yaml or using the command below:
 
 ```
 dart pub add shelf shelf_modular
 ```
 
-ficando assim:
+getting like this:
 
 ```yaml
 
@@ -68,12 +68,12 @@ dependencies:
 
 ```
 
-Agora estamos prontos para iniciar nossa API.
+We are now ready to start our API.
 
-## Inicializando o projeto
+## Starting the project
 
-Precisamos iniciar o Modular no nosso arquivo de inicialização, ou seja, o que contem a função **main()**.
-Caso esteja seguindo o padrão proposto nas dicas acima, esse arquivo estará na pasta **lib/**.
+We need to start Modular in our initialization file, that is, the one that contains the **main()** function.
+If you are following the pattern proposed in the tips above, this file will be in the **lib/** folder.
 
 ```dart title="bin/backend_app.dart"
 
@@ -87,8 +87,8 @@ void main(List<String> arguments) async {
 
 ```
 
-O **AppModule()** é uma classe que herda de **Module**, e que pode ficar na pasta **lib/** para tornar o código
-mais semelhante a um projeto Flutter padrão por exemplo.
+**AppModule()** is a class that inherits from **Module**, and which can be in the **lib/** folder to make code
+more similar to a standard Flutter project for example.
 
 ```dart title="lib/app_module.dart"
 import 'package:shelf/shelf.dart';
@@ -102,7 +102,7 @@ class AppModule extends Module {
 }
 ```
 
-Isso é tudo! Para iniciar o projeto use o comando:
+That is all! To start the project use the command:
 
 ```
 dart run
@@ -114,6 +114,6 @@ dart bin/backend_app.dart
 
 :::info TIP
 
-Usuários do **VSCode** podem configurar o launch.json para ter acesso a mais opções de depuração como breakpoint.
+The **VSCode** users can configure **launch.json** to have access to more debugging options like breakpoint.
 
 :::

@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Dependency Injection
 
-Falamos um pouco sobre o padrão de injeção de dependencyas na sessão do **flutter_modular**, a qual pode ser acessada [clicando aqui](https://modular.flutterando.com.br). Recomendamos fortemente a leitura principalmente para quem não conhece ou quer conhecer melhor esse padão de projetos.
+We talked a little about the dependency injection pattern in the **flutter_modular** session, which can be accessed [clicking here](https://modular.flutterando.com.br). We strongly recommend reading it mainly for those who do not know or want to know better this pattern of projects.
 
 ## Instance registration
 
@@ -14,10 +14,10 @@ manufactures them on demand or in single-instance form(singleton). This 'registr
 There are a few ways to build a Bind to register object instances:
 
 
-- *Bind.scoped*: Controi uma instancia que sobrevive durante toda a requisição, sendo destruida ao final da requisição.
-- *Bind.singleton*: Build an instance only once when the module starts.
+- *Bind.scoped*: Builds an instance that survives the entire request, being destroyed at the end of the request.
+- *Bind.singleton*: Builds an instance only once when the module starts.
 - *Bind.lazySingleton*: Build an instance only once when prompted.
-- *Bind.factory*: Build an instance on demand.
+- *Bind.factory*: Builds an instance on demand.
 - *Bind.instance*: Adds an existing instance.
 
 We register the binds in **AppModule**:
