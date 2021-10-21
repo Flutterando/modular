@@ -4,12 +4,12 @@ sidebar_position: 3
 
 # Dependency Injection
 
-We talked a little about the dependency injection pattern in the **flutter_modular** session, which can be accessed [clicking here](https://modular.flutterando.com.br). We strongly recommend reading it mainly for those who do not know or want to know better this pattern of projects.
+We talked a little about the dependency injection pattern in the **flutter_modular** session, which can be accessed by [clicking here](https://modular.flutterando.com.br). We strongly recommend reading it mainly for those who do not know or want to know better this pattern of projects.
 
 ## Instance registration
 
-The strategy for building an instance with its dependencies comprise register all objects in a module and
-manufactures them on demand or in single-instance form(singleton). This 'registration' is called **Bind**.
+The strategy for building an instance with its dependencies comprises of registering all objects in a module and
+manufacturing them on demand or in single-instance form(singleton). This 'registration' is called **Bind**.
 
 There are a few ways to build a Bind to register object instances:
 
