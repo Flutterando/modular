@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Routes
 
-The **shelf_modular** is preparing to receive requests respecting the methods **GET**, **POST**, **PUT**, **DELETE**, **PATCH**, applying the REST.
+The **shelf_modular** is prepared to receive requests respecting the methods **GET**, **POST**, **PUT**, **DELETE**, **PATCH**, applying the REST.
 We can use the **Route** class constructors to inform the method, the path and the handler.
 Routes are added in modules. We'll take the AppModule as an example and add some routes:
 
@@ -44,9 +44,9 @@ Route.get('/6', (Injector injector, ModularArguments args) => Request.ok('ok'));
 ```
 Magic Handler parameters are injected by **shelf_modular** and can be used in any order, making the handler function more dynamic even without using Reflection (dart:mirrors). So what are these parameters?
 
-- **Request**: Contains the information of the request coming from the customer.
+- **Request**: Contains the information of the request coming from the client.
 - **Injector**: Similar to **Modular.get**. Service Locator is made available in this way to facilitate testing.
-- **ModularArguments**: It stores the parameters and queries of the request, as well as the payload (in json) of the body of a POST request for example.
+- **ModularArguments**: It stores the parameters and queries of the request, as well as the payload (in json) of the body of a POST request, for example.
 
 :::info TIP
 
@@ -56,12 +56,12 @@ Feel free to shuffle or omit some parameters.
 
 :::danger ATTENTION
 
-It is mandatory to add the parameter type. (ex: **Request** req);
+It is mandatory to specify the parameter's type. (ex: **Request** req);
 
 :::
 
 
-## Argumento de rotas.
+## Route Arguments.
 
 **shelf_modular** supports dynamic routing and also understands query and request body. The object that represents this is **ModularArguments**. Let's look at an example with a complete REST layer:
 
