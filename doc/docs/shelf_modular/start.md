@@ -52,13 +52,13 @@ It is still recommended to start keeping the initialization file in the **bin/**
 
 :::
 
-Now let's add **shelf** and **shelf_modular** directly into **pubspec.yaml or using the command below:
+Now let's add **shelf** and **shelf_modular** directly into **pubspec.yaml** or using the command below:
 
 ```
 dart pub add shelf shelf_modular
 ```
 
-getting like this:
+getting a result like this:
 
 ```yaml
 
@@ -73,7 +73,7 @@ We are now ready to start our API.
 ## Starting the project
 
 We need to start Modular in our initialization file, that is, the one that contains the **main()** function.
-If you are following the pattern proposed in the tips above, this file will be in the **lib/** folder.
+If you are following the pattern proposed in the tips above, this file will be in the **bin/** folder.
 
 ```dart title="bin/backend_app.dart"
 
