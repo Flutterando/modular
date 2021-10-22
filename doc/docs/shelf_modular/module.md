@@ -10,7 +10,7 @@ A Module’s lifetime ends when the last page is closed.
 
 ## Routing between modules
 
-The **shelf_modular** works with "dynamic routes”, segments, query, fragments, very similar to what we see on web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
+The **shelf_modular** works with "dynamic routes”, segments, query, fragments, very similar to what we see on web. Let’s take a look at the anatomy of a “path”. To access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
 ```
 /home/user/1
 ```
