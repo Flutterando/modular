@@ -55,17 +55,17 @@ class FlutterModularModule extends Module {
         Bind.factory<ReportPush>((i) => ReportPushImpl(i())),
         Bind.factory<ReassembleTracker>((i) => ReassembleTrackerImpl(i())),
         //presenter
-        Bind.singleton<ModularRouteInformationParser>((i) =>
+        Bind.factory<ModularRouteInformationParser>((i) =>
             ModularRouteInformationParser(
                 getRoute: i(),
                 getArguments: i(),
                 setArguments: i(),
                 reportPush: i())),
-        Bind.singleton<ModularRouterDelegate>((i) => ModularRouterDelegate(
+        Bind.factory<ModularRouterDelegate>((i) => ModularRouterDelegate(
             parser: i(),
             navigatorKey: GlobalKey<NavigatorState>(),
             reportPop: i())),
-        Bind.lazySingleton<IModularBase>((i) => ModularBase(
+        Bind.factory<IModularBase>((i) => ModularBase(
             reassembleTracker: i(),
             disposeBind: i(),
             finishModule: i(),
