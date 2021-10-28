@@ -24,6 +24,7 @@ Tracker get ModularTracker {
   return _tracker!;
 }
 
+///clean ModularTracker singleton
 void cleanTracker() {
   _tracker?.finishApp();
   _tracker = null;

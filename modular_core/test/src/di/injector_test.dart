@@ -80,8 +80,10 @@ class MyInjectModule extends BindContextImpl {
         _Bind((i) => 'Jacob', scoped: true),
         _Bind((i) => true),
         _Bind<double>((i) => 0.0, lazy: false),
-        _Bind<MyObjectWithReassemble>((i) => MyObjectWithReassemble(), lazy: false),
-        _Bind<MyObjectWithlessReassemble>((i) => MyObjectWithlessReassemble(), lazy: false),
+        _Bind<MyObjectWithReassemble>((i) => MyObjectWithReassemble(),
+            lazy: false),
+        _Bind<MyObjectWithlessReassemble>((i) => MyObjectWithlessReassemble(),
+            lazy: false),
       ];
 }
 
