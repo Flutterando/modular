@@ -53,6 +53,7 @@ class ModularAppState extends State<ModularApp> {
     Modular.destroy();
     Modular.debugPrintModular(
         '-- ${widget.module.runtimeType.toString()} DISPOSED');
+    cleanGlobals();
     super.dispose();
   }
 
