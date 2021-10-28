@@ -1,3 +1,6 @@
+## [4.2.0] - 2021-10-28
+* Added cleanInjector() and cleanModular() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
+* Updated modular_core.
 ## [4.1.2] - 2021-10-08
 * Added "maintainState" in routes. [#572](https://github.com/Flutterando/modular/issues/572)
 * Fixed pushReplacementNamed
