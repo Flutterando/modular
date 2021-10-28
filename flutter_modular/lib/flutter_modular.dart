@@ -43,7 +43,6 @@ IModularBase get Modular {
 
 void cleanModular() {
   _modular?.destroy();
-  _modular?.dispose();
   _modular = null;
 }
 
