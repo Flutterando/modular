@@ -1,4 +1,7 @@
-## 1.1.3 - 2021/10/01
+## 1.2.0 - 2021/10/28
+* Added cleanTracker() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
+
+## 1.2.0 - 2021/10/01
 * Added reassemble method for routes and binds.
 
 ## 1.0.5 - 2021/09/24
