@@ -12,7 +12,7 @@ In this session we'll learn how to do this.
 We can replace the navigation object with a Mock/Fake by injecting the **Modular.navigatorDelegate** property:
 
 ```dart
-class ModularNavigateMock extends Mock implements IModularNavigate {}
+class ModularNavigateMock extends Mock implements IModularNavigator {}
 
 void main(){
     final navigate = ModularNavigateMock();
