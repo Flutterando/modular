@@ -30,7 +30,7 @@ class OnlyErrorWidget extends StatelessWidget {
 }
 ```
 
-See more details (here)[https://modular.flutterando.com.br/docs/flutter_modular/watch]
+See more details [here](https://modular.flutterando.com.br/docs/flutter_modular/watch)
 
 ## [4.2.0] - 2021-10-28
 * Added cleanInjector() and cleanModular() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
