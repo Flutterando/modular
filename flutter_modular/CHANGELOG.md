@@ -1,3 +1,15 @@
+## [4.3.0] - 2021-12-10
+* Added BuildContext extension [context.read()] and [context.watch()];
+* The [context.watch()] listen changes of [Listanable], [Stream] and [Store] by Triple;
+```dart
+class Body extends StatelessWidget {
+  Widget build(BuildContext context){
+    final notifier = context.watch<ValueNotifier>();
+    return Text('${notifier.value}')
+  }
+}
+```
+
 ## [4.2.0] - 2021-10-28
 * Added cleanInjector() and cleanModular() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
 * Updated modular_core.
