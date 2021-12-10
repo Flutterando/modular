@@ -175,10 +175,15 @@ class _InheritedModularElement extends InheritedElement {
 }
 
 extension ModularWatchExtension on BuildContext {
+  /// Request an instance by [Type] and
+  /// watch your changes
+  ///
+  /// SUPPORTED CLASS ([Listenable], [Stream] and [Store] by Triple).
   T watch<T extends Object>([SelectCallback<T>? select]) {
     return _ModularInherited.of<T>(this, select: select);
   }
 
+  /// Request an instance by [Type]
   T read<T extends Object>() {
     return _ModularInherited.of<T>(this, listen: false);
   }
