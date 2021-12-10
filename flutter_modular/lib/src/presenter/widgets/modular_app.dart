@@ -92,7 +92,8 @@ class _ModularInherited extends InheritedWidget {
     final bind = Modular.get<T>();
     if (listen) {
       final registre = _Register<T>(bind, select);
-      context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
+      final inherited = context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
+      inherited.updateShouldNotify(inherited);
     }
 
     return bind;
@@ -116,9 +117,11 @@ class _InheritedModularElement extends InheritedElement {
 
   @override
   void updateDependencies(Element dependent, covariant _Register aspect) {
-    final localRegister = getDependencies(dependent) as _Register?;
+    var registers = getDependencies(dependent) as Set<_Register>?;
 
-    if (localRegister == aspect.value) {
+    registers ??= {};
+
+    if (registers.contains(aspect)) {
       return;
     }
 
@@ -135,7 +138,8 @@ class _InheritedModularElement extends InheritedElement {
         onLoading: (isLoading) => _handleUpdate(aspect.type),
       );
     }
-    setDependencies(dependent, aspect);
+    registers.add(aspect);
+    setDependencies(dependent, registers);
   }
 
   @override
@@ -159,10 +163,13 @@ class _InheritedModularElement extends InheritedElement {
 
   @override
   void notifyDependent(covariant InheritedWidget oldWidget, Element dependent) {
-    final register = getDependencies(dependent) as _Register;
+    var registers = getDependencies(dependent) as Set<_Register>?;
+    registers ??= {};
 
-    if (register.type == current) {
-      dependent.didChangeDependencies();
+    for (var register in registers) {
+      if (register.type == current) {
+        dependent.didChangeDependencies();
+      }
     }
   }
 }
