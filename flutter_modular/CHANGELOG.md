@@ -9,6 +9,15 @@ class Body extends StatelessWidget {
   }
 }
 ```
+* Use `select` in `.watch()` to select the reactive property:
+```dart
+class Body extends StatelessWidget {
+  Widget build(BuildContext context){
+    final bloc = context.watch<CounterBloc>((bloc) => bloc.stream);
+    return Text('${bloc.state}')
+  }
+}
+```
 
 ## [4.2.0] - 2021-10-28
 * Added cleanInjector() and cleanModular() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
