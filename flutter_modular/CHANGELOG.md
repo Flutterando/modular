@@ -19,6 +19,17 @@ class Body extends StatelessWidget {
 }
 ```
 
+Also, use `Store Selectors` in conjunction with `.watch`:
+```dart
+class OnlyErrorWidget extends StatelessWidget {
+  Widget build(BuildContext context){
+    // changes with store.setError();
+    final store = context.watch<MyTripleStore>((store) => store.selectError);
+    return Text('${store.error}')
+  }
+}
+```
+
 ## [4.2.0] - 2021-10-28
 * Added cleanInjector() and cleanModular() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
 * Updated modular_core.
