@@ -7,6 +7,22 @@ sidebar_position: 7
 Modular provides tools make unit testing and route and injection integration easier.
 In this session we'll learn how to do this.
 
+First you need add the **modular_test** to pubspec.yaml:
+```yaml
+
+dev_dependencies:
+  modular_test: any
+
+```
+
+:::tip TIP
+
+Flutter's CLI has a tool that makes package installation easier in the project. Use the command:
+
+`flutter pub add --dev modular_test`
+
+:::
+
 ## Route Test 
 
 We can replace the navigation object with a Mock/Fake by injecting the **Modular.navigatorDelegate** property:
@@ -50,11 +66,11 @@ class DioMock extends Mock implements DioForNative {}
 main(){
     final dioMock = DioMock();
 
-    setUp(){
+    setUp((){
         initModule(MyModule(), replaceBinds: [
             Bind.instance<Dio>(dioMock),
         ]);
-    }
+    });
 }
 ```
 
