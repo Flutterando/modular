@@ -1,3 +1,40 @@
+## [4.3.0] - 2021-12-10
+* Added BuildContext extension [context.read()] and [context.watch()];
+* The [context.watch()] listen changes of [Listanable], [Stream] and [Store] by Triple;
+```dart
+class Body extends StatelessWidget {
+  Widget build(BuildContext context){
+    final notifier = context.watch<ValueNotifier>();
+    return Text('${notifier.value}')
+  }
+}
+```
+* Use `select` in `.watch()` to select the reactive property:
+```dart
+class Body extends StatelessWidget {
+  Widget build(BuildContext context){
+    final bloc = context.watch<CounterBloc>((bloc) => bloc.stream);
+    return Text('${bloc.state}')
+  }
+}
+```
+
+Also, use `Store Selectors` in conjunction with `.watch`:
+```dart
+class OnlyErrorWidget extends StatelessWidget {
+  Widget build(BuildContext context){
+    // changes with store.setError();
+    final store = context.watch<MyTripleStore>((store) => store.selectError);
+    return Text('${store.error}')
+  }
+}
+```
+
+See more details [here](https://modular.flutterando.com.br/docs/flutter_modular/watch)
+
+## [4.2.0] - 2021-10-28
+* Added cleanInjector() and cleanModular() for restart Modular. [#601](https://github.com/Flutterando/modular/pull/601)
+* Updated modular_core.
 ## [4.1.2] - 2021-10-08
 * Added "maintainState" in routes. [#572](https://github.com/Flutterando/modular/issues/572)
 * Fixed pushReplacementNamed

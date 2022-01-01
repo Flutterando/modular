@@ -2,11 +2,11 @@
 sidebar_position: 2
 ---
 
-# Rotas
+# Routes
 
-O **shelf_modular** está preparando para receber requisições respeitando os métodos **GET**, **POST**, **PUT**, **DELETE**, **PATCH**, aplicando o REST.
-Podemos utilizar os construtores da classe **Route** para informar o método, o caminho e o handler.
-Rotas são adicionadas nos módulos. Tomaremos como exemplo o AppModule e adicionaremos algumas rotas
+The **shelf_modular** is prepared to receive requests respecting the methods **GET**, **POST**, **PUT**, **DELETE**, **PATCH**, applying the REST.
+We can use the **Route** class constructors to inform the method, the path and the handler.
+Routes are added in modules. We'll take the AppModule as an example and add some routes:
 
 ```dart title="lib/app_module.dart"
 import 'package:shelf/shelf.dart';
@@ -21,7 +21,7 @@ class AppModule extends Module {
 }
 ```
 
-Agora você pode testar no seu navegador ou usando algum programa (wget/curl):
+Now you can test it in your browser or using some program (wget/curl):
 
 ```
 http://localhost:3000/users
@@ -30,7 +30,7 @@ http://localhost:3000/products
 
 ## Magic Handler
 
-Toda rota tem uma função que retorna um **Response**. Essa função pode ter até 3 parâmetros opcionais: **Request**, **Injector** e **ModularArgments**.
+Every route has a function that returns a **Response**. This function can have up to 3 optional parameters: **Request**, **Injector** and **ModularArgments**.
 
 ```dart
 Route.get('/', (Request request) => Request.ok('ok'));
@@ -42,29 +42,28 @@ Route.get('/5', (ModularArguments args) => Request.ok('ok'));
 Route.get('/6', (Injector injector, ModularArguments args) => Request.ok('ok'));
 ...
 ```
-Os parâmetros do Magic Handler são injetados pelo **shelf_modular** e podem ser usados em qualquer ordem, tornando a função handler mais dinâmica mesmo sem usar Reflection (dart:mirrors). Então o que são esses parametros?
+Magic Handler parameters are injected by **shelf_modular** and can be used in any order, making the handler function more dynamic even without using Reflection (dart:mirrors). So what are these parameters?
 
-- **Request**: Contém as informação da requisição vinda do cliente.
-- **Injector**: Semelhante ao **Modular.get**. O Service Locator é disponibilizado dessa forma para facilitar os testes.
-- **ModularArguments**: Amarzena os parametros e queries da requisição, bem como o payload(em json) do corpo de uma requisição POST por exemplo.
+- **Request**: Contains the information of the request coming from the client.
+- **Injector**: Similar to **Modular.get**. Service Locator is made available in this way to facilitate testing.
+- **ModularArguments**: It stores the parameters and queries of the request, as well as the payload (in json) of the body of a POST request, for example.
 
 :::info TIP
 
-Fique a vontade para embaralhar ou omitir alguns parametros.
+Feel free to shuffle or omit some parameters.
 
 :::
 
 :::danger ATTENTION
 
-É obrigatório adicionar o tipo do parâmetro. 
+It is mandatory to specify the parameter's type. (ex: **Request** req);
 
 :::
 
 
-## Argumento de rotas.
+## Route Arguments.
 
-O **shelf_modular** tem suporte a rota dinâmicas e também entende query e corpo da requisição. O objeto que representa isso é o **ModularArguments**. Vejamos um exemplo com uma camada REST completa:
-
+**shelf_modular** supports dynamic routing and also understands query and request body. The object that represents this is **ModularArguments**. Let's look at an example with a complete REST layer:
 
 ```dart title="lib/app_module.dart"
 import 'package:shelf/shelf.dart';
@@ -85,21 +84,22 @@ class AppModule extends Module {
 
 :::info TIP
 
-Você pode usar query ao invés de params acessando ```http://localhost:3000/users?id=1``` e recuperando com o **ModularArguments.query** usando ```final id = ModularAguments.query['id'];```
+You can use query instead of params by going to ```http://localhost:3000/users?id=1``` and retrieving with **ModularArguments.query** using ```final id = ModularAguments.query[ 'id'];```.
 
 :::
 
 :::info TIP
 
-Note que no **Route.post** foi usado o **ModularArguments.data** em vez de **ModularArguments.params**.
-Isso porque o **ModularArguments.data** pega o corpo da requisição (como por exemplo um json).
+Note that in **Route.post** **ModularArguments.data** was used instead of **ModularArguments.params**.
+That's because **ModularArguments.data** takes the body of the request (such as a json).
 
-Para pegar um Multipart, deve usar o **Request.read()**.
+To get a Multipart, you must use **Request.read()**.
+
 :::
 
 ## Resources
 
-As vezes precisamos agregar rotas em uma camada para facilitar a compreenção dos dados, por isso usamos objetos do tipo **Resource**. Bastar criar uma classe que herde de **Resource** e implementar a Lista de ModularRoute. Veja o exemplo de um CRUD completo:
+Sometimes we need to aggregate routes in a layer to make the data easier to understand, that's why we use **Resource** type objects. Just create a class that inherits from **Resource** and implement the ModularRoute List. See an example of a complete CRUD:
 
 ```dart title="lib/user_resource.dart
 class UserResource extends Resource {
@@ -121,7 +121,7 @@ class UserResource extends Resource {
 }
 ```
 
-Agora, basta adicionar o **UserResource** ao **AppModule** usando o construtor **Route.resource**:
+Now, just add **UserResource** to **AppModule** using the **Route.resource** constructor:
 
 ```dart title="lib/app_module.dart"
 import 'package:shelf/shelf.dart';
@@ -137,14 +137,15 @@ class AppModule extends Module {
 }
 ```
 
-Para ver se está tudo funcionando, basta testar em um navegador:
+To see if everything is working, just test it in a browser:
+
 ```
 http://localhost:3000/users/
 ```
 
 :::info TIP
 
-Prestando atenção no seguimento da URL, percebemos que o nome da rota **/users** é concatenado com o as rotas do resource, ficando: **/users** + **/**.
+Paying attention to the following URL, we notice that the route name **/users** is concatenated with the resource routes, being: **/users** + **/**.
 
 :::
 

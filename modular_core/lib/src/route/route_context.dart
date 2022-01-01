@@ -3,7 +3,8 @@ import 'package:modular_interfaces/modular_interfaces.dart';
 
 import '../di/bind_context.dart';
 
-abstract class RouteContextImpl extends BindContextImpl implements RouteContext {
+abstract class RouteContextImpl extends BindContextImpl
+    implements RouteContext {
   @override
   List<ModularRoute> get routes => const [];
 
@@ -21,7 +22,8 @@ abstract class RouteContextImpl extends BindContextImpl implements RouteContext 
       if (preview.name.contains('**')) {
         if (!actual.name.contains('**')) {
           return 1;
-        } else if (actual.name.split('/').length > preview.name.split('/').length) {
+        } else if (actual.name.split('/').length >
+            preview.name.split('/').length) {
           return 1;
         }
       }
@@ -67,7 +69,9 @@ abstract class RouteContextImpl extends BindContextImpl implements RouteContext 
     final module = route.context!;
     modules.add(module);
     for (var child in module.routes) {
-      child = child.copyWith(bindContextEntries: {module.runtimeType: module}, parent: route.parent);
+      child = child.copyWith(
+          bindContextEntries: {module.runtimeType: module},
+          parent: route.parent);
       child = copy(route, child);
       map.addAll(assembleRoute(child));
     }

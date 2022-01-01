@@ -1,6 +1,7 @@
 library modular_core;
 
 import 'package:modular_core/src/di/injector.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
 import 'src/route/tracker.dart' as t;
 
@@ -16,4 +17,15 @@ export 'package:modular_interfaces/modular_interfaces.dart';
 export 'src/route/tracker.dart';
 
 /// Starting object to get routes and binds.
-final ModularTracker = t.TrackerImpl(InjectorImpl());
+Tracker? _tracker;
+
+Tracker get ModularTracker {
+  _tracker ??= t.TrackerImpl(InjectorImpl());
+  return _tracker!;
+}
+
+///clean ModularTracker singleton
+void cleanTracker() {
+  _tracker?.finishApp();
+  _tracker = null;
+}
