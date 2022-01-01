@@ -1,3 +1,5 @@
+## [4.3.1] - 2021-12-10
+* Fixed "bind replaced" bug
 ## [4.3.0] - 2021-12-10
 * Added BuildContext extension [context.read()] and [context.watch()];
 * The [context.watch()] listen changes of [Listanable], [Stream] and [Store] by Triple;

@@ -6,7 +6,8 @@ import 'package:triple/triple.dart';
 void main() {
   testWidgets('ModularApp', (tester) async {
     final modularKey = UniqueKey();
-    final modularApp = ModularApp(key: modularKey, module: CustomModule(), child: AppWidget());
+    final modularApp =
+        ModularApp(key: modularKey, module: CustomModule(), child: AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -94,7 +95,10 @@ class MyStore extends Store<Exception, int> {
   }
 
   @override
-  Disposer observer({void Function(int state)? onState, void Function(bool isLoading)? onLoading, void Function(Exception error)? onError}) {
+  Disposer observer(
+      {void Function(int state)? onState,
+      void Function(bool isLoading)? onLoading,
+      void Function(Exception error)? onError}) {
     fnState = onState;
     fnLoading = onLoading;
     fnError = onError;
