@@ -115,7 +115,9 @@ abstract class BindContextImpl implements BindContext {
     final filteredList = _binds.where((bind) => !bind.isLazy && !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
       var b = bindElement.factoryFunction(injector);
-      _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
+      if (!_singletonBinds.containsKey(b.runtimeType)) {
+        _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
+      }
     }
   }
 

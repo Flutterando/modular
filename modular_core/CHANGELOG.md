@@ -1,3 +1,5 @@
+## 1.1.4 - 2021/12/31
+* Fixed "bind replaced" bug
 ## 1.1.3 - 2021/10/01
 * Added reassemble method for routes and binds.
 
