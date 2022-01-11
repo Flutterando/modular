@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Triple Pattern integration
@@ -16,7 +16,7 @@ ScopedBuilder<MyStore, Exception, String>(
     onLoading: (context) => CircularProgressIndicator(),
 );
 ```
-Exemple with **flutter_modular**:
+Example with **flutter_modular**:
 ```dart
 ScopedBuilder<MyStore, Exception, String>(
     onState: (context, state) => Text('$state'),

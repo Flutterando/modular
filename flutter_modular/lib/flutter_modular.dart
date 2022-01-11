@@ -33,11 +33,27 @@ export 'src/presenter/navigation/transitions/transitions.dart';
 export 'package:modular_core/modular_core.dart'
     show ModularRoute, Disposable, ReassembleMixin;
 
+IModularBase? _modular;
+
 /// Instance of Modular for search binds and route.
-final Modular = injector<IModularBase>();
+IModularBase get Modular {
+  _modular ??= injector<IModularBase>();
+  return _modular!;
+}
+
+void cleanModular() {
+  _modular?.destroy();
+  _modular = null;
+}
+
+void cleanGlobals() {
+  cleanTracker();
+  cleanModular();
+  cleanInjector();
+}
 
 @visibleForTesting
-String initialRouteDeclaratedInMaterialApp = '/';
+String initialRouteDeclaredInMaterialApp = '/';
 
 extension ModularExtensionMaterial on MaterialApp {
   MaterialApp modular() {
@@ -47,7 +63,7 @@ extension ModularExtensionMaterial on MaterialApp {
 
     injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
 
-    initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
+    initialRouteDeclaredInMaterialApp = initialRoute ?? '/';
 
     final app = MaterialApp.router(
       key: key,
@@ -95,7 +111,7 @@ extension ModularExtensionCupertino on CupertinoApp {
 
     (injector.get<IModularBase>() as ModularBase).flags.isCupertino = true;
 
-    initialRouteDeclaratedInMaterialApp = initialRoute ?? '/';
+    initialRouteDeclaredInMaterialApp = initialRoute ?? '/';
 
     final app = CupertinoApp.router(
       key: key,

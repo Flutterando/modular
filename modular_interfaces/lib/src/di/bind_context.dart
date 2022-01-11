@@ -9,7 +9,7 @@ abstract class BindContext {
   /// ATTENTION: The binds must be marked with the flag export: true, in the module to be imported.
   List<BindContext> get imports;
 
-  /// Pega os binds referente a esse contexto.
+  /// Get the binds for that context.
   T? getBind<T extends Object>(Injector injector);
 
   /// Dispose bind from the memory

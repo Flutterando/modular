@@ -21,7 +21,8 @@ abstract class BindContextImpl implements BindContext {
   final _singletonBinds = <Type, SingletonBind>{};
 
   @override
-  List<SingletonBind> get instanciatedSingletons => _singletonBinds.values.toList();
+  List<SingletonBind> get instanciatedSingletons =>
+      _singletonBinds.values.toList();
 
   @visibleForTesting
   List<BindContract> getProcessBinds() => _binds;
@@ -51,7 +52,9 @@ abstract class BindContextImpl implements BindContext {
       return bindValue;
     }
 
-    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
+    var bind = _binds.firstWhere(
+        (b) => b.factoryFunction is T Function(Injector),
+        orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       return null;
     }
@@ -111,16 +114,23 @@ abstract class BindContextImpl implements BindContext {
   }
 
   @mustCallSuper
-  void instantiateSingletonBinds(List<SingletonBind> singletons, Injector injector) {
-    final filteredList = _binds.where((bind) => !bind.isLazy && !_containBind(singletons, bind));
+  void instantiateSingletonBinds(
+      List<SingletonBind> singletons, Injector injector) {
+    final filteredList =
+        _binds.where((bind) => !bind.isLazy && !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
       var b = bindElement.factoryFunction(injector);
-      _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
+      if (!_singletonBinds.containsKey(b.runtimeType)) {
+        _singletonBinds[b.runtimeType] =
+            SingletonBind(value: b, bind: bindElement);
+      }
     }
   }
 
   bool _containBind(List<SingletonBind> singletons, BindContract bind) {
-    return singletons.indexWhere((element) => element.bind.factoryFunction == bind.factoryFunction) != -1;
+    return singletons.indexWhere((element) =>
+            element.bind.factoryFunction == bind.factoryFunction) !=
+        -1;
   }
 
   Type _getInjectType<B>() {
@@ -128,7 +138,9 @@ abstract class BindContextImpl implements BindContext {
 
     for (var singleton in _singletonBinds.values) {
       if (singleton.value is B) {
-        foundType = _singletonBinds.entries.firstWhere((map) => map.value.value == singleton.value).key;
+        foundType = _singletonBinds.entries
+            .firstWhere((map) => map.value.value == singleton.value)
+            .key;
         break;
       }
     }

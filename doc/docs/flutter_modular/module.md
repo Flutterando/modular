@@ -1,10 +1,10 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Module
 
-A module clusters all rotes and binds relative to an scope or feature of the application and may contain sub modules forming one single composition. 
+A module clusters all routes and binds relative to a scope or feature of the application and may contain sub modules forming one single composition. 
 It means that to access a bind, it needs to be in a parent module that's already started, otherwise, the bind will not be visible to be recovered using a system injection. 
 A Module’s lifetime ends when the last page is closed.
 
@@ -88,14 +88,14 @@ The ending point of a route must always be referenced with **ChildRoute**.
 
 ## Routing between modules
 
-The **flutter_modular** works with “named routes”, with segments, query, fragments, very similar to what we see on web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
+**flutter_modular** works with “named routes”, with segments, query, fragments, very similar to what we see on web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
 ```
 /home/user/1
 ```
 
 :::tip TIP
 
-We call “segment” the text separated by `/`. For example, the URI `/home/user/1` has three segment, being them [‘home’, ‘user’, ‘1’];
+We call “segment” the text separated by `/`. For example, the URI `/home/user/1` has three segments, being them [‘home’, ‘user’, ‘1’];
 
 :::
 
@@ -120,9 +120,9 @@ class BModule extends Module {
 ```
 In this scenario, there are two routes in **AModule**, a **ChildRoute** called `/` and a **ModuleRoute** called `/b-module`.
 
-The **BModule** contains another two **ChildRoute** called `/` and `/other`, respectively. 
+**BModule** contains another two **ChildRoute** called `/` and `/other`, respectively. 
 
-What would you call **ChildRoute** `/other`? The answer is in follow up. Assuming that AModule is the application’s root module, 
+How would you call **ChildRoute** `/other`? The answer is in follow up. Assuming that AModule is the application’s root module, 
 then the initial segment will be the name of the **BModule**, because we need to get a route that is within it.
 
 ```
@@ -133,7 +133,7 @@ The next segment will be the name of the route we want, the `/other`.
 ```
 /b-module/other
 ```
-READY! When you execute the `Modular.to.navigate(‘/b-module/other’)` the page that will appear will be **OtherPage()** widget.
+DONE! When you execute the `Modular.to.navigate(‘/b-module/other’)` the page that will appear will be **OtherPage()** widget.
 
 The logic is the same when the submodule contains a route named as `/`. Understanding this, we assume that the available routes in this example are:
 ```
@@ -144,7 +144,7 @@ The logic is the same when the submodule contains a route named as `/`. Understa
 
 :::tip TIP
 
-When the concatenation of named routes takes place and generates a `//`, this route is normalized to `/`. This explains the first example of the session.
+When the concatenation of named routes takes place and generates a `//`, this route is normalized to `/`. This explains the first example in this section.
 
 :::
 
@@ -170,7 +170,7 @@ Note that there is a `./` at the beginning of the path. This causes only the end
 
 :::tip TIP
 
-The concept of relative path is applied in terminals, CMD and file import.
+The concept of relative path is applied as in terminals, CMD and file import.
 
 Expressions like `../` would replace the penultimate segment onwards.
 

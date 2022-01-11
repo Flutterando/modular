@@ -151,6 +151,8 @@ class ModularBase implements IModularBase {
         rethrow;
       }
     } catch (e, s) {
+      print(e.toString());
+      print('STACK TRACE \n $s');
       response = Response.internalServerError(body: '${e.toString()}/n$s');
     }
     releaseScopedBinds();
@@ -167,6 +169,8 @@ class ModularBase implements IModularBase {
       }
 
       if (route is Route) {
+        reportPush(route);
+
         final response = applyHandler(
           route.handler!,
           request: request,
@@ -175,7 +179,6 @@ class ModularBase implements IModularBase {
           injector: injector<Injector>(),
         );
         if (response != null) {
-          reportPush(route);
           return response;
         } else {
           return Response.internalServerError(body: 'Handler not correct');
