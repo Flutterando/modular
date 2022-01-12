@@ -13,16 +13,17 @@ class ChildRoute<T> extends ParallelRoute<T> {
     Duration? duration,
     TransitionType? transition,
     List<RouteGuard> guards = const [],
+    RouteBuilder<T>? routeGenerator,
   })  : assert(name.startsWith('/'), 'The name must always start with a /'),
         assert(children.where((e) => e.name == name).isEmpty,
             'Don\'t use name "/" in route\'s children when parent be "/" too'),
         super(
-          name: name,
-          child: child,
-          customTransition: customTransition,
-          children: children,
-          duration: duration,
-          transition: transition,
-          middlewares: guards,
-        );
+            name: name,
+            child: child,
+            customTransition: customTransition,
+            children: children,
+            duration: duration,
+            transition: transition,
+            middlewares: guards,
+            routeGenerator: routeGenerator);
 }

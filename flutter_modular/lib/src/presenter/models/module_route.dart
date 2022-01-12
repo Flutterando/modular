@@ -21,6 +21,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     List<Middleware> middlewares = const [],
     Uri? uri,
     Map<Type, BindContext> bindContextEntries = const {},
+    RouteBuilder<T>? routeGenerator,
   })  : assert(!name.contains('/:'),
             'ModuleRoute should not contain dynamic route'),
         super(
@@ -37,6 +38,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
           middlewares: middlewares,
           uri: uri ?? Uri.parse('/'),
           bindContextEntries: bindContextEntries,
+          routeGenerator: routeGenerator,
         );
 
   factory ModuleRoute(
@@ -72,6 +74,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
+    RouteBuilder<T>? routeGenerator,
   }) {
     return ModuleRoute<T>._start(
       child: child ?? this.child,
@@ -87,6 +90,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
       uri: uri ?? this.uri,
       context: context ?? this.context,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      routeGenerator: routeGenerator,
     );
   }
 }

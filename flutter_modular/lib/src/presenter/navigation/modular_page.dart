@@ -51,6 +51,10 @@ class ModularPage<T> extends Page<T> {
       // Helper function
       Widget widgetBuilder(BuildContext context) => page;
 
+      if (route.routeGenerator != null) {
+        return route.routeGenerator!(widgetBuilder, this) as Route<T>;
+      }
+
       if (flags.isCupertino) {
         return CupertinoPageRoute<T>(
           settings: this,
@@ -64,6 +68,13 @@ class ModularPage<T> extends Page<T> {
         builder: widgetBuilder,
       );
     } else if (transitionType == TransitionType.noTransition) {
+      // Helper function
+      Widget widgetBuilder(BuildContext context) => page;
+
+      if (route.routeGenerator != null) {
+        return route.routeGenerator!(widgetBuilder, this) as Route<T>;
+      }
+
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
         maintainState: true,

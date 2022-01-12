@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/presenter/navigation/transitions/transitions.dart';
-import 'package:modular_core/modular_core.dart';
 import 'package:meta/meta.dart';
+import 'package:modular_core/modular_core.dart';
 
 import 'module.dart';
 
@@ -25,6 +25,8 @@ class ParallelRoute<T> extends ModularRouteImpl {
   /// Default is 300 milliseconds
   final Duration? duration;
 
+  final RouteBuilder<T>? routeGenerator;
+
   @internal
   final void Function(dynamic)? popCallback;
 
@@ -35,6 +37,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
     String parent = '',
     String schema = '',
     this.transition,
+    this.routeGenerator,
     this.customTransition,
     this.duration,
     List<ModularRoute> children = const [],
@@ -111,6 +114,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext>? bindContextEntries,
+    RouteBuilder<T>? routeGenerator,
   }) {
     return ParallelRoute<T>(
       child: child ?? this.child,
@@ -126,6 +130,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
       parent: parent ?? this.parent,
       uri: uri ?? this.uri,
       bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      routeGenerator: routeGenerator ?? this.routeGenerator,
     );
   }
 
