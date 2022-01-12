@@ -1,18 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
-import 'package:flutter_modular/src/presenter/models/modular_args.dart';
-import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'custom_navigator.dart';
 import 'modular_book.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
+import '../../domain/usecases/report_pop.dart';
 
 class ModularRouterDelegate extends RouterDelegate<ModularBook>
     with
@@ -35,6 +31,8 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
 
   @override
   ModularBook? currentConfiguration;
+  @override
+  List<ParallelRoute> get navigateHistory => currentConfiguration?.routes ?? [];
 
   @override
   Widget build(BuildContext context) {
