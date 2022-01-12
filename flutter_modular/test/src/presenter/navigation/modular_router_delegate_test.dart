@@ -79,6 +79,7 @@ void main() {
     delegate.currentConfiguration = ModularBook(routes: [route]);
     widget = delegate.build(context);
     expect(widget, isA<CustomNavigator>());
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('Book copywith', () {
@@ -98,6 +99,7 @@ void main() {
 
     await Future.delayed(Duration(seconds: 1));
     expect(delegate.currentConfiguration?.uri.toString(), '/test2');
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('navigate', () async {
@@ -123,6 +125,7 @@ void main() {
     await delegate.navigate('/test');
     expect(delegate.currentConfiguration?.uri.toString(), '/test');
     expect(delegate.path, '/test');
+    expect(delegate.navigateHistory, delegate.currentConfiguration!.routes);
   });
   test('onPopPage', () {
     final route = RouteMock();
@@ -149,6 +152,7 @@ void main() {
     expect(delegate.currentConfiguration?.routes.length, 1);
     delegate.onPopPage(route, null);
     expect(delegate.currentConfiguration?.routes.length, 0);
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('pushNamed with forRoot', () async {
@@ -184,6 +188,7 @@ void main() {
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('pushNamed common', () async {
@@ -223,6 +228,7 @@ void main() {
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 3);
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('pushReplacementNamed with forRoot', () async {
@@ -259,6 +265,7 @@ void main() {
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 1);
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('pushReplacementNamed common', () async {
@@ -303,6 +310,7 @@ void main() {
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('popAndPushNamed ', () async {
@@ -337,6 +345,7 @@ void main() {
     await Future.delayed(Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('pop ', () async {
