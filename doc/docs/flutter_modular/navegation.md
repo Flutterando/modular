@@ -83,8 +83,8 @@ In case you want to keep the previous routes, do not use the Modular.to.navigate
 It's common that we want to send data as parameters to another page. The **flutter_modular**
 offers some ways to do this:
 
-- _Dynamic routes_: consists on having a dynamic route segment, can be retrieved as a
-  parameter:
+- *Dynamic routes*: consists on having a dynamic route segment, can be retrieved as a
+parameter:
 
 ```dart
 ChildRoute('/second/:name', child: (context, args) => SecondPage(name: args.params['name'])),
@@ -102,13 +102,13 @@ Modular.to.navigate('/second/rie');    // args.params['name'] -> 'rie'
 
 :::tip TIP
 
-Use _:parameter_name_ syntax to provide a parameter in your route.
+Use *:parameter_name* syntax to provide a parameter in your route.
 Route arguments will be available through `args`, and can be accessed in `params` property,
 using square brackets notation (['parameter_name']).
 
 :::
 
-- _Query_: like the web environment, we can send parameters using query. This doesn't allows you to let the route dynamic, but it has the same effect when recovering a parameter;
+- *Query*: like the web environment, we can send parameters using query. This doesn't allows you to let the route dynamic, but it has the same effect when recovering a parameter;
 
 ```dart
 ChildRoute('/second', child: (context, args) => SecondPage(name: args.query['name'])),
@@ -129,8 +129,8 @@ We can continue the query separating by `&` like on web, for example: `/second?n
 
 :::
 
-- _Direct arguments_: Sometimes, we need to send a complex object and not only a
-  String as parameter. So we send the whole object directly in the navigation:
+- *Direct arguments*: Sometimes, we need to send a complex object and not only a
+String as parameter. So we send the whole object directly in the navigation:
 
 ```dart
 class Person {}
