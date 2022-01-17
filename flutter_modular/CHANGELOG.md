@@ -1,7 +1,7 @@
 ## [4.4.0] - 2022-01-17
 * Added `Modular.to.navigateHistory`.
 * Added ChildRoute.maintainState property.
-* Update **Triple** version.
+* Updated **Triple** version.
 
 ## [4.3.1] - 2021-12-10
 * Fixed "bind replaced" bug
