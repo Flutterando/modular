@@ -43,7 +43,7 @@ class ModularPage<T> extends Page<T> {
       return PageRouteBuilder<T>(
         pageBuilder: (context, _, __) => page,
         settings: this,
-        maintainState: true,
+        maintainState: route.maintainState,
         transitionsBuilder: route.customTransition!.transitionBuilder,
         transitionDuration: route.customTransition!.transitionDuration,
       );
@@ -54,19 +54,19 @@ class ModularPage<T> extends Page<T> {
       if (flags.isCupertino) {
         return CupertinoPageRoute<T>(
           settings: this,
-          maintainState: true,
+          maintainState: route.maintainState,
           builder: widgetBuilder,
         );
       }
       return MaterialPageRoute<T>(
         settings: this,
-        maintainState: true,
+        maintainState: route.maintainState,
         builder: widgetBuilder,
       );
     } else if (transitionType == TransitionType.noTransition) {
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
-        maintainState: true,
+        maintainState: route.maintainState,
         builder: (_) => page,
       );
     } else {
@@ -74,7 +74,8 @@ class ModularPage<T> extends Page<T> {
       return selectTransition!(
           (_, __) => page,
           route.duration ?? const Duration(milliseconds: 300),
-          this) as Route<T>;
+          this,
+          route.maintainState) as Route<T>;
     }
   }
 }

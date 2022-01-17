@@ -18,11 +18,14 @@ class PageTransition<T> extends PageRouteBuilder<T> {
   final Curve curve;
   final Alignment alignment;
   final Duration duration;
+  @override
+  final bool maintainState;
 
   PageTransition({
     Key? key,
     required this.builder,
     required this.type,
+    this.maintainState = true,
     this.curve = Curves.easeInOut,
     this.alignment = Alignment.center,
     this.duration = const Duration(milliseconds: 600),
@@ -33,7 +36,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
           },
           transitionDuration: duration,
           settings: settings,
-          maintainState: true,
+          maintainState: maintainState,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             switch (type) {
               case PageTransitionType.rightToLeft:
