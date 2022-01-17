@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'route.dart';
 
 abstract class IModularNavigator implements Listenable {
   ///  Actual path
   String get path;
+  List<ParallelRoute> get navigateHistory;
 
   /// Navigate to a new screen.
   ///

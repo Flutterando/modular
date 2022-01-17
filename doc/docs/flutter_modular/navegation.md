@@ -78,8 +78,6 @@ In case you want to keep the previous routes, do not use the Modular.to.navigate
 
 :::
 
-
-
 ## Passing parameters
 
 It's common that we want to send data as parameters to another page. The **flutter_modular**
@@ -91,6 +89,7 @@ parameter:
 ```dart
 ChildRoute('/second/:name', child: (context, args) => SecondPage(name: args.params['name'])),
 ```
+
 Adding a second segment to the route’s name starting with `:`. This is a special syntax to
 indicate that the route now matches any value in that part of the segment, and this value will
 be considered a parameter and can be retrieved using `Modular.args`;
@@ -114,8 +113,10 @@ using square brackets notation (['parameter_name']).
 ```dart
 ChildRoute('/second', child: (context, args) => SecondPage(name: args.query['name'])),
 ```
+
 Note that the route name is the same, so we can use **Modular.args.query** to get the parameter.
 Let’s see how we can navigate using queries:
+
 ```dart
 Modular.to.navigate('/second?name=jacob');  // args.query['name'] -> 'jacob'
 Modular.to.navigate('/second?name=sara');   // args.query['name'] -> 'sara'
@@ -177,7 +178,8 @@ You can also decrease or increase the transition duration by adding the property
 
 :::
 
-If no preset is useful, we can create a custom transition using the `CustomTransition()`: 
+If no preset is useful, we can create a custom transition using the `CustomTransition()`:
+
 ```dart {4-12}
 ChildRoute(
   '/second',
@@ -197,6 +199,7 @@ ChildRoute(
 ## RedirectRoute
 
 If is necessary to define a route for redirection, you can use **RedirectRoute** as a route:
+
 ```dart
 @override
 List<ModularRoute> get routes => [
@@ -204,6 +207,7 @@ List<ModularRoute> get routes => [
   RedirectRoute('/redirect', to: '/'),
 ];
 ```
+
 :::tip TIP
 
 **RedirectRoute** is very useful to work as a shortcut for long routes.
@@ -215,6 +219,7 @@ List<ModularRoute> get routes => [
 When a route is not found, an error is sent informing that the route path does not exist.
 Although we can add a behavior when no route is found in the module. We call this route
 **WildcardRoute**:
+
 ```dart
 WildcardRoute(child: (context, args) => NotFoundPage()),
 ```
@@ -249,6 +254,7 @@ To use a guard just add it to a route:
 ```dart
 ChildRoute('/', child: (context, args) => HomePage(), guards: [AuthGuard()]),
 ```
+
 :::tip TIP
 
 Setting redirection is not an obligation, but if not, an error will be raised.
@@ -366,3 +372,17 @@ A **ChildRoute** named as `/` cannot have a child `/`. It is a good practice to 
 for following child route.
 
 :::
+
+## Getting Navigation History
+
+You could get navigation history whetever you want using `Modular.to.navigateHistory`. For example:
+
+```dart title="navigator_helper.dart"
+class NavigatorHelper {
+  String getFirstRouteHistory(String path) {
+    var history = Modular.to.navigateHistory;
+
+    return history.first.name;;
+  }
+}
+```

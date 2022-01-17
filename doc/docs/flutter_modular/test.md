@@ -42,6 +42,12 @@ Prefer to use Mockito or Mocktail to create mocks.
 
 :::
 
+:::tip TIP
+
+To get navigate History use Modular.navigatorDelegate.navigateHistory
+
+:::
+
 ## Injection Test
 
 The safest way possible to inject dependencies is to test if the **Bind** construction happens as expected, then
