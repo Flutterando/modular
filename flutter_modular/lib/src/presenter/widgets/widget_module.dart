@@ -109,6 +109,6 @@ class _ModularProviderState<T extends BindContext>
   @override
   void dispose() {
     super.dispose();
-    injector.get<UnbindModule>().call<T>();
+    injector.get<UnbindModule>().call<T>(type: widget.module.runtimeType);
   }
 }

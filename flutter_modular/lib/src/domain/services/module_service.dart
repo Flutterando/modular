@@ -6,7 +6,7 @@ import 'package:flutter_modular/src/shared/either.dart';
 abstract class ModuleService {
   Either<ModularError, Unit> start(RouteContext module);
   Either<ModularError, Unit> bind(BindContext module);
-  Either<ModularError, Unit> unbind<T extends BindContext>();
+  Either<ModularError, Unit> unbind<T extends BindContext>({Type? type});
   Either<ModularError, Unit> finish();
   Future<Either<ModularError, bool>> isModuleReady<M extends Module>();
 }

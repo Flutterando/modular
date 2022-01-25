@@ -32,8 +32,8 @@ class ModuleServiceImpl extends ModuleService {
   }
 
   @override
-  Either<ModularError, Unit> unbind<T extends BindContext>() {
-    tracker.injector.removeBindContext<T>();
+  Either<ModularError, Unit> unbind<T extends BindContext>({Type? type}) {
+    tracker.injector.removeBindContext<T>(type: type);
     return right(unit);
   }
 }
