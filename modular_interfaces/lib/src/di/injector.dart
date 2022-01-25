@@ -27,7 +27,7 @@ abstract class Injector<T> {
   void destroy();
 
   /// remove [BindContext] by [Type]
-  void removeBindContext<T extends BindContext>();
+  void removeBindContext<T extends BindContext>({Type? type});
 
   /// checks if all asynchronous binds are ready to be used synchronously of all BindContext of Tree.
   Future<bool> isModuleReady<M extends BindContext>();
