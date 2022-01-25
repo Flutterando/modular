@@ -93,6 +93,8 @@ extension ModularExtensionMaterial on MaterialApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
+      scrollBehavior: scrollBehavior,
+      useInheritedMediaQuery: useInheritedMediaQuery,
       routeInformationParser: injector.get<ModularRouteInformationParser>(),
       routerDelegate: injector.get<ModularRouterDelegate>(),
     );
