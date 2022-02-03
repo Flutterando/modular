@@ -1,6 +1,6 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/services/route_service.dart';
+import '../../shared/either.dart';
+import '../services/route_service.dart';
 
 abstract class GetArguments {
   Either<ModularError, ModularArguments> call();

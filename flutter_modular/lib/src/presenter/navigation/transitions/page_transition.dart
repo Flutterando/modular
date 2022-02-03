@@ -43,13 +43,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 return SlideTransition(
                   transformHitTests: false,
                   position: Tween<Offset>(
-                    begin: Offset(1.0, 0.0),
+                    begin: const Offset(1.0, 0.0),
                     end: Offset.zero,
                   ).animate(CurvedAnimation(parent: animation, curve: curve)),
                   child: SlideTransition(
                     position: Tween<Offset>(
                       begin: Offset.zero,
-                      end: Offset(-1.0, 0.0),
+                      end: const Offset(-1.0, 0.0),
                     ).animate(CurvedAnimation(
                         parent: secondaryAnimation, curve: curve)),
                     child: child,
@@ -60,13 +60,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 return SlideTransition(
                   transformHitTests: false,
                   position: Tween<Offset>(
-                    begin: Offset(-1.0, 0.0),
+                    begin: const Offset(-1.0, 0.0),
                     end: Offset.zero,
                   ).animate(CurvedAnimation(parent: animation, curve: curve)),
                   child: SlideTransition(
                     position: Tween<Offset>(
                       begin: Offset.zero,
-                      end: Offset(1.0, 0.0),
+                      end: const Offset(1.0, 0.0),
                     ).animate(CurvedAnimation(
                         parent: secondaryAnimation, curve: curve)),
                     child: child,
@@ -76,13 +76,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 return SlideTransition(
                   transformHitTests: false,
                   position: Tween<Offset>(
-                    begin: Offset(0.0, -1.0),
+                    begin: const Offset(0.0, -1.0),
                     end: Offset.zero,
                   ).animate(CurvedAnimation(parent: animation, curve: curve)),
                   child: SlideTransition(
                     position: Tween<Offset>(
                       begin: Offset.zero,
-                      end: Offset(0.0, 1.0),
+                      end: const Offset(0.0, 1.0),
                     ).animate(CurvedAnimation(
                         parent: secondaryAnimation, curve: curve)),
                     child: child,
@@ -92,13 +92,13 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                 return SlideTransition(
                   transformHitTests: false,
                   position: Tween<Offset>(
-                    begin: Offset(0.0, 1.0),
+                    begin: const Offset(0.0, 1.0),
                     end: Offset.zero,
                   ).animate(CurvedAnimation(parent: animation, curve: curve)),
                   child: SlideTransition(
                     position: Tween<Offset>(
                       begin: Offset.zero,
-                      end: Offset(0.0, -1.0),
+                      end: const Offset(0.0, -1.0),
                     ).animate(CurvedAnimation(
                         parent: secondaryAnimation, curve: curve)),
                     child: child,
@@ -144,7 +144,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
               case PageTransitionType.rightToLeftWithFade:
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(1.0, 0.0),
+                    begin: const Offset(1.0, 0.0),
                     end: Offset.zero,
                   ).animate(CurvedAnimation(parent: animation, curve: curve)),
                   child: FadeTransition(
@@ -152,7 +152,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                     child: SlideTransition(
                       position: Tween<Offset>(
                         begin: Offset.zero,
-                        end: Offset(-1.0, 0.0),
+                        end: const Offset(-1.0, 0.0),
                       ).animate(CurvedAnimation(
                           parent: secondaryAnimation, curve: curve)),
                       child: child,
@@ -162,7 +162,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
               case PageTransitionType.leftToRightWithFade:
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(-1.0, 0.0),
+                    begin: const Offset(-1.0, 0.0),
                     end: Offset.zero,
                   ).animate(CurvedAnimation(parent: animation, curve: curve)),
                   child: FadeTransition(
@@ -170,7 +170,7 @@ class PageTransition<T> extends PageRouteBuilder<T> {
                     child: SlideTransition(
                       position: Tween<Offset>(
                         begin: Offset.zero,
-                        end: Offset(1.0, 0.0),
+                        end: const Offset(1.0, 0.0),
                       ).animate(CurvedAnimation(
                           parent: secondaryAnimation, curve: curve)),
                       child: child,

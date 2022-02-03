@@ -1,6 +1,6 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
+import '../../shared/either.dart';
+import '../dtos/route_dto.dart';
 
 abstract class RouteService {
   Future<Either<ModularError, ModularRoute>> getRoute(RouteParmsDTO params);

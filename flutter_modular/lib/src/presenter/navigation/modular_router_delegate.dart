@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../../flutter_modular.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'custom_navigator.dart';

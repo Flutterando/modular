@@ -1,16 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
-import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
-import 'package:flutter_modular/src/domain/usecases/get_route.dart';
-import 'package:flutter_modular/src/domain/usecases/report_push.dart';
-import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
-import 'package:flutter_modular/src/presenter/models/redirect_to_route.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+
 import 'package:modular_core/modular_core.dart';
 
+import '../../../flutter_modular.dart';
+import '../../domain/dtos/route_dto.dart';
+import '../../domain/usecases/get_arguments.dart';
+import '../../domain/usecases/get_route.dart';
+import '../../domain/usecases/report_push.dart';
+import '../../domain/usecases/set_arguments.dart';
 import 'modular_book.dart';
 
 class ModularRouteInformationParser

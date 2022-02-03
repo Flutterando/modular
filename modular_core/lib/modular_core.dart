@@ -19,7 +19,7 @@ export 'src/route/tracker.dart';
 /// Starting object to get routes and binds.
 Tracker? _tracker;
 
-Tracker get ModularTracker {
+Tracker get modularTracker {
   _tracker ??= t.TrackerImpl(InjectorImpl());
   return _tracker!;
 }

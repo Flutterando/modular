@@ -5,6 +5,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 class AppWidget extends StatelessWidget {
   final alice = Alice();
 
+  AppWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

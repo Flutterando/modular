@@ -1,15 +1,15 @@
 import 'package:meta/meta.dart';
-import 'package:modular_core/modular_core.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
-import 'resolvers.dart';
+import '../../modular_core.dart';
 
 class _MutableValue {
   var isReadyFlag = false;
 }
 
 abstract class BindContextImpl implements BindContext {
+  @override
   @visibleForOverriding
   List<BindContract> get binds => const [];
+  @override
   @visibleForOverriding
   List<BindContext> get imports => const [];
 
@@ -24,9 +24,11 @@ abstract class BindContextImpl implements BindContext {
   List<SingletonBind> get instanciatedSingletons =>
       _singletonBinds.values.toList();
 
+  @override
   @visibleForTesting
   List<BindContract> getProcessBinds() => _binds;
 
+  @override
   void changeBinds(List<BindContract> newBinds) {
     _binds.removeWhere((element) => !element.alwaysSerialized);
     _binds.addAll(newBinds);
@@ -44,6 +46,7 @@ abstract class BindContextImpl implements BindContext {
     _binds.insertAll(0, filteredList);
   }
 
+  @override
   T? getBind<T extends Object>(Injector injector) {
     T bindValue;
     var type = _getInjectType<T>();
@@ -67,6 +70,7 @@ abstract class BindContextImpl implements BindContext {
     return bindValue;
   }
 
+  @override
   @mustCallSuper
   bool remove<T>() {
     final type = _getInjectType<T>();
@@ -93,6 +97,7 @@ abstract class BindContextImpl implements BindContext {
     return totalBind != _singletonBinds.length;
   }
 
+  @override
   @mustCallSuper
   void dispose() {
     for (final key in _singletonBinds.keys) {
@@ -102,6 +107,7 @@ abstract class BindContextImpl implements BindContext {
     _singletonBinds.clear();
   }
 
+  @override
   @mustCallSuper
   Future<void> isReady() async {
     if (_mutableValue.isReadyFlag) return;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/presenter/navigation/transitions/transitions.dart';
+import '../navigation/transitions/transitions.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:meta/meta.dart';
 

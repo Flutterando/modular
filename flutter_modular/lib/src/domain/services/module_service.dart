@@ -1,7 +1,7 @@
-import 'package:flutter_modular/src/presenter/models/module.dart';
+import '../../presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/shared/either.dart';
+import '../../../flutter_modular.dart';
+import '../../shared/either.dart';
 
 abstract class ModuleService {
   Either<ModularError, Unit> start(RouteContext module);

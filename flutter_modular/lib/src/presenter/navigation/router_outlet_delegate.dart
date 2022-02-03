@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import '../../../flutter_modular.dart';
 
 import 'custom_navigator.dart';
 import 'modular_page.dart';
@@ -31,7 +30,7 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
   Widget build(BuildContext context) {
     final _pages = _getPages();
     return _pages.isEmpty
-        ? Material()
+        ? const Material()
         : CustomNavigator(
             key: navigatorKey,
             modularBase: Modular,

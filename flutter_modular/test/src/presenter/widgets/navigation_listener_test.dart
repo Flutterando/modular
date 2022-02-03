@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('NavigationListener', (tester) async {
-    final modularApp = ModularApp(module: CustomModule(), child: AppWidget());
+    final modularApp =
+        ModularApp(module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -38,6 +39,6 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp().modular();
+    return const MaterialApp().modular();
   }
 }

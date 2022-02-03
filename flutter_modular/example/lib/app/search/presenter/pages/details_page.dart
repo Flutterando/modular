@@ -39,7 +39,7 @@ class _DetailsPageState extends State<DetailsPage> {
           : Center(
               child: ElevatedButton(
                 onPressed: () => Modular.to.pushReplacementNamed('/'),
-                child: Text('Make a search'),
+                child: const Text('Make a search'),
               ),
             ),
     );

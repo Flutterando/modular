@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:modular_core/src/di/reassemble_mixin.dart';
+import 'reassemble_mixin.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
 import 'bind_context.dart';
 import 'resolvers.dart';
@@ -8,8 +8,10 @@ import 'package:characters/characters.dart';
 class InjectorImpl<T> implements Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
+  @override
   B call<B extends Object>([BindContract<B>? bind]) => get<B>(bind);
 
+  @override
   B get<B extends Object>([BindContract<B>? bind]) {
     B? bind;
 
@@ -27,10 +29,12 @@ class InjectorImpl<T> implements Injector<T> {
     }
   }
 
+  @override
   @mustCallSuper
   bool isModuleAlive<T extends BindContext>() =>
       _allBindContexts.containsKey(_getType<T>());
 
+  @override
   @mustCallSuper
   Future<bool> isModuleReady<M extends BindContext>() async {
     if (isModuleAlive<M>()) {
@@ -40,6 +44,7 @@ class InjectorImpl<T> implements Injector<T> {
     return false;
   }
 
+  @override
   @mustCallSuper
   void addBindContext(covariant BindContextImpl module, {String tag = ''}) {
     final typeModule = module.runtimeType;
@@ -59,6 +64,7 @@ class InjectorImpl<T> implements Injector<T> {
     printResolverFunc?.call(text);
   }
 
+  @override
   @mustCallSuper
   void disposeModuleByTag(String tag) {
     final trash = <Type>[];
@@ -82,6 +88,7 @@ class InjectorImpl<T> implements Injector<T> {
     }
   }
 
+  @override
   @mustCallSuper
   bool dispose<B extends Object>() {
     for (var binds in _allBindContexts.values) {
@@ -115,6 +122,7 @@ class InjectorImpl<T> implements Injector<T> {
     module.changeBinds(List<BindContract>.from(context.getProcessBinds()));
   }
 
+  @override
   @mustCallSuper
   void destroy() {
     for (var binds in _allBindContexts.values) {
@@ -123,6 +131,7 @@ class InjectorImpl<T> implements Injector<T> {
     _allBindContexts.clear();
   }
 
+  @override
   @mustCallSuper
   void removeBindContext<T extends BindContext>() {
     final module = _allBindContexts.remove(_getType<T>());

@@ -7,6 +7,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../stores/search_store.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -35,15 +37,15 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
 
   Widget _buildError(Failure error) {
     if (error is EmptyList) {
-      return Center(
+      return const Center(
         child: Text('Nothing has been found'),
       );
     } else if (error is ErrorSearch) {
-      return Center(
+      return const Center(
         child: Text('Github error'),
       );
     } else {
-      return Center(
+      return const Center(
         child: Text('Internal error'),
       );
     }
@@ -54,7 +56,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
     print('setState');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Github Search'),
+        title: const Text('Github Search'),
       ),
       body: Column(
         children: <Widget>[
@@ -62,7 +64,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
             padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
             child: TextField(
               onChanged: controller.setSearchText,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Search...',
               ),
@@ -71,13 +73,14 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
           Expanded(
             child: ScopedBuilder<SearchStore, Failure, List<Result>>(
                 store: controller,
-                onLoading: (_) => Center(child: CircularProgressIndicator()),
+                onLoading: (_) =>
+                    const Center(child: CircularProgressIndicator()),
                 onError: (_, error) {
                   return _buildError(error!);
                 },
                 onState: (_, state) {
                   if (state.isEmpty) {
-                    return Center(
+                    return const Center(
                       child: Text('Please, type something...'),
                     );
                   } else {

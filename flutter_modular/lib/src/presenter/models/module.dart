@@ -1,8 +1,5 @@
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
-import 'bind.dart';
+import '../../../flutter_modular.dart';
 
 /// A Module gathers all Binds and Routes referring to this context.
 /// They are usually distributed in the form of features or a monolithic representation of the app.

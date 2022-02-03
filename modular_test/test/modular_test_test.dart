@@ -18,6 +18,7 @@ class RepoImpl2 implements IRepo {
 }
 
 class MyModule extends RouteContextImpl {
+  @override
   final binds = [
     _Bind<String>((i) => 'teste'),
     _Bind<bool>((i) => true),

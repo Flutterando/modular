@@ -18,6 +18,7 @@ class RepoImpl2 implements IRepo {
 }
 
 class MyModule extends Module {
+  @override
   final binds = [
     Bind.instance<String>('teste'),
     Bind.instance<bool>(true),

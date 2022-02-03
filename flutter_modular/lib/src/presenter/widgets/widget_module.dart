@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
-import 'package:flutter_modular/src/domain/usecases/unbind_module.dart';
-import 'package:flutter_modular/src/flutter_modular_module.dart';
-import 'package:flutter_modular/src/presenter/models/bind.dart';
-import 'package:flutter_modular/src/presenter/models/module.dart';
+import '../../domain/usecases/bind_module.dart';
+import '../../domain/usecases/unbind_module.dart';
+import '../../flutter_modular_module.dart';
+import '../models/bind.dart';
+import '../models/module.dart';
 import 'package:modular_core/modular_core.dart';
 
 abstract class WidgetModule extends StatelessWidget implements BindContextImpl {

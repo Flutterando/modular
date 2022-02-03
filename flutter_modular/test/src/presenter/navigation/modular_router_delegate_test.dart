@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
 import 'package:flutter_modular/src/presenter/models/modular_args.dart';
@@ -83,7 +81,7 @@ void main() {
   });
 
   test('Book copywith', () {
-    expect(ModularBook(routes: []).copyWith(), isA<ModularBook>());
+    expect(const ModularBook(routes: []).copyWith(), isA<ModularBook>());
   });
 
   test('navigate blink', () async {
@@ -97,7 +95,7 @@ void main() {
     delegate.navigate('/test');
     delegate.navigate('/test2');
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     expect(delegate.currentConfiguration?.uri.toString(), '/test2');
     expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
@@ -121,7 +119,7 @@ void main() {
 
     await delegate.navigate('/');
     await delegate.navigate('/test');
-    await Future.delayed(Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 600));
     await delegate.navigate('/test');
     expect(delegate.currentConfiguration?.uri.toString(), '/test');
     expect(delegate.path, '/test');
@@ -184,7 +182,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushNamed('/pushForce', forRoot: true);
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);
@@ -221,10 +219,10 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
     // ignore: unawaited_futures
     delegate.pushNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 3);
@@ -261,7 +259,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushReplacementNamed('/pushForce', forRoot: true);
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 1);
@@ -306,7 +304,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route3]));
     // ignore: unawaited_futures
     delegate.pushReplacementNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);
@@ -342,7 +340,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.popAndPushNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
@@ -419,7 +417,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushNamedAndRemoveUntil('/pushForce', (_) => false);
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);

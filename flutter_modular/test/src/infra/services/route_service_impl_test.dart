@@ -10,7 +10,7 @@ import '../../presenter/modular_base_test.dart';
 void main() {
   final tracker = TrackerMock();
   final service = RouteServiceImpl(tracker);
-  final params = RouteParmsDTO(url: '/');
+  const params = RouteParmsDTO(url: '/');
 
   group('getRoute', () {
     test('should get route', () async {

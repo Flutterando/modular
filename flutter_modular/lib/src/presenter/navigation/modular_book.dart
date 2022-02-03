@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
-import 'package:flutter_modular/src/presenter/modular_base.dart';
-import 'package:flutter_modular/src/presenter/navigation/modular_page.dart';
+import '../../../flutter_modular.dart';
+import '../modular_base.dart';
+import 'modular_page.dart';
 
-@immutable
 class ModularBook {
   final List<ParallelRoute> routes;
   Uri get uri => routes.isEmpty ? Uri.parse('/') : routes.last.uri;
 
-  ModularBook({required this.routes});
+  const ModularBook({required this.routes});
 
   Iterable<ModularPage> chapters([String chapter = '']) {
     final filteredRoutes =

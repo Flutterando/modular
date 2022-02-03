@@ -8,7 +8,8 @@ import 'package:source_gen/source_gen.dart';
 
 class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
   @override
-  FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) async {
+  FutureOr<String> generateForAnnotatedElement(
+      Element element, ConstantReader annotation, BuildStep buildStep) async {
     final singleton = annotation.read('singleton').boolValue;
     final lazy = annotation.read('lazy').boolValue;
 
@@ -29,7 +30,8 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
         break;
       }
     }
-    _write("final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), isSingleton: $singleton, isLazy: $lazy,);");
+    _write(
+        "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), isSingleton: $singleton, isLazy: $lazy,);");
     return _buffer.toString();
   }
 }
@@ -44,7 +46,8 @@ class ModelVisitor extends SimpleElementVisitor {
         .map((parameter) => parameter.metadata)
         .expand((annotations) => annotations)
         .map((annotation) => annotation.element?.displayName ?? '')
-        .where((displayName) => ['Data', 'Param', 'Default'].contains(displayName))
+        .where(
+            (displayName) => ['Data', 'Param', 'Default'].contains(displayName))
         .isNotEmpty;
   }
 
@@ -57,7 +60,7 @@ class ModelVisitor extends SimpleElementVisitor {
 
   writeParams(List<ParameterElement> parameters) {
     params = parameters.map((param) {
-      if (param.metadata.length > 0) {
+      if (param.metadata.isNotEmpty) {
         String? arg;
 
         for (var meta in param.metadata) {
@@ -69,7 +72,7 @@ class ModelVisitor extends SimpleElementVisitor {
             arg = _normalizeDefault(param);
           }
         }
-        return arg == null ? _normalize(param) : arg;
+        return arg ?? _normalize(param);
       } else {
         return _normalize(param);
       }

@@ -1,5 +1,4 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/infra/services/module_service_impl.dart';
 import 'package:test/test.dart';
 
@@ -13,14 +12,14 @@ void main() {
 
   group('start', () {
     test('should return true', () {
-      when(() => tracker.runApp(module)).thenReturn(unit);
+      when(() => tracker.runApp(module));
       expect(service.start(module).isRight, true);
     });
   });
 
   group('finish', () {
     test('should return true', () {
-      when(() => tracker.finishApp()).thenReturn(unit);
+      when(() => tracker.finishApp());
       expect(service.finish().isRight, true);
     });
   });

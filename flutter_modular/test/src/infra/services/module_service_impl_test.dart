@@ -1,5 +1,4 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_modular/src/infra/services/module_service_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,14 +12,14 @@ void main() {
 
   group('start', () {
     test('should return true', () {
-      when(() => tracker.runApp(module)).thenReturn(unit);
+      when(() => tracker.runApp(module));
       expect(service.start(module).isRight, true);
     });
   });
 
   group('finish', () {
     test('should return true', () {
-      when(() => tracker.finishApp()).thenReturn(unit);
+      when(() => tracker.finishApp());
       expect(service.finish().isRight, true);
     });
   });
@@ -37,7 +36,7 @@ void main() {
   group('bind', () {
     test('should execute', () async {
       when(() => tracker.injector).thenReturn(injectorMock);
-      when(() => injectorMock.addBindContext(module)).thenReturn(true);
+      when(() => injectorMock.addBindContext(module));
       final result = service.bind(module);
       expect(result.isRight, true);
     });
@@ -46,7 +45,7 @@ void main() {
   group('unbind', () {
     test('should execute', () async {
       when(() => tracker.injector).thenReturn(injectorMock);
-      when(() => injectorMock.removeBindContext()).thenReturn(true);
+      when(() => injectorMock.removeBindContext());
       final result = service.unbind();
       expect(result.isRight, true);
     });
