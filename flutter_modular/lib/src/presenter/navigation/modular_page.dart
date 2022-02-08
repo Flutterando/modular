@@ -40,12 +40,14 @@ class ModularPage<T> extends Page<T> {
 
     if (transitionType == TransitionType.custom &&
         route.customTransition != null) {
+      final transition = route.customTransition!;
       return PageRouteBuilder<T>(
-        pageBuilder: (context, _, __) => page,
+        pageBuilder: transition.pageBuilder ?? (context, _, __) => page,
+        opaque: transition.opaque,
         settings: this,
         maintainState: route.maintainState,
-        transitionsBuilder: route.customTransition!.transitionBuilder,
-        transitionDuration: route.customTransition!.transitionDuration,
+        transitionsBuilder: transition.transitionBuilder,
+        transitionDuration: transition.transitionDuration,
       );
     } else if (transitionType == TransitionType.defaultTransition) {
       // Helper function
