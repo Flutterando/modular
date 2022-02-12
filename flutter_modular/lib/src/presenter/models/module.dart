@@ -7,7 +7,7 @@ import 'bind.dart';
 /// A Module gathers all Binds and Routes referring to this context.
 /// They are usually distributed in the form of features or a monolithic representation of the app.
 /// At least one module is needed to start a Modular project.
-class Module extends RouteContextImpl {
+abstract class Module extends RouteContextImpl {
   @override
   List<Module> get imports => const [];
 
@@ -18,8 +18,7 @@ class Module extends RouteContextImpl {
   List<ModularRoute> get routes => const [];
 
   @override
-  ModularRoute copy(
-      covariant ParallelRoute parent, covariant ParallelRoute route) {
+  ModularRoute copy(covariant ParallelRoute parent, covariant ParallelRoute route) {
     // ignore: invalid_use_of_visible_for_overriding_member
     final newRoute = super.copy(parent, route) as ParallelRoute;
     return newRoute.copyWith(
