@@ -6,6 +6,8 @@ import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
 import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';
+import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
+import 'package:flutter_modular/src/presenter/navigation/modular_router_delegate.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
@@ -55,6 +57,10 @@ class DisposableMock extends Mock implements Disposable {}
 
 class IModularNavigatorMock extends Mock implements IModularNavigator {}
 
+class ModularRouteInformationParserMock extends Mock implements ModularRouteInformationParser {}
+
+class ModularRouterDelegateMock extends Mock implements ModularRouterDelegate {}
+
 void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
@@ -64,6 +70,8 @@ void main() {
   final startModule = StartModuleMock();
   final isModuleReadyImpl = IsModuleReadyImplMock();
   final modularNavigator = IModularNavigatorMock();
+  final routeInformationParser = ModularRouteInformationParserMock();
+  final routerDelegate = ModularRouterDelegateMock();
   late IModularBase modularBase;
 
   setUpAll(() {
@@ -80,6 +88,8 @@ void main() {
       isModuleReadyUsecase: isModuleReadyImpl,
       navigator: modularNavigator,
       startModule: startModule,
+      routeInformationParser: routeInformationParser,
+      routerDelegate: routerDelegate,
     );
   });
 
@@ -100,8 +110,7 @@ void main() {
     when(() => startModule.call(module)).thenReturn(right(unit));
     modularBase.init(module);
     verify(() => startModule.call(module));
-    expect(
-        () => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
+    expect(() => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
   });
 
   test('dispose', () {
@@ -120,14 +129,11 @@ void main() {
   });
 
   test('getAsync', () {
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(right(Future.value('modular')));
+    when(() => getBind.call<Future<String>>()).thenReturn(right(Future.value('modular')));
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(left(BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
-        completion('changed'));
+    when(() => getBind.call<Future<String>>()).thenReturn(left(BindNotFoundException('')));
+    expect(modularBase.getAsync<String>(defaultValue: 'changed'), completion('changed'));
   });
 
   test('isModuleReady', () {

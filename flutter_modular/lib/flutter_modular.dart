@@ -30,8 +30,7 @@ export 'src/presenter/widgets/navigation_listener.dart';
 export 'src/presenter/widgets/widget_module.dart';
 export 'src/presenter/navigation/transitions/page_transition.dart';
 export 'src/presenter/navigation/transitions/transitions.dart';
-export 'package:modular_core/modular_core.dart'
-    show ModularRoute, Disposable, ReassembleMixin;
+export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable, ReassembleMixin;
 
 IModularBase? _modular;
 
@@ -56,10 +55,17 @@ void cleanGlobals() {
 String initialRouteDeclaredInMaterialApp = '/';
 
 extension ModularExtensionMaterial on MaterialApp {
+  ///Use instead:
+  ///```dart
+  ///MaterialApp.router(
+  ///   routeInformationParser: Modular.routeInformationParser,
+  ///   routerDelegate: Modular.routerDelegate,
+  ///...
+  ///);
+  ///```
+  @deprecated
   MaterialApp modular() {
-    injector
-        .get<IModularNavigator>()
-        .setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+    injector.get<IModularNavigator>().setObserver(navigatorObservers ?? <NavigatorObserver>[]);
 
     injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
 
@@ -93,8 +99,8 @@ extension ModularExtensionMaterial on MaterialApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: injector.get<ModularRouteInformationParser>(),
-      routerDelegate: injector.get<ModularRouterDelegate>(),
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
     );
 
     return app;
@@ -102,10 +108,17 @@ extension ModularExtensionMaterial on MaterialApp {
 }
 
 extension ModularExtensionCupertino on CupertinoApp {
+  ///Use instead:
+  ///```dart
+  ///CupertinoApp.router(
+  ///   routeInformationParser: Modular.routeInformationParser,
+  ///   routerDelegate: Modular.routerDelegate,
+  ///...
+  ///);
+  ///```
+  @deprecated
   CupertinoApp modular() {
-    injector
-        .get<IModularNavigator>()
-        .setObserver(navigatorObservers ?? <NavigatorObserver>[]);
+    injector.get<IModularNavigator>().setObserver(navigatorObservers ?? <NavigatorObserver>[]);
 
     injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
 
@@ -135,8 +148,8 @@ extension ModularExtensionCupertino on CupertinoApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: injector.get<ModularRouteInformationParser>(),
-      routerDelegate: injector.get<ModularRouterDelegate>(),
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
     );
 
     return app;
@@ -145,10 +158,7 @@ extension ModularExtensionCupertino on CupertinoApp {
 
 extension InjectorExtends on Injector {
   /// get arguments
-  ModularArguments get args => injector
-      .get<GetArguments>()
-      .call()
-      .getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => injector.get<GetArguments>().call().getOrElse((l) => ModularArguments.empty());
 }
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
@@ -181,11 +191,9 @@ class RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
-    delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
-        injector.get<ModularRouterDelegate>(), navigatorKey);
+    delegate ??= RouterOutletDelegate(modal.route.uri.toString(), injector.get<ModularRouterDelegate>(), navigatorKey);
     final router = Router.of(context);
-    _backButtonDispatcher =
-        router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override

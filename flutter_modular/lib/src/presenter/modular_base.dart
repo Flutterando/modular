@@ -17,6 +17,9 @@ import 'models/modular_navigator.dart';
 import 'models/module.dart';
 import 'package:meta/meta.dart';
 
+import 'navigation/modular_route_information_parser.dart';
+import 'navigation/modular_router_delegate.dart';
+
 abstract class IModularBase {
   /// Finishes all trees(BindContext and RouteContext).
   void destroy();
@@ -60,6 +63,12 @@ abstract class IModularBase {
 
   /// called whennever throw hot-reload
   void reassemble();
+
+  /// Navigator 2.0 initializator: RouteInformationParser
+  ModularRouteInformationParser get routeInformationParser;
+
+  /// Navigator 2.0 initializator: RouterDelegate
+  ModularRouterDelegate get routerDelegate;
 }
 
 class ModularBase implements IModularBase {
@@ -71,6 +80,10 @@ class ModularBase implements IModularBase {
   final StartModule startModule;
   final IsModuleReady isModuleReadyUsecase;
   final IModularNavigator navigator;
+  @override
+  final ModularRouteInformationParser routeInformationParser;
+  @override
+  final ModularRouterDelegate routerDelegate;
 
   @override
   IModularNavigator? navigatorDelegate;
@@ -78,6 +91,8 @@ class ModularBase implements IModularBase {
   bool _moduleHasBeenStarted = false;
 
   ModularBase({
+    required this.routeInformationParser,
+    required this.routerDelegate,
     required this.disposeBind,
     required this.reassembleTracker,
     required this.getArguments,
@@ -89,8 +104,7 @@ class ModularBase implements IModularBase {
   });
 
   @override
-  bool dispose<B extends Object>() =>
-      disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>({B? defaultValue}) {
@@ -113,8 +127,7 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  Future<void> isModuleReady<M extends Module>() =>
-      isModuleReadyUsecase.call<M>();
+  Future<void> isModuleReady<M extends Module>() => isModuleReadyUsecase.call<M>();
 
   @override
   void destroy() {
@@ -138,16 +151,14 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module)
-          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setDisposeResolver(disposeBindFunction);
 
       setPrintResolver(print);
     } else {
-      throw ModuleStartedException(
-          'Module ${module.runtimeType} is already started');
+      throw ModuleStartedException('Module ${module.runtimeType} is already started');
     }
   }
 
@@ -155,8 +166,7 @@ class ModularBase implements IModularBase {
   IModularNavigator get to => navigatorDelegate ?? navigator;
 
   @override
-  ModularArguments get args =>
-      getArguments().getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => getArguments().getOrElse((l) => ModularArguments.empty());
 
   final flags = ModularFlags();
 

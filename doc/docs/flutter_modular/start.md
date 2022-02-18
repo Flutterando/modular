@@ -142,7 +142,7 @@ There are two ModularRoute types: **ChildRoute** and **ModuleRoute**.
 
 The main Widget's function is to instantiate the MaterialApp or CupertinoApp.
 
-In these main Widgets it's also necessary to set the custom route system. For this, **flutter_modular** has an extension that adds a helper method to automate the process. For this next snippet we'll use **MaterialApp**, but the process is exactly the same for CupertinoApp.
+In these main Widgets it's also necessary to set the custom route system. For this next snippet we'll use **MaterialApp**, but the process is exactly the same for CupertinoApp.
 
 ```dart title="lib/main.dart" {8-15}
 import 'package:flutter/material.dart';
@@ -157,7 +157,9 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-    ).modular(); //added by extension 
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    ); //added by extension 
   }
 }
 
