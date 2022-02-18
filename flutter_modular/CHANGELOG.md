@@ -1,4 +1,17 @@
-## [4.4.0+1] - 2022-02/22
+## [4.4.1] - 2022-02-18
+
+- @Deprecated: `.modular()` extension.
+  Use instead:
+  ```dart
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
+
+  ```
+- Fix bugs.
+
+## [4.4.0+1] - 2022-01-22
 
 - Added `CustomTransition Expansion`.
 
