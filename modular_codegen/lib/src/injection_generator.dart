@@ -44,7 +44,8 @@ class ModelVisitor extends SimpleElementVisitor {
         .map((parameter) => parameter.metadata)
         .expand((annotations) => annotations)
         .map((annotation) => annotation.element?.displayName ?? '')
-        .where((displayName) => ['Data', 'Param', 'Default'].contains(displayName))
+        .where((displayName) =>
+            ['Data', 'Param', 'QueryParam', 'Default'].contains(displayName))
         .isNotEmpty;
   }
 
@@ -63,6 +64,8 @@ class ModelVisitor extends SimpleElementVisitor {
         for (var meta in param.metadata) {
           if (meta.element?.displayName == 'Param') {
             arg = _normalizeParam(param);
+          } else if (meta.element?.displayName == 'QueryParam') {
+            arg = _normalizeQueryParam(param);
           } else if (meta.element?.displayName == 'Data') {
             arg = _normalizeData(param);
           } else if (meta.element?.displayName == 'Default') {
@@ -89,6 +92,14 @@ class ModelVisitor extends SimpleElementVisitor {
       return "${param.name}: i.args.params['${param.name}']";
     } else {
       return "i.args.params['${param.name}']";
+    }
+  }
+
+  String _normalizeQueryParam(ParameterElement param) {
+    if (param.isNamed) {
+      return "${param.name}: i.args.queryParams['${param.name}']";
+    } else {
+      return "i.args.queryParams['${param.name}']";
     }
   }
 

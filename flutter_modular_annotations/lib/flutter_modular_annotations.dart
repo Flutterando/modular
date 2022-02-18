@@ -12,6 +12,12 @@ class _ModularParam {
 
 const Param = _ModularParam();
 
+class _ModularQueryParam {
+  const _ModularQueryParam();
+}
+
+const QueryParam = _ModularQueryParam();
+
 class _ModularData {
   const _ModularData();
 }
