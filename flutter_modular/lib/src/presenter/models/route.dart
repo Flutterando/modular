@@ -176,9 +176,16 @@ class CustomTransition {
   final Widget Function(
           BuildContext, Animation<double>, Animation<double>, Widget)
       transitionBuilder;
+  Widget Function(BuildContext, Animation<double>, Animation<double>)?
+      pageBuilder;
   final Duration transitionDuration;
+  final Duration reverseTransitionDuration;
+  final bool opaque;
 
   CustomTransition(
       {required this.transitionBuilder,
-      this.transitionDuration = const Duration(milliseconds: 300)});
+      this.transitionDuration = const Duration(milliseconds: 300),
+      this.reverseTransitionDuration = const Duration(milliseconds: 300),
+      this.opaque = true,
+      this.pageBuilder});
 }

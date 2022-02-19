@@ -57,6 +57,15 @@ void cleanGlobals() {
 String initialRouteDeclaredInMaterialApp = '/';
 
 extension ModularExtensionMaterial on MaterialApp {
+  ///Use instead:
+  ///```dart
+  ///MaterialApp.router(
+  ///   routeInformationParser: Modular.routeInformationParser,
+  ///   routerDelegate: Modular.routerDelegate,
+  ///...
+  ///);
+  ///```
+  @deprecated
   MaterialApp modular() {
     injector
         .get<IModularNavigator>()
@@ -94,8 +103,8 @@ extension ModularExtensionMaterial on MaterialApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: injector.get<ModularRouteInformationParser>(),
-      routerDelegate: injector.get<ModularRouterDelegate>(),
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
     );
 
     return app;
@@ -103,6 +112,15 @@ extension ModularExtensionMaterial on MaterialApp {
 }
 
 extension ModularExtensionCupertino on CupertinoApp {
+  ///Use instead:
+  ///```dart
+  ///CupertinoApp.router(
+  ///   routeInformationParser: Modular.routeInformationParser,
+  ///   routerDelegate: Modular.routerDelegate,
+  ///...
+  ///);
+  ///```
+  @deprecated
   CupertinoApp modular() {
     injector
         .get<IModularNavigator>()
@@ -136,8 +154,8 @@ extension ModularExtensionCupertino on CupertinoApp {
       shortcuts: shortcuts,
       actions: actions,
       restorationScopeId: restorationScopeId,
-      routeInformationParser: injector.get<ModularRouteInformationParser>(),
-      routerDelegate: injector.get<ModularRouterDelegate>(),
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
     );
 
     return app;

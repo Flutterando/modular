@@ -76,6 +76,8 @@ class FlutterModularModule extends Module {
             navigatorKey: GlobalKey<NavigatorState>(),
             reportPop: i())),
         Bind.lazySingleton<IModularBase>((i) => ModularBase(
+            routeInformationParser: i(),
+            routerDelegate: i(),
             reassembleTracker: i(),
             disposeBind: i(),
             finishModule: i(),

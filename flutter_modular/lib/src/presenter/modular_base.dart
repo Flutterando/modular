@@ -17,6 +17,9 @@ import 'models/modular_navigator.dart';
 import 'models/module.dart';
 import 'package:meta/meta.dart';
 
+import 'navigation/modular_route_information_parser.dart';
+import 'navigation/modular_router_delegate.dart';
+
 abstract class IModularBase {
   /// Finishes all trees(BindContext and RouteContext).
   void destroy();
@@ -60,6 +63,12 @@ abstract class IModularBase {
 
   /// called whennever throw hot-reload
   void reassemble();
+
+  /// Navigator 2.0 initializator: RouteInformationParser
+  ModularRouteInformationParser get routeInformationParser;
+
+  /// Navigator 2.0 initializator: RouterDelegate
+  ModularRouterDelegate get routerDelegate;
 }
 
 class ModularBase implements IModularBase {
@@ -71,6 +80,10 @@ class ModularBase implements IModularBase {
   final StartModule startModule;
   final IsModuleReady isModuleReadyUsecase;
   final IModularNavigator navigator;
+  @override
+  final ModularRouteInformationParser routeInformationParser;
+  @override
+  final ModularRouterDelegate routerDelegate;
 
   @override
   IModularNavigator? navigatorDelegate;
@@ -78,6 +91,8 @@ class ModularBase implements IModularBase {
   bool _moduleHasBeenStarted = false;
 
   ModularBase({
+    required this.routeInformationParser,
+    required this.routerDelegate,
     required this.disposeBind,
     required this.reassembleTracker,
     required this.getArguments,
