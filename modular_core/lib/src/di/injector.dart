@@ -31,8 +31,8 @@ class InjectorImpl<T> implements Injector<T> {
 
   @override
   @mustCallSuper
-  bool isModuleAlive<T extends BindContext>() =>
-      _allBindContexts.containsKey(_getType<T>());
+  bool isModuleAlive<B extends BindContext>() =>
+      _allBindContexts.containsKey(_getType<B>());
 
   @override
   @mustCallSuper
@@ -133,15 +133,15 @@ class InjectorImpl<T> implements Injector<T> {
 
   @override
   @mustCallSuper
-  void removeBindContext<T extends BindContext>() {
-    final module = _allBindContexts.remove(_getType<T>());
+  void removeBindContext<B extends BindContext>() {
+    final module = _allBindContexts.remove(_getType<B>());
     if (module != null) {
       module.dispose();
       debugPrint("-- ${module.runtimeType} DISPOSED");
     }
   }
 
-  Type _getType<T>() => T;
+  Type _getType<G>() => G;
 
   List<SingletonBind> _getAllSingletons() {
     final list = <SingletonBind>[];

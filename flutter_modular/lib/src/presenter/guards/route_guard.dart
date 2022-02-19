@@ -21,8 +21,8 @@ abstract class RouteGuard extends Middleware<ModularArguments> {
   FutureOr<ModularRoute?> pre(ModularRoute route) => route;
 
   @override
-  FutureOr<ParallelRoute?> pos(route, args) async {
-    if (await canActivate(args.uri.toString(), route as ParallelRoute)) {
+  FutureOr<ParallelRoute?> pos(route, data) async {
+    if (await canActivate(data.uri.toString(), route as ParallelRoute)) {
       return route;
     } else if (redirectTo != null) {
       return RedirectRoute(route.name, to: redirectTo!);

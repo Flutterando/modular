@@ -56,7 +56,7 @@ class CustomWidgetModule extends WidgetModule {
   @override
   List<Bind> get binds => [
         Bind.factory<double>((i) {
-          print(i.args);
+          debugPrint(i.args.toString());
           return 0.0;
         }),
       ];

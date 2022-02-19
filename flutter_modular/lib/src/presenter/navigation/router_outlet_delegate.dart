@@ -40,7 +40,7 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ParallelRoute router) async {
+  Future<void> setNewRoutePath(ParallelRoute configuration) async {
     assert(false);
   }
 }

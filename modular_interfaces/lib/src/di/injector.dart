@@ -8,7 +8,7 @@ abstract class Injector<T> {
   B get<B extends Object>();
 
   /// Checks if the context (Module) is in the context of binds.
-  bool isModuleAlive<T extends BindContext>();
+  bool isModuleAlive<B extends BindContext>();
 
   /// adds a context to the tree.
   void addBindContext(BindContext module, {String tag = ''});
@@ -27,7 +27,7 @@ abstract class Injector<T> {
   void destroy();
 
   /// remove [BindContext] by [Type]
-  void removeBindContext<T extends BindContext>();
+  void removeBindContext<B extends BindContext>();
 
   /// checks if all asynchronous binds are ready to be used synchronously of all BindContext of Tree.
   Future<bool> isModuleReady<M extends BindContext>();

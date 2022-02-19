@@ -75,6 +75,17 @@ class Home extends StatelessWidget {
       child: Column(
         children: [
           Text('${notifier.value}'),
+          StreamBuilder(
+            stream: stream,
+            builder: (context, snapshot) {
+              return Text('${snapshot.data}');
+            },
+          ),
+          StreamBuilder<Object>(
+              stream: null,
+              builder: (context, snapshot) {
+                return Text('${store.state}');
+              }),
         ],
       ),
     );

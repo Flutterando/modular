@@ -36,6 +36,7 @@ export 'package:modular_core/modular_core.dart'
 IModularBase? _modular;
 
 /// Instance of Modular for search binds and route.
+// ignore: non_constant_identifier_names
 IModularBase get Modular {
   _modular ??= injector<IModularBase>();
   return _modular!;

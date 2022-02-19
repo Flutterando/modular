@@ -138,13 +138,13 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module)
-          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module).fold(
+          (l) => throw l, (r) => debugPrint('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setDisposeResolver(disposeBindFunction);
 
-      setPrintResolver(print);
+      setPrintResolver(debugPrint);
     } else {
       throw ModuleStartedException(
           'Module ${module.runtimeType} is already started');
@@ -163,7 +163,7 @@ class ModularBase implements IModularBase {
   @override
   void debugPrintModular(String text) {
     if (flags.isDebug) {
-      print(text);
+      debugPrint(text);
     }
   }
 

@@ -37,7 +37,7 @@ void main() {
   group('setArguments', () {
     test('should set args', () async {
       final args = ModularArguments.empty();
-      when(() => tracker.setArguments(args)).thenReturn('');
+      when(() => tracker.setArguments(args)).thenReturn(null);
       final result = service.setArguments(args);
       expect(result.isRight, true);
     });
@@ -46,7 +46,7 @@ void main() {
   group('reportPop', () {
     test('should send route', () async {
       final route = ParallelRouteMock();
-      when(() => tracker.reportPopRoute(route)).thenReturn('');
+      when(() => tracker.reportPopRoute(route)).thenReturn(null);
       final result = service.reportPop(route);
       expect(result.isRight, true);
     });
@@ -55,14 +55,14 @@ void main() {
   group('reportPush', () {
     test('should send route', () async {
       final route = ParallelRouteMock();
-      when(() => tracker.reportPushRoute(route)).thenReturn('');
+      when(() => tracker.reportPushRoute(route)).thenReturn(null);
       final result = service.reportPush(route);
       expect(result.isRight, true);
     });
   });
   group('reassemble', () {
     test('should call reassemble', () async {
-      when(() => tracker.reassemble()).thenReturn('');
+      when(() => tracker.reassemble()).thenReturn(null);
       final result = service.reassemble();
       expect(result.isRight, true);
     });

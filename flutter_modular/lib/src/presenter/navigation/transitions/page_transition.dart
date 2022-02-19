@@ -18,18 +18,16 @@ class PageTransition<T> extends PageRouteBuilder<T> {
   final Curve curve;
   final Alignment alignment;
   final Duration duration;
-  @override
-  final bool maintainState;
 
   PageTransition({
     Key? key,
     required this.builder,
     required this.type,
-    this.maintainState = true,
     this.curve = Curves.easeInOut,
     this.alignment = Alignment.center,
     this.duration = const Duration(milliseconds: 600),
     RouteSettings? settings,
+    bool maintainState = true,
   }) : super(
           pageBuilder: (context, animation, secondaryAnimation) {
             return builder(context);

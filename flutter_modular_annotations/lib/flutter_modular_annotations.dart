@@ -10,13 +10,13 @@ class _ModularParam {
   const _ModularParam();
 }
 
-const Param = _ModularParam();
+const param = _ModularParam();
 
 class _ModularData {
   const _ModularData();
 }
 
-const Data = _ModularData();
+const data = _ModularData();
 
 class Default {
   final dynamic defaultValue;

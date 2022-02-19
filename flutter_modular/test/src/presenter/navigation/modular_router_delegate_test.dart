@@ -347,7 +347,7 @@ void main() {
   });
 
   test('pop ', () async {
-    when(() => navigatorState.pop()).thenReturn('');
+    when(() => navigatorState.pop()).thenReturn(null);
     delegate.pop();
     verify(() => navigatorState.pop());
   });
@@ -380,7 +380,7 @@ void main() {
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
 
-    when(() => navigatorState.popUntil(any())).thenReturn('');
+    when(() => navigatorState.popUntil(any())).thenReturn(null);
     delegate.popUntil((_) => false);
     delegate.currentConfiguration = ModularBook(routes: [route1, route2]);
     delegate.popUntil((_) => true);
@@ -398,7 +398,7 @@ void main() {
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
 
-    when(() => navigatorState.popUntil(any())).thenReturn('');
+    when(() => navigatorState.popUntil(any())).thenReturn(null);
 
     final getArgsMock = GetArgumentsMock();
     final setArgsMock = SetArgumentsMock();

@@ -15,7 +15,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
-    print(Modular.args.queryParams['id']);
+    debugPrint(Modular.args.queryParams['id'].toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(

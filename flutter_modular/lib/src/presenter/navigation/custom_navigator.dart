@@ -11,7 +11,11 @@ class CustomNavigator extends Navigator {
     List<Page<dynamic>> pages = const <Page<dynamic>>[],
     bool Function(Route<dynamic>, dynamic)? onPopPage,
   }) : super(
-            key: key, pages: pages, onPopPage: onPopPage, observers: observers);
+          key: key,
+          pages: pages,
+          onPopPage: onPopPage,
+          observers: observers,
+        );
 
   @override
   _CustomNavigatorState createState() => _CustomNavigatorState(modularBase);

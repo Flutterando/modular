@@ -47,10 +47,10 @@ class HomeExample extends StatefulWidget {
 class _HomeExampleState extends ModularState<HomeExample, String> {
   @override
   Widget build(BuildContext context) {
-    print(cubit);
-    print(bloc);
-    print(store);
-    print(controller);
+    debugPrint(cubit.toString());
+    debugPrint(bloc.toString());
+    debugPrint(store.toString());
+    debugPrint(controller.toString());
     return Container();
   }
 }

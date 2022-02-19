@@ -53,7 +53,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
 
   @override
   Widget build(BuildContext context) {
-    print('setState');
+    debugPrint('setState');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Github Search'),

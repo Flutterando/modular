@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:example/app/search/infra/datasources/search_datasource.dart';
 import 'package:example/app/search/infra/models/result_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 part 'github_search_datasource.g.dart';
@@ -18,7 +19,7 @@ class GithubSearchDatasource implements SearchDatasource {
     var result = await client.get(url);
     if (result.statusCode == 200) {
       final json = jsonDecode(result.body);
-      print('execute datasource');
+      debugPrint('execute datasource');
       var jsonList = json['items'] as List;
       var list = jsonList
           .map((item) => ResultModel(

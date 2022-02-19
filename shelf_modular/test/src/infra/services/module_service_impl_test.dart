@@ -12,14 +12,14 @@ void main() {
 
   group('start', () {
     test('should return true', () {
-      when(() => tracker.runApp(module));
+      tracker.runApp(module);
       expect(service.start(module).isRight, true);
     });
   });
 
   group('finish', () {
     test('should return true', () {
-      when(() => tracker.finishApp());
+      tracker.finishApp();
       expect(service.finish().isRight, true);
     });
   });

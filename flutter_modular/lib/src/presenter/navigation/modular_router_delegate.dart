@@ -38,7 +38,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   Widget build(BuildContext context) {
     final pages = currentConfiguration?.chapters().toList() ?? [];
     if (pages.isEmpty) {
-      return Material();
+      return const Material();
     }
 
     return CustomNavigator(
@@ -65,19 +65,19 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularBook book) async {
+  Future<void> setNewRoutePath(ModularBook configuration) async {
     final disposableRoutes = <ParallelRoute>[];
 
     for (var route
         in currentConfiguration?.routes ?? <ParallelRoute<dynamic>>[]) {
-      if (book.routes
+      if (configuration.routes
               .indexWhere((element) => element.uri.path == route.uri.path) ==
           -1) {
         disposableRoutes.add(route);
       }
     }
 
-    currentConfiguration = book;
+    currentConfiguration = configuration;
     notifyListeners();
 
     for (var disposableRoute in disposableRoutes) {

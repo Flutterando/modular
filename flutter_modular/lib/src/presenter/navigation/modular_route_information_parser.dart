@@ -51,8 +51,8 @@ class ModularRouteInformationParser
   }
 
   @override
-  RouteInformation restoreRouteInformation(ModularBook book) {
-    return RouteInformation(location: book.uri.toString());
+  RouteInformation restoreRouteInformation(ModularBook configuration) {
+    return RouteInformation(location: configuration.uri.toString());
   }
 
   Future<ModularBook> selectBook(String path,
@@ -110,7 +110,7 @@ class ModularRouteInformationParser
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
       final result = await getRoute.call(params);
       return await result.fold((l) => throw modularError, (route) {
-        print('[MODULAR WARNING] - Please, use $path/ instead of $path.');
+        debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
         return _routeSuccess(route);
       });
     }, (route) => _routeSuccess(route));
