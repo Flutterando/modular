@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../../flutter_modular.dart';
 
 import 'custom_navigator.dart';
 import 'modular_page.dart';
@@ -16,21 +16,17 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
   final ModularRouterDelegate modularRouterDelegate;
   final String path;
 
-  RouterOutletDelegate(
-      this.path, this.modularRouterDelegate, this.navigatorKey);
+  RouterOutletDelegate(this.path, this.modularRouterDelegate, this.navigatorKey);
 
   List<ModularPage> _getPages() {
-    return modularRouterDelegate.currentConfiguration
-            ?.chapters(path)
-            .toList() ??
-        [];
+    return modularRouterDelegate.currentConfiguration?.chapters(path).toList() ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
     final _pages = _getPages();
     return _pages.isEmpty
-        ? Material()
+        ? const Material()
         : CustomNavigator(
             key: navigatorKey,
             modularBase: Modular,
@@ -40,7 +36,7 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
   }
 
   @override
-  Future<void> setNewRoutePath(ParallelRoute router) async {
+  Future<void> setNewRoutePath(ParallelRoute configuration) async {
     assert(false);
   }
 }

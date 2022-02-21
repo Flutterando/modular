@@ -6,8 +6,8 @@ import 'package:triple/triple.dart';
 void main() {
   testWidgets('ModularApp', (tester) async {
     final modularKey = UniqueKey();
-    final modularApp =
-        ModularApp(key: modularKey, module: CustomModule(), child: AppWidget());
+    final modularApp = ModularApp(
+        key: modularKey, module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -46,7 +46,7 @@ class CustomModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, __) => Home()),
+        ChildRoute('/', child: (_, __) => const Home()),
       ];
 }
 
@@ -57,7 +57,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<String>();
 
-    return MaterialApp().modular();
+    return const MaterialApp().modular();
   }
 }
 
@@ -72,7 +72,22 @@ class Home extends StatelessWidget {
 
     return Container(
       key: key,
-      child: Text('${notifier.value}'),
+      child: Column(
+        children: [
+          Text('${notifier.value}'),
+          StreamBuilder(
+            stream: stream,
+            builder: (context, snapshot) {
+              return Text('${snapshot.data}');
+            },
+          ),
+          StreamBuilder<Object>(
+              stream: null,
+              builder: (context, snapshot) {
+                return Text('${store.state}');
+              }),
+        ],
+      ),
     );
   }
 }

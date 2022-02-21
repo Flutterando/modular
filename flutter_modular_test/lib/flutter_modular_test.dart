@@ -35,7 +35,7 @@ void initModules(List<Module> modules,
 
 Widget buildTestableWidget(Widget widget) {
   return MediaQuery(
-    data: MediaQueryData(),
+    data: const MediaQueryData(),
     child: MaterialApp(
       home: widget,
     ),

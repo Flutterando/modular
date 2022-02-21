@@ -10,7 +10,7 @@ void main() {
   final service = RouteServiceMock();
   final usecase = GetRouteImpl(service);
   final route = ModularRouteMock();
-  final params = RouteParmsDTO(url: '/');
+  const params = RouteParmsDTO(url: '/');
   test('get route', () async {
     when(() => service.getRoute(params)).thenAnswer((_) async => right(route));
     final result = await usecase.call(params);

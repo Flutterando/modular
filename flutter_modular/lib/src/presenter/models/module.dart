@@ -1,5 +1,5 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import '../../../flutter_modular.dart';
 
 /// A Module gathers all Binds and Routes referring to this context.
 /// They are usually distributed in the form of features or a monolithic representation of the app.
@@ -15,8 +15,7 @@ abstract class Module extends RouteContextImpl {
   List<ModularRoute> get routes => const [];
 
   @override
-  ModularRoute copy(
-      covariant ParallelRoute parent, covariant ParallelRoute route) {
+  ModularRoute copy(covariant ParallelRoute parent, covariant ParallelRoute route) {
     // ignore: invalid_use_of_visible_for_overriding_member
     final newRoute = super.copy(parent, route) as ParallelRoute;
     return newRoute.copyWith(

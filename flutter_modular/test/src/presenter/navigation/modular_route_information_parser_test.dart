@@ -49,7 +49,7 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(RouteParmsDTO(url: '/test'));
+    registerFallbackValue(const RouteParmsDTO(url: '/test'));
     registerFallbackValue(ModularArguments.empty());
     registerFallbackValue(ParallelRouteFake());
   });
@@ -91,9 +91,9 @@ void main() {
     when(() => reportPush(routeMock)).thenReturn(right(unit));
     when(() => reportPush(routeParent)).thenReturn(right(unit));
 
-    when(() => getRoute.call(RouteParmsDTO(url: '/test')))
+    when(() => getRoute.call(const RouteParmsDTO(url: '/test')))
         .thenAnswer((_) async => right(routeMock));
-    when(() => getRoute.call(RouteParmsDTO(url: '/')))
+    when(() => getRoute.call(const RouteParmsDTO(url: '/')))
         .thenAnswer((_) async => right(routeParent));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
 
@@ -128,11 +128,11 @@ void main() {
     when(() => reportPush(routeMock)).thenReturn(right(unit));
     when(() => reportPush(routeParent)).thenReturn(right(unit));
 
-    when(() => getRoute.call(RouteParmsDTO(url: '/oo')))
+    when(() => getRoute.call(const RouteParmsDTO(url: '/oo')))
         .thenAnswer((_) async => right(redirect));
     when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args)))
         .thenAnswer((_) async => right(routeMock));
-    when(() => getRoute.call(RouteParmsDTO(url: '/')))
+    when(() => getRoute.call(const RouteParmsDTO(url: '/')))
         .thenAnswer((_) async => right(routeParent));
     when(() => getArguments.call()).thenReturn(right(args));
 
@@ -185,9 +185,11 @@ void main() {
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
-    expect(parser.parseRouteInformation(RouteInformation(location: '/test')),
+    expect(
+        parser.parseRouteInformation(const RouteInformation(location: '/test')),
         completion(isA<ModularBook>()));
-    expect(parser.parseRouteInformation(RouteInformation(location: '/test')),
+    expect(
+        parser.parseRouteInformation(const RouteInformation(location: '/test')),
         completion(isA<ModularBook>()));
     expect(Guard().pre(routeMock), routeMock);
   });
@@ -201,8 +203,8 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
 
     expect(
-        () async =>
-            await parser.parseRouteInformation(RouteInformation(location: '/')),
+        () async => await parser
+            .parseRouteInformation(const RouteInformation(location: '/')),
         throwsA(isA<GuardedRouteException>()));
   });
 
@@ -215,8 +217,8 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
 
     expect(
-        () async =>
-            await parser.parseRouteInformation(RouteInformation(location: '/')),
+        () async => await parser
+            .parseRouteInformation(const RouteInformation(location: '/')),
         throwsA(isA<Exception>()));
   });
 

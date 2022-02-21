@@ -16,7 +16,7 @@ class SearchStore extends NotifierStore<Failure, List<Result>> {
   void setSearchText(String value) {
     executeEither(
       () => DartzEitherAdapter.adapter(searchByText(value)),
-      delay: Duration(milliseconds: 500),
+      delay: const Duration(milliseconds: 500),
     );
   }
 

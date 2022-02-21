@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('ModularState', (tester) async {
-    final modularApp = ModularApp(module: CustomModule(), child: AppWidget());
+    final modularApp =
+        ModularApp(module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -32,7 +33,7 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp().modular();
+    return const MaterialApp().modular();
   }
 }
 
@@ -46,10 +47,10 @@ class HomeExample extends StatefulWidget {
 class _HomeExampleState extends ModularState<HomeExample, String> {
   @override
   Widget build(BuildContext context) {
-    print(cubit);
-    print(bloc);
-    print(store);
-    print(controller);
+    debugPrint(cubit.toString());
+    debugPrint(bloc.toString());
+    debugPrint(store.toString());
+    debugPrint(controller.toString());
     return Container();
   }
 }

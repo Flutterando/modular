@@ -15,7 +15,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
-    print(Modular.args.queryParams['id']);
+    debugPrint(Modular.args.queryParams['id'].toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +39,7 @@ class _DetailsPageState extends State<DetailsPage> {
           : Center(
               child: ElevatedButton(
                 onPressed: () => Modular.to.pushReplacementNamed('/'),
-                child: Text('Make a search'),
+                child: const Text('Make a search'),
               ),
             ),
     );

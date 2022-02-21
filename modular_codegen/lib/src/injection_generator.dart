@@ -60,7 +60,7 @@ class ModelVisitor extends SimpleElementVisitor {
 
   writeParams(List<ParameterElement> parameters) {
     params = parameters.map((param) {
-      if (param.metadata.length > 0) {
+      if (param.metadata.isNotEmpty) {
         String? arg;
 
         for (var meta in param.metadata) {
@@ -74,7 +74,7 @@ class ModelVisitor extends SimpleElementVisitor {
             arg = _normalizeDefault(param);
           }
         }
-        return arg == null ? _normalize(param) : arg;
+        return arg ?? _normalize(param);
       } else {
         return _normalize(param);
       }

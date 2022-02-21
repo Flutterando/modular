@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/presenter/errors/errors.dart';
-import 'package:flutter_modular/src/presenter/models/modular_args.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import '../errors/errors.dart';
+import '../models/modular_args.dart';
+import '../models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
 class ModularPage<T> extends Page<T> {

@@ -76,7 +76,7 @@ void main() {
   late IModularBase modularBase;
 
   setUpAll(() {
-    registerFallbackValue(RouteParmsDTO(url: '/'));
+    registerFallbackValue(const RouteParmsDTO(url: '/'));
   });
 
   setUp(() {
@@ -136,7 +136,7 @@ void main() {
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
     when(() => getBind.call<Future<String>>())
-        .thenReturn(left(BindNotFoundException('')));
+        .thenReturn(left(const BindNotFoundException('')));
     expect(modularBase.getAsync<String>(defaultValue: 'changed'),
         completion('changed'));
   });

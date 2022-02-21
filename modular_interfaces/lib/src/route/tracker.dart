@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:modular_interfaces/modular_interfaces.dart';
 
-import 'modular_arguments.dart';
-
 abstract class Tracker {
   /// Service Injector instancia
   final Injector injector;

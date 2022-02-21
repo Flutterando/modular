@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
-import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
-import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
-import 'package:flutter_modular/src/domain/usecases/report_push.dart';
+import 'domain/usecases/bind_module.dart';
+import 'domain/usecases/reassemble_tracker.dart';
+import 'domain/usecases/report_pop.dart';
+import 'domain/usecases/report_push.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'domain/services/bind_service.dart';
