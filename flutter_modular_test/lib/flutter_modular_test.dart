@@ -3,7 +3,8 @@ library flutter_modular_test;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-void initModule(Module module, {List<Bind<Object>> replaceBinds = const [], bool initialModule = false}) {
+void initModule(Module module,
+    {List<Bind<Object>> replaceBinds = const [], bool initialModule = false}) {
   // ignore: invalid_use_of_visible_for_testing_member
   final bindModules = [...module.getProcessBinds()];
 
@@ -25,7 +26,8 @@ void initModule(Module module, {List<Bind<Object>> replaceBinds = const [], bool
   }
 }
 
-void initModules(List<Module> modules, {List<Bind<Object>> replaceBinds = const []}) {
+void initModules(List<Module> modules,
+    {List<Bind<Object>> replaceBinds = const []}) {
   for (var module in modules) {
     initModule(module, replaceBinds: replaceBinds);
   }

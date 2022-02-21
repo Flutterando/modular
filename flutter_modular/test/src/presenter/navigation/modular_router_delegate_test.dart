@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
 import 'package:flutter_modular/src/presenter/models/modular_args.dart';
@@ -92,10 +90,10 @@ void main() {
     when(() => parser.selectBook('/test2'))
         .thenAnswer((_) async => ModularBook(routes: [route1]));
 
-    delegate.navigate('/test');
-    delegate.navigate('/test2');
-    delegate.navigate('/test');
-    delegate.navigate('/test2');
+    await delegate.navigate('/test');
+    await delegate.navigate('/test2');
+    await delegate.navigate('/test');
+    await delegate.navigate('/test2');
 
     await Future.delayed(Duration(seconds: 1));
     expect(delegate.currentConfiguration?.uri.toString(), '/test2');

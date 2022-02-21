@@ -1,9 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
-
-import 'module.dart';
 
 /// This route represents a cluster of routes from another module that will be concatenated to the context of the parent module.
 class ModuleRoute<T> extends ParallelRoute<T> {

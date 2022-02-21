@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modular_core/modular_core.dart';
 
-import 'route.dart';
-
 /// Escape route if nothing is found in current context.
 ///Usually serves as a wildcard, and is called if no path matching the context is found.
 ///

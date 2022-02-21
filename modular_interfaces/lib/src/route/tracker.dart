@@ -20,7 +20,8 @@ abstract class Tracker {
   String get currentPath => arguments.uri.toString();
 
   /// Searches for a route by name or context throughout the tree.
-  FutureOr<ModularRoute?> findRoute(String path, {dynamic data, String schema = ''});
+  FutureOr<ModularRoute?> findRoute(String path,
+      {dynamic data, String schema = ''});
 
   /// Reports whether a route will leave the route context. This is important to call automatic dispose of the entire context.
   void reportPopRoute(ModularRoute route);

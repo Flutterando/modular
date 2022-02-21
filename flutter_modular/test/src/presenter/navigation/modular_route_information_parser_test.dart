@@ -7,8 +7,6 @@ import 'package:flutter_modular/src/domain/usecases/get_route.dart';
 import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
-import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_book.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_page.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';

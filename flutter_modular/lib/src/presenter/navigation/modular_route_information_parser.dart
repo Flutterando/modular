@@ -7,8 +7,6 @@ import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
 import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
-import 'package:flutter_modular/src/presenter/models/redirect_to_route.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'modular_book.dart';

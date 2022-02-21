@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 
 import 'custom_navigator.dart';
 import 'modular_page.dart';

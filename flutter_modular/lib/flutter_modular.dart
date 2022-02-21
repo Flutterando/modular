@@ -9,7 +9,6 @@ import 'src/domain/usecases/get_arguments.dart';
 import 'src/presenter/models/modular_navigator.dart';
 import 'src/presenter/modular_base.dart';
 import 'src/presenter/navigation/modular_page.dart';
-import 'src/presenter/navigation/modular_route_information_parser.dart';
 import 'src/presenter/navigation/modular_router_delegate.dart';
 import 'src/presenter/navigation/router_outlet_delegate.dart';
 

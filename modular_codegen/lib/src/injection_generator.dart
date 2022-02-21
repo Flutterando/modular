@@ -8,7 +8,8 @@ import 'package:source_gen/source_gen.dart';
 
 class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
   @override
-  FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) async {
+  FutureOr<String> generateForAnnotatedElement(
+      Element element, ConstantReader annotation, BuildStep buildStep) async {
     final singleton = annotation.read('singleton').boolValue;
     final lazy = annotation.read('lazy').boolValue;
 
@@ -29,7 +30,8 @@ class InjectionGenerator extends GeneratorForAnnotation<Injectable> {
         break;
       }
     }
-    _write("final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), isSingleton: $singleton, isLazy: $lazy,);");
+    _write(
+        "final \$${element.displayName} = BindInject((i) => ${element.displayName}(${visitor.params.join(', ')}), isSingleton: $singleton, isLazy: $lazy,);");
     return _buffer.toString();
   }
 }

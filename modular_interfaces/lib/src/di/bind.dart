@@ -28,7 +28,8 @@ abstract class BindContract<T extends Object> {
     this.export = false,
     this.isScoped = false,
     this.alwaysSerialized = false,
-  }) : assert((isSingleton || isLazy), r"'singleton' can't be false if 'lazy' is also false");
+  }) : assert((isSingleton || isLazy),
+            r"'singleton' can't be false if 'lazy' is also false");
 }
 
 /// For empty instance binds.
