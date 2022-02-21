@@ -51,7 +51,10 @@ void main() {
     when(() => key.currentState).thenReturn(navigatorState);
     parser = ModularRouteInformationParserMock();
     delegate = ModularRouterDelegate(
-        parser: parser, navigatorKey: key, reportPop: reportPopMock);
+      parser: parser,
+      navigatorKey: key,
+      reportPop: reportPopMock,
+    );
   });
 
   test('setObserver', () {
@@ -90,10 +93,10 @@ void main() {
     when(() => parser.selectBook('/test2'))
         .thenAnswer((_) async => ModularBook(routes: [route1]));
 
-    await delegate.navigate('/test');
-    await delegate.navigate('/test2');
-    await delegate.navigate('/test');
-    await delegate.navigate('/test2');
+    delegate.navigate('/test');
+    delegate.navigate('/test2');
+    delegate.navigate('/test');
+    delegate.navigate('/test2');
 
     await Future.delayed(const Duration(seconds: 1));
     expect(delegate.currentConfiguration?.uri.toString(), '/test2');
