@@ -64,7 +64,7 @@ extension ModularExtensionMaterial on MaterialApp {
   ///...
   ///);
   ///```
-  @deprecated
+  @Deprecated('Use **MaterialApp.router** instead')
   MaterialApp modular() {
     injector
         .get<IModularNavigator>()
@@ -119,7 +119,7 @@ extension ModularExtensionCupertino on CupertinoApp {
   ///...
   ///);
   ///```
-  @deprecated
+  @Deprecated('Use CupertinoApp.router instead')
   CupertinoApp modular() {
     injector
         .get<IModularNavigator>()
