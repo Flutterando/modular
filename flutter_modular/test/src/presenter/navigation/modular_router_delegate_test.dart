@@ -51,7 +51,10 @@ void main() {
     when(() => key.currentState).thenReturn(navigatorState);
     parser = ModularRouteInformationParserMock();
     delegate = ModularRouterDelegate(
-        parser: parser, navigatorKey: key, reportPop: reportPopMock);
+      parser: parser,
+      navigatorKey: key,
+      reportPop: reportPopMock,
+    );
   });
 
   test('setObserver', () {

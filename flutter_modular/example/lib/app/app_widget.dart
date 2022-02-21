@@ -9,12 +9,14 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: alice.getNavigatorKey(),
+    Modular.routerDelegate.setNavigatorKey(alice.getNavigatorKey());
+    return MaterialApp.router(
       title: 'Flutter Slidy',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-    ).modular();
+      routerDelegate: Modular.routerDelegate,
+      routeInformationParser: Modular.routeInformationParser,
+    );
   }
 }
