@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('disposeResolverFunc', () {
-    var value;
+    dynamic value;
     setDisposeResolver((r) {
       value = r;
     });
@@ -11,7 +11,7 @@ void main() {
     expect(value, '.');
   });
   test('printResolver', () {
-    var text;
+    dynamic text;
     setPrintResolver((t) {
       text = t;
     });

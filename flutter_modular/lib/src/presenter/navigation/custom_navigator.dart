@@ -1,26 +1,30 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/src/presenter/modular_base.dart';
+import '../modular_base.dart';
 
 class CustomNavigator extends Navigator {
   final IModularBase modularBase;
 
-  CustomNavigator({
+  const CustomNavigator({
     Key? key,
     required this.modularBase,
     List<NavigatorObserver> observers = const <NavigatorObserver>[],
     List<Page<dynamic>> pages = const <Page<dynamic>>[],
     bool Function(Route<dynamic>, dynamic)? onPopPage,
   }) : super(
-            key: key, pages: pages, onPopPage: onPopPage, observers: observers);
+          key: key,
+          pages: pages,
+          onPopPage: onPopPage,
+          observers: observers,
+        );
 
   @override
-  CustomNavigatorState createState() => CustomNavigatorState(modularBase);
+  _CustomNavigatorState createState() => _CustomNavigatorState(modularBase);
 }
 
-class CustomNavigatorState extends NavigatorState {
+class _CustomNavigatorState extends NavigatorState {
   final IModularBase modularBase;
 
-  CustomNavigatorState(this.modularBase);
+  _CustomNavigatorState(this.modularBase);
 
   @override
   Future<T?> pushNamed<T extends Object?>(String routeName,

@@ -1,5 +1,4 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:modular_core/src/di/reassemble_mixin.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
-import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
+import 'package:flutter/foundation.dart';
+import '../domain/usecases/get_arguments.dart';
+import '../domain/usecases/reassemble_tracker.dart';
 import 'package:modular_core/modular_core.dart';
 
-import 'package:flutter_modular/src/domain/usecases/dispose_bind.dart';
-import 'package:flutter_modular/src/domain/usecases/finish_module.dart';
-import 'package:flutter_modular/src/domain/usecases/get_bind.dart';
-import 'package:flutter_modular/src/domain/usecases/module_ready.dart';
-import 'package:flutter_modular/src/domain/usecases/start_module.dart';
+import '../domain/usecases/dispose_bind.dart';
+import '../domain/usecases/finish_module.dart';
+import '../domain/usecases/get_bind.dart';
+import '../domain/usecases/module_ready.dart';
+import '../domain/usecases/start_module.dart';
 import 'package:triple/triple.dart';
 import 'errors/errors.dart';
 import 'models/modular_args.dart';
@@ -153,13 +153,13 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module)
-          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module).fold(
+          (l) => throw l, (r) => debugPrint('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setDisposeResolver(disposeBindFunction);
 
-      setPrintResolver(print);
+      setPrintResolver(debugPrint);
     } else {
       throw ModuleStartedException(
           'Module ${module.runtimeType} is already started');
@@ -178,7 +178,7 @@ class ModularBase implements IModularBase {
   @override
   void debugPrintModular(String text) {
     if (flags.isDebug) {
-      print(text);
+      debugPrint(text);
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/presenter/models/module.dart';
+import '../../../flutter_modular.dart';
 import 'package:triple/triple.dart';
 
 import '../modular_base.dart';

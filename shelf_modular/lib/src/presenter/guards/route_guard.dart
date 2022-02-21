@@ -12,8 +12,8 @@ abstract class RouteGuard extends Middleware<shelf.Request> {
   FutureOr<ModularRoute?> pre(ModularRoute route) => route;
 
   @override
-  FutureOr<Route?> pos(route, request) async {
-    if (await canActivate(request, route as Route)) {
+  FutureOr<Route?> pos(route, data) async {
+    if (await canActivate(data, route as Route)) {
       return route;
     }
 

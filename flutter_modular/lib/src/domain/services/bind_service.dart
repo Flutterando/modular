@@ -1,5 +1,5 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
+import '../../shared/either.dart';
 
 abstract class BindService {
   Either<ModularError, T> getBind<T extends Object>();

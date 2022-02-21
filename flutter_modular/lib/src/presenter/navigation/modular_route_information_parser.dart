@@ -1,16 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
-import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
-import 'package:flutter_modular/src/domain/usecases/get_route.dart';
-import 'package:flutter_modular/src/domain/usecases/report_push.dart';
-import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
-import 'package:flutter_modular/src/presenter/models/redirect_to_route.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+
 import 'package:modular_core/modular_core.dart';
 
+import '../../../flutter_modular.dart';
+import '../../domain/dtos/route_dto.dart';
+import '../../domain/usecases/get_arguments.dart';
+import '../../domain/usecases/get_route.dart';
+import '../../domain/usecases/report_push.dart';
+import '../../domain/usecases/set_arguments.dart';
 import 'modular_book.dart';
 
 class ModularRouteInformationParser
@@ -52,8 +51,8 @@ class ModularRouteInformationParser
   }
 
   @override
-  RouteInformation restoreRouteInformation(ModularBook book) {
-    return RouteInformation(location: book.uri.toString());
+  RouteInformation restoreRouteInformation(ModularBook configuration) {
+    return RouteInformation(location: configuration.uri.toString());
   }
 
   Future<ModularBook> selectBook(String path,
@@ -111,7 +110,7 @@ class ModularRouteInformationParser
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
       final result = await getRoute.call(params);
       return await result.fold((l) => throw modularError, (route) {
-        print('[MODULAR WARNING] - Please, use $path/ instead of $path.');
+        debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
         return _routeSuccess(route);
       });
     }, (route) => _routeSuccess(route));

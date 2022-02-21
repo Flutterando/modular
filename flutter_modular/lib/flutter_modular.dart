@@ -36,6 +36,7 @@ export 'package:modular_core/modular_core.dart'
 IModularBase? _modular;
 
 /// Instance of Modular for search binds and route.
+// ignore: non_constant_identifier_names
 IModularBase get Modular {
   _modular ??= injector<IModularBase>();
   return _modular!;
@@ -171,7 +172,7 @@ extension InjectorExtends on Injector {
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
 class RouterOutlet extends StatefulWidget {
-  RouterOutlet({Key? key}) : super(key: key);
+  const RouterOutlet({Key? key}) : super(key: key);
 
   @override
   RouterOutletState createState() => RouterOutletState();

@@ -1,7 +1,4 @@
-import 'package:modular_core/modular_core.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
-
-import 'modular_route.dart';
+import '../../modular_core.dart';
 
 class CustomRoute extends ModularRouteImpl {
   final dynamic data;

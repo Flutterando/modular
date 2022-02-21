@@ -1,7 +1,4 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:modular_core/src/di/bind_context.dart';
-import 'package:modular_core/src/di/injector.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -116,7 +113,7 @@ class MyInjectModule extends BindContextImpl {
 
   @override
   List<BindContract> get binds => [
-        AsyncBind<Set>((i) => Future.value(Set())),
+        AsyncBind<Set>((i) => Future.value(<dynamic>{})),
         _Bind((i) => 'Jacob', scoped: true),
         _Bind((i) => true),
         _Bind<double>((i) => 0.0, lazy: false),
@@ -160,7 +157,7 @@ class AsyncBind<T extends Object> extends _Bind<Future<T>>
 
   @override
   Future<T> resolveAsyncBind() async {
-    final bind = await asyncInject(ModularTracker.injector);
+    final bind = await asyncInject(modularTracker.injector);
     return bind;
   }
 

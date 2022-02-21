@@ -13,4 +13,5 @@ export 'src/presenter/resources/resource.dart';
 export 'package:modular_core/modular_core.dart'
     show ModularRoute, ModularArguments, Injector, Disposable;
 
+// ignore: non_constant_identifier_names
 final Modular = injector<IModularBase>();

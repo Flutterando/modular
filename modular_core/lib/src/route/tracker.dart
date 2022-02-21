@@ -4,8 +4,10 @@ import 'package:meta/meta.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
 
 class TrackerImpl implements Tracker {
+  @override
   final Injector injector;
   RouteContext? _nullableModule;
+  @override
   RouteContext get module {
     if (_nullableModule != null) {
       return _nullableModule!;
@@ -20,10 +22,13 @@ class TrackerImpl implements Tracker {
   TrackerImpl(this.injector);
 
   var _arguments = ModularArguments.empty();
+  @override
   ModularArguments get arguments => _arguments;
 
+  @override
   String get currentPath => arguments.uri.toString();
 
+  @override
   FutureOr<ModularRoute?> findRoute(String path,
       {dynamic data, String schema = ''}) async {
     var uri = _resolverPath(path);
@@ -80,6 +85,7 @@ class TrackerImpl implements Tracker {
     return route;
   }
 
+  @override
   void reportPopRoute(ModularRoute route) {
     injector.disposeModuleByTag(route.uri.toString());
   }
@@ -98,7 +104,7 @@ class TrackerImpl implements Tracker {
   Map<String, String>? _extractParams(Uri candidate, Uri match) {
     final settledUrl = _processUrl(candidate.path);
 
-    final regExp = RegExp("^${settledUrl}\$", caseSensitive: true);
+    final regExp = RegExp("^$settledUrl\$", caseSensitive: true);
     final result = regExp.firstMatch(match.path);
 
     if (result != null) {
@@ -123,6 +129,7 @@ class TrackerImpl implements Tracker {
     return newUrl.join("/");
   }
 
+  @override
   void runApp(RouteContext module) {
     _nullableModule = module;
     injector.addBindContext(module, tag: '/');
@@ -139,6 +146,7 @@ class TrackerImpl implements Tracker {
     injector.reassemble();
   }
 
+  @override
   void finishApp() {
     injector.destroy();
     routeMap.clear();

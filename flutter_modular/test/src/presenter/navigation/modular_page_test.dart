@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/models/modular_args.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';

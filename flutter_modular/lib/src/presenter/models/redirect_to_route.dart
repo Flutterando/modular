@@ -8,5 +8,5 @@ class RedirectRoute extends ChildRoute {
   RedirectRoute(
     String name, {
     required this.to,
-  }) : super(name, child: (_, __) => SizedBox());
+  }) : super(name, child: (_, __) => const SizedBox());
 }

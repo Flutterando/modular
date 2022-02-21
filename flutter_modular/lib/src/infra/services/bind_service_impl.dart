@@ -1,7 +1,7 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/domain/errors/errors.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/services/bind_service.dart';
+import '../../domain/errors/errors.dart';
+import '../../shared/either.dart';
+import '../../domain/services/bind_service.dart';
 
 class BindServiceImpl extends BindService {
   final Injector injector;
