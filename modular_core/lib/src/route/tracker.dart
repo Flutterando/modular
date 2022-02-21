@@ -113,6 +113,8 @@ class TrackerImpl implements Tracker {
         params[name] = result.namedGroup(name)!;
       }
       return params;
+    } else {
+      return null;
     }
   }
 
