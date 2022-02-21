@@ -25,7 +25,8 @@ class ModularApp extends StatefulWidget {
     /// Prohibits taking any bind of parent modules, forcing the imports of the same in the current module to be accessed. This is the same behavior as the system. Default is false;
     bool notAllowedParentBinds = false,
   }) : super(key: key) {
-    (Modular as ModularBase).flags.experimentalNotAllowedParentBinds = notAllowedParentBinds;
+    (Modular as ModularBase).flags.experimentalNotAllowedParentBinds =
+        notAllowedParentBinds;
     (Modular as ModularBase).flags.isDebug = debugMode;
   }
 
@@ -49,7 +50,8 @@ class ModularAppState extends State<ModularApp> {
   @override
   void dispose() {
     Modular.destroy();
-    Modular.debugPrintModular('-- ${widget.module.runtimeType.toString()} DISPOSED');
+    Modular.debugPrintModular(
+        '-- ${widget.module.runtimeType.toString()} DISPOSED');
     cleanGlobals();
     super.dispose();
   }
@@ -78,20 +80,28 @@ class _Register<T> {
   dynamic getSelected() => _select != null ? _select!(value) : value;
 
   @override
-  bool operator ==(Object object) => identical(this, object) || object is _Register && runtimeType == object.runtimeType && type == object.type;
+  bool operator ==(Object object) =>
+      identical(this, object) ||
+      object is _Register &&
+          runtimeType == object.runtimeType &&
+          type == object.type;
 
   @override
   int get hashCode => value.hashCode ^ type.hashCode;
 }
 
 class _ModularInherited extends InheritedWidget {
-  const _ModularInherited({Key? key, required Widget child}) : super(key: key, child: child);
+  const _ModularInherited({Key? key, required Widget child})
+      : super(key: key, child: child);
 
-  static T of<T extends Object>(BuildContext context, {bool listen = true, SelectCallback<T>? select}) {
+  static T of<T extends Object>(BuildContext context,
+      {bool listen = true, SelectCallback<T>? select}) {
     final bind = Modular.get<T>();
     if (listen) {
       final registre = _Register<T>(bind, select);
-      final inherited = context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
+      final inherited =
+          context.dependOnInheritedWidgetOfExactType<_ModularInherited>(
+              aspect: registre)!;
       inherited.updateShouldNotify(inherited);
     }
 

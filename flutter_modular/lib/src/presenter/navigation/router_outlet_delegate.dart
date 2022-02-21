@@ -16,10 +16,14 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
   final ModularRouterDelegate modularRouterDelegate;
   final String path;
 
-  RouterOutletDelegate(this.path, this.modularRouterDelegate, this.navigatorKey);
+  RouterOutletDelegate(
+      this.path, this.modularRouterDelegate, this.navigatorKey);
 
   List<ModularPage> _getPages() {
-    return modularRouterDelegate.currentConfiguration?.chapters(path).toList() ?? [];
+    return modularRouterDelegate.currentConfiguration
+            ?.chapters(path)
+            .toList() ??
+        [];
   }
 
   @override
