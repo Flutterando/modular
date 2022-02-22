@@ -1,4 +1,4 @@
-## [4.4.1] - 2022-02-18
+## [4.5.0] - 2022-02-22
 
 - @Deprecated: `.modular()` extension.
   Use instead:
@@ -9,7 +9,13 @@
     );
 
   ```
-- Fix bugs.
+- Added `Modular.setInitialRoute`.
+- Added `Modular.setObservers`.
+- Added `Modular.setNavigatorKey`.
+
+## [4.4.1] - 2022-02-18
+
+- Fix bugs in lints.
 
 ## [4.4.0+1] - 2022-01-22
 
