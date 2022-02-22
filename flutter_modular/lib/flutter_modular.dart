@@ -6,7 +6,6 @@ import 'package:flutter_modular/src/flutter_modular_module.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'src/domain/usecases/get_arguments.dart';
-import 'src/presenter/models/modular_navigator.dart';
 import 'src/presenter/modular_base.dart';
 import 'src/presenter/navigation/modular_page.dart';
 import 'src/presenter/navigation/modular_router_delegate.dart';
@@ -52,9 +51,6 @@ void cleanGlobals() {
   cleanInjector();
 }
 
-@visibleForTesting
-String initialRouteDeclaredInMaterialApp = '/';
-
 extension ModularExtensionMaterial on MaterialApp {
   ///Use instead:
   ///```dart
@@ -66,13 +62,9 @@ extension ModularExtensionMaterial on MaterialApp {
   ///```
   @Deprecated('Use **MaterialApp.router** instead')
   MaterialApp modular() {
-    injector
-        .get<IModularNavigator>()
-        .setObserver(navigatorObservers ?? <NavigatorObserver>[]);
-
-    injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
-
-    initialRouteDeclaredInMaterialApp = initialRoute ?? '/';
+    Modular.setObservers(navigatorObservers ?? []);
+    Modular.setNavigatorKey(navigatorKey);
+    Modular.setInitialRoute(initialRoute ?? '/');
 
     final app = MaterialApp.router(
       key: key,
@@ -121,15 +113,11 @@ extension ModularExtensionCupertino on CupertinoApp {
   ///```
   @Deprecated('Use CupertinoApp.router instead')
   CupertinoApp modular() {
-    injector
-        .get<IModularNavigator>()
-        .setObserver(navigatorObservers ?? <NavigatorObserver>[]);
-
-    injector.get<IModularNavigator>().setNavigatorKey(navigatorKey);
+    Modular.setObservers(navigatorObservers ?? []);
+    Modular.setNavigatorKey(navigatorKey);
+    Modular.setInitialRoute(initialRoute ?? '/');
 
     (injector.get<IModularBase>() as ModularBase).flags.isCupertino = true;
-
-    initialRouteDeclaredInMaterialApp = initialRoute ?? '/';
 
     final app = CupertinoApp.router(
       key: key,

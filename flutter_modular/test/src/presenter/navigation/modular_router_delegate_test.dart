@@ -58,7 +58,7 @@ void main() {
   });
 
   test('setObserver', () {
-    delegate.setObserver([NavigatorObserver()]);
+    delegate.setObservers([NavigatorObserver()]);
     expect(delegate.observers.length, 1);
   });
 

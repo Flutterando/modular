@@ -144,7 +144,7 @@ The main Widget's function is to instantiate the MaterialApp or CupertinoApp.
 
 In these main Widgets it's also necessary to set the custom route system. For this next snippet we'll use **MaterialApp**, but the process is exactly the same for CupertinoApp.
 
-```dart title="lib/main.dart" {8-15}
+```dart title="lib/main.dart" {9-16}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -154,7 +154,7 @@ void main(){
 
 class AppWidget extends StatelessWidget {
   Widget build(BuildContext context){
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
       routeInformationParser: Modular.routeInformationParser,
@@ -185,6 +185,20 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-Here we create a Widget called **AppWidget** containing an instance of **MaterialApp**. Note that in the end, we call **.modular()** method that was added to **MaterialApp** through an extension.
+Here we create a Widget called **AppWidget** containing an instance of **MaterialApp.router**. 
+
+
+## Support methods
+
+Navigator 2.0 made Flutter's routing system more dynamic, but some information, previously passed in MaterialApp or CupertinoApp, has been removed, and it will be necessary to configure it using Modular's own support methods.
+
+```dart
+Modular.setNavigatorKey(myNavigatorKey);
+
+Modular.setObservers([myObserver]);
+
+Modular.setInitialRoute('/home');
+```
+
 
 That's enough to run a Modular app. In the next steps let's explore navigation.

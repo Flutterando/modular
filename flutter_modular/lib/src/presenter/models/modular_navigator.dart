@@ -113,7 +113,7 @@ abstract class IModularNavigator implements Listenable {
   /// ```
   void navigate(String path, {dynamic arguments});
 
-  void setObserver(List<NavigatorObserver> navigatorObservers);
+  void setObservers(List<NavigatorObserver> navigatorObservers);
 
   void setNavigatorKey(GlobalKey<NavigatorState>? navigatorkey);
 }
