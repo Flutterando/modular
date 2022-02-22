@@ -25,7 +25,9 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-    ).modular(); //added by extension
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    ); //added by extension
   }
 }
 
@@ -285,11 +287,14 @@ void main() {
 
 class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
-    return MaterialApp(
+    Modular.setInitialRoute('/page1');
+
+    return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/page1',
-    ).modular();
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
   }
 }
 
