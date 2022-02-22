@@ -35,7 +35,7 @@ class ModularRouteInformationParser
       if (routeInformation.location == null ||
           routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
-        path = initialRouteDeclaredInMaterialApp;
+        path = Modular.initialRoutePath;
       } else {
         path = routeInformation.location!;
       }
@@ -43,7 +43,7 @@ class ModularRouteInformationParser
       _firstParse = true;
     } else {
       // ignore: invalid_use_of_visible_for_testing_member
-      path = routeInformation.location ?? initialRouteDeclaredInMaterialApp;
+      path = routeInformation.location ?? Modular.initialRoutePath;
     }
 
     return await selectBook(path);

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import '../domain/usecases/get_arguments.dart';
 import '../domain/usecases/reassemble_tracker.dart';
 import 'package:modular_core/modular_core.dart';
@@ -69,6 +69,18 @@ abstract class IModularBase {
 
   /// Navigator 2.0 initializator: RouterDelegate
   ModularRouterDelegate get routerDelegate;
+
+  /// Change the starting route path
+  void setInitialRoute(String initialRoute);
+
+  /// Change a list of NavigatorObserver objects
+  void setObservers(List<NavigatorObserver> navigatorObservers);
+
+  /// Change the navigatorKey
+  void setNavigatorKey(GlobalKey<NavigatorState>? key);
+
+  @visibleForTesting
+  String get initialRoutePath;
 }
 
 class ModularBase implements IModularBase {
@@ -89,6 +101,12 @@ class ModularBase implements IModularBase {
   IModularNavigator? navigatorDelegate;
 
   bool _moduleHasBeenStarted = false;
+
+  String _initialRoutePath = '/';
+
+  @visibleForTesting
+  @override
+  String get initialRoutePath => _initialRoutePath;
 
   ModularBase({
     required this.routeInformationParser,
@@ -189,5 +207,20 @@ class ModularBase implements IModularBase {
   @override
   void reassemble() {
     reassembleTracker();
+  }
+
+  @override
+  void setInitialRoute(String value) {
+    _initialRoutePath = value;
+  }
+
+  @override
+  void setNavigatorKey(GlobalKey<NavigatorState>? key) {
+    routerDelegate.setNavigatorKey(key);
+  }
+
+  @override
+  void setObservers(List<NavigatorObserver> navigatorObservers) {
+    routerDelegate.setObservers(navigatorObservers);
   }
 }

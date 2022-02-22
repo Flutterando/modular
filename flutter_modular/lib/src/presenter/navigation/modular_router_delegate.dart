@@ -51,7 +51,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   }
 
   @override
-  void setObserver(List<NavigatorObserver> navigatorObservers) {
+  void setObservers(List<NavigatorObserver> navigatorObservers) {
     observers = navigatorObservers;
     notifyListeners();
   }
