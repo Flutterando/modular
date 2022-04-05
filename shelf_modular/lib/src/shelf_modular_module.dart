@@ -25,8 +25,8 @@ class ShelfModularModule extends Module {
   @override
   List<Bind> get binds => [
         //datasource
-        Bind.factory<Tracker>((i) => ModularTracker),
-        Bind.factory<Injector>((i) => ModularTracker.injector),
+        Bind.factory<Tracker>((i) => modularTracker),
+        Bind.factory<Injector>((i) => modularTracker.injector),
         //infra
         Bind.factory<BindService>((i) => BindServiceImpl(i())),
         Bind.factory<ModuleService>((i) => ModuleServiceImpl(i())),
