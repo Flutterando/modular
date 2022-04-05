@@ -53,7 +53,7 @@ class AsyncBind<T extends Object> extends Bind<Future<T>>
 
   @override
   Future<T> resolveAsyncBind() async {
-    final bind = await asyncInject(ModularTracker.injector);
+    final bind = await asyncInject(modularTracker.injector);
     return bind;
   }
 
