@@ -1,4 +1,7 @@
 ## [4.5.0] - 2022-02-22
+- Fixed `modular_core` and resolve issues [#699] [#671] [#678].
+
+## [4.5.0] - 2022-02-22
 
 - @Deprecated: `.modular()` extension.
   Use instead:
