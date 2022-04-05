@@ -1,3 +1,6 @@
+## 1.2.2 - 2022/04/05
+* Fixed binds auto-dispose [#699] [#671] [#678]
+
 ## 1.2.1 - 2021/12/31
 * Fixed "bind replaced" bug
 

@@ -38,17 +38,17 @@ void main() {
   );
 
   test('init Module', () {
-    final text = ModularTracker.injector.get<String>();
+    final text = modularTracker.injector.get<String>();
     expect(text, 'teste');
   });
 
   test('replace binds', () {
-    final boolean = ModularTracker.injector.get<bool>();
+    final boolean = modularTracker.injector.get<bool>();
     expect(boolean, false);
   });
 
   test('replace binds with interface', () {
-    final result = ModularTracker.injector.get<IRepo>();
+    final result = modularTracker.injector.get<IRepo>();
     expect(result, isA<RepoImpl2>());
     expect(result.name, 'RepoImpl2');
   });

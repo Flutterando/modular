@@ -75,8 +75,8 @@ abstract class BindContextImpl implements BindContext {
   bool remove<T>() {
     final type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
-      var singletonBind = _singletonBinds[type]!.value;
-      disposeResolverFunc?.call(singletonBind);
+      var singletonBind = _singletonBinds[type]!;
+      disposeResolverFunc?.call(singletonBind.value);
       _singletonBinds.remove(type);
       return true;
     } else {
@@ -101,8 +101,8 @@ abstract class BindContextImpl implements BindContext {
   @mustCallSuper
   void dispose() {
     for (final key in _singletonBinds.keys) {
-      var _bind = _singletonBinds[key];
-      disposeResolverFunc?.call(_bind);
+      var _bind = _singletonBinds[key]!;
+      disposeResolverFunc?.call(_bind.value);
     }
     _singletonBinds.clear();
   }

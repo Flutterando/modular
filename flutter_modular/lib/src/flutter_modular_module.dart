@@ -43,8 +43,8 @@ class FlutterModularModule extends Module {
   @override
   List<Bind> get binds => [
         //datasource
-        Bind.instance<Tracker>(ModularTracker),
-        Bind.instance<Injector>(ModularTracker.injector),
+        Bind.instance<Tracker>(modularTracker),
+        Bind.instance<Injector>(modularTracker.injector),
         //infra
         Bind.factory<BindService>((i) => BindServiceImpl(i())),
         Bind.factory<ModuleService>((i) => ModuleServiceImpl(i())),
