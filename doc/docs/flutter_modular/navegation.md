@@ -22,7 +22,7 @@ void main() {
 
 class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
       routeInformationParser: Modular.routeInformationParser,
