@@ -14,11 +14,21 @@ dev_dependencies:
   build_runner: any
 ```
 
+If you use want to nullsafety with flutter2, use a nullsafety varsion.
+
+```
+dev_dependencies:
+  modular_codegen: 3.0.0-nullsafety.2
+  build_runner: any
+```
+
 ## Injection automation
 
 Annotate your class with `Injectable`. Don't forget the `part` directive.
 
 ```dart
+import 'package:flutter_modular/flutter_modular.dart'; // ← for using Injectable annotation
+
 part 'home_controller.g.dart'; // ← part directive with your_file_name.g.dart
 
 @Injectable() // ← Injectable annotation
