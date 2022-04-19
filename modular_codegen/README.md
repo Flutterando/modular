@@ -14,7 +14,7 @@ dev_dependencies:
   build_runner: any
 ```
 
-If you use want to nullsafety with flutter2, use a nullsafety varsion.
+If you want to use null-safety with flutter2, use a null-safety version.
 
 ```
 dev_dependencies:
