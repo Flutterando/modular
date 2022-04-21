@@ -8,8 +8,7 @@ environment:
 
 dependencies:
   flutter_modular_annotations: ^0.0.2
-  triple: ">=1.4.0 <2.0.0"
-  modular_core: ">=1.2.2 <=2.0.0"
+  modular_core: 2.0.0-dev.1
   meta: ">=1.3.0 <2.0.0"
   flutter:
     sdk: flutter

@@ -23,7 +23,6 @@ import 'package:flutter_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:flutter_modular/src/domain/usecases/start_module.dart';
 import 'package:flutter_modular/src/presenter/modular_base.dart';
 import 'package:flutter_modular/src/shared/either.dart';
-import 'package:triple/triple.dart';
 
 import '../mocks/mocks.dart';
 
@@ -32,8 +31,6 @@ class DisposeBindMock extends Mock implements DisposeBind {}
 class ChangeNotifierMock extends Mock implements ChangeNotifier {}
 
 class SinkMock extends Mock implements Sink {}
-
-class StoreMock extends Mock implements Store {}
 
 class GetArgumentsMock extends Mock implements GetArguments {}
 
@@ -57,8 +54,7 @@ class DisposableMock extends Mock implements Disposable {}
 
 class IModularNavigatorMock extends Mock implements IModularNavigator {}
 
-class ModularRouteInformationParserMock extends Mock
-    implements ModularRouteInformationParser {}
+class ModularRouteInformationParserMock extends Mock implements ModularRouteInformationParser {}
 
 class ModularRouterDelegateMock extends Mock implements ModularRouterDelegate {}
 
@@ -111,8 +107,7 @@ void main() {
     when(() => startModule.call(module)).thenReturn(right(unit));
     modularBase.init(module);
     verify(() => startModule.call(module));
-    expect(
-        () => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
+    expect(() => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
   });
 
   test('dispose', () {
@@ -131,14 +126,11 @@ void main() {
   });
 
   test('getAsync', () {
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(right(Future.value('modular')));
+    when(() => getBind.call<Future<String>>()).thenReturn(right(Future.value('modular')));
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(left(const BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
-        completion('changed'));
+    when(() => getBind.call<Future<String>>()).thenReturn(left(const BindNotFoundException('')));
+    expect(modularBase.getAsync<String>(defaultValue: 'changed'), completion('changed'));
   });
 
   test('isModuleReady', () {
@@ -150,22 +142,6 @@ void main() {
     when(() => finishModule.call()).thenReturn(right(unit));
     modularBase.destroy();
     verify(() => finishModule.call()).called(1);
-  });
-
-  test('disposeBindFunction', () {
-    final changeNotifierMock = ChangeNotifierMock();
-    final sinkMock = SinkMock();
-    final disposableMock = DisposableMock();
-    final storeMock = StoreMock();
-    when(() => storeMock.destroy()).thenAnswer((_) async {});
-    (modularBase as ModularBase).disposeBindFunction(disposableMock);
-    (modularBase as ModularBase).disposeBindFunction(changeNotifierMock);
-    (modularBase as ModularBase).disposeBindFunction(sinkMock);
-    (modularBase as ModularBase).disposeBindFunction(storeMock);
-    verify(() => disposableMock.dispose()).called(1);
-    verify(() => sinkMock.close()).called(1);
-    verify(() => changeNotifierMock.dispose()).called(1);
-    verify(() => storeMock.destroy()).called(1);
   });
 }
 
