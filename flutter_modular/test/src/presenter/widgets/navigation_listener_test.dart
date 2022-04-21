@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('NavigationListener', (tester) async {
-    final modularApp = ModularApp(module: CustomModule(), child: const AppWidget());
+    final modularApp =
+        ModularApp(module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
