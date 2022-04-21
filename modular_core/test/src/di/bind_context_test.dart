@@ -41,6 +41,13 @@ void main() {
     final bindIRepository = instance.getBind<IRepository>(injector);
     expect(bindIRepository, isA<IRepository>());
   });
+  test('get bind by interface with Disposable', () async {
+    final bindRepository = instance.getBind<Repository>(injector);
+    expect(bindRepository, isA<Repository>());
+    instance.remove<Repository>();
+
+    expect(bindRepository?.isDisposed, true);
+  });
 
   test('get imported bind', () {
     final bindWithExportFlag = instance.getBind<Map>(injector);
@@ -64,11 +71,6 @@ void main() {
 
     final bindString = instance.getBind<String>(injector);
     expect(bindString, 'Jacob');
-    setDisposeResolver((t) {
-      expect(t, 'Jacob');
-    });
-    setDisposeResolver((t) {});
-
     expect(instance.remove<String>(), true);
   });
 
@@ -99,8 +101,7 @@ void main() {
   });
 
   test('instantiateSingletonBinds', () {
-    instance.instantiateSingletonBinds(
-        [SingletonBind(bind: _Bind((i) => 0.0), value: 0.0)], injector);
+    instance.instantiateSingletonBinds([SingletonBind(bind: _Bind((i) => 0.0), value: 0.0)], injector);
     expect(instance.instanciatedSingletons.length, 1);
   });
 }
@@ -117,7 +118,10 @@ class MyInjectModule extends BindContextImpl {
         _Bind((i) => 'Jacob', scoped: true),
         _Bind((i) => true),
         _Bind<double>((i) => 0.0, lazy: false),
-        _Bind((i) => Repository()),
+        _Bind(
+          (i) => Repository(),
+          onDispose: (value) => value,
+        ),
       ];
 }
 
@@ -135,25 +139,32 @@ class _Bind<T extends Object> extends BindContract<T> {
     bool export = false,
     bool scoped = false,
     bool lazy = true,
+    void Function(T value)? onDispose,
   }) : super(
           factoryFunction,
           export: export,
           isLazy: lazy,
           isScoped: scoped,
+          onDispose: onDispose,
         );
 }
 
-abstract class IRepository {}
+abstract class IRepository {
+  bool isDisposed = false;
+}
 
-class Repository extends IRepository {}
+class Repository extends IRepository with Disposable {
+  @override
+  void dispose() {
+    isDisposed = true;
+  }
+}
 
-class AsyncBind<T extends Object> extends _Bind<Future<T>>
-    implements AsyncBindContract<T> {
+class AsyncBind<T extends Object> extends _Bind<Future<T>> implements AsyncBindContract<T> {
   @override
   final Future<T> Function(Injector i) asyncInject;
 
-  AsyncBind(this.asyncInject, {bool export = false})
-      : super(asyncInject, export: export);
+  AsyncBind(this.asyncInject, {bool export = false}) : super(asyncInject, export: export);
 
   @override
   Future<T> resolveAsyncBind() async {
