@@ -21,6 +21,9 @@ abstract class BindContract<T extends Object> {
   ///When 'false', the object is instantiated along with the module.
   final bool isLazy;
 
+  ///Called in module`s dispose.
+  final void Function(T value)? onDispose;
+
   BindContract(
     this.factoryFunction, {
     this.isSingleton = true,
@@ -28,8 +31,8 @@ abstract class BindContract<T extends Object> {
     this.export = false,
     this.isScoped = false,
     this.alwaysSerialized = false,
-  }) : assert((isSingleton || isLazy),
-            r"'singleton' can't be false if 'lazy' is also false");
+    this.onDispose,
+  }) : assert((isSingleton || isLazy), r"'singleton' can't be false if 'lazy' is also false");
 }
 
 /// For empty instance binds.
