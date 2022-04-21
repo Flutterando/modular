@@ -1,3 +1,34 @@
+## [5.0.0] - 2022-04-21
+- [BREAK CHANGE]: Removed `MaterialApp.modular()` and `Cupertino().modular()`.
+  Use instead:
+  ```dart
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
+
+  ```
+This modification aims to keep Modular support independent of `WidgetApp` updates, and can be used in other bootstraps such as `FluentApp [fluent_ui]`.
+
+- [BREAK CHANGE]: New auto-dispose configuration.
+Previously Modular had automatic closing or destruction calls for objects of type `ChangeNotifier/ValueNotifier`, `Stream` and Triple\`s `Stores`.
+Starting with version 5.0, Modular will provide the `Bind.onDispose` property for calls to destroy, close or dispose methods FOR EACH BIND. This will make the dispose settings more straightforward and less universal. Therefore, Modular will manage the destruction of Binds that implement `Disposable` only. This is the new configuration:
+```dart
+@override
+final List<Bind> binds = [
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close()),
+];
+```
+
+The `Bind.onDispose` CANNOT be used in Bind type factory.
+You can choose to use `Bind.onDispose` or implement the `Disposable` class.
+
+
+- Now the main constructor of `Bind` is @protected.
+Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bind.instance()` instead of `Bind()`.
+
+- Removed `triple` dependency.
+
 ## [4.5.1+1] - 2022-04-05
 - Fixed `modular_core` and resolve issues [#699] [#671] [#678].
 
