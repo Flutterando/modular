@@ -50,53 +50,6 @@ void cleanGlobals() {
   cleanInjector();
 }
 
-extension ModularExtensionCupertino on CupertinoApp {
-  ///Use instead:
-  ///```dart
-  ///CupertinoApp.router(
-  ///   routeInformationParser: Modular.routeInformationParser,
-  ///   routerDelegate: Modular.routerDelegate,
-  ///...
-  ///);
-  ///```
-  @Deprecated('Use CupertinoApp.router instead')
-  CupertinoApp modular() {
-    Modular.setObservers(navigatorObservers ?? []);
-    Modular.setNavigatorKey(navigatorKey);
-    Modular.setInitialRoute(initialRoute ?? '/');
-
-    (injector.get<IModularBase>() as ModularBase).flags.isCupertino = true;
-
-    final app = CupertinoApp.router(
-      key: key,
-      routeInformationProvider: routeInformationProvider,
-      backButtonDispatcher: backButtonDispatcher,
-      builder: builder,
-      title: title,
-      onGenerateTitle: onGenerateTitle,
-      color: color,
-      theme: theme,
-      locale: locale,
-      localizationsDelegates: localizationsDelegates,
-      localeListResolutionCallback: localeListResolutionCallback,
-      localeResolutionCallback: localeResolutionCallback,
-      supportedLocales: supportedLocales,
-      showPerformanceOverlay: showPerformanceOverlay,
-      checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-      showSemanticsDebugger: showSemanticsDebugger,
-      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-      shortcuts: shortcuts,
-      actions: actions,
-      restorationScopeId: restorationScopeId,
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
-    );
-
-    return app;
-  }
-}
-
 extension InjectorExtends on Injector {
   /// get arguments
   ModularArguments get args => injector.get<GetArguments>().call().getOrElse((l) => ModularArguments.empty());
