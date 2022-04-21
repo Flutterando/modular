@@ -59,7 +59,10 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<String>();
 
-    return const MaterialApp().modular();
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
   }
 }
 

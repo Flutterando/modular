@@ -4,8 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('WidgetModule', (tester) async {
-    final modularApp =
-        ModularApp(module: CustomModule(), child: const AppWidget());
+    final modularApp = ModularApp(module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -13,8 +12,7 @@ void main() {
     expect(finder, findsOneWidget);
     expect(Modular.get<double>(), 0.0);
 
-    final result =
-        tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
+    final result = tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
 
     result.changeBinds(result.getProcessBinds());
 
@@ -46,7 +44,10 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp().modular();
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
   }
 }
 

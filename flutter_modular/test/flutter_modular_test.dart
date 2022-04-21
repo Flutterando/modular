@@ -5,18 +5,27 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
   test('MaterialApp extension', () {
-    final app = const MaterialApp().modular();
+    final app = MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
     expect(app, isA<MaterialApp>());
   });
 
   test('CupertinoApp extension', () {
-    final app = const CupertinoApp().modular();
+    final app = MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
     expect(app, isA<CupertinoApp>());
   });
 
   testWidgets('RouterOutlet', (tester) async {
     Modular.init(AppModule());
-    await tester.pumpWidget(const MaterialApp().modular());
+    await tester.pumpWidget(MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    ));
 
     await tester.pump();
     final finder = find.byKey(keyOutlet);
@@ -32,7 +41,6 @@ const keyOutlet = ValueKey('keyOutlet');
 class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        ParallelRoute.child('/',
-            child: (_, __) => const RouterOutlet(key: keyOutlet)),
+        ParallelRoute.child('/', child: (_, __) => const RouterOutlet(key: keyOutlet)),
       ];
 }
