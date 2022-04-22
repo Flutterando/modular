@@ -1,4 +1,5 @@
 import 'package:example/app/search/domain/entities/result.dart';
+import 'package:example/app/search/presenter/stores/search_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -14,12 +15,17 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   @override
+  void dispose() {
+    Modular.dispose<SearchStore>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     debugPrint(Modular.args.queryParams['id'].toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            widget.result != null ? widget.result!.nickname : 'Make a search'),
+        title: Text(widget.result != null ? widget.result!.nickname : 'Make a search'),
       ),
       body: widget.result != null
           ? Center(

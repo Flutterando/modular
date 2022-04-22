@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
@@ -121,12 +122,12 @@ void main() {
   });
 
   test('get', () {
-    when(() => getBind.call<String>()).thenReturn(right(BindEntry(bind: BindEmpty(), value: 'modular')));
+    when(() => getBind.call<String>()).thenReturn(right(BindEntry(bind: Bind<String>((i) => ''), value: 'modular')));
     expect(modularBase.get<String>(), 'modular');
   });
 
   test('getAsync', () {
-    when(() => getBind.call<Future<String>>()).thenReturn(right(BindEntry(bind: BindEmpty(), value: Future.value('modular'))));
+    when(() => getBind.call<Future<String>>()).thenReturn(right(BindEntry(bind: Bind((i) async => ''), value: Future.value('modular'))));
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
     when(() => getBind.call<Future<String>>()).thenReturn(left(const BindNotFoundException('')));

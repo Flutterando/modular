@@ -59,7 +59,7 @@ abstract class BindContextImpl implements BindContext {
     }
 
     bindValue = bind.factoryFunction(injector) as T;
-    final entry = BindEntry<T>(value: bindValue, bind: bind);
+    final entry = BindEntry<T>(value: bindValue, bind: bind.cast<T>());
     if (bind.isSingleton) {
       _singletonBinds[type] = entry;
     }
@@ -149,11 +149,11 @@ abstract class BindContextImpl implements BindContext {
   }
 
   void _executeDisposeImplementation(BindEntry singletonBind) {
-    final value = singletonBind.value;
+    var value = singletonBind.value;
     if (value is Disposable) {
       value.dispose();
     } else {
-      singletonBind.bind.onDispose?.call(value);
+      singletonBind.dispose();
     }
   }
 }

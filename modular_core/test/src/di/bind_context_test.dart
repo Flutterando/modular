@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:modular_core/modular_core.dart';
 import 'package:test/test.dart';
 
@@ -147,6 +149,17 @@ class _Bind<T extends Object> extends BindContract<T> {
           isScoped: scoped,
           onDispose: onDispose,
         );
+
+  @override
+  BindContract<E> cast<E extends Object>() {
+    return _Bind<E>(
+      factoryFunction as E Function(Injector),
+      export: export,
+      lazy: isLazy,
+      onDispose: onDispose != null ? onDispose as void Function(E) : null,
+      scoped: isScoped,
+    );
+  }
 }
 
 abstract class IRepository {

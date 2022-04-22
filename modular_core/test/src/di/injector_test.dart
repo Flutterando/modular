@@ -96,6 +96,16 @@ class _Bind<T extends Object> extends BindContract<T> {
           isLazy: lazy,
           isScoped: scoped,
         );
+
+  @override
+  BindContract<E> cast<E extends Object>() {
+    return _Bind<E>(
+      factoryFunction as E Function(Injector),
+      export: export,
+      lazy: isLazy,
+      scoped: isScoped,
+    );
+  }
 }
 
 class MyObjectWithReassemble with ReassembleMixin {

@@ -1,3 +1,4 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:flutter_modular/src/shared/either.dart';
@@ -13,7 +14,7 @@ void main() {
 
   group('getBind', () {
     test('should get bind', () {
-      when(() => injector.get<String>()).thenReturn(BindEntry(bind: BindEmpty(), value: 'test'));
+      when(() => injector.get<String>()).thenReturn(BindEntry(bind: Bind<String>((i) => ''), value: 'test'));
       expect(service.getBind<String>().map((r) => r.value).getOrElse((left) => ''), 'test');
     });
     test('should throw error not found bind', () {

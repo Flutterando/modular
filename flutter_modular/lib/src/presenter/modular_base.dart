@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import '../domain/usecases/get_arguments.dart';
 import '../domain/usecases/reassemble_tracker.dart';
 import 'package:modular_core/modular_core.dart';
@@ -130,7 +131,7 @@ class ModularBase implements IModularBase {
   BindEntry<B> getBindEntry<B extends Object>({B? defaultValue}) {
     return getBind<B>().getOrElse((left) {
       if (defaultValue != null) {
-        return BindEntry<B>(bind: BindEmpty(), value: defaultValue);
+        return BindEntry<B>(bind: Bind.instance(defaultValue), value: defaultValue);
       }
       throw left;
     });
