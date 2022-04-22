@@ -31,7 +31,9 @@ void main() {
     final store = Modular.get<MyStore>();
     store.update(1);
 
-    //  await tester.pump();
+    await tester.pump();
+
+    expect(find.text('1'), findsWidgets);
   });
 }
 
@@ -86,12 +88,7 @@ class Home extends StatelessWidget {
               return Text('${snapshot.data}');
             },
           ),
-          StreamBuilder<Object>(
-            stream: null,
-            builder: (context, snapshot) {
-              return Text('${store.state}');
-            },
-          ),
+          Text('${store.state}')
         ],
       ),
     );

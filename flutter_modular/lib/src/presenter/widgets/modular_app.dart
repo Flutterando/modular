@@ -68,7 +68,13 @@ class _Register<T> {
 
   _Register(this.value, this._select);
 
-  dynamic getSelected() => _select != null ? _select!(value) : value;
+  dynamic getSelected() {
+    final result = _select?.call(value);
+    if (result != null) {
+      return result;
+    }
+    return value;
+  }
 
   @override
   bool operator ==(Object object) => identical(this, object) || object is _Register && runtimeType == object.runtimeType && type == object.type;
