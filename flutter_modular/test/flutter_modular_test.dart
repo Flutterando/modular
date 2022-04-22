@@ -5,6 +5,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
   test('MaterialApp extension', () {
+    Modular.setInitialRoute('/');
+    Modular.setObservers([]);
+    Modular.setNavigatorKey(GlobalKey<NavigatorState>());
     final app = MaterialApp.router(
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
@@ -13,7 +16,7 @@ void main() {
   });
 
   test('CupertinoApp extension', () {
-    final app = MaterialApp.router(
+    final app = CupertinoApp.router(
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
     );
@@ -41,7 +44,6 @@ const keyOutlet = ValueKey('keyOutlet');
 class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        ParallelRoute.child('/',
-            child: (_, __) => const RouterOutlet(key: keyOutlet)),
+        ParallelRoute.child('/', child: (_, __) => const RouterOutlet(key: keyOutlet)),
       ];
 }
