@@ -81,14 +81,15 @@ class _ModularInherited extends InheritedWidget {
   const _ModularInherited({Key? key, required Widget child}) : super(key: key, child: child);
 
   static T of<T extends Object>(BuildContext context, {bool listen = true, SelectCallback<T>? select}) {
-    final bind = Modular.get<T>();
+    final entry = Modular.getBindEntry<T>();
+    final bind = entry.bind as Bind;
     if (listen) {
-      final registre = _Register<T>(bind, select);
+      final registre = _Register<T>(entry.value, select ?? bind.notifier);
       final inherited = context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
       inherited.updateShouldNotify(inherited);
     }
 
-    return bind;
+    return entry.value;
   }
 
   @override

@@ -54,6 +54,9 @@ abstract class IModularBase {
   /// Request an instance by [Type]
   B get<B extends Object>({B? defaultValue});
 
+  @internal
+  BindEntry<B> getBindEntry<B extends Object>({B? defaultValue});
+
   /// Request an async instance by [Type]
   Future<B> getAsync<B extends Object>({B? defaultValue});
 
@@ -121,22 +124,26 @@ class ModularBase implements IModularBase {
   });
 
   @override
-  bool dispose<B extends Object>() =>
-      disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
 
   @override
-  B get<B extends Object>({B? defaultValue}) {
+  BindEntry<B> getBindEntry<B extends Object>({B? defaultValue}) {
     return getBind<B>().getOrElse((left) {
       if (defaultValue != null) {
-        return defaultValue;
+        return BindEntry<B>(bind: BindEmpty(), value: defaultValue);
       }
       throw left;
     });
   }
 
   @override
+  B get<B extends Object>({B? defaultValue}) {
+    return getBindEntry<B>(defaultValue: defaultValue).value;
+  }
+
+  @override
   Future<B> getAsync<B extends Object>({B? defaultValue}) {
-    return getBind<Future<B>>().getOrElse((left) {
+    return getBind<Future<B>>().map((r) => r.value).getOrElse((left) {
       if (defaultValue != null) {
         return Future.value(defaultValue);
       }
@@ -145,8 +152,7 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  Future<void> isModuleReady<M extends Module>() =>
-      isModuleReadyUsecase.call<M>();
+  Future<void> isModuleReady<M extends Module>() => isModuleReadyUsecase.call<M>();
 
   @override
   void destroy() {
@@ -157,14 +163,12 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold(
-          (l) => throw l, (r) => debugPrint('${module.runtimeType} started!'));
+      startModule(module).fold((l) => throw l, (r) => debugPrint('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setPrintResolver(debugPrint);
     } else {
-      throw ModuleStartedException(
-          'Module ${module.runtimeType} is already started');
+      throw ModuleStartedException('Module ${module.runtimeType} is already started');
     }
   }
 
@@ -172,8 +176,7 @@ class ModularBase implements IModularBase {
   IModularNavigator get to => navigatorDelegate ?? navigator;
 
   @override
-  ModularArguments get args =>
-      getArguments().getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => getArguments().getOrElse((l) => ModularArguments.empty());
 
   final flags = ModularFlags();
 

@@ -10,7 +10,7 @@ abstract class BindContext {
   List<BindContext> get imports;
 
   /// Get the binds for that context.
-  T? getBind<T extends Object>(Injector injector);
+  BindEntry<T>? getBind<T extends Object>(Injector injector);
 
   /// Dispose bind from the memory
   bool remove<T>();
@@ -28,5 +28,5 @@ abstract class BindContext {
   void changeBinds(List<BindContract> newBinds);
 
   /// Bind ready as singleton
-  List<SingletonBind> get instanciatedSingletons;
+  List<BindEntry> get instanciatedSingletons;
 }

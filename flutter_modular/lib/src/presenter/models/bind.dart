@@ -1,9 +1,9 @@
-import 'package:meta/meta.dart';
 import 'package:modular_core/modular_core.dart';
 
 /// Represents and manufactures an object instance that can be injected.
 class Bind<T extends Object> extends BindContract<T> {
-  @protected
+  final dynamic Function(T value)? notifier;
+
   Bind(
     T Function(Injector i) factoryFunction, {
     bool isSingleton = true,
@@ -11,6 +11,7 @@ class Bind<T extends Object> extends BindContract<T> {
     bool export = false,
     bool alwaysSerialized = false,
     void Function(T value)? onDispose,
+    this.notifier,
   }) : super(
           factoryFunction,
           isSingleton: isSingleton,
@@ -23,8 +24,7 @@ class Bind<T extends Object> extends BindContract<T> {
 
   ///Bind  an already exist 'Instance' of object..
   static Bind<T> instance<T extends Object>(T instance, {bool export = false}) {
-    return Bind<T>((i) => instance,
-        isSingleton: false, isLazy: true, export: export);
+    return Bind<T>((i) => instance, isSingleton: false, isLazy: true, export: export);
   }
 
   ///Bind a 'Singleton' class.
@@ -35,8 +35,7 @@ class Bind<T extends Object> extends BindContract<T> {
     bool export = false,
     void Function(T value)? onDispose,
   }) {
-    return Bind<T>(inject,
-        isSingleton: true, isLazy: false, export: export, onDispose: onDispose);
+    return Bind<T>(inject, isSingleton: true, isLazy: false, export: export, onDispose: onDispose);
   }
 
   ///Create single instance for request.
@@ -45,8 +44,7 @@ class Bind<T extends Object> extends BindContract<T> {
     bool export = false,
     void Function(T value)? onDispose,
   }) {
-    return Bind<T>(inject,
-        isSingleton: true, isLazy: true, export: export, onDispose: onDispose);
+    return Bind<T>(inject, isSingleton: true, isLazy: true, export: export, onDispose: onDispose);
   }
 
   ///Bind a factory. Always a new constructor when calling Modular.get
@@ -59,8 +57,7 @@ class Bind<T extends Object> extends BindContract<T> {
 }
 
 /// AsyncBind represents an asynchronous Bind that can be resolved before module initialization by calling Modular.isModuleReady() or called with Modular.getAsync()
-class AsyncBind<T extends Object> extends Bind<Future<T>>
-    implements AsyncBindContract<T> {
+class AsyncBind<T extends Object> extends Bind<Future<T>> implements AsyncBindContract<T> {
   @override
   final Future<T> Function(Injector i) asyncInject;
 
@@ -82,8 +79,7 @@ class AsyncBind<T extends Object> extends Bind<Future<T>>
   @override
   Future<BindContract<T>> convertToBind() async {
     final bindValue = await resolveAsyncBind();
-    return Bind<T>((i) => bindValue,
-        export: export, alwaysSerialized: true, onDispose: _localOnDispose);
+    return Bind<T>((i) => bindValue, export: export, alwaysSerialized: true, onDispose: _localOnDispose);
   }
 }
 

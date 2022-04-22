@@ -21,28 +21,28 @@ void main() {
   });
 
   test('get bind', () {
-    final bindString = instance.getBind<String>(injector);
+    final bindString = instance.getBind<String>(injector)?.value;
     expect(bindString, 'Jacob');
 
-    final bindStringSingleton = instance.getBind<String>(injector);
+    final bindStringSingleton = instance.getBind<String>(injector)?.value;
     expect(bindStringSingleton, 'Jacob');
 
-    final bindDouble = instance.getBind<double>(injector);
+    final bindDouble = instance.getBind<double>(injector)?.value;
     expect(bindDouble, 0.0);
 
-    final bindInt = instance.getBind<Map>(injector);
+    final bindInt = instance.getBind<Map>(injector)?.value;
     expect(bindInt, isA<Map>());
   });
 
   test('get bind by interface', () {
-    final bindRepository = instance.getBind<Repository>(injector);
+    final bindRepository = instance.getBind<Repository>(injector)?.value;
     expect(bindRepository, isA<Repository>());
 
-    final bindIRepository = instance.getBind<IRepository>(injector);
+    final bindIRepository = instance.getBind<IRepository>(injector)?.value;
     expect(bindIRepository, isA<IRepository>());
   });
   test('get bind by interface with Disposable', () async {
-    final bindRepository = instance.getBind<Repository>(injector);
+    final bindRepository = instance.getBind<Repository>(injector)?.value;
     expect(bindRepository, isA<Repository>());
     instance.remove<Repository>();
 
@@ -50,17 +50,17 @@ void main() {
   });
 
   test('get imported bind', () {
-    final bindWithExportFlag = instance.getBind<Map>(injector);
+    final bindWithExportFlag = instance.getBind<Map>(injector)?.value;
     expect(bindWithExportFlag, isNotNull);
 
-    final bindWithlessExportFlag = instance.getBind<List>(injector);
+    final bindWithlessExportFlag = instance.getBind<List>(injector)?.value;
     expect(bindWithlessExportFlag, isNull);
   });
 
   test('remove bind', () {
     expect(instance.remove<String>(), false);
 
-    final bindString = instance.getBind<String>(injector);
+    final bindString = instance.getBind<String>(injector)?.value;
     expect(bindString, 'Jacob');
 
     expect(instance.remove<String>(), true);
@@ -69,7 +69,7 @@ void main() {
   test('remove bind with dispose resolver', () {
     expect(instance.remove<String>(), false);
 
-    final bindString = instance.getBind<String>(injector);
+    final bindString = instance.getBind<String>(injector)?.value;
     expect(bindString, 'Jacob');
     expect(instance.remove<String>(), true);
   });
@@ -77,7 +77,7 @@ void main() {
   test('remove scopedBinds', () {
     expect(instance.removeScopedBind(), false);
 
-    final bindString = instance.getBind<String>(injector);
+    final bindString = instance.getBind<String>(injector)?.value;
     expect(bindString, 'Jacob');
 
     expect(instance.removeScopedBind(), true);
@@ -86,7 +86,7 @@ void main() {
   test('dispose', () {
     instance.dispose();
 
-    final bindString = instance.getBind<String>(injector);
+    final bindString = instance.getBind<String>(injector)?.value;
     expect(bindString, 'Jacob');
     expect(instance.instanciatedSingletons.length, 1);
 
@@ -96,12 +96,12 @@ void main() {
 
   test('isReady', () async {
     await instance.isReady();
-    final bindSet = instance.getBind<Set>(injector);
+    final bindSet = instance.getBind<Set>(injector)?.value;
     expect(bindSet, isA<Set>());
   });
 
   test('instantiateSingletonBinds', () {
-    instance.instantiateSingletonBinds([SingletonBind(bind: _Bind((i) => 0.0), value: 0.0)], injector);
+    instance.instantiateSingletonBinds([BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector);
     expect(instance.instanciatedSingletons.length, 1);
   });
 }

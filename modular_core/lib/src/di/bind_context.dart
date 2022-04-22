@@ -18,10 +18,10 @@ abstract class BindContextImpl implements BindContext {
   final List<BindContract> _binds = [];
   @internal
   final Set<String> tags = {};
-  final _singletonBinds = <Type, SingletonBind>{};
+  final _singletonBinds = <Type, BindEntry>{};
 
   @override
-  List<SingletonBind> get instanciatedSingletons => _singletonBinds.values.toList();
+  List<BindEntry> get instanciatedSingletons => _singletonBinds.values.toList();
 
   @override
   @visibleForTesting
@@ -46,12 +46,11 @@ abstract class BindContextImpl implements BindContext {
   }
 
   @override
-  T? getBind<T extends Object>(Injector injector) {
+  BindEntry<T>? getBind<T extends Object>(Injector injector) {
     T bindValue;
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
-      bindValue = _singletonBinds[type]!.value as T;
-      return bindValue;
+      return _singletonBinds[type]!.cast<T>();
     }
 
     var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
@@ -60,11 +59,12 @@ abstract class BindContextImpl implements BindContext {
     }
 
     bindValue = bind.factoryFunction(injector) as T;
+    final entry = BindEntry<T>(value: bindValue, bind: bind);
     if (bind.isSingleton) {
-      _singletonBinds[type] = SingletonBind(value: bindValue, bind: bind);
+      _singletonBinds[type] = entry;
     }
 
-    return bindValue;
+    return entry;
   }
 
   @override
@@ -117,17 +117,21 @@ abstract class BindContextImpl implements BindContext {
   }
 
   @mustCallSuper
-  void instantiateSingletonBinds(List<SingletonBind> singletons, Injector injector) {
+  void instantiateSingletonBinds(List<BindEntry> singletons, Injector injector) {
     final filteredList = _binds.where((bind) => !bind.isLazy && !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
       var b = bindElement.factoryFunction(injector);
       if (!_singletonBinds.containsKey(b.runtimeType)) {
-        _singletonBinds[b.runtimeType] = SingletonBind(value: b, bind: bindElement);
+        _singletonBinds[b.runtimeType] = _generateBindEntry(b, bindElement);
       }
     }
   }
 
-  bool _containBind(List<SingletonBind> singletons, BindContract bind) {
+  BindEntry<T> _generateBindEntry<T extends Object>(T value, bind) {
+    return BindEntry<T>(value: value, bind: bind);
+  }
+
+  bool _containBind(List<BindEntry> singletons, BindContract bind) {
     return singletons.indexWhere((element) => element.bind.factoryFunction == bind.factoryFunction) != -1;
   }
 
@@ -144,7 +148,7 @@ abstract class BindContextImpl implements BindContext {
     return foundType;
   }
 
-  void _executeDisposeImplementation(SingletonBind singletonBind) {
+  void _executeDisposeImplementation(BindEntry singletonBind) {
     final value = singletonBind.value;
     if (value is Disposable) {
       value.dispose();

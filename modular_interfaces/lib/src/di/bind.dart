@@ -40,9 +40,13 @@ class BindEmpty extends BindContract<Object> {
   BindEmpty() : super((e) => Object());
 }
 
-class SingletonBind<T extends Object> {
-  final BindContract<T> bind;
+class BindEntry<T extends Object> {
+  final BindContract bind;
   final T value;
 
-  SingletonBind({required this.bind, required this.value});
+  BindEntry({required this.bind, required this.value});
+
+  BindEntry<E> cast<E extends Object>() {
+    return BindEntry<E>(bind: bind, value: value as E);
+  }
 }

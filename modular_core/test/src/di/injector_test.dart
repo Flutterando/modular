@@ -28,7 +28,7 @@ void main() {
     expect(await injector.isModuleReady<MyInjectModule>(), true);
   });
   test('get bind', () {
-    final bindString = injector.get<String>();
+    final bindString = injector.get<String>().value;
     expect(bindString, 'Jacob');
 
     expect(() => injector<Char>(), throwsA(isA<BindNotFound>()));
@@ -43,7 +43,7 @@ void main() {
   test('Injector removeScopedBinds', () {
     expect(module.instanciatedSingletons.length, 3);
 
-    final bindString = injector.get<String>();
+    final bindString = injector.get<String>().value;
     expect(bindString, 'Jacob');
     expect(module.instanciatedSingletons.length, 4);
 
@@ -57,8 +57,8 @@ void main() {
   });
 
   test('reassemble', () {
-    final withReassemble = injector.get<MyObjectWithReassemble>();
-    final withlessReassemble = injector.get<MyObjectWithlessReassemble>();
+    final withReassemble = injector.get<MyObjectWithReassemble>().value;
+    final withlessReassemble = injector.get<MyObjectWithlessReassemble>().value;
     expect(withReassemble.count, 0);
     expect(withlessReassemble.count, 0);
 
@@ -76,13 +76,11 @@ class Char {
 class MyInjectModule extends BindContextImpl {
   @override
   List<BindContract> get binds => [
-        _Bind((i) => 'Jacob', scoped: true),
-        _Bind((i) => true),
+        _Bind<String>((i) => 'Jacob', scoped: true),
+        _Bind<bool>((i) => true),
         _Bind<double>((i) => 0.0, lazy: false),
-        _Bind<MyObjectWithReassemble>((i) => MyObjectWithReassemble(),
-            lazy: false),
-        _Bind<MyObjectWithlessReassemble>((i) => MyObjectWithlessReassemble(),
-            lazy: false),
+        _Bind<MyObjectWithReassemble>((i) => MyObjectWithReassemble(), lazy: false),
+        _Bind<MyObjectWithlessReassemble>((i) => MyObjectWithlessReassemble(), lazy: false),
       ];
 }
 

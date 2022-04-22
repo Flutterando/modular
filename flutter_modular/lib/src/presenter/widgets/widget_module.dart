@@ -22,7 +22,7 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   WidgetModule({Key? key}) : super(key: key);
 
   @override
-  T? getBind<T extends Object>(Injector injector) {
+  BindEntry<T>? getBind<T extends Object>(Injector injector) {
     return _fakeModule.getBind<T>(injector);
   }
 
@@ -35,12 +35,10 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   final List<Module> imports = const [];
 
   @override
-  List<SingletonBind> get instanciatedSingletons =>
-      _fakeModule.instanciatedSingletons;
+  List<BindEntry> get instanciatedSingletons => _fakeModule.instanciatedSingletons;
 
   @override
-  void instantiateSingletonBinds(
-      List<SingletonBind<Object>> singletons, Injector injector) {
+  void instantiateSingletonBinds(List<BindEntry<Object>> singletons, Injector injector) {
     _fakeModule.instantiateSingletonBinds(singletons, injector);
   }
 
@@ -67,8 +65,7 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   }
 
   @override
-  void changeBinds(List<BindContract<Object>> newBinds) =>
-      _fakeModule.changeBinds(newBinds);
+  void changeBinds(List<BindContract<Object>> newBinds) => _fakeModule.changeBinds(newBinds);
 
   @override
   // ignore: invalid_use_of_visible_for_testing_member
@@ -86,19 +83,17 @@ class ModularProvider<T extends BindContext> extends StatefulWidget {
   final BindContext module;
   final Widget child;
 
-  const ModularProvider({Key? key, required this.module, required this.child})
-      : super(key: key);
+  const ModularProvider({Key? key, required this.module, required this.child}) : super(key: key);
 
   @override
   _ModularProviderState createState() => _ModularProviderState<T>();
 }
 
-class _ModularProviderState<T extends BindContext>
-    extends State<ModularProvider> {
+class _ModularProviderState<T extends BindContext> extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
-    injector.get<BindModule>().call(widget.module);
+    injector.get<BindModule>().value.call(widget.module);
   }
 
   @override
@@ -109,6 +104,6 @@ class _ModularProviderState<T extends BindContext>
   @override
   void dispose() {
     super.dispose();
-    injector.get<UnbindModule>().call<T>();
+    injector.get<UnbindModule>().value.call<T>();
   }
 }

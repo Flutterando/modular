@@ -1,6 +1,7 @@
 ## 2.0.0 - 2022/04/21
 * Remove `setDisposeResolver`.
 * Apply `BindContract.onDispose` of `modular_interface`.
+* Injetor.getBind now returns `BindEntry`.
 
 ## 1.2.2 - 2022/04/05
 * Fixed binds auto-dispose [#699] [#671] [#678]
