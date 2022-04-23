@@ -23,7 +23,6 @@ export 'src/presenter/models/module.dart';
 export 'src/presenter/models/route.dart';
 export 'src/presenter/models/modular_navigator.dart';
 export 'src/presenter/widgets/modular_app.dart';
-export 'src/presenter/widgets/modular_state.dart';
 export 'src/presenter/widgets/navigation_listener.dart';
 export 'src/presenter/widgets/widget_module.dart';
 export 'src/presenter/navigation/transitions/page_transition.dart';

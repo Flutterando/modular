@@ -20,6 +20,9 @@ final List<Bind> binds = [
 ];
 ```
 
+- [BREAK CHANGE]: Removed `ModularState`.
+A few months of research showed us that ModularState caused unnecessary coupling with the view and made it difficult for those who used it to understand. For this reason, we decided to remove it to ensure code congruence for all professionals who use Modular.
+
 The `Bind.onDispose` CANNOT be used in Bind type factory.
 You can choose to use `Bind.onDispose` or implement the `Disposable` class.
 

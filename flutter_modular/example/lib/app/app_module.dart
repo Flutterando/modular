@@ -1,3 +1,4 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -64,5 +65,18 @@ class StoreBind {
         return notifier;
       },
     );
+  }
+}
+
+class BlocBind {
+  static Bind<T> singleton<T extends Bloc>(
+    T Function(Injector<dynamic> i) factoryFunction, {
+    bool export = false,
+  }) {
+    return Bind<T>(factoryFunction, export: true, isLazy: false, onDispose: (bloc) {
+      bloc.close();
+    }, notifier: (bloc) {
+      return bloc.stream;
+    });
   }
 }

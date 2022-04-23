@@ -1,4 +1,3 @@
-import 'package:flutter_triple/flutter_triple.dart';
 import 'package:example/app/search/domain/entities/result.dart';
 import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +57,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<SearchStore>();
+    final store = context.watch<SearchStore>();
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +68,7 @@ class _SearchPageState extends State<SearchPage> {
           Padding(
             padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
             child: TextField(
-              onChanged: controller.setSearchText,
+              onChanged: store.setSearchText,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Search...',
@@ -77,7 +76,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           Expanded(
-            child: controller.when(
+            child: store.when(
               onState: _buildList,
               onLoading: (loading) => const Center(child: CircularProgressIndicator()),
               onError: _buildError,
