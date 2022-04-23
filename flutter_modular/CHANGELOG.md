@@ -27,6 +27,8 @@ You can choose to use `Bind.onDispose` or implement the `Disposable` class.
 - Now the main constructor of `Bind` is @protected.
 Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bind.instance()` instead of `Bind()`.
 
+- Added `Bind.notifier`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
+
 - Removed `triple` dependency.
 
 ### Issues
