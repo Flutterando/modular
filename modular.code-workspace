@@ -26,6 +26,12 @@
 		},
 		{
 			"path": "modular_test"
+		},
+		{
+			"path": "plugins/modular_bloc_bind"
+		},
+		{
+			"path": "plugins/modular_triple_bind"
 		}
 	],
 	"settings": {
