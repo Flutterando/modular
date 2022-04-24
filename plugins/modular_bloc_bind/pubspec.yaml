@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   bloc: ^8.0.3
+  stream_transform: ^2.0.0
   flutter_modular: 5.0.0-dev.5
   flutter:
     sdk: flutter
