@@ -10,9 +10,12 @@ dependencies:
   bloc: ^8.0.3
   stream_transform: ^2.0.0
   flutter_modular: 5.0.0-dev.5
+  modular_interfaces: 2.0.0-dev.10
   flutter:
     sdk: flutter
 
 dev_dependencies:
   lints: ^1.0.0
+
+flutter:
 
