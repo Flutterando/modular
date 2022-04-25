@@ -20,6 +20,29 @@ final List<Bind> binds = [
 ];
 ```
 
+- Added `Bind.notifier`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
+```dart
+@override
+final List<Bind> binds = [
+  //notifier return stream or listenable to use context.watch()
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close(), notifier: (bloc) => bloc.stream),
+];
+```
+
+- [BREAK CHANGE]: Como já descrito acima, as reatividades funcionaram de forma externa ao Modular, propocionando uma
+maior vida ao projeto. Por esse motivo, os usuário de BLoC ou Triple deveram usar `Bind's` especiais afim de usar as funcionalidade do `context.watch()` e dispose automático. São eles: `BlocBind()` e `TripleBind()`, que estão disponíveis atravès de packages externos.
+* [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) -> BlocBind
+* [modular_triple_bind](https://pub.dev/packages/modular_triple_bind) -> TripleBind
+Example: 
+```dart
+
+@override
+final List<Bind> binds = [
+  BlocBind.singleton((i) => MyBloc()),
+];
+```
+
+
 - [BREAK CHANGE]: Removed `ModularState`.
 A few months of research showed us that ModularState caused unnecessary coupling with the view and made it difficult for those who used it to understand. For this reason, we decided to remove it to ensure code congruence for all professionals who use Modular.
 
@@ -29,8 +52,6 @@ You can choose to use `Bind.onDispose` or implement the `Disposable` class.
 
 - Now the main constructor of `Bind` is @protected.
 Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bind.instance()` instead of `Bind()`.
-
-- Added `Bind.notifier`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
 
 - Removed `triple` dependency.
 
