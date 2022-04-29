@@ -12,7 +12,7 @@ class InjectorImpl<T> extends Injector<T> {
   BindEntry<B> get<B extends Object>() {
     BindEntry<B>? entry;
 
-    for (var module in _allBindContexts.values) {
+    for (var module in _allBindContexts.values.toList().reversed) {
       entry = module.getBind<B>(this);
       if (entry != null) {
         break;

@@ -59,6 +59,8 @@ Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bi
 ### Issues
 
 - Fix [#668](https://github.com/Flutterando/modular/issues/668)
+- Fix [#694](https://github.com/Flutterando/modular/issues/694)
+- Fix [#681](https://github.com/Flutterando/modular/issues/681)
 
 ## [4.5.1+1] - 2022-04-05
 - Fixed `modular_core` and resolve issues [#699] [#671] [#678].

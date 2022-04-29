@@ -59,6 +59,8 @@ class ModularRouteInformationParserMock extends Mock implements ModularRouteInfo
 
 class ModularRouterDelegateMock extends Mock implements ModularRouterDelegate {}
 
+class ModularErrorMock extends Mock implements ModularError {}
+
 void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
@@ -124,6 +126,11 @@ void main() {
   test('get', () {
     when(() => getBind.call<String>()).thenReturn(right(BindEntry(bind: Bind<String>((i) => ''), value: 'modular')));
     expect(modularBase.get<String>(), 'modular');
+  });
+
+  test('getBindEntry', () {
+    when(() => getBind.call<String>()).thenReturn(left(ModularErrorMock()));
+    expect(modularBase.get<String>(defaultValue: 'jacob'), 'jacob');
   });
 
   test('getAsync', () {
