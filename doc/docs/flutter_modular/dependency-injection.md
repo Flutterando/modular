@@ -199,8 +199,8 @@ final List<Bind> binds = [
 
 :::tip TIP
 
-Existem `Bind` pré-configurados para BLoC e Triple.
-Veja os packages [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) e [modular_triple_bind](https://pub.dev/packages/modular_triple_bind)
+There are pre-configured `Bind` for BLoC and Triple.
+See the packages [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) and [modular_triple_bind](https://pub.dev/packages/modular_triple_bind)
 
 :::
 
