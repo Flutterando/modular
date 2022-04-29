@@ -20,7 +20,7 @@ final List<Bind> binds = [
 ];
 ```
 
-- Added `Bind.notifier`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
+- Added `Bind.selector`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
 ```dart
 @override
 final List<Bind> binds = [
