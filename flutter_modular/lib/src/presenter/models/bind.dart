@@ -9,7 +9,7 @@ class Bind<T extends Object> extends BindContract<T> {
     bool export = false,
     bool alwaysSerialized = false,
     void Function(T value)? onDispose,
-    dynamic Function(T value)? notifier,
+    dynamic Function(T value)? selector,
   }) : super(
           factoryFunction,
           isSingleton: isSingleton,
@@ -18,7 +18,7 @@ class Bind<T extends Object> extends BindContract<T> {
           isScoped: false,
           alwaysSerialized: alwaysSerialized,
           onDispose: onDispose,
-          selector: notifier,
+          selector: selector,
         );
 
   @override
@@ -29,34 +29,26 @@ class Bind<T extends Object> extends BindContract<T> {
       export: export,
       isLazy: isLazy,
       isSingleton: isSingleton,
-      notifier: selector != null ? selector as Function(E) : null,
+      selector: selector != null ? selector as Function(E) : null,
       onDispose: onDispose != null ? onDispose as void Function(E) : null,
     );
   }
 
   ///Bind  an already exist 'Instance' of object..
-  static Bind<T> instance<T extends Object>(T instance, {bool export = false}) {
-    return Bind<T>((i) => instance, isSingleton: false, isLazy: true, export: export);
+  static Bind<T> instance<T extends Object>(T instance, {bool export = false, dynamic Function(T value)? selector}) {
+    return Bind<T>((i) => instance, isSingleton: false, isLazy: true, export: export, selector: selector);
   }
 
   ///Bind a 'Singleton' class.
   ///Built together with the module.
   ///The instance will always be the same.
-  static Bind<T> singleton<T extends Object>(
-    T Function(Injector i) inject, {
-    bool export = false,
-    void Function(T value)? onDispose,
-  }) {
-    return Bind<T>(inject, isSingleton: true, isLazy: false, export: export, onDispose: onDispose);
+  static Bind<T> singleton<T extends Object>(T Function(Injector i) inject, {bool export = false, void Function(T value)? onDispose, dynamic Function(T value)? selector}) {
+    return Bind<T>(inject, isSingleton: true, isLazy: false, export: export, onDispose: onDispose, selector: selector);
   }
 
   ///Create single instance for request.
-  static Bind<T> lazySingleton<T extends Object>(
-    T Function(Injector i) inject, {
-    bool export = false,
-    void Function(T value)? onDispose,
-  }) {
-    return Bind<T>(inject, isSingleton: true, isLazy: true, export: export, onDispose: onDispose);
+  static Bind<T> lazySingleton<T extends Object>(T Function(Injector i) inject, {bool export = false, void Function(T value)? onDispose, dynamic Function(T value)? selector}) {
+    return Bind<T>(inject, isSingleton: true, isLazy: true, export: export, onDispose: onDispose, selector: selector);
   }
 
   ///Bind a factory. Always a new constructor when calling Modular.get

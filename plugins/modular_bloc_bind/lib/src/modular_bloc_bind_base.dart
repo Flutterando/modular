@@ -9,7 +9,7 @@ class BlocBind {
   }) {
     return Bind<T>(factoryFunction, export: export, isLazy: false, onDispose: (bloc) {
       bloc.close();
-    }, notifier: (bloc) {
+    }, selector: (bloc) {
       return bloc.stream;
     });
   }
@@ -20,7 +20,7 @@ class BlocBind {
   }) {
     return Bind<T>(factoryFunction, export: export, isLazy: true, onDispose: (bloc) {
       bloc.close();
-    }, notifier: (bloc) {
+    }, selector: (bloc) {
       return bloc.stream;
     });
   }
@@ -31,7 +31,7 @@ class BlocBind {
   }) {
     return Bind<T>(factoryFunction, export: export, isLazy: true, isSingleton: false, onDispose: (bloc) {
       bloc.close();
-    }, notifier: (bloc) {
+    }, selector: (bloc) {
       return bloc.stream;
     });
   }
@@ -42,7 +42,7 @@ class BlocBind {
   }) {
     return Bind<T>((i) => bloc, export: export, isLazy: true, isSingleton: false, onDispose: (bloc) {
       bloc.close();
-    }, notifier: (bloc) {
+    }, selector: (bloc) {
       return bloc.stream;
     });
   }

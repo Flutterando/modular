@@ -55,7 +55,7 @@ class StoreBind {
       export: export,
       isLazy: false,
       onDispose: (store) => store.destroy(),
-      notifier: (store) {
+      selector: (store) {
         final notifier = ChangeNotifier();
         store.observer(
           onState: (_) => notifier.notifyListeners(),
@@ -75,7 +75,7 @@ class BlocBind {
   }) {
     return Bind<T>(factoryFunction, export: true, isLazy: false, onDispose: (bloc) {
       bloc.close();
-    }, notifier: (bloc) {
+    }, selector: (bloc) {
       return bloc.stream;
     });
   }

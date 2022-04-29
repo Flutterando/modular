@@ -1,6 +1,6 @@
 name: modular_bloc_bind
 description: A starting point for Dart libraries or applications.
-version: 1.0.0-dev.1
+version: 1.0.0-dev.2
 # homepage: https://www.example.com
 
 environment:
@@ -9,8 +9,8 @@ environment:
 dependencies:
   bloc: ^8.0.3
   stream_transform: ^2.0.0
-  flutter_modular: 5.0.0-dev.5
-  modular_interfaces: 2.0.0-dev.10
+  flutter_modular: 5.0.0-dev.8
+  modular_interfaces: 2.0.0-dev.11
   flutter:
     sdk: flutter
 

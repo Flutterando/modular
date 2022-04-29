@@ -30,7 +30,7 @@ class TripleBind {
       onDispose: (store) {
         store.destroy();
       },
-      notifier: _generateNotifier,
+      selector: _generateNotifier,
     );
   }
 
@@ -45,7 +45,7 @@ class TripleBind {
       onDispose: (store) {
         store.destroy();
       },
-      notifier: _generateNotifier,
+      selector: _generateNotifier,
     );
   }
 
@@ -61,7 +61,7 @@ class TripleBind {
       onDispose: (store) {
         store.destroy();
       },
-      notifier: _generateNotifier,
+      selector: _generateNotifier,
     );
   }
 
@@ -77,7 +77,7 @@ class TripleBind {
       onDispose: (store) {
         store.destroy();
       },
-      notifier: _generateNotifier,
+      selector: _generateNotifier,
     );
   }
 }
