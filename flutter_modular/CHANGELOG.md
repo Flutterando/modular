@@ -25,7 +25,7 @@ final List<Bind> binds = [
 @override
 final List<Bind> binds = [
   //notifier return stream or listenable to use context.watch()
-  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close(), notifier: (bloc) => bloc.stream),
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close(), selector: (bloc) => bloc.stream),
 ];
 ```
 
