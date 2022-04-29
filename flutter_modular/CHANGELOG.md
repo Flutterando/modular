@@ -31,8 +31,9 @@ final List<Bind> binds = [
 
 - [BREAK CHANGE]: Como já descrito acima, as reatividades funcionaram de forma externa ao Modular, propocionando uma
 maior vida ao projeto. Por esse motivo, os usuário de BLoC ou Triple deveram usar `Bind's` especiais afim de usar as funcionalidade do `context.watch()` e dispose automático. São eles: `BlocBind()` e `TripleBind()`, que estão disponíveis atravès de packages externos.
-* [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) -> BlocBind
-* [modular_triple_bind](https://pub.dev/packages/modular_triple_bind) -> TripleBind
+[modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) -> BlocBind <br>
+[modular_triple_bind](https://pub.dev/packages/modular_triple_bind) -> TripleBind
+
 Example: 
 ```dart
 

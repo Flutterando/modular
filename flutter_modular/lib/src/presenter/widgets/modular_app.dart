@@ -90,7 +90,7 @@ class _ModularInherited extends InheritedWidget {
     final entry = Modular.getBindEntry<T>();
     final bind = entry.bind as Bind;
     if (listen) {
-      final registre = _Register<T>(entry.value, select ?? bind.onNotifierFunc);
+      final registre = _Register<T>(entry.value, select ?? bind.onSelectorFunc);
       final inherited = context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
       inherited.updateShouldNotify(inherited);
     }

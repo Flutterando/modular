@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:modular_core/modular_core.dart';
 
 /// Represents and manufactures an object instance that can be injected.
@@ -19,7 +18,7 @@ class Bind<T extends Object> extends BindContract<T> {
           isScoped: false,
           alwaysSerialized: alwaysSerialized,
           onDispose: onDispose,
-          notifier: notifier,
+          selector: notifier,
         );
 
   @override
@@ -30,7 +29,7 @@ class Bind<T extends Object> extends BindContract<T> {
       export: export,
       isLazy: isLazy,
       isSingleton: isSingleton,
-      notifier: notifier != null ? notifier as Function(E) : null,
+      notifier: selector != null ? selector as Function(E) : null,
       onDispose: onDispose != null ? onDispose as void Function(E) : null,
     );
   }

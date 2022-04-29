@@ -25,7 +25,7 @@ abstract class BindContract<T extends Object> {
   final void Function(T value)? onDispose;
 
   /// Generate reactive object
-  final dynamic Function(T value)? notifier;
+  final dynamic Function(T value)? selector;
 
   BindContract(
     this.factoryFunction, {
@@ -35,12 +35,12 @@ abstract class BindContract<T extends Object> {
     this.isScoped = false,
     this.alwaysSerialized = false,
     this.onDispose,
-    this.notifier,
+    this.selector,
   }) : assert((isSingleton || isLazy), r"'singleton' can't be false if 'lazy' is also false");
 
   BindContract<E> cast<E extends Object>();
 
-  dynamic onNotifierFunc(Object o) => notifier?.call(o as T);
+  dynamic onSelectorFunc(Object o) => selector?.call(o as T);
 
   dynamic onDisposeFunc(Object o) => onDispose?.call(o as T);
 }
