@@ -55,10 +55,20 @@ You can choose to use `Bind.onDispose` or implement the `Disposable` class.
 Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bind.instance()` instead of `Bind()`.
 
 - Removed `triple` dependency.
+- Simplify docs.
 
 - [BREAK CHANGE] `Bind.export` works only after imported.
 
 - Added `Modular.setArguments`.
+```dart
+Modular.setArguments('cody1024d');
+
+// get
+Modular.args.data; // -> cody1024d
+//or
+Bind((i) => MyClass(i.args.data));
+
+```
 
 ### Issues
 
