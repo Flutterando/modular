@@ -25,8 +25,7 @@ abstract class BindContextImpl implements BindContext {
 
   @override
   @visibleForTesting
-  List<BindContract> getProcessBinds() => _binds;
-
+  List<BindContract> getProcessBinds() => _binds.where((element) => !element.export).toList();
   @override
   void changeBinds(List<BindContract> newBinds) {
     _binds.removeWhere((element) => !element.alwaysSerialized);
@@ -42,7 +41,7 @@ abstract class BindContextImpl implements BindContext {
 
   void _addExportBinds(List<BindContract> bindsForOtherModule) {
     final filteredList = bindsForOtherModule.where((element) => element.export);
-    _binds.insertAll(0, filteredList);
+    _binds.insertAll(0, filteredList.map((e) => e.copyWith(export: false)));
   }
 
   @override
@@ -53,7 +52,7 @@ abstract class BindContextImpl implements BindContext {
       return _singletonBinds[type]!.cast<T>();
     }
 
-    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
+    var bind = getProcessBinds().firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
       return null;
     }
@@ -109,7 +108,7 @@ abstract class BindContextImpl implements BindContext {
   Future<void> isReady() async {
     if (_mutableValue.isReadyFlag) return;
     _mutableValue.isReadyFlag = true;
-    final asyncBindList = _binds.whereType<AsyncBindContract>().toList();
+    final asyncBindList = getProcessBinds().whereType<AsyncBindContract>().toList();
     for (var bind in asyncBindList) {
       final resolvedBind = await bind.convertToBind();
       _binds.insert(0, resolvedBind);
@@ -118,7 +117,7 @@ abstract class BindContextImpl implements BindContext {
 
   @mustCallSuper
   void instantiateSingletonBinds(List<BindEntry> singletons, Injector injector) {
-    final filteredList = _binds.where((bind) => !bind.isLazy && !_containBind(singletons, bind));
+    final filteredList = getProcessBinds().where((bind) => !bind.isLazy && !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
       var b = bindElement.factoryFunction(injector);
       if (!_singletonBinds.containsKey(b.runtimeType)) {

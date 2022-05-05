@@ -38,6 +38,17 @@ abstract class BindContract<T extends Object> {
     this.selector,
   }) : assert((isSingleton || isLazy), r"'singleton' can't be false if 'lazy' is also false");
 
+  BindContract<T> copyWith({
+    T Function(Injector i)? factoryFunction,
+    bool? isSingleton,
+    bool? isLazy,
+    bool? export,
+    bool? isScoped,
+    bool? alwaysSerialized,
+    void Function(T value)? onDispose,
+    dynamic Function(T value)? selector,
+  });
+
   BindContract<E> cast<E extends Object>();
 
   dynamic onSelectorFunc(Object o) => selector?.call(o as T);
@@ -51,6 +62,19 @@ class BindEmpty extends BindContract<Object> {
 
   @override
   BindContract<E> cast<E extends Object>() {
+    throw UnimplementedError();
+  }
+
+  @override
+  BindContract<Object> copyWith(
+      {Object Function(Injector i)? factoryFunction,
+      bool? isSingleton,
+      bool? isLazy,
+      bool? export,
+      bool? isScoped,
+      bool? alwaysSerialized,
+      void Function(Object value)? onDispose,
+      Function(Object value)? selector}) {
     throw UnimplementedError();
   }
 }

@@ -56,6 +56,8 @@ Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bi
 
 - Removed `triple` dependency.
 
+- ∂[BREAK CHANGE] `Bind.export` works only after imported.
+
 ### Issues
 
 - Fix [#668](https://github.com/Flutterando/modular/issues/668)

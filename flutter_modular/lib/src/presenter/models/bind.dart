@@ -58,6 +58,27 @@ class Bind<T extends Object> extends BindContract<T> {
   }) {
     return Bind<T>(inject, isSingleton: false, isLazy: true, export: export);
   }
+
+  @override
+  Bind<T> copyWith(
+      {T Function(Injector i)? factoryFunction,
+      bool? isSingleton,
+      bool? isLazy,
+      bool? export,
+      bool? isScoped,
+      bool? alwaysSerialized,
+      void Function(T value)? onDispose,
+      Function(T value)? selector}) {
+    return Bind<T>(
+      factoryFunction ?? this.factoryFunction,
+      alwaysSerialized: alwaysSerialized ?? this.alwaysSerialized,
+      export: export ?? this.export,
+      isLazy: isLazy ?? this.isLazy,
+      isSingleton: isSingleton ?? this.isSingleton,
+      selector: selector ?? this.selector,
+      onDispose: onDispose ?? this.onDispose,
+    );
+  }
 }
 
 /// AsyncBind represents an asynchronous Bind that can be resolved before module initialization by calling Modular.isModuleReady() or called with Modular.getAsync()

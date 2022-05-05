@@ -106,6 +106,25 @@ class _Bind<T extends Object> extends BindContract<T> {
       scoped: isScoped,
     );
   }
+
+  @override
+  BindContract<T> copyWith({
+    T Function(Injector i)? factoryFunction,
+    bool? isSingleton,
+    bool? isLazy,
+    bool? export,
+    bool? isScoped,
+    bool? alwaysSerialized,
+    void Function(T value)? onDispose,
+    Function(T value)? selector,
+  }) {
+    return _Bind(
+      factoryFunction ?? this.factoryFunction,
+      lazy: isLazy ?? this.isLazy,
+      export: export ?? this.export,
+      scoped: isScoped ?? this.isScoped,
+    );
+  }
 }
 
 class MyObjectWithReassemble with ReassembleMixin {

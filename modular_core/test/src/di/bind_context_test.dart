@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:modular_core/modular_core.dart';
 import 'package:test/test.dart';
 
@@ -158,6 +156,25 @@ class _Bind<T extends Object> extends BindContract<T> {
       lazy: isLazy,
       onDispose: onDispose != null ? onDispose as void Function(E) : null,
       scoped: isScoped,
+    );
+  }
+
+  @override
+  BindContract<T> copyWith({
+    T Function(Injector i)? factoryFunction,
+    bool? isSingleton,
+    bool? isLazy,
+    bool? export,
+    bool? isScoped,
+    bool? alwaysSerialized,
+    void Function(T value)? onDispose,
+    Function(T value)? selector,
+  }) {
+    return _Bind(
+      factoryFunction ?? this.factoryFunction,
+      lazy: isLazy ?? this.isLazy,
+      export: export ?? this.export,
+      scoped: isScoped ?? this.isScoped,
     );
   }
 }
