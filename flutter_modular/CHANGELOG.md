@@ -72,6 +72,7 @@ Bind((i) => MyClass(i.args.data));
 
 ### Issues
 
+- Fix [#644](https://github.com/Flutterando/modular/issues/644)
 - Fix [#666](https://github.com/Flutterando/modular/issues/666)
 - Fix [#668](https://github.com/Flutterando/modular/issues/668)
 - Fix [#681](https://github.com/Flutterando/modular/issues/681)
