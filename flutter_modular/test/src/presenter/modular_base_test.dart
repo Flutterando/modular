@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
+import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
-import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
-import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_router_delegate.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,6 +32,8 @@ class ChangeNotifierMock extends Mock implements ChangeNotifier {}
 class SinkMock extends Mock implements Sink {}
 
 class GetArgumentsMock extends Mock implements GetArguments {}
+
+class SetArgumentsMock extends Mock implements SetArguments {}
 
 class ReassembleTrackerMock extends Mock implements ReassembleTracker {}
 
@@ -65,6 +65,7 @@ void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
   final getArguments = GetArgumentsMock();
+  final setArguments = SetArgumentsMock();
   final reassembleTracker = ReassembleTrackerMock();
   final finishModule = FinishModuleMock();
   final startModule = StartModuleMock();
@@ -76,6 +77,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(const RouteParmsDTO(url: '/'));
+    registerFallbackValue(ModularArguments.empty());
   });
 
   setUp(() {
@@ -90,6 +92,7 @@ void main() {
       startModule: startModule,
       routeInformationParser: routeInformationParser,
       routerDelegate: routerDelegate,
+      setArgumentsUsecase: setArguments,
     );
   });
 
@@ -150,6 +153,13 @@ void main() {
     when(() => finishModule.call()).thenReturn(right(unit));
     modularBase.destroy();
     verify(() => finishModule.call()).called(1);
+  });
+
+  test('setArguments', () {
+    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => setArguments.call(any())).thenReturn(right(unit));
+    modularBase.setArguments('args');
+    verify(() => setArguments.call(any())).called(1);
   });
 }
 

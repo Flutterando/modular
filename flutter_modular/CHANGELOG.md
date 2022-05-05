@@ -56,13 +56,16 @@ Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bi
 
 - Removed `triple` dependency.
 
-- ∂[BREAK CHANGE] `Bind.export` works only after imported.
+- [BREAK CHANGE] `Bind.export` works only after imported.
+
+- Added `Modular.setArguments`.
 
 ### Issues
 
+- Fix [#666](https://github.com/Flutterando/modular/issues/666)
 - Fix [#668](https://github.com/Flutterando/modular/issues/668)
-- Fix [#694](https://github.com/Flutterando/modular/issues/694)
 - Fix [#681](https://github.com/Flutterando/modular/issues/681)
+- Fix [#694](https://github.com/Flutterando/modular/issues/694)
 
 ## [4.5.1+1] - 2022-04-05
 - Fixed `modular_core` and resolve issues [#699] [#671] [#678].

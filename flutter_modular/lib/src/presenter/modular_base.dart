@@ -10,11 +10,9 @@ import '../domain/usecases/dispose_bind.dart';
 import '../domain/usecases/finish_module.dart';
 import '../domain/usecases/get_bind.dart';
 import '../domain/usecases/module_ready.dart';
+import '../domain/usecases/set_arguments.dart';
 import '../domain/usecases/start_module.dart';
 import 'errors/errors.dart';
-import 'models/modular_args.dart';
-import 'models/modular_navigator.dart';
-import 'models/module.dart';
 import 'package:meta/meta.dart';
 
 import 'navigation/modular_route_information_parser.dart';
@@ -82,6 +80,9 @@ abstract class IModularBase {
   /// Change the navigatorKey
   void setNavigatorKey(GlobalKey<NavigatorState>? key);
 
+  /// Change the navigatorKey
+  void setArguments(dynamic arguments);
+
   @visibleForTesting
   String get initialRoutePath;
 }
@@ -91,6 +92,7 @@ class ModularBase implements IModularBase {
   final FinishModule finishModule;
   final GetBind getBind;
   final GetArguments getArguments;
+  final SetArguments setArgumentsUsecase;
   final ReassembleTracker reassembleTracker;
   final StartModule startModule;
   final IsModuleReady isModuleReadyUsecase;
@@ -122,6 +124,7 @@ class ModularBase implements IModularBase {
     required this.startModule,
     required this.isModuleReadyUsecase,
     required this.navigator,
+    required this.setArgumentsUsecase,
   });
 
   @override
@@ -210,5 +213,10 @@ class ModularBase implements IModularBase {
   @override
   void setObservers(List<NavigatorObserver> navigatorObservers) {
     routerDelegate.setObservers(navigatorObservers);
+  }
+
+  @override
+  void setArguments(dynamic data) {
+    setArgumentsUsecase.call(args.copyWith(data: args));
   }
 }
