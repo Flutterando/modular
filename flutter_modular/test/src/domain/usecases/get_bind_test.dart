@@ -11,8 +11,10 @@ void main() {
   final service = BindServiceMock();
   final usecase = GetBindImpl(service);
   test('get bind', () {
-    when(() => service.getBind<String>()).thenReturn(right(BindEntry(bind: Bind<String>((i) => ''), value: 'test')));
+    when(() => service.getBind<String>()).thenReturn(
+        right(BindEntry(bind: Bind<String>((i) => ''), value: 'test')));
 
-    expect(usecase.call<String>().map((r) => r.value).getOrElse((left) => ''), 'test');
+    expect(usecase.call<String>().map((r) => r.value).getOrElse((left) => ''),
+        'test');
   });
 }

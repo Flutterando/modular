@@ -25,7 +25,8 @@ class _DetailsPageState extends State<DetailsPage> {
     debugPrint(Modular.args.queryParams['id'].toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.result != null ? widget.result!.nickname : 'Make a search'),
+        title: Text(
+            widget.result != null ? widget.result!.nickname : 'Make a search'),
       ),
       body: widget.result != null
           ? Center(

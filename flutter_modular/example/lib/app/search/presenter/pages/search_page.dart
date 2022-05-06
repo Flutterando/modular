@@ -78,7 +78,8 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
             child: store.when(
               onState: _buildList,
-              onLoading: (loading) => const Center(child: CircularProgressIndicator()),
+              onLoading: (loading) =>
+                  const Center(child: CircularProgressIndicator()),
               onError: _buildError,
             ),
           ),

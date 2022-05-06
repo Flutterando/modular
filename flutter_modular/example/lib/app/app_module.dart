@@ -39,7 +39,8 @@ class AppModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, __) => const SearchPage()),
-    ChildRoute('/details', child: (_, args) => DetailsPage(result: args.data), guards: [GuardT()]),
+    ChildRoute('/details',
+        child: (_, args) => DetailsPage(result: args.data), guards: [GuardT()]),
   ];
 }
 
@@ -73,7 +74,8 @@ class BlocBind {
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
-    return Bind<T>(factoryFunction, export: true, isLazy: false, onDispose: (bloc) {
+    return Bind<T>(factoryFunction, export: true, isLazy: false,
+        onDispose: (bloc) {
       bloc.close();
     }, selector: (bloc) {
       return bloc.stream;

@@ -14,12 +14,16 @@ void main() {
 
   group('getBind', () {
     test('should get bind', () {
-      when(() => injector.get<String>()).thenReturn(BindEntry(bind: Bind<String>((i) => ''), value: 'test'));
-      expect(service.getBind<String>().map((r) => r.value).getOrElse((left) => ''), 'test');
+      when(() => injector.get<String>())
+          .thenReturn(BindEntry(bind: Bind<String>((i) => ''), value: 'test'));
+      expect(
+          service.getBind<String>().map((r) => r.value).getOrElse((left) => ''),
+          'test');
     });
     test('should throw error not found bind', () {
       when(() => injector.get<String>()).thenThrow(BindNotFound('String'));
-      expect(service.getBind<String>().fold(id, id), isA<BindNotFoundException>());
+      expect(
+          service.getBind<String>().fold(id, id), isA<BindNotFoundException>());
     });
   });
 
@@ -33,7 +37,8 @@ void main() {
   group('releaseScopedBinds', () {
     test('should return true', () {
       when(() => injector.removeScopedBinds());
-      expect(service.releaseScopedBinds().getOrElse((left) => throw left), unit);
+      expect(
+          service.releaseScopedBinds().getOrElse((left) => throw left), unit);
     });
   });
 }

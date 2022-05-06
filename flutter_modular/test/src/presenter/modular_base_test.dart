@@ -55,7 +55,8 @@ class DisposableMock extends Mock implements Disposable {}
 
 class IModularNavigatorMock extends Mock implements IModularNavigator {}
 
-class ModularRouteInformationParserMock extends Mock implements ModularRouteInformationParser {}
+class ModularRouteInformationParserMock extends Mock
+    implements ModularRouteInformationParser {}
 
 class ModularRouterDelegateMock extends Mock implements ModularRouterDelegate {}
 
@@ -113,7 +114,8 @@ void main() {
     when(() => startModule.call(module)).thenReturn(right(unit));
     modularBase.init(module);
     verify(() => startModule.call(module));
-    expect(() => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
+    expect(
+        () => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
   });
 
   test('dispose', () {
@@ -127,7 +129,8 @@ void main() {
   });
 
   test('get', () {
-    when(() => getBind.call<String>()).thenReturn(right(BindEntry(bind: Bind<String>((i) => ''), value: 'modular')));
+    when(() => getBind.call<String>()).thenReturn(
+        right(BindEntry(bind: Bind<String>((i) => ''), value: 'modular')));
     expect(modularBase.get<String>(), 'modular');
   });
 
@@ -137,11 +140,14 @@ void main() {
   });
 
   test('getAsync', () {
-    when(() => getBind.call<Future<String>>()).thenReturn(right(BindEntry(bind: Bind((i) async => ''), value: Future.value('modular'))));
+    when(() => getBind.call<Future<String>>()).thenReturn(right(BindEntry(
+        bind: Bind((i) async => ''), value: Future.value('modular'))));
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
-    when(() => getBind.call<Future<String>>()).thenReturn(left(const BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'), completion('changed'));
+    when(() => getBind.call<Future<String>>())
+        .thenReturn(left(const BindNotFoundException('')));
+    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
+        completion('changed'));
   });
 
   test('isModuleReady', () {
