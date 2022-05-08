@@ -19,6 +19,8 @@ final List<Bind> binds = [
   Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close()),
 ];
 ```
+The `Bind.onDispose` CANNOT be used in Bind type factory.
+You can choose to use `Bind.onDispose` or implement the `Disposable` class.
 
 - Added `Bind.selector`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
 ```dart
@@ -43,22 +45,12 @@ final List<Bind> binds = [
 ];
 ```
 
-
-- [BREAK CHANGE]: Removed `ModularState`.
-A few months of research showed us that ModularState caused unnecessary coupling with the view and made it difficult for those who used it to understand. For this reason, we decided to remove it to ensure code congruence for all professionals who use Modular.
-
-The `Bind.onDispose` CANNOT be used in Bind type factory.
-You can choose to use `Bind.onDispose` or implement the `Disposable` class.
-
-
-- Now the main constructor of `Bind` is @protected.
-Prefer to use `Bind.factory()`, `Bind.singleton()`, `Bind.lazySingleton()` e `Bind.instance()` instead of `Bind()`.
+- [BREAK CHANGE] `Bind.export` works only after imported.
+- @deprecated `ModularState`.
+A few months of research showed us that ModularState caused unnecessary coupling with the view and made it difficult for those who used it to understand. For this reason, we decided to deprecate it to ensure code congruence for all professionals who use Modular.
 
 - Removed `triple` dependency.
 - Simplify docs.
-
-- [BREAK CHANGE] `Bind.export` works only after imported.
-
 - Added `Modular.setArguments`.
 ```dart
 Modular.setArguments('cody1024d');
