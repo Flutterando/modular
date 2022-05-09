@@ -207,17 +207,15 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     final popComplete = Completer();
     var book = await parser.selectBook(routeName, arguments: arguments, popCallback: popComplete.complete);
     if (forRoot) {
-      final list = currentConfiguration?.routes.where((route) {
-            return predicate(CustomModalRoute(ModularPage(route: route, args: ModularArguments.empty(), flags: ModularFlags())));
-          }).toList() ??
-          [];
+      final list = currentConfiguration!.routes.where((route) {
+        return predicate(CustomModalRoute(ModularPage(route: route, args: ModularArguments.empty(), flags: ModularFlags())));
+      }).toList();
       book = currentConfiguration!.copyWith(routes: [...list, book.routes.last.copyWith(schema: '')]);
       await setNewRoutePath(book);
     } else {
-      final list = currentConfiguration?.routes.where((route) {
-            return predicate(CustomModalRoute(ModularPage(route: route, args: ModularArguments.empty(), flags: ModularFlags())));
-          }).toList() ??
-          [];
+      final list = currentConfiguration!.routes.where((route) {
+        return predicate(CustomModalRoute(ModularPage(route: route, args: ModularArguments.empty(), flags: ModularFlags())));
+      }).toList();
       for (var route in book.routes.reversed) {
         if (list.firstWhere((element) => element.uri.toString() == route.uri.toString(), orElse: () => ParallelRoute.empty()).name == '') {
           list.add(route);
