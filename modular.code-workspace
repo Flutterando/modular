@@ -35,7 +35,7 @@
 		}
 	],
 	"settings": {
-		"dart.flutterSdkPath": "/Users/jacobmoura/fvm/versions/stable",
+		"dart.flutterSdkPath": "D:\\fvm\\sdks\\versions\\stable",
 		"lcov.branchCoverage": "off",
 		"lcov.path": "coverage/lcov.info"
 	}
