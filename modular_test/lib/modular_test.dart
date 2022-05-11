@@ -15,6 +15,7 @@ void initModule(BindContext module, {List<BindContract> replaceBinds = const []}
       bindModules[i] = dep;
     }
   }
+  module.changeBinds(bindModules);
   modularTracker.injector.addBindContext(module);
 }
 
