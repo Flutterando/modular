@@ -1,4 +1,5 @@
-## [5.0.0] - 2022-04-21
+## [5.0.0] - 2022-05-16
+- Feat: Flutter 3.0.0 support
 - [BREAK CHANGE]: Removed `MaterialApp.modular()` and `Cupertino().modular()`.
   Use instead:
   ```dart
