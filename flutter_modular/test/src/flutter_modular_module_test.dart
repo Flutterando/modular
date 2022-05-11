@@ -4,6 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('resolver injection (ModularBase)', () {
-    expect(injector.get<IModularBase>(), isA<ModularBase>());
+    expect(injector.get<IModularBase>().value, isA<ModularBase>());
   });
 }

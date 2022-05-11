@@ -15,7 +15,7 @@ class BindServiceImpl extends BindService {
   }
 
   @override
-  Either<ModularError, T> getBind<T extends Object>() {
+  Either<ModularError, BindEntry<T>> getBind<T extends Object>() {
     try {
       final result = injector.get<T>();
       return right(result);

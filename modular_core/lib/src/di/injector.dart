@@ -5,34 +5,30 @@ import 'bind_context.dart';
 import 'resolvers.dart';
 import 'package:characters/characters.dart';
 
-class InjectorImpl<T> implements Injector<T> {
+class InjectorImpl<T> extends Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
   @override
-  B call<B extends Object>([BindContract<B>? bind]) => get<B>(bind);
+  BindEntry<B> get<B extends Object>() {
+    BindEntry<B>? entry;
 
-  @override
-  B get<B extends Object>([BindContract<B>? bind]) {
-    B? bind;
-
-    for (var module in _allBindContexts.values) {
-      bind = module.getBind<B>(this);
-      if (bind != null) {
+    for (var module in _allBindContexts.values.toList().reversed) {
+      entry = module.getBind<B>(this);
+      if (entry != null) {
         break;
       }
     }
 
-    if (bind != null) {
-      return bind;
-    } else {
+    if (entry == null) {
       throw BindNotFound(B.toString());
     }
+
+    return entry;
   }
 
   @override
   @mustCallSuper
-  bool isModuleAlive<B extends BindContext>() =>
-      _allBindContexts.containsKey(_getType<B>());
+  bool isModuleAlive<B extends BindContext>() => _allBindContexts.containsKey(_getType<B>());
 
   @override
   @mustCallSuper
@@ -50,8 +46,7 @@ class InjectorImpl<T> implements Injector<T> {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       _allBindContexts[typeModule] = module;
-      (_allBindContexts[typeModule] as BindContextImpl)
-          .instantiateSingletonBinds(_getAllSingletons(), this);
+      (_allBindContexts[typeModule] as BindContextImpl).instantiateSingletonBinds(_getAllSingletons(), this);
       (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
       debugPrint("-- $typeModule INITIALIZED");
     } else {
@@ -112,9 +107,7 @@ class InjectorImpl<T> implements Injector<T> {
 
   @override
   void updateBinds(BindContext context) {
-    final key = _allBindContexts.keys.firstWhere(
-        (key) => key.toString() == context.runtimeType.toString(),
-        orElse: () => _KeyNotFound);
+    final key = _allBindContexts.keys.firstWhere((key) => key.toString() == context.runtimeType.toString(), orElse: () => _KeyNotFound);
     if (key == _KeyNotFound) {
       return;
     }
@@ -143,8 +136,8 @@ class InjectorImpl<T> implements Injector<T> {
 
   Type _getType<G>() => G;
 
-  List<SingletonBind> _getAllSingletons() {
-    final list = <SingletonBind>[];
+  List<BindEntry> _getAllSingletons() {
+    final list = <BindEntry>[];
     for (var module in _allBindContexts.values) {
       list.addAll((module as BindContextImpl).instanciatedSingletons);
     }

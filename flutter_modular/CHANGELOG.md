@@ -1,3 +1,77 @@
+## [5.0.0] - 2022-04-21
+- [BREAK CHANGE]: Removed `MaterialApp.modular()` and `Cupertino().modular()`.
+  Use instead:
+  ```dart
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
+
+  ```
+This modification aims to keep Modular support independent of `WidgetApp` updates, and can be used in other bootstraps such as `FluentApp [fluent_ui]`.
+
+- [BREAK CHANGE]: New auto-dispose configuration.
+Previously Modular had automatic closing or destruction calls for objects of type `ChangeNotifier/ValueNotifier`, `Stream` and Triple\`s `Stores`.
+Starting with version 5.0, Modular will provide the `Bind.onDispose` property for calls to destroy, close or dispose methods FOR EACH BIND. This will make the dispose settings more straightforward and less universal. Therefore, Modular will manage the destruction of Binds that implement `Disposable` only. This is the new configuration:
+```dart
+@override
+final List<Bind> binds = [
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close()),
+];
+```
+The `Bind.onDispose` CANNOT be used in Bind type factory.
+You can choose to use `Bind.onDispose` or implement the `Disposable` class.
+
+- Added `Bind.selector`. Generates a reactivity (Listenable/Stream) to be listened to when `context.watch()` is called.
+```dart
+@override
+final List<Bind> binds = [
+  //notifier return stream or listenable to use context.watch()
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close(), selector: (bloc) => bloc.stream),
+];
+```
+
+- [BREAK CHANGE]: As already described above, the reactivities worked externally to Modular, providing a
+longer life to the project. For this reason, BLoC or Triple users should use special `Bind's` in order to use the `context.watch()` and auto dispose functionality. They are: `BlocBind()` and `TripleBind()`, which are available through external packages.
+[modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) -> BlocBind <br>
+[modular_triple_bind](https://pub.dev/packages/modular_triple_bind) -> TripleBind
+
+Example: 
+```dart
+
+@override
+final List<Bind> binds = [
+  BlocBind.singleton((i) => MyBloc()),
+];
+```
+
+- [BREAK CHANGE] `Bind.export` works only after imported.
+- @deprecated `ModularState`.
+A few months of research showed us that ModularState caused unnecessary coupling with the view and made it difficult for those who used it to understand. For this reason, we decided to deprecate it to ensure code congruence for all professionals who use Modular.
+
+- Removed `triple` dependency.
+- Simplify docs.
+- Added `Modular.setArguments`.
+```dart
+Modular.setArguments('cody1024d');
+
+// get
+Modular.args.data; // -> cody1024d
+//or
+Bind((i) => MyClass(i.args.data));
+
+```
+
+### Issues
+
+- Fix [#615](https://github.com/Flutterando/modular/issues/615)
+- Fix [#643](https://github.com/Flutterando/modular/issues/643)
+- Fix [#644](https://github.com/Flutterando/modular/issues/644)
+- Fix [#666](https://github.com/Flutterando/modular/issues/666)
+- Fix [#668](https://github.com/Flutterando/modular/issues/668)
+- Fix [#681](https://github.com/Flutterando/modular/issues/681)
+- Fix [#694](https://github.com/Flutterando/modular/issues/694)
+
 ## [4.5.1+1] - 2022-04-05
 - Fixed `modular_core` and resolve issues [#699] [#671] [#678].
 

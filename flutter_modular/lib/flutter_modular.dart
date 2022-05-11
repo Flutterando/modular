@@ -23,11 +23,11 @@ export 'src/presenter/models/module.dart';
 export 'src/presenter/models/route.dart';
 export 'src/presenter/models/modular_navigator.dart';
 export 'src/presenter/widgets/modular_app.dart';
-export 'src/presenter/widgets/modular_state.dart';
 export 'src/presenter/widgets/navigation_listener.dart';
 export 'src/presenter/widgets/widget_module.dart';
 export 'src/presenter/navigation/transitions/page_transition.dart';
 export 'src/presenter/navigation/transitions/transitions.dart';
+export 'src/presenter/widgets/modular_state.dart';
 export 'package:modular_core/modular_core.dart'
     show ModularRoute, Disposable, ReassembleMixin;
 
@@ -51,108 +51,11 @@ void cleanGlobals() {
   cleanInjector();
 }
 
-extension ModularExtensionMaterial on MaterialApp {
-  ///Use instead:
-  ///```dart
-  ///MaterialApp.router(
-  ///   routeInformationParser: Modular.routeInformationParser,
-  ///   routerDelegate: Modular.routerDelegate,
-  ///...
-  ///);
-  ///```
-  @Deprecated('Use **MaterialApp.router** instead')
-  MaterialApp modular() {
-    Modular.setObservers(navigatorObservers ?? []);
-    Modular.setNavigatorKey(navigatorKey);
-    Modular.setInitialRoute(initialRoute ?? '/');
-
-    final app = MaterialApp.router(
-      key: key,
-      scaffoldMessengerKey: scaffoldMessengerKey,
-      routeInformationProvider: routeInformationProvider,
-      backButtonDispatcher: backButtonDispatcher,
-      builder: builder,
-      title: title,
-      onGenerateTitle: onGenerateTitle,
-      color: color,
-      theme: theme,
-      darkTheme: darkTheme,
-      highContrastTheme: highContrastTheme,
-      highContrastDarkTheme: highContrastDarkTheme,
-      themeMode: themeMode,
-      locale: locale,
-      localizationsDelegates: localizationsDelegates,
-      localeListResolutionCallback: localeListResolutionCallback,
-      localeResolutionCallback: localeResolutionCallback,
-      supportedLocales: supportedLocales,
-      debugShowMaterialGrid: debugShowMaterialGrid,
-      showPerformanceOverlay: showPerformanceOverlay,
-      checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-      showSemanticsDebugger: showSemanticsDebugger,
-      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-      shortcuts: shortcuts,
-      actions: actions,
-      restorationScopeId: restorationScopeId,
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
-    );
-
-    return app;
-  }
-}
-
-extension ModularExtensionCupertino on CupertinoApp {
-  ///Use instead:
-  ///```dart
-  ///CupertinoApp.router(
-  ///   routeInformationParser: Modular.routeInformationParser,
-  ///   routerDelegate: Modular.routerDelegate,
-  ///...
-  ///);
-  ///```
-  @Deprecated('Use CupertinoApp.router instead')
-  CupertinoApp modular() {
-    Modular.setObservers(navigatorObservers ?? []);
-    Modular.setNavigatorKey(navigatorKey);
-    Modular.setInitialRoute(initialRoute ?? '/');
-
-    (injector.get<IModularBase>() as ModularBase).flags.isCupertino = true;
-
-    final app = CupertinoApp.router(
-      key: key,
-      routeInformationProvider: routeInformationProvider,
-      backButtonDispatcher: backButtonDispatcher,
-      builder: builder,
-      title: title,
-      onGenerateTitle: onGenerateTitle,
-      color: color,
-      theme: theme,
-      locale: locale,
-      localizationsDelegates: localizationsDelegates,
-      localeListResolutionCallback: localeListResolutionCallback,
-      localeResolutionCallback: localeResolutionCallback,
-      supportedLocales: supportedLocales,
-      showPerformanceOverlay: showPerformanceOverlay,
-      checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-      showSemanticsDebugger: showSemanticsDebugger,
-      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-      shortcuts: shortcuts,
-      actions: actions,
-      restorationScopeId: restorationScopeId,
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
-    );
-
-    return app;
-  }
-}
-
 extension InjectorExtends on Injector {
   /// get arguments
   ModularArguments get args => injector
       .get<GetArguments>()
+      .value
       .call()
       .getOrElse((l) => ModularArguments.empty());
 }
@@ -188,7 +91,7 @@ class RouterOutletState extends State<RouterOutlet> {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
     delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
-        injector.get<ModularRouterDelegate>(), navigatorKey);
+        injector.get<ModularRouterDelegate>().value, navigatorKey);
     final router = Router.of(context);
     _backButtonDispatcher =
         router.backButtonDispatcher!.createChildBackButtonDispatcher();

@@ -27,6 +27,7 @@ dependencies:
   http: ^0.13.0
   flutter_modular: ^4.0.0-dev.1
   alice: ^0.2.4
+  bloc: ^8.0.3
   flutter:
     sdk: flutter
   
@@ -35,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
 
 dev_dependencies:
-  modular_test: ^1.0.1
+  modular_test: ^2.0.0-dev.1
   modular_codegen: ^3.0.1
   build_runner: ^2.1.0
   mocktail: ^0.1.4
@@ -46,6 +47,10 @@ dev_dependencies:
 dependency_overrides:
   flutter_modular:
     path: ../
+  modular_core:
+    path: ../../modular_core
+  modular_interfaces:
+    path: ../../modular_interfaces
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

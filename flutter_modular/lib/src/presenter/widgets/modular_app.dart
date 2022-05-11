@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import '../../../flutter_modular.dart';
-import 'package:triple/triple.dart';
 
 import '../modular_base.dart';
 
@@ -39,12 +38,6 @@ class ModularAppState extends State<ModularApp> {
   void initState() {
     super.initState();
     Modular.init(widget.module);
-    setTripleResolver(tripleResolverCallback);
-  }
-
-  @visibleForTesting
-  T tripleResolverCallback<T extends Object>() {
-    return Modular.get<T>();
   }
 
   @override
@@ -77,7 +70,13 @@ class _Register<T> {
 
   _Register(this.value, this._select);
 
-  dynamic getSelected() => _select != null ? _select!(value) : value;
+  dynamic getSelected() {
+    final result = _select?.call(value);
+    if (result != null) {
+      return result;
+    }
+    return value;
+  }
 
   @override
   bool operator ==(Object object) =>
@@ -96,16 +95,17 @@ class _ModularInherited extends InheritedWidget {
 
   static T of<T extends Object>(BuildContext context,
       {bool listen = true, SelectCallback<T>? select}) {
-    final bind = Modular.get<T>();
+    final entry = Modular.getBindEntry<T>();
+    final bind = entry.bind as Bind;
     if (listen) {
-      final registre = _Register<T>(bind, select);
+      final registre = _Register<T>(entry.value, select ?? bind.onSelectorFunc);
       final inherited =
           context.dependOnInheritedWidgetOfExactType<_ModularInherited>(
               aspect: registre)!;
       inherited.updateShouldNotify(inherited);
     }
 
-    return bind;
+    return entry.value;
   }
 
   @override
@@ -140,12 +140,6 @@ class _InheritedModularElement extends InheritedElement {
       value.addListener(() => _handleUpdate(aspect.type));
     } else if (value is Stream) {
       value.listen((event) => _handleUpdate(aspect.type));
-    } else if (value is Store) {
-      value.observer(
-        onState: (state) => _handleUpdate(aspect.type),
-        onError: (error) => _handleUpdate(aspect.type),
-        onLoading: (isLoading) => _handleUpdate(aspect.type),
-      );
     }
     registers.add(aspect);
     setDependencies(dependent, registers);
@@ -164,8 +158,8 @@ class _InheritedModularElement extends InheritedElement {
   }
 
   @override
-  void notifyClients(InheritedWidget oldWidget) {
-    super.notifyClients(oldWidget);
+  void notifyClients(covariant Widget oldWidget) {
+    super.notifyClients(oldWidget as InheritedWidget);
     _dirty = false;
     current = null;
   }
@@ -187,7 +181,7 @@ extension ModularWatchExtension on BuildContext {
   /// Request an instance by [Type] and
   /// watch your changes
   ///
-  /// SUPPORTED CLASS ([Listenable], [Stream] and [Store] by Triple).
+  /// SUPPORTED CLASS ([Listenable], [Stream]).
   T watch<T extends Object>([SelectCallback<T>? select]) {
     return _ModularInherited.of<T>(this, select: select);
   }

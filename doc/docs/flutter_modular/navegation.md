@@ -113,16 +113,16 @@ using square brackets notation (['parameter_name']).
 - *Query*: like the web environment, we can send parameters using query. This doesn't allows you to let the route dynamic, but it has the same effect when recovering a parameter;
 
 ```dart
-ChildRoute('/second', child: (context, args) => SecondPage(name: args.query['name'])),
+ChildRoute('/second', child: (context, args) => SecondPage(name: args.queryParams['name'])),
 ```
 
-Note that the route name is the same, so we can use **Modular.args.query** to get the parameter.
+Note that the route name is the same, so we can use **Modular.args.queryParams** to get the parameter.
 Let’s see how we can navigate using queries:
-
+∂
 ```dart
-Modular.to.navigate('/second?name=jacob');  // args.query['name'] -> 'jacob'
-Modular.to.navigate('/second?name=sara');   // args.query['name'] -> 'sara'
-Modular.to.navigate('/second?name=rie');    // args.query['name'] -> 'rie'
+Modular.to.navigate('/second?name=jacob');  // args.queryParams['name'] -> 'jacob'
+Modular.to.navigate('/second?name=sara');   // args.queryParams['name'] -> 'sara'
+Modular.to.navigate('/second?name=rie');    // args.queryParams['name'] -> 'rie'
 ```
 
 :::tip TIP

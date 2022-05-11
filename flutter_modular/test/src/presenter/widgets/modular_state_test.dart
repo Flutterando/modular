@@ -4,8 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('ModularState', (tester) async {
-    final modularApp =
-        ModularApp(module: CustomModule(), child: const AppWidget());
+    final modularApp = ModularApp(module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -33,7 +32,10 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp().modular();
+    return MaterialApp.router(
+      routerDelegate: Modular.routerDelegate,
+      routeInformationParser: Modular.routeInformationParser,
+    );
   }
 }
 
@@ -44,6 +46,7 @@ class HomeExample extends StatefulWidget {
   _HomeExampleState createState() => _HomeExampleState();
 }
 
+// ignore: deprecated_member_use_from_same_package
 class _HomeExampleState extends ModularState<HomeExample, String> {
   @override
   Widget build(BuildContext context) {

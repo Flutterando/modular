@@ -85,6 +85,7 @@ class FlutterModularModule extends Module {
             isModuleReadyUsecase: i(),
             navigator: i(),
             startModule: i(),
+            setArgumentsUsecase: i(),
             getArguments: i())),
       ];
 }

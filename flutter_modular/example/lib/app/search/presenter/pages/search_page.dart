@@ -1,4 +1,3 @@
-import 'package:flutter_triple/flutter_triple.dart';
 import 'package:example/app/search/domain/entities/result.dart';
 import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,13 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends ModularState<SearchPage, SearchStore> {
+class _SearchPageState extends State<SearchPage> {
   Widget _buildList(List<Result> list) {
+    if (list.isEmpty) {
+      return const Center(
+        child: Text('Please, type something...'),
+      );
+    }
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (_, index) {
@@ -53,7 +57,8 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('setState');
+    final store = context.watch<SearchStore>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Github Search'),
@@ -63,7 +68,7 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
           Padding(
             padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
             child: TextField(
-              onChanged: controller.setSearchText,
+              onChanged: store.setSearchText,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Search...',
@@ -71,23 +76,13 @@ class _SearchPageState extends ModularState<SearchPage, SearchStore> {
             ),
           ),
           Expanded(
-            child: ScopedBuilder<SearchStore, Failure, List<Result>>(
-                store: controller,
-                onLoading: (_) =>
-                    const Center(child: CircularProgressIndicator()),
-                onError: (_, error) {
-                  return _buildError(error!);
-                },
-                onState: (_, state) {
-                  if (state.isEmpty) {
-                    return const Center(
-                      child: Text('Please, type something...'),
-                    );
-                  } else {
-                    return _buildList(state);
-                  }
-                }),
-          )
+            child: store.when(
+              onState: _buildList,
+              onLoading: (loading) =>
+                  const Center(child: CircularProgressIndicator()),
+              onError: _buildError,
+            ),
+          ),
         ],
       ),
     );

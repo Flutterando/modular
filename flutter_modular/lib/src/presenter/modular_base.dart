@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import '../domain/usecases/get_arguments.dart';
 import '../domain/usecases/reassemble_tracker.dart';
 import 'package:modular_core/modular_core.dart';
@@ -9,12 +10,9 @@ import '../domain/usecases/dispose_bind.dart';
 import '../domain/usecases/finish_module.dart';
 import '../domain/usecases/get_bind.dart';
 import '../domain/usecases/module_ready.dart';
+import '../domain/usecases/set_arguments.dart';
 import '../domain/usecases/start_module.dart';
-import 'package:triple/triple.dart';
 import 'errors/errors.dart';
-import 'models/modular_args.dart';
-import 'models/modular_navigator.dart';
-import 'models/module.dart';
 import 'package:meta/meta.dart';
 
 import 'navigation/modular_route_information_parser.dart';
@@ -55,6 +53,9 @@ abstract class IModularBase {
   /// Request an instance by [Type]
   B get<B extends Object>({B? defaultValue});
 
+  @internal
+  BindEntry<B> getBindEntry<B extends Object>({B? defaultValue});
+
   /// Request an async instance by [Type]
   Future<B> getAsync<B extends Object>({B? defaultValue});
 
@@ -79,6 +80,9 @@ abstract class IModularBase {
   /// Change the navigatorKey
   void setNavigatorKey(GlobalKey<NavigatorState>? key);
 
+  /// Change the navigatorKey
+  void setArguments(dynamic arguments);
+
   @visibleForTesting
   String get initialRoutePath;
 }
@@ -88,6 +92,7 @@ class ModularBase implements IModularBase {
   final FinishModule finishModule;
   final GetBind getBind;
   final GetArguments getArguments;
+  final SetArguments setArgumentsUsecase;
   final ReassembleTracker reassembleTracker;
   final StartModule startModule;
   final IsModuleReady isModuleReadyUsecase;
@@ -119,6 +124,7 @@ class ModularBase implements IModularBase {
     required this.startModule,
     required this.isModuleReadyUsecase,
     required this.navigator,
+    required this.setArgumentsUsecase,
   });
 
   @override
@@ -126,18 +132,24 @@ class ModularBase implements IModularBase {
       disposeBind<B>().getOrElse((left) => false);
 
   @override
-  B get<B extends Object>({B? defaultValue}) {
+  BindEntry<B> getBindEntry<B extends Object>({B? defaultValue}) {
     return getBind<B>().getOrElse((left) {
       if (defaultValue != null) {
-        return defaultValue;
+        return BindEntry<B>(
+            bind: Bind.instance(defaultValue), value: defaultValue);
       }
       throw left;
     });
   }
 
   @override
+  B get<B extends Object>({B? defaultValue}) {
+    return getBindEntry<B>(defaultValue: defaultValue).value;
+  }
+
+  @override
   Future<B> getAsync<B extends Object>({B? defaultValue}) {
-    return getBind<Future<B>>().getOrElse((left) {
+    return getBind<Future<B>>().map((r) => r.value).getOrElse((left) {
       if (defaultValue != null) {
         return Future.value(defaultValue);
       }
@@ -155,27 +167,12 @@ class ModularBase implements IModularBase {
     finishModule();
   }
 
-  @visibleForTesting
-  void disposeBindFunction(bindValue) {
-    if (bindValue is Disposable) {
-      bindValue.dispose();
-    } else if (bindValue is Store) {
-      bindValue.destroy();
-    } else if (bindValue is Sink) {
-      bindValue.close();
-    } else if (bindValue is ChangeNotifier) {
-      bindValue.dispose();
-    }
-  }
-
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold(
           (l) => throw l, (r) => debugPrint('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
-
-      setDisposeResolver(disposeBindFunction);
 
       setPrintResolver(debugPrint);
     } else {
@@ -222,5 +219,10 @@ class ModularBase implements IModularBase {
   @override
   void setObservers(List<NavigatorObserver> navigatorObservers) {
     routerDelegate.setObservers(navigatorObservers);
+  }
+
+  @override
+  void setArguments(dynamic data) {
+    setArgumentsUsecase.call(args.copyWith(data: args));
   }
 }

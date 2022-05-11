@@ -5,18 +5,30 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
   test('MaterialApp extension', () {
-    final app = const MaterialApp().modular();
+    Modular.setInitialRoute('/');
+    Modular.setObservers([]);
+    Modular.setNavigatorKey(GlobalKey<NavigatorState>());
+    final app = MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
     expect(app, isA<MaterialApp>());
   });
 
   test('CupertinoApp extension', () {
-    final app = const CupertinoApp().modular();
+    final app = CupertinoApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
     expect(app, isA<CupertinoApp>());
   });
 
   testWidgets('RouterOutlet', (tester) async {
     Modular.init(AppModule());
-    await tester.pumpWidget(const MaterialApp().modular());
+    await tester.pumpWidget(MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    ));
 
     await tester.pump();
     final finder = find.byKey(keyOutlet);
