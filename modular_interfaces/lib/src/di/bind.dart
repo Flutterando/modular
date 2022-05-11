@@ -15,6 +15,7 @@ abstract class BindContract<T extends Object> {
   final bool isScoped;
 
   ///export bind for others modules
+  ///This bind can only be accessed when imported by a module.
   final bool export;
 
   ///When 'true', the object is instantiated only the first time it is called.
