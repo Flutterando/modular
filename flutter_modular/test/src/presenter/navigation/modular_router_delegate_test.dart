@@ -395,6 +395,18 @@ void main() {
   test('pushNamedAndRemoveUntil ', () async {
     final route1 = ParallelRouteMock();
     final route2 = ParallelRouteMock();
+    final route3 = ParallelRouteMock();
+
+    final arguments = ModularArguments.empty();
+
+    final getArgsMock = GetArgumentsMock();
+    final setArgsMock = SetArgumentsMock();
+
+    when(() => getArgsMock.call()).thenReturn(right(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+
+    when(() => parser.getArguments).thenReturn(getArgsMock);
+    when(() => parser.setArguments).thenReturn(setArgsMock);
 
     when(() => reportPopMock.call(any())).thenReturn(right(unit));
 
@@ -406,28 +418,23 @@ void main() {
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
 
+    when(() => route3.uri).thenReturn(Uri.parse('/pushForce2'));
+    when(() => route3.copyWith(schema: '')).thenReturn(route3);
+    when(() => route3.schema).thenReturn('');
+
     when(() => navigatorState.popUntil(any())).thenReturn(null);
 
-    final getArgsMock = GetArgumentsMock();
-    final setArgsMock = SetArgumentsMock();
-    when(() => parser.getArguments).thenReturn(getArgsMock);
-    when(() => parser.setArguments).thenReturn(setArgsMock);
+    delegate.currentConfiguration =
+        ModularBook(routes: [route1, route2, route3]);
 
-    final arguments = ModularArguments.empty();
-
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
-
-    delegate.currentConfiguration = ModularBook(routes: [route1]);
-
-    when(() => parser.selectBook('/pushForce',
+    when(() => parser.selectBook('/pushForce2',
             popCallback: any(named: 'popCallback')))
-        .thenAnswer((_) async => ModularBook(routes: [route2]));
+        .thenAnswer((_) async => ModularBook(routes: [route3]));
     // ignore: unawaited_futures
-    delegate.pushNamedAndRemoveUntil('/pushForce', (_) => false);
+    delegate.pushNamedAndRemoveUntil('/pushForce2', (_) => false);
     await Future.delayed(const Duration(milliseconds: 400));
 
-    expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
+    expect(delegate.currentConfiguration?.uri.toString(), '/pushForce2');
     expect(delegate.currentConfiguration?.routes.length, 1);
   });
 
