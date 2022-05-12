@@ -1,3 +1,7 @@
+## 2.0.1 - 2022/05/12
+
+- Fix: Inject.get returns instance
+
 ## 2.0.0 - 2022/05/11
 
 - Added `BindContract.onDispose`.

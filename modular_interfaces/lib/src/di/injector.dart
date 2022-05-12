@@ -2,10 +2,13 @@ import 'package:modular_interfaces/modular_interfaces.dart';
 
 /// Service injector that is responsible for searching for instances in all bind contexts.
 abstract class Injector<T> {
-  B call<B extends Object>() => get<B>().value;
+  B call<B extends Object>() => get<B>();
 
   /// Request an bind by [Type]
-  BindEntry<B> get<B extends Object>();
+  B get<B extends Object>();
+
+  /// Request an bindEntry by [Type]
+  BindEntry<B> getBind<B extends Object>();
 
   /// Checks if the context (Module) is in the context of binds.
   bool isModuleAlive<B extends BindContext>();

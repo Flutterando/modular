@@ -12,24 +12,24 @@ import 'src/presenter/navigation/modular_router_delegate.dart';
 import 'src/presenter/navigation/router_outlet_delegate.dart';
 
 export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
+export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable, ReassembleMixin;
+
 export 'src/presenter/guards/route_guard.dart';
 export 'src/presenter/models/bind.dart';
 export 'src/presenter/models/child_route.dart';
-export 'src/presenter/models/module_route.dart';
-export 'src/presenter/models/wildcard_route.dart';
-export 'src/presenter/models/redirect_to_route.dart';
 export 'src/presenter/models/modular_args.dart';
-export 'src/presenter/models/module.dart';
-export 'src/presenter/models/route.dart';
 export 'src/presenter/models/modular_navigator.dart';
-export 'src/presenter/widgets/modular_app.dart';
-export 'src/presenter/widgets/navigation_listener.dart';
-export 'src/presenter/widgets/widget_module.dart';
+export 'src/presenter/models/module.dart';
+export 'src/presenter/models/module_route.dart';
+export 'src/presenter/models/redirect_to_route.dart';
+export 'src/presenter/models/route.dart';
+export 'src/presenter/models/wildcard_route.dart';
 export 'src/presenter/navigation/transitions/page_transition.dart';
 export 'src/presenter/navigation/transitions/transitions.dart';
+export 'src/presenter/widgets/modular_app.dart';
 export 'src/presenter/widgets/modular_state.dart';
-export 'package:modular_core/modular_core.dart'
-    show ModularRoute, Disposable, ReassembleMixin;
+export 'src/presenter/widgets/navigation_listener.dart';
+export 'src/presenter/widgets/widget_module.dart';
 
 IModularBase? _modular;
 
@@ -53,11 +53,7 @@ void cleanGlobals() {
 
 extension InjectorExtends on Injector {
   /// get arguments
-  ModularArguments get args => injector
-      .get<GetArguments>()
-      .value
-      .call()
-      .getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => injector.get<GetArguments>().call().getOrElse((l) => ModularArguments.empty());
 }
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
@@ -90,11 +86,9 @@ class RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
-    delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
-        injector.get<ModularRouterDelegate>().value, navigatorKey);
+    delegate ??= RouterOutletDelegate(modal.route.uri.toString(), injector.get<ModularRouterDelegate>(), navigatorKey);
     final router = Router.of(context);
-    _backButtonDispatcher =
-        router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override

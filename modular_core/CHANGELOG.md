@@ -1,3 +1,6 @@
+## 2.0.1 - 2022/05/12
+* Fix: Inject.get should return instance
+
 ## 2.0.0 - 2022/05/11
 * Remove `setDisposeResolver`.
 * Apply `BindContract.onDispose` of `modular_interface`.
