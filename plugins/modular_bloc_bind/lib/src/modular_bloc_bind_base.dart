@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
 
 class BlocBind {
-  static Bind<T> singleton<T extends Bloc>(
+  static Bind<T> singleton<T extends BlocBase>(
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
@@ -14,7 +14,7 @@ class BlocBind {
     });
   }
 
-  static Bind<T> lazySingleton<T extends Bloc>(
+  static Bind<T> lazySingleton<T extends BlocBase>(
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
@@ -25,7 +25,7 @@ class BlocBind {
     });
   }
 
-  static Bind<T> factory<T extends Bloc>(
+  static Bind<T> factory<T extends BlocBase>(
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
@@ -36,7 +36,7 @@ class BlocBind {
     });
   }
 
-  static Bind<T> instance<T extends Bloc>(
+  static Bind<T> instance<T extends BlocBase>(
     T bloc, {
     bool export = false,
   }) {
