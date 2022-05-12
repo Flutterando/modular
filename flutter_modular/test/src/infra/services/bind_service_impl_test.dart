@@ -18,7 +18,7 @@ void main() {
       expect(service.getBind<String>().map((r) => r.value).getOrElse((left) => ''), 'test');
     });
     test('should throw error not found bind', () {
-      when(() => injector.get<String>()).thenThrow(BindNotFound('String'));
+      when(() => injector.getBind<String>()).thenThrow(BindNotFound('String'));
       expect(service.getBind<String>().fold(id, id), isA<BindNotFoundException>());
     });
   });
