@@ -3,7 +3,7 @@
 
 Working only Modular 5.
 
-Specific Bind to BLoC with auto-dispose and notifier:
+Specific Bind to BLoC with auto-dispose and selector:
 
 ```dart
 @override
