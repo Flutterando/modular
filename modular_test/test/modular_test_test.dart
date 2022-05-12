@@ -1,7 +1,6 @@
+import 'package:modular_core/modular_core.dart';
 import 'package:modular_test/modular_test.dart' as modular_test;
 import 'package:test/test.dart';
-
-import 'package:modular_core/modular_core.dart';
 
 abstract class IRepo {
   String get name;
@@ -38,17 +37,17 @@ void main() {
   );
 
   test('init Module', () {
-    final text = modularTracker.injector.get<String>();
+    final text = modularTracker.injector.get<String>().value;
     expect(text, 'teste');
   });
 
   test('replace binds', () {
-    final boolean = modularTracker.injector.get<bool>();
+    final boolean = modularTracker.injector.get<bool>().value;
     expect(boolean, false);
   });
 
   test('replace binds with interface', () {
-    final result = modularTracker.injector.get<IRepo>();
+    final result = modularTracker.injector.get<IRepo>().value;
     expect(result, isA<RepoImpl2>());
     expect(result.name, 'RepoImpl2');
   });
@@ -56,4 +55,22 @@ void main() {
 
 class _Bind<T extends Object> extends BindContract<T> {
   _Bind(T Function(Injector i) factoryFunction) : super(factoryFunction);
+
+  @override
+  BindContract<E> cast<E extends Object>() {
+    return _Bind(factoryFunction as E Function(Injector i));
+  }
+
+  @override
+  BindContract<T> copyWith(
+      {T Function(Injector i)? factoryFunction,
+      bool? isSingleton,
+      bool? isLazy,
+      bool? export,
+      bool? isScoped,
+      bool? alwaysSerialized,
+      void Function(T value)? onDispose,
+      Function(T value)? selector}) {
+    return this;
+  }
 }
