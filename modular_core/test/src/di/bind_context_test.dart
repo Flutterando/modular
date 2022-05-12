@@ -101,7 +101,8 @@ void main() {
   });
 
   test('instantiateSingletonBinds', () {
-    instance.instantiateSingletonBinds([BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector);
+    instance.instantiateSingletonBinds(
+        [BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector);
     expect(instance.instanciatedSingletons.length, 1);
   });
 }
@@ -190,11 +191,13 @@ class Repository extends IRepository with Disposable {
   }
 }
 
-class AsyncBind<T extends Object> extends _Bind<Future<T>> implements AsyncBindContract<T> {
+class AsyncBind<T extends Object> extends _Bind<Future<T>>
+    implements AsyncBindContract<T> {
   @override
   final Future<T> Function(Injector i) asyncInject;
 
-  AsyncBind(this.asyncInject, {bool export = false}) : super(asyncInject, export: export);
+  AsyncBind(this.asyncInject, {bool export = false})
+      : super(asyncInject, export: export);
 
   @override
   Future<T> resolveAsyncBind() async {

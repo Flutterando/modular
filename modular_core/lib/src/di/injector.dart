@@ -1,15 +1,16 @@
-import 'package:meta/meta.dart';
-import 'reassemble_mixin.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
-import 'bind_context.dart';
-import 'resolvers.dart';
 import 'package:characters/characters.dart';
+import 'package:meta/meta.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
+
+import 'bind_context.dart';
+import 'reassemble_mixin.dart';
+import 'resolvers.dart';
 
 class InjectorImpl<T> extends Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
   @override
-  BindEntry<B> get<B extends Object>() {
+  BindEntry<B> getBind<B extends Object>() {
     BindEntry<B>? entry;
 
     for (var module in _allBindContexts.values.toList().reversed) {
@@ -27,8 +28,12 @@ class InjectorImpl<T> extends Injector<T> {
   }
 
   @override
+  B get<B extends Object>() => getBind<B>().value;
+
+  @override
   @mustCallSuper
-  bool isModuleAlive<B extends BindContext>() => _allBindContexts.containsKey(_getType<B>());
+  bool isModuleAlive<B extends BindContext>() =>
+      _allBindContexts.containsKey(_getType<B>());
 
   @override
   @mustCallSuper
@@ -46,7 +51,8 @@ class InjectorImpl<T> extends Injector<T> {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       _allBindContexts[typeModule] = module;
-      (_allBindContexts[typeModule] as BindContextImpl).instantiateSingletonBinds(_getAllSingletons(), this);
+      (_allBindContexts[typeModule] as BindContextImpl)
+          .instantiateSingletonBinds(_getAllSingletons(), this);
       (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
       debugPrint("-- $typeModule INITIALIZED");
     } else {
@@ -107,7 +113,9 @@ class InjectorImpl<T> extends Injector<T> {
 
   @override
   void updateBinds(BindContext context) {
-    final key = _allBindContexts.keys.firstWhere((key) => key.toString() == context.runtimeType.toString(), orElse: () => _KeyNotFound);
+    final key = _allBindContexts.keys.firstWhere(
+        (key) => key.toString() == context.runtimeType.toString(),
+        orElse: () => _KeyNotFound);
     if (key == _KeyNotFound) {
       return;
     }

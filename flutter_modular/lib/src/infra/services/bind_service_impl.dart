@@ -1,7 +1,8 @@
 import 'package:modular_core/modular_core.dart';
+
 import '../../domain/errors/errors.dart';
-import '../../shared/either.dart';
 import '../../domain/services/bind_service.dart';
+import '../../shared/either.dart';
 
 class BindServiceImpl extends BindService {
   final Injector injector;
@@ -17,7 +18,7 @@ class BindServiceImpl extends BindService {
   @override
   Either<ModularError, BindEntry<T>> getBind<T extends Object>() {
     try {
-      final result = injector.get<T>();
+      final result = injector.getBind<T>();
       return right(result);
     } on BindNotFound catch (e, s) {
       return left(BindNotFoundException('$T not found.', s));
