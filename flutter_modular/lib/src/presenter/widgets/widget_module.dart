@@ -36,10 +36,12 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   final List<Module> imports = const [];
 
   @override
-  List<BindEntry> get instanciatedSingletons => _fakeModule.instanciatedSingletons;
+  List<BindEntry> get instanciatedSingletons =>
+      _fakeModule.instanciatedSingletons;
 
   @override
-  void instantiateSingletonBinds(List<BindEntry<Object>> singletons, Injector injector) {
+  void instantiateSingletonBinds(
+      List<BindEntry<Object>> singletons, Injector injector) {
     _fakeModule.instantiateSingletonBinds(singletons, injector);
   }
 
@@ -66,7 +68,8 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   }
 
   @override
-  void changeBinds(List<BindContract<Object>> newBinds) => _fakeModule.changeBinds(newBinds);
+  void changeBinds(List<BindContract<Object>> newBinds) =>
+      _fakeModule.changeBinds(newBinds);
 
   @override
   // ignore: invalid_use_of_visible_for_testing_member
@@ -84,13 +87,15 @@ class ModularProvider<T extends BindContext> extends StatefulWidget {
   final BindContext module;
   final Widget child;
 
-  const ModularProvider({Key? key, required this.module, required this.child}) : super(key: key);
+  const ModularProvider({Key? key, required this.module, required this.child})
+      : super(key: key);
 
   @override
   _ModularProviderState createState() => _ModularProviderState<T>();
 }
 
-class _ModularProviderState<T extends BindContext> extends State<ModularProvider> {
+class _ModularProviderState<T extends BindContext>
+    extends State<ModularProvider> {
   @override
   void initState() {
     super.initState();
