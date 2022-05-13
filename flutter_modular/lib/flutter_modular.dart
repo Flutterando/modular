@@ -12,7 +12,8 @@ import 'src/presenter/navigation/modular_router_delegate.dart';
 import 'src/presenter/navigation/router_outlet_delegate.dart';
 
 export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
-export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable, ReassembleMixin;
+export 'package:modular_core/modular_core.dart'
+    show ModularRoute, Disposable, ReassembleMixin;
 
 export 'src/presenter/guards/route_guard.dart';
 export 'src/presenter/models/bind.dart';
@@ -53,7 +54,10 @@ void cleanGlobals() {
 
 extension InjectorExtends on Injector {
   /// get arguments
-  ModularArguments get args => injector.get<GetArguments>().call().getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => injector
+      .get<GetArguments>()
+      .call()
+      .getOrElse((l) => ModularArguments.empty());
 }
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
@@ -86,9 +90,11 @@ class RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
-    delegate ??= RouterOutletDelegate(modal.route.uri.toString(), injector.get<ModularRouterDelegate>(), navigatorKey);
+    delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
+        injector.get<ModularRouterDelegate>(), navigatorKey);
     final router = Router.of(context);
-    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher =
+        router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override

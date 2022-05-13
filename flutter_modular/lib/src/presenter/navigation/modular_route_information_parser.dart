@@ -58,6 +58,9 @@ class ModularRouteInformationParser
       {dynamic arguments, void Function(dynamic)? popCallback}) async {
     var route = await selectRoute(path, arguments: arguments);
 
+    final modularArgs =
+        getArguments().getOrElse((l) => ModularArguments.empty());
+
     if (popCallback != null) {
       route = route.copyWith(popCallback: popCallback);
     }
@@ -77,6 +80,8 @@ class ModularRouteInformationParser
         child = child.copyWith(schema: parent);
         book.routes.insert(0, child);
       }
+
+      setArguments(modularArgs);
 
       for (var booksRoute in book.routes) {
         reportPush(booksRoute);

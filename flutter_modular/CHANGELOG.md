@@ -1,3 +1,5 @@
+## [5.0.2] - 2022-04-22
+- Fix: Parse params in RouteOutlet
 ## [5.0.1] - 2022-04-22
 - Fix: Inject.get should return instance.
 
