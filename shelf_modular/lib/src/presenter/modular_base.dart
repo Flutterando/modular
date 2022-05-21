@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
+import 'package:meta/meta.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
@@ -16,11 +17,11 @@ import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
 import 'package:shelf_modular/src/shelf_modular_module.dart';
+
 import 'errors/errors.dart';
 import 'models/module.dart';
-import 'utils/handlers.dart';
 import 'models/route.dart';
-import 'package:meta/meta.dart';
+import 'utils/handlers.dart';
 
 abstract class IModularBase {
   /// Finishes all trees(BindContext and RouteContext).
@@ -62,20 +63,10 @@ class ModularBase implements IModularBase {
 
   bool _moduleHasBeenStarted = false;
 
-  ModularBase(
-      this.disposeBind,
-      this.finishModule,
-      this.getBind,
-      this.startModule,
-      this.isModuleReadyImpl,
-      this.getRoute,
-      this.getArguments,
-      this.releaseScopedBinds,
-      this.reportPush);
+  ModularBase(this.disposeBind, this.finishModule, this.getBind, this.startModule, this.isModuleReadyImpl, this.getRoute, this.getArguments, this.releaseScopedBinds, this.reportPush);
 
   @override
-  bool dispose<B extends Object>() =>
-      disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>({B? defaultValue}) {
@@ -103,27 +94,16 @@ class ModularBase implements IModularBase {
   @override
   void destroy() => finishModule();
 
-  @visibleForTesting
-  void disposeBindFunction(bindValue) {
-    if (bindValue is Disposable) {
-      bindValue.dispose();
-    }
-  }
-
   @override
   Handler call({required RouteContext module}) {
     if (!_moduleHasBeenStarted) {
-      startModule(module)
-          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
-
-      setDisposeResolver(disposeBindFunction);
 
       setPrintResolver(print);
       return handler;
     } else {
-      throw ModuleStartedException(
-          'Module ${module.runtimeType} is already started');
+      throw ModuleStartedException('Module ${module.runtimeType} is already started');
     }
   }
 
@@ -135,17 +115,11 @@ class ModularBase implements IModularBase {
     Response response;
     try {
       final data = await tryJsonDecode(request);
-      final params = RouteParmsDTO(
-          url: '/${request.url.toString()}',
-          schema: request.method,
-          arguments: data);
+      final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
       final result = await getRoute.call(params);
-      response = await result.fold<FutureOr<Response>>(
-          _routeError, (r) => _routeSuccess(r, request));
+      response = await result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
     } on Exception catch (e) {
-      if (e
-          .toString()
-          .contains('Exception: Got a response for hijacked request')) {
+      if (e.toString().contains('Exception: Got a response for hijacked request')) {
         response = Response.ok('');
       } else {
         rethrow;
@@ -174,8 +148,7 @@ class ModularBase implements IModularBase {
         final response = applyHandler(
           route.handler!,
           request: request,
-          arguments:
-              getArguments().getOrElse((left) => ModularArguments.empty()),
+          arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
           injector: injector<Injector>(),
         );
         if (response != null) {
@@ -239,8 +212,7 @@ class ModularBase implements IModularBase {
     // }
   }
 
-  bool _isMultipart(Request request) =>
-      _extractMultipartBoundary(request) != null;
+  bool _isMultipart(Request request) => _extractMultipartBoundary(request) != null;
 
   String? _extractMultipartBoundary(Request request) {
     if (!request.headers.containsKey('Content-Type')) return null;
