@@ -9,7 +9,8 @@
             "type": "dart",
             "cwd": "../shelf_modular",
             "request": "launch",
-            "program": "example/bin/example.dart"
+            "program": "example/bin/example.dart",
+            "args": ["--enable-vm-service"]
         },
         {
             "name": "flutter_modular",

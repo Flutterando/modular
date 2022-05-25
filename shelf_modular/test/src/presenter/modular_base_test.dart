@@ -13,6 +13,7 @@ import 'package:shelf_modular/src/domain/usecases/get_arguments.dart';
 import 'package:shelf_modular/src/domain/usecases/get_bind.dart';
 import 'package:shelf_modular/src/domain/usecases/get_route.dart';
 import 'package:shelf_modular/src/domain/usecases/module_ready.dart';
+import 'package:shelf_modular/src/domain/usecases/reassemble_tracker.dart';
 import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
@@ -48,6 +49,8 @@ class DisposableMock extends Mock implements Disposable {}
 
 class ReportPushMock extends Mock implements ReportPush {}
 
+class ReassembleTrackerMock extends Mock implements ReassembleTracker {}
+
 void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
@@ -58,6 +61,7 @@ void main() {
   final releaseScopedBinds = ReleaseScopedBindsMock();
   final isModuleReadyImpl = IsModuleReadyImplMock();
   final reportPush = ReportPushMock();
+  final reassembleTracker = ReassembleTrackerMock();
 
   late IModularBase modularBase;
 
@@ -66,7 +70,7 @@ void main() {
   });
 
   setUp(() {
-    modularBase = ModularBase(disposeBind, finishModule, getBind, startModule, isModuleReadyImpl, getRoute, getArguments, releaseScopedBinds, reportPush);
+    modularBase = ModularBase(disposeBind, finishModule, getBind, startModule, isModuleReadyImpl, getRoute, getArguments, releaseScopedBinds, reportPush, reassembleTracker);
   });
 
   test('dispose', () {

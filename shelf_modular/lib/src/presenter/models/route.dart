@@ -4,31 +4,23 @@ import 'package:shelf_modular/shelf_modular.dart';
 
 class Route extends ModularRouteImpl {
   final Function? handler;
+
   Route._({
     this.handler,
-    required String name,
-    String parent = '',
-    String schema = '',
-    List<ModularRoute> children = const [],
-    List<Middleware> middlewares = const [],
+    required super.name,
+    super.parent = '',
+    super.schema = '',
+    super.children = const [],
     Uri? uri,
-    RouteContext? context,
-    Map<Type, BindContext> bindContextEntries = const {},
-  }) : super(
-          name: name,
-          parent: parent,
-          schema: schema,
-          children: children,
-          context: context,
-          middlewares: middlewares,
-          uri: uri ?? Uri.parse('/'),
-          bindContextEntries: bindContextEntries,
-        );
+    super.context,
+    super.middlewares = const [],
+    super.bindContextEntries = const {},
+  }) : super(uri: uri ?? Uri.parse('/'));
 
   factory Route.get(
     String name,
     Function handler, {
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       handler: handler,
@@ -41,7 +33,7 @@ class Route extends ModularRouteImpl {
   factory Route.post(
     String name,
     Function handler, {
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       handler: handler,
@@ -54,7 +46,7 @@ class Route extends ModularRouteImpl {
   factory Route.delete(
     String name,
     Function handler, {
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       handler: handler,
@@ -66,7 +58,7 @@ class Route extends ModularRouteImpl {
   factory Route.path(
     String name,
     Function handler, {
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       handler: handler,
@@ -79,7 +71,7 @@ class Route extends ModularRouteImpl {
   factory Route.put(
     String name,
     Function handler, {
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       handler: handler,
@@ -92,7 +84,7 @@ class Route extends ModularRouteImpl {
   factory Route.resource(
     String name, {
     required Resource resource,
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       name: name,
@@ -101,8 +93,7 @@ class Route extends ModularRouteImpl {
     );
   }
 
-  factory Route.module(String name,
-      {required Module module, List<Middleware> middlewares = const []}) {
+  factory Route.module(String name, {required Module module, List<ModularMiddleware> middlewares = const []}) {
     final route = Route._(name: name, middlewares: middlewares);
     return route.addModule(name, module: module) as Route;
   }
@@ -110,7 +101,7 @@ class Route extends ModularRouteImpl {
   factory Route.websocket(
     String name, {
     required WebSocketResource websocket,
-    List<Middleware> middlewares = const [],
+    List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
       handler: websocket.handler,
@@ -137,7 +128,7 @@ class Route extends ModularRouteImpl {
       handler: handler ?? this.handler,
       name: name ?? this.name,
       schema: schema ?? this.schema,
-      middlewares: middlewares ?? this.middlewares,
+      middlewares: (middlewares ?? this.middlewares),
       children: children ?? this.children,
       parent: parent ?? this.parent,
       context: context ?? this.context,
