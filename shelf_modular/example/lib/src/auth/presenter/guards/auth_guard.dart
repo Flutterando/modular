@@ -31,7 +31,7 @@ class AuthGuard2 extends RouteGuard {
 
 class AuthGuard3 extends ModularMiddleware {
   @override
-  Handler call(Handler handler, ModularRoute route) {
+  Handler call(Handler handler, [ModularRoute? route]) {
     return (request) {
       final accessToken = request.headers['Authorization']?.split(' ').last;
       if (accessToken == null || accessToken.isEmpty || accessToken != '1234') {

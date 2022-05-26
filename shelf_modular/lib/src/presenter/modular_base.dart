@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:meta/meta.dart';
-import 'package:modular_core/modular_core.dart';
+import 'package:modular_core/modular_core.dart' hide Middleware;
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
@@ -32,7 +32,9 @@ abstract class IModularBase {
 
   /// Responsible for starting the app.
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
-  Handler call({required RouteContext module});
+  /// [module]: Start initial module.
+  /// [middlewares]: List of Shelf middlewares.
+  Handler call({required RouteContext module, List<Middleware> middlewares = const []});
 
   /// Responsible for starting the app.
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
@@ -110,13 +112,18 @@ class ModularBase implements IModularBase {
   void destroy() => finishModule();
 
   @override
-  Handler call({required RouteContext module}) {
+  Handler call({required RouteContext module, List<Middleware> middlewares = const []}) {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setPrintResolver(print);
-      return handler;
+      var pipeline = Pipeline();
+      for (var middleware in middlewares) {
+        pipeline = pipeline.addMiddleware(middleware);
+      }
+
+      return pipeline.addHandler(handler);
     } else {
       throw ModuleStartedException('Module ${module.runtimeType} is already started');
     }
@@ -149,11 +156,13 @@ class ModularBase implements IModularBase {
   }
 
   FutureOr<Response> _routeSuccess(ModularRoute? route, Request request) async {
-    final middlewares = route!.middlewares as List<ModularMiddleware>;
+    final middlewares = route!.middlewares;
     var pipeline = Pipeline();
 
     for (var middleware in middlewares) {
-      pipeline = pipeline.addMiddleware(((innerHandler) => middleware(innerHandler, route)));
+      if (middleware is ModularMiddleware) {
+        pipeline = pipeline.addMiddleware(((innerHandler) => middleware(innerHandler, route)));
+      }
     }
 
     if (route is Route) {

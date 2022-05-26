@@ -16,11 +16,26 @@ You can choose to use `Bind.onDispose` or implement the `Disposable` class.
 
 - [BREAK CHANGE] `Bind.export` works only after imported.
 
+- feat: Added `middlewares` propertie in Modular() handler;
+
+```dart
+final handler = Modular(
+    module: AppModule(),
+    middlewares: [
+      logRequests(), //add any shelf middleware
+      CustomModularMiddleware(), // implementations of ModularMiddleware
+    ],
+  );
+
+  var server = await io.serve(handler, '0.0.0.0', 4000);
+  print('Serving at http://${server.address.host}:${server.port}');
+```
+
 - feat: Added new Middleware system:
 ```dart
 class AuthGuard extends ModularMiddleware {
   @override
-  Handler call(Handler handler, ModularRoute route) {
+  Handler execute(Handler handler, [ModularRoute? route]) {
     return (request) {
       final accessToken = request.headers['Authorization']?.split(' ').last;
       if (accessToken == null || accessToken.isEmpty || accessToken != '1234') {

@@ -1,5 +1,6 @@
 import 'package:example/src/app_module.dart';
 import 'package:hotreloader/hotreloader.dart';
+import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_modular/shelf_modular.dart';
 
@@ -9,6 +10,22 @@ void main(List<String> args) async {
     onAfterReload: (ctx) => print(ctx.reloadReports),
   );
 
-  var server = await io.serve(Modular.call(module: AppModule()), '0.0.0.0', 4000);
+  final handler = Modular(
+    module: AppModule(),
+    middlewares: [
+      logRequests(),
+      MyMiddleware(),
+    ],
+  );
+
+  var server = await io.serve(handler, '0.0.0.0', 4000);
   print('Serving at http://${server.address.host}:${server.port}');
+}
+
+class MyMiddleware extends ModularMiddleware {
+  @override
+  Handler call(Handler handler, [ModularRoute? route]) {
+    // TODO: implement call
+    throw UnimplementedError();
+  }
 }

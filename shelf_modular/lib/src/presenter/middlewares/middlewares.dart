@@ -15,7 +15,7 @@ abstract class RouteGuard extends ModularMiddleware {
   FutureOr<Route?> pos(route, data) async => route as Route;
 
   @override
-  FutureOr<shelf.Response> Function(shelf.Request) call(shelf.Handler handler, ModularRoute route) {
+  FutureOr<shelf.Response> Function(shelf.Request) call(shelf.Handler handler, [ModularRoute? route]) {
     return (request) async {
       if (!await canActivate(request, route as Route)) {
         return shelf.Response.forbidden(jsonEncode({'error': route.uri.toString().trim()}));
@@ -34,5 +34,9 @@ abstract class ModularMiddleware implements Middleware<shelf.Request> {
   @override
   FutureOr<Route?> pos(route, data) => route as Route;
 
-  shelf.Handler call(shelf.Handler handler, ModularRoute route);
+  FutureOr<shelf.Response> Function(shelf.Request) call(shelf.Handler handler, [ModularRoute? route]) {
+    return (request) {
+      return handler(request);
+    };
+  }
 }
