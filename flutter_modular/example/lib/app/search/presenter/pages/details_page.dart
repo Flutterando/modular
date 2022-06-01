@@ -1,4 +1,5 @@
 import 'package:example/app/search/domain/entities/result.dart';
+import 'package:example/app/search/presenter/stores/search_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -14,8 +15,14 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   @override
+  void dispose() {
+    Modular.dispose<SearchStore>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(Modular.args.queryParams['id']);
+    debugPrint(Modular.args.queryParams['id'].toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +46,7 @@ class _DetailsPageState extends State<DetailsPage> {
           : Center(
               child: ElevatedButton(
                 onPressed: () => Modular.to.pushReplacementNamed('/'),
-                child: Text('Make a search'),
+                child: const Text('Make a search'),
               ),
             ),
     );

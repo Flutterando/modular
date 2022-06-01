@@ -54,7 +54,7 @@ main(){
     final route = ModularTracker.findRoute('/product/1', data: MyArgs());
 
     //get binds
-    final controller = ModularTracker.injector.get<MyController>();
+    final controller = ModularTracker.injector.get<MyController>().value;
 
     //finishApp
     ModularTracker.finishApp();

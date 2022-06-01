@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';

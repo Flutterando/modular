@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
-import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
-import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
-import 'package:flutter_modular/src/domain/usecases/report_push.dart';
+import 'domain/usecases/bind_module.dart';
+import 'domain/usecases/reassemble_tracker.dart';
+import 'domain/usecases/report_pop.dart';
+import 'domain/usecases/report_push.dart';
 import 'package:modular_core/modular_core.dart';
 
 import 'domain/services/bind_service.dart';
@@ -43,8 +43,8 @@ class FlutterModularModule extends Module {
   @override
   List<Bind> get binds => [
         //datasource
-        Bind.instance<Tracker>(ModularTracker),
-        Bind.instance<Injector>(ModularTracker.injector),
+        Bind.instance<Tracker>(modularTracker),
+        Bind.instance<Injector>(modularTracker.injector),
         //infra
         Bind.factory<BindService>((i) => BindServiceImpl(i())),
         Bind.factory<ModuleService>((i) => ModuleServiceImpl(i())),
@@ -76,6 +76,8 @@ class FlutterModularModule extends Module {
             navigatorKey: GlobalKey<NavigatorState>(),
             reportPop: i())),
         Bind.lazySingleton<IModularBase>((i) => ModularBase(
+            routeInformationParser: i(),
+            routerDelegate: i(),
             reassembleTracker: i(),
             disposeBind: i(),
             finishModule: i(),
@@ -83,6 +85,7 @@ class FlutterModularModule extends Module {
             isModuleReadyUsecase: i(),
             navigator: i(),
             startModule: i(),
+            setArgumentsUsecase: i(),
             getArguments: i())),
       ];
 }

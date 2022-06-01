@@ -1,36 +1,41 @@
-import 'package:meta/meta.dart';
-import 'package:modular_core/src/di/reassemble_mixin.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
-import 'bind_context.dart';
-import 'resolvers.dart';
 import 'package:characters/characters.dart';
+import 'package:meta/meta.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
 
-class InjectorImpl<T> implements Injector<T> {
+import 'bind_context.dart';
+import 'reassemble_mixin.dart';
+import 'resolvers.dart';
+
+class InjectorImpl<T> extends Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
-  B call<B extends Object>([BindContract<B>? bind]) => get<B>(bind);
+  @override
+  BindEntry<B> getBind<B extends Object>() {
+    BindEntry<B>? entry;
 
-  B get<B extends Object>([BindContract<B>? bind]) {
-    B? bind;
-
-    for (var module in _allBindContexts.values) {
-      bind = module.getBind<B>(this);
-      if (bind != null) {
+    for (var module in _allBindContexts.values.toList().reversed) {
+      entry = module.getBind<B>(this);
+      if (entry != null) {
         break;
       }
     }
 
-    if (bind != null) {
-      return bind;
-    } else {
+    if (entry == null) {
       throw BindNotFound(B.toString());
     }
+
+    return entry;
   }
 
-  @mustCallSuper
-  bool isModuleAlive<T extends BindContext>() =>
-      _allBindContexts.containsKey(_getType<T>());
+  @override
+  B get<B extends Object>() => getBind<B>().value;
 
+  @override
+  @mustCallSuper
+  bool isModuleAlive<B extends BindContext>() =>
+      _allBindContexts.containsKey(_getType<B>());
+
+  @override
   @mustCallSuper
   Future<bool> isModuleReady<M extends BindContext>() async {
     if (isModuleAlive<M>()) {
@@ -40,6 +45,7 @@ class InjectorImpl<T> implements Injector<T> {
     return false;
   }
 
+  @override
   @mustCallSuper
   void addBindContext(covariant BindContextImpl module, {String tag = ''}) {
     final typeModule = module.runtimeType;
@@ -59,6 +65,7 @@ class InjectorImpl<T> implements Injector<T> {
     printResolverFunc?.call(text);
   }
 
+  @override
   @mustCallSuper
   void disposeModuleByTag(String tag) {
     final trash = <Type>[];
@@ -82,6 +89,7 @@ class InjectorImpl<T> implements Injector<T> {
     }
   }
 
+  @override
   @mustCallSuper
   bool dispose<B extends Object>() {
     for (var binds in _allBindContexts.values) {
@@ -115,6 +123,7 @@ class InjectorImpl<T> implements Injector<T> {
     module.changeBinds(List<BindContract>.from(context.getProcessBinds()));
   }
 
+  @override
   @mustCallSuper
   void destroy() {
     for (var binds in _allBindContexts.values) {
@@ -123,6 +132,7 @@ class InjectorImpl<T> implements Injector<T> {
     _allBindContexts.clear();
   }
 
+  @override
   @mustCallSuper
   void removeBindContext<T extends BindContext>({Type? type}) {
     final module = _allBindContexts.remove(type ?? _getType<T>());
@@ -132,10 +142,10 @@ class InjectorImpl<T> implements Injector<T> {
     }
   }
 
-  Type _getType<T>() => T;
+  Type _getType<G>() => G;
 
-  List<SingletonBind> _getAllSingletons() {
-    final list = <SingletonBind>[];
+  List<BindEntry> _getAllSingletons() {
+    final list = <BindEntry>[];
     for (var module in _allBindContexts.values) {
       list.addAll((module as BindContextImpl).instanciatedSingletons);
     }

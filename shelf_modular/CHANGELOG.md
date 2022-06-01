@@ -1,3 +1,7 @@
+## 1.0.2 - 2022/04/05
+
+* Update modular_core
+
 ## 1.0.1 - 2021/12/31
 
 * Fixed "bind replaced" bug

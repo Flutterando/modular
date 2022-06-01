@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
 import 'package:flutter_modular/src/presenter/models/modular_args.dart';
@@ -13,7 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
 
-import '../modular_base_test.dart' hide GetArgumentsMock;
+import '../../mocks/mocks.dart';
+import '../modular_base_test.dart' hide GetArgumentsMock, SetArgumentsMock;
 import 'modular_page_test.dart';
 import 'modular_route_information_parser_test.dart';
 
@@ -44,6 +43,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue<ModularArguments>(ModularArguments.empty());
+    registerFallbackValue<ModularRoute>(ModularRouteMock());
   });
 
   setUp(() {
@@ -53,11 +53,14 @@ void main() {
     when(() => key.currentState).thenReturn(navigatorState);
     parser = ModularRouteInformationParserMock();
     delegate = ModularRouterDelegate(
-        parser: parser, navigatorKey: key, reportPop: reportPopMock);
+      parser: parser,
+      navigatorKey: key,
+      reportPop: reportPopMock,
+    );
   });
 
   test('setObserver', () {
-    delegate.setObserver([NavigatorObserver()]);
+    delegate.setObservers([NavigatorObserver()]);
     expect(delegate.observers.length, 1);
   });
 
@@ -83,7 +86,7 @@ void main() {
   });
 
   test('Book copywith', () {
-    expect(ModularBook(routes: []).copyWith(), isA<ModularBook>());
+    expect(const ModularBook(routes: []).copyWith(), isA<ModularBook>());
   });
 
   test('navigate blink', () async {
@@ -97,7 +100,7 @@ void main() {
     delegate.navigate('/test');
     delegate.navigate('/test2');
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     expect(delegate.currentConfiguration?.uri.toString(), '/test2');
     expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
@@ -121,7 +124,7 @@ void main() {
 
     await delegate.navigate('/');
     await delegate.navigate('/test');
-    await Future.delayed(Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 600));
     await delegate.navigate('/test');
     expect(delegate.currentConfiguration?.uri.toString(), '/test');
     expect(delegate.path, '/test');
@@ -184,7 +187,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushNamed('/pushForce', forRoot: true);
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);
@@ -221,10 +224,10 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
     // ignore: unawaited_futures
     delegate.pushNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 3);
@@ -261,7 +264,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.pushReplacementNamed('/pushForce', forRoot: true);
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 1);
@@ -306,7 +309,7 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route3]));
     // ignore: unawaited_futures
     delegate.pushReplacementNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.currentConfiguration?.routes.length, 2);
@@ -342,14 +345,14 @@ void main() {
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
     delegate.popAndPushNamed('/pushForce');
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
     expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
 
   test('pop ', () async {
-    when(() => navigatorState.pop()).thenReturn('');
+    when(() => navigatorState.pop()).thenReturn(null);
     delegate.pop();
     verify(() => navigatorState.pop());
   });
@@ -382,7 +385,7 @@ void main() {
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
 
-    when(() => navigatorState.popUntil(any())).thenReturn('');
+    when(() => navigatorState.popUntil(any())).thenReturn(null);
     delegate.popUntil((_) => false);
     delegate.currentConfiguration = ModularBook(routes: [route1, route2]);
     delegate.popUntil((_) => true);
@@ -392,6 +395,21 @@ void main() {
   test('pushNamedAndRemoveUntil ', () async {
     final route1 = ParallelRouteMock();
     final route2 = ParallelRouteMock();
+    final route3 = ParallelRouteMock();
+
+    final arguments = ModularArguments.empty();
+
+    final getArgsMock = GetArgumentsMock();
+    final setArgsMock = SetArgumentsMock();
+
+    when(() => getArgsMock.call()).thenReturn(right(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+
+    when(() => parser.getArguments).thenReturn(getArgsMock);
+    when(() => parser.setArguments).thenReturn(setArgsMock);
+
+    when(() => reportPopMock.call(any())).thenReturn(right(unit));
+
     when(() => route1.uri).thenReturn(Uri.parse('/'));
     when(() => route1.copyWith(schema: '')).thenReturn(route1);
     when(() => route1.schema).thenReturn('');
@@ -400,7 +418,41 @@ void main() {
     when(() => route2.copyWith(schema: '')).thenReturn(route2);
     when(() => route2.schema).thenReturn('');
 
-    when(() => navigatorState.popUntil(any())).thenReturn('');
+    when(() => route3.uri).thenReturn(Uri.parse('/pushForce2'));
+    when(() => route3.copyWith(schema: '')).thenReturn(route3);
+    when(() => route3.schema).thenReturn('');
+
+    when(() => navigatorState.popUntil(any())).thenReturn(null);
+
+    delegate.currentConfiguration =
+        ModularBook(routes: [route1, route2, route3]);
+
+    when(() => parser.selectBook('/pushForce2',
+            popCallback: any(named: 'popCallback')))
+        .thenAnswer((_) async => ModularBook(routes: [route3]));
+    // ignore: unawaited_futures
+    delegate.pushNamedAndRemoveUntil('/pushForce2', ModalRoute.withName('/'));
+    await Future.delayed(const Duration(milliseconds: 400));
+
+    expect(delegate.currentConfiguration?.uri.toString(), '/pushForce2');
+    expect(delegate.currentConfiguration?.routes.length, 2);
+  });
+
+  test('pushNamedAndRemoveUntil forRoot', () async {
+    final route1 = ParallelRouteMock();
+    final route2 = ParallelRouteMock();
+
+    when(() => reportPopMock.call(any())).thenReturn(right(unit));
+
+    when(() => route1.uri).thenReturn(Uri.parse('/'));
+    when(() => route1.copyWith(schema: '')).thenReturn(route1);
+    when(() => route1.schema).thenReturn('');
+
+    when(() => route2.uri).thenReturn(Uri.parse('/pushForce'));
+    when(() => route2.copyWith(schema: '')).thenReturn(route2);
+    when(() => route2.schema).thenReturn('');
+
+    when(() => navigatorState.popUntil(any())).thenReturn(null);
 
     final getArgsMock = GetArgumentsMock();
     final setArgsMock = SetArgumentsMock();
@@ -418,11 +470,11 @@ void main() {
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route2]));
     // ignore: unawaited_futures
-    delegate.pushNamedAndRemoveUntil('/pushForce', (_) => false);
-    await Future.delayed(Duration(milliseconds: 400));
+    delegate.pushNamedAndRemoveUntil('/pushForce', (_) => false, forRoot: true);
+    await Future.delayed(const Duration(milliseconds: 400));
 
     expect(delegate.currentConfiguration?.uri.toString(), '/pushForce');
-    expect(delegate.currentConfiguration?.routes.length, 2);
+    expect(delegate.currentConfiguration?.routes.length, 1);
   });
 
   test('CustomModalRoute ', () async {

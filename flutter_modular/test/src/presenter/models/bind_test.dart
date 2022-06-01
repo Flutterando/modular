@@ -38,4 +38,8 @@ void main() {
     expect(bind.isSingleton, true);
     expect(bind.isLazy, true);
   });
+  test('copyWith', () async {
+    final bind = BindInject((i) => 'instance');
+    expect(bind.copyWith(), isA<Bind>());
+  });
 }

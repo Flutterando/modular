@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
+import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
-import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
-import 'package:flutter_modular/src/presenter/models/modular_navigator.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
+import 'package:flutter_modular/src/presenter/navigation/modular_router_delegate.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
@@ -21,7 +22,6 @@ import 'package:flutter_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:flutter_modular/src/domain/usecases/start_module.dart';
 import 'package:flutter_modular/src/presenter/modular_base.dart';
 import 'package:flutter_modular/src/shared/either.dart';
-import 'package:triple/triple.dart';
 
 import '../mocks/mocks.dart';
 
@@ -31,9 +31,9 @@ class ChangeNotifierMock extends Mock implements ChangeNotifier {}
 
 class SinkMock extends Mock implements Sink {}
 
-class StoreMock extends Mock implements Store {}
-
 class GetArgumentsMock extends Mock implements GetArguments {}
+
+class SetArgumentsMock extends Mock implements SetArguments {}
 
 class ReassembleTrackerMock extends Mock implements ReassembleTracker {}
 
@@ -55,19 +55,30 @@ class DisposableMock extends Mock implements Disposable {}
 
 class IModularNavigatorMock extends Mock implements IModularNavigator {}
 
+class ModularRouteInformationParserMock extends Mock
+    implements ModularRouteInformationParser {}
+
+class ModularRouterDelegateMock extends Mock implements ModularRouterDelegate {}
+
+class ModularErrorMock extends Mock implements ModularError {}
+
 void main() {
   final disposeBind = DisposeBindMock();
   final getBind = GetBindMock();
   final getArguments = GetArgumentsMock();
+  final setArguments = SetArgumentsMock();
   final reassembleTracker = ReassembleTrackerMock();
   final finishModule = FinishModuleMock();
   final startModule = StartModuleMock();
   final isModuleReadyImpl = IsModuleReadyImplMock();
   final modularNavigator = IModularNavigatorMock();
+  final routeInformationParser = ModularRouteInformationParserMock();
+  final routerDelegate = ModularRouterDelegateMock();
   late IModularBase modularBase;
 
   setUpAll(() {
-    registerFallbackValue(RouteParmsDTO(url: '/'));
+    registerFallbackValue(const RouteParmsDTO(url: '/'));
+    registerFallbackValue(ModularArguments.empty());
   });
 
   setUp(() {
@@ -80,6 +91,9 @@ void main() {
       isModuleReadyUsecase: isModuleReadyImpl,
       navigator: modularNavigator,
       startModule: startModule,
+      routeInformationParser: routeInformationParser,
+      routerDelegate: routerDelegate,
+      setArgumentsUsecase: setArguments,
     );
   });
 
@@ -115,17 +129,23 @@ void main() {
   });
 
   test('get', () {
-    when(() => getBind.call<String>()).thenReturn(right('modular'));
+    when(() => getBind.call<String>()).thenReturn(
+        right(BindEntry(bind: Bind<String>((i) => ''), value: 'modular')));
     expect(modularBase.get<String>(), 'modular');
   });
 
+  test('getBindEntry', () {
+    when(() => getBind.call<String>()).thenReturn(left(ModularErrorMock()));
+    expect(modularBase.get<String>(defaultValue: 'jacob'), 'jacob');
+  });
+
   test('getAsync', () {
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(right(Future.value('modular')));
+    when(() => getBind.call<Future<String>>()).thenReturn(right(BindEntry(
+        bind: Bind((i) async => ''), value: Future.value('modular'))));
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
     when(() => getBind.call<Future<String>>())
-        .thenReturn(left(BindNotFoundException('')));
+        .thenReturn(left(const BindNotFoundException('')));
     expect(modularBase.getAsync<String>(defaultValue: 'changed'),
         completion('changed'));
   });
@@ -141,20 +161,11 @@ void main() {
     verify(() => finishModule.call()).called(1);
   });
 
-  test('disposeBindFunction', () {
-    final changeNotifierMock = ChangeNotifierMock();
-    final sinkMock = SinkMock();
-    final disposableMock = DisposableMock();
-    final storeMock = StoreMock();
-    when(() => storeMock.destroy()).thenAnswer((_) async {});
-    (modularBase as ModularBase).disposeBindFunction(disposableMock);
-    (modularBase as ModularBase).disposeBindFunction(changeNotifierMock);
-    (modularBase as ModularBase).disposeBindFunction(sinkMock);
-    (modularBase as ModularBase).disposeBindFunction(storeMock);
-    verify(() => disposableMock.dispose()).called(1);
-    verify(() => sinkMock.close()).called(1);
-    verify(() => changeNotifierMock.dispose()).called(1);
-    verify(() => storeMock.destroy()).called(1);
+  test('setArguments', () {
+    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => setArguments.call(any())).thenReturn(right(unit));
+    modularBase.setArguments('args');
+    verify(() => setArguments.call(any())).called(1);
   });
 }
 

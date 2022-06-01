@@ -1,5 +1,5 @@
-import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import '../guards/route_guard.dart';
+import 'route.dart';
 
 /// Represents a route in the modular route tree.
 /// You will be asked for a route name which should always start with '/'

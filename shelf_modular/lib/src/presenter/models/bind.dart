@@ -46,22 +46,15 @@ class Bind<T extends Object> extends BindContract<T> {
 class BindInject<T extends Object> extends Bind<T> {
   final T Function(Injector i) inject;
 
-  @override
-
-  ///single instance object?
-  final bool isSingleton;
-
-  @override
-  final bool isScoped;
-
-  @override
-
-  ///When 'true', the object is instantiated only the first time it is called.
-  ///When 'false', the object is instantiated along with the module.
-  final bool isLazy;
-
-  BindInject(this.inject,
-      {this.isSingleton = true, this.isLazy = true, this.isScoped = true})
-      : super(inject,
-            isSingleton: isSingleton, isLazy: isLazy, isScoped: isScoped);
+  BindInject(
+    this.inject, {
+    bool isSingleton = true,
+    bool isLazy = true,
+    bool isScoped = true,
+  }) : super(
+          inject,
+          isSingleton: isSingleton,
+          isLazy: isLazy,
+          isScoped: isScoped,
+        );
 }

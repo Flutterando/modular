@@ -1,3 +1,7 @@
-## [1.0.0] - TODO: Add release date.
+## [2.0.0] - 2022/04/21.
 
-* TODO: Describe initial release.
+* Upper `modular_core`.
+
+## [1.0.1+2] - New release.
+
+* New Release

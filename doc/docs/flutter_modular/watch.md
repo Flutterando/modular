@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Watch
@@ -25,11 +25,7 @@ Used in `ChangeNotifier/ValueNotifier` classes and in RxNotifier.
 
 - [Stream](https://api.dart.dev/stable/2.15.0/dart-async/Stream-class.html)
 
-Used in StreamController or BLoC/Cubit
-
-- [Store](https://triple.flutterando.com.br/docs/getting-started/using-flutter-triple)
-
-Used in Triple Pattern in StreamStore and NotifierStore classes.
+Used in StreamController.
 
 :::tip TIP
 
@@ -70,3 +66,19 @@ class OnlyErrorWidget extends StatelessWidget {
 }
 ```
 
+It's also possible to configure a selector directly in bind:
+
+```dart
+@override
+final List<Bind> binds = [
+  //notifier return stream or listenable to use context.watch()
+  Bind.singleton((i) => MyBloc(), selector: (bloc) => bloc.stream),
+];
+```
+
+:::tip TIP
+
+Existem `Bind` pré-configurados para BLoC e Triple.
+Veja os packages [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) e [modular_triple_bind](https://pub.dev/packages/modular_triple_bind)
+
+:::

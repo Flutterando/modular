@@ -37,7 +37,7 @@ void main() {
   group('reportPush', () {
     test('report pushroute', () async {
       final route = RouteMock();
-      when(() => tracker.reportPopRoute(route)).thenReturn('');
+      when(() => tracker.reportPopRoute(route));
       final result = service.reportPush(route);
       expect(result.isRight, true);
     });

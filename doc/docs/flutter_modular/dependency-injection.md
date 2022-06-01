@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 # Dependency Injection
@@ -174,7 +174,6 @@ run an instance destruction routine and are automatically removed from memory. H
 
 - Stream/Sink (Dart Native).
 - ChangeNotifier/ValueNotifier (Flutter Native).
-- Store (Triple Pattern).
 
 For registered objects that are not part of this list, we can implement a **Disposable** interface on the instance where we want to run an algorithm before dispose:
 
@@ -189,9 +188,19 @@ class MyController implements Disposable {
 }
 ```
 
+The dispose of an instance can be set directly in `Bind` by implementing the `onDispose` property:
+
+```dart
+@override
+final List<Bind> binds = [
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close()),
+];
+```
+
 :::tip TIP
 
-As BLoC is based on Streams, the memory release takes effect automatically.
+There are pre-configured `Bind` for BLoC and Triple.
+See the packages [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) and [modular_triple_bind](https://pub.dev/packages/modular_triple_bind)
 
 :::
 

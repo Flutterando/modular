@@ -1,8 +1,8 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
-import 'package:flutter_modular/src/domain/errors/errors.dart';
-import 'package:flutter_modular/src/domain/services/route_service.dart';
+import '../../shared/either.dart';
+import '../../domain/dtos/route_dto.dart';
+import '../../domain/errors/errors.dart';
+import '../../domain/services/route_service.dart';
 
 class RouteServiceImpl implements RouteService {
   final Tracker tracker;

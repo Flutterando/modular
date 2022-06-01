@@ -1,5 +1,4 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:modular_core/src/di/reassemble_mixin.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -77,8 +76,8 @@ class Char {
 class MyInjectModule extends BindContextImpl {
   @override
   List<BindContract> get binds => [
-        _Bind((i) => 'Jacob', scoped: true),
-        _Bind((i) => true),
+        _Bind<String>((i) => 'Jacob', scoped: true),
+        _Bind<bool>((i) => true),
         _Bind<double>((i) => 0.0, lazy: false),
         _Bind<MyObjectWithReassemble>((i) => MyObjectWithReassemble(),
             lazy: false),
@@ -99,6 +98,35 @@ class _Bind<T extends Object> extends BindContract<T> {
           isLazy: lazy,
           isScoped: scoped,
         );
+
+  @override
+  BindContract<E> cast<E extends Object>() {
+    return _Bind<E>(
+      factoryFunction as E Function(Injector),
+      export: export,
+      lazy: isLazy,
+      scoped: isScoped,
+    );
+  }
+
+  @override
+  BindContract<T> copyWith({
+    T Function(Injector i)? factoryFunction,
+    bool? isSingleton,
+    bool? isLazy,
+    bool? export,
+    bool? isScoped,
+    bool? alwaysSerialized,
+    void Function(T value)? onDispose,
+    Function(T value)? selector,
+  }) {
+    return _Bind(
+      factoryFunction ?? this.factoryFunction,
+      lazy: isLazy ?? this.isLazy,
+      export: export ?? this.export,
+      scoped: isScoped ?? this.isScoped,
+    );
+  }
 }
 
 class MyObjectWithReassemble with ReassembleMixin {

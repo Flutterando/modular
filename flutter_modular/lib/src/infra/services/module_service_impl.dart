@@ -1,7 +1,7 @@
-import 'package:flutter_modular/src/presenter/models/module.dart';
+import '../../presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/services/module_service.dart';
+import '../../shared/either.dart';
+import '../../domain/services/module_service.dart';
 
 class ModuleServiceImpl extends ModuleService {
   final Tracker tracker;
