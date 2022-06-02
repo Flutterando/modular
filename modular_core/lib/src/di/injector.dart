@@ -134,8 +134,8 @@ class InjectorImpl<T> extends Injector<T> {
 
   @override
   @mustCallSuper
-  void removeBindContext<B extends BindContext>() {
-    final module = _allBindContexts.remove(_getType<B>());
+  void removeBindContext<B extends BindContext>({Type? type}) {
+    final module = _allBindContexts.remove(type ?? _getType<B>());
     if (module != null) {
       module.dispose();
       debugPrint("-- ${module.runtimeType} DISPOSED");
