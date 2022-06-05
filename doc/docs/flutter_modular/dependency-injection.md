@@ -55,7 +55,7 @@ abstract class EmailService {
 
 class XPTOEmailService implements EmailService {
 
-  final XPTOEmail;
+  final XPTOEmail xpto;
   XPTOEmailService(this.xpto);
 
   void sendEmail(String email, String title, String body) {
