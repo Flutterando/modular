@@ -387,7 +387,7 @@ class NavigatorHelper {
   String getFirstRouteHistory(String path) {
     var history = Modular.to.navigateHistory;
 
-    return history.first.name;;
+    return history.first.name;
   }
 }
 ```
