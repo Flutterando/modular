@@ -55,7 +55,7 @@ class Route extends ModularRouteImpl {
       middlewares: middlewares,
     );
   }
-  factory Route.path(
+  factory Route.patch(
     String name,
     Function handler, {
     List<ModularMiddleware> middlewares = const [],
