@@ -62,7 +62,8 @@ extension InjectorExtends on Injector {
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
 class RouterOutlet extends StatefulWidget {
-  const RouterOutlet({Key? key}) : super(key: key);
+  final List<NavigatorObserver>? observers;
+  const RouterOutlet({Key? key, this.observers}) : super(key: key);
 
   @override
   RouterOutletState createState() => RouterOutletState();
@@ -72,6 +73,9 @@ class RouterOutletState extends State<RouterOutlet> {
   late GlobalKey<NavigatorState> navigatorKey;
   RouterOutletDelegate? delegate;
   late ChildBackButtonDispatcher _backButtonDispatcher;
+
+  List<NavigatorObserver> get currentObservers =>
+      widget.observers ?? <NavigatorObserver>[];
 
   @override
   void initState() {
@@ -91,7 +95,7 @@ class RouterOutletState extends State<RouterOutlet> {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
     delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
-        injector.get<ModularRouterDelegate>(), navigatorKey);
+        injector.get<ModularRouterDelegate>(), navigatorKey, currentObservers);
     final router = Router.of(context);
     _backButtonDispatcher =
         router.backButtonDispatcher!.createChildBackButtonDispatcher();
