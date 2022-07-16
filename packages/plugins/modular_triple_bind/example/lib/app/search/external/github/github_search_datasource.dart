@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular_example/app/search/infra/datasources/search_datasource.dart';
-import 'package:flutter_modular_example/app/search/infra/models/result_model.dart';
 import 'package:http/http.dart';
+import 'package:modular_triple_bind_example/app/search/infra/datasources/search_datasource.dart';
+import 'package:modular_triple_bind_example/app/search/infra/models/result_model.dart';
 
 part 'github_search_datasource.g.dart';
 

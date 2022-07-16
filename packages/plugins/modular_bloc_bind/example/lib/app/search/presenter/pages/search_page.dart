@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
-import 'package:flutter_modular_example/app/search/domain/errors/erros.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/errors/erros.dart';
+import 'package:modular_bloc_bind_example/app/search/presenter/blocs/search_bloc.dart';
 
-import '../stores/search_store.dart';
+import '../events/search_event.dart';
+import '../states/search_state.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -13,7 +14,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  Widget _buildList(List<Result> list) {
+  Widget _buildList(ListedSearchState state) {
+    final list = state.list;
     if (list.isEmpty) {
       return const Center(
         child: Text('Please, type something...'),
@@ -39,7 +41,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildError(Failure error) {
+  Widget _buildError(ErrorState error) {
     if (error is EmptyList) {
       return const Center(
         child: Text('Nothing has been found'),
@@ -57,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final store = context.watch<SearchStore>();
+    final bloc = context.watch<SearchBloc>();
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +70,9 @@ class _SearchPageState extends State<SearchPage> {
           Padding(
             padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
             child: TextField(
-              onChanged: store.setSearchText,
+              onChanged: (text) {
+                bloc.add(ByTextSearchEvent(text));
+              },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Search...',
@@ -76,10 +80,9 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           Expanded(
-            child: store.when(
+            child: bloc.state.when(
               onState: _buildList,
-              onLoading: (loading) =>
-                  const Center(child: CircularProgressIndicator()),
+              onLoading: () => const Center(child: CircularProgressIndicator()),
               onError: _buildError,
             ),
           ),

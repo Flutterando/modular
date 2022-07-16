@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
-import 'package:flutter_modular_example/app/search/presenter/stores/search_store.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/entities/result.dart';
 
 class DetailsPage extends StatefulWidget {
   final Result? result;
@@ -14,12 +13,6 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  @override
-  void dispose() {
-    Modular.dispose<SearchStore>();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     debugPrint(Modular.args.queryParams['id'].toString());

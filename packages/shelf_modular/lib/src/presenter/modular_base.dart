@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
+import 'package:meta/meta.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
@@ -16,11 +17,11 @@ import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 import 'package:shelf_modular/src/domain/usecases/start_module.dart';
 import 'package:shelf_modular/src/shelf_modular_module.dart';
+
 import 'errors/errors.dart';
 import 'models/module.dart';
-import 'utils/handlers.dart';
 import 'models/route.dart';
-import 'package:meta/meta.dart';
+import 'utils/handlers.dart';
 
 abstract class IModularBase {
   /// Finishes all trees(BindContext and RouteContext).
@@ -117,7 +118,7 @@ class ModularBase implements IModularBase {
           .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
-      setDisposeResolver(disposeBindFunction);
+      // setDisposeResolver(disposeBindFunction);
 
       setPrintResolver(print);
       return handler;

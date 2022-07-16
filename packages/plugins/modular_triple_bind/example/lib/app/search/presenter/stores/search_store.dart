@@ -1,9 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular_example/app/core/dartz_adapter/dartz_adapter.dart';
-import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
-import 'package:flutter_modular_example/app/search/domain/errors/erros.dart';
-import 'package:flutter_modular_example/app/search/domain/usecases/search_by_text.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:modular_triple_bind_example/app/core/dartz_adapter/dartz_adapter.dart';
+import 'package:modular_triple_bind_example/app/search/domain/entities/result.dart';
+import 'package:modular_triple_bind_example/app/search/domain/errors/erros.dart';
+import 'package:modular_triple_bind_example/app/search/domain/usecases/search_by_text.dart';
 
 part 'search_store.g.dart';
 

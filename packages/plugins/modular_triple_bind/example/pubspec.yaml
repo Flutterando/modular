@@ -1,4 +1,4 @@
-name: flutter_modular_example
+name: modular_triple_bind_example
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -25,9 +25,10 @@ dependencies:
   flutter_mobx: ^2.0.1
   flutter_triple: ^1.2.3+2
   http: ^0.13.0
-  flutter_modular: 
+  flutter_modular: ^5.0.0
   alice: ^0.2.4
-  bloc: ^8.0.3
+  modular_triple_bind:
+    path: ../
   flutter:
     sdk: flutter
   
@@ -41,16 +42,9 @@ dev_dependencies:
   build_runner: ^2.1.0
   mocktail: ^0.1.4
   flutter_lints: ^1.0.4
+
   flutter_test:
     sdk: flutter
-
-dependency_overrides:
-  flutter_modular:
-    path: ../
-  modular_core:
-    path: ../../modular_core
-  modular_interfaces:
-    path: ../../modular_interfaces
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
+import 'package:modular_triple_bind_example/app/search/domain/entities/result.dart';
 
 class ResultModel implements Result {
   @override

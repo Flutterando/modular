@@ -41,6 +41,34 @@ class Bind<T extends Object> extends BindContract<T> {
     return Bind<T>(inject,
         isSingleton: false, isLazy: true, isScoped: false, export: export);
   }
+
+  @override
+  Bind<E> cast<E extends Object>() {
+    return Bind<E>(
+      factoryFunction as E Function(Injector i),
+      export: export,
+      isLazy: isLazy,
+      isSingleton: isSingleton,
+    );
+  }
+
+  @override
+  Bind<T> copyWith(
+      {T Function(Injector i)? factoryFunction,
+      bool? isSingleton,
+      bool? isLazy,
+      bool? export,
+      bool? isScoped,
+      bool? alwaysSerialized,
+      void Function(T value)? onDispose,
+      Function(T value)? selector}) {
+    return Bind<T>(
+      factoryFunction ?? this.factoryFunction,
+      export: export ?? this.export,
+      isLazy: isLazy ?? this.isLazy,
+      isSingleton: isSingleton ?? this.isSingleton,
+    );
+  }
 }
 
 class BindInject<T extends Object> extends Bind<T> {

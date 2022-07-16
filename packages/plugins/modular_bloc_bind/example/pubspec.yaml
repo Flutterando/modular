@@ -1,9 +1,9 @@
-name: flutter_modular_example
+name: modular_bloc_bind_example
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,68 +18,63 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.2 <3.0.0"
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
-  dartz: ^0.10.0-nullsafety.2
-  flutter_mobx: ^2.0.1
-  flutter_triple: ^1.2.3+2
-  http: ^0.13.0
-  flutter_modular: 
-  alice: ^0.2.4
-  bloc: ^8.0.3
   flutter:
     sdk: flutter
-  
+  bloc: ^8.0.3
+  flutter_modular: 5.0.1
+  dartz: ^0.10.0-nullsafety.2
+  http: ^0.13.0
+  bloc_concurrency: ^0.2.0
+  modular_bloc_bind:
+    path: ../
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  modular_test: ^2.0.0-dev.1
-  modular_codegen: ^3.0.1
-  build_runner: ^2.1.0
-  mocktail: ^0.1.4
-  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 
-dependency_overrides:
-  flutter_modular:
-    path: ../
-  modular_core:
-    path: ../../modular_core
-  modular_interfaces:
-    path: ../../modular_interfaces
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-vars:
-  clean: flutter clean
-  get: flutter pub get
-  runner: flutter pub run build_runner
-scripts:
-  mobx_build: $clean & $get & $runner build --delete-conflicting-outputs
-  mobx_watch: $clean & $get & $runner watch --delete-conflicting-outputs
-  
-# dependency_overrides: 
-#   flutter_modular:
-#     path: ../../../modular/flutter_modular
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
+
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

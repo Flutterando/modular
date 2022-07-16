@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart' hide Bind;
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
-import 'package:flutter_modular_example/app/search/domain/errors/erros.dart';
-import 'package:flutter_modular_example/app/search/domain/repositories/search_repository.dart';
-import 'package:flutter_modular_example/app/search/infra/datasources/search_datasource.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/entities/result.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/errors/erros.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/repositories/search_repository.dart';
+import 'package:modular_bloc_bind_example/app/search/infra/datasources/search_datasource.dart';
 
 part 'search_repository_impl.g.dart';
 
