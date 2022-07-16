@@ -49,238 +49,257 @@ class DisposableMock extends Mock implements Disposable {}
 class ReportPushMock extends Mock implements ReportPush {}
 
 void main() {
-  final disposeBind = DisposeBindMock();
-  final getBind = GetBindMock();
-  final getArguments = GetArgumentsMock();
-  final finishModule = FinishModuleMock();
-  final startModule = StartModuleMock();
-  final getRoute = GetRouteMock();
-  final releaseScopedBinds = ReleaseScopedBindsMock();
-  final isModuleReadyImpl = IsModuleReadyImplMock();
-  final reportPush = ReportPushMock();
+  late DisposeBind disposeBind;
+  late GetBind getBind;
+  late GetArguments getArguments;
+  late FinishModule finishModule;
+  late StartModule startModule;
+  late GetRoute getRoute;
+  late ReleaseScopedBinds releaseScopedBinds;
+  late IsModuleReadyImpl isModuleReadyImpl;
+  late ReportPush reportPush;
 
   late IModularBase modularBase;
 
-  setUpAll(() {
+  setUp(() {
+    disposeBind = DisposeBindMock();
+    getBind = GetBindMock();
+    getArguments = GetArgumentsMock();
+    finishModule = FinishModuleMock();
+    startModule = StartModuleMock();
+    getRoute = GetRouteMock();
+    releaseScopedBinds = ReleaseScopedBindsMock();
+    isModuleReadyImpl = IsModuleReadyImplMock();
+    reportPush = ReportPushMock();
+
+    modularBase = ModularBase(
+      disposeBind,
+      finishModule,
+      getBind,
+      startModule,
+      isModuleReadyImpl,
+      getRoute,
+      getArguments,
+      releaseScopedBinds,
+      reportPush,
+    );
+
     registerFallbackValue(RouteParmsDTO(url: '/'));
   });
 
-  setUp(() {
-    modularBase = ModularBase(
-        disposeBind,
-        finishModule,
-        getBind,
-        startModule,
-        isModuleReadyImpl,
-        getRoute,
-        getArguments,
-        releaseScopedBinds,
-        reportPush);
-  });
-
-  test('dispose', () {
-    when(() => disposeBind.call()).thenReturn(right(true));
-    expect(modularBase.dispose(), true);
-  });
-
-  test('get', () {
-    when(() => getBind.call<String>()).thenReturn(right('modular'));
-    expect(modularBase.get<String>(), 'modular');
-  });
-
-  test('getAsync', () {
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(right(Future.value('modular')));
-    expect(modularBase.getAsync<String>(), completion('modular'));
-    reset(getBind);
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(left(BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
-        completion('changed'));
-  });
-
-  test('isModuleReady', () {
-    when(() => isModuleReadyImpl.call()).thenAnswer((_) async => right(true));
-    expect(modularBase.isModuleReady(), completes);
-  });
-
-  test('destroy', () {
-    when(() => finishModule.call()).thenReturn(right(unit));
-    modularBase.destroy();
-    verify(() => finishModule.call()).called(1);
-  });
-
-  test('start (call)', () {
-    final module = RouteContextMock();
-    when(() => startModule.call(module)).thenReturn(right(unit));
-    final handler = modularBase.call(module: module);
-    verify(() => startModule.call(module)).called(1);
-    expect(handler, isA<FutureOr<Response> Function(Request request)>());
-    expect(() => modularBase.start(module: module),
-        throwsA(isA<ModuleStartedException>()));
-  });
-
-  test('handler', () async {
-    final request = RequestMock();
-    final response = Response.ok('test');
-    final route = RouteMock();
-
-    when(() => request.method).thenReturn('GET');
-    when(() => request.url).thenReturn(Uri.parse(''));
-
-    when(() => route.middlewares).thenReturn([]);
-    when(() => route.handler).thenReturn(() => response);
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
-    when(() => reportPush.call(route)).thenReturn(right(unit));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 200);
-  });
-
-  test('disposeBindFunction', () {
-    final disposableMock = DisposableMock();
-    (modularBase as ModularBase).disposeBindFunction(disposableMock);
-    verify(() => disposableMock.dispose()).called(1);
-  });
-
-  test('handler with error', () async {
-    final request = RequestMock();
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 500);
-  });
-  test('handler with  hijacked request', () async {
-    final request = RequestMock();
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => request.method)
-        .thenThrow(Exception('Got a response for hijacked request'));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 200);
-  });
-
-  test('handler not found because is not Route', () async {
-    final request = RequestMock();
-    final route = ModularRouteMock();
-    when(() => route.middlewares).thenReturn([]);
-
-    when(() => request.method).thenReturn('GET');
-    when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 404);
-  });
-
-  test('handler error handlerFunction return', () async {
-    final request = RequestMock();
-    final route = RouteMock();
-
-    when(() => request.method).thenReturn('GET');
-    when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => route.handler).thenReturn(() {});
-    when(() => route.middlewares).thenReturn([]);
-
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 500);
-  });
-
-  test('handler error in route RouteNotFoundException', () async {
-    final request = RequestMock();
-    final route = RouteMock();
-
-    when(() => request.method).thenReturn('GET');
-    when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => route.handler).thenReturn(() {});
-    when(() => route.middlewares).thenReturn([]);
-
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any()))
-        .thenAnswer((_) async => left(RouteNotFoundException('')));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 404);
-  });
-
-  test('handler error in route (other errors)', () async {
-    final request = RequestMock();
-    final route = RouteMock();
-
-    when(() => request.method).thenReturn('GET');
-    when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => route.handler).thenReturn(() {});
-    when(() => route.middlewares).thenReturn([]);
-
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any()))
-        .thenAnswer((_) async => left(ModuleStartedException('')));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 500);
-  });
-
-  test('handler with guard', () async {
-    final request = RequestMock();
-    final response = Response.ok('test');
-    final route = RouteMock();
-
-    when(() => request.method).thenReturn('GET');
-    when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => route.uri).thenReturn(Uri.parse('/'));
-
-    when(() => route.middlewares).thenReturn([MyGuard(true), MyGuard(false)]);
-    when(() => route.handler).thenReturn(() => response);
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
-
-    final result = await (modularBase as ModularBase).handler(request);
-    expect(result.statusCode, 403);
-
-    expect(MyGuard(true).pre(route), route);
-  });
-
-  test('tryJsonDecode isMultipart false', () async {
-    final request = RequestMock();
-    when(() => request.method).thenReturn('POST');
-    when(() => request.headers).thenReturn({});
-    when(() => request.readAsString())
-        .thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
-    final result = await (modularBase as ModularBase).tryJsonDecode(request);
-    expect(result['name'], 'Jacob');
-  });
-
-  test('tryJsonDecode isMultipart false with FormatException', () async {
-    final request = RequestMock();
-    when(() => request.method).thenReturn('POST');
-    when(() => request.headers)
-        .thenReturn({'Content-Type': MediaType('image', 'png').toString()});
-
-    when(() => request.readAsString()).thenThrow(FormatException());
-    final result = await (modularBase as ModularBase).tryJsonDecode(request);
-    expect(result, {});
-  });
-
-  test('tryJsonDecode isMultipart true return {}', () async {
-    final request = RequestMock();
-    when(() => request.method).thenReturn('POST');
-    when(() => request.headers).thenReturn({
-      'Content-Type':
-          MediaType('multipart', 'form-data', {'boundary': 'boundary'})
-              .toString()
+  group('', () {
+    test('dispose', () {
+      when(() => disposeBind.call()).thenReturn(right(true));
+      expect(modularBase.dispose(), true);
     });
-    final result = await (modularBase as ModularBase).tryJsonDecode(request);
-    expect(result.isEmpty, true);
+
+    test('get', () {
+      when(() => getBind.call<String>()).thenReturn(right('modular'));
+      expect(modularBase.get<String>(), 'modular');
+    });
+
+    test('getAsync', () {
+      when(() => getBind.call<Future<String>>())
+          .thenReturn(right(Future.value('modular')));
+      expect(modularBase.getAsync<String>(), completion('modular'));
+      reset(getBind);
+      when(() => getBind.call<Future<String>>())
+          .thenReturn(left(BindNotFoundException('')));
+      expect(modularBase.getAsync<String>(defaultValue: 'changed'),
+          completion('changed'));
+    });
+
+    test('isModuleReady', () {
+      when(() => isModuleReadyImpl.call()).thenAnswer((_) async => right(true));
+      expect(modularBase.isModuleReady(), completes);
+    });
+
+    test('destroy', () {
+      when(() => finishModule.call()).thenReturn(right(unit));
+      modularBase.destroy();
+      verify(() => finishModule.call()).called(1);
+    });
+
+    test('start (call)', () {
+      final module = RouteContextMock();
+      when(() => startModule.call(module)).thenReturn(right(unit));
+      final handler = modularBase.call(module: module);
+      verify(() => startModule.call(module)).called(1);
+      expect(handler, isA<FutureOr<Response> Function(Request request)>());
+      expect(() => modularBase.start(module: module),
+          throwsA(isA<ModuleStartedException>()));
+    });
+
+    test('handler', () async {
+      final request = RequestMock();
+      final response = Response.ok('test');
+      final route = RouteMock();
+
+      when(() => request.method).thenReturn('GET');
+      when(() => request.url).thenReturn(Uri.parse(''));
+
+      when(() => route.middlewares).thenReturn([]);
+      when(() => route.handler).thenReturn(() => response);
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => getArguments.call())
+          .thenReturn(right(ModularArguments.empty()));
+      when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+      when(() => reportPush.call(route)).thenReturn(right(unit));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 200);
+    });
+
+    test('disposeBindFunction', () {
+      final disposableMock = DisposableMock();
+      (modularBase as ModularBase).disposeBindFunction(disposableMock);
+      verify(() => disposableMock.dispose()).called(1);
+    });
+
+    test('handler with error', () async {
+      final request = RequestMock();
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => request.method).thenReturn('GET');
+
+      when(() => request.url).thenReturn(Uri.parse('http://teste.com'));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 500);
+    });
+    test('handler with  hijacked request', () async {
+      final request = RequestMock();
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => request.method)
+          .thenThrow(Exception('Got a response for hijacked request'));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 200);
+    });
+
+    test('handler not found because is not Route', () async {
+      final request = RequestMock();
+      final route = ModularRouteMock();
+      when(() => route.middlewares).thenReturn([]);
+
+      when(() => request.method).thenReturn('GET');
+      when(() => request.url).thenReturn(Uri.parse(''));
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 404);
+    });
+
+    test('handler error handlerFunction return', () async {
+      final request = RequestMock();
+      final route = RouteMock();
+
+      when(() => request.method).thenReturn('GET');
+      when(() => request.url).thenReturn(Uri.parse(''));
+      when(() => route.handler).thenReturn(() {});
+      when(() => route.middlewares).thenReturn([]);
+
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => getArguments.call())
+          .thenReturn(right(ModularArguments.empty()));
+      when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 500);
+    });
+
+    test('handler error in route RouteNotFoundException', () async {
+      final request = RequestMock();
+      final route = RouteMock();
+
+      when(() => request.method).thenReturn('GET');
+      when(() => request.url).thenReturn(Uri.parse(''));
+      when(() => route.handler).thenReturn(() {});
+      when(() => route.middlewares).thenReturn([]);
+
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => getArguments.call())
+          .thenReturn(right(ModularArguments.empty()));
+      when(() => getRoute.call(any()))
+          .thenAnswer((_) async => left(RouteNotFoundException('')));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 404);
+    });
+
+    test('handler error in route (other errors)', () async {
+      final request = RequestMock();
+      final route = RouteMock();
+
+      when(() => request.method).thenReturn('GET');
+      when(() => request.url).thenReturn(Uri.parse(''));
+      when(() => route.handler).thenReturn(() {});
+      when(() => route.middlewares).thenReturn([]);
+
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => getArguments.call())
+          .thenReturn(right(ModularArguments.empty()));
+      when(() => getRoute.call(any()))
+          .thenAnswer((_) async => left(ModuleStartedException('')));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 500);
+    });
+
+    test('handler with guard', () async {
+      final request = RequestMock();
+      final response = Response.ok('test');
+      final route = RouteMock();
+
+      when(() => request.method).thenReturn('GET');
+      when(() => request.url).thenReturn(Uri.parse(''));
+      when(() => route.uri).thenReturn(Uri.parse('/'));
+
+      when(() => route.middlewares).thenReturn([MyGuard(true), MyGuard(false)]);
+      when(() => route.handler).thenReturn(() => response);
+      when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+      when(() => getArguments.call())
+          .thenReturn(right(ModularArguments.empty()));
+      when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+
+      final result = await (modularBase as ModularBase).handler(request);
+      expect(result.statusCode, 403);
+
+      expect(MyGuard(true).pre(route), route);
+    });
+
+    test('tryJsonDecode isMultipart false', () async {
+      final request = RequestMock();
+      when(() => request.method).thenReturn('POST');
+      when(() => request.headers).thenReturn({});
+      when(() => request.readAsString())
+          .thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
+      final result = await (modularBase as ModularBase).tryJsonDecode(request);
+      expect(result['name'], 'Jacob');
+    });
+
+    test('tryJsonDecode isMultipart false with FormatException', () async {
+      final request = RequestMock();
+      when(() => request.method).thenReturn('POST');
+      when(() => request.headers)
+          .thenReturn({'Content-Type': MediaType('image', 'png').toString()});
+
+      when(() => request.readAsString()).thenThrow(FormatException());
+      final result = await (modularBase as ModularBase).tryJsonDecode(request);
+      expect(result, {});
+    });
+
+    test('tryJsonDecode isMultipart true return {}', () async {
+      final request = RequestMock();
+      when(() => request.method).thenReturn('POST');
+      when(() => request.headers).thenReturn({
+        'Content-Type':
+            MediaType('multipart', 'form-data', {'boundary': 'boundary'})
+                .toString()
+      });
+      final result = await (modularBase as ModularBase).tryJsonDecode(request);
+      expect(result.isEmpty, true);
+    });
   });
 }
 

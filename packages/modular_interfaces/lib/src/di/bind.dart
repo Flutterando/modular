@@ -37,7 +37,8 @@ abstract class BindContract<T extends Object> {
     this.alwaysSerialized = false,
     this.onDispose,
     this.selector,
-  }) : assert((isSingleton || isLazy), r"'singleton' can't be false if 'lazy' is also false");
+  }) : assert((isSingleton || isLazy),
+            r"'singleton' can't be false if 'lazy' is also false");
 
   BindContract<T> copyWith({
     T Function(Injector i)? factoryFunction,

@@ -7,7 +7,8 @@ class BlocBind {
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
-    return Bind<T>(factoryFunction, export: export, isLazy: false, onDispose: (bloc) {
+    return Bind<T>(factoryFunction, export: export, isLazy: false,
+        onDispose: (bloc) {
       bloc.close();
     }, selector: (bloc) {
       return bloc.stream;
@@ -18,7 +19,8 @@ class BlocBind {
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
-    return Bind<T>(factoryFunction, export: export, isLazy: true, onDispose: (bloc) {
+    return Bind<T>(factoryFunction, export: export, isLazy: true,
+        onDispose: (bloc) {
       bloc.close();
     }, selector: (bloc) {
       return bloc.stream;
@@ -29,7 +31,8 @@ class BlocBind {
     T Function(Injector<dynamic> i) factoryFunction, {
     bool export = false,
   }) {
-    return Bind<T>(factoryFunction, export: export, isLazy: true, isSingleton: false, onDispose: (bloc) {
+    return Bind<T>(factoryFunction,
+        export: export, isLazy: true, isSingleton: false, onDispose: (bloc) {
       bloc.close();
     }, selector: (bloc) {
       return bloc.stream;
@@ -40,7 +43,8 @@ class BlocBind {
     T bloc, {
     bool export = false,
   }) {
-    return Bind<T>((i) => bloc, export: export, isLazy: true, isSingleton: false, onDispose: (bloc) {
+    return Bind<T>((i) => bloc,
+        export: export, isLazy: true, isSingleton: false, onDispose: (bloc) {
       bloc.close();
     }, selector: (bloc) {
       return bloc.stream;

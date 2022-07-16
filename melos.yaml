@@ -30,11 +30,30 @@ scripts:
     description: |
       Run `dart analyze` in all packages.
        - Note: you can also rely on your IDEs Dart Analysis / Issues window.
+  
   format:
     run: |
-      dart pub global run flutter_plugin_tools format
+      melos exec -c 5 -- \
+        dart format .
+
     description: |
       Build a specific example app for Android.
        - Requires `flutter_plugin_tools` (`pub global activate flutter_plugin_tools`).
        - Requires `clang-format` (can be installed via Brew on macOS).
        - Requires `swiftformat` (can be installed via Brew on macOS).
+  test:
+    run: |
+      melos exec -c 1 -- \
+        flutter test --no-pub
+
+    description: |
+      Execute all Tests
+
+  gen_coverage: melos exec -- "$MELOS_ROOT_PATH/combine_coverage.sh"
+
+  test:selective_unit_test:
+    run: melos exec --dir-exists="test" --fail-fast -- flutter test --no-pub --coverage
+    description: Run Flutter tests for a specific package in this project.
+   # select-package:
+    #  flutter: true
+      #dir-exists: test   

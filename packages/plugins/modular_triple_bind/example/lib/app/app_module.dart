@@ -24,6 +24,7 @@ class AppModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, __) => const SearchPage()),
-    ChildRoute('/details', child: (_, args) => DetailsPage(result: args.data), guards: [GuardT()]),
+    ChildRoute('/details',
+        child: (_, args) => DetailsPage(result: args.data), guards: [GuardT()]),
   ];
 }

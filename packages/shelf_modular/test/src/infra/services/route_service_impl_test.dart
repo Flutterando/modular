@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:shelf_modular/shelf_modular.dart';
+import 'package:modular_core/modular_core.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
+import 'package:shelf_modular/src/domain/services/route_service.dart';
 import 'package:shelf_modular/src/infra/services/route_service_impl.dart';
 import 'package:test/test.dart';
 
@@ -8,9 +9,18 @@ import '../../mocks/mocks.dart';
 import '../../presenter/modular_base_test.dart';
 
 void main() {
-  final tracker = TrackerMock();
-  final service = RouteServiceImpl(tracker);
+  late Tracker tracker;
+  late RouteService service;
   final params = RouteParmsDTO(url: '/');
+
+  setUpAll(() {
+    tracker = TrackerMock();
+    service = RouteServiceImpl(tracker);
+  });
+
+  tearDown(() {
+    reset(tracker);
+  });
 
   group('getRoute', () {
     test('should get route', () async {

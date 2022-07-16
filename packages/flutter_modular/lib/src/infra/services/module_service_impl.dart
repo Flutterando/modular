@@ -1,7 +1,8 @@
-import '../../presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+
 import '../../domain/services/module_service.dart';
+import '../../presenter/models/module.dart';
+import '../../shared/either.dart';
 
 class ModuleServiceImpl extends ModuleService {
   final Tracker tracker;
@@ -22,7 +23,10 @@ class ModuleServiceImpl extends ModuleService {
 
   @override
   Future<Either<ModularError, bool>> isModuleReady<M extends Module>() {
-    return tracker.injector.isModuleReady<M>().then((value) => right(value));
+    var res = tracker.injector
+        .isModuleReady<M>()
+        .then((value) => right<ModularError, bool>(value));
+    return res;
   }
 
   @override

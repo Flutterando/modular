@@ -42,8 +42,8 @@ void main() {
   late ReportPopMock reportPopMock;
 
   setUpAll(() {
-    registerFallbackValue<ModularArguments>(ModularArguments.empty());
-    registerFallbackValue<ModularRoute>(ModularRouteMock());
+    registerFallbackValue(ModularArguments.empty());
+    registerFallbackValue(ModularRouteMock());
   });
 
   setUp(() {

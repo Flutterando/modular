@@ -1,7 +1,8 @@
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/infra/services/module_service_impl.dart';
+import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
 
 class TrackerMock extends Mock implements Tracker {}
@@ -11,9 +12,9 @@ class InjectorMock extends Mock implements Injector {}
 class RouteContextMock extends Mock implements RouteContext {}
 
 void main() {
-  late TrackerMock tracker;
-  late InjectorMock injectorMock;
-  late RouteContextMock module;
+  late Tracker tracker;
+  late Injector injectorMock;
+  late RouteContext module;
   late ModuleServiceImpl service;
 
   setUpAll(() {
@@ -39,8 +40,10 @@ void main() {
   group('isModuleReady', () {
     test('should return true', () async {
       when(() => tracker.injector).thenReturn(injectorMock);
-      when(() => injectorMock.isModuleReady()).thenAnswer((_) async => true);
-      final result = await service.isModuleReady();
+      when(() => injectorMock.isModuleReady<Module>())
+          .thenAnswer((_) async => true);
+
+      final result = await service.isModuleReady<Module>();
       expect(result.isRight, true);
       final isReady = result.getOrElse((left) => false);
       expect(isReady, true);
