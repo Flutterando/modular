@@ -2,36 +2,39 @@
 	"folders": [
 		{
 			"name": "modular_interfaces",
-			"path": "modular_interfaces"
+			"path": "packages/modular_interfaces"
 		},
 		{
 			"name": "modular_core",
-			"path": "modular_core"
+			"path": "packages/modular_core"
 		},
 		{
 			"name": "shelf_modular",
-			"path": "shelf_modular"
+			"path": "packages/shelf_modular"
 		},
 		{
 			"name": "flutter_modular",
-			"path": "flutter_modular"
+			"path": "packages/flutter_modular"
 		},
 		{
 			"name": "modular_codegen",
-			"path": "modular_codegen"
+			"path": "packages/modular_codegen"
 		},
 		{
 			"name": "flutter_modular_annotations",
-			"path": "flutter_modular_annotations"
+			"path": "packages/flutter_modular_annotations"
 		},
 		{
-			"path": "modular_test"
+			"name": "modular_test",
+			"path": "packages/modular_test"
+		},
+		{	
+			"name": "modular_bloc_bind",
+			"path": "packages/plugins/modular_bloc_bind"
 		},
 		{
-			"path": "plugins/modular_bloc_bind"
-		},
-		{
-			"path": "plugins/modular_triple_bind"
+			"name": "modular_triple_bind",
+			"path": "packages/plugins/modular_triple_bind"
 		}
 	],
 	"settings": {
