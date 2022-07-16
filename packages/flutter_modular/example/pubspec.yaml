@@ -48,7 +48,7 @@ dependency_overrides:
   flutter_modular:
     path: ../
   modular_core:
-    path: ../../modular_core
+    path: ../modular_core
   modular_interfaces:
     path: ../../modular_interfaces
 
