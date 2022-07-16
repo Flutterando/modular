@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_shadowing_type_parameters
+
 import 'package:modular_interfaces/modular_interfaces.dart';
 
 /// Service injector that is responsible for searching for instances in all bind contexts.
