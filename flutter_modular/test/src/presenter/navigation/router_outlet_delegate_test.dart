@@ -21,18 +21,23 @@ class NavigatorStateMock extends Mock implements NavigatorState {
   }
 }
 
+class NavigatorObserverMock extends Mock implements NavigatorObserver {}
+
 void main() {
   late ModularRouterDelegateMock modularRouterDelegateMock;
   late RouterOutletDelegate outlet;
   late NavigatorKeyMock<NavigatorState> key;
   late NavigatorStateMock navigatorState;
+  late NavigatorObserverMock navigatorObserver;
 
   setUp(() {
     modularRouterDelegateMock = ModularRouterDelegateMock();
     key = NavigatorKeyMock<NavigatorState>();
     navigatorState = NavigatorStateMock();
+    navigatorObserver = NavigatorObserverMock();
     when(() => key.currentState).thenReturn(navigatorState);
-    outlet = RouterOutletDelegate('outlet', modularRouterDelegateMock, key);
+    outlet = RouterOutletDelegate(
+        'outlet', modularRouterDelegateMock, key, [navigatorObserver]);
   });
 
   test('setNewRoutePath...', () {
