@@ -44,13 +44,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-dependency_overrides:
-  flutter_modular:
-    path: ../
-  modular_core:
-    path: ../../modular_core
-  modular_interfaces:
-    path: ../../modular_interfaces
+# dependency_overrides:
+#   flutter_modular:
+#     path: ../
+#   modular_core:
+#     path: ../../modular_core
+#   modular_interfaces:
+#     path: ../../modular_interfaces
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
