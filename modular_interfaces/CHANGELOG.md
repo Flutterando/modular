@@ -1,3 +1,7 @@
+## 2.0.2 - 2022/06/02
+
+- feat: Added Type propertie in removeBindContext();
+
 ## 2.0.1 - 2022/05/12
 
 - Fix: Inject.get returns instance

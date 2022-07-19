@@ -126,6 +126,22 @@ class AsyncBind<T extends Object> extends Bind<Future<T>>
     return Bind<T>((i) => bindValue,
         export: export, alwaysSerialized: true, onDispose: _localOnDispose);
   }
+
+  @override
+  AsyncBind<T> copyWith(
+      {Future<T> Function(Injector i)? factoryFunction,
+      bool? isSingleton,
+      bool? isLazy,
+      bool? export,
+      bool? isScoped,
+      bool? alwaysSerialized,
+      void Function(Future<T> value)? onDispose,
+      Function(Future<T> value)? selector}) {
+    return AsyncBind(
+      factoryFunction ?? this.factoryFunction,
+      export: export ?? this.export,
+    );
+  }
 }
 
 /// Specific instance for modular_codegen
