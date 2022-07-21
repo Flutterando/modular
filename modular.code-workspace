@@ -28,13 +28,16 @@
 			"name": "modular_test",
 			"path": "packages/modular_test"
 		},
-		{	
+		{
 			"name": "modular_bloc_bind",
 			"path": "packages/plugins/modular_bloc_bind"
 		},
 		{
 			"name": "modular_triple_bind",
 			"path": "packages/plugins/modular_triple_bind"
+		},
+		{
+			"path": "."
 		}
 	],
 	"settings": {

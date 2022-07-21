@@ -20,11 +20,11 @@ jobs:
     
     - name: get packages
       run: flutter pub get
-      working-directory: flutter_modular
+      working-directory: packages/flutter_modular
     
     - name: Flutter Test
       run: flutter test --coverage --coverage-path ../coverage/lcov.info
-      working-directory: flutter_modular
+      working-directory: packages/flutter_modular
       
     - name: Codecov GitHub Action
       uses: codecov/codecov-action@v2.0.3
@@ -46,11 +46,11 @@ jobs:
     
     - name: get packages
       run: flutter pub get
-      working-directory: modular_core
+      working-directory: packages/modular_core
     
     - name: Flutter Test
       run: flutter test --coverage --coverage-path ../coverage/lcov.info
-      working-directory: modular_core
+      working-directory: packages/modular_core
       
     - name: Codecov GitHub Action
       uses: codecov/codecov-action@v2.0.3
@@ -72,11 +72,11 @@ jobs:
     
     - name: get packages
       run: flutter pub get
-      working-directory: shelf_modular
+      working-directory: packages/shelf_modular
     
     - name: Flutter Test
       run: flutter test --coverage --coverage-path ../coverage/lcov.info
-      working-directory: shelf_modular
+      working-directory: packages/shelf_modular
       
     - name: Codecov GitHub Action
       uses: codecov/codecov-action@v2.0.3
@@ -98,11 +98,11 @@ jobs:
     
     - name: get packages
       run: flutter pub get
-      working-directory: modular_test
+      working-directory: packages/modular_test
     
     - name: Flutter Test
       run: flutter test --coverage --coverage-path ../coverage/lcov.info
-      working-directory: modular_test
+      working-directory: packages/modular_test
       
     - name: Codecov GitHub Action
       uses: codecov/codecov-action@v2.0.3
