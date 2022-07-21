@@ -105,7 +105,12 @@ void main() {
   test('start (call)', () {
     final module = RouteContextMock();
     when(() => startModule.call(module)).thenReturn(right(unit));
-    final handler = modularBase.call(module: module);
+    final handler = modularBase.call(module: module, middlewares: [MyGuard(true)]);
+
+    when(() => reassembleTracker.call()).thenReturn(right(unit));
+
+    modularBase.reassemble();
+
     verify(() => startModule.call(module)).called(1);
     expect(handler, isA<FutureOr<Response> Function(Request request)>());
     expect(() => modularBase.start(module: module), throwsA(isA<ModuleStartedException>()));
@@ -132,6 +137,21 @@ void main() {
 
   test('handler with error', () async {
     final request = RequestMock();
+    final route = RouteMock();
+
+    when(() => request.method).thenReturn('GET');
+    when(() => request.url).thenReturn(Uri.parse(''));
+    when(() => route.handler).thenReturn((String v) {});
+    when(() => route.middlewares).thenReturn([]);
+
+    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+
+    when(() => request.method).thenReturn('GET');
+    when(() => request.url).thenReturn(Uri.parse(''));
+    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+    when(() => getRoute.call(any())).thenThrow(Error());
+
+    when(() => reportPush.call(route)).thenReturn(right(unit));
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
@@ -156,6 +176,8 @@ void main() {
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
 
+    when(() => reportPush.call(route)).thenReturn(right(unit));
+
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 404);
   });
@@ -166,12 +188,14 @@ void main() {
 
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => route.handler).thenReturn(() {});
+    when(() => route.handler).thenReturn((String v) {});
     when(() => route.middlewares).thenReturn([]);
 
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+
+    when(() => reportPush.call(route)).thenReturn(right(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
@@ -190,6 +214,8 @@ void main() {
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => left(RouteNotFoundException('')));
 
+    when(() => reportPush.call(route)).thenReturn(right(unit));
+
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 404);
   });
@@ -206,6 +232,27 @@ void main() {
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => left(ModuleStartedException('')));
+
+    when(() => reportPush.call(route)).thenReturn(right(unit));
+
+    final result = await (modularBase as ModularBase).handler(request);
+    expect(result.statusCode, 500);
+  });
+
+  test('handler error \'Handler not correct\'', () async {
+    final request = RequestMock();
+    final route = RouteMock();
+
+    when(() => request.method).thenReturn('GET');
+    when(() => request.url).thenReturn(Uri.parse(''));
+    when(() => route.handler).thenReturn(() {});
+    when(() => route.middlewares).thenReturn([]);
+
+    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer((_) async => left(ModuleStartedException('')));
+
+    when(() => reportPush.call(route)).thenReturn(right(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
@@ -226,10 +273,13 @@ void main() {
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
 
+    when(() => reportPush.call(route)).thenReturn(right(unit));
+
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 403);
 
     expect(MyGuard(true).pre(route), route);
+    expect(MyGuard(true).pos(route, request), route);
   });
 
   test('tryJsonDecode isMultipart false', () async {
