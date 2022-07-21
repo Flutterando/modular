@@ -82,12 +82,11 @@ class Route extends ModularRouteImpl {
   }
 
   factory Route.resource(
-    String name, {
-    required Resource resource,
+    Resource resource, {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
-      name: name,
+      name: '/',
       children: resource.routes,
       middlewares: middlewares,
     );
