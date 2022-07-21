@@ -15,9 +15,10 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
 
   final ModularRouterDelegate modularRouterDelegate;
   final String path;
+  final List<NavigatorObserver>? observers;
 
   RouterOutletDelegate(
-      this.path, this.modularRouterDelegate, this.navigatorKey);
+      this.path, this.modularRouterDelegate, this.navigatorKey, this.observers);
 
   List<ModularPage> _getPages() {
     return modularRouterDelegate.currentConfiguration
@@ -35,6 +36,7 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
             key: navigatorKey,
             modularBase: Modular,
             pages: _pages,
+            observers: observers ?? [],
             onPopPage: modularRouterDelegate.onPopPage,
           );
   }
