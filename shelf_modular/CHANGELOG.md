@@ -1,4 +1,4 @@
-## 2.0.0 - 2022/05/25
+## 2.0.0 - 2022/07/21
 
 - [BREAK CHANGE]: Update to new Dart 2.17.
 Preview version will no longer be supported.
