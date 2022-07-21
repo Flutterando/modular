@@ -14,18 +14,9 @@ void main(List<String> args) async {
     module: AppModule(),
     middlewares: [
       logRequests(),
-      MyMiddleware(),
     ],
   );
 
   var server = await io.serve(handler, '0.0.0.0', 4000);
   print('Serving at http://${server.address.host}:${server.port}');
-}
-
-class MyMiddleware extends ModularMiddleware {
-  @override
-  Handler call(Handler handler, [ModularRoute? route]) {
-    // TODO: implement call
-    throw UnimplementedError();
-  }
 }
