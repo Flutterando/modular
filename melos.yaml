@@ -7,7 +7,6 @@ versioning:
   
 packages:
   - packages/**
-  - packages/plugins/**
 
 command:
   version:
