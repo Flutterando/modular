@@ -14,8 +14,7 @@ void main() {
 
   group('getRoute', () {
     test('should get route', () async {
-      when(() => tracker.findRoute(params.url))
-          .thenAnswer((_) async => ModularRouteMock());
+      when(() => tracker.findRoute(params.url)).thenAnswer((_) async => ModularRouteMock());
       final result = await service.getRoute(params);
       expect(result.isRight, true);
     });
@@ -39,6 +38,13 @@ void main() {
       final route = RouteMock();
       when(() => tracker.reportPopRoute(route));
       final result = service.reportPush(route);
+      expect(result.isRight, true);
+    });
+  });
+
+  group('reassemble', () {
+    test('return unit', () async {
+      final result = service.reassemble();
       expect(result.isRight, true);
     });
   });

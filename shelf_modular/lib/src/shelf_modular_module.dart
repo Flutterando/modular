@@ -1,4 +1,5 @@
 import 'package:modular_core/modular_core.dart';
+import 'package:shelf_modular/src/domain/usecases/reassemble_tracker.dart';
 import 'package:shelf_modular/src/domain/usecases/report_push.dart';
 
 import 'domain/services/bind_service.dart';
@@ -41,8 +42,8 @@ class ShelfModularModule extends Module {
         Bind.factory<GetArguments>((i) => GetArgumentsImpl(i())),
         Bind.factory<ReleaseScopedBinds>((i) => ReleaseScopedBindsImpl(i())),
         Bind.factory<ReportPush>((i) => ReportPushImpl(i())),
+        Bind.factory<ReassembleTracker>((i) => ReassembleTrackerImpl(i())),
         //presenter
-        Bind.singleton<IModularBase>(
-            (i) => ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i())),
+        Bind.singleton<IModularBase>((i) => ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i(), i())),
       ];
 }
