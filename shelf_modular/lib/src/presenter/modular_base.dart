@@ -34,7 +34,8 @@ abstract class IModularBase {
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
   /// [module]: Start initial module.
   /// [middlewares]: List of Shelf middlewares.
-  Handler call({required RouteContext module, List<Middleware> middlewares = const []});
+  Handler call(
+      {required RouteContext module, List<Middleware> middlewares = const []});
 
   /// Responsible for starting the app.
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
@@ -83,7 +84,8 @@ class ModularBase implements IModularBase {
   );
 
   @override
-  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() =>
+      disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>({B? defaultValue}) {
@@ -112,9 +114,11 @@ class ModularBase implements IModularBase {
   void destroy() => finishModule();
 
   @override
-  Handler call({required RouteContext module, List<Middleware> middlewares = const []}) {
+  Handler call(
+      {required RouteContext module, List<Middleware> middlewares = const []}) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module)
+          .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
       setPrintResolver(print);
@@ -125,7 +129,8 @@ class ModularBase implements IModularBase {
 
       return pipeline.addHandler(handler);
     } else {
-      throw ModuleStartedException('Module ${module.runtimeType} is already started');
+      throw ModuleStartedException(
+          'Module ${module.runtimeType} is already started');
     }
   }
 
@@ -137,11 +142,17 @@ class ModularBase implements IModularBase {
     Response response;
     try {
       final data = await tryJsonDecode(request);
-      final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
+      final params = RouteParmsDTO(
+          url: '/${request.url.toString()}',
+          schema: request.method,
+          arguments: data);
       final result = await getRoute.call(params);
-      response = await result.fold<FutureOr<Response>>(_routeError, (r) => _routeSuccess(r, request));
+      response = await result.fold<FutureOr<Response>>(
+          _routeError, (r) => _routeSuccess(r, request));
     } on Exception catch (e) {
-      if (e.toString().contains('Exception: Got a response for hijacked request')) {
+      if (e
+          .toString()
+          .contains('Exception: Got a response for hijacked request')) {
         response = Response.ok('');
       } else {
         rethrow;
@@ -161,7 +172,8 @@ class ModularBase implements IModularBase {
 
     for (var middleware in middlewares) {
       if (middleware is ModularMiddleware) {
-        pipeline = pipeline.addMiddleware(((innerHandler) => middleware(innerHandler, route)));
+        pipeline = pipeline
+            .addMiddleware(((innerHandler) => middleware(innerHandler, route)));
       }
     }
 
@@ -174,7 +186,8 @@ class ModularBase implements IModularBase {
         final response = await applyHandler(
           routeHandler,
           request: request,
-          arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
+          arguments:
+              getArguments().getOrElse((left) => ModularArguments.empty()),
           injector: injector<Injector>(),
         );
 
@@ -213,7 +226,8 @@ class ModularBase implements IModularBase {
     return {};
   }
 
-  bool _isMultipart(Request request) => _extractMultipartBoundary(request) != null;
+  bool _isMultipart(Request request) =>
+      _extractMultipartBoundary(request) != null;
 
   String? _extractMultipartBoundary(Request request) {
     if (!request.headers.containsKey('Content-Type')) return null;

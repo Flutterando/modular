@@ -9,10 +9,12 @@ abstract class RouteGuard extends ModularMiddleware {
   FutureOr<bool> canActivate(shelf.Request request, Route route);
 
   @override
-  FutureOr<shelf.Response> Function(shelf.Request) call(shelf.Handler handler, [ModularRoute? route]) {
+  FutureOr<shelf.Response> Function(shelf.Request) call(shelf.Handler handler,
+      [ModularRoute? route]) {
     return (request) async {
       if (!await canActivate(request, route as Route)) {
-        return shelf.Response.forbidden(jsonEncode({'error': route.uri.toString().trim()}));
+        return shelf.Response.forbidden(
+            jsonEncode({'error': route.uri.toString().trim()}));
       }
       return handler(request);
     };

@@ -70,7 +70,17 @@ void main() {
   });
 
   setUp(() {
-    modularBase = ModularBase(disposeBind, finishModule, getBind, startModule, isModuleReadyImpl, getRoute, getArguments, releaseScopedBinds, reportPush, reassembleTracker);
+    modularBase = ModularBase(
+        disposeBind,
+        finishModule,
+        getBind,
+        startModule,
+        isModuleReadyImpl,
+        getRoute,
+        getArguments,
+        releaseScopedBinds,
+        reportPush,
+        reassembleTracker);
   });
 
   test('dispose', () {
@@ -84,11 +94,14 @@ void main() {
   });
 
   test('getAsync', () {
-    when(() => getBind.call<Future<String>>()).thenReturn(right(Future.value('modular')));
+    when(() => getBind.call<Future<String>>())
+        .thenReturn(right(Future.value('modular')));
     expect(modularBase.getAsync<String>(), completion('modular'));
     reset(getBind);
-    when(() => getBind.call<Future<String>>()).thenReturn(left(BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'), completion('changed'));
+    when(() => getBind.call<Future<String>>())
+        .thenReturn(left(BindNotFoundException('')));
+    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
+        completion('changed'));
   });
 
   test('isModuleReady', () {
@@ -105,7 +118,8 @@ void main() {
   test('start (call)', () {
     final module = RouteContextMock();
     when(() => startModule.call(module)).thenReturn(right(unit));
-    final handler = modularBase.call(module: module, middlewares: [MyGuard(true)]);
+    final handler =
+        modularBase.call(module: module, middlewares: [MyGuard(true)]);
 
     when(() => reassembleTracker.call()).thenReturn(right(unit));
 
@@ -113,7 +127,8 @@ void main() {
 
     verify(() => startModule.call(module)).called(1);
     expect(handler, isA<FutureOr<Response> Function(Request request)>());
-    expect(() => modularBase.start(module: module), throwsA(isA<ModuleStartedException>()));
+    expect(() => modularBase.start(module: module),
+        throwsA(isA<ModuleStartedException>()));
   });
 
   test('handler', () async {
@@ -160,7 +175,8 @@ void main() {
   test('handler with  hijacked request', () async {
     final request = RequestMock();
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => request.method).thenThrow(Exception('Got a response for hijacked request'));
+    when(() => request.method)
+        .thenThrow(Exception('Got a response for hijacked request'));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 200);
@@ -212,7 +228,8 @@ void main() {
 
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => left(RouteNotFoundException('')));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => left(RouteNotFoundException('')));
 
     when(() => reportPush.call(route)).thenReturn(right(unit));
 
@@ -231,7 +248,8 @@ void main() {
 
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => left(ModuleStartedException('')));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => left(ModuleStartedException('')));
 
     when(() => reportPush.call(route)).thenReturn(right(unit));
 
@@ -250,7 +268,8 @@ void main() {
 
     when(() => releaseScopedBinds.call()).thenReturn(right(unit));
     when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => left(ModuleStartedException('')));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => left(ModuleStartedException('')));
 
     when(() => reportPush.call(route)).thenReturn(right(unit));
 
@@ -286,7 +305,8 @@ void main() {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
     when(() => request.headers).thenReturn({});
-    when(() => request.readAsString()).thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
+    when(() => request.readAsString())
+        .thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result['name'], 'Jacob');
   });
@@ -294,7 +314,8 @@ void main() {
   test('tryJsonDecode isMultipart false with FormatException', () async {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
-    when(() => request.headers).thenReturn({'Content-Type': MediaType('image', 'png').toString()});
+    when(() => request.headers)
+        .thenReturn({'Content-Type': MediaType('image', 'png').toString()});
 
     when(() => request.readAsString()).thenThrow(FormatException());
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
@@ -305,7 +326,9 @@ void main() {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
     when(() => request.headers).thenReturn({
-      'Content-Type': MediaType('multipart', 'form-data', {'boundary': 'boundary'}).toString()
+      'Content-Type':
+          MediaType('multipart', 'form-data', {'boundary': 'boundary'})
+              .toString()
     });
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result.isEmpty, true);
