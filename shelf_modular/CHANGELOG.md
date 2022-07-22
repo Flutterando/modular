@@ -1,3 +1,6 @@
+## 2.0.1 - 2022/07/22
+- fix: Bind aways Scoped.
+
 ## 2.0.0 - 2022/07/21
 
 - [BREAK CHANGE]: Update to new Dart 2.17.
