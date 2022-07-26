@@ -117,7 +117,12 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     final page = route.settings as ModularPage;
     final parallel = page.route;
     parallel.popCallback?.call(result);
+
     currentConfiguration?.routes.remove(parallel);
+
+    ///Fix https://github.com/Flutterando/modular/issues/771
+    currentConfiguration?.routes
+        .removeWhere((element) => element.parent == parallel.name);
     if (currentConfiguration?.routes.indexWhere(
             (element) => element.uri.toString() == parallel.uri.toString()) ==
         -1) {
