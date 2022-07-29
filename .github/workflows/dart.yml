@@ -18,7 +18,7 @@ jobs:
       with:
         flutter-version: '2.10.5'
     
-    - name: get packages
+    - name: Flutter get packages
       run: flutter pub get
       working-directory: packages/flutter_modular
     
@@ -42,7 +42,8 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '2.10.5'
+        channel: 'stable'
+
     
     - name: get packages
       run: flutter pub get
@@ -70,11 +71,11 @@ jobs:
       with:
         flutter-version: '2.10.5'
     
-    - name: get packages
+    - name: flutter get packages
       run: flutter pub get
       working-directory: packages/shelf_modular
     
-    - name: Flutter Test
+    - name: flutter test
       run: flutter test --coverage --coverage-path ../coverage/lcov.info
       working-directory: packages/shelf_modular
       
@@ -96,7 +97,7 @@ jobs:
       with:
         flutter-version: '2.10.5'
     
-    - name: get packages
+    - name: flutter pub get
       run: flutter pub get
       working-directory: packages/modular_test
     

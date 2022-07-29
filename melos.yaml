@@ -41,7 +41,11 @@ scripts:
        - Requires `clang-format` (can be installed via Brew on macOS).
        - Requires `swiftformat` (can be installed via Brew on macOS).
 
-  gen_coverage: melos run test && melos exec -- "$MELOS_ROOT_PATH/combine_coverage.sh"
+  test:coverage: melos run test && melos run combine_coverage
+
+  combine_coverage:
+    run: melos exec -- "$MELOS_ROOT_PATH\scripts\combine_coverage.sh"
+    description:  combine all coverage Tests
 
   test:
     run: melos exec --dir-exists="test" --fail-fast -- flutter test --no-pub --coverage
@@ -51,4 +55,4 @@ scripts:
     run: melos exec --dir-exists="test" --fail-fast -- flutter test --no-pub --coverage
     description:  Execute a selected Tests
     select-package:      
-      dir-exists: test   
+      dir-exists: test
