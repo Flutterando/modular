@@ -42,4 +42,11 @@ void main() {
       expect(result.isRight, true);
     });
   });
+
+  group('reassemble', () {
+    test('return unit', () async {
+      final result = service.reassemble();
+      expect(result.isRight, true);
+    });
+  });
 }
