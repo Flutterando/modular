@@ -81,7 +81,15 @@ import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_modular/shelf_modular.dart';
 
 void main(List<String> arguments) async {
-    final server = await io.serve(Modular(module: AppModule()), '0.0.0.0', 3000);
+
+    final modularHandler = Modular(
+      module: AppModule(), // Initial Module
+      middlewares: [
+        logRequests(), // Middleware Pipeline
+      ],
+    );
+
+    final server = await io.serve(modularHandler, '0.0.0.0', 3000);
     print('Server started: ${server.address.address}:${server.port}');
 }
 
@@ -115,5 +123,23 @@ dart bin/backend_app.dart
 :::info TIP
 
 The **VSCode** users can configure **launch.json** to have access to more debugging options like breakpoint.
+
+```json title=".vscode/launch.json"
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "backend",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/backend_app.dart"
+        }
+    ]
+}
+```
+
 
 :::

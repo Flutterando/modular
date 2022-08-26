@@ -29,6 +29,6 @@ class AuthModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        Route.resource('/', resource: AuthResource()),
+        Route.resource(AuthResource()),
       ];
 }

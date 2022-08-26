@@ -33,7 +33,7 @@ void main() {
     expect(route.name, '/');
   });
   test('route resource', () {
-    final route = Route.resource('/', resource: MyResource());
+    final route = Route.resource(MyResource());
     expect(route.name, '/');
   });
 
@@ -42,7 +42,7 @@ void main() {
     expect(route.name, '/');
   });
   test('route copyWith', () {
-    final route = Route.resource('/', resource: MyResource()).copyWith();
+    final route = Route.resource(MyResource()).copyWith();
     expect(route.name, '/');
   });
 }

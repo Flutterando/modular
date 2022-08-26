@@ -1,8 +1,8 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
 import 'package:shelf_modular/src/domain/errors/errors.dart';
 import 'package:shelf_modular/src/domain/services/route_service.dart';
+import 'package:shelf_modular/src/shared/either.dart';
 
 class RouteServiceImpl implements RouteService {
   final Tracker tracker;
@@ -29,6 +29,12 @@ class RouteServiceImpl implements RouteService {
   @override
   Either<ModularError, Unit> reportPush(ModularRoute route) {
     tracker.reportPushRoute(route);
+    return right(unit);
+  }
+
+  @override
+  Either<ModularError, Unit> reassemble() {
+    tracker.reassemble();
     return right(unit);
   }
 }
