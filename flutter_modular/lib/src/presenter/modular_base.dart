@@ -223,6 +223,6 @@ class ModularBase implements IModularBase {
 
   @override
   void setArguments(dynamic data) {
-    setArgumentsUsecase.call(args.copyWith(data: args));
+    setArgumentsUsecase.call(args.copyWith(data: data));
   }
 }
