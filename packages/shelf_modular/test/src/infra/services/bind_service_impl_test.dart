@@ -13,24 +13,20 @@ void main() {
   late BindService service;
 
   setUpAll(() {
-    print('Setup');
     injector = InjectorMock();
     service = BindServiceImpl(injector);
   });
 
   tearDown(() {
-    print('TearDown');
     reset(injector);
   });
 
   group('getBind', () {
     test('should get bind', () {
-      print('1');
       when(() => injector.get<String>()).thenAnswer((_) => 'test');
       expect(service.getBind<String>().getOrElse((left) => ''), 'test');
     });
     test('should throw error not found bind', () {
-      print('2');
       when(() => injector.get<String>()).thenThrow(BindNotFound('String'));
       expect(
           service.getBind<String>().fold(id, id), isA<BindNotFoundException>());
@@ -39,7 +35,6 @@ void main() {
 
   group('dispose', () {
     test('should return true', () {
-      print('3');
       when(() => injector.dispose<String>()).thenReturn(true);
       expect(service.disposeBind<String>().getOrElse((left) => false), true);
     });
@@ -47,8 +42,7 @@ void main() {
 
   group('releaseScopedBinds', () {
     test('should return true', () {
-      print('4');
-      when(() => injector.removeScopedBinds()).thenReturn(0);
+      when(() => injector.removeScopedBinds()).thenReturn(null);
       expect(
           service.releaseScopedBinds().getOrElse((left) => throw left), unit);
     });
