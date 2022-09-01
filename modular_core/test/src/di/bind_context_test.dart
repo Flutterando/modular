@@ -12,7 +12,7 @@ void main() {
 
   test(' getProcessBinds()', () {
     var list = instance.getProcessBinds();
-    expect(list.length, 6);
+    expect(list.length, 5);
 
     instance.changeBinds([]);
 
@@ -47,14 +47,6 @@ void main() {
     instance.remove<Repository>();
 
     expect(bindRepository?.isDisposed, true);
-  });
-
-  test('get imported bind', () {
-    final bindWithExportFlag = instance.getBind<Map>(injector)?.value;
-    expect(bindWithExportFlag, isNotNull);
-
-    final bindWithlessExportFlag = instance.getBind<List>(injector)?.value;
-    expect(bindWithlessExportFlag, isNull);
   });
 
   test('remove bind', () {
@@ -101,9 +93,17 @@ void main() {
   });
 
   test('instantiateSingletonBinds', () {
-    instance.instantiateSingletonBinds(
-        [BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector);
+    instance.instantiateSingletonBinds([BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector);
     expect(instance.instanciatedSingletons.length, 1);
+  });
+
+  test('get exported Bind', () {
+    injector.addBindContext(MyInjectModule());
+
+    final value = injector.get<Map<String, List<String>>>();
+    expect(value['test']?.first, 'String');
+
+    expect(() => injector.get<List<String>>(), throwsA(isA<BindNotFound>()));
   });
 }
 
@@ -111,6 +111,7 @@ class MyInjectModule extends BindContextImpl {
   @override
   List<BindContext> get imports => [
         MyInjectModule2(),
+        MyInjectModule3(),
       ];
 
   @override
@@ -131,6 +132,14 @@ class MyInjectModule2 extends BindContextImpl {
   List<BindContract> get binds => [
         _Bind<Map>((i) => {}, export: true),
         _Bind<List>((i) => []),
+      ];
+}
+
+class MyInjectModule3 extends BindContextImpl {
+  @override
+  List<BindContract> get binds => [
+        _Bind<Map<String, List<String>>>((i) => {'test': i()}, export: true),
+        _Bind<List<String>>((i) => ['String']),
       ];
 }
 
@@ -191,13 +200,11 @@ class Repository extends IRepository with Disposable {
   }
 }
 
-class AsyncBind<T extends Object> extends _Bind<Future<T>>
-    implements AsyncBindContract<T> {
+class AsyncBind<T extends Object> extends _Bind<Future<T>> implements AsyncBindContract<T> {
   @override
   final Future<T> Function(Injector i) asyncInject;
 
-  AsyncBind(this.asyncInject, {bool export = false})
-      : super(asyncInject, export: export);
+  AsyncBind(this.asyncInject, {bool export = false}) : super(asyncInject, export: export);
 
   @override
   Future<T> resolveAsyncBind() async {

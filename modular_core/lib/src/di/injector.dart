@@ -12,6 +12,8 @@ class InjectorImpl<T> extends Injector<T> {
   @override
   BindEntry<B> getBind<B extends Object>() {
     BindEntry<B>? entry;
+    trace++;
+    final _trace = trace;
 
     for (var module in _allBindContexts.values.toList().reversed) {
       entry = module.getBind<B>(this);
@@ -21,19 +23,25 @@ class InjectorImpl<T> extends Injector<T> {
     }
 
     if (entry == null) {
+      resetTrace();
       throw BindNotFound(B.toString());
+    }
+
+    if (_trace == 1) {
+      resetTrace();
     }
 
     return entry;
   }
+
+  void resetTrace() => trace = 0;
 
   @override
   B get<B extends Object>() => getBind<B>().value;
 
   @override
   @mustCallSuper
-  bool isModuleAlive<B extends BindContext>() =>
-      _allBindContexts.containsKey(_getType<B>());
+  bool isModuleAlive<B extends BindContext>() => _allBindContexts.containsKey(_getType<B>());
 
   @override
   @mustCallSuper
@@ -51,8 +59,7 @@ class InjectorImpl<T> extends Injector<T> {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       _allBindContexts[typeModule] = module;
-      (_allBindContexts[typeModule] as BindContextImpl)
-          .instantiateSingletonBinds(_getAllSingletons(), this);
+      (_allBindContexts[typeModule] as BindContextImpl).instantiateSingletonBinds(_getAllSingletons(), this);
       (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
       debugPrint("-- $typeModule INITIALIZED");
     } else {
@@ -113,9 +120,7 @@ class InjectorImpl<T> extends Injector<T> {
 
   @override
   void updateBinds(BindContext context) {
-    final key = _allBindContexts.keys.firstWhere(
-        (key) => key.toString() == context.runtimeType.toString(),
-        orElse: () => _KeyNotFound);
+    final key = _allBindContexts.keys.firstWhere((key) => key.toString() == context.runtimeType.toString(), orElse: () => _KeyNotFound);
     if (key == _KeyNotFound) {
       return;
     }
@@ -159,6 +164,9 @@ class InjectorImpl<T> extends Injector<T> {
       context.removeScopedBind();
     }
   }
+
+  @override
+  int trace = 0;
 }
 
 class BindNotFound extends ModularError {

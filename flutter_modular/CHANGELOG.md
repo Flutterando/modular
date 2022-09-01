@@ -1,3 +1,6 @@
+## [5.0.4] - 2022-09-01
+- fix: Make the export of the bind not need exported dependencies. [790](https://github.com/Flutterando/modular/issues/790)
+
 ## [5.0.3] - 2022-06-03
 - Fix [#713](https://github.com/Flutterando/modular/issues/713)
 - Fix [#676](https://github.com/Flutterando/modular/issues/676)

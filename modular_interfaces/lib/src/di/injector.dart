@@ -41,4 +41,9 @@ abstract class Injector<T> {
   /// internal
   /// used for reassemble bind list
   void updateBinds(BindContext context);
+
+  /// internal
+  /// Watch recursive values;
+  int get trace;
+  set trace(int newValue);
 }

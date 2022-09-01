@@ -1,3 +1,7 @@
+## 2.1.1 - 2022/09/01
+
+- feat: Added trace propertie;
+
 ## 2.0.2 - 2022/06/02
 
 - feat: Added Type propertie in removeBindContext();

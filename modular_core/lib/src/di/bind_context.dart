@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+
 import '../../modular_core.dart';
 
 class _MutableValue {
@@ -6,6 +7,8 @@ class _MutableValue {
 }
 
 abstract class BindContextImpl implements BindContext {
+  final _mutableValue = _MutableValue();
+
   @override
   @visibleForOverriding
   List<BindContract> get binds => const [];
@@ -13,7 +16,7 @@ abstract class BindContextImpl implements BindContext {
   @visibleForOverriding
   List<BindContext> get imports => const [];
 
-  final _mutableValue = _MutableValue();
+  final List<BindContext> _imports = [];
 
   final List<BindContract> _binds = [];
   @internal
@@ -25,8 +28,7 @@ abstract class BindContextImpl implements BindContext {
 
   @override
   @visibleForTesting
-  List<BindContract> getProcessBinds() =>
-      _binds.where((element) => !element.export).toList();
+  List<BindContract> getProcessBinds() => _binds;
   @override
   void changeBinds(List<BindContract> newBinds) {
     _binds.removeWhere((element) => !element.alwaysSerialized);
@@ -34,33 +36,46 @@ abstract class BindContextImpl implements BindContext {
   }
 
   BindContextImpl() {
+    _imports.addAll(imports);
     _binds.addAll(binds);
-    for (var module in imports) {
-      _addExportBinds((module as BindContextImpl)._binds);
-    }
+    // for (var module in imports) {
+    //   _addExportBinds((module as BindContextImpl)._binds);
+    // }
   }
 
-  void _addExportBinds(List<BindContract> bindsForOtherModule) {
-    final filteredList = bindsForOtherModule.where((element) => element.export);
-    _binds.insertAll(0, filteredList.map((e) => e.copyWith(export: false)));
-  }
+  // void _addExportBinds(List<BindContract> bindsForOtherModule) {
+  //   final filteredList = bindsForOtherModule.where((element) => element.export);
+  //   _binds.insertAll(0, filteredList.map((e) => e.copyWith(export: false)));
+  // }
 
   @override
   BindEntry<T>? getBind<T extends Object>(Injector injector) {
     T bindValue;
+    final trace = injector.trace;
+
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
       return _singletonBinds[type]!.cast<T>();
     }
 
-    var bind = getProcessBinds().firstWhere(
-        (b) => b.factoryFunction is T Function(Injector),
-        orElse: () => BindEmpty());
+    var bind = _binds.firstWhere((b) => b.factoryFunction is T Function(Injector), orElse: () => BindEmpty());
     if (bind is BindEmpty) {
+      for (var import in _imports) {
+        final entry = import.getBind<T>(injector);
+        if (entry != null) {
+          if (trace == 1) {
+            return entry.bind.export ? entry : null;
+          } else {
+            return entry;
+          }
+        }
+      }
+
       return null;
     }
 
     bindValue = bind.factoryFunction(injector) as T;
+
     final entry = BindEntry<T>(value: bindValue, bind: bind.cast<T>());
     if (bind.isSingleton) {
       _singletonBinds[type] = entry;
@@ -111,8 +126,7 @@ abstract class BindContextImpl implements BindContext {
   Future<void> isReady() async {
     if (_mutableValue.isReadyFlag) return;
     _mutableValue.isReadyFlag = true;
-    final asyncBindList =
-        getProcessBinds().whereType<AsyncBindContract>().toList();
+    final asyncBindList = getProcessBinds().whereType<AsyncBindContract>().toList();
     for (var bind in asyncBindList) {
       final resolvedBind = await bind.convertToBind();
       _binds.insert(0, resolvedBind);
@@ -120,10 +134,8 @@ abstract class BindContextImpl implements BindContext {
   }
 
   @mustCallSuper
-  void instantiateSingletonBinds(
-      List<BindEntry> singletons, Injector injector) {
-    final filteredList = getProcessBinds()
-        .where((bind) => !bind.isLazy && !_containBind(singletons, bind));
+  void instantiateSingletonBinds(List<BindEntry> singletons, Injector injector) {
+    final filteredList = getProcessBinds().where((bind) => !bind.isLazy && !_containBind(singletons, bind));
     for (final bindElement in filteredList) {
       var b = bindElement.factoryFunction(injector);
       if (!_singletonBinds.containsKey(b.runtimeType)) {
@@ -137,9 +149,7 @@ abstract class BindContextImpl implements BindContext {
   }
 
   bool _containBind(List<BindEntry> singletons, BindContract bind) {
-    return singletons.indexWhere((element) =>
-            element.bind.factoryFunction == bind.factoryFunction) !=
-        -1;
+    return singletons.indexWhere((element) => element.bind.factoryFunction == bind.factoryFunction) != -1;
   }
 
   Type _getInjectType<B>() {
@@ -147,9 +157,7 @@ abstract class BindContextImpl implements BindContext {
 
     for (var singleton in _singletonBinds.values) {
       if (singleton.value is B) {
-        foundType = _singletonBinds.entries
-            .firstWhere((map) => map.value.value == singleton.value)
-            .key;
+        foundType = _singletonBinds.entries.firstWhere((map) => map.value.value == singleton.value).key;
         break;
       }
     }
