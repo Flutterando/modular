@@ -4,7 +4,7 @@ import 'package:modular_core/modular_core.dart';
 
 void initModule(BindContext module, {List<BindContract> replaceBinds = const []}) {
   // ignore: invalid_use_of_visible_for_testing_member
-  final bindModules = module.getProcessBinds();
+  final bindModules = [...module.getProcessBinds()];
 
   for (var i = 0; i < bindModules.length; i++) {
     final item = bindModules[i];
