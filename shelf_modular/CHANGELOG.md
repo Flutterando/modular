@@ -1,7 +1,6 @@
 ## 2.0.2 - 2022/09/01
 - fix: Make the export of the bind not need exported dependencies. [790](https://github.com/Flutterando/modular/issues/790)
 
-
 ## 2.0.1 - 2022/07/22
 - fix: Bind aways Scoped.
 
