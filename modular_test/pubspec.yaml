@@ -1,6 +1,6 @@
 name: modular_test
 description: Smart project structure with dependency injection and route management
-version: 2.0.2
+version: 2.1.0
 homepage: https://github.com/Flutterando/modular
 
 environment:
