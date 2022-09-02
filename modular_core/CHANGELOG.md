@@ -1,4 +1,4 @@
-## 3.0.0 - 2022/09/01
+## 3.0.1 - 2022/09/01
 * feat: Make the export of the bind not need exported dependencies.  [790](https://github.com/Flutterando/modular/issues/790)
 * BREAK-CHANGE: ProcessBind() gets all binds.
 

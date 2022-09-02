@@ -45,5 +45,4 @@ abstract class Injector<T> {
   /// internal
   /// Watch recursive values;
   int get trace;
-  set trace(int newValue);
 }
