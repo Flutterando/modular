@@ -1,14 +1,16 @@
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:http/http.dart' as http;
+// ignore: implementation_imports
 import 'package:modular_interfaces/src/di/injector.dart';
 
 import 'search/domain/usecases/search_by_text.dart';
 import 'search/external/github/github_search_datasource.dart';
 import 'search/infra/repositories/search_repository_impl.dart';
-import 'package:http/http.dart' as http;
-
 import 'search/presenter/pages/details_page.dart';
 import 'search/presenter/pages/guardt.dart';
 import 'search/presenter/pages/search_page.dart';

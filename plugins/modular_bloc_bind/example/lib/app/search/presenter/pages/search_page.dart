@@ -1,4 +1,3 @@
-import 'package:example/app/search/domain/entities/result.dart';
 import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:example/app/search/presenter/blocs/search_bloc.dart';
 import 'package:flutter/material.dart';

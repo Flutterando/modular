@@ -1,8 +1,11 @@
 import '../../modular_core.dart';
 
+///Creates a custom route, extending from [ModularRouteImpl]
 class CustomRoute extends ModularRouteImpl {
+  ///[data] from route
   final dynamic data;
 
+  ///[CustomRoute] constructor
   CustomRoute({
     required String name,
     this.data,
@@ -12,7 +15,6 @@ class CustomRoute extends ModularRouteImpl {
     List<ModularRoute> children = const [],
     Uri? uri,
     List<Middleware> middlewares = const [],
-    Map<ModularKey, ModularRoute>? routeMap,
     Map<Type, BindContext> bindContextEntries = const {},
   }) : super(
           name: name,
@@ -25,8 +27,12 @@ class CustomRoute extends ModularRouteImpl {
           bindContextEntries: bindContextEntries,
         );
 
-  factory CustomRoute.module(String name,
-      {required RouteContext module, List<Middleware> middlewares = const []}) {
+  ///Creates a [CustomRoute] and adds a module into it
+  factory CustomRoute.module(
+    String name, {
+    required RouteContext module,
+    List<Middleware> middlewares = const [],
+  }) {
     final route = CustomRoute(name: name, middlewares: middlewares);
     return route.addModule(name, module: module) as CustomRoute;
   }

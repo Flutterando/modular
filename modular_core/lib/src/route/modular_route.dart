@@ -1,5 +1,7 @@
 import 'package:modular_interfaces/modular_interfaces.dart';
 
+///Abstract class [ModularRouteImpl]
+///interface for route creation
 abstract class ModularRouteImpl implements ModularRoute {
   @override
   final String name;
@@ -20,6 +22,8 @@ abstract class ModularRouteImpl implements ModularRoute {
   @override
   late final ModularKey key;
 
+/// [ModularRouteImpl] constructor, creates a
+/// [key] with [ModularKey]
   ModularRouteImpl({
     required this.name,
     this.parent = '',

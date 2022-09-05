@@ -102,7 +102,7 @@ void main() {
 
   test('instantiateSingletonBinds', () {
     instance.instantiateSingletonBinds(
-        [BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector);
+        [BindEntry(bind: _Bind((i) => 0.0), value: 0.0)], injector,);
     expect(instance.instanciatedSingletons.length, 1);
   });
 }
@@ -155,7 +155,7 @@ class _Bind<T extends Object> extends BindContract<T> {
       factoryFunction as E Function(Injector),
       export: export,
       lazy: isLazy,
-      onDispose: onDispose != null ? onDispose as void Function(E) : null,
+      onDispose: onDispose != null ? onDispose! as void Function(E) : null,
       scoped: isScoped,
     );
   }

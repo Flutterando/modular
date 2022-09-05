@@ -1,5 +1,4 @@
 import '../di/bind_context.dart';
-
 import 'middleware.dart';
 import 'modular_key.dart';
 import 'route_context.dart';
@@ -28,7 +27,8 @@ abstract class ModularRoute {
   /// Current uri of the route.
   Uri get uri;
 
-  /// Contains a list of all BindContexts that will need to be active when this route is active.
+  /// Contains a list of all BindContexts that will need to be active when this 
+  /// route is active.
   Map<Type, BindContext> get bindContextEntries;
 
   /// Key that references the route in the RouteContext tree.
@@ -37,6 +37,7 @@ abstract class ModularRoute {
   /// Create a new Route by adding a RouteContext to the context.
   ModularRoute addModule(String name, {required RouteContext module});
 
+  ///Copy the [ModularRoute] object into another memory reference
   ModularRoute copyWith({
     String? name,
     List<Middleware>? middlewares,

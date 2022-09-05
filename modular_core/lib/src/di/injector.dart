@@ -6,6 +6,8 @@ import 'bind_context.dart';
 import 'reassemble_mixin.dart';
 import 'resolvers.dart';
 
+///Abstract class [InjectorImpl]
+///Extends from [Injector], Manage the binds of a module.
 class InjectorImpl<T> extends Injector<T> {
   final _allBindContexts = <Type, BindContext>{};
 
@@ -13,7 +15,7 @@ class InjectorImpl<T> extends Injector<T> {
   BindEntry<B> getBind<B extends Object>() {
     BindEntry<B>? entry;
 
-    for (var module in _allBindContexts.values.toList().reversed) {
+    for (final module in _allBindContexts.values.toList().reversed) {
       entry = module.getBind<B>(this);
       if (entry != null) {
         break;
@@ -51,15 +53,16 @@ class InjectorImpl<T> extends Injector<T> {
     final typeModule = module.runtimeType;
     if (!_allBindContexts.containsKey(typeModule)) {
       _allBindContexts[typeModule] = module;
-      (_allBindContexts[typeModule] as BindContextImpl)
+      (_allBindContexts[typeModule]! as BindContextImpl)
           .instantiateSingletonBinds(_getAllSingletons(), this);
-      (_allBindContexts[typeModule] as BindContextImpl).tags.add(tag);
-      debugPrint("-- $typeModule INITIALIZED");
+      (_allBindContexts[typeModule]! as BindContextImpl).tags.add(tag);
+      debugPrint('-- $typeModule INITIALIZED');
     } else {
       (_allBindContexts[typeModule] as BindContextImpl?)?.tags.add(tag);
     }
   }
 
+  ///Creates a print for debug purposes
   @visibleForTesting
   void debugPrint(String text) {
     printResolverFunc?.call(text);
@@ -70,7 +73,7 @@ class InjectorImpl<T> extends Injector<T> {
   void disposeModuleByTag(String tag) {
     final trash = <Type>[];
 
-    for (var key in _allBindContexts.keys) {
+    for (final key in _allBindContexts.keys) {
       final module = _allBindContexts[key]!;
 
       (module as BindContextImpl).tags.remove(tag);
@@ -85,14 +88,14 @@ class InjectorImpl<T> extends Injector<T> {
 
     for (final key in trash) {
       _allBindContexts.remove(key);
-      debugPrint("-- $key DISPOSED");
+      debugPrint('-- $key DISPOSED');
     }
   }
 
   @override
   @mustCallSuper
   bool dispose<B extends Object>() {
-    for (var binds in _allBindContexts.values) {
+    for (final binds in _allBindContexts.values) {
       final r = binds.remove<B>();
       if (r) return r;
     }
@@ -101,8 +104,8 @@ class InjectorImpl<T> extends Injector<T> {
 
   @override
   void reassemble() {
-    for (var binds in _allBindContexts.values) {
-      for (var bind in binds.instanciatedSingletons) {
+    for (final binds in _allBindContexts.values) {
+      for (final bind in binds.instanciatedSingletons) {
         final value = bind.value;
         if (value is ReassembleMixin) {
           value.reassemble();
@@ -114,19 +117,18 @@ class InjectorImpl<T> extends Injector<T> {
   @override
   void updateBinds(BindContext context) {
     final key = _allBindContexts.keys.firstWhere(
-        (key) => key.toString() == context.runtimeType.toString(),
-        orElse: () => _KeyNotFound);
+      (key) => key.toString() == context.runtimeType.toString(),
+      orElse: () => _KeyNotFound,
+    );
     if (key == _KeyNotFound) {
       return;
     }
-    final module = _allBindContexts[key]!;
-    module.changeBinds(List<BindContract>.from(context.getProcessBinds()));
   }
 
   @override
   @mustCallSuper
   void destroy() {
-    for (var binds in _allBindContexts.values) {
+    for (final binds in _allBindContexts.values) {
       binds.dispose();
     }
     _allBindContexts.clear();
@@ -138,7 +140,7 @@ class InjectorImpl<T> extends Injector<T> {
     final module = _allBindContexts.remove(type ?? _getType<B>());
     if (module != null) {
       module.dispose();
-      debugPrint("-- ${module.runtimeType} DISPOSED");
+      debugPrint('-- ${module.runtimeType} DISPOSED');
     }
   }
 
@@ -146,7 +148,7 @@ class InjectorImpl<T> extends Injector<T> {
 
   List<BindEntry> _getAllSingletons() {
     final list = <BindEntry>[];
-    for (var module in _allBindContexts.values) {
+    for (final module in _allBindContexts.values) {
       list.addAll((module as BindContextImpl).instanciatedSingletons);
     }
     return list;
@@ -155,13 +157,18 @@ class InjectorImpl<T> extends Injector<T> {
   @mustCallSuper
   @override
   void removeScopedBinds() {
-    for (var context in _allBindContexts.values.cast<BindContextImpl>()) {
+    for (final context in _allBindContexts.values.cast<BindContextImpl>()) {
       context.removeScopedBind();
     }
   }
+  
+  @override
+  int trace = 0;
 }
 
+///Error class for bind not found
 class BindNotFound extends ModularError {
+  ///[BindNotFound] constructor, receives a [message] with the error.
   BindNotFound(String message) : super(message);
 }
 

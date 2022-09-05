@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:modular_interfaces/modular_interfaces.dart';
 
+///Abstract class [TrackerImpl]
+///implements [Tracker], manage routes.
 class TrackerImpl implements Tracker {
   @override
   final Injector injector;
@@ -13,12 +15,15 @@ class TrackerImpl implements Tracker {
       return _nullableModule!;
     }
 
-    throw TrackerNotInitiated('Execute Tracker.runApp()');
+    throw const TrackerNotInitiated('Execute Tracker.runApp()');
   }
 
   @visibleForTesting
+
+  ///Map of routes
   final routeMap = <ModularKey, ModularRoute>{};
 
+  ///[TrackerImpl] constructor, receives a [Injector]
   TrackerImpl(this.injector);
 
   var _arguments = ModularArguments.empty();
@@ -29,16 +34,19 @@ class TrackerImpl implements Tracker {
   String get currentPath => arguments.uri.toString();
 
   @override
-  FutureOr<ModularRoute?> findRoute(String path,
-      {dynamic data, String schema = ''}) async {
-    var uri = _resolverPath(path);
+  FutureOr<ModularRoute?> findRoute(
+    String path, {
+    dynamic data,
+    String schema = '',
+  }) async {
+    final uri = _resolverPath(path);
     final modularKey = ModularKey(schema: schema, name: uri.path);
 
     ModularRoute? route;
     var params = <String, String>{};
 
-    for (var key in routeMap.keys) {
-      var uriCandidate = Uri.parse(key.name);
+    for (final key in routeMap.keys) {
+      final uriCandidate = Uri.parse(key.name);
       if (uriCandidate.path == uri.path) {
         final candidate = routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
@@ -56,7 +64,7 @@ class TrackerImpl implements Tracker {
         continue;
       }
 
-      var result = _extractParams(uriCandidate, uri);
+      final result = _extractParams(uriCandidate, uri);
       if (result != null) {
         final candidate = routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
@@ -71,7 +79,7 @@ class TrackerImpl implements Tracker {
 
     route = route.copyWith(uri: uri);
 
-    for (var middleware in route.middlewares) {
+    for (final middleware in route.middlewares) {
       route = await middleware.pre(route!);
       if (route == null) {
         break;
@@ -92,7 +100,7 @@ class TrackerImpl implements Tracker {
 
   @override
   void reportPushRoute(ModularRoute route) {
-    for (var module in [...route.bindContextEntries.values, module]) {
+    for (final module in [...route.bindContextEntries.values, module]) {
       injector.addBindContext(module, tag: route.uri.toString());
     }
   }
@@ -104,12 +112,12 @@ class TrackerImpl implements Tracker {
   Map<String, String>? _extractParams(Uri candidate, Uri match) {
     final settledUrl = _processUrl(candidate.path);
 
-    final regExp = RegExp("^$settledUrl\$", caseSensitive: true);
+    final regExp = RegExp('^$settledUrl\$');
     final result = regExp.firstMatch(match.path);
 
     if (result != null) {
       final params = <String, String>{};
-      for (var name in result.groupNames) {
+      for (final name in result.groupNames) {
         params[name] = result.namedGroup(name)!;
       }
       return params;
@@ -125,10 +133,10 @@ class TrackerImpl implements Tracker {
 
     final newUrl = <String>[];
     for (var part in url.split('/')) {
-      part = part.contains(":") ? "(?<${part.substring(1)}>.*)" : part;
+      part = part.contains(':') ? '(?<${part.substring(1)}>.*)' : part;
       newUrl.add(part);
     }
-    return newUrl.join("/");
+    return newUrl.join('/');
   }
 
   @override
@@ -140,9 +148,10 @@ class TrackerImpl implements Tracker {
 
   @override
   void reassemble() {
-    routeMap.clear();
-    routeMap.addAll(module.init());
-    for (var childModule in module.modules) {
+    routeMap
+      ..clear()
+      ..addAll(module.init());
+    for (final childModule in module.modules) {
       injector.updateBinds(childModule);
     }
     injector.reassemble();
@@ -158,8 +167,10 @@ class TrackerImpl implements Tracker {
   @override
   void setArguments(ModularArguments args) => _arguments = args;
 }
-
+///Error class for tracker not instantiated
 class TrackerNotInitiated extends ModularError {
+  /// [TrackerNotInitiated] constructor, receives a [String] and a
+  /// [StackTrace] which will describe the error.
   const TrackerNotInitiated(String message, [StackTrace? stackTrace])
       : super(message, stackTrace);
 }

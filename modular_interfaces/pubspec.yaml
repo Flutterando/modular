@@ -7,8 +7,11 @@ homepage: https://github.com/Flutterando/modular
 environment:
   sdk: '>=2.12.0 <3.0.0'
 
-# dependencies:
-#   path: ^1.8.0
+dependencies:
+  meta: ^1.7.0
+
 
 dev_dependencies:
   lints: ^1.0.1
+  flutterando_analysis: 
+    git: https://github.com/Flutterando/flutterando_analysis.git

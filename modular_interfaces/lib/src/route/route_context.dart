@@ -1,8 +1,8 @@
 import '../di/bind_context.dart';
-
 import 'modular_key.dart';
 import 'modular_route.dart';
 
+///Abstract class [RouteContext]
 abstract class RouteContext extends BindContext {
   /// Aggregates all [ModularRoute] type Objects to the context,
   List<ModularRoute> get routes;

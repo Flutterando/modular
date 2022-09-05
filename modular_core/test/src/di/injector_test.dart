@@ -12,7 +12,7 @@ void main() {
   });
 
   test('debugPrint', () async {
-    int count = 0;
+    var count = 0;
 
     injector.debugPrint('value');
     expect(count, 0);
@@ -80,9 +80,9 @@ class MyInjectModule extends BindContextImpl {
         _Bind<bool>((i) => true),
         _Bind<double>((i) => 0.0, lazy: false),
         _Bind<MyObjectWithReassemble>((i) => MyObjectWithReassemble(),
-            lazy: false),
+            lazy: false,),
         _Bind<MyObjectWithlessReassemble>((i) => MyObjectWithlessReassemble(),
-            lazy: false),
+            lazy: false,),
       ];
 }
 
@@ -130,7 +130,7 @@ class _Bind<T extends Object> extends BindContract<T> {
 }
 
 class MyObjectWithReassemble with ReassembleMixin {
-  var count = 0;
+  int count = 0;
 
   @override
   void reassemble() {
@@ -139,7 +139,7 @@ class MyObjectWithReassemble with ReassembleMixin {
 }
 
 class MyObjectWithlessReassemble {
-  var count = 0;
+  int count = 0;
 
   void reassemble() {
     count++;

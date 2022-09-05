@@ -1,12 +1,15 @@
 import 'bind.dart';
 import 'injector.dart';
 
+///Abstract class [BindContext]
+///Creates the context for binds
 abstract class BindContext {
   /// Link injected objects
   List<BindContract> get binds;
 
   /// Import Binds from other modules.
-  /// ATTENTION: The binds must be marked with the flag export: true, in the module to be imported.
+  /// ATTENTION: The binds must be marked with the flag export: true, in the
+  /// module to be imported.
   List<BindContext> get imports;
 
   /// Get the binds for that context.

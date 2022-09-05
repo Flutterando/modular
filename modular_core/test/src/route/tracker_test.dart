@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:modular_core/modular_core.dart';
 import 'package:modular_core/src/route/custom_route.dart';
 import 'package:test/test.dart';
-import 'package:modular_core/modular_core.dart';
 
 void main() {
   // setPrintResolver(print);
@@ -39,13 +39,13 @@ void main() {
   });
 
   test('find route with queries', () async {
-    var route = await modularTracker.findRoute('/?q=banana') as CustomRoute?;
+    final route = await modularTracker.findRoute('/?q=banana') as CustomRoute?;
     expect(route?.uri.path, '/');
     expect(modularTracker.arguments.queryParams['q'], 'banana');
   });
 
   test('find route in other module', () async {
-    var route = await modularTracker.findRoute('/other/') as CustomRoute?;
+    final route = await modularTracker.findRoute('/other/') as CustomRoute?;
     expect(route?.uri.path, '/other/');
     expect(route?.data, 'other');
     modularTracker.reportPopRoute(route!);
@@ -54,7 +54,7 @@ void main() {
   });
 
   test('find child route in other module', () async {
-    var route =
+    final route =
         await modularTracker.findRoute('/other/details') as CustomRoute?;
     expect(route?.uri.path, '/other/details');
     expect(route?.parent, '/other/');
@@ -120,11 +120,14 @@ void main() {
 class MyModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'first', middlewares: [
-          CustomMidleware()
-        ], children: [
-          CustomRoute(name: '/second', data: 'second'),
-        ]),
+        CustomRoute(
+          name: '/',
+          data: 'first',
+          middlewares: [CustomMidleware()],
+          children: [
+            CustomRoute(name: '/second', data: 'second'),
+          ],
+        ),
         CustomRoute(name: '/schema', data: 'withSchema', schema: 'tag'),
         CustomRoute(name: '/wildcard/**', data: 'wildcard'),
         CustomRoute(name: '/product/:id', data: 'withParams'),
@@ -136,9 +139,13 @@ class MyModule extends RouteContextImpl {
 class OtherModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'other', children: [
-          CustomRoute(name: '/details', data: 'otherWithDetails'),
-        ]),
+        CustomRoute(
+          name: '/',
+          data: 'other',
+          children: [
+            CustomRoute(name: '/details', data: 'otherWithDetails'),
+          ],
+        ),
         CustomRoute.module('/internal', module: DeepModule()),
       ];
 }
@@ -146,9 +153,13 @@ class OtherModule extends RouteContextImpl {
 class DeepModule extends RouteContextImpl {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'internal', children: [
-          CustomRoute(name: '/deep', data: 'deep'),
-        ]),
+        CustomRoute(
+          name: '/',
+          data: 'internal',
+          children: [
+            CustomRoute(name: '/deep', data: 'deep'),
+          ],
+        ),
       ];
 }
 
@@ -168,5 +179,5 @@ class CustomMidleware implements Middleware {
   }
 
   @override
-  FutureOr<ModularRoute?> pos(route, data) => route;
+  FutureOr<ModularRoute?> pos(ModularRoute route, dynamic data) => route;
 }
