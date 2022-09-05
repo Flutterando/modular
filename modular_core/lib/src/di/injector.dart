@@ -22,7 +22,7 @@ class InjectorImpl<T> extends Injector<T> {
       }
     }
 
-    if (entry == null) {
+    if (entry == null || (_trace == 1 && !entry.bind.export)) {
       resetTrace();
       throw BindNotFound(B.toString());
     }

@@ -51,7 +51,6 @@ abstract class BindContextImpl implements BindContext {
   @override
   BindEntry<T>? getBind<T extends Object>(Injector injector) {
     T bindValue;
-    final trace = injector.trace;
 
     var type = _getInjectType<T>();
     if (_singletonBinds.containsKey(type)) {
@@ -63,11 +62,7 @@ abstract class BindContextImpl implements BindContext {
       for (var import in _imports) {
         final entry = import.getBind<T>(injector);
         if (entry != null) {
-          if (trace == 1) {
-            return entry.bind.export ? entry : null;
-          } else {
-            return entry;
-          }
+          return entry;
         }
       }
 
