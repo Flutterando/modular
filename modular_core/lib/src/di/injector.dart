@@ -162,6 +162,8 @@ class InjectorImpl<T> extends Injector<T> {
     }
   }
   
+  //TODOjennifer: Implement trace correctly as removing it causes an error in 
+  //InjectorImpl.
   @override
   int trace = 0;
 }
