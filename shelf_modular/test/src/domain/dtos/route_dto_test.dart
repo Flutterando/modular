@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Equatable', () {
-    expect(RouteParmsDTO(url: '/'), RouteParmsDTO(url: '/'));
-    expect(RouteParmsDTO(url: '/').hashCode, RouteParmsDTO(url: '/').hashCode);
+    expect(const RouteParmsDTO(url: '/'), const RouteParmsDTO(url: '/'));
+    expect(const RouteParmsDTO(url: '/').hashCode, const RouteParmsDTO(url: '/').hashCode);
   });
 }

@@ -9,7 +9,7 @@ void main() {
   final service = BindServiceMock();
   final usecase = ReleaseScopedBindsImpl(service);
   test('get ModularArguments', () {
-    when(() => service.releaseScopedBinds()).thenReturn(right(unit));
+    when(service.releaseScopedBinds).thenReturn(right(unit));
     expect(usecase.call().getOrElse((left) => throw left), unit);
   });
 }

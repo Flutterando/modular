@@ -9,7 +9,7 @@ void main() {
   final service = RouteServiceMock();
   final usecase = ReassembleTrackerImpl(service);
   test('Reassemble tracker', () {
-    when(() => service.reassemble()).thenReturn(right(unit));
+    when(service.reassemble).thenReturn(right(unit));
 
     expect(usecase.call().getOrElse((l) => throw l), unit);
   });

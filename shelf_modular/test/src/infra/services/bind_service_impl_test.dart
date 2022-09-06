@@ -1,8 +1,8 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/src/shared/either.dart';
 import 'package:shelf_modular/src/domain/errors/errors.dart';
 import 'package:shelf_modular/src/infra/services/bind_service_impl.dart';
+import 'package:shelf_modular/src/shared/either.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/mocks.dart';
@@ -19,7 +19,7 @@ void main() {
     test('should throw error not found bind', () {
       when(() => injector.get<String>()).thenThrow(BindNotFound('String'));
       expect(
-          service.getBind<String>().fold(id, id), isA<BindNotFoundException>());
+          service.getBind<String>().fold(id, id), isA<BindNotFoundException>(),);
     });
   });
 
@@ -32,9 +32,9 @@ void main() {
 
   group('releaseScopedBinds', () {
     test('should return true', () {
-      when(() => injector.removeScopedBinds());
+      when(injector.removeScopedBinds);
       expect(
-          service.releaseScopedBinds().getOrElse((left) => throw left), unit);
+          service.releaseScopedBinds().getOrElse((left) => throw left), unit,);
     });
   });
 }

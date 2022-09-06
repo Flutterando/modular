@@ -11,7 +11,7 @@ void main() {
   final usecase = GetArgumentsImpl(service);
   test('get ModularArguments', () {
     final args = ModularArguments.empty();
-    when(() => service.getArguments()).thenReturn(right(args));
+    when(service.getArguments).thenReturn(right(args));
 
     expect(usecase.call().getOrElse((left) => ModularArguments.empty()), args);
   });

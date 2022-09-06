@@ -27,7 +27,7 @@ void main() {
   group('isModuleReady', () {
     test('should return true', () async {
       when(() => tracker.injector).thenReturn(injectorMock);
-      when(() => injectorMock.isModuleReady()).thenAnswer((_) async => true);
+      when(injectorMock.isModuleReady).thenAnswer((_) async => true);
       final result = await service.isModuleReady();
       expect(result.isRight, true);
     });

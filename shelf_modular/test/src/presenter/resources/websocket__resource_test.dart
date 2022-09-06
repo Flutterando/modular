@@ -23,7 +23,7 @@ void main() {
     final request = RequestMock();
     final resource = MyWebsocketResource();
     expect(
-        () async => await resource.handler(request), throwsA(isA<TypeError>()));
+        () async => await resource.handler(request), throwsA(isA<TypeError>()),);
   });
 
   test('connectSocket', () async {
@@ -37,7 +37,7 @@ void main() {
     when(() => channel.stream).thenAnswer((_) => controllerGeneral.stream);
     when(() => channel.sink).thenReturn(sinkMock);
     expect(controllerResourceSocket.stream,
-        emitsInOrder([isA<WebSocket>(), isA<WebSocket>(), isA<WebSocket>()]));
+        emitsInOrder([isA<WebSocket>(), isA<WebSocket>(), isA<WebSocket>()]),);
 
     //start
     resource.connectSocket(channel);

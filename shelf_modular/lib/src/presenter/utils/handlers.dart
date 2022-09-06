@@ -11,35 +11,35 @@ typedef Handler2 = FutureOr<Response> Function(Injector i);
 
 //two params
 typedef HandlerTwoParams = FutureOr<Response> Function(
-    Request request, ModularArguments args);
+    Request request, ModularArguments args,);
 typedef HandlerTwoParams1 = FutureOr<Response> Function(
-    Request request, Injector i);
+    Request request, Injector i,);
 typedef HandlerTwoParams2 = FutureOr<Response> Function(
-    ModularArguments args, Request request);
+    ModularArguments args, Request request,);
 typedef HandlerTwoParams3 = FutureOr<Response> Function(
-    ModularArguments args, Injector i);
+    ModularArguments args, Injector i,);
 typedef HandlerTwoParams4 = FutureOr<Response> Function(
-    Injector i, ModularArguments args);
+    Injector i, ModularArguments args,);
 typedef HandlerTwoParams5 = FutureOr<Response> Function(
-    Injector i, Request request);
+    Injector i, Request request,);
 //three params
 typedef HandlerThreeParams = FutureOr<Response> Function(
-    Request request, ModularArguments args, Injector i);
+    Request request, ModularArguments args, Injector i,);
 typedef HandlerThreeParams1 = FutureOr<Response> Function(
-    Request request, Injector i, ModularArguments args);
+    Request request, Injector i, ModularArguments args,);
 typedef HandlerThreeParams2 = FutureOr<Response> Function(
-    ModularArguments args, Request request, Injector i);
+    ModularArguments args, Request request, Injector i,);
 typedef HandlerThreeParams3 = FutureOr<Response> Function(
-    ModularArguments args, Injector i, Request request);
+    ModularArguments args, Injector i, Request request,);
 typedef HandlerThreeParams4 = FutureOr<Response> Function(
-    Injector i, ModularArguments args, Request request);
+    Injector i, ModularArguments args, Request request,);
 typedef HandlerThreeParams5 = FutureOr<Response> Function(
-    Injector i, Request request, ModularArguments args);
+    Injector i, Request request, ModularArguments args,);
 
 FutureOr<Response>? applyHandler(Function fn,
     {required Request request,
     required ModularArguments arguments,
-    required Injector injector}) {
+    required Injector injector,}) {
   //less
   if (fn is HandlerWithlessParams) {
     return fn();

@@ -13,7 +13,7 @@ abstract class Either<TLeft, TRight> {
   }
 
   Future<Either<TLeft, T>> asyncBind<T>(
-      Future<Either<TLeft, T>> Function(TRight r) fn) {
+      Future<Either<TLeft, T>> Function(TRight r) fn,) {
     return fold((l) async => left(l), fn);
   }
 

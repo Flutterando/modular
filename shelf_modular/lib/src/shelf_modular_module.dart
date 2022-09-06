@@ -45,6 +45,6 @@ class ShelfModularModule extends Module {
         Bind.factory<ReassembleTracker>((i) => ReassembleTrackerImpl(i())),
         //presenter
         Bind.singleton<IModularBase>((i) =>
-            ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i(), i())),
+            ModularBase(i(), i(), i(), i(), i(), i(), i(), i(), i(), i()),),
       ];
 }

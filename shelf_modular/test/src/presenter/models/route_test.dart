@@ -19,7 +19,7 @@ void main() {
     expect(route.schema, 'DELETE');
   });
   test('route PATCH', () {
-    final route = Route.path('/', () {});
+    final route = Route.patch('/', () {});
     expect(route.name, '/');
     expect(route.schema, 'PATCH');
   });

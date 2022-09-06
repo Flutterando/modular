@@ -14,5 +14,6 @@ export 'src/presenter/models/route.dart';
 export 'src/presenter/resources/resource.dart';
 export 'src/presenter/resources/websocket_resource.dart';
 
+///Modular Base
 // ignore: non_constant_identifier_names
 final Modular = injector<IModularBase>();

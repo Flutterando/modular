@@ -23,22 +23,28 @@ import 'package:shelf_modular/src/shelf_modular_module.dart';
 import 'errors/errors.dart';
 import 'utils/handlers.dart';
 
+///Interface for [ModularBase]
 abstract class IModularBase {
   /// Finishes all trees(BindContext and RouteContext).
   void destroy();
 
-  /// checks if all asynchronous binds are ready to be used synchronously of all BindContext of Tree.
+  /// checks if all asynchronous binds are ready to be used synchronously of
+  /// all BindContext of Tree.
   Future<void> isModuleReady<M extends Module>();
 
   /// Responsible for starting the app.
-  /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
+  /// It should only be called once, but it should be the first method to be
+  /// called before a route or bind lookup.
   /// [module]: Start initial module.
   /// [middlewares]: List of Shelf middlewares.
-  Handler call(
-      {required RouteContext module, List<Middleware> middlewares = const []});
+  Handler call({
+    required RouteContext module,
+    List<Middleware> middlewares = const [],
+  });
 
   /// Responsible for starting the app.
-  /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
+  /// It should only be called once, but it should be the first method to be
+  /// called before a route or bind lookup.
   Handler start({required RouteContext module});
 
   /// Request an async instance by [Type]
@@ -56,20 +62,50 @@ abstract class IModularBase {
   bool reassemble();
 }
 
+///Implements [IModularBase] and it's methods
+
 class ModularBase implements IModularBase {
+  ///Instantiate a [DisposeBind]
   final DisposeBind disposeBind;
+
+  ///Instantiate a [GetArguments]
   final GetArguments getArguments;
+
+  ///Instantiate a [FinishModule]
+
   final FinishModule finishModule;
+
+  ///Instantiate a [GetBind]
+
   final GetBind getBind;
+
+  ///Instantiate a [StartModule]
+
   final StartModule startModule;
+
+  ///Instantiate a [GetRoute]
+
   final GetRoute getRoute;
+
+  ///Instantiate a [ReleaseScopedBinds]
+
   final ReleaseScopedBinds releaseScopedBinds;
+
+  ///Instantiate a [IsModuleReadyImpl]
+
   final IsModuleReadyImpl isModuleReadyImpl;
+
+  ///Instantiate a [ReportPush]
+
   final ReportPush reportPush;
+
+  ///Instantiate a [ReassembleTracker]
+
   final ReassembleTracker reassembleTracker;
 
   bool _moduleHasBeenStarted = false;
 
+  ///[ModularBase] constructor
   ModularBase(
     this.disposeBind,
     this.finishModule,
@@ -114,23 +150,28 @@ class ModularBase implements IModularBase {
   void destroy() => finishModule();
 
   @override
-  Handler call(
-      {required RouteContext module, List<Middleware> middlewares = const []}) {
+  Handler call({
+    required RouteContext module,
+    List<Middleware> middlewares = const [],
+  }) {
     if (!_moduleHasBeenStarted) {
       startModule(module)
+          // ignore: avoid_print
           .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
+      // ignore: avoid_print
       setPrintResolver(print);
-      var pipeline = Pipeline();
-      for (var middleware in middlewares) {
+      var pipeline = const Pipeline();
+      for (final middleware in middlewares) {
         pipeline = pipeline.addMiddleware(middleware);
       }
 
       return pipeline.addHandler(handler);
     } else {
       throw ModuleStartedException(
-          'Module ${module.runtimeType} is already started');
+        'Module ${module.runtimeType} is already started',
+      );
     }
   }
 
@@ -143,12 +184,15 @@ class ModularBase implements IModularBase {
     try {
       final data = await tryJsonDecode(request);
       final params = RouteParmsDTO(
-          url: '/${request.url.toString()}',
-          schema: request.method,
-          arguments: data);
+        url: '/${request.url.toString()}',
+        schema: request.method,
+        arguments: data,
+      );
       final result = await getRoute.call(params);
       response = await result.fold<FutureOr<Response>>(
-          _routeError, (r) => _routeSuccess(r, request));
+        _routeError,
+        (r) => _routeSuccess(r, request),
+      );
     } on Exception catch (e) {
       if (e
           .toString()
@@ -168,12 +212,12 @@ class ModularBase implements IModularBase {
 
   FutureOr<Response> _routeSuccess(ModularRoute? route, Request request) async {
     final middlewares = route!.middlewares;
-    var pipeline = Pipeline();
+    var pipeline = const Pipeline();
 
-    for (var middleware in middlewares) {
+    for (final middleware in middlewares) {
       if (middleware is ModularMiddleware) {
         pipeline = pipeline
-            .addMiddleware(((innerHandler) => middleware(innerHandler, route)));
+            .addMiddleware((innerHandler) => middleware(innerHandler, route));
       }
     }
 
