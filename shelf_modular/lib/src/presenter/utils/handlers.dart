@@ -4,42 +4,111 @@ import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart';
 
 //less
+///Handler with less params
 typedef HandlerWithlessParams = FutureOr<Response> Function();
 //one param
+///Handler with one param
 typedef Handler1 = FutureOr<Response> Function(ModularArguments args);
+
+///Handler with one param
 typedef Handler2 = FutureOr<Response> Function(Injector i);
 
 //two params
+///Handler with two params
 typedef HandlerTwoParams = FutureOr<Response> Function(
-    Request request, ModularArguments args,);
-typedef HandlerTwoParams1 = FutureOr<Response> Function(
-    Request request, Injector i,);
-typedef HandlerTwoParams2 = FutureOr<Response> Function(
-    ModularArguments args, Request request,);
-typedef HandlerTwoParams3 = FutureOr<Response> Function(
-    ModularArguments args, Injector i,);
-typedef HandlerTwoParams4 = FutureOr<Response> Function(
-    Injector i, ModularArguments args,);
-typedef HandlerTwoParams5 = FutureOr<Response> Function(
-    Injector i, Request request,);
-//three params
-typedef HandlerThreeParams = FutureOr<Response> Function(
-    Request request, ModularArguments args, Injector i,);
-typedef HandlerThreeParams1 = FutureOr<Response> Function(
-    Request request, Injector i, ModularArguments args,);
-typedef HandlerThreeParams2 = FutureOr<Response> Function(
-    ModularArguments args, Request request, Injector i,);
-typedef HandlerThreeParams3 = FutureOr<Response> Function(
-    ModularArguments args, Injector i, Request request,);
-typedef HandlerThreeParams4 = FutureOr<Response> Function(
-    Injector i, ModularArguments args, Request request,);
-typedef HandlerThreeParams5 = FutureOr<Response> Function(
-    Injector i, Request request, ModularArguments args,);
+  Request request,
+  ModularArguments args,
+);
 
-FutureOr<Response>? applyHandler(Function fn,
-    {required Request request,
-    required ModularArguments arguments,
-    required Injector injector,}) {
+///Handler with two params
+
+typedef HandlerTwoParams1 = FutureOr<Response> Function(
+  Request request,
+  Injector i,
+);
+
+///Handler with two params
+
+typedef HandlerTwoParams2 = FutureOr<Response> Function(
+  ModularArguments args,
+  Request request,
+);
+
+///Handler with two params
+
+typedef HandlerTwoParams3 = FutureOr<Response> Function(
+  ModularArguments args,
+  Injector i,
+);
+
+///Handler with two params
+
+typedef HandlerTwoParams4 = FutureOr<Response> Function(
+  Injector i,
+  ModularArguments args,
+);
+
+///Handler with two params
+
+typedef HandlerTwoParams5 = FutureOr<Response> Function(
+  Injector i,
+  Request request,
+);
+//three params
+///Handler with three params
+
+typedef HandlerThreeParams = FutureOr<Response> Function(
+  Request request,
+  ModularArguments args,
+  Injector i,
+);
+
+///Handler with three params
+
+typedef HandlerThreeParams1 = FutureOr<Response> Function(
+  Request request,
+  Injector i,
+  ModularArguments args,
+);
+
+///Handler with three params
+
+typedef HandlerThreeParams2 = FutureOr<Response> Function(
+  ModularArguments args,
+  Request request,
+  Injector i,
+);
+
+///Handler with three params
+
+typedef HandlerThreeParams3 = FutureOr<Response> Function(
+  ModularArguments args,
+  Injector i,
+  Request request,
+);
+
+///Handler with three params
+
+typedef HandlerThreeParams4 = FutureOr<Response> Function(
+  Injector i,
+  ModularArguments args,
+  Request request,
+);
+
+///Handler with three params
+
+typedef HandlerThreeParams5 = FutureOr<Response> Function(
+  Injector i,
+  Request request,
+  ModularArguments args,
+);
+///Manage the handler types
+FutureOr<Response>? applyHandler(
+  Function fn, {
+  required Request request,
+  required ModularArguments arguments,
+  required Injector injector,
+}) {
   //less
   if (fn is HandlerWithlessParams) {
     return fn();

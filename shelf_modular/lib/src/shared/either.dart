@@ -1,9 +1,16 @@
 import 'package:meta/meta.dart';
 
+///Abstract class [Either]
+///acts as an interface
 abstract class Either<TLeft, TRight> {
+  ///Checks if the response is left
   bool get isLeft;
+
+  ///Checks if the response is right
+
   bool get isRight;
 
+///Folds the right and left responses
   T fold<T>(T Function(TLeft l) leftFn, T Function(TRight r) rightFn);
 
   TRight getOrElse(TRight Function(TLeft left) orElse);
@@ -13,7 +20,8 @@ abstract class Either<TLeft, TRight> {
   }
 
   Future<Either<TLeft, T>> asyncBind<T>(
-      Future<Either<TLeft, T>> Function(TRight r) fn,) {
+    Future<Either<TLeft, T>> Function(TRight r) fn,
+  ) {
     return fold((l) async => left(l), fn);
   }
 

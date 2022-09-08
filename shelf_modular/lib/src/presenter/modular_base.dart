@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -156,11 +158,9 @@ class ModularBase implements IModularBase {
   }) {
     if (!_moduleHasBeenStarted) {
       startModule(module)
-          // ignore: avoid_print
           .fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
       _moduleHasBeenStarted = true;
 
-      // ignore: avoid_print
       setPrintResolver(print);
       var pipeline = const Pipeline();
       for (final middleware in middlewares) {
@@ -178,6 +178,7 @@ class ModularBase implements IModularBase {
   @override
   Handler start({required RouteContext module}) => call(module: module);
 
+///Handle the requests, setting up a response from it.
   @visibleForTesting
   FutureOr<Response> handler(Request request) async {
     Response response;
@@ -253,6 +254,7 @@ class ModularBase implements IModularBase {
     return Response.internalServerError(body: error.toString());
   }
 
+///Converts json to data.
   @visibleForTesting
   Future<Map> tryJsonDecode(Request request) async {
     if (request.method == 'GET') return {};
