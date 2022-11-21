@@ -35,6 +35,10 @@ class ParallelRoute<T> extends ModularRoute {
   /// Default is 300 milliseconds
   final Duration? duration;
 
+  /// Whether this page route is a full-screen dialog.
+  /// Default is false;
+  final bool isFullscreenDialog;
+
   @internal
   final void Function(dynamic)? popCallback;
 
@@ -48,6 +52,7 @@ class ParallelRoute<T> extends ModularRoute {
     this.transition,
     this.customTransition,
     this.duration,
+    this.isFullscreenDialog = false,
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
     Module? module,
@@ -71,6 +76,7 @@ class ParallelRoute<T> extends ModularRoute {
     List<ParallelRoute> children = const [],
     Duration? duration,
     TransitionType? transition,
+    bool isFullscreenDialog = false,
     List<Middleware> middlewares = const [],
   }) {
     return ParallelRoute<T>(
@@ -80,6 +86,7 @@ class ParallelRoute<T> extends ModularRoute {
       customTransition: customTransition,
       transition: transition,
       duration: duration,
+      isFullscreenDialog: isFullscreenDialog,
       middlewares: middlewares,
     );
   }
@@ -126,6 +133,7 @@ class ParallelRoute<T> extends ModularRoute {
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
+    bool? isFullscreenDialog,
     String? name,
     String? schema,
     void Function(dynamic)? popCallback,
@@ -142,6 +150,7 @@ class ParallelRoute<T> extends ModularRoute {
       module: module ?? this.module,
       customTransition: customTransition ?? this.customTransition,
       duration: duration ?? this.duration,
+      isFullscreenDialog: isFullscreenDialog ?? this.isFullscreenDialog,
       name: name ?? this.name,
       schema: schema ?? this.schema,
       popCallback: popCallback ?? this.popCallback,

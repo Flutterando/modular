@@ -49,6 +49,7 @@ class ModularPage<T> extends Page<T> {
         maintainState: route.maintainState,
         transitionsBuilder: transition.transitionBuilder,
         transitionDuration: transition.transitionDuration,
+        fullscreenDialog: route.isFullscreenDialog,
       );
     } else if (transitionType == TransitionType.defaultTransition) {
       // Helper function
@@ -59,18 +60,21 @@ class ModularPage<T> extends Page<T> {
           settings: this,
           maintainState: route.maintainState,
           builder: widgetBuilder,
+          fullscreenDialog: route.isFullscreenDialog,
         );
       }
       return MaterialPageRoute<T>(
         settings: this,
         maintainState: route.maintainState,
         builder: widgetBuilder,
+        fullscreenDialog: route.isFullscreenDialog,
       );
     } else if (transitionType == TransitionType.noTransition) {
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
         maintainState: route.maintainState,
         builder: (_) => page,
+        fullscreenDialog: route.isFullscreenDialog,
       );
     } else {
       final selectTransition = route.transitions[transitionType];
