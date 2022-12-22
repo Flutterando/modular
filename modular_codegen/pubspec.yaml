@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   flutter_modular_annotations: ^0.0.2
-  analyzer: ">=2.0.0 <3.4.0"
+  analyzer: ">=2.0.0 <4.8.0"
   glob: ^2.0.0
   build: ">=2.1.0 <3.0.0"
   build_resolvers: ">=2.0.0 <2.1.0"
