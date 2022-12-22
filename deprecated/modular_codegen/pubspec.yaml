@@ -1,5 +1,5 @@
 name: modular_codegen
-description: Code Generate for flutter_modular. Inject Automation. Annotation @Inject, @Param and @Data. 
+description: Code Generate for flutter_modular. Inject Automation. Annotation @Inject, @Param and @Data.
 version: 3.0.4
 homepage: https://github.com/Flutterando/modular
 
@@ -8,10 +8,10 @@ environment:
 
 dependencies:
   flutter_modular_annotations: ^0.0.2
-  analyzer: ">=2.0.0 <3.2.0"
+  analyzer: ">=2.0.0 <3.4.0"
   glob: ^2.0.0
-  build: '>=2.1.0 <3.0.0'
-  build_resolvers: '>=2.0.0 <2.1.0'
+  build: ">=2.1.0 <3.0.0"
+  build_resolvers: ">=2.0.0 <2.1.0"
   source_gen: ^1.0.0
   meta: ">=1.3.0 <2.0.0"
   flutter:
