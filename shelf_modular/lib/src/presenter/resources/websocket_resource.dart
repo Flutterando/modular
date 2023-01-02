@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:meta/meta.dart';
 
 abstract class WebSocketResource {
   FutureOr<Response> handler(Request request) {
@@ -19,7 +19,7 @@ abstract class WebSocketResource {
 
   @visibleForTesting
   void connectSocket(WebSocketChannel socketChannel) {
-    final socket = WebSocket._(socketChannel, _broadcast);
+    final socket = WebSocket._(socketChannel, broadcast);
 
     _websockets.add(socket);
     connect(socket);
@@ -31,8 +31,8 @@ abstract class WebSocketResource {
     });
   }
 
-  void _broadcast(
-      dynamic message, WebSocket currentSocket, Iterable<String> rooms) {
+  void broadcast(dynamic message,
+      {WebSocket? currentSocket, Iterable<String> rooms = const []}) {
     for (var room in rooms.isEmpty ? [''] : rooms) {
       var list = _websockets.where((socket) => currentSocket != socket);
       if (room.isNotEmpty) {
@@ -51,9 +51,8 @@ class WebSocket {
   final Set<String> _enteredRooms = {};
   late final Stream _stream = _channel.stream.asBroadcastStream();
   Set<String> get enteredRooms => Set<String>.unmodifiable(_enteredRooms);
-  final void Function(
-          dynamic message, WebSocket currentWebSocket, Iterable<String> room)
-      _broadcast;
+  final void Function(dynamic message,
+      {WebSocket? currentSocket, Iterable<String> rooms}) _broadcast;
   dynamic tag;
 
   Stream get stream => _stream;
@@ -63,8 +62,9 @@ class WebSocket {
   bool leaveRoom(String room) => _enteredRooms.remove(room);
 
   void emit(dynamic data, [Iterable<String> rooms = const []]) =>
-      _broadcast(data, this, rooms);
-  void emitToRooms(dynamic data) => _broadcast(data, this, _enteredRooms);
+      _broadcast(data, currentSocket: this, rooms: rooms);
+  void emitToRooms(dynamic data) =>
+      _broadcast(data, currentSocket: this, rooms: _enteredRooms);
 
   WebSocket._(this._channel, this._broadcast);
 }

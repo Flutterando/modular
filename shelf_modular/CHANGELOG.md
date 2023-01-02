@@ -1,3 +1,6 @@
+## 2.2.0 - 2022/01/02
+- feat: added broadcast function
+
 ## 2.0.1 - 2022/07/22
 - fix: Bind aways Scoped.
 
