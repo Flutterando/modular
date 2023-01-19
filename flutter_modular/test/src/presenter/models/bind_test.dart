@@ -1,5 +1,6 @@
 import 'package:flutter_modular/src/presenter/models/bind.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:modular_core/modular_core.dart';
 
 void main() {
   test('bind instance', () {
@@ -37,5 +38,14 @@ void main() {
     final bind = BindInject((i) => 'instance');
     expect(bind.isSingleton, true);
     expect(bind.isLazy, true);
+  });
+  test('copyWith', () async {
+    final bind = BindInject((i) => 'instance');
+    expect(bind.copyWith(), isA<Bind>());
+  });
+
+  test('copyWith asyncBind', () async {
+    final asyncBind = AsyncBind((i) async => 'instance');
+    expect(asyncBind.copyWith(), isA<AsyncBindContract>());
   });
 }

@@ -1,25 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/presenter/models/module.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:modular_core/modular_core.dart';
 
 void main() {
   test('MaterialApp extension', () {
-    final app = MaterialApp().modular();
+    Modular.setInitialRoute('/');
+    Modular.setObservers([]);
+    Modular.setNavigatorKey(GlobalKey<NavigatorState>());
+    final app = MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
     expect(app, isA<MaterialApp>());
   });
 
   test('CupertinoApp extension', () {
-    final app = CupertinoApp().modular();
+    final app = CupertinoApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
     expect(app, isA<CupertinoApp>());
   });
 
   testWidgets('RouterOutlet', (tester) async {
     Modular.init(AppModule());
-    await tester.pumpWidget(MaterialApp().modular());
+    await tester.pumpWidget(MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    ));
 
     await tester.pump();
     final finder = find.byKey(keyOutlet);
@@ -30,12 +39,12 @@ void main() {
   });
 }
 
-final keyOutlet = ValueKey('keyOutlet');
+const keyOutlet = ValueKey('keyOutlet');
 
 class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ParallelRoute.child('/',
-            child: (_, __) => RouterOutlet(key: keyOutlet)),
+            child: (_, __) => const RouterOutlet(key: keyOutlet)),
       ];
 }

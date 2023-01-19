@@ -37,8 +37,15 @@ void main() {
   group('reportPush', () {
     test('report pushroute', () async {
       final route = RouteMock();
-      when(() => tracker.reportPopRoute(route)).thenReturn('');
+      when(() => tracker.reportPopRoute(route));
       final result = service.reportPush(route);
+      expect(result.isRight, true);
+    });
+  });
+
+  group('reassemble', () {
+    test('return unit', () async {
+      final result = service.reassemble();
       expect(result.isRight, true);
     });
   });

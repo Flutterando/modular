@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
-import 'package:flutter_modular/src/domain/usecases/unbind_module.dart';
-import 'package:flutter_modular/src/flutter_modular_module.dart';
-import 'package:flutter_modular/src/presenter/models/bind.dart';
-import 'package:flutter_modular/src/presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
+
+import '../../domain/usecases/bind_module.dart';
+import '../../domain/usecases/unbind_module.dart';
+import '../../flutter_modular_module.dart';
+import '../models/bind.dart';
+import '../models/module.dart';
 
 abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   Widget get view;
@@ -22,7 +23,7 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   WidgetModule({Key? key}) : super(key: key);
 
   @override
-  T? getBind<T extends Object>(Injector injector) {
+  BindEntry<T>? getBind<T extends Object>(Injector injector) {
     return _fakeModule.getBind<T>(injector);
   }
 
@@ -35,12 +36,12 @@ abstract class WidgetModule extends StatelessWidget implements BindContextImpl {
   final List<Module> imports = const [];
 
   @override
-  List<SingletonBind> get instanciatedSingletons =>
+  List<BindEntry> get instanciatedSingletons =>
       _fakeModule.instanciatedSingletons;
 
   @override
   void instantiateSingletonBinds(
-      List<SingletonBind<Object>> singletons, Injector injector) {
+      List<BindEntry<Object>> singletons, Injector injector) {
     _fakeModule.instantiateSingletonBinds(singletons, injector);
   }
 
@@ -109,6 +110,6 @@ class _ModularProviderState<T extends BindContext>
   @override
   void dispose() {
     super.dispose();
-    injector.get<UnbindModule>().call<T>();
+    injector.get<UnbindModule>().call<T>(type: widget.module.runtimeType);
   }
 }

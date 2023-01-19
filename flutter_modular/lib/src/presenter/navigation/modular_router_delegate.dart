@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modular_core/modular_core.dart';
 
+import '../../../flutter_modular.dart';
+import '../../domain/usecases/report_pop.dart';
 import 'custom_navigator.dart';
 import 'modular_book.dart';
 import 'modular_page.dart';
 import 'modular_route_information_parser.dart';
-import '../../domain/usecases/report_pop.dart';
 
 class ModularRouterDelegate extends RouterDelegate<ModularBook>
     with
@@ -38,7 +38,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   Widget build(BuildContext context) {
     final pages = currentConfiguration?.chapters().toList() ?? [];
     if (pages.isEmpty) {
-      return Material();
+      return const Material();
     }
 
     return CustomNavigator(
@@ -51,7 +51,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   }
 
   @override
-  void setObserver(List<NavigatorObserver> navigatorObservers) {
+  void setObservers(List<NavigatorObserver> navigatorObservers) {
     observers = navigatorObservers;
     notifyListeners();
   }
@@ -65,19 +65,19 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   }
 
   @override
-  Future<void> setNewRoutePath(ModularBook book) async {
+  Future<void> setNewRoutePath(ModularBook configuration) async {
     final disposableRoutes = <ParallelRoute>[];
 
     for (var route
         in currentConfiguration?.routes ?? <ParallelRoute<dynamic>>[]) {
-      if (book.routes
+      if (configuration.routes
               .indexWhere((element) => element.uri.path == route.uri.path) ==
           -1) {
         disposableRoutes.add(route);
       }
     }
 
-    currentConfiguration = book;
+    currentConfiguration = configuration;
     notifyListeners();
 
     for (var disposableRoute in disposableRoutes) {
@@ -243,10 +243,43 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
 
   @override
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
-      String newRouteName, bool Function(Route) predicate,
-      {Object? arguments, bool forRoot = false}) {
-    popUntil(predicate);
-    return pushNamed<T>(newRouteName, arguments: arguments, forRoot: forRoot);
+      String routeName, bool Function(Route) predicate,
+      {Object? arguments, bool forRoot = false}) async {
+    final popComplete = Completer();
+    var book = await parser.selectBook(routeName,
+        arguments: arguments, popCallback: popComplete.complete);
+    if (forRoot) {
+      final list = currentConfiguration!.routes.where((route) {
+        return predicate(CustomModalRoute(ModularPage(
+            route: route,
+            args: ModularArguments.empty(),
+            flags: ModularFlags())));
+      }).toList();
+      book = currentConfiguration!
+          .copyWith(routes: [...list, book.routes.last.copyWith(schema: '')]);
+      await setNewRoutePath(book);
+    } else {
+      final list = currentConfiguration!.routes.where((route) {
+        return predicate(CustomModalRoute(ModularPage(
+            route: route,
+            args: ModularArguments.empty(),
+            flags: ModularFlags())));
+      }).toList();
+      for (var route in book.routes.reversed) {
+        if (list
+                .firstWhere(
+                    (element) => element.uri.toString() == route.uri.toString(),
+                    orElse: () => ParallelRoute.empty())
+                .name ==
+            '') {
+          list.add(route);
+        }
+      }
+
+      await setNewRoutePath(book.copyWith(routes: list));
+    }
+
+    return await popComplete.future;
   }
 
   @override

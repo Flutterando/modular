@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/models/modular_args.dart';
 import 'package:flutter_modular/src/presenter/models/route.dart';
@@ -32,6 +31,7 @@ void main() {
     final route = ParallelRouteMock();
     when(() => route.child).thenReturn((_, __) => Container());
     when(() => route.uri).thenReturn(Uri.parse('/'));
+    when(() => route.maintainState).thenReturn(true);
     when(() => route.transition).thenReturn(TransitionType.defaultTransition);
     final page = ModularPage(args: args, flags: ModularFlags(), route: route);
     expect(page.createRoute(context), isA<Route>());
@@ -44,6 +44,8 @@ void main() {
     final widget = Container();
     when(() => route.child).thenReturn((_, __) => widget);
     when(() => route.uri).thenReturn(Uri.parse('/'));
+    when(() => route.maintainState).thenReturn(true);
+
     when(() => route.transition).thenReturn(TransitionType.defaultTransition);
     final page = ModularPage(
         args: args, flags: ModularFlags(isCupertino: true), route: route);
@@ -58,6 +60,8 @@ void main() {
     final route = ParallelRouteMock();
     final widget = Container();
     when(() => route.child).thenReturn((_, __) => widget);
+    when(() => route.maintainState).thenReturn(true);
+
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.transition).thenReturn(TransitionType.noTransition);
     final page = ModularPage(args: args, flags: ModularFlags(), route: route);
@@ -82,6 +86,8 @@ void main() {
     final widget = Container();
     when(() => route.child).thenReturn((_, __) => widget);
     when(() => route.uri).thenReturn(Uri.parse('/'));
+    when(() => route.maintainState).thenReturn(true);
+
     when(() => route.transition).thenReturn(TransitionType.custom);
     when(() => route.customTransition).thenReturn(
         CustomTransition(transitionBuilder: (_, __, ___, child) => child));
@@ -114,6 +120,8 @@ void main() {
       when(() => route.transition).thenReturn(key);
       when(() => route.transitions).thenReturn(transitionMap);
       when(() => route.child).thenReturn((_, __) => widget);
+      when(() => route.maintainState).thenReturn(true);
+
       when(() => route.uri).thenReturn(Uri.parse('/'));
       when(() => route.duration).thenReturn(Duration.zero);
 

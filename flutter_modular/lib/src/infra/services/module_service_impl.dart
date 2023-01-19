@@ -1,7 +1,7 @@
-import 'package:flutter_modular/src/presenter/models/module.dart';
+import '../../presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/services/module_service.dart';
+import '../../shared/either.dart';
+import '../../domain/services/module_service.dart';
 
 class ModuleServiceImpl extends ModuleService {
   final Tracker tracker;
@@ -32,8 +32,8 @@ class ModuleServiceImpl extends ModuleService {
   }
 
   @override
-  Either<ModularError, Unit> unbind<T extends BindContext>() {
-    tracker.injector.removeBindContext<T>();
+  Either<ModularError, Unit> unbind<T extends BindContext>({Type? type}) {
+    tracker.injector.removeBindContext<T>(type: type);
     return right(unit);
   }
 }

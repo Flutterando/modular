@@ -28,6 +28,26 @@ http://localhost:3000/users
 http://localhost:3000/products
 ```
 
+You can user POSIX in route name:
+
+```dart title="lib/app_module.dart"
+...
+  List<ModularRoute> get routes => [
+        Route.get('/any/**', () => Response.ok('All products')),
+        Route.get('/**', () => Response.notFound(body: 'not found')),
+      ];
+
+```
+
+```
+http://localhost:3000/any/test1   - ok
+http://localhost:3000/any/test2   - ok
+http://localhost:3000/any/test3   - ok
+
+
+http://localhost:3000/other  -  [404] -> 'not found'
+```
+
 ## Magic Handler
 
 Every route has a function that returns a **Response**. This function can have up to 3 optional parameters: **Request**, **Injector** and **ModularArgments**.
@@ -105,12 +125,12 @@ Sometimes we need to aggregate routes in a layer to make the data easier to unde
 class UserResource extends Resource {
   @override
   List<Route> get routes => [
-        Route.get('/', () => getAllUsers),
-        Route.get('/:id', getUser),
+        Route.get('/user', () => getAllUsers),
+        Route.get('/user/:id', getUser),
         //passed json body in request
-        Route.post('/', addUser),
-        Route.put('/:id', updateUser),
-        Route.delete('/:id', deleteUser),
+        Route.post('/user', addUser),
+        Route.put('/user/:id', updateUser),
+        Route.delete('/user/:id', deleteUser),
       ];
 
   FutureOr<Response> getAllUsers() => Response.ok('All users');
@@ -132,7 +152,7 @@ import 'user_resource.dart';
 class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
-      Route.resource('/users', resource: UserResource()),
+      Route.resource(UserResource()),
     ];
 }
 ```
@@ -140,7 +160,7 @@ class AppModule extends Module {
 To see if everything is working, just test it in a browser:
 
 ```
-http://localhost:3000/users/
+http://localhost:3000/users
 ```
 
 :::info TIP

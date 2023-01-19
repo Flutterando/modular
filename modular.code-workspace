@@ -25,11 +25,13 @@
 			"path": "flutter_modular_annotations"
 		},
 		{
-			"name": "flutter_modular_test",
-			"path": "flutter_modular_test"
+			"path": "modular_test"
 		},
 		{
-			"path": "modular_test"
+			"path": "plugins/modular_bloc_bind"
+		},
+		{
+			"path": "plugins/modular_triple_bind"
 		}
 	],
 	"settings": {

@@ -1,3 +1,18 @@
+## 2.0.3+1 - 2022/06/02
+* feat: Added type propertie in removeBindContext
+
+## 2.0.1 - 2022/05/12
+* Fix: Inject.get should return instance
+
+## 2.0.0 - 2022/05/11
+* Remove `setDisposeResolver`.
+* Apply `BindContract.onDispose` of `modular_interface`.
+* Injetor.getBind now returns `BindEntry`.
+* [BREAK CHANGE] Bind.export works only after imported.
+
+## 1.2.2 - 2022/04/05
+* Fixed binds auto-dispose [#699] [#671] [#678]
+
 ## 1.2.1 - 2021/12/31
 * Fixed "bind replaced" bug
 

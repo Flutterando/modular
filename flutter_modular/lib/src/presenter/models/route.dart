@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/presenter/navigation/transitions/transitions.dart';
+import '../navigation/transitions/transitions.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:meta/meta.dart';
 
@@ -10,6 +10,11 @@ typedef ModularChild = Widget Function(
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
 
 class ParallelRoute<T> extends ModularRouteImpl {
+  /// Whether the route should remain in memory when it is inactive.
+  /// If this is true, then the route is maintained, so that any futures it is holding from the next route will properly resolve when the next route pops. If this is not necessary, this can be set to false to allow the framework to entirely discard the route's widget hierarchy when it is not visible.
+  /// If this getter would ever start returning a different value, the [changedInternalState] should be invoked so that the change can take effect.
+  final bool maintainState;
+
   /// Widget Builder that will be called when prompted in navigation.
   final ModularChild? child;
 
@@ -32,6 +37,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
     this.child,
     required String name,
     this.popCallback,
+    this.maintainState = true,
     String parent = '',
     String schema = '',
     this.transition,
@@ -135,6 +141,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
     Widget Function(BuildContext, ModularArguments) builder,
     Duration transitionDuration,
     RouteSettings settings,
+    bool maintainState,
   )> transitions = {
     TransitionType.fadeIn: fadeInTransition,
     TransitionType.rightToLeft: rightToLeft,
@@ -169,9 +176,16 @@ class CustomTransition {
   final Widget Function(
           BuildContext, Animation<double>, Animation<double>, Widget)
       transitionBuilder;
+  Widget Function(BuildContext, Animation<double>, Animation<double>)?
+      pageBuilder;
   final Duration transitionDuration;
+  final Duration reverseTransitionDuration;
+  final bool opaque;
 
   CustomTransition(
       {required this.transitionBuilder,
-      this.transitionDuration = const Duration(milliseconds: 300)});
+      this.transitionDuration = const Duration(milliseconds: 300),
+      this.reverseTransitionDuration = const Duration(milliseconds: 300),
+      this.opaque = true,
+      this.pageBuilder});
 }

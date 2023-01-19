@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/src/presenter/errors/errors.dart';
-import 'package:flutter_modular/src/presenter/models/modular_args.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import '../errors/errors.dart';
+import '../models/modular_args.dart';
+import '../models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
 class ModularPage<T> extends Page<T> {
@@ -40,12 +40,14 @@ class ModularPage<T> extends Page<T> {
 
     if (transitionType == TransitionType.custom &&
         route.customTransition != null) {
+      final transition = route.customTransition!;
       return PageRouteBuilder<T>(
-        pageBuilder: (context, _, __) => page,
+        pageBuilder: transition.pageBuilder ?? (context, _, __) => page,
+        opaque: transition.opaque,
         settings: this,
-        maintainState: true,
-        transitionsBuilder: route.customTransition!.transitionBuilder,
-        transitionDuration: route.customTransition!.transitionDuration,
+        maintainState: route.maintainState,
+        transitionsBuilder: transition.transitionBuilder,
+        transitionDuration: transition.transitionDuration,
       );
     } else if (transitionType == TransitionType.defaultTransition) {
       // Helper function
@@ -54,19 +56,19 @@ class ModularPage<T> extends Page<T> {
       if (flags.isCupertino) {
         return CupertinoPageRoute<T>(
           settings: this,
-          maintainState: true,
+          maintainState: route.maintainState,
           builder: widgetBuilder,
         );
       }
       return MaterialPageRoute<T>(
         settings: this,
-        maintainState: true,
+        maintainState: route.maintainState,
         builder: widgetBuilder,
       );
     } else if (transitionType == TransitionType.noTransition) {
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
-        maintainState: true,
+        maintainState: route.maintainState,
         builder: (_) => page,
       );
     } else {
@@ -74,7 +76,8 @@ class ModularPage<T> extends Page<T> {
       return selectTransition!(
           (_, __) => page,
           route.duration ?? const Duration(milliseconds: 300),
-          this) as Route<T>;
+          this,
+          route.maintainState) as Route<T>;
     }
   }
 }

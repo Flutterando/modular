@@ -1,5 +1,5 @@
-import 'package:flutter_modular/src/presenter/guards/route_guard.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import '../guards/route_guard.dart';
+import 'route.dart';
 
 /// Represents a route in the modular route tree.
 /// You will be asked for a route name which should always start with '/'
@@ -12,6 +12,7 @@ class ChildRoute<T> extends ParallelRoute<T> {
     List<ParallelRoute> children = const [],
     Duration? duration,
     TransitionType? transition,
+    bool maintainState = true,
     List<RouteGuard> guards = const [],
   })  : assert(name.startsWith('/'), 'The name must always start with a /'),
         assert(children.where((e) => e.name == name).isEmpty,
@@ -19,6 +20,7 @@ class ChildRoute<T> extends ParallelRoute<T> {
         super(
           name: name,
           child: child,
+          maintainState: maintainState,
           customTransition: customTransition,
           children: children,
           duration: duration,

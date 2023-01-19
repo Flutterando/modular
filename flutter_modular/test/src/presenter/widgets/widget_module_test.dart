@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('WidgetModule', (tester) async {
-    final modularApp = ModularApp(module: CustomModule(), child: AppWidget());
+    final modularApp =
+        ModularApp(module: CustomModule(), child: const AppWidget());
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -45,15 +46,20 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp().modular();
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
   }
 }
 
 class CustomWidgetModule extends WidgetModule {
+  CustomWidgetModule({Key? key}) : super(key: key);
+
   @override
   List<Bind> get binds => [
         Bind.factory<double>((i) {
-          print(i.args);
+          debugPrint(i.args.toString());
           return 0.0;
         }),
       ];

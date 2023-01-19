@@ -1,35 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:triple/triple.dart';
 
 void main() {
   testWidgets('ModularApp', (tester) async {
     final modularKey = UniqueKey();
-    final modularApp =
-        ModularApp(key: modularKey, module: CustomModule(), child: AppWidget());
+    final modularApp = ModularApp(
+      key: modularKey,
+      module: CustomModule(),
+      child: const AppWidget(),
+    );
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
     expect(find.byKey(key), findsOneWidget);
 
     final state = tester.state<ModularAppState>(find.byKey(modularKey));
-    final result = state.tripleResolverCallback<String>();
+    final result = Modular.get<String>();
     state.reassemble();
     expect(result, 'test');
 
     await tester.pump();
-    final notifier = state.tripleResolverCallback<ValueNotifier<int>>();
+    final notifier = Modular.get<ValueNotifier<int>>();
     notifier.value++;
 
     await tester.pump();
 
     expect(find.text('1'), findsOneWidget);
 
-    final store = state.tripleResolverCallback<MyStore>();
+    final store = Modular.get<MyStore>();
     store.update(1);
 
-    //  await tester.pump();
+    await tester.pump();
+
+    expect(find.text('1'), findsWidgets);
   });
 }
 
@@ -46,7 +50,7 @@ class CustomModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, __) => Home()),
+        ChildRoute('/', child: (_, __) => const Home()),
       ];
 }
 
@@ -57,7 +61,10 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<String>();
 
-    return MaterialApp().modular();
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+    );
   }
 }
 
@@ -72,36 +79,32 @@ class Home extends StatelessWidget {
 
     return Container(
       key: key,
-      child: Text('${notifier.value}'),
+      child: Column(
+        children: [
+          Text('${notifier.value}'),
+          StreamBuilder(
+            stream: stream,
+            builder: (context, snapshot) {
+              return Text('${snapshot.data}');
+            },
+          ),
+          Text('${store.state}')
+        ],
+      ),
     );
   }
 }
 
-class MyStore extends Store<Exception, int> {
+class MyStore extends ValueNotifier<int> {
   MyStore() : super(0);
 
-  @override
-  Future destroy() async {}
+  int get state => value;
 
   late final void Function(int state)? fnState;
   late final void Function(bool state)? fnLoading;
   late final void Function(Exception state)? fnError;
 
-  @override
   void update(int newState, {bool force = false}) {
-    fnState?.call(newState);
-    fnError?.call(Exception());
-    fnLoading?.call(true);
-  }
-
-  @override
-  Disposer observer(
-      {void Function(int state)? onState,
-      void Function(bool isLoading)? onLoading,
-      void Function(Exception error)? onError}) {
-    fnState = onState;
-    fnLoading = onLoading;
-    fnError = onError;
-    return () => Future.value();
+    value = newState;
   }
 }

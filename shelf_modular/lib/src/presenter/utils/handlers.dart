@@ -73,5 +73,7 @@ FutureOr<Response>? applyHandler(Function fn,
     return fn(injector, arguments, request);
   } else if (fn is HandlerThreeParams5) {
     return fn(injector, request, arguments);
+  } else {
+    return null;
   }
 }

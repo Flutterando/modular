@@ -1,14 +1,23 @@
 import 'package:modular_interfaces/modular_interfaces.dart';
 
 abstract class ModularRouteImpl implements ModularRoute {
+  @override
   final String name;
+  @override
   final String schema;
+  @override
   final String parent;
+  @override
   final List<ModularRoute> children;
+  @override
   final List<Middleware> middlewares;
+  @override
   final Uri uri;
+  @override
   final RouteContext? context;
+  @override
   final Map<Type, BindContext> bindContextEntries;
+  @override
   late final ModularKey key;
 
   ModularRouteImpl({
@@ -21,9 +30,10 @@ abstract class ModularRouteImpl implements ModularRoute {
     this.bindContextEntries = const {},
     this.middlewares = const [],
   }) {
-    this.key = ModularKey(name: name, schema: schema);
+    key = ModularKey(name: name, schema: schema);
   }
 
+  @override
   ModularRoute addModule(String name, {required RouteContext module}) {
     final bindContextEntries = {module.runtimeType: module};
 
@@ -35,6 +45,7 @@ abstract class ModularRouteImpl implements ModularRoute {
     );
   }
 
+  @override
   ModularRoute copyWith({
     String? name,
     List<Middleware>? middlewares,

@@ -1,6 +1,6 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:flutter_modular/src/shared/either.dart';
-import 'package:flutter_modular/src/domain/services/bind_service.dart';
+import '../../shared/either.dart';
+import '../services/bind_service.dart';
 
 abstract class ReleaseScopedBinds {
   Either<ModularError, Unit> call<T extends Object>();
