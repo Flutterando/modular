@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import '../../../flutter_modular.dart';
-import '../errors/errors.dart';
 import 'package:modular_core/modular_core.dart';
+
+import '../errors/errors.dart';
 
 /// RouteGuard implements Middleware and adds guard behavior, authorizing or not the route via the canActivate() method;
 abstract class RouteGuard extends Middleware<ModularArguments> {
