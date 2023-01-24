@@ -1,26 +1,19 @@
 library modular_core;
 
-import 'package:modular_core/src/di/injector.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
+import 'package:auto_injector/auto_injector.dart';
+import 'package:modular_core/src/module/main.dart';
 
-import 'src/route/tracker.dart' as t;
+export 'package:auto_injector/auto_injector.dart';
 
-export 'src/di/async_bind.dart';
-export 'src/di/resolvers.dart';
-export 'src/di/injector.dart';
 export 'src/di/disposable.dart';
-export 'src/di/bind_context.dart';
-export 'src/di/reassemble_mixin.dart';
-export 'src/route/modular_route.dart';
-export 'src/route/route_context.dart';
-export 'package:modular_interfaces/modular_interfaces.dart';
-export 'src/route/tracker.dart';
+export 'src/module/core_module.dart';
+export 'src/module/main.dart';
 
 /// Starting object to get routes and binds.
 Tracker? _tracker;
 
 Tracker get modularTracker {
-  _tracker ??= t.TrackerImpl(InjectorImpl());
+  _tracker ??= Tracker(AutoInjector());
   return _tracker!;
 }
 

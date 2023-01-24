@@ -1,14 +1,28 @@
 import 'package:meta/meta.dart';
+import 'package:modular_interfaces/modular_interfaces.dart';
+
 import '../../modular_core.dart';
+import 'async_bind.dart';
 
 class _MutableValue {
   var isReadyFlag = false;
+}
+
+abstract class BindContextImpl2 implements BindContext {
+  @override
+  @visibleForOverriding
+  List<BindContract> get binds => const [];
+
+  @override
+  @visibleForOverriding
+  List<BindContext> get imports => const [];
 }
 
 abstract class BindContextImpl implements BindContext {
   @override
   @visibleForOverriding
   List<BindContract> get binds => const [];
+
   @override
   @visibleForOverriding
   List<BindContext> get imports => const [];
