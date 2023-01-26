@@ -1,4 +1,5 @@
 import 'package:auto_injector/auto_injector.dart';
+import 'package:meta/meta.dart';
 
 typedef DisposeCallback<T extends Object> = void Function(T value);
 typedef NotifierCallback<T extends Object> = dynamic Function(T value);
@@ -12,15 +13,10 @@ abstract class Bind<T extends Object> {
   /// Generate reactive object
   final NotifierCallback<T>? notifier;
 
-  ///export bind for others modules
-  ///This bind can only be accessed when imported by a module.
-  final bool export;
-
   void includeInjector(AutoInjector injector);
 
   Bind(
     this.constructor, {
-    this.export = false,
     this.onDispose,
     this.notifier,
   });
@@ -128,7 +124,10 @@ class InstanceBind<T extends Object> extends Bind<T> {
 }
 
 abstract class AutoBind<T extends Object> extends Bind<T> {
-  AutoBind(super.constructor, {super.onDispose, super.notifier});
+  AutoBind._(super.constructor, {super.onDispose, super.notifier});
+
+  @visibleForTesting
+  static AutoBind emptyInstance() => AutoBindEmpty();
 
   static Bind<T> singleton<T extends Object>(
     Function constructor, {
@@ -177,4 +176,11 @@ abstract class AutoBind<T extends Object> extends Bind<T> {
       notifier: notifier,
     );
   }
+}
+
+class AutoBindEmpty extends AutoBind<String> {
+  AutoBindEmpty() : super._(() => 'String');
+
+  @override
+  void includeInjector(AutoInjector injector) {}
 }
