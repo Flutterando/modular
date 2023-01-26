@@ -1,10 +1,6 @@
 {
 	"folders": [
 		{
-			"name": "modular_interfaces",
-			"path": "modular_interfaces"
-		},
-		{
 			"name": "modular_core",
 			"path": "modular_core"
 		},
@@ -15,17 +11,6 @@
 		{
 			"name": "flutter_modular",
 			"path": "flutter_modular"
-		},
-		{
-			"name": "modular_codegen",
-			"path": "modular_codegen"
-		},
-		{
-			"name": "flutter_modular_annotations",
-			"path": "flutter_modular_annotations"
-		},
-		{
-			"path": "modular_test"
 		},
 		{
 			"path": "plugins/modular_bloc_bind"

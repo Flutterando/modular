@@ -16,6 +16,6 @@ dependencies:
   shelf_web_socket: ">=1.0.1 <2.0.0"
 
 dev_dependencies:
-  mocktail: ^0.1.4
+  mocktail: ^0.3.0
   lints: ^1.0.1
-  test: ^1.17.12
+  test: ">=1.16.0 <2.0.0"
