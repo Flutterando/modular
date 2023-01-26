@@ -5,7 +5,7 @@ import 'package:shelf_modular/src/presenter/resources/websocket_resource.dart';
 import 'package:test/test.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../modular_base_test.dart';
+import '../../mocks/mocks.dart';
 
 class WebSocketChannelMock extends Mock implements WebSocketChannel {}
 
@@ -22,8 +22,7 @@ void main() {
   test('handle', () {
     final request = RequestMock();
     final resource = MyWebsocketResource();
-    expect(
-        () async => await resource.handler(request), throwsA(isA<TypeError>()));
+    expect(() async => await resource.handler(request), throwsA(isA<TypeError>()));
   });
 
   test('connectSocket', () async {
@@ -36,8 +35,7 @@ void main() {
 
     when(() => channel.stream).thenAnswer((_) => controllerGeneral.stream);
     when(() => channel.sink).thenReturn(sinkMock);
-    expect(controllerResourceSocket.stream,
-        emitsInOrder([isA<WebSocket>(), isA<WebSocket>(), isA<WebSocket>()]));
+    expect(controllerResourceSocket.stream, emitsInOrder([isA<WebSocket>(), isA<WebSocket>(), isA<WebSocket>()]));
 
     //start
     resource.connectSocket(channel);

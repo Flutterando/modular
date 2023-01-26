@@ -30,12 +30,11 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^8.0.3
-  flutter_modular: 5.0.1
+  flutter_modular: 
   dartz: ^0.10.0-nullsafety.2
   http: ^0.13.0
   bloc_concurrency: ^0.2.0
   modular_bloc_bind:
-    path: ../
 
 
   # The following adds the Cupertino Icons font to your application.

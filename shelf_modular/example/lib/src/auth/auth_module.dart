@@ -14,11 +14,10 @@ class AuthModule extends Module {
   @override
   List<Bind<Object>> get binds => [
         //external
-        Bind.scoped((i) => RedisService()),
-        Bind.scoped((i) => PostgresConnect()),
+        AutoBind.singleton(RedisService.new),
+        AutoBind.singleton(PostgresConnect.new),
         Bind.factory((i) => TokenManager()),
-        Bind.factory(
-            (i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
+        Bind.factory((i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
         //infra
         Bind.factory((i) => AuthRepositoryImpl(i())),
         //domain

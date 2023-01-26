@@ -2,19 +2,19 @@ import 'package:modular_core/modular_core.dart';
 import 'package:shelf/shelf.dart' hide Middleware;
 import 'package:shelf_modular/shelf_modular.dart';
 
-class Route extends ModularRouteImpl {
+class Route extends ModularRoute {
   final Function? handler;
 
-  Route._({
+  Route._(
+    super.name, {
     this.handler,
-    required super.name,
     super.parent = '',
     super.schema = '',
     super.children = const [],
     Uri? uri,
-    super.context,
+    super.module,
     super.middlewares = const [],
-    super.bindContextEntries = const {},
+    super.innerModules = const {},
   }) : super(uri: uri ?? Uri.parse('/'));
 
   factory Route.get(
@@ -23,8 +23,8 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
+      name,
       handler: handler,
-      name: name,
       schema: 'GET',
       middlewares: middlewares,
     );
@@ -36,8 +36,8 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
+      name,
       handler: handler,
-      name: name,
       schema: 'POST',
       middlewares: middlewares,
     );
@@ -49,8 +49,8 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
+      name,
       handler: handler,
-      name: name,
       schema: 'DELETE',
       middlewares: middlewares,
     );
@@ -61,8 +61,8 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
+      name,
       handler: handler,
-      name: name,
       schema: 'PATCH',
       middlewares: middlewares,
     );
@@ -74,8 +74,8 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
+      name,
       handler: handler,
-      name: name,
       schema: 'PUT',
       middlewares: middlewares,
     );
@@ -86,17 +86,15 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
-      name: '/',
+      '/',
       children: resource.routes,
       middlewares: middlewares,
     );
   }
 
-  factory Route.module(String name,
-      {required Module module,
-      List<ModularMiddleware> middlewares = const []}) {
-    final route = Route._(name: name, middlewares: middlewares);
-    return route.addModule(name, module: module) as Route;
+  factory Route.module(String name, {required Module module, List<ModularMiddleware> middlewares = const []}) {
+    final route = Route._(name, middlewares: middlewares);
+    return route.addModule(name, module: module);
   }
 
   factory Route.websocket(
@@ -105,8 +103,8 @@ class Route extends ModularRouteImpl {
     List<ModularMiddleware> middlewares = const [],
   }) {
     return Route._(
+      name,
       handler: websocket.handler,
-      name: name,
       schema: 'GET',
       middlewares: middlewares,
     );
@@ -117,24 +115,36 @@ class Route extends ModularRouteImpl {
     Handler? handler,
     String? name,
     String? schema,
-    RouteContext? context,
+    Module? module,
     List<Middleware>? middlewares,
     List<ModularRoute>? children,
     String? parent,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext>? bindContextEntries,
+    Map<Type, Module>? innerModules,
   }) {
     return Route._(
+      name ?? this.name,
       handler: handler ?? this.handler,
-      name: name ?? this.name,
       schema: schema ?? this.schema,
       middlewares: (middlewares ?? this.middlewares),
       children: children ?? this.children,
       parent: parent ?? this.parent,
-      context: context ?? this.context,
+      module: module ?? this.module,
       uri: uri ?? uri,
-      bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      innerModules: innerModules ?? this.innerModules,
+    );
+  }
+
+  @override
+  Route addModule(String name, {required Module module}) {
+    final innerModules = {module.runtimeType: module};
+
+    return copyWith(
+      name: name,
+      uri: Uri.parse(name),
+      innerModules: innerModules,
+      module: module,
     );
   }
 }

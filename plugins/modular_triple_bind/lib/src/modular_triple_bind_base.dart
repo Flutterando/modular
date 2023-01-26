@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
+import 'package:modular_core/modular_core.dart';
 import 'package:triple/triple.dart';
 
 class LocalNotifier extends ChangeNotifier {
@@ -19,49 +18,39 @@ class TripleBind {
     return notifier;
   }
 
-  static Bind<T> singleton<T extends Store>(
-    T Function(Injector<dynamic> i) factoryFunction, {
-    bool export = false,
-  }) {
-    return Bind<T>(
+  static Bind<T> singleton<T extends Store>(T Function(AutoInjector i) factoryFunction) {
+    return Bind.singleton<T>(
       factoryFunction,
-      export: export,
-      isLazy: false,
       onDispose: (store) {
         store.destroy();
       },
-      selector: _generateNotifier,
+      notifier: _generateNotifier,
     );
   }
 
   static Bind<T> lazySingleton<T extends Store>(
-    T Function(Injector<dynamic> i) factoryFunction, {
+    T Function(AutoInjector i) factoryFunction, {
     bool export = false,
   }) {
-    return Bind<T>(
+    return Bind.lazySingleton<T>(
       factoryFunction,
-      export: export,
-      isLazy: true,
       onDispose: (store) {
         store.destroy();
       },
-      selector: _generateNotifier,
+      notifier: _generateNotifier,
     );
   }
 
   static Bind<T> factory<T extends Store>(
-    T Function(Injector<dynamic> i) factoryFunction, {
+    T Function(AutoInjector i) factoryFunction, {
     bool export = false,
   }) {
-    return Bind<T>(
+    return Bind.factory<T>(
       factoryFunction,
-      export: export,
-      isLazy: true,
-      isSingleton: false,
       onDispose: (store) {
         store.destroy();
       },
-      selector: _generateNotifier,
+      notifier: _generateNotifier,
     );
   }
 
@@ -69,15 +58,12 @@ class TripleBind {
     T store, {
     bool export = false,
   }) {
-    return Bind<T>(
-      (i) => store,
-      export: export,
-      isLazy: true,
-      isSingleton: false,
+    return Bind.instance<T>(
+      store,
       onDispose: (store) {
         store.destroy();
       },
-      selector: _generateNotifier,
+      notifier: _generateNotifier,
     );
   }
 }

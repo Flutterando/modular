@@ -1,0 +1,16 @@
+name: modular
+repository: https://github.com/Flutterando/modular
+
+ignore:
+  - deprecated/**
+
+packages:
+  - modular_core
+  - flutter_modular
+  - shelf_modular
+  - plugins/*
+
+
+scripts:
+  pubget:
+    exec: flutter pub get

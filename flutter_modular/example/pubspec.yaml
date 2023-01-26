@@ -35,20 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
 
 dev_dependencies:
-  modular_test: ^2.0.0-dev.1
-  modular_codegen: ^3.0.1
-  build_runner: ^2.1.0
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 
-dependency_overrides:
-  flutter_modular:
-    path: ../
-  modular_core:
-    path: ../../modular_core
-  modular_interfaces:
-    path: ../../modular_interfaces
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -11,7 +11,7 @@ import 'src/presenter/navigation/modular_router_delegate.dart';
 import 'src/presenter/navigation/router_outlet_delegate.dart';
 
 export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
-export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable, Module, Bind, AutoBind, AutoInjector, AutoInjectorException;
+export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable, Module, Bind, AutoBind, AutoInjector, AutoInjectorException, ModularArguments;
 
 export 'src/presenter/guards/route_guard.dart';
 export 'src/presenter/models/child_route.dart';
