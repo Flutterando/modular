@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
@@ -10,11 +11,10 @@ import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_book.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_page.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../modular_base_test.dart';
 
@@ -59,11 +59,13 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
     when(() => routeMock.schema).thenReturn('');
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
-    when(() => reportPush(routeMock)).thenReturn(right(unit));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
 
     final book = await parser.selectBook('/');
     expect(book.uri.toString(), '/');
@@ -88,16 +90,17 @@ void main() {
     when(() => routeParent.copyWith(schema: any(named: 'schema')))
         .thenReturn(routeParent);
 
-    when(() => reportPush(routeMock)).thenReturn(right(unit));
-    when(() => reportPush(routeParent)).thenReturn(right(unit));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+    when(() => reportPush(routeParent)).thenReturn(const Success(unit));
 
     when(() => getRoute.call(const RouteParmsDTO(url: '/test')))
-        .thenAnswer((_) async => right(routeMock));
+        .thenAnswer((_) async => Success(routeMock));
     when(() => getRoute.call(const RouteParmsDTO(url: '/')))
-        .thenAnswer((_) async => right(routeParent));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+        .thenAnswer((_) async => Success(routeParent));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
 
-    when(() => setArguments.call(any())).thenReturn(right(unit));
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
 
     final book = await parser.selectBook('/test');
     expect(book.uri.toString(), '/test');
@@ -125,18 +128,18 @@ void main() {
     when(() => routeParent.copyWith(schema: any(named: 'schema')))
         .thenReturn(routeParent);
 
-    when(() => reportPush(routeMock)).thenReturn(right(unit));
-    when(() => reportPush(routeParent)).thenReturn(right(unit));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+    when(() => reportPush(routeParent)).thenReturn(const Success(unit));
 
     when(() => getRoute.call(const RouteParmsDTO(url: '/oo')))
-        .thenAnswer((_) async => right(redirect));
+        .thenAnswer((_) async => Success(redirect));
     when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args)))
-        .thenAnswer((_) async => right(routeMock));
+        .thenAnswer((_) async => Success(routeMock));
     when(() => getRoute.call(const RouteParmsDTO(url: '/')))
-        .thenAnswer((_) async => right(routeParent));
-    when(() => getArguments.call()).thenReturn(right(args));
+        .thenAnswer((_) async => Success(routeParent));
+    when(() => getArguments.call()).thenReturn(Success(args));
 
-    when(() => setArguments.call(any())).thenReturn(right(unit));
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
 
     final book = await parser.selectBook('/oo');
     expect(book.uri.toString(), '/test');
@@ -153,15 +156,15 @@ void main() {
     when(() => routeMock.schema).thenReturn('');
     when(() => routeMock.middlewares).thenReturn([]);
 
-    when(() => reportPush(routeMock)).thenReturn(right(unit));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
 
     when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args)))
-        .thenAnswer((_) async => left(ModularPageException('')));
+        .thenAnswer((_) async => Failure(ModularPageException('')));
     when(() => getRoute.call(RouteParmsDTO(url: '/test/', arguments: args)))
-        .thenAnswer((_) async => right(routeMock));
-    when(() => getArguments.call()).thenReturn(right(args));
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call()).thenReturn(Success(args));
 
-    when(() => setArguments.call(any())).thenReturn(right(unit));
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
 
     final route = await parser.selectRoute('/test', arguments: args);
     expect(route.uri.toString(), '/test/');
@@ -179,10 +182,12 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
 
-    when(() => reportPush(routeMock)).thenReturn(right(unit));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
 
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
     expect(
@@ -197,8 +202,10 @@ void main() {
   test('parseRouteInformation with location / and guard false', () {
     final routeMock = ParallelRouteMock();
 
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard(false)]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
 
@@ -211,8 +218,10 @@ void main() {
   test('parseRouteInformation with location / and middleware null', () {
     final routeMock = ParallelRouteMock();
 
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([MiddlewareNull()]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
 
@@ -228,9 +237,11 @@ void main() {
 
   test('selectBook with popCallback', () {
     final routeMock = ParallelRouteMock();
-    when(() => reportPush(routeMock)).thenReturn(right(unit));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(routeMock));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');

@@ -1,14 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
 import '../errors/errors.dart';
+import '../models/redirect_to_route.dart';
 
 /// RouteGuard implements Middleware and adds guard behavior, authorizing or not the route via the canActivate() method;
 abstract class RouteGuard extends Middleware<ModularArguments> {
   /// Returns a FutureOr<bool>.
-  /// If TRUE, allow the route to continue processing.
-  /// If it is FALSE, the Guard will try to redirect the route.
+  /// If [true], allow the route to continue processing.
+  /// If it is [false], the Guard will try to redirect the route.
   /// If there is no redirect then an error will be thrown [GuardedRouteException].
   FutureOr<bool> canActivate(String path, ParallelRoute route);
 

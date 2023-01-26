@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/functions.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
 import '../../domain/dtos/route_dto.dart';
@@ -92,9 +94,9 @@ class ModularRouteInformationParser
   }
 
   String _resolverPath(String relativePath) {
-    return getArguments.call().fold((l) => relativePath, (r) {
+    return getArguments.call().fold((r) {
       return r.uri.resolve(relativePath).toString();
-    });
+    }, (l) => relativePath);
   }
 
   FutureOr<ParallelRoute> selectRoute(String path, {dynamic arguments}) async {
@@ -105,18 +107,25 @@ class ModularRouteInformationParser
     path = _resolverPath(path);
 
     final params = RouteParmsDTO(url: path, arguments: arguments);
-    final result = await getRoute.call(params);
-    return await result.fold<FutureOr<ParallelRoute>>((modularError) async {
+    return getRoute
+        .call(params) //
+        .map(_routeSuccess)
+        .recover((modularError) {
       if (path.endsWith('/')) {
-        throw modularError;
+        return Failure(modularError);
       }
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
-      final result = await getRoute.call(params);
-      return await result.fold((l) => throw modularError, (route) {
-        debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
-        return _routeSuccess(route);
-      });
-    }, (route) => _routeSuccess(route));
+      return getRoute
+          .call(params) //
+          .map(_routeSuccess)
+        ..fold(
+          (success) {
+            debugPrint(
+                '[MODULAR WARNING] - Please, use $path/ instead of $path.');
+          },
+          identity,
+        );
+    }).getOrThrow();
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {

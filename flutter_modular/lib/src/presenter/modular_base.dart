@@ -1,17 +1,22 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modular_core/modular_core.dart';
 
+import '../domain/usecases/dispose_bind.dart';
+import '../domain/usecases/finish_module.dart';
+import '../domain/usecases/get_arguments.dart';
+import '../domain/usecases/get_bind.dart';
+import '../domain/usecases/set_arguments.dart';
+import '../domain/usecases/start_module.dart';
 import 'errors/errors.dart';
-import 'models/modular_args.dart';
-import 'models/modular_navigator.dart';
 import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
 
 abstract class IModularBase {
-  /// Finishes all trees(BindContext and RouteContext).
+  /// Finishes all trees(Modules).
   void destroy();
 
-  /// Responsible for starting the app.
+  // Responsible for starting the app.
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
   void init(Module module);
 
@@ -40,7 +45,8 @@ abstract class IModularBase {
   B get<B extends Object>();
 
   /// Request an instance by [Type]
-  /// returning [null] if instance not founded.
+  /// <br>
+  /// Return null if not found instance
   B? tryGet<B extends Object>();
 
   /// Dispose a [Bind] by [Type]
@@ -51,6 +57,9 @@ abstract class IModularBase {
 
   /// Navigator 2.0 initializator: RouterDelegate
   ModularRouterDelegate get routerDelegate;
+
+  /// Navigator 2.0 initializator: RouterConfig
+  RouterConfig<Object> get routerConfig;
 
   /// Change the starting route path
   void setInitialRoute(String initialRoute);
@@ -69,7 +78,12 @@ abstract class IModularBase {
 }
 
 class ModularBase implements IModularBase {
-  final Tracker tracker;
+  final DisposeBind disposeBind;
+  final FinishModule finishModule;
+  final GetBind getBind;
+  final GetArguments getArguments;
+  final SetArguments setArgumentsUsecase;
+  final StartModule startModule;
   final IModularNavigator navigator;
   @override
   final ModularRouteInformationParser routeInformationParser;
@@ -90,35 +104,42 @@ class ModularBase implements IModularBase {
   ModularBase({
     required this.routeInformationParser,
     required this.routerDelegate,
+    required this.disposeBind,
+    required this.getArguments,
+    required this.finishModule,
+    required this.getBind,
+    required this.startModule,
     required this.navigator,
-    required this.tracker,
+    required this.setArgumentsUsecase,
   });
 
   @override
-  bool dispose<B extends Object>() {
-    return tracker.dispose<B>();
-  }
+  bool dispose<B extends Object>() =>
+      disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>() {
-    return tracker.injector.get<B>();
+    return getBind<B>().getOrThrow();
   }
 
   @override
   B? tryGet<B extends Object>() {
-    return tracker.injector.tryGet<B>();
+    return getBind<B>().getOrNull();
   }
 
   @override
   void destroy() {
     _moduleHasBeenStarted = false;
-    tracker.finishApp();
+    finishModule();
   }
 
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      tracker.runApp(module);
+      startModule(module).fold(
+        (r) => debugPrint('${module.runtimeType} started!'),
+        (l) => throw l,
+      );
       _moduleHasBeenStarted = true;
     } else {
       throw ModuleStartedException(
@@ -130,7 +151,8 @@ class ModularBase implements IModularBase {
   IModularNavigator get to => navigatorDelegate ?? navigator;
 
   @override
-  ModularArguments get args => tracker.arguments;
+  ModularArguments get args =>
+      getArguments().getOrElse((l) => ModularArguments.empty());
 
   final flags = ModularFlags();
 
@@ -161,6 +183,15 @@ class ModularBase implements IModularBase {
 
   @override
   void setArguments(dynamic data) {
-    tracker.setArguments(args.copyWith(data: data));
+    setArgumentsUsecase.call(args.copyWith(data: data));
   }
+
+  @override
+  late final RouterConfig<Object> routerConfig = RouterConfig<Object>(
+    routerDelegate: routerDelegate,
+    routeInformationParser: routeInformationParser,
+    routeInformationProvider: PlatformRouteInformationProvider(
+      initialRouteInformation: const RouteInformation(location: null),
+    ),
+  );
 }

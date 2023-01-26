@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import '../navigation/transitions/transitions.dart';
-import 'package:modular_core/modular_core.dart';
 import 'package:meta/meta.dart';
+import 'package:modular_core/modular_core.dart';
 
-import 'module.dart';
+import '../navigation/transitions/transitions.dart';
 
 typedef ModularChild = Widget Function(
     BuildContext context, ModularArguments args);
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
 
-class ParallelRoute<T> extends ModularRouteImpl {
+class ParallelRoute<T> extends ModularRoute {
   /// Whether the route should remain in memory when it is inactive.
   /// If this is true, then the route is maintained, so that any futures it is holding from the next route will properly resolve when the next route pops. If this is not necessary, this can be set to false to allow the framework to entirely discard the route's widget hierarchy when it is not visible.
   /// If this getter would ever start returning a different value, the [changedInternalState] should be invoked so that the change can take effect.
@@ -45,19 +44,19 @@ class ParallelRoute<T> extends ModularRouteImpl {
     this.duration,
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
-    RouteContext? context,
+    Module? module,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext> bindContextEntries = const {},
+    Map<Type, Module> innerModules = const {},
   }) : super(
-          name: name,
+          name,
           parent: parent,
           schema: schema,
           children: children,
           middlewares: middlewares,
-          context: context,
+          module: module,
           uri: uri ?? Uri.parse('/'),
-          bindContextEntries: bindContextEntries,
+          innerModules: innerModules,
         );
 
   factory ParallelRoute.child(
@@ -90,21 +89,32 @@ class ParallelRoute<T> extends ModularRouteImpl {
   }
 
   @override
-  ParallelRoute<T> addModule(String name, {required RouteContext module}) {
-    final bindContextEntries = {module.runtimeType: module};
+  ParallelRoute<T> addModule(String name, {required Module module}) {
+    final innerModules = {module.runtimeType: module};
 
     return copyWith(
       name: name,
       uri: Uri.parse(name),
-      bindContextEntries: bindContextEntries,
-      context: module,
+      innerModules: innerModules,
+      module: module,
+    );
+  }
+
+  @override
+  ModularRoute addParent(covariant ParallelRoute parent) {
+    // ignore: invalid_use_of_visible_for_overriding_member
+    final newRoute = super.addParent(parent) as ParallelRoute;
+    return newRoute.copyWith(
+      customTransition: customTransition ?? parent.customTransition,
+      transition: transition ?? parent.transition,
+      duration: duration ?? parent.duration,
     );
   }
 
   @override
   ParallelRoute<T> copyWith({
     ModularChild? child,
-    RouteContext? context,
+    Module? module,
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
@@ -116,12 +126,12 @@ class ParallelRoute<T> extends ModularRouteImpl {
     String? parent,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext>? bindContextEntries,
+    Map<Type, Module>? innerModules,
   }) {
     return ParallelRoute<T>(
       child: child ?? this.child,
       transition: transition ?? this.transition,
-      context: context ?? this.context,
+      module: module ?? this.module,
       customTransition: customTransition ?? this.customTransition,
       duration: duration ?? this.duration,
       name: name ?? this.name,
@@ -131,7 +141,7 @@ class ParallelRoute<T> extends ModularRouteImpl {
       children: children ?? this.children,
       parent: parent ?? this.parent,
       uri: uri ?? this.uri,
-      bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      innerModules: innerModules ?? this.innerModules,
     );
   }
 

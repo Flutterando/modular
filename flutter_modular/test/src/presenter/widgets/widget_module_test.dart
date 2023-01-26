@@ -16,12 +16,6 @@ void main() {
     final result =
         tester.widget<CustomWidgetModule>(find.byType(CustomWidgetModule));
 
-    result.changeBinds(result.getProcessBinds());
-
-    await result.isReady();
-    result.remove();
-    result.removeScopedBind();
-
     // final state = tester.state<NavigationListenerState>(find.byKey(key));
     // state.listener();
   });
@@ -37,7 +31,7 @@ class CustomModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, __) => CustomWidgetModule()),
+        ChildRoute('/', child: (_, __) => const CustomWidgetModule()),
       ];
 }
 
@@ -54,7 +48,7 @@ class AppWidget extends StatelessWidget {
 }
 
 class CustomWidgetModule extends WidgetModule {
-  CustomWidgetModule({Key? key}) : super(key: key);
+  const CustomWidgetModule({Key? key}) : super(key: key);
 
   @override
   List<Bind> get binds => [

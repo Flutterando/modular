@@ -1,9 +1,10 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../services/module_service.dart';
 
 abstract class UnbindModule {
-  Either<ModularError, Unit> call<T extends BindContext>({Type? type});
+  Result<Unit, ModularError> call<T extends Module>({Type? type});
 }
 
 class UnbindModuleImpl implements UnbindModule {
@@ -12,7 +13,7 @@ class UnbindModuleImpl implements UnbindModule {
   UnbindModuleImpl(this.moduleService);
 
   @override
-  Either<ModularError, Unit> call<T extends BindContext>({Type? type}) {
+  Result<Unit, ModularError> call<T extends Module>({Type? type}) {
     return moduleService.unbind<T>(type: type);
   }
 }

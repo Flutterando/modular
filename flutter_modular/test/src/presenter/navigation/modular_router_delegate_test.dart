@@ -6,10 +6,10 @@ import 'package:flutter_modular/src/presenter/navigation/modular_book.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_page.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_router_delegate.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../mocks/mocks.dart';
 import '../modular_base_test.dart' hide GetArgumentsMock, SetArgumentsMock;
@@ -119,8 +119,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     await delegate.navigate('/');
     await delegate.navigate('/test');
@@ -140,7 +140,7 @@ void main() {
     when(() => route.settings).thenReturn(page);
     when(() => route.isFirst).thenReturn(false);
 
-    when(() => reportPopMock.call(parallel)).thenReturn(right(unit));
+    when(() => reportPopMock.call(parallel)).thenReturn(const Success(unit));
 
     final arguments = ModularArguments.empty();
     final getArgsMock = GetArgumentsMock();
@@ -148,8 +148,8 @@ void main() {
     when(() => parser.getArguments).thenReturn(getArgsMock);
     when(() => parser.setArguments).thenReturn(setArgsMock);
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [parallel]);
     expect(delegate.currentConfiguration?.routes.length, 1);
@@ -177,8 +177,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
@@ -214,8 +214,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
@@ -252,10 +252,10 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
-    when(() => reportPopMock.call(route1)).thenReturn(right(unit));
+    when(() => reportPopMock.call(route1)).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
@@ -288,8 +288,8 @@ void main() {
     when(() => route3.copyWith(schema: '')).thenReturn(route3);
     when(() => route3.schema).thenReturn('');
 
-    when(() => reportPopMock.call(route1)).thenReturn(right(unit));
-    when(() => reportPopMock.call(route2)).thenReturn(right(unit));
+    when(() => reportPopMock.call(route1)).thenReturn(const Success(unit));
+    when(() => reportPopMock.call(route2)).thenReturn(const Success(unit));
 
     final getArgsMock = GetArgumentsMock();
     final setArgsMock = SetArgumentsMock();
@@ -299,8 +299,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1, route2]);
 
@@ -335,8 +335,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
@@ -402,13 +402,13 @@ void main() {
     final getArgsMock = GetArgumentsMock();
     final setArgsMock = SetArgumentsMock();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     when(() => parser.getArguments).thenReturn(getArgsMock);
     when(() => parser.setArguments).thenReturn(setArgsMock);
 
-    when(() => reportPopMock.call(any())).thenReturn(right(unit));
+    when(() => reportPopMock.call(any())).thenReturn(const Success(unit));
 
     when(() => route1.uri).thenReturn(Uri.parse('/'));
     when(() => route1.copyWith(schema: '')).thenReturn(route1);
@@ -442,7 +442,7 @@ void main() {
     final route1 = ParallelRouteMock();
     final route2 = ParallelRouteMock();
 
-    when(() => reportPopMock.call(any())).thenReturn(right(unit));
+    when(() => reportPopMock.call(any())).thenReturn(const Success(unit));
 
     when(() => route1.uri).thenReturn(Uri.parse('/'));
     when(() => route1.copyWith(schema: '')).thenReturn(route1);
@@ -461,8 +461,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(() => getArgsMock.call()).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 

@@ -1,164 +1,191 @@
 import 'dart:async';
 
-import 'package:modular_core/src/route/custom_route.dart';
-import 'package:test/test.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:test/test.dart';
 
 void main() {
   // setPrintResolver(print);
-  modularTracker.runApp(MyModule());
+  late Tracker tracker;
+
+  // only coverage
+  EmptyModule()
+    ..binds
+    ..exportedBinds
+    ..imports
+    ..routes;
+
+  setUp(() {
+    tracker = Tracker(AutoInjector(tag: 'Test')..commit());
+
+    final module = MyModule();
+    tracker.runApp(module);
+  });
 
   test('thwow error if runApp not iniciate module', () {
-    final tracker = TrackerImpl(InjectorImpl());
+    tracker.finishApp();
     expect(() => tracker.module, throwsA(isA<TrackerNotInitiated>()));
   });
 
   test('setArguments', () {
     final args = ModularArguments.empty();
-    modularTracker.setArguments(args);
-    expect(modularTracker.arguments, args);
+    tracker.setArguments(args);
+    expect(tracker.arguments, args);
+  });
+
+  test('dispose instance', () async {
+    final route = await tracker.findRoute('/');
+    tracker.reportPushRoute(route!);
+
+    expect(tracker.dispose<TestController>(), true);
   });
 
   test('find route', () async {
-    final route = await modularTracker.findRoute('/') as CustomRoute?;
+    final route = await tracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');
+    expect(tracker.currentPath, '/');
     expect(route?.data, 'first');
-    modularTracker.reassemble();
   });
 
   test('find route with params', () async {
-    var route = await modularTracker.findRoute('/product/1') as CustomRoute?;
+    var route = await tracker.findRoute('/product/1') as CustomRoute?;
     expect(route?.uri.path, '/product/1');
-    expect(modularTracker.currentPath, '/product/1');
-    expect(modularTracker.arguments.params['id'], '1');
+    expect(tracker.currentPath, '/product/1');
+    expect(tracker.arguments.params['id'], '1');
 
-    route = await modularTracker.findRoute('/product/test') as CustomRoute?;
+    route = await tracker.findRoute('/product/test') as CustomRoute?;
     expect(route?.uri.path, '/product/test');
-    expect(modularTracker.currentPath, '/product/test');
-    expect(modularTracker.arguments.params['id'], isNull);
+    expect(tracker.currentPath, '/product/test');
+    expect(tracker.arguments.params['id'], isNull);
   });
 
   test('find route with queries', () async {
-    var route = await modularTracker.findRoute('/?q=banana') as CustomRoute?;
+    var route = await tracker.findRoute('/?q=banana') as CustomRoute?;
     expect(route?.uri.path, '/');
-    expect(modularTracker.arguments.queryParams['q'], 'banana');
+    expect(tracker.arguments.queryParams['q'], 'banana');
   });
 
   test('find route in other module', () async {
-    var route = await modularTracker.findRoute('/other/') as CustomRoute?;
+    var route = await tracker.findRoute('/other/') as CustomRoute?;
     expect(route?.uri.path, '/other/');
     expect(route?.data, 'other');
-    modularTracker.reportPopRoute(route!);
-    expect(modularTracker.injector.isModuleAlive<OtherModule>(), false);
-    expect(modularTracker.injector.isModuleAlive<MyModule>(), true);
+    tracker.reportPopRoute(route!);
   });
 
   test('find child route in other module', () async {
-    var route =
-        await modularTracker.findRoute('/other/details') as CustomRoute?;
+    var route = await tracker.findRoute('/other/details') as CustomRoute?;
     expect(route?.uri.path, '/other/details');
     expect(route?.parent, '/other/');
     expect(route?.data, 'otherWithDetails');
-    modularTracker.reportPopRoute(route!);
-    expect(modularTracker.injector.isModuleAlive<OtherModule>(), false);
-    expect(modularTracker.injector.isModuleAlive<MyModule>(), true);
+    tracker.reportPopRoute(route!);
   });
 
   test('find child route in deep module', () async {
-    var route =
-        await modularTracker.findRoute('/other/internal/') as CustomRoute?;
+    var route = await tracker.findRoute('/other/internal/') as CustomRoute?;
     expect(route, isNotNull);
-    modularTracker.reportPushRoute(route!);
-    expect(modularTracker.injector.isModuleAlive<DeepModule>(), true);
+    tracker.reportPushRoute(route!);
     expect(route.uri.path, '/other/internal/');
     expect(route.data, 'internal');
 
-    modularTracker.reportPopRoute(route);
-    expect(modularTracker.injector.isModuleAlive<DeepModule>(), false);
+    tracker.reportPopRoute(route);
 
-    route =
-        await modularTracker.findRoute('/other/internal/deep') as CustomRoute?;
+    route = await tracker.findRoute('/other/internal/deep') as CustomRoute?;
     expect(route, isNotNull);
-    modularTracker.reportPushRoute(route!);
-    expect(modularTracker.injector.isModuleAlive<DeepModule>(), true);
+    tracker.reportPushRoute(route!);
     expect(route.uri.path, '/other/internal/deep');
     expect(route.parent, '/other/internal/');
     expect(route.data, 'deep');
-    modularTracker.reportPopRoute(route);
-
-    expect(modularTracker.injector.isModuleAlive<DeepModule>(), false);
-    expect(modularTracker.injector.isModuleAlive<OtherModule>(), false);
-    expect(modularTracker.injector.isModuleAlive<MyModule>(), true);
+    tracker.reportPopRoute(route);
   });
 
   test('find route with schema', () async {
-    expect(await modularTracker.findRoute('/schema'), isNull);
-    final route = await modularTracker.findRoute('/schema', schema: 'tag')
-        as CustomRoute?;
+    expect(await tracker.findRoute('/schema'), isNull);
+    final route = await tracker.findRoute('/schema', schema: 'tag') as CustomRoute?;
     expect(route?.uri.path, '/schema');
     expect(route?.data, 'withSchema');
   });
 
   test('find route with wildcard', () async {
-    final route =
-        await modularTracker.findRoute('/wildcard/test/2') as CustomRoute?;
+    final route = await tracker.findRoute('/wildcard/test/2') as CustomRoute?;
     expect(route?.uri.path, '/wildcard/test/2');
     expect(route?.data, 'wildcard');
   });
 
   test('finishApp', () {
-    modularTracker.finishApp();
-    expect(() => modularTracker.module, throwsA(isA<TrackerNotInitiated>()));
-  });
-
-  test('cleanTracker executes finishApp', () {
-    cleanTracker();
-    expect(() => modularTracker.module, throwsA(isA<TrackerNotInitiated>()));
+    tracker.finishApp();
+    expect(() => tracker.module, throwsA(isA<TrackerNotInitiated>()));
   });
 }
 
-class MyModule extends RouteContextImpl {
+class MyModule extends Module {
+  @override
+  final List<Module> imports = [ImportedModule()];
+
+  @override
+  final List<Bind> binds = [
+    AutoBind.instance<String>('instance'),
+    AutoBind.singleton<TestController>(TestController.new),
+  ];
+
+  @override
+  final List<ModularRoute> routes = [
+    CustomRoute('/', data: 'first', middlewares: [
+      CustomMidleware()
+    ], children: [
+      CustomRoute('/second', data: 'second'),
+    ]),
+    CustomRoute('/schema', data: 'withSchema', schema: 'tag'),
+    CustomRoute('/wildcard/**', data: 'wildcard'),
+    CustomRoute('/product/:id', data: 'withParams'),
+    CustomRoute('/product/test', data: 'test'),
+    CustomRoute.moduleMode('/other', module: OtherModule()),
+  ];
+}
+
+class OtherModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'first', middlewares: [
-          CustomMidleware()
-        ], children: [
-          CustomRoute(name: '/second', data: 'second'),
+        CustomRoute('/', data: 'other', children: [
+          CustomRoute('/details', data: 'otherWithDetails'),
         ]),
-        CustomRoute(name: '/schema', data: 'withSchema', schema: 'tag'),
-        CustomRoute(name: '/wildcard/**', data: 'wildcard'),
-        CustomRoute(name: '/product/:id', data: 'withParams'),
-        CustomRoute(name: '/product/test', data: 'test'),
-        CustomRoute.module('/other', module: OtherModule()),
+        CustomRoute.moduleMode('/internal', module: DeepModule()),
       ];
 }
 
-class OtherModule extends RouteContextImpl {
+class DeepModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'other', children: [
-          CustomRoute(name: '/details', data: 'otherWithDetails'),
-        ]),
-        CustomRoute.module('/internal', module: DeepModule()),
-      ];
-}
-
-class DeepModule extends RouteContextImpl {
-  @override
-  List<ModularRoute> get routes => [
-        CustomRoute(name: '/', data: 'internal', children: [
-          CustomRoute(name: '/deep', data: 'deep'),
+        CustomRoute('/', data: 'internal', children: [
+          CustomRoute('/deep', data: 'deep'),
         ]),
       ];
 }
 
-class BlockedModule extends RouteContextImpl {
+class BlockedModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute(name: '/'),
-        CustomRoute(name: '/again'),
+        CustomRoute('/'),
+        CustomRoute('/again'),
       ];
 }
+
+class ImportedModule extends Module {
+  @override
+  final List<Module> imports = [ImportedModule2()];
+
+  @override
+  List<Bind> get exportedBinds => [
+        AutoBind.instance<double>(0.0),
+      ];
+}
+
+class ImportedModule2 extends Module {
+  @override
+  final List<Bind> exportedBinds = [
+    AutoBind.instance<int>(0),
+  ];
+}
+
+class EmptyModule extends Module {}
 
 class CustomMidleware implements Middleware {
   @override
@@ -169,4 +196,63 @@ class CustomMidleware implements Middleware {
 
   @override
   FutureOr<ModularRoute?> pos(route, data) => route;
+}
+
+class CustomRoute extends ModularRoute {
+  final dynamic data;
+  CustomRoute(
+    super.name, {
+    Uri? uri,
+    this.data,
+    super.children,
+    super.innerModules,
+    super.middlewares,
+    super.module,
+    super.parent,
+    super.schema,
+  }) : super(uri: uri ?? Uri.parse('/'));
+
+  static CustomRoute moduleMode(String name, {required Module module}) {
+    return CustomRoute(name, module: module);
+  }
+
+  @override
+  ModularRoute addModule(String name, {required Module module}) {
+    final innerModules = {module.runtimeType: module};
+    return copyWith(
+      name: name,
+      uri: Uri.parse(name),
+      module: module,
+      innerModules: innerModules,
+    );
+  }
+
+  @override
+  ModularRoute copyWith({
+    String? name,
+    String? schema,
+    List<ModularRoute>? children,
+    List<Middleware>? middlewares,
+    Map<Type, Module>? innerModules,
+    Uri? uri,
+    String? parent,
+    Module? module,
+  }) {
+    return CustomRoute(
+      name ?? this.name,
+      uri: uri ?? this.uri,
+      children: children ?? this.children,
+      innerModules: innerModules ?? this.innerModules,
+      middlewares: middlewares ?? this.middlewares,
+      module: module ?? this.module,
+      parent: parent ?? this.parent,
+      schema: schema ?? this.schema,
+      data: data,
+    );
+  }
+}
+
+class TestController implements Disposable {
+  @override
+  void dispose() {}
 }

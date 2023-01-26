@@ -1,9 +1,10 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../services/bind_service.dart';
 
 abstract class DisposeBind {
-  Either<ModularError, bool> call<T extends Object>();
+  Result<bool, ModularError> call<T extends Object>();
 }
 
 class DisposeBindImpl implements DisposeBind {
@@ -12,7 +13,7 @@ class DisposeBindImpl implements DisposeBind {
   DisposeBindImpl(this.bindService);
 
   @override
-  Either<ModularError, bool> call<T extends Object>() {
+  Result<bool, ModularError> call<T extends Object>() {
     return bindService.disposeBind<T>();
   }
 }

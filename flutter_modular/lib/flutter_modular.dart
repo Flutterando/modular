@@ -5,21 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/flutter_modular_module.dart';
 import 'package:modular_core/modular_core.dart';
 
-import 'src/domain/usecases/get_arguments.dart';
 import 'src/presenter/modular_base.dart';
 import 'src/presenter/navigation/modular_page.dart';
 import 'src/presenter/navigation/modular_router_delegate.dart';
 import 'src/presenter/navigation/router_outlet_delegate.dart';
 
 export 'package:flutter_modular_annotations/flutter_modular_annotations.dart';
-export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable;
+export 'package:modular_core/modular_core.dart' show ModularRoute, Disposable, Module, Bind, AutoBind, AutoInjector, AutoInjectorException;
 
 export 'src/presenter/guards/route_guard.dart';
-export 'src/presenter/models/bind.dart';
 export 'src/presenter/models/child_route.dart';
 export 'src/presenter/models/modular_args.dart';
 export 'src/presenter/models/modular_navigator.dart';
-export 'src/presenter/models/module.dart';
 export 'src/presenter/models/module_route.dart';
 export 'src/presenter/models/redirect_to_route.dart';
 export 'src/presenter/models/route.dart';
@@ -36,7 +33,7 @@ IModularBase? _modular;
 /// Instance of Modular for search binds and route.
 // ignore: non_constant_identifier_names
 IModularBase get Modular {
-  _modular ??= injector<IModularBase>();
+  _modular ??= injector.get<IModularBase>();
   return _modular!;
 }
 
@@ -46,17 +43,12 @@ void cleanModular() {
 }
 
 void cleanGlobals() {
-  cleanTracker();
   cleanModular();
-  cleanInjector();
 }
 
-extension InjectorExtends on Injector {
+extension InjectorExtends on AutoInjector {
   /// get arguments
-  ModularArguments get args => injector
-      .get<GetArguments>()
-      .call()
-      .getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => injector.get<Tracker>().arguments;
 }
 
 /// It acts as a Nested Browser that will be populated by the children of this route.
@@ -73,8 +65,7 @@ class RouterOutletState extends State<RouterOutlet> {
   RouterOutletDelegate? delegate;
   late ChildBackButtonDispatcher _backButtonDispatcher;
 
-  List<NavigatorObserver> get currentObservers =>
-      widget.observers ?? <NavigatorObserver>[];
+  List<NavigatorObserver> get currentObservers => widget.observers ?? <NavigatorObserver>[];
 
   @override
   void initState() {
@@ -93,11 +84,9 @@ class RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final modal = (ModalRoute.of(context)?.settings as ModularPage);
-    delegate ??= RouterOutletDelegate(modal.route.uri.toString(),
-        injector.get<ModularRouterDelegate>(), navigatorKey, currentObservers);
+    delegate ??= RouterOutletDelegate(modal.route.uri.toString(), injector.get<ModularRouterDelegate>(), navigatorKey, currentObservers);
     final router = Router.of(context);
-    _backButtonDispatcher =
-        router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher = router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }
 
   @override

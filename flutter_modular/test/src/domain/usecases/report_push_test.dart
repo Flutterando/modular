@@ -1,7 +1,7 @@
 import 'package:flutter_modular/src/domain/usecases/report_push.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../mocks/mocks.dart';
 import '../../presenter/modular_base_test.dart';
@@ -11,8 +11,8 @@ void main() {
   final usecase = ReportPushImpl(service);
   test('report push route', () {
     final route = ParallelRouteMock();
-    when(() => service.reportPush(route)).thenReturn(right(unit));
+    when(() => service.reportPush(route)).thenReturn(const Success(unit));
     final result = usecase.call(route);
-    expect(result.isRight, true);
+    expect(result.isSuccess(), true);
   });
 }

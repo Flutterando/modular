@@ -1,5 +1,6 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../../domain/dtos/route_dto.dart';
 import '../../domain/errors/errors.dart';
 import '../../domain/services/route_service.dart';
@@ -10,43 +11,36 @@ class RouteServiceImpl implements RouteService {
   RouteServiceImpl(this.tracker);
 
   @override
-  Future<Either<ModularError, ModularRoute>> getRoute(
-      RouteParmsDTO params) async {
+  AsyncResult<ModularRoute, ModularError> getRoute(RouteParmsDTO params) async {
     var route = await tracker.findRoute(params.url,
         data: params.arguments, schema: params.schema);
     if (route != null) {
-      return right(route);
+      return Success(route);
     } else {
-      return left(RouteNotFoundException('Route (${params.url}) not found'));
+      return Failure(RouteNotFoundException('Route (${params.url}) not found'));
     }
   }
 
   @override
-  Either<ModularError, ModularArguments> getArguments() {
-    return right(tracker.arguments);
+  Result<ModularArguments, ModularError> getArguments() {
+    return Success(tracker.arguments);
   }
 
   @override
-  Either<ModularError, Unit> reportPop(ModularRoute route) {
+  Result<Unit, ModularError> reportPop(ModularRoute route) {
     tracker.reportPopRoute(route);
-    return right(unit);
+    return const Success(unit);
   }
 
   @override
-  Either<ModularError, Unit> setArguments(ModularArguments args) {
+  Result<Unit, ModularError> setArguments(ModularArguments args) {
     tracker.setArguments(args);
-    return right(unit);
+    return const Success(unit);
   }
 
   @override
-  Either<ModularError, Unit> reportPush(ModularRoute route) {
+  Result<Unit, ModularError> reportPush(ModularRoute route) {
     tracker.reportPushRoute(route);
-    return right(unit);
-  }
-
-  @override
-  Either<ModularError, Unit> reassemble() {
-    tracker.reassemble();
-    return right(unit);
+    return const Success(unit);
   }
 }

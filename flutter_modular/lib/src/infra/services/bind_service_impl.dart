@@ -1,33 +1,27 @@
 import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../domain/errors/errors.dart';
 import '../../domain/services/bind_service.dart';
-import '../../shared/either.dart';
 
 class BindServiceImpl extends BindService {
-  final Injector injector;
+  final AutoInjector injector;
 
   BindServiceImpl(this.injector);
 
   @override
-  Either<ModularError, bool> disposeBind<T extends Object>() {
-    final result = injector.dispose<T>();
-    return right(result);
+  Result<bool, ModularError> disposeBind<T extends Object>() {
+    final result = injector.disposeSingleton<T>();
+    return Success(result != null);
   }
 
   @override
-  Either<ModularError, BindEntry<T>> getBind<T extends Object>() {
+  Result<T, ModularError> getBind<T extends Object>() {
     try {
-      final result = injector.getBind<T>();
-      return right(result);
-    } on BindNotFound catch (e, s) {
-      return left(BindNotFoundException('$T not found.', s));
+      final result = injector.get<T>();
+      return Success(result);
+    } on AutoInjectorException catch (e, s) {
+      return Failure(BindNotFoundException(e.toString(), s));
     }
-  }
-
-  @override
-  Either<ModularError, Unit> releaseScopedBinds() {
-    injector.removeScopedBinds();
-    return right(unit);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import '../../../flutter_modular.dart';
+import 'package:flutter_modular/src/flutter_modular_module.dart';
 
+import '../../../flutter_modular.dart';
 import '../modular_base.dart';
 
 /// Widget responsible for starting the Modular engine.
@@ -24,8 +25,7 @@ class ModularApp extends StatefulWidget {
     /// Prohibits taking any bind of parent modules, forcing the imports of the same in the current module to be accessed. This is the same behavior as the system. Default is false;
     bool notAllowedParentBinds = false,
   }) : super(key: key) {
-    (Modular as ModularBase).flags.experimentalNotAllowedParentBinds =
-        notAllowedParentBinds;
+    (Modular as ModularBase).flags.experimentalNotAllowedParentBinds = notAllowedParentBinds;
     (Modular as ModularBase).flags.isDebug = debugMode;
   }
 
@@ -43,16 +43,9 @@ class ModularAppState extends State<ModularApp> {
   @override
   void dispose() {
     Modular.destroy();
-    Modular.debugPrintModular(
-        '-- ${widget.module.runtimeType.toString()} DISPOSED');
+    Modular.debugPrintModular('-- ${widget.module.runtimeType.toString()} DISPOSED');
     cleanGlobals();
     super.dispose();
-  }
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    Modular.reassemble();
   }
 
   @override
@@ -66,46 +59,30 @@ typedef SelectCallback<T> = Function(T bind);
 class _Register<T> {
   final T value;
   Type get type => T;
-  final SelectCallback<T>? _select;
+  final dynamic notifier;
 
-  _Register(this.value, this._select);
-
-  dynamic getSelected() {
-    final result = _select?.call(value);
-    if (result != null) {
-      return result;
-    }
-    return value;
-  }
+  _Register(this.value, this.notifier);
 
   @override
-  bool operator ==(Object object) =>
-      identical(this, object) ||
-      object is _Register &&
-          runtimeType == object.runtimeType &&
-          type == object.type;
+  bool operator ==(Object object) => identical(this, object) || object is _Register && runtimeType == object.runtimeType && type == object.type;
 
   @override
   int get hashCode => value.hashCode ^ type.hashCode;
 }
 
 class _ModularInherited extends InheritedWidget {
-  const _ModularInherited({Key? key, required Widget child})
-      : super(key: key, child: child);
+  const _ModularInherited({Key? key, required Widget child}) : super(key: key, child: child);
 
-  static T of<T extends Object>(BuildContext context,
-      {bool listen = true, SelectCallback<T>? select}) {
-    final entry = Modular.getBindEntry<T>();
-    final bind = entry.bind as Bind;
+  static T of<T extends Object>(BuildContext context, {bool listen = true, SelectCallback<T>? select}) {
+    final instance = injector<AutoInjector>().get<T>();
+    final notifier = injector<AutoInjector>().getNotifier<T>();
     if (listen) {
-      final registre = _Register<T>(entry.value, select ?? bind.onSelectorFunc);
-      final inherited =
-          context.dependOnInheritedWidgetOfExactType<_ModularInherited>(
-              aspect: registre)!;
+      final registre = _Register<T>(instance, notifier ?? instance);
+      final inherited = context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
       inherited.updateShouldNotify(inherited);
     }
 
-    return entry.value;
+    return instance;
   }
 
   @override
@@ -134,7 +111,7 @@ class _InheritedModularElement extends InheritedElement {
       return;
     }
 
-    final value = aspect.getSelected();
+    final value = aspect.notifier;
 
     if (value is Listenable) {
       value.addListener(() => _handleUpdate(aspect.type));

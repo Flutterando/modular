@@ -9,19 +9,16 @@ import 'package:flutter_modular/src/domain/usecases/finish_module.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_bind.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
-import 'package:flutter_modular/src/domain/usecases/module_ready.dart';
-import 'package:flutter_modular/src/domain/usecases/reassemble_tracker.dart';
-import 'package:flutter_modular/src/domain/usecases/release_scoped_binds.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/start_module.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/modular_base.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_router_delegate.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../mocks/mocks.dart';
 
@@ -35,8 +32,6 @@ class GetArgumentsMock extends Mock implements GetArguments {}
 
 class SetArgumentsMock extends Mock implements SetArguments {}
 
-class ReassembleTrackerMock extends Mock implements ReassembleTracker {}
-
 class FinishModuleMock extends Mock implements FinishModule {}
 
 class GetBindMock extends Mock implements GetBind {}
@@ -44,10 +39,6 @@ class GetBindMock extends Mock implements GetBind {}
 class StartModuleMock extends Mock implements StartModule {}
 
 class GetRouteMock extends Mock implements GetRoute {}
-
-class ReleaseScopedBindsMock extends Mock implements ReleaseScopedBinds {}
-
-class IsModuleReadyImplMock extends Mock implements IsModuleReadyImpl {}
 
 class ParallelRouteMock extends Mock implements ParallelRoute {}
 
@@ -67,10 +58,8 @@ void main() {
   final getBind = GetBindMock();
   final getArguments = GetArgumentsMock();
   final setArguments = SetArgumentsMock();
-  final reassembleTracker = ReassembleTrackerMock();
   final finishModule = FinishModuleMock();
   final startModule = StartModuleMock();
-  final isModuleReadyImpl = IsModuleReadyImplMock();
   final modularNavigator = IModularNavigatorMock();
   final routeInformationParser = ModularRouteInformationParserMock();
   final routerDelegate = ModularRouterDelegateMock();
@@ -83,12 +72,10 @@ void main() {
 
   setUp(() {
     modularBase = ModularBase(
-      reassembleTracker: reassembleTracker,
       disposeBind: disposeBind,
       finishModule: finishModule,
       getArguments: getArguments,
       getBind: getBind,
-      isModuleReadyUsecase: isModuleReadyImpl,
       navigator: modularNavigator,
       startModule: startModule,
       routeInformationParser: routeInformationParser,
@@ -111,7 +98,7 @@ void main() {
 
   test('init', () {
     final module = ModuleMock();
-    when(() => startModule.call(module)).thenReturn(right(unit));
+    when(() => startModule.call(module)).thenReturn(const Success(unit));
     modularBase.init(module);
     verify(() => startModule.call(module));
     expect(
@@ -119,51 +106,33 @@ void main() {
   });
 
   test('dispose', () {
-    when(() => disposeBind.call()).thenReturn(right(true));
+    when(() => disposeBind.call()).thenReturn(const Success(true));
     expect(modularBase.dispose(), true);
   });
 
-  test('reassemble', () {
-    when(() => reassembleTracker.call()).thenReturn(right(unit));
-    modularBase.reassemble();
-  });
-
   test('get', () {
-    when(() => getBind.call<String>()).thenReturn(
-        right(BindEntry(bind: Bind<String>((i) => ''), value: 'modular')));
+    when(() => getBind.call<String>()).thenReturn(const Success('modular'));
     expect(modularBase.get<String>(), 'modular');
   });
 
-  test('getBindEntry', () {
-    when(() => getBind.call<String>()).thenReturn(left(ModularErrorMock()));
-    expect(modularBase.get<String>(defaultValue: 'jacob'), 'jacob');
-  });
-
-  test('getAsync', () {
-    when(() => getBind.call<Future<String>>()).thenReturn(right(BindEntry(
-        bind: Bind((i) async => ''), value: Future.value('modular'))));
-    expect(modularBase.getAsync<String>(), completion('modular'));
-    reset(getBind);
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(left(const BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
-        completion('changed'));
-  });
-
-  test('isModuleReady', () {
-    when(() => isModuleReadyImpl.call()).thenAnswer((_) async => right(true));
-    expect(modularBase.isModuleReady(), completes);
+  test('tryGet', () {
+    when(() => getBind.call<String>()).thenReturn(const Success('modular'));
+    when(() => getBind.call<int>())
+        .thenReturn(const Failure(BindNotFoundException('')));
+    expect(modularBase.tryGet<String>(), 'modular');
+    expect(modularBase.tryGet<int>(), isNull);
   });
 
   test('destroy', () {
-    when(() => finishModule.call()).thenReturn(right(unit));
+    when(() => finishModule.call()).thenReturn(const Success(unit));
     modularBase.destroy();
     verify(() => finishModule.call()).called(1);
   });
 
   test('setArguments', () {
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => setArguments.call(any())).thenReturn(right(unit));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
     modularBase.setArguments('args');
     verify(() => setArguments.call(
           any(that: predicate<ModularArguments>((it) => it.data == 'args')),

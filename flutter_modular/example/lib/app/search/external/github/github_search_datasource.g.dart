@@ -6,8 +6,6 @@ part of 'github_search_datasource.dart';
 // InjectionGenerator
 // **************************************************************************
 
-final $GithubSearchDatasource = Bind(
+final $GithubSearchDatasource = Bind.lazySingleton<SearchDatasource>(
   (i) => GithubSearchDatasource(i<Client>()),
-  isSingleton: false,
-  isLazy: true,
 );

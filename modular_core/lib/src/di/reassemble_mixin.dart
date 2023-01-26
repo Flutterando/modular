@@ -1,3 +1,0 @@
-mixin ReassembleMixin {
-  void reassemble();
-}

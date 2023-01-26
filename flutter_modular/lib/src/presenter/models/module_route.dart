@@ -1,5 +1,7 @@
-import '../../../flutter_modular.dart';
+import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
+
+import '../guards/route_guard.dart';
 
 /// This route represents a cluster of routes from another module that will be concatenated to the context of the parent module.
 class ModuleRoute<T> extends ParallelRoute<T> {
@@ -9,14 +11,14 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     void Function(dynamic)? popCallback,
     String parent = '',
     String schema = '',
-    RouteContext? context,
+    Module? module,
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
     Uri? uri,
-    Map<Type, BindContext> bindContextEntries = const {},
+    Map<Type, Module> innerModules = const {},
   })  : assert(!name.contains('/:'),
             'ModuleRoute should not contain dynamic route'),
         super(
@@ -29,10 +31,10 @@ class ModuleRoute<T> extends ParallelRoute<T> {
           parent: parent,
           schema: schema,
           children: children,
-          context: context,
+          module: module,
           middlewares: middlewares,
           uri: uri ?? Uri.parse('/'),
-          bindContextEntries: bindContextEntries,
+          innerModules: innerModules,
         );
 
   factory ModuleRoute(
@@ -58,7 +60,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
-    RouteContext? context,
+    Module? module,
     String? name,
     String? schema,
     void Function(dynamic)? popCallback,
@@ -67,7 +69,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     String? parent,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext>? bindContextEntries,
+    Map<Type, Module>? innerModules,
   }) {
     return ModuleRoute<T>._start(
       child: child ?? this.child,
@@ -81,8 +83,8 @@ class ModuleRoute<T> extends ParallelRoute<T> {
       children: children ?? this.children,
       parent: parent ?? this.parent,
       uri: uri ?? this.uri,
-      context: context ?? this.context,
-      bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      module: module ?? this.module,
+      innerModules: innerModules ?? this.innerModules,
     );
   }
 }

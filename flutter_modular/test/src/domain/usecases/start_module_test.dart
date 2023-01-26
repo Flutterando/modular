@@ -1,17 +1,17 @@
-import 'package:mocktail/mocktail.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_modular/src/domain/usecases/start_module.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../mocks/mocks.dart';
 
 void main() {
   final service = ModuleServiceMock();
   final usecase = StartModuleImpl(service);
-  final module = RouteContextMock();
+  final module = ModuleMock();
   test('start module', () {
-    when(() => service.start(module)).thenReturn(right(unit));
+    when(() => service.start(module)).thenReturn(const Success(unit));
 
-    expect(usecase.call(module).isRight, true);
+    expect(usecase.call(module).isSuccess(), true);
   });
 }
