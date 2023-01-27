@@ -17,5 +17,6 @@ packages:
 
 
 scripts:
-  test:
-    exec: flutter test --coverage
+  tests: melos exec --ignore="*example" -- flutter test --coverage 
+
+    
