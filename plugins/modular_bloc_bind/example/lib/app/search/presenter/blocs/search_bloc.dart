@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:example/app/search/domain/usecases/search_by_text.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/usecases/search_by_text.dart';
 
 import '../events/search_event.dart';
 import '../states/search_state.dart';

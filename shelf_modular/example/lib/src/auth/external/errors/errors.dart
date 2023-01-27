@@ -1,8 +1,7 @@
-import 'package:example/src/auth/domain/errors/errors.dart';
+import 'package:shelf_modular_example/src/auth/domain/errors/errors.dart';
 
 class NotAuthorized extends AuthException {
-  const NotAuthorized(String message, [StackTrace? stackTrace])
-      : super(message, stackTrace);
+  const NotAuthorized(String message, [StackTrace? stackTrace]) : super(message, stackTrace);
 }
 
 class JWTViolations extends AuthException {

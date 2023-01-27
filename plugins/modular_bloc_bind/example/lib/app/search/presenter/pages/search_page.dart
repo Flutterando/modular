@@ -1,8 +1,7 @@
-import 'package:example/app/search/domain/entities/result.dart';
-import 'package:example/app/search/domain/errors/erros.dart';
-import 'package:example/app/search/presenter/blocs/search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/errors/erros.dart';
+import 'package:modular_bloc_bind_example/app/search/presenter/blocs/search_bloc.dart';
 
 import '../events/search_event.dart';
 import '../states/search_state.dart';

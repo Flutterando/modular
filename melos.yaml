@@ -9,8 +9,13 @@ packages:
   - flutter_modular
   - shelf_modular
   - plugins/*
+  # examples
+  - flutter_modular/example
+  - shelf_modular/example
+  - plugins/modular_triple_bind/example
+  - plugins/modular_bloc_bind/example
 
 
 scripts:
-  pubget:
-    exec: flutter pub get
+  test:
+    exec: flutter test --coverage

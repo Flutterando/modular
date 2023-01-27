@@ -1,5 +1,5 @@
-import 'package:example/app/search/domain/entities/result.dart';
-import 'package:example/app/search/presenter/stores/search_store.dart';
+import 'package:modular_triple_bind_example/app/search/domain/entities/result.dart';
+import 'package:modular_triple_bind_example/app/search/presenter/stores/search_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

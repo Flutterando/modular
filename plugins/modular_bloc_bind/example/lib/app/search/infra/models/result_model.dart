@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:example/app/search/domain/entities/result.dart';
+import 'package:modular_bloc_bind_example/app/search/domain/entities/result.dart';
 
 class ResultModel implements Result {
   @override
@@ -12,11 +12,7 @@ class ResultModel implements Result {
   @override
   final String url;
 
-  const ResultModel(
-      {required this.image,
-      required this.name,
-      required this.nickname,
-      required this.url});
+  const ResultModel({required this.image, required this.name, required this.nickname, required this.url});
 
   Map<String, dynamic> toMap() {
     return {

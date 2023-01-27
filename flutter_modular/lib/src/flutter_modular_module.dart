@@ -32,33 +32,34 @@ final _innerInjector = AutoInjector(
 );
 
 final injector = AutoInjector(
-    tag: 'ModularCore',
-    on: (i) {
-      //datasource
-      i.addInstance<AutoInjector>(_innerInjector);
-      i.addSingleton<Tracker>(Tracker.new);
-      //infra
-      i.add<BindService>(BindServiceImpl.new);
-      i.add<ModuleService>(ModuleServiceImpl.new);
-      i.add<RouteService>(RouteServiceImpl.new);
-      //domain
-      i.add<DisposeBind>(DisposeBindImpl.new);
-      i.add<FinishModule>(FinishModuleImpl.new);
-      i.add<GetBind>(GetBindImpl.new);
-      i.add<GetRoute>(GetRouteImpl.new);
-      i.add<StartModule>(StartModuleImpl.new);
-      i.add<GetArguments>(GetArgumentsImpl.new);
-      i.add<BindModule>(BindModuleImpl.new);
-      i.add<ReportPop>(ReportPopImpl.new);
-      i.add<SetArguments>(SetArgumentsImpl.new);
-      i.add<UnbindModule>(UnbindModuleImpl.new);
-      i.add<ReportPush>(ReportPushImpl.new);
-      //presenter
-      i.addInstance(GlobalKey<NavigatorState>());
-      i.addSingleton<ModularRouteInformationParser>(ModularRouteInformationParser.new);
-      i.addSingleton<ModularRouterDelegate>(ModularRouterDelegate.new);
-      i.add<IModularNavigator>(() => i<ModularRouterDelegate>());
-      i.addLazySingleton<IModularBase>(ModularBase.new);
+  tag: 'ModularCore',
+  on: (i) {
+    //datasource
+    i.addInstance<AutoInjector>(_innerInjector);
+    i.addSingleton<Tracker>(Tracker.new);
+    //infra
+    i.add<BindService>(BindServiceImpl.new);
+    i.add<ModuleService>(ModuleServiceImpl.new);
+    i.add<RouteService>(RouteServiceImpl.new);
+    //domain
+    i.add<DisposeBind>(DisposeBindImpl.new);
+    i.add<FinishModule>(FinishModuleImpl.new);
+    i.add<GetBind>(GetBindImpl.new);
+    i.add<GetRoute>(GetRouteImpl.new);
+    i.add<StartModule>(StartModuleImpl.new);
+    i.add<GetArguments>(GetArgumentsImpl.new);
+    i.add<BindModule>(BindModuleImpl.new);
+    i.add<ReportPop>(ReportPopImpl.new);
+    i.add<SetArguments>(SetArgumentsImpl.new);
+    i.add<UnbindModule>(UnbindModuleImpl.new);
+    i.add<ReportPush>(ReportPushImpl.new);
+    //presenter
+    i.addInstance(GlobalKey<NavigatorState>());
+    i.addSingleton<ModularRouteInformationParser>(ModularRouteInformationParser.new);
+    i.addSingleton<ModularRouterDelegate>(ModularRouterDelegate.new);
+    i.add<IModularNavigator>(() => i<ModularRouterDelegate>());
+    i.addLazySingleton<IModularBase>(ModularBase.new);
 
-      i.commit();
-    });
+    i.commit();
+  },
+);

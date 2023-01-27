@@ -1,6 +1,6 @@
-import 'package:example/src/auth/external/shared/token/token_manager.dart';
-import 'package:example/src/auth/presenter/auth_resource.dart';
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular_example/src/auth/external/shared/token/token_manager.dart';
+import 'package:shelf_modular_example/src/auth/presenter/auth_resource.dart';
 
 import 'domain/usecases/check_token.dart';
 import 'domain/usecases/login.dart';

@@ -234,12 +234,11 @@ packages:
     source: hosted
     version: "1.0.4"
   modular_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: modular_core
-      sha256: d22061e7956a473d2f45369e3e1d58e939e3da83ad1c1692c48b436472c439cc
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../modular_core"
+      relative: true
+    source: path
     version: "3.0.0-alpha.0"
   node_preamble:
     dependency: transitive
@@ -321,6 +320,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.0+4"
+  result_dart:
+    dependency: transitive
+    description:
+      name: result_dart
+      sha256: c8a6baefe21b9f5af2f4a6b47d9a2f742c379f0018bf0373cc1d5056cb2d1625
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   sasl_scram:
     dependency: transitive
     description:

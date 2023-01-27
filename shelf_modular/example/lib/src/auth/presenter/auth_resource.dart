@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:example/src/auth/domain/usecases/login.dart';
-import 'package:example/src/auth/domain/usecases/refresh_token.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular_example/src/auth/domain/usecases/login.dart';
+import 'package:shelf_modular_example/src/auth/domain/usecases/refresh_token.dart';
 
 import 'extensions/tokenization_extension.dart';
 import 'guards/auth_guard.dart';

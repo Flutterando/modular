@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:example/app/search/infra/datasources/search_datasource.dart';
-import 'package:example/app/search/infra/models/result_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-part 'github_search_datasource.g.dart';
+import 'package:http/http.dart';
+import 'package:modular_triple_bind_example/app/search/infra/datasources/search_datasource.dart';
+import 'package:modular_triple_bind_example/app/search/infra/models/result_model.dart';
 
-@Injectable(singleton: false)
 class GithubSearchDatasource implements SearchDatasource {
   final Client client;
 
@@ -21,13 +19,7 @@ class GithubSearchDatasource implements SearchDatasource {
       final json = jsonDecode(result.body);
       debugPrint('execute datasource');
       var jsonList = json['items'] as List;
-      var list = jsonList
-          .map((item) => ResultModel(
-              name: '',
-              nickname: item['login'],
-              image: item['avatar_url'],
-              url: item['url']))
-          .toList();
+      var list = jsonList.map((item) => ResultModel(name: '', nickname: item['login'], image: item['avatar_url'], url: item['url'])).toList();
       return list;
     } else {
       throw Exception();

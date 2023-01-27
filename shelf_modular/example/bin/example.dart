@@ -1,7 +1,7 @@
-import 'package:example/src/app_module.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular_example/src/app_module.dart';
 
 void main(List<String> args) async {
   final handler = Modular(

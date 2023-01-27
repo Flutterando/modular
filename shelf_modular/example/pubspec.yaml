@@ -1,4 +1,4 @@
-name: example
+name: shelf_modular_example
 description: A web server built using the shelf package.
 version: 1.0.0
 publish_to: none
@@ -16,7 +16,6 @@ dependencies:
   redis_dart: ^0.1.0+4
   uuid: ^3.0.4
   shelf_modular:
-    path: ../
 
 dev_dependencies:
   pedantic: ^1.10.0

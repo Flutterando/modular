@@ -1,7 +1,7 @@
-import 'package:example/app/search/domain/entities/result.dart';
-import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
+import 'package:flutter_modular_example/app/search/domain/errors/erros.dart';
 
 import '../stores/search_store.dart';
 
@@ -78,8 +78,7 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
             child: store.when(
               onState: _buildList,
-              onLoading: (loading) =>
-                  const Center(child: CircularProgressIndicator()),
+              onLoading: (loading) => const Center(child: CircularProgressIndicator()),
               onError: _buildError,
             ),
           ),

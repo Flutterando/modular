@@ -1,8 +1,8 @@
-import 'package:example/src/auth/domain/entities/tokenization.dart';
-import 'package:example/src/auth/external/errors/errors.dart';
-import 'package:example/src/auth/external/shared/redis/redis_service.dart';
-import 'package:example/src/auth/external/shared/token/token_manager.dart';
-import 'package:example/src/auth/infra/datasources/auth_datasource.dart';
+import 'package:shelf_modular_example/src/auth/domain/entities/tokenization.dart';
+import 'package:shelf_modular_example/src/auth/external/errors/errors.dart';
+import 'package:shelf_modular_example/src/auth/external/shared/redis/redis_service.dart';
+import 'package:shelf_modular_example/src/auth/external/shared/token/token_manager.dart';
+import 'package:shelf_modular_example/src/auth/infra/datasources/auth_datasource.dart';
 import 'package:uuid/uuid.dart';
 
 import 'postgres_connect.dart';
@@ -12,12 +12,10 @@ class AuthDatasourceImpl implements AuthDatasource {
   final IRedisService redis;
   final IPostgresConnect pg;
 
-  AuthDatasourceImpl(
-      {required this.tokenManager, required this.redis, required this.pg});
+  AuthDatasourceImpl({required this.tokenManager, required this.redis, required this.pg});
 
   @override
-  Future<Tokenization> fromCredentials(
-      {required String email, required String password}) async {
+  Future<Tokenization> fromCredentials({required String email, required String password}) async {
     final connection = await pg.connection;
     final results = await connection.mappedResultsQuery(
       'SELECT id FROM users WHERE email=@email AND password=@password',
@@ -26,9 +24,7 @@ class AuthDatasourceImpl implements AuthDatasource {
         'password': password,
       },
     );
-    final userList = results
-        .where((element) => element.containsKey('users'))
-        .map((e) => e['users']!);
+    final userList = results.where((element) => element.containsKey('users')).map((e) => e['users']!);
 
     if (userList.isEmpty) {
       throw NotAuthorized('acesso negado');
@@ -69,10 +65,7 @@ class AuthDatasourceImpl implements AuthDatasource {
       ...claims,
     });
 
-    final tokenization = Tokenization(
-        expiresIn: expiresIn.inSeconds,
-        accessToken: accessToken,
-        refreshToken: newRefreshToken);
+    final tokenization = Tokenization(expiresIn: expiresIn.inSeconds, accessToken: accessToken, refreshToken: newRefreshToken);
     return tokenization;
   }
 }

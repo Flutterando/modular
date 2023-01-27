@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:example/src/auth/domain/usecases/check_token.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular_example/src/auth/domain/usecases/check_token.dart';
 
 class AuthGuard extends RouteGuard {
   @override
@@ -12,8 +12,7 @@ class AuthGuard extends RouteGuard {
     if (accessToken == null || accessToken.isEmpty) {
       return false;
     }
-    final result =
-        await Modular.get<CheckToken>().call(accessToken: accessToken);
+    final result = await Modular.get<CheckToken>().call(accessToken: accessToken);
     return result.fold((l) => false, (r) => true);
   }
 }
