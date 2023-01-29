@@ -16,7 +16,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.0.5'
+        flutter-version: '3.7.0'
     
     - name: get packages
       run: flutter pub get
@@ -42,7 +42,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.0.5'
+        flutter-version: '3.7.0'
     
     - name: get packages
       run: flutter pub get
@@ -68,7 +68,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.0.5'
+        flutter-version: '3.7.0'
     
     - name: get packages
       run: flutter pub get
@@ -83,28 +83,3 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
-  modular_test:
-    name: modular_test
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '3.0.5'
-    
-    - name: get packages
-      run: flutter pub get
-      working-directory: modular_test
-    
-    - name: Flutter Test
-      run: flutter test --coverage --coverage-path ../coverage/lcov.info
-      working-directory: modular_test
-      
-    - name: Codecov GitHub Action
-      uses: codecov/codecov-action@v2.0.3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
