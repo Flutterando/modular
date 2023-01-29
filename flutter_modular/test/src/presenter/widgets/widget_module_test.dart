@@ -18,6 +18,10 @@ void main() {
     // final state = tester.state<NavigationListenerState>(find.byKey(key));
     // state.listener();
   });
+
+  test('WidgetModule dont use routes', () {
+    expect(() => const CustomWidgetModule().routes, throwsA(isA<UnimplementedError>()));
+  });
 }
 
 final key = UniqueKey();
@@ -58,5 +62,8 @@ class CustomWidgetModule extends WidgetModule {
       ];
 
   @override
-  Widget get view => Container(key: key);
+  Widget get view {
+    exportedBinds;
+    return Container(key: key);
+  }
 }

@@ -88,9 +88,11 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   }
 
   String _resolverPath(String relativePath) {
-    return getArguments.call().fold((r) {
-      return r.uri.resolve(relativePath).toString();
-    }, (l) => relativePath);
+    return getArguments //
+        .call()
+        .map((r) => r.uri.resolve(relativePath))
+        .map((s) => s.toString())
+        .getOrDefault(relativePath);
   }
 
   FutureOr<ParallelRoute> selectRoute(String path, {dynamic arguments}) async {
@@ -105,9 +107,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
         .call(params) //
         .map(_routeSuccess)
         .recover((modularError) {
-      if (path.endsWith('/')) {
-        return Failure(modularError);
-      }
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
       return getRoute
           .call(params) //

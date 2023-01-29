@@ -23,6 +23,12 @@ void main() {
     final route = ParallelRoute.module('/', module: MyModule2()).copyWith();
     expect(route.name, '/');
   });
+
+  test('route addParent', () {
+    final routeParent = ParallelRoute.empty().copyWith(name: '/parent');
+    var route = ParallelRoute.empty().copyWith(name: '/').addParent(routeParent);
+    expect(route.name, '/parent/');
+  });
 }
 
 class MyModule extends Module {}

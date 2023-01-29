@@ -134,10 +134,7 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold(
-        (r) => debugPrint('${module.runtimeType} started!'),
-        (l) => throw l,
-      );
+      startModule(module).fold((r) => debugPrint('${module.runtimeType} started!'), (l) => throw l);
       _moduleHasBeenStarted = true;
     } else {
       throw ModuleStartedException('Module ${module.runtimeType} is already started');
