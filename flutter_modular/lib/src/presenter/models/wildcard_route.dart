@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:modular_core/modular_core.dart';
-
 import '../../../flutter_modular.dart';
 
 /// Escape route if nothing is found in current context.
@@ -14,9 +12,5 @@ class WildcardRoute<T> extends ChildRoute<T> {
     TransitionType transition = TransitionType.defaultTransition,
     CustomTransition? customTransition,
     Duration duration = const Duration(milliseconds: 300),
-  }) : super('/**',
-            duration: duration,
-            child: child,
-            customTransition: customTransition,
-            transition: transition);
+  }) : super('/**', duration: duration, child: child, customTransition: customTransition, transition: transition);
 }

@@ -12,7 +12,8 @@ class CheckTokenImpl implements CheckToken {
   CheckTokenImpl(this.repository);
 
   @override
-  Future<Either<AuthException, Unit>> call({required String accessToken}) async {
+  Future<Either<AuthException, Unit>> call(
+      {required String accessToken}) async {
     return await repository.checkToken(accessToken: accessToken);
   }
 }

@@ -10,19 +10,31 @@ typedef Handler1 = FutureOr<Response> Function(ModularArguments args);
 typedef Handler2 = FutureOr<Response> Function(AutoInjector i);
 
 //two params
-typedef HandlerTwoParams = FutureOr<Response> Function(Request request, ModularArguments args);
-typedef HandlerTwoParams1 = FutureOr<Response> Function(Request request, AutoInjector i);
-typedef HandlerTwoParams2 = FutureOr<Response> Function(ModularArguments args, Request request);
-typedef HandlerTwoParams3 = FutureOr<Response> Function(ModularArguments args, AutoInjector i);
-typedef HandlerTwoParams4 = FutureOr<Response> Function(AutoInjector i, ModularArguments args);
-typedef HandlerTwoParams5 = FutureOr<Response> Function(AutoInjector i, Request request);
+typedef HandlerTwoParams = FutureOr<Response> Function(
+    Request request, ModularArguments args);
+typedef HandlerTwoParams1 = FutureOr<Response> Function(
+    Request request, AutoInjector i);
+typedef HandlerTwoParams2 = FutureOr<Response> Function(
+    ModularArguments args, Request request);
+typedef HandlerTwoParams3 = FutureOr<Response> Function(
+    ModularArguments args, AutoInjector i);
+typedef HandlerTwoParams4 = FutureOr<Response> Function(
+    AutoInjector i, ModularArguments args);
+typedef HandlerTwoParams5 = FutureOr<Response> Function(
+    AutoInjector i, Request request);
 //three params
-typedef HandlerThreeParams = FutureOr<Response> Function(Request request, ModularArguments args, AutoInjector i);
-typedef HandlerThreeParams1 = FutureOr<Response> Function(Request request, AutoInjector i, ModularArguments args);
-typedef HandlerThreeParams2 = FutureOr<Response> Function(ModularArguments args, Request request, AutoInjector i);
-typedef HandlerThreeParams3 = FutureOr<Response> Function(ModularArguments args, AutoInjector i, Request request);
-typedef HandlerThreeParams4 = FutureOr<Response> Function(AutoInjector i, ModularArguments args, Request request);
-typedef HandlerThreeParams5 = FutureOr<Response> Function(AutoInjector i, Request request, ModularArguments args);
+typedef HandlerThreeParams = FutureOr<Response> Function(
+    Request request, ModularArguments args, AutoInjector i);
+typedef HandlerThreeParams1 = FutureOr<Response> Function(
+    Request request, AutoInjector i, ModularArguments args);
+typedef HandlerThreeParams2 = FutureOr<Response> Function(
+    ModularArguments args, Request request, AutoInjector i);
+typedef HandlerThreeParams3 = FutureOr<Response> Function(
+    ModularArguments args, AutoInjector i, Request request);
+typedef HandlerThreeParams4 = FutureOr<Response> Function(
+    AutoInjector i, ModularArguments args, Request request);
+typedef HandlerThreeParams5 = FutureOr<Response> Function(
+    AutoInjector i, Request request, ModularArguments args);
 
 FutureOr<Response>? applyHandler(
   Function fn, {

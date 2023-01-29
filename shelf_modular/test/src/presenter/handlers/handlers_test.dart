@@ -29,55 +29,95 @@ void main() {
   });
 
   test('Handler1', () {
-    expect(_applyHandler((ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler((ModularArguments args) => Response.ok('')), isNotNull);
   });
 
   test('Handler2', () {
-    expect(_applyHandler((AutoInjector injector) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler((AutoInjector injector) => Response.ok('')), isNotNull);
   });
 
   test('HandlerTwoParams', () {
-    expect(_applyHandler((Request request, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, ModularArguments args) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams1', () {
-    expect(_applyHandler((Request request, AutoInjector i) => Response.ok('')), isNotNull);
+    expect(_applyHandler((Request request, AutoInjector i) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams2', () {
-    expect(_applyHandler((ModularArguments args, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, Request request) => Response.ok('')),
+        isNotNull);
   });
   test('HandlerTwoParams3', () {
-    expect(_applyHandler((ModularArguments args, AutoInjector i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, AutoInjector i) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams4', () {
-    expect(_applyHandler((AutoInjector i, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (AutoInjector i, ModularArguments args) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerTwoParams5', () {
-    expect(_applyHandler((AutoInjector i, Request request) => Response.ok('')), isNotNull);
+    expect(_applyHandler((AutoInjector i, Request request) => Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams', () {
-    expect(_applyHandler((Request request, ModularArguments args, AutoInjector i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, ModularArguments args, AutoInjector i) =>
+                Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams1', () {
-    expect(_applyHandler((Request request, AutoInjector i, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (Request request, AutoInjector i, ModularArguments args) =>
+                Response.ok('')),
+        isNotNull);
   });
   test('HandlerThreeParams2', () {
-    expect(_applyHandler((ModularArguments args, Request request, AutoInjector i) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, Request request, AutoInjector i) =>
+                Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams3', () {
-    expect(_applyHandler((ModularArguments args, AutoInjector i, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (ModularArguments args, AutoInjector i, Request request) =>
+                Response.ok('')),
+        isNotNull);
   });
 
   test('HandlerThreeParams4', () {
-    expect(_applyHandler((AutoInjector i, ModularArguments args, Request request) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (AutoInjector i, ModularArguments args, Request request) =>
+                Response.ok('')),
+        isNotNull);
   });
   test('HandlerThreeParams5', () {
-    expect(_applyHandler((AutoInjector i, Request request, ModularArguments args) => Response.ok('')), isNotNull);
+    expect(
+        _applyHandler(
+            (AutoInjector i, Request request, ModularArguments args) =>
+                Response.ok('')),
+        isNotNull);
   });
 }

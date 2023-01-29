@@ -61,11 +61,13 @@ void main() {
   test('start (call)', () {
     final module = ModuleMock();
     when(() => startModule.call(module)).thenReturn(Success(unit));
-    final handler = modularBase.call(module: module, middlewares: [MyGuard(true)]);
+    final handler =
+        modularBase.call(module: module, middlewares: [MyGuard(true)]);
 
     verify(() => startModule.call(module)).called(1);
-    expect(handler, isA<FutureOr<Response> Function(Request request)>);
-    expect(() => modularBase.start(module: module), throwsA(isA<ModuleStartedException>()));
+    expect(handler, isA<Future<Response> Function(Request)>());
+    expect(() => modularBase.start(module: module),
+        throwsA(isA<ModuleStartedException>()));
   });
 
   test('handler', () async {
@@ -78,7 +80,8 @@ void main() {
 
     when(() => route.middlewares).thenReturn([]);
     when(() => route.handler).thenReturn(() => response);
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
     when(() => reportPush.call(route)).thenReturn(Success(unit));
 
@@ -95,7 +98,8 @@ void main() {
     when(() => route.handler).thenReturn((String v) {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
 
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
@@ -108,7 +112,8 @@ void main() {
   });
   test('handler with  hijacked request', () async {
     final request = RequestMock();
-    when(() => request.method).thenThrow(Exception('Got a response for hijacked request'));
+    when(() => request.method)
+        .thenThrow(Exception('Got a response for hijacked request'));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 200);
@@ -138,7 +143,8 @@ void main() {
     when(() => route.handler).thenReturn((String v) {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
 
     when(() => reportPush.call(route)).thenReturn(Success(unit));
@@ -156,8 +162,10 @@ void main() {
     when(() => route.handler).thenReturn(() {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => Failure(RouteNotFoundException('')));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Failure(RouteNotFoundException('')));
 
     when(() => reportPush.call(route)).thenReturn(Success(unit));
 
@@ -174,8 +182,10 @@ void main() {
     when(() => route.handler).thenReturn(() {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => Failure(ModuleStartedException('')));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Failure(ModuleStartedException('')));
 
     when(() => reportPush.call(route)).thenReturn(Success(unit));
 
@@ -192,8 +202,10 @@ void main() {
     when(() => route.handler).thenReturn(() {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => Failure(ModuleStartedException('')));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Failure(ModuleStartedException('')));
 
     when(() => reportPush.call(route)).thenReturn(Success(unit));
 
@@ -212,7 +224,8 @@ void main() {
 
     when(() => route.middlewares).thenReturn([MyGuard(true), MyGuard(false)]);
     when(() => route.handler).thenReturn(() => response);
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
 
     when(() => reportPush.call(route)).thenReturn(Success(unit));
@@ -228,7 +241,8 @@ void main() {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
     when(() => request.headers).thenReturn({});
-    when(() => request.readAsString()).thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
+    when(() => request.readAsString())
+        .thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result['name'], 'Jacob');
   });
@@ -236,9 +250,10 @@ void main() {
   test('tryJsonDecode isMultipart false with FormatException', () async {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
-    when(() => request.headers).thenReturn({'Content-Type': MediaType('image', 'png').toString()});
-
+    when(() => request.headers)
+        .thenReturn({'Content-Type': MediaType('image', 'png').toString()});
     when(() => request.readAsString()).thenThrow(FormatException());
+
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result, {});
   });
@@ -247,7 +262,9 @@ void main() {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
     when(() => request.headers).thenReturn({
-      'Content-Type': MediaType('multipart', 'form-data', {'boundary': 'boundary'}).toString()
+      'Content-Type':
+          MediaType('multipart', 'form-data', {'boundary': 'boundary'})
+              .toString()
     });
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result.isEmpty, true);

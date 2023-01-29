@@ -10,13 +10,11 @@ class TrackerMock extends Mock implements Tracker {}
 
 void main() {
   late TrackerMock tracker;
-  late InjectorMock injectorMock;
   late ModuleMock module;
   late ModuleServiceImpl service;
 
-  setUpAll(() {
+  setUp(() {
     tracker = TrackerMock();
-    injectorMock = InjectorMock();
     module = ModuleMock();
     service = ModuleServiceImpl(tracker);
   });
@@ -35,7 +33,7 @@ void main() {
   });
 
   group('bind', () {
-    test('should execute', () async {
+    test('should execute', () {
       when(() => tracker.bindModule(module));
       final result = service.bind(module);
       expect(result.isSuccess(), true);
@@ -44,8 +42,8 @@ void main() {
   });
 
   group('unbind', () {
-    test('should execute', () async {
-      when(() => tracker.unbindModule('ModuleMock'));
+    test('should execute', () {
+      //  when(() => tracker.unbindModule('ModuleMock'));
       final result = service.unbind<ModuleMock>();
       expect(result.isSuccess(), true);
     });

@@ -11,14 +11,14 @@ void main() {
   group('start', () {
     test('should return true', () {
       tracker.runApp(module);
-      expect(service.start(module).isSuccess, true);
+      expect(service.start(module).isSuccess(), true);
     });
   });
 
   group('finish', () {
     test('should return true', () {
       tracker.finishApp();
-      expect(service.finish().isSuccess, true);
+      expect(service.finish().isSuccess(), true);
     });
   });
 }

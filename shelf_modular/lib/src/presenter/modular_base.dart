@@ -30,7 +30,8 @@ abstract class IModularBase {
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
   /// [module]: Start initial module.
   /// [middlewares]: List of Shelf middlewares.
-  Handler call({required Module module, List<Middleware> middlewares = const []});
+  Handler call(
+      {required Module module, List<Middleware> middlewares = const []});
 
   /// Responsible for starting the app.
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
@@ -69,7 +70,8 @@ class ModularBase implements IModularBase {
   );
 
   @override
-  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() =>
+      disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>() {
@@ -85,9 +87,11 @@ class ModularBase implements IModularBase {
   void destroy() => finishModule();
 
   @override
-  Handler call({required Module module, List<Middleware> middlewares = const []}) {
+  Handler call(
+      {required Module module, List<Middleware> middlewares = const []}) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold((l) => throw l, (r) => print('${module.runtimeType} started!'));
+      startModule(module)
+          .fold((r) => print('${module.runtimeType} started!'), (l) => throw l);
       _moduleHasBeenStarted = true;
 
       setPrintResolver(print);
@@ -98,7 +102,8 @@ class ModularBase implements IModularBase {
 
       return pipeline.addHandler(handler);
     } else {
-      throw ModuleStartedException('Module ${module.runtimeType} is already started');
+      throw ModuleStartedException(
+          'Module ${module.runtimeType} is already started');
     }
   }
 
@@ -107,60 +112,62 @@ class ModularBase implements IModularBase {
 
   @visibleForTesting
   FutureOr<Response> handler(Request request) async {
-    Response response;
     try {
       final data = await tryJsonDecode(request);
-      final params = RouteParmsDTO(url: '/${request.url.toString()}', schema: request.method, arguments: data);
+      final params = RouteParmsDTO(
+          url: '/${request.url.toString()}',
+          schema: request.method,
+          arguments: data);
       return getRoute //
           .call(params)
           .map((route) => _routeSuccess(route, request))
           .mapError(_routeError)
           .fold(identity, identity);
-    } on Exception catch (e) {
-      if (e.toString().contains('Exception: Got a response for hijacked request')) {
-        response = Response.ok('');
+    } on Exception catch (e, s) {
+      if (e
+          .toString()
+          .contains('Exception: Got a response for hijacked request')) {
+        return Response.ok('');
       } else {
-        rethrow;
+        print(e.toString());
+        print('STACK TRACE \n $s');
+        return Response.internalServerError(body: '${e.toString()}/n$s');
       }
-    } catch (e, s) {
-      print(e.toString());
-      print('STACK TRACE \n $s');
-      response = Response.internalServerError(body: '${e.toString()}/n$s');
     }
-    return response;
   }
 
   FutureOr<Response> _routeSuccess(ModularRoute? route, Request request) async {
-    final middlewares = route!.middlewares;
+    final middlewares = route?.middlewares ?? [];
     var pipeline = Pipeline();
 
     for (var middleware in middlewares) {
       if (middleware is ModularMiddleware) {
-        pipeline = pipeline.addMiddleware(((innerHandler) => middleware(innerHandler, route)));
+        pipeline = pipeline
+            .addMiddleware(((innerHandler) => middleware(innerHandler, route)));
       }
     }
 
-    if (route is Route) {
-      reportPush(route);
-
-      final routeHandler = route.handler!;
-
-      return pipeline.addHandler((request) async {
-        final response = await applyHandler(
-          routeHandler,
-          request: request,
-          arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
-          injector: injector<AutoInjector>(),
-        );
-
-        if (response != null) {
-          return response;
-        } else {
-          return Response.internalServerError(body: 'Handler not correct');
-        }
-      })(request);
+    if (route is! Route) {
+      return Response.notFound('');
     }
-    return Response.notFound('');
+    reportPush(route);
+
+    final routeHandler = route.handler!;
+
+    return pipeline.addHandler((request) async {
+      final response = await applyHandler(
+        routeHandler,
+        request: request,
+        arguments: getArguments().getOrElse((left) => ModularArguments.empty()),
+        injector: injector<AutoInjector>(),
+      );
+
+      if (response != null) {
+        return response;
+      } else {
+        return Response.internalServerError(body: 'Handler not correct');
+      }
+    })(request);
   }
 
   FutureOr<Response> _routeError(ModularError error) {
@@ -188,7 +195,8 @@ class ModularBase implements IModularBase {
     return {};
   }
 
-  bool _isMultipart(Request request) => _extractMultipartBoundary(request) != null;
+  bool _isMultipart(Request request) =>
+      _extractMultipartBoundary(request) != null;
 
   String? _extractMultipartBoundary(Request request) {
     if (!request.headers.containsKey('Content-Type')) return null;

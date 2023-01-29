@@ -37,7 +37,7 @@ abstract class Tracker {
 
   /// Responsible for starting the app.
   /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
-  void runApp(Module module);
+  void runApp(Module module, [String initialRoutePath = '/']);
 
   /// Add a Module to Injection System.<br>
   /// Use Tracker.unbindModule to remove registers;
@@ -241,9 +241,10 @@ class _Tracker implements Tracker {
   }
 
   @override
-  void runApp(Module module) {
+  void runApp(Module module, [String initialRoutePath = '/']) {
     _nullableModule = module;
-    _disposeTags[module.runtimeType] = [];
+    _disposeTags[module.runtimeType] = [initialRoutePath];
+    bindModule(module);
     addRoutes(module);
   }
 

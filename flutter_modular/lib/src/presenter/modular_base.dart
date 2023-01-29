@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:modular_core/modular_core.dart';
 
 import '../domain/usecases/dispose_bind.dart';
 import '../domain/usecases/finish_module.dart';
@@ -114,8 +113,7 @@ class ModularBase implements IModularBase {
   });
 
   @override
-  bool dispose<B extends Object>() =>
-      disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>() => disposeBind<B>().getOrElse((left) => false);
 
   @override
   B get<B extends Object>() {
@@ -142,8 +140,7 @@ class ModularBase implements IModularBase {
       );
       _moduleHasBeenStarted = true;
     } else {
-      throw ModuleStartedException(
-          'Module ${module.runtimeType} is already started');
+      throw ModuleStartedException('Module ${module.runtimeType} is already started');
     }
   }
 
@@ -151,8 +148,7 @@ class ModularBase implements IModularBase {
   IModularNavigator get to => navigatorDelegate ?? navigator;
 
   @override
-  ModularArguments get args =>
-      getArguments().getOrElse((l) => ModularArguments.empty());
+  ModularArguments get args => getArguments().getOrElse((l) => ModularArguments.empty());
 
   final flags = ModularFlags();
 

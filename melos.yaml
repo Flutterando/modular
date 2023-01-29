@@ -18,5 +18,6 @@ packages:
 
 scripts:
   tests: melos exec --ignore="*example" -- flutter test --coverage 
+  clean: melos exec flutter clean
 
     

@@ -27,7 +27,7 @@ final injector = AutoInjector(
   tag: 'ModularCore',
   on: (i) {
     i.add<Tracker>(Tracker.new);
-    i.add<AutoInjector>(_innerInjector);
+    i.addInstance<AutoInjector>(_innerInjector);
     //infra
     i.add<BindService>(BindServiceImpl.new);
     i.add<ModuleService>(ModuleServiceImpl.new);

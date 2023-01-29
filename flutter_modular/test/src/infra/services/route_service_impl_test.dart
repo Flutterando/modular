@@ -14,15 +14,14 @@ void main() {
 
   group('getRoute', () {
     test('should get route', () async {
-      when(() => tracker.findRoute(params.url))
-          .thenAnswer((_) async => ModularRouteMock());
+      when(() => tracker.findRoute(params.url)).thenAnswer((_) async => ModularRouteMock());
       final result = await service.getRoute(params);
       expect(result.isSuccess(), true);
     });
     test('should throw error not found route', () async {
       when(() => tracker.findRoute(params.url)).thenAnswer((_) async => null);
       final result = await service.getRoute(params);
-      expect(result.isSuccess(), true);
+      expect(result.isError(), true);
     });
   });
 

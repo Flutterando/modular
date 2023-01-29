@@ -12,8 +12,9 @@ void main() {
   final route = ModularRouteMock();
   final params = RouteParmsDTO(url: '/');
   test('get route', () async {
-    when(() => service.getRoute(params)).thenAnswer((_) async => Success(route));
+    when(() => service.getRoute(params))
+        .thenAnswer((_) async => Success(route));
     final result = await usecase.call(params);
-    expect(result.isSuccess, true);
+    expect(result.isSuccess(), true);
   });
 }

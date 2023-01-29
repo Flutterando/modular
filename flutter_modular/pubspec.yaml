@@ -20,8 +20,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# dependency_overrides:
-#   modular_core:
-#     path: ../modular_core
 
 flutter:

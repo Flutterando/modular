@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:modular_core/modular_core.dart';
 import 'package:result_dart/functions.dart';
 import 'package:result_dart/result_dart.dart';
 
@@ -13,8 +12,7 @@ import '../../domain/usecases/report_push.dart';
 import '../../domain/usecases/set_arguments.dart';
 import 'modular_book.dart';
 
-class ModularRouteInformationParser
-    extends RouteInformationParser<ModularBook> {
+class ModularRouteInformationParser extends RouteInformationParser<ModularBook> {
   final GetRoute getRoute;
   final GetArguments getArguments;
   final SetArguments setArguments;
@@ -30,12 +28,10 @@ class ModularRouteInformationParser
   });
 
   @override
-  Future<ModularBook> parseRouteInformation(
-      RouteInformation routeInformation) async {
+  Future<ModularBook> parseRouteInformation(RouteInformation routeInformation) async {
     var path = '';
     if (!_firstParse) {
-      if (routeInformation.location == null ||
-          routeInformation.location == '/') {
+      if (routeInformation.location == null || routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = Modular.initialRoutePath;
       } else {
@@ -56,12 +52,10 @@ class ModularRouteInformationParser
     return RouteInformation(location: configuration.uri.toString());
   }
 
-  Future<ModularBook> selectBook(String path,
-      {dynamic arguments, void Function(dynamic)? popCallback}) async {
+  Future<ModularBook> selectBook(String path, {dynamic arguments, void Function(dynamic)? popCallback}) async {
     var route = await selectRoute(path, arguments: arguments);
 
-    final modularArgs =
-        getArguments().getOrElse((l) => ModularArguments.empty());
+    final modularArgs = getArguments().getOrElse((l) => ModularArguments.empty());
 
     if (popCallback != null) {
       route = route.copyWith(popCallback: popCallback);
@@ -120,8 +114,7 @@ class ModularRouteInformationParser
           .map(_routeSuccess)
         ..fold(
           (success) {
-            debugPrint(
-                '[MODULAR WARNING] - Please, use $path/ instead of $path.');
+            debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
           },
           identity,
         );

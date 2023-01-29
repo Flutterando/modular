@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -71,8 +73,4 @@ class BlocBind {
       },
     );
   }
-}
-
-void main(List<String> args) {
-  Function fn = SearchStore.new;
 }

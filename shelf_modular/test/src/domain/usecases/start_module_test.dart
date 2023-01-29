@@ -12,6 +12,6 @@ void main() {
   test('start module', () {
     when(() => service.start(module)).thenReturn(Success(unit));
 
-    expect(usecase.call(module).isSuccess, true);
+    expect(usecase.call(module).isSuccess(), true);
   });
 }

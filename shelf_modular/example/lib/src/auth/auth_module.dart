@@ -17,7 +17,8 @@ class AuthModule extends Module {
         AutoBind.singleton(RedisService.new),
         AutoBind.singleton(PostgresConnect.new),
         Bind.factory((i) => TokenManager()),
-        Bind.factory((i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
+        Bind.factory(
+            (i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
         //infra
         Bind.factory((i) => AuthRepositoryImpl(i())),
         //domain
