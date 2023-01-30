@@ -1,3 +1,3 @@
 # modular_core
 
-Injection system and routes for `modular flutter` and `modular shelf`;
+Injection system and routes for `flutter_modular` and `shelf_modular`;

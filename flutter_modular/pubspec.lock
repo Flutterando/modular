@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: "96103a4c6bb363691ff8b13b3c1b900e36ab08a13e565e7f40433454dafb5e46"
+      sha256: d9bf6106ebfe46d503a4fcd1d0b2b8b6a059a5dc185e9cbfb456be54c07cc28c
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1-alpha.11"
+    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -118,27 +118,19 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_lints:
-    dependency: "direct dev"
-    description:
-      name: flutter_lints
-      sha256: b543301ad291598523947dc534aaddc5aaad597b709d2426d3a0e0d44c5cb493
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
-  flutter_modular_annotations:
-    dependency: "direct main"
-    description:
-      name: flutter_modular_annotations
-      sha256: "65971655bdd30816a6a66651c801f4ceba6c8ba265f0866cc51ad038332c9a71"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutterando_analysis:
+    dependency: "direct dev"
+    description:
+      name: flutterando_analysis
+      sha256: "9541b7d6c849f3f82c8ac4f65116c8c4371d37ad691e6d6da905325707aa6244"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   frontend_server_client:
     dependency: transitive
     description:
@@ -187,14 +179,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
-  lints:
-    dependency: transitive
-    description:
-      name: lints
-      sha256: a2c3d198cb5ea2e179926622d433331d8b58374ab8f29cdda6e863bd62fd369c
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   logging:
     dependency: transitive
     description:
@@ -249,7 +233,7 @@ packages:
       path: "../modular_core"
       relative: true
     source: path
-    version: "3.0.0-alpha.0"
+    version: "3.0.0-alpha.1"
   node_preamble:
     dependency: transitive
     description:

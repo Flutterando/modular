@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/domain/usecases/replace_instance.dart';
 import 'package:modular_core/modular_core.dart';
 
 import '../flutter_modular.dart';
@@ -53,6 +54,7 @@ final injector = AutoInjector(
     i.add<SetArguments>(SetArgumentsImpl.new);
     i.add<UnbindModule>(UnbindModuleImpl.new);
     i.add<ReportPush>(ReportPushImpl.new);
+    i.add<ReplaceInstance>(ReplaceInstanceImpl.new);
     //presenter
     i.addInstance(GlobalKey<NavigatorState>());
     i.addSingleton<ModularRouteInformationParser>(ModularRouteInformationParser.new);

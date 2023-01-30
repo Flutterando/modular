@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/dtos/route_dto.dart';
 import 'package:flutter_modular/src/domain/errors/errors.dart';
+import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
 import 'package:flutter_modular/src/domain/usecases/dispose_bind.dart';
 import 'package:flutter_modular/src/domain/usecases/finish_module.dart';
 import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_bind.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
+import 'package:flutter_modular/src/domain/usecases/replace_instance.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/start_module.dart';
+import 'package:flutter_modular/src/domain/usecases/unbind_module.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/modular_base.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
@@ -46,8 +49,13 @@ class DisposableMock extends Mock implements Disposable {}
 
 class IModularNavigatorMock extends Mock implements IModularNavigator {}
 
-class ModularRouteInformationParserMock extends Mock
-    implements ModularRouteInformationParser {}
+class BindModuleMock extends Mock implements BindModule {}
+
+class UnbindModuleMock extends Mock implements UnbindModule {}
+
+class ReplaceInstanceMock extends Mock implements ReplaceInstance {}
+
+class ModularRouteInformationParserMock extends Mock implements ModularRouteInformationParser {}
 
 class ModularRouterDelegateMock extends Mock implements ModularRouterDelegate {}
 
@@ -63,6 +71,9 @@ void main() {
   final modularNavigator = IModularNavigatorMock();
   final routeInformationParser = ModularRouteInformationParserMock();
   final routerDelegate = ModularRouterDelegateMock();
+  final replaceInstance = ReplaceInstanceMock();
+  final bindModule = BindModuleMock();
+  final unbindModule = UnbindModuleMock();
   late IModularBase modularBase;
 
   setUpAll(() {
@@ -81,7 +92,23 @@ void main() {
       routeInformationParser: routeInformationParser,
       routerDelegate: routerDelegate,
       setArgumentsUsecase: setArguments,
+      bindModuleUsecase: bindModule,
+      replaceInstanceUsecase: replaceInstance,
+      unbindModuleUsecase: unbindModule,
     );
+
+    reset(disposeBind);
+    reset(finishModule);
+    reset(getArguments);
+    reset(getBind);
+    reset(modularNavigator);
+    reset(startModule);
+    reset(routeInformationParser);
+    reset(routerDelegate);
+    reset(setArguments);
+    reset(bindModule);
+    reset(replaceInstance);
+    reset(unbindModule);
   });
 
   test('debugPrintModular', () {
@@ -101,8 +128,7 @@ void main() {
     when(() => startModule.call(module)).thenReturn(const Success(unit));
     modularBase.init(module);
     verify(() => startModule.call(module));
-    expect(
-        () => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
+    expect(() => modularBase.init(module), throwsA(isA<ModuleStartedException>()));
   });
 
   test('dispose', () {
@@ -117,10 +143,29 @@ void main() {
 
   test('tryGet', () {
     when(() => getBind.call<String>()).thenReturn(const Success('modular'));
-    when(() => getBind.call<int>())
-        .thenReturn(const Failure(BindNotFoundException('')));
+    when(() => getBind.call<int>()).thenReturn(const Failure(BindNotFoundException('')));
     expect(modularBase.tryGet<String>(), 'modular');
     expect(modularBase.tryGet<int>(), isNull);
+  });
+
+  test('bindModule', () {
+    final module = ModuleMock();
+    when(() => bindModule.call(module)).thenReturn(const Success(unit));
+    modularBase.bindModule(module);
+    verify(() => bindModule.call(module)).called(1);
+  });
+
+  test('unbindModule', () {
+    when(() => unbindModule.call<ModuleMock>()).thenReturn(const Success(unit));
+    modularBase.unbindModule<ModuleMock>();
+    verify(() => unbindModule.call<ModuleMock>()).called(1);
+  });
+
+  test('replaceInstance', () {
+    const instance = 'String';
+    when(() => replaceInstance.call<String>(instance)).thenReturn(const Success(unit));
+    modularBase.replaceInstance<String>(instance);
+    verify(() => replaceInstance.call<String>(instance)).called(1);
   });
 
   test('destroy', () {
@@ -130,8 +175,7 @@ void main() {
   });
 
   test('setArguments', () {
-    when(() => getArguments.call())
-        .thenReturn(Success(ModularArguments.empty()));
+    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
     when(() => setArguments.call(any())).thenReturn(const Success(unit));
     modularBase.setArguments('args');
     verify(() => setArguments.call(

@@ -1,5 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
+import 'package:flutter_modular/src/domain/usecases/replace_instance.dart';
+import 'package:flutter_modular/src/domain/usecases/unbind_module.dart';
 
 import '../domain/usecases/dispose_bind.dart';
 import '../domain/usecases/finish_module.dart';
@@ -72,6 +75,15 @@ abstract class IModularBase {
   /// Change the navigatorKey
   void setArguments(dynamic arguments);
 
+  /// Change the navigatorKey
+  void bindModule(Module module);
+
+  /// remove all module binds by name
+  void unbindModule<T extends Module>({Type? type});
+
+  /// replace instance
+  void replaceInstance<T>(T instance);
+
   @visibleForTesting
   String get initialRoutePath;
 }
@@ -83,6 +95,9 @@ class ModularBase implements IModularBase {
   final GetArguments getArguments;
   final SetArguments setArgumentsUsecase;
   final StartModule startModule;
+  final BindModule bindModuleUsecase;
+  final UnbindModule unbindModuleUsecase;
+  final ReplaceInstance replaceInstanceUsecase;
   final IModularNavigator navigator;
   @override
   final ModularRouteInformationParser routeInformationParser;
@@ -110,6 +125,9 @@ class ModularBase implements IModularBase {
     required this.startModule,
     required this.navigator,
     required this.setArgumentsUsecase,
+    required this.bindModuleUsecase,
+    required this.unbindModuleUsecase,
+    required this.replaceInstanceUsecase,
   });
 
   @override
@@ -187,4 +205,19 @@ class ModularBase implements IModularBase {
       initialRouteInformation: const RouteInformation(location: null),
     ),
   );
+
+  @override
+  void bindModule(Module module) {
+    bindModuleUsecase(module).getOrThrow();
+  }
+
+  @override
+  void unbindModule<T extends Module>({Type? type}) {
+    unbindModuleUsecase.call<T>(type: type).getOrThrow();
+  }
+
+  @override
+  void replaceInstance<T>(T instance) {
+    replaceInstanceUsecase.call<T>(instance).getOrThrow();
+  }
 }

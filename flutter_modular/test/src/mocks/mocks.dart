@@ -17,3 +17,15 @@ class ModularRouteMock extends Mock implements ModularRoute {}
 class InjectorMock extends Mock implements AutoInjector {}
 
 class TrackerMock extends Mock implements Tracker {}
+
+extension WhenExtension on When<void> {
+  void _stubFunc() {}
+
+  void thenReturnVoid() {
+    thenReturn(_stubFunc());
+  }
+
+  void thenAnswerVoid() {
+    thenAnswer((_) => Future.value());
+  }
+}

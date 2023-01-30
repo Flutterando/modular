@@ -25,7 +25,7 @@ dependencies:
   flutter_mobx: ^2.0.1
   flutter_triple: ^1.2.3+2
   http: ^0.13.0
-  flutter_modular: ^4.0.0-dev.1
+  flutter_modular: ">=6.0.0-alpha.0 <7.0.0"
   alice: ^0.2.4
   bloc: ^8.0.3
   flutter:

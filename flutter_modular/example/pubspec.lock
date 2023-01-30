@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: "96103a4c6bb363691ff8b13b3c1b900e36ab08a13e565e7f40433454dafb5e46"
+      sha256: d9bf6106ebfe46d503a4fcd1d0b2b8b6a059a5dc185e9cbfb456be54c07cc28c
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1-alpha.11"
+    version: "1.0.0"
   better_player:
     dependency: transitive
     description:
@@ -204,15 +204,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.0.3"
-  flutter_modular_annotations:
-    dependency: transitive
-    description:
-      name: flutter_modular_annotations
-      sha256: "65971655bdd30816a6a66651c801f4ceba6c8ba265f0866cc51ad038332c9a71"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
+    version: "6.0.0-alpha.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -341,7 +333,7 @@ packages:
       path: "../../modular_core"
       relative: true
     source: path
-    version: "3.0.0-alpha.0"
+    version: "3.0.0-alpha.1"
   open_file:
     dependency: transitive
     description:

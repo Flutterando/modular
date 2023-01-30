@@ -4,12 +4,12 @@ import 'package:auto_injector/auto_injector.dart';
 import 'package:characters/characters.dart';
 import 'package:meta/meta.dart';
 
-import '../di/bind.dart';
-import '../di/disposable.dart';
-import '../errors/errors.dart';
-import '../module/module.dart';
-import 'arguments.dart';
-import 'route.dart';
+import 'di/bind.dart';
+import 'di/disposable.dart';
+import 'errors/errors.dart';
+import 'module/module.dart';
+import 'route/arguments.dart';
+import 'route/route.dart';
 
 abstract class Tracker {
   /// Service Injector instancia
@@ -42,6 +42,9 @@ abstract class Tracker {
   /// Add a Module to Injection System.<br>
   /// Use Tracker.unbindModule to remove registers;
   void bindModule(Module module);
+
+  /// Add a multiples Module to Injection System.<br>
+  void bindModules(List<Module> modules);
 
   /// Remove registers manually;
   void unbindModule(String moduleName);
@@ -192,6 +195,13 @@ class _Tracker implements Tracker {
     injector.uncommit();
     injector.addInjector(newInjector);
     injector.commit();
+  }
+
+  @override
+  void bindModules(List<Module> modules) {
+    for (var module in modules) {
+      bindModule(module);
+    }
   }
 
   @override

@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^8.0.3
-  flutter_modular: 
+  flutter_modular: ">=6.0.0-alpha.0 <7.0.0"
   dartz: ^0.10.0-nullsafety.2
   http: ^0.13.0
   bloc_concurrency: ^0.2.0

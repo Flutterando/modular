@@ -39,6 +39,12 @@ void main() {
     expect(tracker.dispose<TestController>(), true);
   });
 
+  test('bindModules', () async {
+    tracker.bindModules([MyModule()]);
+
+    expect(tracker.dispose<String>(), true);
+  });
+
   test('find route', () async {
     final route = await tracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');

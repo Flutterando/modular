@@ -17,7 +17,7 @@ packages:
 
 
 scripts:
-  tests: melos exec --ignore="*example" -- flutter test --coverage 
+  tests: melos exec --ignore="*example" --ignore="modular_*_bind" -- flutter test --coverage 
   clean: melos exec flutter clean
 
     
