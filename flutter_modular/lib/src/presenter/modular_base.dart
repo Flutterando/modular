@@ -79,7 +79,7 @@ abstract class IModularBase {
   void bindModule(Module module);
 
   /// remove all module binds by name
-  void unbindModule<T extends Module>({Type? type});
+  void unbindModule<T extends Module>({String? type});
 
   /// replace instance
   void replaceInstance<T>(T instance);
@@ -202,7 +202,7 @@ class ModularBase implements IModularBase {
     routerDelegate: routerDelegate,
     routeInformationParser: routeInformationParser,
     routeInformationProvider: PlatformRouteInformationProvider(
-      initialRouteInformation: const RouteInformation(location: null),
+      initialRouteInformation: const RouteInformation(),
     ),
   );
 
@@ -212,7 +212,7 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  void unbindModule<T extends Module>({Type? type}) {
+  void unbindModule<T extends Module>({String? type}) {
     unbindModuleUsecase.call<T>(type: type).getOrThrow();
   }
 

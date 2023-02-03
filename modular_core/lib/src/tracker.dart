@@ -41,10 +41,7 @@ abstract class Tracker {
 
   /// Add a Module to Injection System.<br>
   /// Use Tracker.unbindModule to remove registers;
-  void bindModule(Module module);
-
-  /// Add a multiples Module to Injection System.<br>
-  void bindModules(List<Module> modules);
+  void bindModule(Module module, [String? tag]);
 
   /// Remove registers manually;
   void unbindModule(String moduleName);
@@ -69,7 +66,7 @@ class _Tracker implements Tracker {
       return _nullableModule!;
     }
 
-    throw TrackerNotInitiated('Execute Tracker.runApp()');
+    throw const TrackerNotInitiated('Execute Tracker.runApp()');
   }
 
   @visibleForTesting
@@ -87,14 +84,14 @@ class _Tracker implements Tracker {
 
   @override
   FutureOr<ModularRoute?> findRoute(String path, {dynamic data, String schema = ''}) async {
-    var uri = _resolverPath(path);
+    final uri = _resolverPath(path);
     final modularKey = ModularKey(schema: schema, name: uri.path);
 
     ModularRoute? route;
     var params = <String, String>{};
 
-    for (var key in routeMap.keys) {
-      var uriCandidate = Uri.parse(key.name);
+    for (final key in routeMap.keys) {
+      final uriCandidate = Uri.parse(key.name);
       if (uriCandidate.path == uri.path) {
         final candidate = routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
@@ -110,7 +107,7 @@ class _Tracker implements Tracker {
         continue;
       }
 
-      var result = _extractParams(uriCandidate, uri);
+      final result = _extractParams(uriCandidate, uri);
       if (result != null) {
         final candidate = routeMap[key];
         if (key.copyWith(name: uri.path) == modularKey) {
@@ -125,7 +122,7 @@ class _Tracker implements Tracker {
 
     route = route.copyWith(uri: uri);
 
-    for (var middleware in route.middlewares) {
+    for (final middleware in route.middlewares) {
       route = await middleware.pre(route!);
       if (route == null) {
         break;
@@ -143,7 +140,7 @@ class _Tracker implements Tracker {
   void reportPopRoute(ModularRoute route) {
     final tag = route.uri.toString();
 
-    for (var key in _disposeTags.keys) {
+    for (final key in _disposeTags.keys) {
       final moduleTags = _disposeTags[key]!;
 
       moduleTags.remove(tag);
@@ -167,7 +164,7 @@ class _Tracker implements Tracker {
     injector.removeByTag(tag);
     injector.commit();
 
-    print("-- $tag DISPOSED");
+    print('-- $tag DISPOSED');
   }
 
   void _disposeInstance(dynamic instance) {
@@ -178,30 +175,23 @@ class _Tracker implements Tracker {
 
   @override
   void reportPushRoute(ModularRoute route) {
-    for (var module in [...route.innerModules.values, module]) {
+    for (final module in [...route.innerModules.values, module]) {
       final key = module.runtimeType;
       if (_disposeTags[key]!.isEmpty) {
         bindModule(module);
-        print("-- ${module.runtimeType} INITIALIZED");
+        print('-- ${module.runtimeType} INITIALIZED');
       }
       _disposeTags[key]!.add(route.uri.toString());
     }
   }
 
   @override
-  void bindModule(Module module) {
-    final newInjector = _createInjector(module);
+  void bindModule(Module module, [String? tag]) {
+    final newInjector = _createInjector(module, tag);
 
     injector.uncommit();
     injector.addInjector(newInjector);
     injector.commit();
-  }
-
-  @override
-  void bindModules(List<Module> modules) {
-    for (var module in modules) {
-      bindModule(module);
-    }
   }
 
   @override
@@ -223,12 +213,12 @@ class _Tracker implements Tracker {
   Map<String, String>? _extractParams(Uri candidate, Uri match) {
     final settledUrl = _processUrl(candidate.path);
 
-    final regExp = RegExp("^$settledUrl\$", caseSensitive: true);
+    final regExp = RegExp('^$settledUrl\$');
     final result = regExp.firstMatch(match.path);
 
     if (result != null) {
       final params = <String, String>{};
-      for (var name in result.groupNames) {
+      for (final name in result.groupNames) {
         params[name] = result.namedGroup(name)!;
       }
       return params;
@@ -244,10 +234,10 @@ class _Tracker implements Tracker {
 
     final newUrl = <String>[];
     for (var part in url.split('/')) {
-      part = part.contains(":") ? "(?<${part.substring(1)}>.*)" : part;
+      part = part.contains(':') ? '(?<${part.substring(1)}>.*)' : part;
       newUrl.add(part);
     }
-    return newUrl.join("/");
+    return newUrl.join('/');
   }
 
   @override
@@ -258,24 +248,24 @@ class _Tracker implements Tracker {
     addRoutes(module);
   }
 
-  AutoInjector _createInjector(Module module) {
-    final newInjector = AutoInjector(tag: module.runtimeType.toString());
+  AutoInjector _createInjector(Module module, [String? tag]) {
+    final newInjector = AutoInjector(tag: tag ?? module.runtimeType.toString());
     _addBinds(module.binds, newInjector);
-    for (var importedModule in module.imports) {
+    for (final importedModule in module.imports) {
       _addExportedBinds(importedModule, newInjector);
     }
     return newInjector;
   }
 
   void _addBinds(List<Bind> binds, AutoInjector injector) {
-    for (var bind in binds) {
+    for (final bind in binds) {
       bind.includeInjector(injector);
     }
   }
 
   void _addExportedBinds(Module module, AutoInjector injector) {
     _addBinds(module.exportedBinds, injector);
-    for (var importedModule in module.imports) {
+    for (final importedModule in module.imports) {
       _addExportedBinds(importedModule, injector);
     }
   }
@@ -284,12 +274,12 @@ class _Tracker implements Tracker {
     final routes = module.routes;
 
     final _routeMap = <ModularKey, ModularRoute>{};
-    for (var route in routes) {
+    for (final route in routes) {
       _routeMap.addAll(_assembleRoute(route));
     }
 
     final _odernatedMap = <ModularKey, ModularRoute>{};
-    for (var key in _orderRouteKeys(_routeMap.keys)) {
+    for (final key in _orderRouteKeys(_routeMap.keys)) {
       _odernatedMap[key] = _routeMap[key]!;
     }
 
@@ -297,7 +287,7 @@ class _Tracker implements Tracker {
   }
 
   Map<ModularKey, ModularRoute> _assembleRoute(ModularRoute route) {
-    final Map<ModularKey, ModularRoute> map = {};
+    final map = <ModularKey, ModularRoute>{};
 
     if (route.module == null) {
       map[route.key] = route;
@@ -310,7 +300,7 @@ class _Tracker implements Tracker {
   }
 
   List<ModularKey> _orderRouteKeys(Iterable<ModularKey> keys) {
-    List<ModularKey> ordenatekeys = [...keys];
+    final ordenatekeys = <ModularKey>[...keys];
     ordenatekeys.sort((preview, actual) {
       if (preview.name.contains('/:') && !actual.name.contains('**')) {
         return 1;
@@ -328,7 +318,7 @@ class _Tracker implements Tracker {
   }
 
   Map<ModularKey, ModularRoute> _addModule(ModularRoute route) {
-    final Map<ModularKey, ModularRoute> map = {};
+    final map = <ModularKey, ModularRoute>{};
     final module = route.module!;
     _disposeTags[module.runtimeType] = [];
     for (var child in module.routes) {
@@ -341,7 +331,7 @@ class _Tracker implements Tracker {
   }
 
   Map<ModularKey, ModularRoute> _addChildren(ModularRoute route) {
-    final Map<ModularKey, ModularRoute> map = {};
+    final map = <ModularKey, ModularRoute>{};
 
     for (var child in route.children) {
       child = child.addParent(route);

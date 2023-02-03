@@ -4,7 +4,7 @@ import 'package:result_dart/result_dart.dart';
 import '../services/module_service.dart';
 
 abstract class UnbindModule {
-  Result<Unit, ModularError> call<T extends Module>({Type? type});
+  Result<Unit, ModularError> call<T extends Module>({String? type});
 }
 
 class UnbindModuleImpl implements UnbindModule {
@@ -13,7 +13,7 @@ class UnbindModuleImpl implements UnbindModule {
   UnbindModuleImpl(this.moduleService);
 
   @override
-  Result<Unit, ModularError> call<T extends Module>({Type? type}) {
+  Result<Unit, ModularError> call<T extends Module>({String? type}) {
     return moduleService.unbind<T>(type: type);
   }
 }

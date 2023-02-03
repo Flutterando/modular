@@ -239,7 +239,7 @@ packages:
       path: "../../modular_core"
       relative: true
     source: path
-    version: "3.0.0-alpha.1"
+    version: "3.0.0-alpha.2"
   node_preamble:
     dependency: transitive
     description:
@@ -358,7 +358,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0-alpha.0"
+    version: "3.0.0-alpha.1"
   shelf_packages_handler:
     dependency: transitive
     description:

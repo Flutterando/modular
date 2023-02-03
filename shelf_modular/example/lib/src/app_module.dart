@@ -10,10 +10,12 @@ class AppModule extends Module {
   List<Bind> get binds => [];
 
   @override
+  List<Bind> get exportedBinds => [];
+
+  @override
   final List<ModularRoute> routes = [
     Route.get('/', (Request request) => Response.ok('ok!!')),
-    Route.get('/2', (Request request) => Response.ok('ok!!'),
-        middlewares: [AuthGuard3()]),
+    Route.get('/2', (Request request) => Response.ok('ok!!'), middlewares: [AuthGuard3()]),
     Route.module('/auth', module: AuthModule()),
     Route.websocket('/websocket', websocket: ChatWebSocket()),
   ];

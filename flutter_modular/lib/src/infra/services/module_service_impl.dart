@@ -21,14 +21,14 @@ class ModuleServiceImpl extends ModuleService {
   }
 
   @override
-  Result<Unit, ModularError> bind(Module module) {
-    tracker.bindModule(module);
+  Result<Unit, ModularError> bind(Module module, [String? tag]) {
+    tracker.bindModule(module, tag);
     return const Success(unit);
   }
 
   @override
-  Result<Unit, ModularError> unbind<T extends Module>({Type? type}) {
-    tracker.unbindModule(type?.toString() ?? T.toString());
+  Result<Unit, ModularError> unbind<T extends Module>({String? type}) {
+    tracker.unbindModule(type ?? T.toString());
     return const Success(unit);
   }
 }

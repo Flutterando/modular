@@ -4,7 +4,7 @@ import 'package:result_dart/result_dart.dart';
 import '../services/module_service.dart';
 
 abstract class BindModule {
-  Result<Unit, ModularError> call(Module context);
+  Result<Unit, ModularError> call(Module module, [String? tag]);
 }
 
 class BindModuleImpl implements BindModule {
@@ -13,7 +13,7 @@ class BindModuleImpl implements BindModule {
   BindModuleImpl(this.moduleService);
 
   @override
-  Result<Unit, ModularError> call(Module binds) {
-    return moduleService.bind(binds);
+  Result<Unit, ModularError> call(Module module, [String? tag]) {
+    return moduleService.bind(module, tag);
   }
 }

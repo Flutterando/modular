@@ -39,12 +39,6 @@ void main() {
     expect(tracker.dispose<TestController>(), true);
   });
 
-  test('bindModules', () async {
-    tracker.bindModules([MyModule()]);
-
-    expect(tracker.dispose<String>(), true);
-  });
-
   test('find route', () async {
     final route = await tracker.findRoute('/') as CustomRoute?;
     expect(route?.uri.path, '/');
@@ -65,20 +59,20 @@ void main() {
   });
 
   test('find route with queries', () async {
-    var route = await tracker.findRoute('/?q=banana') as CustomRoute?;
+    final route = await tracker.findRoute('/?q=banana') as CustomRoute?;
     expect(route?.uri.path, '/');
     expect(tracker.arguments.queryParams['q'], 'banana');
   });
 
   test('find route in other module', () async {
-    var route = await tracker.findRoute('/other/') as CustomRoute?;
+    final route = await tracker.findRoute('/other/') as CustomRoute?;
     expect(route?.uri.path, '/other/');
     expect(route?.data, 'other');
     tracker.reportPopRoute(route!);
   });
 
   test('find child route in other module', () async {
-    var route = await tracker.findRoute('/other/details') as CustomRoute?;
+    final route = await tracker.findRoute('/other/details') as CustomRoute?;
     expect(route?.uri.path, '/other/details');
     expect(route?.parent, '/other/');
     expect(route?.data, 'otherWithDetails');
@@ -134,11 +128,14 @@ class MyModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    CustomRoute('/', data: 'first', middlewares: [
-      CustomMidleware()
-    ], children: [
-      CustomRoute('/second', data: 'second'),
-    ]),
+    CustomRoute(
+      '/',
+      data: 'first',
+      middlewares: [CustomMidleware()],
+      children: [
+        CustomRoute('/second', data: 'second'),
+      ],
+    ),
     CustomRoute('/schema', data: 'withSchema', schema: 'tag'),
     CustomRoute('/wildcard/**', data: 'wildcard'),
     CustomRoute('/product/:id', data: 'withParams'),
@@ -150,9 +147,13 @@ class MyModule extends Module {
 class OtherModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute('/', data: 'other', children: [
-          CustomRoute('/details', data: 'otherWithDetails'),
-        ]),
+        CustomRoute(
+          '/',
+          data: 'other',
+          children: [
+            CustomRoute('/details', data: 'otherWithDetails'),
+          ],
+        ),
         CustomRoute.moduleMode('/internal', module: DeepModule()),
       ];
 }
@@ -160,9 +161,13 @@ class OtherModule extends Module {
 class DeepModule extends Module {
   @override
   List<ModularRoute> get routes => [
-        CustomRoute('/', data: 'internal', children: [
-          CustomRoute('/deep', data: 'deep'),
-        ]),
+        CustomRoute(
+          '/',
+          data: 'internal',
+          children: [
+            CustomRoute('/deep', data: 'deep'),
+          ],
+        ),
       ];
 }
 
@@ -180,7 +185,7 @@ class ImportedModule extends Module {
 
   @override
   List<Bind> get exportedBinds => [
-        AutoBind.instance<double>(0.0),
+        AutoBind.instance<double>(0),
       ];
 }
 
@@ -201,7 +206,7 @@ class CustomMidleware implements Middleware {
   }
 
   @override
-  FutureOr<ModularRoute?> pos(route, data) => route;
+  FutureOr<ModularRoute?> pos(ModularRoute route, data) => route;
 }
 
 class CustomRoute extends ModularRoute {

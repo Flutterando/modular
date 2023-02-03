@@ -204,7 +204,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "6.0.0-alpha.0"
+    version: "6.0.0-alpha.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -333,7 +333,7 @@ packages:
       path: "../../modular_core"
       relative: true
     source: path
-    version: "3.0.0-alpha.1"
+    version: "3.0.0-alpha.2"
   open_file:
     dependency: transitive
     description:
