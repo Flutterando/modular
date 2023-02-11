@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: d9bf6106ebfe46d503a4fcd1d0b2b8b6a059a5dc185e9cbfb456be54c07cc28c
+      sha256: e473e81b625c5a8f26abbeda285759bd781a48be204e66dfec9b3b5812580a76
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.2"
   better_player:
     dependency: transitive
     description:
@@ -204,7 +204,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "6.0.0-alpha.1"
+    version: "6.0.0-alpha.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -333,7 +333,7 @@ packages:
       path: "../../modular_core"
       relative: true
     source: path
-    version: "3.0.0-alpha.2"
+    version: "3.0.0-alpha.4"
   open_file:
     dependency: transitive
     description:
@@ -692,5 +692,5 @@ packages:
     source: hosted
     version: "6.2.2"
 sdks:
-  dart: ">=2.18.0 <4.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=3.1.0-0"

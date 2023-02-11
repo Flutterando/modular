@@ -73,9 +73,9 @@ class _Register<T> {
 class _ModularInherited extends InheritedWidget {
   const _ModularInherited({Key? key, required Widget child}) : super(key: key, child: child);
 
-  static T of<T extends Object>(BuildContext context, {bool listen = true, SelectCallback<T>? select}) {
+  static T of<T extends Object>(BuildContext context, {bool listen = true, SelectCallback<T>? onSelect}) {
     final instance = injector<AutoInjector>().get<T>();
-    final notifier = injector<AutoInjector>().getNotifier<T>();
+    final notifier = onSelect?.call(instance) ?? injector<AutoInjector>().getNotifier<T>();
     if (listen) {
       final registre = _Register<T>(instance, notifier ?? instance);
       final inherited = context.dependOnInheritedWidgetOfExactType<_ModularInherited>(aspect: registre)!;
@@ -146,7 +146,7 @@ class _InheritedModularElement extends InheritedElement {
     var registers = getDependencies(dependent) as Set<_Register>?;
     registers ??= {};
 
-    for (var register in registers) {
+    for (final register in registers) {
       if (register.type == current) {
         dependent.didChangeDependencies();
       }
@@ -159,8 +159,8 @@ extension ModularWatchExtension on BuildContext {
   /// watch your changes
   ///
   /// SUPPORTED CLASS ([Listenable], [Stream]).
-  T watch<T extends Object>([SelectCallback<T>? select]) {
-    return _ModularInherited.of<T>(this, select: select);
+  T watch<T extends Object>([SelectCallback<T>? onSelect]) {
+    return _ModularInherited.of<T>(this, onSelect: onSelect);
   }
 
   /// Request an instance by [Type]

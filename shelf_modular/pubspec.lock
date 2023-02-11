@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: d9bf6106ebfe46d503a4fcd1d0b2b8b6a059a5dc185e9cbfb456be54c07cc28c
+      sha256: e473e81b625c5a8f26abbeda285759bd781a48be204e66dfec9b3b5812580a76
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -197,10 +197,10 @@ packages:
     dependency: "direct main"
     description:
       name: modular_core
-      sha256: "2fd6e7c8b5b3e485e16505217d22b364ecc070670dbfb27a36decadf1a5d4baa"
+      sha256: "5f4f8d35b942445381d976139c5dcca7890a708c78a0105507aaba25d95128c1"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0-alpha.3"
+    version: "3.0.0-alpha.5"
   node_preamble:
     dependency: transitive
     description:
@@ -410,4 +410,4 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.19.0-345.0.dev <4.0.0"
+  dart: ">=2.19.0-345.0.dev <3.0.0"

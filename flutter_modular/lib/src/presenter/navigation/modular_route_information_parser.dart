@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:result_dart/functions.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
@@ -73,13 +72,17 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
       while (parent != '') {
         var child = await selectRoute(parent, arguments: arguments);
         parent = child.parent;
+        if (parent == route.parent) {
+          parent = '';
+          continue;
+        }
         child = child.copyWith(schema: parent);
         book.routes.insert(0, child);
       }
 
       setArguments(modularArgs);
 
-      for (var booksRoute in book.routes) {
+      for (final booksRoute in book.routes) {
         reportPush(booksRoute);
       }
     }
@@ -111,18 +114,17 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
       return getRoute
           .call(params) //
           .map(_routeSuccess)
-        ..fold(
-          (success) {
-            debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
-          },
-          identity,
-        );
+          .map((success) {
+        debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
+
+        return success;
+      });
     }).getOrThrow();
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {
     final arguments = getArguments().getOrElse((l) => ModularArguments.empty());
-    for (var middleware in route!.middlewares) {
+    for (final middleware in route!.middlewares) {
       route = await middleware.pos(route!, arguments);
       if (route == null) {
         break;
@@ -137,6 +139,6 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
       return route as ParallelRoute;
     }
 
-    throw Exception('route can\'t null');
+    throw Exception("route can't null");
   }
 }
