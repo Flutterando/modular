@@ -10,7 +10,7 @@ If it's for the Flutterando version of the template just send a message to us (o
 -->
 
 
-  <h1 align="center">Triple - Segmented State Pattern</h1>
+  <h1 align="center">Flutter Modular</h1>
 
 
 <!-- PROJECT LOGO -->
@@ -25,15 +25,15 @@ If it's for the Flutterando version of the template just send a message to us (o
 
   <br />
   <p align="center">
-    Welcome to Triple!
-    Design Pattern for State Management. 
+    Welcome to Flutter Modular!
+    A smart project structure.
     <br>
     <br>
-    <a href="https://triple.flutterando.com.br/docs/getting-started/example">View Example</a>
+    <a href="https://modular.flutterando.com.br/docs/intro">View Example</a>
     ·
-    <a href="https://github.com/Flutterando/triple_pattern/issues">Report Bug</a>
+    <a href="https://github.com/Flutterando/modular/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Flutterando/triple_pattern/issues">Request Feature</a>
+    <a href="https://github.com/Flutterando/modular/issues">Request Feature</a>
   </p>
 </div>
 
@@ -198,14 +198,9 @@ dependencies:
 ```
 
 If that succeeded, we are ready to move on!
- 
-```
-💡 TIP:
 
-Flutter's CLI has a tool that makes package installation easier in the project. Use the command:
-
-(flutter pub add flutter_modular)
-```
+>**💡 TIP:** Flutter's CLI has a tool that makes package installation easier in the project. Use the command: 
+>`(flutter pub add flutter_modular)`
 
 ## <div id="the-modularApp">The ModularApp</div>
 
@@ -224,12 +219,9 @@ void main(){
 **ModularApp** forces us to add a main Module and main Widget. What are we going to do next?
 This Widget does the initial setup so everything can work as expected. For more details go to **ModularApp** doc.
 
-```
-💡 TIP:
+>**💡 TIP:** It's important that **ModularApp** is the first widget in your app!
 
-It's important that **ModularApp** is the first widget in your app!
 
-```
 ## <div id="creating-the-main-module">Creating the Main Module</div>
 
 A module represents a set of Routes and Binds.
@@ -294,15 +286,10 @@ class HomePage extends StatelessWidget {
 
 We've created a Widget called **HomePage** and added its instances in a route called **ChildRoute**.
 
-```
-💡 TIP:
+>**💡 TIP:** There are two ModularRoute types: **ChildRoute** and **ModuleRoute**.
+ >- **ChildRoute**: Serves to build a Widget.
+ >- **ModuleRoute**: Concatenates another module.
 
-There are two ModularRoute types: **ChildRoute** and **ModuleRoute**.
-
-**ChildRoute**: Serves to build a Widget.
-**ModuleRoute**: Concatenates another module.
-
-```
 <!-- CONTRIBUTING -->
 ## <div id="contributing">🧑‍💻 Contributing</div>
 
@@ -339,8 +326,8 @@ Flutterando Community
 <!-- CONTRIBUTORS -->
 ## <div id="contributors">👥 Contributors</div>
 
-<a href="https://github.com/Flutterando/triple_pattern/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=flutterando/triple_pattern" />
+<a href="https://github.com/Flutterando/modular/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=flutterando/modular" />
 </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
