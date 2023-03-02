@@ -367,20 +367,20 @@ The result will be:
 
 :::danger ATTENTION
 
-The **RouterOutlet** is a nested navigation, so there is no page cache.
+The **RouterOutlet** is a nested navigation, so there is no page caching.
 
 :::
 
 :::danger ATTENTION
 
-A **ChildRoute** named as `/` cannot have a child `/`. It is a good practice to have a better name
-for following child route.
+A **ChildRoute** named as `/` cannot have a child `/`. It is necessary to use better naming convention
+for its child routes.
 
 :::
 
 ## Getting Navigation History
 
-You could get navigation history whetever you want using `Modular.to.navigateHistory`. For example:
+You could get the navigation history anywhere by using `Modular.to.navigateHistory`. For example:
 
 ```dart title="navigator_helper.dart"
 class NavigatorHelper {
