@@ -34,7 +34,7 @@ You can user POSIX in route name:
 ...
   List<ModularRoute> get routes => [
         Route.get('/any/**', () => Response.ok('All products')),
-        Route.get('/**', () => Response.notFound(body: 'not found')),
+        Route.get('/**', () => Response.notFound('not found')),
       ];
 
 ```
