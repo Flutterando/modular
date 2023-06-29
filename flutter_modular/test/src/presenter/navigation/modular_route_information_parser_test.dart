@@ -107,7 +107,7 @@ void main() {
 
   test('selectRoute with RedirectRoute', () async {
     final redirect = RedirectRoute('/oo', to: '/test');
-    final args = ModularArguments.empty();
+    final modularArgument = ModularArguments.empty();
 
     final routeMock = ParallelRouteMock();
     when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
@@ -130,11 +130,12 @@ void main() {
 
     when(() => getRoute.call(const RouteParmsDTO(url: '/oo')))
         .thenAnswer((_) async => right(redirect));
-    when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args)))
+    when(() => getRoute
+            .call(RouteParmsDTO(url: '/test', arguments: modularArgument.data)))
         .thenAnswer((_) async => right(routeMock));
     when(() => getRoute.call(const RouteParmsDTO(url: '/')))
         .thenAnswer((_) async => right(routeParent));
-    when(() => getArguments.call()).thenReturn(right(args));
+    when(() => getArguments.call()).thenReturn(right(modularArgument));
 
     when(() => setArguments.call(any())).thenReturn(right(unit));
 
@@ -143,7 +144,6 @@ void main() {
     expect(book.chapters().first.name, '/');
     expect(book.chapters('/').first.name, '/test');
   });
-
   test('selectRoute with resolver route withless /', () async {
     final args = ModularArguments.empty();
 
