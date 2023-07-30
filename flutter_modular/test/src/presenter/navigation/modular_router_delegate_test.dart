@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/usecases/report_pop.dart';
 import 'package:flutter_modular/src/presenter/models/modular_args.dart';
@@ -6,10 +8,10 @@ import 'package:flutter_modular/src/presenter/navigation/modular_book.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_page.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_route_information_parser.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_router_delegate.dart';
-import 'package:flutter_modular/src/shared/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../mocks/mocks.dart';
 import '../modular_base_test.dart' hide GetArgumentsMock, SetArgumentsMock;
@@ -42,8 +44,8 @@ void main() {
   late ReportPopMock reportPopMock;
 
   setUpAll(() {
-    registerFallbackValue<ModularArguments>(ModularArguments.empty());
-    registerFallbackValue<ModularRoute>(ModularRouteMock());
+    registerFallbackValue(ModularArguments.empty());
+    registerFallbackValue(ModularRouteMock());
   });
 
   setUp(() {
@@ -119,8 +121,8 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     await delegate.navigate('/');
     await delegate.navigate('/test');
@@ -140,7 +142,7 @@ void main() {
     when(() => route.settings).thenReturn(page);
     when(() => route.isFirst).thenReturn(false);
 
-    when(() => reportPopMock.call(parallel)).thenReturn(right(unit));
+    when(() => reportPopMock.call(parallel)).thenReturn(const Success(unit));
 
     final arguments = ModularArguments.empty();
     final getArgsMock = GetArgumentsMock();
@@ -148,8 +150,8 @@ void main() {
     when(() => parser.getArguments).thenReturn(getArgsMock);
     when(() => parser.setArguments).thenReturn(setArgsMock);
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [parallel]);
     expect(delegate.currentConfiguration?.routes.length, 1);
@@ -177,15 +179,14 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
     when(() => parser.selectBook('/pushForce',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route2]));
-    // ignore: unawaited_futures
     delegate.pushNamed('/pushForce', forRoot: true);
     await Future.delayed(const Duration(milliseconds: 400));
 
@@ -214,18 +215,16 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
     when(() => parser.selectBook('/pushForce',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route2]));
-    // ignore: unawaited_futures
     delegate.pushNamed('/pushForce');
     await Future.delayed(const Duration(milliseconds: 400));
-    // ignore: unawaited_futures
     delegate.pushNamed('/pushForce');
     await Future.delayed(const Duration(milliseconds: 400));
 
@@ -252,17 +251,16 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
-    when(() => reportPopMock.call(route1)).thenReturn(right(unit));
+    when(() => reportPopMock.call(route1)).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
     when(() => parser.selectBook('/pushForce',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route2]));
-    // ignore: unawaited_futures
     delegate.pushReplacementNamed('/pushForce', forRoot: true);
     await Future.delayed(const Duration(milliseconds: 400));
 
@@ -288,8 +286,8 @@ void main() {
     when(() => route3.copyWith(schema: '')).thenReturn(route3);
     when(() => route3.schema).thenReturn('');
 
-    when(() => reportPopMock.call(route1)).thenReturn(right(unit));
-    when(() => reportPopMock.call(route2)).thenReturn(right(unit));
+    when(() => reportPopMock.call(route1)).thenReturn(const Success(unit));
+    when(() => reportPopMock.call(route2)).thenReturn(const Success(unit));
 
     final getArgsMock = GetArgumentsMock();
     final setArgsMock = SetArgumentsMock();
@@ -299,15 +297,14 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1, route2]);
 
     when(() => parser.selectBook('/pushForce',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route3]));
-    // ignore: unawaited_futures
     delegate.pushReplacementNamed('/pushForce');
     await Future.delayed(const Duration(milliseconds: 400));
 
@@ -335,15 +332,14 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
     when(() => parser.selectBook('/pushForce',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route2]));
-    // ignore: unawaited_futures
     delegate.popAndPushNamed('/pushForce');
     await Future.delayed(const Duration(milliseconds: 400));
 
@@ -402,13 +398,13 @@ void main() {
     final getArgsMock = GetArgumentsMock();
     final setArgsMock = SetArgumentsMock();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     when(() => parser.getArguments).thenReturn(getArgsMock);
     when(() => parser.setArguments).thenReturn(setArgsMock);
 
-    when(() => reportPopMock.call(any())).thenReturn(right(unit));
+    when(() => reportPopMock.call(any())).thenReturn(const Success(unit));
 
     when(() => route1.uri).thenReturn(Uri.parse('/'));
     when(() => route1.copyWith(schema: '')).thenReturn(route1);
@@ -430,7 +426,6 @@ void main() {
     when(() => parser.selectBook('/pushForce2',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route3]));
-    // ignore: unawaited_futures
     delegate.pushNamedAndRemoveUntil('/pushForce2', ModalRoute.withName('/'));
     await Future.delayed(const Duration(milliseconds: 400));
 
@@ -442,7 +437,7 @@ void main() {
     final route1 = ParallelRouteMock();
     final route2 = ParallelRouteMock();
 
-    when(() => reportPopMock.call(any())).thenReturn(right(unit));
+    when(() => reportPopMock.call(any())).thenReturn(const Success(unit));
 
     when(() => route1.uri).thenReturn(Uri.parse('/'));
     when(() => route1.copyWith(schema: '')).thenReturn(route1);
@@ -461,15 +456,14 @@ void main() {
 
     final arguments = ModularArguments.empty();
 
-    when(() => getArgsMock.call()).thenReturn(right(arguments));
-    when(() => setArgsMock.call(any())).thenReturn(right(unit));
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
     delegate.currentConfiguration = ModularBook(routes: [route1]);
 
     when(() => parser.selectBook('/pushForce',
             popCallback: any(named: 'popCallback')))
         .thenAnswer((_) async => ModularBook(routes: [route2]));
-    // ignore: unawaited_futures
     delegate.pushNamedAndRemoveUntil('/pushForce', (_) => false, forRoot: true);
     await Future.delayed(const Duration(milliseconds: 400));
 

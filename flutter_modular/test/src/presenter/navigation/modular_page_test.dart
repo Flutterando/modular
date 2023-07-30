@@ -29,7 +29,7 @@ void main() {
     final args = ModularArguments.empty();
     final context = BuildContextMock();
     final route = ParallelRouteMock();
-    when(() => route.child).thenReturn((_, __) => Container());
+    when(() => route.child).thenReturn((_) => Container());
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.maintainState).thenReturn(true);
     when(() => route.transition).thenReturn(TransitionType.defaultTransition);
@@ -42,7 +42,7 @@ void main() {
     final context = BuildContextMock();
     final route = ParallelRouteMock();
     final widget = Container();
-    when(() => route.child).thenReturn((_, __) => widget);
+    when(() => route.child).thenReturn((_) => widget);
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.maintainState).thenReturn(true);
 
@@ -59,7 +59,7 @@ void main() {
     final context = BuildContextMock();
     final route = ParallelRouteMock();
     final widget = Container();
-    when(() => route.child).thenReturn((_, __) => widget);
+    when(() => route.child).thenReturn((_) => widget);
     when(() => route.maintainState).thenReturn(true);
 
     when(() => route.uri).thenReturn(Uri.parse('/'));
@@ -84,7 +84,7 @@ void main() {
     final context = BuildContextMock();
     final route = ParallelRouteMock();
     final widget = Container();
-    when(() => route.child).thenReturn((_, __) => widget);
+    when(() => route.child).thenReturn((_) => widget);
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.maintainState).thenReturn(true);
 
@@ -116,10 +116,10 @@ void main() {
         .where((k) => k != TransitionType.noTransition)
         .toList();
 
-    for (var key in keys) {
+    for (final key in keys) {
       when(() => route.transition).thenReturn(key);
       when(() => route.transitions).thenReturn(transitionMap);
-      when(() => route.child).thenReturn((_, __) => widget);
+      when(() => route.child).thenReturn((_) => widget);
       when(() => route.maintainState).thenReturn(true);
 
       when(() => route.uri).thenReturn(Uri.parse('/'));

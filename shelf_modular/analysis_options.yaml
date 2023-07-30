@@ -7,7 +7,7 @@
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
-include: package:lints/recommended.yaml
+include: package:flutterando_analysis/dart_package.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -22,6 +22,8 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    public_member_api_docs: false
+    cascade_invocations: false
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 

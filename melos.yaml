@@ -1,0 +1,23 @@
+name: modular
+repository: https://github.com/Flutterando/modular
+
+ignore:
+  - deprecated/**
+
+packages:
+  - modular_core
+  - flutter_modular
+  - shelf_modular
+  - plugins/*
+  # examples
+  - flutter_modular/example
+  - shelf_modular/example
+  - plugins/modular_triple_bind/example
+  - plugins/modular_bloc_bind/example
+
+
+scripts:
+  tests: melos exec --ignore="*example" --ignore="modular_*_bind" -- flutter test --coverage 
+  clean: melos exec flutter clean
+
+    

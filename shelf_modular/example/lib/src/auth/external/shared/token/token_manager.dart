@@ -1,5 +1,5 @@
-import 'package:example/src/auth/external/errors/errors.dart';
 import 'package:jose/jose.dart';
+import 'package:shelf_modular_example/src/auth/external/errors/errors.dart';
 
 class TokenManager {
   final key = JsonWebKey.fromJson({

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+
 import '../../../flutter_modular.dart';
 import '../modular_base.dart';
 import 'modular_page.dart';
@@ -16,7 +17,7 @@ class ModularBook {
     for (var i = 0; i < filteredRoutes.length; i++) {
       final route = filteredRoutes[i];
       pages.add(ModularPage(
-        key: ValueKey('${route.uri.toString()}@${route.schema}@$i'),
+        key: ValueKey('${route.uri}@${route.schema}@$i'),
         route: route,
         args: Modular.args,
         flags: (Modular as ModularBase).flags,

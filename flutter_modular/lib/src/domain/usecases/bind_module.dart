@@ -1,9 +1,10 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../services/module_service.dart';
 
 abstract class BindModule {
-  Either<ModularError, Unit> call(BindContext context);
+  Result<Unit, ModularError> call(Module module, [String? tag]);
 }
 
 class BindModuleImpl implements BindModule {
@@ -12,7 +13,7 @@ class BindModuleImpl implements BindModule {
   BindModuleImpl(this.moduleService);
 
   @override
-  Either<ModularError, Unit> call(BindContext binds) {
-    return moduleService.bind(binds);
+  Result<Unit, ModularError> call(Module module, [String? tag]) {
+    return moduleService.bind(module, tag);
   }
 }

@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('NavigationListener', (tester) async {
-    final modularApp =
-        ModularApp(module: CustomModule(), child: const AppWidget());
+    final modularApp = ModularApp(
+      module: CustomModule(),
+      child: const AppWidget(),
+    );
     await tester.pumpWidget(modularApp);
 
     await tester.pump();
@@ -21,17 +23,19 @@ final key = UniqueKey();
 
 class CustomModule extends Module {
   @override
-  List<Bind> get binds => [Bind.factory((i) => 'test')];
+  void binds(Injector i) => i.add((i) => 'test');
 
   @override
-  List<ModularRoute> get routes => [
-        ChildRoute('/',
-            child: (_, __) => NavigationListener(
-                key: key,
-                builder: (context, snapshot) {
-                  return Container();
-                })),
-      ];
+  void routes(RouteManager r) => r.add(
+        ChildRoute(
+          '/',
+          child: (_) => NavigationListener(
+              key: key,
+              builder: (context, snapshot) {
+                return Container();
+              }),
+        ),
+      );
 }
 
 class AppWidget extends StatelessWidget {

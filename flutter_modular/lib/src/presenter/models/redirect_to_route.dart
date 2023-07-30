@@ -10,12 +10,12 @@ class RedirectRoute extends ChildRoute {
   RedirectRoute(
     String name, {
     required this.to,
-  }) : super(name, child: (_, __) => const SizedBox());
+  }) : super(name, child: (_) => const SizedBox());
 
   @override
   RedirectRoute copyWith({
     ModularChild? child,
-    RouteContext? context,
+    Module? module,
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
@@ -27,7 +27,7 @@ class RedirectRoute extends ChildRoute {
     String? parent,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext>? bindContextEntries,
+    Map<Type, Module>? innerModules,
   }) {
     return this;
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../modular_base.dart';
 
 class CustomNavigator extends Navigator {
@@ -18,7 +19,7 @@ class CustomNavigator extends Navigator {
         );
 
   @override
-  _CustomNavigatorState createState() => _CustomNavigatorState(modularBase);
+  NavigatorState createState() => _CustomNavigatorState(modularBase);
 }
 
 class _CustomNavigatorState extends NavigatorState {
@@ -43,7 +44,7 @@ class _CustomNavigatorState extends NavigatorState {
 
   @override
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
-      String newRouteName, predicate,
+      String newRouteName, dynamic predicate,
       {Object? arguments}) {
     return modularBase.to.pushNamedAndRemoveUntil<T>(newRouteName, predicate,
         arguments: arguments);

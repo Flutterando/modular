@@ -1,9 +1,10 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../services/module_service.dart';
 
 abstract class StartModule {
-  Either<ModularError, Unit> call(RouteContext context);
+  Result<Unit, ModularError> call(Module context);
 }
 
 class StartModuleImpl implements StartModule {
@@ -12,7 +13,7 @@ class StartModuleImpl implements StartModule {
   StartModuleImpl(this.moduleService);
 
   @override
-  Either<ModularError, Unit> call(RouteContext context) {
+  Result<Unit, ModularError> call(Module context) {
     return moduleService.start(context);
   }
 }
