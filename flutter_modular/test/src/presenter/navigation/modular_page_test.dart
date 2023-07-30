@@ -151,7 +151,7 @@ void main() {
     final args = ModularArguments.empty();
     final context = BuildContextMock();
     final route = ParallelRouteMock();
-    when(() => route.child).thenReturn((_, __) => Container());
+    when(() => route.child).thenReturn((_) => Container());
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.maintainState).thenReturn(true);
     when(() => route.isFullscreenDialog).thenReturn(true);
