@@ -120,16 +120,17 @@ class ModularRouteInformationParser
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {
-    final arguments = getArguments().getOrElse((l) => ModularArguments.empty());
+    final modularArguments =
+        getArguments().getOrElse((l) => ModularArguments.empty());
     for (var middleware in route!.middlewares) {
-      route = await middleware.pos(route!, arguments);
+      route = await middleware.pos(route!, modularArguments);
       if (route == null) {
         break;
       }
     }
 
     if (route is RedirectRoute) {
-      route = await selectRoute(route.to, arguments: arguments);
+      route = await selectRoute(route.to, arguments: modularArguments.data);
     }
 
     if (route != null) {
