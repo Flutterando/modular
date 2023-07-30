@@ -146,4 +146,18 @@ void main() {
       reset(route);
     }
   });
+
+  test('createRoute full screen dialog route', () {
+    final args = ModularArguments.empty();
+    final context = BuildContextMock();
+    final route = ParallelRouteMock();
+    when(() => route.child).thenReturn((_, __) => Container());
+    when(() => route.uri).thenReturn(Uri.parse('/'));
+    when(() => route.maintainState).thenReturn(true);
+    when(() => route.isFullscreenDialog).thenReturn(true);
+    when(() => route.transition).thenReturn(TransitionType.defaultTransition);
+    final page = ModularPage(args: args, flags: ModularFlags(), route: route);
+    expect(page.createRoute(context), isA<Route>());
+    expect(page.route.isFullscreenDialog, equals(true));
+  });
 }

@@ -19,6 +19,7 @@ class RedirectRoute extends ChildRoute {
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
+    bool? isFullscreenDialog,
     String? name,
     String? schema,
     void Function(dynamic)? popCallback,
