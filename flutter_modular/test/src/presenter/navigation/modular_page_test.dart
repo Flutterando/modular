@@ -21,8 +21,7 @@ void main() {
 
   test('createRoute throw error child null', () {
     final page = ModularPage.empty();
-    expect(() => page.createRoute(BuildContextMock()),
-        throwsA(isA<ModularPageException>()));
+    expect(() => page.createRoute(BuildContextMock()), throwsA(isA<ModularPageException>()));
   });
 
   test('createRoute default route', () {
@@ -102,16 +101,12 @@ void main() {
     when(() => route.maintainState).thenReturn(true);
 
     when(() => route.transition).thenReturn(TransitionType.custom);
-    when(() => route.customTransition).thenReturn(
-        CustomTransition(transitionBuilder: (_, __, ___, child) => child));
+    when(() => route.customTransition).thenReturn(CustomTransition(transitionBuilder: (_, __, ___, child) => child));
 
     final page = ModularPage(args: args, flags: ModularFlags(), route: route);
     final pageRoute = page.createRoute(context);
     expect(pageRoute, isA<PageRouteBuilder>());
-    expect(
-        (pageRoute as PageRouteBuilder).pageBuilder(
-            context, AnimationMock<double>(), AnimationMock<double>()),
-        widget);
+    expect((pageRoute as PageRouteBuilder).pageBuilder(context, AnimationMock<double>(), AnimationMock<double>()), widget);
   });
 
   test('createRoute other transitions', () {
@@ -123,11 +118,7 @@ void main() {
     final transitionMap = ParallelRoute.empty().transitions;
     final anim = AnimationMock<double>();
     when(() => anim.status).thenReturn(AnimationStatus.completed);
-    final keys = transitionMap.keys
-        .where((k) => k != TransitionType.custom)
-        .where((k) => k != TransitionType.defaultTransition)
-        .where((k) => k != TransitionType.noTransition)
-        .toList();
+    final keys = transitionMap.keys.where((k) => k != TransitionType.custom).where((k) => k != TransitionType.defaultTransition).where((k) => k != TransitionType.noTransition).toList();
 
     for (final key in keys) {
       when(() => route.transition).thenReturn(key);
@@ -143,17 +134,11 @@ void main() {
       expect(pageRoute, isA<PageRouteBuilder>());
 
       if (key == TransitionType.fadeIn) {
-        expect((pageRoute as PageRouteBuilder).pageBuilder(context, anim, anim),
-            widget);
-        expect(
-            pageRoute.buildTransitions(context, AnimationMock<double>(),
-                AnimationMock<double>(), widget),
-            isA<FadeTransition>());
+        expect((pageRoute as PageRouteBuilder).pageBuilder(context, anim, anim), widget);
+        expect(pageRoute.buildTransitions(context, AnimationMock<double>(), AnimationMock<double>(), widget), isA<FadeTransition>());
       } else {
-        expect((pageRoute as PageRouteBuilder).pageBuilder(context, anim, anim),
-            widget);
-        expect(pageRoute.buildTransitions(context, anim, anim, widget),
-            isA<Widget>());
+        expect((pageRoute as PageRouteBuilder).pageBuilder(context, anim, anim), widget);
+        expect(pageRoute.buildTransitions(context, anim, anim, widget), isA<Widget>());
       }
 
       reset(route);
