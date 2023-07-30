@@ -29,18 +29,11 @@ dependencies:
     path: ../
   alice: ^0.3.3
   bloc: ^8.0.3
-  auto_injector: ^1.1.0+1
   flutter:
     sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-
-dependency_overrides: 
-  auto_injector:
-    path: /Users/jacob/Projects/auto_injector
-
-
 
 dev_dependencies:
   flutter_lints: ^2.0.2

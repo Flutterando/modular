@@ -26,11 +26,12 @@ packages:
     source: hosted
     version: "2.11.0"
   auto_injector:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      path: "/Users/jacob/Projects/auto_injector"
-      relative: false
-    source: path
+      name: auto_injector
+      sha256: "736d70bd3d44af815053a3dd464b331177add5b58bd99dda3c8d1d08a299745b"
+      url: "https://pub.dev"
+    source: hosted
     version: "1.1.0+3"
   bloc:
     dependency: "direct main"
