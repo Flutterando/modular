@@ -16,7 +16,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.7.0'
+        flutter-version: '3.10.6'
     
     - name: get packages
       run: flutter pub get
@@ -42,7 +42,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.7.0'
+        flutter-version: '3.10.6'
     
     - name: get packages
       run: flutter pub get
@@ -68,7 +68,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.7.0'
+        flutter-version: '3.10.6'
     
     - name: get packages
       run: flutter pub get
