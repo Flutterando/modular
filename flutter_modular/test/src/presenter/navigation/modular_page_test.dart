@@ -32,6 +32,7 @@ void main() {
     when(() => route.child).thenReturn((_) => Container());
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.maintainState).thenReturn(true);
+    when(() => route.isFullscreenDialog).thenReturn(true);
     when(() => route.transition).thenReturn(TransitionType.defaultTransition);
     final page = ModularPage(args: args, flags: ModularFlags(), route: route);
     expect(page.createRoute(context), isA<Route>());
@@ -44,11 +45,15 @@ void main() {
     final widget = Container();
     when(() => route.child).thenReturn((_) => widget);
     when(() => route.uri).thenReturn(Uri.parse('/'));
+    when(() => route.isFullscreenDialog).thenReturn(true);
     when(() => route.maintainState).thenReturn(true);
 
     when(() => route.transition).thenReturn(TransitionType.defaultTransition);
     final page = ModularPage(
-        args: args, flags: ModularFlags(isCupertino: true), route: route);
+      args: args,
+      flags: ModularFlags(isCupertino: true),
+      route: route,
+    );
     final routePage = page.createRoute(context);
     expect(routePage, isA<CupertinoPageRoute>());
     expect((routePage as CupertinoPageRoute).builder(context), widget);
@@ -61,19 +66,26 @@ void main() {
     final widget = Container();
     when(() => route.child).thenReturn((_) => widget);
     when(() => route.maintainState).thenReturn(true);
-
+    when(() => route.isFullscreenDialog).thenReturn(true);
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.transition).thenReturn(TransitionType.noTransition);
     final page = ModularPage(args: args, flags: ModularFlags(), route: route);
     final pageRoute = page.createRoute(context);
     expect(pageRoute, isA<NoTransitionMaterialPageRoute>());
     expect(
-        (pageRoute as NoTransitionMaterialPageRoute).builder(context), widget);
+      (pageRoute as NoTransitionMaterialPageRoute).builder(context),
+      widget,
+    );
     expect(pageRoute.transitionDuration, Duration.zero);
     expect(
-        pageRoute.buildTransitions(
-            context, AnimationMock<double>(), AnimationMock<double>(), widget),
-        widget);
+      pageRoute.buildTransitions(
+        context,
+        AnimationMock<double>(),
+        AnimationMock<double>(),
+        widget,
+      ),
+      widget,
+    );
 
     final pageRouteGenerate = page.createRoute(context);
     expect(pageRouteGenerate, isA<Route>());
@@ -85,6 +97,7 @@ void main() {
     final route = ParallelRouteMock();
     final widget = Container();
     when(() => route.child).thenReturn((_) => widget);
+    when(() => route.isFullscreenDialog).thenReturn(true);
     when(() => route.uri).thenReturn(Uri.parse('/'));
     when(() => route.maintainState).thenReturn(true);
 

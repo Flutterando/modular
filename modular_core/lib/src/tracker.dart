@@ -303,8 +303,9 @@ class _Tracker implements Tracker {
       }
 
       if (preview.name.contains('**')) {
-        if (!actual.name.contains('**') ||
-            actual.name.split('/').length > preview.name.split('/').length) {
+        final c =
+            actual.name.split('/').length > preview.name.split('/').length;
+        if (!actual.name.contains('**') || c) {
           return 1;
         }
       }

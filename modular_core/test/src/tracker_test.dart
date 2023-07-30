@@ -10,7 +10,8 @@ void main() {
 
   // Only coverage
   MyModule().exportedBinds(AutoInjector());
-  ImportedModule().routes(RouteManager());
+  final manager = RouteManager();
+  ImportedModule().routes(manager);
   ModularArguments(uri: Uri.parse(''), data: '').copyWith();
   setPrintResolver((text) {});
 
@@ -18,6 +19,8 @@ void main() {
     tracker = Tracker(AutoInjector(tag: 'Test')..commit());
 
     final module = MyModule();
+    manager.allRoutes;
+
     tracker.runApp(module);
   });
 
