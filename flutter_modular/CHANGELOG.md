@@ -1,4 +1,3 @@
-
 ## [6.0.0] - 2023-07-31
 
 - Supports Dart 3.0 (Flutter >=3.10.0)
@@ -78,6 +77,7 @@ class AModule extends Module {
 
 - Removed: `WidgetModule`;
 - Removed: `ModularState`;
+- Removed: `AsyncBind`;
 
 
 
