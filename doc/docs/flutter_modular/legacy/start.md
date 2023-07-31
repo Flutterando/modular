@@ -28,7 +28,7 @@ Now add the **flutter_modular** to pubspec.yaml:
 ```yaml
 
 dependencies:
-  flutter_modular: 6.x.x
+  flutter_modular: any
 
 ```
 
@@ -67,9 +67,15 @@ It's important that **ModularApp** is the first widget in your app!
 
 ## Creating the Main Module
 
+A module represents a set of Routes and Binds.
+- **ROUTE**: Page setup eligible for navigation.
+- **BIND**: Represents an object that will be available for injection to other dependencies.
+
+We'll see more info about these topics further below.
+
 We can have several modules, but for now, let's just create a main module called **AppModule**:
 
-```dart title="lib/main.dart" {8-18}
+```dart title="lib/main.dart" {8-16}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -78,16 +84,15 @@ void main(){
 }
 
 class AppModule extends Module {
+  @override
+  List<Bind> get binds => [];
 
   @override
-  void binds(i) {}
-
-  @override
-  void routes(r) {}
+  List<ModularRoute> get routes => [];
 }
 ```
 
-Note that the module is just a class that inherits from the **Module** class, overriding the **binds** and **routes** method.
+Note that the module is just a class that inherits from the **Module** class, overriding the **binds** and **routes** properties.
 With this we have a route and injection mechanism separate from the application and can be both applied in a global context (as we are doing) or in a local context, for example, creating a module that contains only binds and routes only for a specific feature!
 
 We've added **AppModule** to ModularApp. Now we need an initial route, so let's create a StatelessWidget to serve as the home page.
@@ -102,12 +107,12 @@ void main(){
 
 class AppModule extends Module {
   @override
-  void binds(i) {}
+  List<Bind> get binds => [];
 
   @override
-  void routes(r) {
-    r.child('/', child: (context) => HomePage()),
-  }
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => HomePage()),
+  ];
 }
 
 class HomePage extends StatelessWidget {
@@ -126,18 +131,10 @@ We've created a Widget called **HomePage** and added its instances in a route ca
 
 :::tip TIP
 
-There are some ModularRoute types: **ChildRoute**, **ModuleRoute**, **RedirectRoute** and **WildcardRoute**.
+There are two ModularRoute types: **ChildRoute** and **ModuleRoute**.
 
-**ChildRoute**: Serves to build a Widget. <br />
-**ModuleRoute**: Concatenates another module. <br />
-**RedirectRoute**: Redirect to other route.<br />
-**WildcardRoute**: Default route in Module.<br /> <br />
-
-Inside the `routes(e);` method we can use: <br />
-**r.child => ChildRoute**. <br />
-**r.module => ModuleRoute**. <br />
-**r.redirect => RedirectRoute**. <br />
-**r.wildcard => WildcardRoute**. <br />
+**ChildRoute**: Serves to build a Widget.
+**ModuleRoute**: Concatenates another module.
 
 :::
 
@@ -147,7 +144,7 @@ The main Widget's function is to instantiate the MaterialApp or CupertinoApp.
 
 In these main Widgets it's also necessary to set the custom route system. For this next snippet we'll use **MaterialApp**, but the process is exactly the same for CupertinoApp.
 
-```dart title="lib/main.dart" {8-16}
+```dart title="lib/main.dart" {9-16}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -160,19 +157,20 @@ class AppWidget extends StatelessWidget {
     return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      routerConfig: Modular.routerConfig,
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
     ); //added by extension 
   }
 }
 
 class AppModule extends Module {
   @override
-  void binds(i) {}
+  List<Bind> get binds => [];
 
   @override
-  void routes(r) {
-    r.child('/', child: (context) => HomePage()),
-  }
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => HomePage()),
+  ];
 }
 
 class HomePage extends StatelessWidget {

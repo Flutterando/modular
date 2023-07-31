@@ -95,32 +95,32 @@ This object creation method solves coupling issues but may increase instance cre
 ## Instance registration
 
 The strategy for building an instance with its dependencies comprise register all objects in a module and
-manufactures them on demand or in single-instance form(singleton). All instance registration process
-is managed by [auto_injector](https://pub.dev/packages/auto_injector)
+manufactures them on demand or in single-instance form(singleton). This 'registration' is called **Bind**.
 
 There are a few ways to build a Bind to register object instances:
 
 
-- *injector.add*: Build an instance on demand (Factory).
-- *injector.addSingleton*: Build an instance only once when the module starts.
-- *injector.addLazySingleton*: Build an instance only once when prompted.
-- *injector.addInstance*: Adds an existing instance.
+- *Bind.singleton*: Build an instance only once when the module starts.
+- *Bind.lazySingleton*: Build an instance only once when prompted.
+- *Bind.factory*: Build an instance on demand.
+- *Bind.instance*: Adds an existing instance.
 
 We register the binds in **AppModule**:
 
 ```dart
 class AppModule extends Module {
   @override
-  void binds(i) {
-    i.add(XPTOEmail.new);
-    i.add<EmailService>(XPTOEmailService.new);
-    i.addSingleton(Client.new)
-  }
+  List<Bind> get binds => [
+    Bind.factory((i) => XPTOEmail())
+    Bind.factory<EmailService>((i) => XPTOEmailService(i()))
+    Bind.singleton((i) => Client(i()))
+  ];
   
   ...
 }
 ```
-The dependencies of these instances will be resolved automatically using the [auto_injector](https://pub.dev/packages/auto_injector) mechanisms.
+Note that we placed an `i()` instead of the dependencies instance. This will be responsible to allocate the
+dependencies automatically.
 
 To get a resolved instance use `Modular.get`:
 
@@ -131,6 +131,42 @@ final client = Modular.get<Client>();
 final client = Modular.get<Client>(defaultValue: Client());
 ```
 
+:::tip TIP
+
+A default constructor **Bind()** is the same as **Bind.lazySingleton()**;
+
+:::
+
+## AsyncBind
+
+**flutter_modular** can also resolve asynchronous dependencies. To do this, use **AsyncBind** instead of **Bind**:
+
+```dart
+class AppModule extends Module {
+  @override
+  List<Bind> get binds => [
+    AsyncBind<SharedPreferences>((i) => SharedPreferences.getInstance()),
+    ...
+  ];
+  ...
+}
+```
+
+By now we need to transform the AsyncBind into synchronous Bind in order to resolve the other instances. Therefore, 
+we use **Modular.isModuleReady()** passing the module type in generics;
+
+```dart
+await Modular.isModuleReady<AppModule>();
+```
+This action will convert all AsyncBinds to synchronous Binds and singletons.
+
+:::tip TIP
+
+We can get the asynchronous instance directly too without having to convert to a synchronous bind using
+**Modular.getAsync()**;
+
+:::
+
 ## Auto Dispose
 
 The lifetime of a Bind singleton ends when its module 'dies'. But there are some objects that, by default, 
@@ -139,24 +175,7 @@ run an instance destruction routine and are automatically removed from memory. H
 - Stream/Sink (Dart Native).
 - ChangeNotifier/ValueNotifier (Flutter Native).
 
-For registered objects that are not part of this list, we can use **BindConfig** or implement a **Disposable** interface on the instance where we want to run an algorithm before dispose:
-
-**Using BindConfig**:
-
-The dispose of an instance can be set directly in `Register` by implementing the `onDispose` property:
-
-```dart
-@override
-void binds(i) {
-  i.addSingleton<MyBloc>(MyBloc.new, config: BindConfig(
-    onDispose: (bloc) => bloc.close(),
-  ));
-}
-```
-
-**Using Disposable interface**
-
-Doing this does not require **BindConfig**, but creates a link between the package and the class.
+For registered objects that are not part of this list, we can implement a **Disposable** interface on the instance where we want to run an algorithm before dispose:
 
 ```dart
 class MyController implements Disposable {
@@ -169,11 +188,43 @@ class MyController implements Disposable {
 }
 ```
 
+The dispose of an instance can be set directly in `Bind` by implementing the `onDispose` property:
+
+```dart
+@override
+final List<Bind> binds = [
+  Bind.singleton((i) => MyBloc(), onDispose: (bloc) => bloc.close()),
+];
+```
+
+:::tip TIP
+
+There are pre-configured `Bind` for BLoC and Triple.
+See the packages [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) and [modular_triple_bind](https://pub.dev/packages/modular_triple_bind)
+
+:::
 
 **flutter_modular** also offers a singleton removal option from the dependency injection system 
 by calling the **Modular.dispose**() method even with an active module:
 
 ```dart
 Modular.dispose<MySingletonBind>();
+```
+
+## Hot Reload
+
+The modular is hot-reload friendly, but, singleton binds are not notified.
+Use the ReassembleMixin for this:
+
+```dart
+import 'package:flutter_modular/flutter_modular.dart';
+
+class ProductController with ReassembleMixin {
+  @override
+  void reassemble() {
+    //called when the hot reload happens.
+    print('reassemble');
+  }
+}
 ```
 

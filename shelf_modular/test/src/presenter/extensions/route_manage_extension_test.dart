@@ -28,17 +28,11 @@ class CustomModule extends Module {}
 
 class CustomWebsocket extends WebSocketResource {
   @override
-  void connect(WebSocket socket) {
-    // TODO: implement connect
-  }
+  void connect(WebSocket socket) {}
 
   @override
-  void disconnect(WebSocket socket) {
-    // TODO: implement disconnect
-  }
+  void disconnect(WebSocket socket) {}
 
   @override
-  void onMessage(data, WebSocket socket) {
-    // TODO: implement onMessage
-  }
+  void onMessage(dynamic data, WebSocket socket) {}
 }

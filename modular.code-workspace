@@ -1,16 +1,20 @@
 {
 	"folders": [
 		{
-			"name": "modular_core",
+			"name": "Core",
 			"path": "modular_core"
 		},
 		{
-			"name": "shelf_modular",
+			"name": "Shelf",
 			"path": "shelf_modular"
 		},
 		{
-			"name": "flutter_modular",
+			"name": "Flutter",
 			"path": "flutter_modular"
+		},
+		{
+			"name": "Documentation",
+			"path": "doc"
 		}
 	],
 	"settings": {

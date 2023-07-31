@@ -59,8 +59,10 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
     when(() => routeMock.schema).thenReturn('');
-    when(() => getRoute.call(any())).thenAnswer((_) async => Success(routeMock));
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
@@ -77,21 +79,26 @@ void main() {
     when(() => routeMock.parent).thenReturn('/');
     when(() => routeMock.schema).thenReturn('/');
     when(() => routeMock.middlewares).thenReturn([Guard()]);
-    when(() => routeMock.copyWith(schema: any(named: 'schema'))).thenReturn(routeMock);
+    when(() => routeMock.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeMock);
 
     final routeParent = ParallelRouteMock();
     when(() => routeParent.uri).thenReturn(Uri.parse('/'));
     when(() => routeParent.parent).thenReturn('');
     when(() => routeParent.schema).thenReturn('');
     when(() => routeParent.middlewares).thenReturn([Guard()]);
-    when(() => routeParent.copyWith(schema: any(named: 'schema'))).thenReturn(routeParent);
+    when(() => routeParent.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeParent);
 
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
     when(() => reportPush(routeParent)).thenReturn(const Success(unit));
 
-    when(() => getRoute.call(const RouteParmsDTO(url: '/test'))).thenAnswer((_) async => Success(routeMock));
-    when(() => getRoute.call(const RouteParmsDTO(url: '/'))).thenAnswer((_) async => Success(routeParent));
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(const RouteParmsDTO(url: '/test')))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getRoute.call(const RouteParmsDTO(url: '/')))
+        .thenAnswer((_) async => Success(routeParent));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
 
     when(() => setArguments.call(any())).thenReturn(const Success(unit));
 
@@ -110,21 +117,27 @@ void main() {
     when(() => routeMock.parent).thenReturn('/');
     when(() => routeMock.schema).thenReturn('/');
     when(() => routeMock.middlewares).thenReturn([Guard()]);
-    when(() => routeMock.copyWith(schema: any(named: 'schema'))).thenReturn(routeMock);
+    when(() => routeMock.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeMock);
 
     final routeParent = ParallelRouteMock();
     when(() => routeParent.uri).thenReturn(Uri.parse('/'));
     when(() => routeParent.parent).thenReturn('');
     when(() => routeParent.schema).thenReturn('');
     when(() => routeParent.middlewares).thenReturn([Guard()]);
-    when(() => routeParent.copyWith(schema: any(named: 'schema'))).thenReturn(routeParent);
+    when(() => routeParent.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeParent);
 
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
     when(() => reportPush(routeParent)).thenReturn(const Success(unit));
 
-    when(() => getRoute.call(const RouteParmsDTO(url: '/oo'))).thenAnswer((_) async => Success(redirect));
-    when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: modularArgument.data))).thenAnswer((_) async => Success(routeMock));
-    when(() => getRoute.call(const RouteParmsDTO(url: '/'))).thenAnswer((_) async => Success(routeParent));
+    when(() => getRoute.call(const RouteParmsDTO(url: '/oo')))
+        .thenAnswer((_) async => Success(redirect));
+    when(() => getRoute
+            .call(RouteParmsDTO(url: '/test', arguments: modularArgument.data)))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getRoute.call(const RouteParmsDTO(url: '/')))
+        .thenAnswer((_) async => Success(routeParent));
     when(() => getArguments.call()).thenReturn(Success(modularArgument));
 
     when(() => setArguments.call(any())).thenReturn(const Success(unit));
@@ -145,8 +158,10 @@ void main() {
 
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
 
-    when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args))).thenAnswer((_) async => Failure(ModularPageException('')));
-    when(() => getRoute.call(RouteParmsDTO(url: '/test/', arguments: args))).thenAnswer((_) async => Success(routeMock));
+    when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args)))
+        .thenAnswer((_) async => Failure(ModularPageException('')));
+    when(() => getRoute.call(RouteParmsDTO(url: '/test/', arguments: args)))
+        .thenAnswer((_) async => Success(routeMock));
     when(() => getArguments.call()).thenReturn(Success(args));
 
     when(() => setArguments.call(any())).thenReturn(const Success(unit));
@@ -169,35 +184,51 @@ void main() {
 
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
 
-    when(() => getRoute.call(any())).thenAnswer((_) async => Success(routeMock));
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
-    expect(parser.parseRouteInformation(const RouteInformation(location: '/test')), completion(isA<ModularBook>()));
-    expect(parser.parseRouteInformation(const RouteInformation(location: '/test')), completion(isA<ModularBook>()));
+    expect(
+        parser.parseRouteInformation(const RouteInformation(location: '/test')),
+        completion(isA<ModularBook>()));
+    expect(
+        parser.parseRouteInformation(const RouteInformation(location: '/test')),
+        completion(isA<ModularBook>()));
     expect(Guard().pre(routeMock), routeMock);
   });
 
   test('parseRouteInformation with location / and guard false', () {
     final routeMock = ParallelRouteMock();
 
-    when(() => getRoute.call(any())).thenAnswer((_) async => Success(routeMock));
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard(false)]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
 
-    expect(() => parser.parseRouteInformation(const RouteInformation(location: '/')), throwsA(isA<GuardedRouteException>()));
+    expect(
+        () =>
+            parser.parseRouteInformation(const RouteInformation(location: '/')),
+        throwsA(isA<GuardedRouteException>()));
   });
 
   test('parseRouteInformation with location / and middleware null', () {
     final routeMock = ParallelRouteMock();
 
-    when(() => getRoute.call(any())).thenAnswer((_) async => Success(routeMock));
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([MiddlewareNull()]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
 
-    expect(() => parser.parseRouteInformation(const RouteInformation(location: '/')), throwsA(isA<Exception>()));
+    expect(
+        () =>
+            parser.parseRouteInformation(const RouteInformation(location: '/')),
+        throwsA(isA<Exception>()));
   });
 
   test('throw error if path be empty', () {
@@ -207,12 +238,15 @@ void main() {
   test('selectBook with popCallback', () {
     final routeMock = ParallelRouteMock();
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
-    when(() => getRoute.call(any())).thenAnswer((_) async => Success(routeMock));
-    when(() => getArguments.call()).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
-    when(() => routeMock.copyWith(popCallback: any(named: 'popCallback'))).thenReturn(routeMock);
+    when(() => routeMock.copyWith(popCallback: any(named: 'popCallback')))
+        .thenReturn(routeMock);
     expect(parser.selectBook('/', popCallback: (r) {}), completes);
   });
 }

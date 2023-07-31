@@ -22,7 +22,7 @@ Although, if you define a property on the child route of a **ModuleRoute**, the 
 
 In **Modular**, everything is done observing the routes, so let’s create a second module to include using **ModuleRoute**:
 
-```dart title="lib/main.dart" {22,27-34}
+```dart title="lib/main.dart" {23,27-35}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -35,27 +35,30 @@ class AppWidget extends StatelessWidget {
     return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      routerConfig: Modular.routerConfig,
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
     ); //added by extension 
   }
 }
 
 class AppModule extends Module {
+  @override
+  List<Bind> get binds => [];
 
   @override
-  void routes(r) {
-    r.module('/', module: HomeModule());
-  }
-
+  List<ModularRoute> get routes => [
+    ModuleRoute('/', module: HomeModule()),
+  ];
 }
 
 class HomeModule extends Module {
+  @override
+  List<Bind> get binds => [];
 
   @override
-  void routes(r) {
-    r.child('/', child: (context) => HomePage());
-  }
-
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => HomePage()),
+  ];
 }
 
 class HomePage extends StatelessWidget {
@@ -103,18 +106,18 @@ The composition of a route must contain the route’s name (declared in **Module
 ```dart
 class AModule extends Module {
   @override
-  void routes(r) {
-    r.child('/', child: (context) => APage());
-    r.module('/b-module', module: BModule());
-  }
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => APage()),
+    ModuleRoute('/b-module', module: BModule()),
+  ];
 }
 
 class BModule extends Module {
   @override
- void routes(r) {
-    r.child('/', child: (context, args) => BPage());
-    r.child('/other', child: (context, args) => OtherPage());
- }
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => BPage()),
+    ChildRoute('/other', child: (context, args) => OtherPage()),
+  ];
 }
 ```
 In this scenario, there are two routes in **AModule**, a **ChildRoute** called `/` and a **ModuleRoute** called `/b-module`.
@@ -184,15 +187,15 @@ This favors the complete decoupling of the module, as it will not need the previ
 
 ## Module import
 
-A module can be created only to store instances. A use case would be established when we have a Shared or Core Module containing all the main binds and distributed among all modules. To use a module only with instances, we must import it into a module containing routes. See the next example:
+A module can be created only to store binds. A use case would be established when we have a Shared or Core Module containing all the main binds and distributed among all modules. To use a module only with binds, we must import it into a module containing routes. See the next example:
 
 ```dart {10-13}
 class CoreModule extends Module {
   @override
-  void exportedBinds(i){
-    i.addSingleton(HttpClient.new);
-    i.addSingleton(LocalStorage.new);
-  }
+  List<Bind> get binds => [
+    Bind.singleton((i) => HttpClient(), export: true),
+    Bind.singleton((i) => LocalStorage(), export: true),
+  ]
 }
 
 class AppModule extends Module {
@@ -202,17 +205,118 @@ class AppModule extends Module {
   ]
 
   @override
-  void routes(r){
-    r.child('/', child: (context) => HomePage()),
-  }
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => HomePage()),
+  ];
 }
 ```
 
-Note that instances of **CoreModule** are registered in the `exportedBinds` method instead of the `binds` method, this means that these instances can be imported into another module.
+Note that **CoreModule** binds are marked with the export flag `export: true`, this means that the bind can be imported into another module.
 
 :::danger ATTENTION
 
-The module import is only for **Instance registers**. **Routes** won't be imported.
+The module import is only for **Binds**. **Routes** won't be imported.
 
 :::
 
+## RouterOutlet Modularization
+
+You could modularizate each item of you **RouterOutlet**. For example:
+
+```dart
+class TabModule extends Module {
+  @override
+  List<Bind> get binds => [];
+
+  @override
+  List<ModularRoute> get routes => [
+        ChildRoute(
+          '/',
+          child: (context, args) => SplashPage(),
+        ),
+        ChildRoute(
+          '/tab',
+          child: (context, args) => HomePage(),
+          children: [
+            ModuleRoute('/home', module: Module1()),
+            ModuleRoute('/product', module: Module2()),
+            ModuleRoute('/config', module: Module3()),
+          ],
+        ),
+      ];
+}
+```
+
+A issue this can cause is each `Bind` will be linked of life cycle of your own modules
+
+```dart
+class Module1 extends Module {
+  @override
+  List<Bind> get binds => [
+        Bind.lazySingleton(
+          (i) => HomeController(),
+        ),
+      ];
+
+  @override
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (_, args) => const HomePage()),
+  ];
+}
+```
+
+When it identify the tab change it will **dispose** whole module, if you need to keep **Bind** life cycle the same of **RouterOutlet** you will need to add parameter `export:  true`. For example
+
+```dart
+class Module1 extends Module {
+  @override
+  List<Bind> get binds => [
+        Bind.lazySingleton(
+          (i) => HomeController(),
+          export:  true,
+        ),
+      ];
+
+  @override
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (_, args) => const HomePage()),
+  ];
+}
+```
+
+In the **RouterOutlet** module you will need to **override** de getter method `imports` providing the module you will change de lyfe cicle.
+
+```dart
+class TabModule extends Module {
+  @override
+  List<Module> get imports => [
+        Module1(),
+        Module2(),
+        Module3(),
+      ];
+      
+  @override
+  List<Bind> get binds => [];
+
+  @override
+  List<ModularRoute> get routes => [
+        ChildRoute(
+          '/',
+          child: (context, args) => SplashPage(),
+        ),
+        ChildRoute(
+          '/tab',
+          child: (context, args) => HomePage(),
+          children: [
+            ModuleRoute('/home', module: Module1()),
+            ModuleRoute('/product', module: Module2()),
+            ModuleRoute('/config', module: Module3()),
+          ],
+        ),
+      ];
+}
+```
+
+:::danger ATTENTION
+The object that you will `Binds` and want to keep alive can't be in  `ModularState<Widget, Object>`, because this will *dispose* automatically when widget trigger your own *dispose()*
+:::

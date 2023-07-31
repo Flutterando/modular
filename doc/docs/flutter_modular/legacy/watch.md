@@ -66,68 +66,19 @@ class OnlyErrorWidget extends StatelessWidget {
 }
 ```
 
-It's also possible to configure a selector directly using **BindConfig**:
+It's also possible to configure a selector directly in bind:
 
 ```dart
 @override
-void binds(i) {
+final List<Bind> binds = [
   //notifier return stream or listenable to use context.watch()
-  i.addSingleton<MyBloc>(MyBloc.new, config: BindConfig(
-      notifier: (bloc) => bloc.stream,
-  ));
-}
+  Bind.singleton((i) => MyBloc(), selector: (bloc) => bloc.stream),
+];
 ```
 
-As **BindConfig** is a separate class we can create `Helpers` to help us with `watch` and `dispose`
-of specific instances like `BLoC` or `Triple`;
+:::tip TIP
 
-## BLoC Configurations
+Existem `Bind` pré-configurados para BLoC e Triple.
+Veja os packages [modular_bloc_bind](https://pub.dev/packages/modular_bloc_bind) e [modular_triple_bind](https://pub.dev/packages/modular_triple_bind)
 
-Example:
-
-```dart
-BindConfig<T> blocConfig<T extends Bloc>(){
-  return BindConfig(
-    notifier: (bloc) => bloc.stream,
-    onDispose: (bloc) => bloc.close(),
-  );
-} 
-
-```
-
-Using:
-
-```dart
-@override
-void binds(i) {
-  i.addSingleton<MyBloc>(MyBloc.new, config: blocConfig());
-  i.addSingleton<ProductBloc>(ProductBloc.new, config: blocConfig());
-  i.addSingleton<UserBloc>(UserBloc.new, config: blocConfig());
-}
-```
-
-## Triple Configurations
-
-Example:
-
-```dart
-BindConfig<T> storeConfig<T extends Store>(){
-  return BindConfig(
-    notifier: (store) => bloc.selectAll,
-    onDispose: (bloc) => bloc.dispose(),
-  );
-} 
-
-```
-
-Using:
-
-```dart
-@override
-void binds(i) {
-  i.addSingleton<MyStore>(MyStore.new, config: storeConfig());
-  i.addSingleton<ProductStore>(ProductStore.new, config: storeConfig());
-  i.addSingleton<UserStore>(UserStore.new, config: storeConfig());
-}
-```
-
+:::

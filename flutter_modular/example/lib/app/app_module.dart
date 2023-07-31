@@ -19,11 +19,10 @@ class AppModule extends Module {
 
   @override
   void binds(i) {
-    i.addInstance(http.Client());
+    i.addInstance<http.Client>(http.Client());
     i.add<SearchDatasource>(GithubSearchDatasource.new);
     i.add<SearchRepository>(SearchRepositoryImpl.new);
     i.add<SearchByText>(SearchByTextImpl.new);
-    //i.store.add<SearchStore>(SearchStore.new);
     i.addSingleton<SearchStore>(SearchStore.new, config: storeConfig());
   }
 

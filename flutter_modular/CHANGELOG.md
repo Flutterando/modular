@@ -1,3 +1,6 @@
+
+## [6.0.0] - 2023-07-31
+
 ## [5.0.3] - 2022-06-03
 - Fix [#713](https://github.com/Flutterando/modular/issues/713)
 - Fix [#676](https://github.com/Flutterando/modular/issues/676)
