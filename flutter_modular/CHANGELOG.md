@@ -1,6 +1,66 @@
 
 ## [6.0.0] - 2023-07-31
 
+- Support Dart 3.0 (Flutter >=3.10.0)
+- Added `Modular.routerConfig` for new inicialization.
+```dart
+MaterialApp.router(
+  routerConfig: Modular.routerConfig,
+);
+```
+- **BREAKING CHANGES** Added: Using `auto_injector` instead of `Core`.
+Desde 2020, o Modular utilizou o motor chamado de `Core` para injeções de dependências e apartir da v6
+será substituido pelo `auto_injector`.<br>
+O `auto_injector` utiliza o construtor como assinatura da instância para registro removendo a necessidade
+do argumento `i()` no cadastro do bind.<br>
+
+**v5**
+```dart
+Bind((i) => MyClass(i(), i(), i())),
+```
+**v6**
+```dart
+i.add(MyClass.new);
+```
+- Added: `exportedBinds(i)` to register instances can be imported by other Modules.
+
+- **BREAKING CHANGES** refactor: O registro de rotas antes era feito por um 
+getter de `List<ModularRoute>`, agora o registro acontece no método `routes(RouteManager r);`.
+
+**v5**
+```dart
+class AModule extends Module {
+  ...
+  @override
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => APage()),
+    ModuleRoute('/b-module', module: BModule()),
+  ];
+  ...
+}
+```
+**v6**
+```dart
+class AModule extends Module {
+  ...
+  @override
+  void routes(RouteManager r) {
+    r.child('/', child: (context) => APage());
+    r.module('/b-module', module: BModule());
+  }
+  ...
+}
+```
+
+- @DEPRECATED: `modular_test` package.
+- @DEPRECATED: `bloc_modular_bind` package.
+- @DEPRECATED: `triple_modular_bind` package.
+
+- Removed: `WidgetModule`;
+- Removed: `ModularState`;
+
+
+
 ## [5.0.3] - 2022-06-03
 - Fix [#713](https://github.com/Flutterando/modular/issues/713)
 - Fix [#676](https://github.com/Flutterando/modular/issues/676)
