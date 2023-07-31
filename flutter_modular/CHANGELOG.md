@@ -1,7 +1,7 @@
 
 ## [6.0.0] - 2023-07-31
 
-- Support Dart 3.0 (Flutter >=3.10.0)
+- Supports Dart 3.0 (Flutter >=3.10.0)
 - Added `Modular.routerConfig` for new inicialization.
 ```dart
 MaterialApp.router(
@@ -9,10 +9,10 @@ MaterialApp.router(
 );
 ```
 - **BREAKING CHANGES** Added: Using `auto_injector` instead of `Core`.
-Desde 2020, o Modular utilizou o motor chamado de `Core` para injeções de dependências e apartir da v6
-será substituido pelo `auto_injector`.<br>
-O `auto_injector` utiliza o construtor como assinatura da instância para registro removendo a necessidade
-do argumento `i()` no cadastro do bind.<br>
+Since 2020, Modular has used the engine called `Core` for dependency injections and starting with v6
+will be replaced by `auto_injector`.<br>
+`auto_injector` uses the constructor as the instance signature for registration removing the need
+of the `i()` argument in the bind register.<br>
 
 **v5**
 ```dart
@@ -24,8 +24,7 @@ i.add(MyClass.new);
 ```
 - Added: `exportedBinds(i)` to register instances can be imported by other Modules.
 
-- **BREAKING CHANGES** refactor: O registro de rotas antes era feito por um 
-getter de `List<ModularRoute>`, agora o registro acontece no método `routes(RouteManager r);`.
+- **BREAKING CHANGES** refactor: The registration of routes was previously done by a getter of `List<ModularRoute>`, now the registration happens in method `routes(RouteManager r);`.
 
 **v5**
 ```dart
@@ -52,9 +51,30 @@ class AModule extends Module {
 }
 ```
 
-- @DEPRECATED: `modular_test` package.
-- @DEPRECATED: `bloc_modular_bind` package.
-- @DEPRECATED: `triple_modular_bind` package.
+- **BREAKING CHANGES**: refactor: `ChildRoute`, `ModuleRoute` and `WildcardRoute` child. Removes `args`:
+
+**v5**
+```dart
+  @override
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => APage(data: args.data)),
+  ];
+
+```
+**v6**
+```dart
+  @override
+  void routes(RouteManager r) {
+    final args = r.args;
+    r.child('/', child: (context) => APage(data: args.data));
+  }
+```
+
+- @DEPRECATED: `modular_test` package. Please check the `Test` section of documentation.
+
+- @DEPRECATED: `bloc_modular_bind` package. Please check the `Watch` section of documentation.
+
+- @DEPRECATED: `triple_modular_bind` package. Please check the `Watch` section of documentation.
 
 - Removed: `WidgetModule`;
 - Removed: `ModularState`;
