@@ -75,3 +75,4 @@ build/
 !**/ios/**/default.perspectivev3
 
 coverage/
+pubspec.lock
