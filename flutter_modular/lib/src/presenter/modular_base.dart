@@ -210,6 +210,7 @@ class ModularBase implements IModularBase {
     routeInformationProvider: PlatformRouteInformationProvider(
       initialRouteInformation: const RouteInformation(),
     ),
+    backButtonDispatcher: RootBackButtonDispatcher(),
   );
 
   @override

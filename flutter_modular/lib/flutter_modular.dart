@@ -80,7 +80,7 @@ class RouterOutlet extends StatefulWidget {
 class RouterOutletState extends State<RouterOutlet> {
   late GlobalKey<NavigatorState> _navigatorKey;
   RouterOutletDelegate? _delegate;
-  late ChildBackButtonDispatcher _backButtonDispatcher;
+  ChildBackButtonDispatcher? _backButtonDispatcher;
 
   /// Get all current observers
   List<NavigatorObserver> get currentObservers =>
@@ -114,8 +114,8 @@ class RouterOutletState extends State<RouterOutlet> {
       currentObservers,
     );
     final router = Router.of(context);
-    _backButtonDispatcher =
-        router.backButtonDispatcher!.createChildBackButtonDispatcher();
+    _backButtonDispatcher = router.backButtonDispatcher //
+        ?.createChildBackButtonDispatcher();
   }
 
   @override
@@ -126,7 +126,7 @@ class RouterOutletState extends State<RouterOutlet> {
 
   @override
   Widget build(BuildContext context) {
-    _backButtonDispatcher.takePriority();
+    _backButtonDispatcher?.takePriority();
     return Router(
       routerDelegate: _delegate!,
       backButtonDispatcher: _backButtonDispatcher,

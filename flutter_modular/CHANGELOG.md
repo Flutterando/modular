@@ -1,4 +1,4 @@
-## [6.0.0] - 2023-07-31
+## [6.0.0+2] - 2023-07-31
 
 - Supports Dart 3.0 (Flutter >=3.10.0)
 - Added `Modular.routerConfig` for new inicialization.
