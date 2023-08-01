@@ -1,3 +1,8 @@
+## [6.0.1] - 2023-08-01
+
+- fix: InnerModules in routes.
+
+
 ## [6.0.0+2] - 2023-07-31
 
 - Supports Dart 3.0 (Flutter >=3.10.0)

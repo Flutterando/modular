@@ -202,5 +202,13 @@ Modular.setObservers([myObserver]);
 Modular.setInitialRoute('/home');
 ```
 
+You can change the `prints` with function `setPrintResolver`:
+```dart
+setPrintResolver((text) => print(text));
+// deactivate
+setPrintResolver((text){});
+```
+
+
 
 That's enough to run a Modular app. In the next steps let's explore navigation.

@@ -19,7 +19,8 @@ export 'package:modular_core/modular_core.dart'
         BindConfig,
         Injector,
         AutoInjectorException,
-        ModularArguments;
+        ModularArguments,
+        setPrintResolver;
 
 export 'src/presenter/extensions/route_manager_ext.dart';
 export 'src/presenter/guards/route_guard.dart';
