@@ -325,7 +325,10 @@ class _Tracker implements Tracker {
     for (var child in routes) {
       child = child.addParent(route);
       child = child.copyWith(
-        innerModules: {module.runtimeType: module},
+        innerModules: {
+          ...child.innerModules,
+          module.runtimeType: module,
+        },
         parent: route.parent,
       );
       map.addAll(_assembleRoute(child));
