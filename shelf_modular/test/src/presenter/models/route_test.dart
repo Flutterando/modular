@@ -62,5 +62,5 @@ class MyWebsocketResource extends WebSocketResource {
   void disconnect(WebSocket socket) {}
 
   @override
-  void onMessage(data, WebSocket socket) {}
+  void onMessage(dynamic data, WebSocket socket) {}
 }

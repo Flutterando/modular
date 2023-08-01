@@ -1,8 +1,8 @@
-import 'package:example/src/auth/domain/errors/errors.dart';
-import 'package:example/src/auth/domain/entities/tokenization.dart';
-import 'package:example/src/auth/domain/repositories/auth_repository.dart';
-import 'package:example/src/auth/infra/datasources/auth_datasource.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:shelf_modular_example/src/auth/domain/entities/tokenization.dart';
+import 'package:shelf_modular_example/src/auth/domain/errors/errors.dart';
+import 'package:shelf_modular_example/src/auth/domain/repositories/auth_repository.dart';
+import 'package:shelf_modular_example/src/auth/infra/datasources/auth_datasource.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDatasource datasource;

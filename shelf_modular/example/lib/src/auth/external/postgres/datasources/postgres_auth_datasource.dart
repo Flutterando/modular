@@ -1,8 +1,8 @@
-import 'package:example/src/auth/domain/entities/tokenization.dart';
-import 'package:example/src/auth/external/errors/errors.dart';
-import 'package:example/src/auth/external/shared/redis/redis_service.dart';
-import 'package:example/src/auth/external/shared/token/token_manager.dart';
-import 'package:example/src/auth/infra/datasources/auth_datasource.dart';
+import 'package:shelf_modular_example/src/auth/domain/entities/tokenization.dart';
+import 'package:shelf_modular_example/src/auth/external/errors/errors.dart';
+import 'package:shelf_modular_example/src/auth/external/shared/redis/redis_service.dart';
+import 'package:shelf_modular_example/src/auth/external/shared/token/token_manager.dart';
+import 'package:shelf_modular_example/src/auth/infra/datasources/auth_datasource.dart';
 import 'package:uuid/uuid.dart';
 
 import 'postgres_connect.dart';

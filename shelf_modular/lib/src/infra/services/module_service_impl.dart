@@ -1,6 +1,5 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/shelf_modular.dart';
-import 'package:shelf_modular/src/shared/either.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/module_service.dart';
 
 class ModuleServiceImpl extends ModuleService {
@@ -9,19 +8,14 @@ class ModuleServiceImpl extends ModuleService {
   ModuleServiceImpl(this.tracker);
 
   @override
-  Either<ModularError, Unit> finish() {
+  Result<Unit, ModularError> finish() {
     tracker.finishApp();
-    return right(unit);
+    return const Success(unit);
   }
 
   @override
-  Either<ModularError, Unit> start(RouteContext module) {
+  Result<Unit, ModularError> start(Module module) {
     tracker.runApp(module);
-    return right(unit);
-  }
-
-  @override
-  Future<Either<ModularError, bool>> isModuleReady<M extends Module>() {
-    return tracker.injector.isModuleReady<M>().then((value) => right(value));
+    return const Success(unit);
   }
 }

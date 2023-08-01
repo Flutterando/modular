@@ -1,32 +1,26 @@
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import '../domain/usecases/get_arguments.dart';
-import '../domain/usecases/reassemble_tracker.dart';
-import 'package:modular_core/modular_core.dart';
+import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
+import 'package:flutter_modular/src/domain/usecases/replace_instance.dart';
+import 'package:flutter_modular/src/domain/usecases/unbind_module.dart';
 
 import '../domain/usecases/dispose_bind.dart';
 import '../domain/usecases/finish_module.dart';
+import '../domain/usecases/get_arguments.dart';
 import '../domain/usecases/get_bind.dart';
-import '../domain/usecases/module_ready.dart';
 import '../domain/usecases/set_arguments.dart';
 import '../domain/usecases/start_module.dart';
 import 'errors/errors.dart';
-import 'package:meta/meta.dart';
-
 import 'navigation/modular_route_information_parser.dart';
 import 'navigation/modular_router_delegate.dart';
 
 abstract class IModularBase {
-  /// Finishes all trees(BindContext and RouteContext).
+  /// Finishes all trees(Modules).
   void destroy();
 
-  /// checks if all asynchronous binds are ready to be used synchronously of all BindContext of Tree.
-  Future<void> isModuleReady<M extends Module>();
-
   // Responsible for starting the app.
-  /// It should only be called once, but it should be the first method to be called before a route or bind lookup.
+  /// It should only be called once, but it should be the first
+  /// method to be called before a route or bind lookup.
   void init(Module module);
 
   /// value is '/';
@@ -38,7 +32,8 @@ abstract class IModularBase {
 
   /// Retrieves the IModularNavigator instance.
   /// By default the instance that controls all routes globally is returned,
-  /// but this behavior can be replaced in ModularNavigator by a custom instance:
+  /// but this behavior can be replaced in ModularNavigator
+  /// by a custom instance:
   ///
   /// Modular.navigatorDelegate = MyNavigatorDelegate();
   IModularNavigator get to;
@@ -51,25 +46,24 @@ abstract class IModularBase {
   void debugPrintModular(String text);
 
   /// Request an instance by [Type]
-  B get<B extends Object>({B? defaultValue});
+  B get<B extends Object>();
 
-  @internal
-  BindEntry<B> getBindEntry<B extends Object>({B? defaultValue});
+  /// Request an instance by [Type]
+  /// <br>
+  /// Return null if not found instance
+  B? tryGet<B extends Object>();
 
-  /// Request an async instance by [Type]
-  Future<B> getAsync<B extends Object>({B? defaultValue});
-
-  /// Dispose a [Bind] by [Type]
+  /// Dispose a bind by [Type]
   bool dispose<B extends Object>();
-
-  /// called whennever throw hot-reload
-  void reassemble();
 
   /// Navigator 2.0 initializator: RouteInformationParser
   ModularRouteInformationParser get routeInformationParser;
 
   /// Navigator 2.0 initializator: RouterDelegate
   ModularRouterDelegate get routerDelegate;
+
+  /// Navigator 2.0 initializator: RouterConfig
+  RouterConfig<Object> get routerConfig;
 
   /// Change the starting route path
   void setInitialRoute(String initialRoute);
@@ -83,6 +77,15 @@ abstract class IModularBase {
   /// Change the navigatorKey
   void setArguments(dynamic arguments);
 
+  /// Change the navigatorKey
+  void bindModule(Module module);
+
+  /// remove all module binds by name
+  void unbindModule<T extends Module>({String? type});
+
+  /// replace instance
+  void replaceInstance<T>(T instance);
+
   @visibleForTesting
   String get initialRoutePath;
 }
@@ -93,9 +96,10 @@ class ModularBase implements IModularBase {
   final GetBind getBind;
   final GetArguments getArguments;
   final SetArguments setArgumentsUsecase;
-  final ReassembleTracker reassembleTracker;
   final StartModule startModule;
-  final IsModuleReady isModuleReadyUsecase;
+  final BindModule bindModuleUsecase;
+  final UnbindModule unbindModuleUsecase;
+  final ReplaceInstance replaceInstanceUsecase;
   final IModularNavigator navigator;
   @override
   final ModularRouteInformationParser routeInformationParser;
@@ -117,14 +121,15 @@ class ModularBase implements IModularBase {
     required this.routeInformationParser,
     required this.routerDelegate,
     required this.disposeBind,
-    required this.reassembleTracker,
     required this.getArguments,
     required this.finishModule,
     required this.getBind,
     required this.startModule,
-    required this.isModuleReadyUsecase,
     required this.navigator,
     required this.setArgumentsUsecase,
+    required this.bindModuleUsecase,
+    required this.unbindModuleUsecase,
+    required this.replaceInstanceUsecase,
   });
 
   @override
@@ -132,34 +137,14 @@ class ModularBase implements IModularBase {
       disposeBind<B>().getOrElse((left) => false);
 
   @override
-  BindEntry<B> getBindEntry<B extends Object>({B? defaultValue}) {
-    return getBind<B>().getOrElse((left) {
-      if (defaultValue != null) {
-        return BindEntry<B>(
-            bind: Bind.instance(defaultValue), value: defaultValue);
-      }
-      throw left;
-    });
+  B get<B extends Object>() {
+    return getBind<B>().getOrThrow();
   }
 
   @override
-  B get<B extends Object>({B? defaultValue}) {
-    return getBindEntry<B>(defaultValue: defaultValue).value;
+  B? tryGet<B extends Object>() {
+    return getBind<B>().getOrNull();
   }
-
-  @override
-  Future<B> getAsync<B extends Object>({B? defaultValue}) {
-    return getBind<Future<B>>().map((r) => r.value).getOrElse((left) {
-      if (defaultValue != null) {
-        return Future.value(defaultValue);
-      }
-      throw left;
-    });
-  }
-
-  @override
-  Future<void> isModuleReady<M extends Module>() =>
-      isModuleReadyUsecase.call<M>();
 
   @override
   void destroy() {
@@ -171,10 +156,8 @@ class ModularBase implements IModularBase {
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold(
-          (l) => throw l, (r) => debugPrint('${module.runtimeType} started!'));
+          (r) => debugPrint('${module.runtimeType} started!'), (l) => throw l);
       _moduleHasBeenStarted = true;
-
-      setPrintResolver(debugPrint);
     } else {
       throw ModuleStartedException(
           'Module ${module.runtimeType} is already started');
@@ -200,12 +183,6 @@ class ModularBase implements IModularBase {
   @override
   final String initialRoute = '/';
 
-  @internal
-  @override
-  void reassemble() {
-    reassembleTracker();
-  }
-
   @override
   void setInitialRoute(String value) {
     _initialRoutePath = value;
@@ -224,5 +201,30 @@ class ModularBase implements IModularBase {
   @override
   void setArguments(dynamic data) {
     setArgumentsUsecase.call(args.copyWith(data: data));
+  }
+
+  @override
+  late final RouterConfig<Object> routerConfig = RouterConfig<Object>(
+    routerDelegate: routerDelegate,
+    routeInformationParser: routeInformationParser,
+    routeInformationProvider: PlatformRouteInformationProvider(
+      initialRouteInformation: const RouteInformation(),
+    ),
+    backButtonDispatcher: RootBackButtonDispatcher(),
+  );
+
+  @override
+  void bindModule(Module module) {
+    bindModuleUsecase(module).getOrThrow();
+  }
+
+  @override
+  void unbindModule<T extends Module>({String? type}) {
+    unbindModuleUsecase.call<T>(type: type).getOrThrow();
+  }
+
+  @override
+  void replaceInstance<T>(T instance) {
+    replaceInstanceUsecase.call<T>(instance).getOrThrow();
   }
 }

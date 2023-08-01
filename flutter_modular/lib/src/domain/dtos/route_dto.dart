@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+
+@immutable
 class RouteParmsDTO {
   final String url;
   final dynamic arguments;

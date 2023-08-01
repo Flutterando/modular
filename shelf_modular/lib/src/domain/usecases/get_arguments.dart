@@ -1,9 +1,9 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/src/shared/either.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/route_service.dart';
 
 abstract class GetArguments {
-  Either<ModularError, ModularArguments> call();
+  Result<ModularArguments, ModularError> call();
 }
 
 class GetArgumentsImpl implements GetArguments {
@@ -12,7 +12,7 @@ class GetArgumentsImpl implements GetArguments {
   GetArgumentsImpl(this.service);
 
   @override
-  Either<ModularError, ModularArguments> call() {
+  Result<ModularArguments, ModularError> call() {
     return service.getArguments();
   }
 }

@@ -6,50 +6,6 @@ sidebar_position: 6
 
 The **flutter_modular** has widgets to help you develop your smart app.
 
-## WidgetModule
-
-If there's a need to instantiate a module as an application, use the **WidgetModule** to do it.
-The injected **Binds** will follow throughout widget's lifecycle, that is, as soon as this widget is
-destroyed, the module it represents will also be. Its implementation is very simple:
-
-```dart
-class LocalModule extends WidgetModule{
-  @override
-  List<Bind> get binds => [
-    Bind.singleton((i) => MySpecialController())
-  ];
-
-  @override
-  Widget get view => MyWidget();
-}
-```
-
-## ModularState
-
-Another way to make a Bind link with the Widget's lifecycle is to implement **ModularState**
-in the **State** of a **StatefulWidget**. Thus, Bind will respect the widget's lifecycle, that is,
-will be destroyed once the widget is unmounted, even if the module is still active.
-**ModularState** also solves dependency and adds 4 getters to the widget: *controller*, *store*,
-*bloc* and *cubit*. They all have the same bind instance and use different boilerplate names.
-
-```dart {6}
-class HomePage extends StatefulWidget {
-    @override
-    _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends ModularState<HomePage, MyController>{
-    ...
-}
-```
-
-:::danger ATTENTION
-
-**ModularState** should only be used by the feature's main page. If used in an internal widget,
-may cause unexpected errors.
-
-:::
-
 ## NavigationListener
 
 This widget is actually a *Builder* that rebuilds its scope when there is navigation.

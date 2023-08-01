@@ -1,3 +1,86 @@
+## [6.0.0+2] - 2023-07-31
+
+- Supports Dart 3.0 (Flutter >=3.10.0)
+- Added `Modular.routerConfig` for new inicialization.
+```dart
+MaterialApp.router(
+  routerConfig: Modular.routerConfig,
+);
+```
+- **BREAKING CHANGES** Added: Using `auto_injector` instead of `Core`.
+Since 2020, Modular has used the engine called `Core` for dependency injections and starting with v6
+will be replaced by `auto_injector`.<br>
+`auto_injector` uses the constructor as the instance signature for registration removing the need
+of the `i()` argument in the bind register.<br>
+
+**v5**
+```dart
+Bind((i) => MyClass(i(), i(), i())),
+```
+**v6**
+```dart
+i.add(MyClass.new);
+```
+- Added: `exportedBinds(i)` to register instances can be imported by other Modules.
+
+- **BREAKING CHANGES** refactor: The registration of routes was previously done by a getter of `List<ModularRoute>`, now the registration happens in method `routes(RouteManager r);`.
+
+**v5**
+```dart
+class AModule extends Module {
+  ...
+  @override
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => APage()),
+    ModuleRoute('/b-module', module: BModule()),
+  ];
+  ...
+}
+```
+**v6**
+```dart
+class AModule extends Module {
+  ...
+  @override
+  void routes(RouteManager r) {
+    r.child('/', child: (context) => APage());
+    r.module('/b-module', module: BModule());
+  }
+  ...
+}
+```
+
+- **BREAKING CHANGES**: refactor: `ChildRoute`, `ModuleRoute` and `WildcardRoute` child. Removes `args`:
+
+**v5**
+```dart
+  @override
+  List<ModularRoute> get routes => [
+    ChildRoute('/', child: (context, args) => APage(data: args.data)),
+  ];
+
+```
+**v6**
+```dart
+  @override
+  void routes(RouteManager r) {
+    final args = r.args;
+    r.child('/', child: (context) => APage(data: args.data));
+  }
+```
+
+- @DEPRECATED: `modular_test` package. Please check the `Test` section of documentation.
+
+- @DEPRECATED: `bloc_modular_bind` package. Please check the `Watch` section of documentation.
+
+- @DEPRECATED: `triple_modular_bind` package. Please check the `Watch` section of documentation.
+
+- Removed: `WidgetModule`;
+- Removed: `ModularState`;
+- Removed: `AsyncBind`;
+
+
+
 ## [5.0.3] - 2022-06-03
 - Fix [#713](https://github.com/Flutterando/modular/issues/713)
 - Fix [#676](https://github.com/Flutterando/modular/issues/676)

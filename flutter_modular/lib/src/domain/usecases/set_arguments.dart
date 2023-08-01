@@ -1,9 +1,10 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../services/route_service.dart';
 
 abstract class SetArguments {
-  Either<ModularError, Unit> call(ModularArguments args);
+  Result<Unit, ModularError> call(ModularArguments args);
 }
 
 class SetArgumentsImpl implements SetArguments {
@@ -12,7 +13,7 @@ class SetArgumentsImpl implements SetArguments {
   SetArgumentsImpl(this.service);
 
   @override
-  Either<ModularError, Unit> call(ModularArguments args) {
+  Result<Unit, ModularError> call(ModularArguments args) {
     return service.setArguments(args);
   }
 }

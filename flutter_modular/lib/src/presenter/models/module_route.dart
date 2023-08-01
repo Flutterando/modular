@@ -1,15 +1,35 @@
-import '../../../flutter_modular.dart';
+import 'package:flutter_modular/src/presenter/models/route.dart';
 import 'package:modular_core/modular_core.dart';
 
-/// This route represents a cluster of routes from another module that will be concatenated to the context of the parent module.
+import '../guards/route_guard.dart';
+
+/// This route represents a cluster of routes from another module
+/// that will be concatenated to the context of the parent module.
 class ModuleRoute<T> extends ParallelRoute<T> {
+  factory ModuleRoute(
+    String name, {
+    required Module module,
+    TransitionType? transition,
+    CustomTransition? customTransition,
+    Duration? duration,
+    List<RouteGuard> guards = const [],
+  }) {
+    final route = ModuleRoute<T>._start(
+      name: name,
+      middlewares: guards,
+      transition: transition,
+      customTransition: customTransition,
+      duration: duration,
+    );
+    return route.addModule(name, module: module) as ModuleRoute<T>;
+  }
   ModuleRoute._start({
     ModularChild? child,
     required String name,
     void Function(dynamic)? popCallback,
     String parent = '',
     String schema = '',
-    RouteContext? context,
+    Module? module,
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
@@ -17,9 +37,11 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
     Uri? uri,
-    Map<Type, BindContext> bindContextEntries = const {},
-  })  : assert(!name.contains('/:'),
-            'ModuleRoute should not contain dynamic route'),
+    Map<Type, Module> innerModules = const {},
+  })  : assert(
+          !name.contains('/:'),
+          'ModuleRoute should not contain dynamic route',
+        ),
         super(
           name: name,
           child: child,
@@ -31,28 +53,11 @@ class ModuleRoute<T> extends ParallelRoute<T> {
           parent: parent,
           schema: schema,
           children: children,
-          context: context,
+          module: module,
           middlewares: middlewares,
           uri: uri ?? Uri.parse('/'),
-          bindContextEntries: bindContextEntries,
+          innerModules: innerModules,
         );
-
-  factory ModuleRoute(
-    String name, {
-    required Module module,
-    TransitionType? transition,
-    CustomTransition? customTransition,
-    Duration? duration,
-    List<RouteGuard> guards = const [],
-  }) {
-    final route = ModuleRoute<T>._start(
-        name: name,
-        middlewares: guards,
-        transition: transition,
-        customTransition: customTransition,
-        duration: duration);
-    return route.addModule(name, module: module) as ModuleRoute<T>;
-  }
 
   @override
   ModuleRoute<T> copyWith({
@@ -60,8 +65,8 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
+    Module? module,
     bool? isFullscreenDialog,
-    RouteContext? context,
     String? name,
     String? schema,
     void Function(dynamic)? popCallback,
@@ -70,7 +75,7 @@ class ModuleRoute<T> extends ParallelRoute<T> {
     String? parent,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext>? bindContextEntries,
+    Map<Type, Module>? innerModules,
   }) {
     return ModuleRoute<T>._start(
       child: child ?? this.child,
@@ -85,8 +90,8 @@ class ModuleRoute<T> extends ParallelRoute<T> {
       children: children ?? this.children,
       parent: parent ?? this.parent,
       uri: uri ?? this.uri,
-      context: context ?? this.context,
-      bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      module: module ?? this.module,
+      innerModules: innerModules ?? this.innerModules,
     );
   }
 }

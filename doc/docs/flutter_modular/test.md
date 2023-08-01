@@ -7,22 +7,6 @@ sidebar_position: 7
 Modular provides tools make unit testing and route and injection integration easier.
 In this session we'll learn how to do this.
 
-First you need add the **modular_test** to pubspec.yaml:
-```yaml
-
-dev_dependencies:
-  modular_test: any
-
-```
-
-:::tip TIP
-
-Flutter's CLI has a tool that makes package installation easier in the project. Use the command:
-
-`flutter pub add --dev modular_test`
-
-:::
-
 ## Route Test 
 
 We can replace the navigation object with a Mock/Fake by injecting the **Modular.navigatorDelegate** property:
@@ -30,10 +14,28 @@ We can replace the navigation object with a Mock/Fake by injecting the **Modular
 ```dart
 class ModularNavigateMock extends Mock implements IModularNavigator {}
 
-void main(){
-    final navigate = ModularNavigateMock();
-    Modular.navigatorDelegate = navigate;
+class MyController {
+  editUser(){
+    ... logic...
+    Modular.to.navigate('/edit-user');
+  }
 }
+
+void main(){
+    final navigator = ModularNavigateMock();
+    Modular.navigatorDelegate = navigate;
+
+    test('edit user', (){
+      when(() => navigator.navigate(any())).thenAnswer((_) => Future.value());
+      final controller = Controller();
+
+      controller.editUser();
+
+      verify(() => navigator.navigate(any())).called(1);
+
+    });
+}
+
 ```
 
 :::tip TIP
@@ -42,47 +44,36 @@ Prefer to use Mockito or Mocktail to create mocks.
 
 :::
 
-:::tip TIP
-
-To get navigate History use Modular.navigatorDelegate.navigateHistory
-
-:::
 
 ## Injection Test
 
-The safest way possible to inject dependencies is to test if the **Bind** construction happens as expected, then
-we'll need to check this through the test.
+The safest possible way to inject dependencies is to test that the instances resolve as expected, then
+we will need to verify this via unit tests.
 
-The **modular_test** package has some tools to initializing modules and replacing binds with
-mock. Let's take look at the example below:
+The `Modular` has tools that help you change an instance for a mock in order to test the integration of several layers.
 
 ```dart {4,18}
 class MyModule extends Module {
   @override
-  List<Bind> get binds => [
-    Bind.factory<Dio>((i) => Dio())
-    Bind.factory((i) => XPTOEmail(i()))
-    Bind.factory<EmailService>((i) => XPTOEmailService(i()))
-    Bind.singleton((i) => Client(i()))
-  ];
+  void binds(i){
+    i.addInstance<Dio>(Dio())
+    i.add(XPTOEmail.new)
+    i.add<EmailService>(XPTOEmailService.new)
+    i.addSingleton(Client.new)
+  }
 }
 ... 
 class DioMock extends Mock implements DioForNative {}
 
 main(){
     final dioMock = DioMock();
+    // Start Module
+    Modular.bindModule(AppModule());
+    // replace Dio instance by DioMock instance
+    Modular.replaceInstance<Dio>(dioMock);
+    // Reset Stub after test ends
+    tearDown(() => reset(client));
 
-    setUp((){
-        initModule(MyModule(), replaceBinds: [
-            Bind.instance<Dio>(dioMock),
-        ]);
-    });
 }
 ```
 
-:::danger ATTENTION
-
-In order for a bind to be eligible for replacement, the **Bind** MUST have
-the type declared in the **Bind** constructor. (ex: Bind<MyObjectType\>());
-
-:::

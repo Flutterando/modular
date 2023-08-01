@@ -5,14 +5,26 @@ import 'package:shelf_modular/src/shelf_modular_module.dart';
 import 'src/presenter/modular_base.dart';
 
 export 'package:modular_core/modular_core.dart'
-    show ModularRoute, ModularArguments, Injector, Disposable;
+    show
+        ModularRoute,
+        Disposable,
+        Module,
+        BindConfig,
+        Injector,
+        AutoInjectorException,
+        ModularArguments;
 
+export 'src/presenter/extensions/route_manage_extension.dart';
 export 'src/presenter/middlewares/middlewares.dart';
-export 'src/presenter/models/bind.dart';
-export 'src/presenter/models/module.dart';
 export 'src/presenter/models/route.dart';
 export 'src/presenter/resources/resource.dart';
 export 'src/presenter/resources/websocket_resource.dart';
 
+IModularBase? _modular;
+
+/// Instance of Modular for search binds and route.
 // ignore: non_constant_identifier_names
-final Modular = injector<IModularBase>();
+IModularBase get Modular {
+  _modular ??= injector.get<IModularBase>();
+  return _modular!;
+}

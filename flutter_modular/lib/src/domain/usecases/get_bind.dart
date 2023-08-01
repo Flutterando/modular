@@ -1,9 +1,10 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../services/bind_service.dart';
 
 abstract class GetBind {
-  Either<ModularError, BindEntry<T>> call<T extends Object>();
+  Result<T, ModularError> call<T extends Object>();
 }
 
 class GetBindImpl implements GetBind {
@@ -12,7 +13,7 @@ class GetBindImpl implements GetBind {
   GetBindImpl(this.bindService);
 
   @override
-  Either<ModularError, BindEntry<T>> call<T extends Object>() {
+  Result<T, ModularError> call<T extends Object>() {
     return bindService.getBind<T>();
   }
 }

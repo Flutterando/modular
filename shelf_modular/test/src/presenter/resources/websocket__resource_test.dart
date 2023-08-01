@@ -5,7 +5,7 @@ import 'package:shelf_modular/src/presenter/resources/websocket_resource.dart';
 import 'package:test/test.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../modular_base_test.dart';
+import '../../mocks/mocks.dart';
 
 class WebSocketChannelMock extends Mock implements WebSocketChannel {}
 
@@ -15,7 +15,7 @@ class WebSocketSinkMock extends Fake implements WebSocketSink {
   WebSocketSinkMock(this.sink);
 
   @override
-  void add(data) => sink.add(data);
+  void add(dynamic data) => sink.add(data);
 }
 
 void main() {
@@ -23,7 +23,9 @@ void main() {
     final request = RequestMock();
     final resource = MyWebsocketResource();
     expect(
-        () async => await resource.handler(request), throwsA(isA<TypeError>()));
+      () async => await resource.handler(request),
+      throwsA(isA<TypeError>()),
+    );
   });
 
   test('connectSocket', () async {
@@ -36,8 +38,10 @@ void main() {
 
     when(() => channel.stream).thenAnswer((_) => controllerGeneral.stream);
     when(() => channel.sink).thenReturn(sinkMock);
-    expect(controllerResourceSocket.stream,
-        emitsInOrder([isA<WebSocket>(), isA<WebSocket>(), isA<WebSocket>()]));
+    expect(
+      controllerResourceSocket.stream,
+      emitsInOrder([isA<WebSocket>(), isA<WebSocket>(), isA<WebSocket>()]),
+    );
 
     //start
     resource.connectSocket(channel);
@@ -62,13 +66,13 @@ class MyWebsocketResource extends WebSocketResource {
     socket.emit('teste');
     socket.sink.add('teste');
     if (socket.enteredRooms.isNotEmpty) {
-      throw 'should be empty';
+      throw Exception('should be empty');
     }
 
     socket.joinRoom('room');
     socket.emitToRooms('teste');
     if (socket.enteredRooms.isEmpty) {
-      throw 'should be not empty';
+      throw Exception('should be not empty');
     }
     socket.leaveRoom('room');
   }
@@ -79,7 +83,7 @@ class MyWebsocketResource extends WebSocketResource {
   }
 
   @override
-  void onMessage(data, WebSocket socket) {
+  void onMessage(dynamic data, WebSocket socket) {
     message = data;
     controllerResourceSocket?.add(socket);
   }

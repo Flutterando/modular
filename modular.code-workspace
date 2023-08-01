@@ -1,41 +1,24 @@
 {
 	"folders": [
 		{
-			"name": "modular_interfaces",
-			"path": "modular_interfaces"
-		},
-		{
-			"name": "modular_core",
+			"name": "Core",
 			"path": "modular_core"
 		},
 		{
-			"name": "shelf_modular",
+			"name": "Shelf",
 			"path": "shelf_modular"
 		},
 		{
-			"name": "flutter_modular",
+			"name": "Flutter",
 			"path": "flutter_modular"
 		},
 		{
-			"name": "modular_codegen",
-			"path": "modular_codegen"
-		},
-		{
-			"name": "flutter_modular_annotations",
-			"path": "flutter_modular_annotations"
-		},
-		{
-			"path": "modular_test"
-		},
-		{
-			"path": "plugins/modular_bloc_bind"
-		},
-		{
-			"path": "plugins/modular_triple_bind"
+			"name": "Documentation",
+			"path": "doc"
 		}
 	],
 	"settings": {
-		"dart.flutterSdkPath": "/Users/jacobmoura/fvm/versions/stable",
+		"dart.flutterSdkPath": "D:\\fvm\\sdks\\versions\\stable",
 		"lcov.branchCoverage": "off",
 		"lcov.path": "coverage/lcov.info"
 	}

@@ -1,9 +1,9 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/src/shared/either.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/module_service.dart';
 
 abstract class FinishModule {
-  Either<ModularError, Unit> call();
+  Result<Unit, ModularError> call();
 }
 
 class FinishModuleImpl implements FinishModule {
@@ -12,7 +12,7 @@ class FinishModuleImpl implements FinishModule {
   FinishModuleImpl(this.moduleService);
 
   @override
-  Either<ModularError, Unit> call() {
+  Result<Unit, ModularError> call() {
     return moduleService.finish();
   }
 }

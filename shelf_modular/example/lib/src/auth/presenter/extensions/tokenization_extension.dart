@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:example/src/auth/domain/entities/tokenization.dart';
+import 'package:shelf_modular_example/src/auth/domain/entities/tokenization.dart';
 
 extension UserExtension on Tokenization {
   Map<String, dynamic> toMap() {

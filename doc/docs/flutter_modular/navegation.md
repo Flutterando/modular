@@ -12,7 +12,7 @@ Therefore, commands like **pushNamed**, **popUntil** among others were preserved
 
 The **flutter_modular** adds the command **navigate** to look similar to the web environment by replacing all the pages for the requested one. Let’s add one more **ChildRoute** to our initial project:
 
-```dart title="lib/main.dart" {24,33-36,42-55}
+```dart title="lib/main.dart" {25,34-37,43-55}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -25,21 +25,20 @@ class AppWidget extends StatelessWidget {
     return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
+      routerConfig: Modular.routerConfig,
     ); //added by extension
   }
 }
 
 class AppModule extends Module {
   @override
-  List<Bind> get binds => [];
+  void binds(i) {}
 
   @override
-  List<ModularRoute> get routes => [
-        ChildRoute('/', child: (context, args) => HomePage()),
-        ChildRoute('/second', child: (context, args) => SecondPage()),
-      ];
+  void routes(r) {
+    r.child('/', child: (context) => HomePage()),
+    r.child('/second', child: (context) => SecondPage()),
+  }
 }
 
 class HomePage extends StatelessWidget {
@@ -89,7 +88,7 @@ offers some ways to do this:
 parameter:
 
 ```dart
-ChildRoute('/second/:name', child: (context, args) => SecondPage(name: args.params['name'])),
+ChildRoute('/second/:name', child: (_) => SecondPage(name: r.args.params['name'])),
 ```
 
 Adding a second segment to the route’s name starting with `:`. This is a special syntax to
@@ -113,7 +112,7 @@ using square brackets notation (['parameter_name']).
 - *Query*: like the web environment, we can send parameters using query. This doesn't allows you to let the route dynamic, but it has the same effect when recovering a parameter;
 
 ```dart
-ChildRoute('/second', child: (context, args) => SecondPage(name: args.queryParams['name'])),
+ChildRoute('/second', child: (_) => SecondPage(name: r.args.queryParams['name'])),
 ```
 
 Note that the route name is the same, so we can use **Modular.args.queryParams** to get the parameter.
@@ -138,7 +137,7 @@ String as parameter. So we send the whole object directly in the navigation:
 class Person {}
 
 // Use Modular.args.data to receive directly argument.
-ChildRoute('/second', child: (context, args) => SecondPage(person: args.data)),
+ChildRoute('/second', child: (_) => SecondPage(person: r.args.data)),
 
 // Send object
 Modular.to.navigate('/second', arguments: Person());
@@ -171,7 +170,7 @@ TransitionType.custom,
 Choose the one you want and add the **Transition** property of an ModularRoute:
 
 ```dart
-ChildRoute('/second', child: (context, args) => SecondPage(), transition: TransitionType.fadeIn),
+ChildRoute('/second', child: (context) => SecondPage(), transition: TransitionType.fadeIn),
 ```
 
 :::tip TIP
@@ -185,7 +184,7 @@ If no preset is useful, we can create a custom transition using the `CustomTrans
 ```dart {4-12}
 ChildRoute(
   '/second',
-  child: (context, args) => SecondPage(),
+  child: (_) => SecondPage(),
   transition: TransitionType.custom,
   customTransition: CustomTransition(
     transitionBuilder: (context, anim1, anim2, child) {
@@ -205,7 +204,7 @@ If is necessary to define a route for redirection, you can use **RedirectRoute**
 ```dart
 @override
 List<ModularRoute> get routes => [
-  ChildRoute('/', child: (context, args) => HomePage()),
+  ChildRoute('/', child: (_) => HomePage()),
   RedirectRoute('/redirect', to: '/'),
 ];
 ```
@@ -223,7 +222,7 @@ Although we can add a behavior when no route is found in the module. We call thi
 **WildcardRoute**:
 
 ```dart
-WildcardRoute(child: (context, args) => NotFoundPage()),
+WildcardRoute(child: (context) => NotFoundPage()),
 ```
 
 :::danger ATTENTION
@@ -254,7 +253,7 @@ class AuthGuard extends RouteGuard {
 To use a guard just add it to a route:
 
 ```dart
-ChildRoute('/', child: (context, args) => HomePage(), guards: [AuthGuard()]),
+ChildRoute('/', child: (_) => HomePage(), guards: [AuthGuard()]),
 ```
 
 :::tip TIP
@@ -292,24 +291,23 @@ class AppWidget extends StatelessWidget {
     return MaterialApp.router(
       title: 'My Smart App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
+      routerConfig: Modular.routerConfig,
     );
   }
 }
 
 class AppModule extends Module {
   @override
-  List<Bind> get binds => [];
+  void binds(i) {}
 
   @override
-  List<ModularRoute> get routes => [
-    ChildRoute('/', child: (context, args) => HomePage(), children: [
-      ChildRoute('/page1', child: (context, args) => InternalPage(title: 'page 1', color: Colors.red)),
-      ChildRoute('/page2', child: (context, args) => InternalPage(title: 'page 2', color: Colors.amber)),
-      ChildRoute('/page3', child: (context, args) => InternalPage(title: 'page 3', color: Colors.green)),
-    ]),
-  ];
+  void routes(r) {
+    r.child('/', child: (context) => HomePage(), children: [
+      ChildRoute('/page1', child: (context) => InternalPage(title: 'page 1', color: Colors.red)),
+      ChildRoute('/page2', child: (context) => InternalPage(title: 'page 2', color: Colors.amber)),
+      ChildRoute('/page3', child: (context) => InternalPage(title: 'page 3', color: Colors.green)),
+    ]);
+  }
 }
 
 class HomePage extends StatelessWidget {

@@ -1,13 +1,9 @@
 import 'package:flutter/widgets.dart';
+
 import '../../../../flutter_modular.dart';
-import 'package:modular_core/modular_core.dart';
 
 PageRouteBuilder<T> fadeInTransition<T>(
-  Widget Function(
-    BuildContext,
-    ModularArguments,
-  )
-      builder,
+  ModularChild builder,
   Duration transitionDuration,
   RouteSettings settings,
   bool maintainState,
@@ -17,7 +13,7 @@ PageRouteBuilder<T> fadeInTransition<T>(
     transitionDuration: transitionDuration,
     maintainState: maintainState,
     pageBuilder: (context, __, ___) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
@@ -28,145 +24,118 @@ PageRouteBuilder<T> fadeInTransition<T>(
   );
 }
 
-PageRouteBuilder<T> rightToLeft<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> rightToLeft<T>(ModularChild builder,
+    Duration transitionDuration, RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.rightToLeft,
   );
 }
 
-PageRouteBuilder<T> leftToRight<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> leftToRight<T>(ModularChild builder,
+    Duration transitionDuration, RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.leftToRight,
   );
 }
 
-PageRouteBuilder<T> upToDown<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> upToDown<T>(ModularChild builder,
+    Duration transitionDuration, RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.upToDown,
   );
 }
 
-PageRouteBuilder<T> downToUp<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> downToUp<T>(ModularChild builder,
+    Duration transitionDuration, RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.downToUp,
   );
 }
 
-PageRouteBuilder<T> scale<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> scale<T>(ModularChild builder, Duration transitionDuration,
+    RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.scale,
   );
 }
 
-PageRouteBuilder<T> rotate<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> rotate<T>(ModularChild builder, Duration transitionDuration,
+    RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.rotate,
   );
 }
 
-PageRouteBuilder<T> size<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> size<T>(ModularChild builder, Duration transitionDuration,
+    RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.size,
   );
 }
 
-PageRouteBuilder<T> rightToLeftWithFade<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> rightToLeftWithFade<T>(ModularChild builder,
+    Duration transitionDuration, RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.rightToLeftWithFade,
   );
 }
 
-PageRouteBuilder<T> leftToRightWithFade<T>(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState) {
+PageRouteBuilder<T> leftToRightWithFade<T>(ModularChild builder,
+    Duration transitionDuration, RouteSettings settings, bool maintainState) {
   return PageTransition<T>(
     settings: settings,
     maintainState: maintainState,
     duration: transitionDuration,
     builder: (context) {
-      return builder(context, Modular.args);
+      return builder(context);
     },
     type: PageTransitionType.leftToRightWithFade,
   );

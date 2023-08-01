@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import '../navigation/transitions/transitions.dart';
-import 'package:modular_core/modular_core.dart';
 import 'package:meta/meta.dart';
+import 'package:modular_core/modular_core.dart';
 
-import 'module.dart';
+import '../navigation/transitions/transitions.dart';
 
-typedef ModularChild = Widget Function(
-    BuildContext context, ModularArguments args);
+typedef ModularChild = Widget Function(BuildContext context);
 typedef RouteBuilder<T> = Route<T> Function(WidgetBuilder, RouteSettings);
 
-class ParallelRoute<T> extends ModularRouteImpl {
+class ParallelRoute<T> extends ModularRoute {
   /// Whether the route should remain in memory when it is inactive.
-  /// If this is true, then the route is maintained, so that any futures it is holding from the next route will properly resolve when the next route pops. If this is not necessary, this can be set to false to allow the framework to entirely discard the route's widget hierarchy when it is not visible.
-  /// If this getter would ever start returning a different value, the [changedInternalState] should be invoked so that the change can take effect.
+  /// If this is true, then the route is maintained, so that any
+  /// futures it is holding from the next route will properly resolve
+  /// when the next route pops. If this is not necessary, this can
+  /// be set to false to allow the framework to entirely discard
+  /// the route's widget hierarchy when it is not visible.
+  /// If this getter would ever start returning a different value,
+  /// the changedInternalState should be invoked so that the change
+  ///  can take effect.
   final bool maintainState;
 
   /// Widget Builder that will be called when prompted in navigation.
@@ -23,7 +27,8 @@ class ParallelRoute<T> extends ModularRouteImpl {
   final TransitionType? transition;
 
   /// Defines a custom transition.
-  /// If the transition is TransitionType.custom, it becomes mandatory to add a CustomTransition() object.
+  /// If the transition is TransitionType.custom, it becomes mandatory
+  /// to add a CustomTransition() object.
   final CustomTransition? customTransition;
 
   /// define the Transition duration
@@ -50,19 +55,18 @@ class ParallelRoute<T> extends ModularRouteImpl {
     this.isFullscreenDialog = false,
     List<ModularRoute> children = const [],
     List<Middleware> middlewares = const [],
-    RouteContext? context,
+    Module? module,
     Uri? uri,
-    Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext> bindContextEntries = const {},
+    Map<Type, Module> innerModules = const {},
   }) : super(
-          name: name,
+          name,
           parent: parent,
           schema: schema,
           children: children,
           middlewares: middlewares,
-          context: context,
+          module: module,
           uri: uri ?? Uri.parse('/'),
-          bindContextEntries: bindContextEntries,
+          innerModules: innerModules,
         );
 
   factory ParallelRoute.child(
@@ -90,28 +94,42 @@ class ParallelRoute<T> extends ModularRouteImpl {
     return ParallelRoute<T>(name: '');
   }
 
-  factory ParallelRoute.module(String name,
-      {required Module module, List<Middleware> middlewares = const []}) {
+  factory ParallelRoute.module(
+    String name, {
+    required Module module,
+    List<Middleware> middlewares = const [],
+  }) {
     final route = ParallelRoute<T>(name: name, middlewares: middlewares);
     return route.addModule(name, module: module);
   }
 
   @override
-  ParallelRoute<T> addModule(String name, {required RouteContext module}) {
-    final bindContextEntries = {module.runtimeType: module};
+  ParallelRoute<T> addModule(String name, {required Module module}) {
+    final innerModules = {module.runtimeType: module};
 
     return copyWith(
       name: name,
       uri: Uri.parse(name),
-      bindContextEntries: bindContextEntries,
-      context: module,
+      innerModules: innerModules,
+      module: module,
+    );
+  }
+
+  @override
+  ModularRoute addParent(covariant ParallelRoute parent) {
+    // ignore: invalid_use_of_visible_for_overriding_member
+    final newRoute = super.addParent(parent) as ParallelRoute;
+    return newRoute.copyWith(
+      customTransition: customTransition ?? parent.customTransition,
+      transition: transition ?? parent.transition,
+      duration: duration ?? parent.duration,
     );
   }
 
   @override
   ParallelRoute<T> copyWith({
     ModularChild? child,
-    RouteContext? context,
+    Module? module,
     TransitionType? transition,
     CustomTransition? customTransition,
     Duration? duration,
@@ -124,12 +142,12 @@ class ParallelRoute<T> extends ModularRouteImpl {
     String? parent,
     Uri? uri,
     Map<ModularKey, ModularRoute>? routeMap,
-    Map<Type, BindContext>? bindContextEntries,
+    Map<Type, Module>? innerModules,
   }) {
     return ParallelRoute<T>(
       child: child ?? this.child,
       transition: transition ?? this.transition,
-      context: context ?? this.context,
+      module: module ?? this.module,
       customTransition: customTransition ?? this.customTransition,
       duration: duration ?? this.duration,
       isFullscreenDialog: isFullscreenDialog ?? this.isFullscreenDialog,
@@ -140,18 +158,18 @@ class ParallelRoute<T> extends ModularRouteImpl {
       children: children ?? this.children,
       parent: parent ?? this.parent,
       uri: uri ?? this.uri,
-      bindContextEntries: bindContextEntries ?? this.bindContextEntries,
+      innerModules: innerModules ?? this.innerModules,
     );
   }
 
   final Map<
       TransitionType,
       PageRouteBuilder<T> Function(
-    Widget Function(BuildContext, ModularArguments) builder,
-    Duration transitionDuration,
-    RouteSettings settings,
-    bool maintainState,
-  )> transitions = {
+        ModularChild builder,
+        Duration transitionDuration,
+        RouteSettings settings,
+        bool maintainState,
+      )> transitions = {
     TransitionType.fadeIn: fadeInTransition,
     TransitionType.rightToLeft: rightToLeft,
     TransitionType.leftToRight: leftToRight,
@@ -183,10 +201,16 @@ enum TransitionType {
 
 class CustomTransition {
   final Widget Function(
-          BuildContext, Animation<double>, Animation<double>, Widget)
-      transitionBuilder;
-  Widget Function(BuildContext, Animation<double>, Animation<double>)?
-      pageBuilder;
+    BuildContext,
+    Animation<double>,
+    Animation<double>,
+    Widget,
+  ) transitionBuilder;
+  Widget Function(
+    BuildContext,
+    Animation<double>,
+    Animation<double>,
+  )? pageBuilder;
   final Duration transitionDuration;
   final Duration reverseTransitionDuration;
   final bool opaque;

@@ -1,12 +1,12 @@
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../dtos/route_dto.dart';
 
 abstract class RouteService {
-  Future<Either<ModularError, ModularRoute>> getRoute(RouteParmsDTO params);
-  Either<ModularError, ModularArguments> getArguments();
-  Either<ModularError, Unit> setArguments(ModularArguments args);
-  Either<ModularError, Unit> reportPop(ModularRoute route);
-  Either<ModularError, Unit> reportPush(ModularRoute route);
-  Either<ModularError, Unit> reassemble();
+  AsyncResult<ModularRoute, ModularError> getRoute(RouteParmsDTO params);
+  Result<ModularArguments, ModularError> getArguments();
+  Result<Unit, ModularError> setArguments(ModularArguments args);
+  Result<Unit, ModularError> reportPop(ModularRoute route);
+  Result<Unit, ModularError> reportPush(ModularRoute route);
 }
