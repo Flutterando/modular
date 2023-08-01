@@ -85,12 +85,12 @@ class ModuleRoute<T> extends ParallelRoute<T> {
       isFullscreenDialog: isFullscreenDialog ?? this.isFullscreenDialog,
       name: name ?? this.name,
       schema: schema ?? this.schema,
-      popCallback: popCallback ?? popCallback,
+      popCallback: popCallback ?? this.popCallback,
       middlewares: middlewares ?? this.middlewares,
       children: children ?? this.children,
       parent: parent ?? this.parent,
-      uri: uri ?? uri,
-      module: module ?? module,
+      uri: uri ?? this.uri,
+      module: module ?? this.module,
       innerModules: innerModules ?? this.innerModules,
     );
   }
