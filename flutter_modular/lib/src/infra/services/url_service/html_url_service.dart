@@ -8,3 +8,7 @@ class WebUrlService extends UrlService {
   @override
   String? getPath() => resolvePath(window.location.href);
 }
+
+UrlService create() {
+  return WebUrlService();
+}

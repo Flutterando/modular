@@ -5,8 +5,10 @@ void main() {
   test('html url service ...', () {
     final service = _TestUrlService();
 
-    expect(service.resolvePath('http://flutterexample.dev/#/path/to/screen'), '/path/to/screen');
-    expect(service.resolvePath('http://flutterexample.dev/path/to/screen'), '/path/to/screen');
+    expect(service.resolvePath('http://flutterexample.dev/#/path/to/screen'),
+        '/path/to/screen');
+    expect(service.resolvePath('http://flutterexample.dev/path/to/screen'),
+        '/path/to/screen');
   });
 }
 

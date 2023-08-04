@@ -7,6 +7,7 @@ import 'package:flutter_modular/src/domain/usecases/get_arguments.dart';
 import 'package:flutter_modular/src/domain/usecases/get_route.dart';
 import 'package:flutter_modular/src/domain/usecases/report_push.dart';
 import 'package:flutter_modular/src/domain/usecases/set_arguments.dart';
+import 'package:flutter_modular/src/infra/services/url_service/url_service.dart';
 import 'package:flutter_modular/src/presenter/errors/errors.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_book.dart';
 import 'package:flutter_modular/src/presenter/navigation/modular_page.dart';
@@ -26,6 +27,8 @@ class SetArgumentsMock extends Mock implements SetArguments {}
 
 class ReportPushMock extends Mock implements ReportPush {}
 
+class UrlServiceMock extends Mock implements UrlService {}
+
 class ParallelRouteFake extends Fake implements ModularRoute {}
 
 void main() {
@@ -34,17 +37,20 @@ void main() {
   late GetArgumentsMock getArguments;
   late SetArgumentsMock setArguments;
   late ReportPush reportPush;
+  late UrlService urlService;
 
   setUp(() {
     getRoute = GetRouteMock();
     getArguments = GetArgumentsMock();
     setArguments = SetArgumentsMock();
     reportPush = ReportPushMock();
+    urlService = UrlServiceMock();
     parser = ModularRouteInformationParser(
       getArguments: getArguments,
       getRoute: getRoute,
       setArguments: setArguments,
       reportPush: reportPush,
+      urlService: urlService,
     );
   });
 

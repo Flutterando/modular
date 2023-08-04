@@ -12,7 +12,8 @@ import '../../domain/usecases/set_arguments.dart';
 import '../../infra/services/url_service/url_service.dart';
 import 'modular_book.dart';
 
-class ModularRouteInformationParser extends RouteInformationParser<ModularBook> {
+class ModularRouteInformationParser
+    extends RouteInformationParser<ModularBook> {
   final GetRoute getRoute;
   final GetArguments getArguments;
   final SetArguments setArguments;
@@ -30,11 +31,12 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   });
 
   @override
-  Future<ModularBook> parseRouteInformation(RouteInformation routeInformation) async {
+  Future<ModularBook> parseRouteInformation(
+      RouteInformation routeInformation) async {
     var path = '';
-    print(urlService.getPath());
     if (!_firstParse) {
-      if (routeInformation.location == null || routeInformation.location == '/') {
+      if (routeInformation.location == null ||
+          routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = urlService.getPath() ?? Modular.initialRoutePath;
       } else {
@@ -55,10 +57,12 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
     return RouteInformation(location: configuration.uri.toString());
   }
 
-  Future<ModularBook> selectBook(String path, {dynamic arguments, void Function(dynamic)? popCallback}) async {
+  Future<ModularBook> selectBook(String path,
+      {dynamic arguments, void Function(dynamic)? popCallback}) async {
     var route = await selectRoute(path, arguments: arguments);
 
-    final modularArgs = getArguments().getOrElse((l) => ModularArguments.empty());
+    final modularArgs =
+        getArguments().getOrElse((l) => ModularArguments.empty());
 
     if (popCallback != null) {
       route = route.copyWith(popCallback: popCallback);
@@ -127,7 +131,8 @@ class ModularRouteInformationParser extends RouteInformationParser<ModularBook> 
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {
-    final modularArguments = getArguments().getOrElse((l) => ModularArguments.empty());
+    final modularArguments =
+        getArguments().getOrElse((l) => ModularArguments.empty());
     for (final middleware in route!.middlewares) {
       route = await middleware.pos(route!, modularArguments);
       if (route == null) {

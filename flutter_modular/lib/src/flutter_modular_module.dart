@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/usecases/replace_instance.dart';
 import 'package:modular_core/modular_core.dart';
@@ -21,8 +20,6 @@ import 'domain/usecases/unbind_module.dart';
 import 'infra/services/bind_service_impl.dart';
 import 'infra/services/module_service_impl.dart';
 import 'infra/services/route_service_impl.dart';
-import 'infra/services/url_service/html_url_service.dart';
-import 'infra/services/url_service/io_url_service.dart';
 import 'infra/services/url_service/url_service.dart';
 import 'presenter/modular_base.dart';
 import 'presenter/navigation/modular_route_information_parser.dart';
@@ -46,11 +43,7 @@ final injector = AutoInjector(
     i.add<BindService>(BindServiceImpl.new);
     i.add<ModuleService>(ModuleServiceImpl.new);
     i.add<RouteService>(RouteServiceImpl.new);
-    if (kIsWeb) {
-      i.add<UrlService>(WebUrlService.new);
-    } else {
-      i.add<UrlService>(IOUrlService.new);
-    }
+    i.add<UrlService>(UrlService.create);
     //domain
     i.add<DisposeBind>(DisposeBindImpl.new);
     i.add<FinishModule>(FinishModuleImpl.new);
