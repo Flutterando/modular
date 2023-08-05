@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/domain/usecases/bind_module.dart';
 import 'package:flutter_modular/src/domain/usecases/replace_instance.dart';
 import 'package:flutter_modular/src/domain/usecases/unbind_module.dart';
+import 'package:modular_core/modular_core.dart';
 
 import '../domain/usecases/dispose_bind.dart';
 import '../domain/usecases/finish_module.dart';
@@ -42,8 +43,6 @@ abstract class IModularBase {
   /// Ideal for Unit Testing.
   /// Modular.navigatorDelegate = MyNavigatorDelegate()
   IModularNavigator? navigatorDelegate;
-
-  void debugPrintModular(String text);
 
   /// Request an instance by [Type]
   B get<B extends Object>();
@@ -156,11 +155,14 @@ class ModularBase implements IModularBase {
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
       startModule(module).fold(
-          (r) => debugPrint('${module.runtimeType} started!'), (l) => throw l);
+        (r) => printResolverFunc?.call('${module.runtimeType} started!'),
+        (l) => throw l,
+      );
       _moduleHasBeenStarted = true;
     } else {
       throw ModuleStartedException(
-          'Module ${module.runtimeType} is already started');
+        'Module ${module.runtimeType} is already started',
+      );
     }
   }
 
@@ -172,13 +174,6 @@ class ModularBase implements IModularBase {
       getArguments().getOrElse((l) => ModularArguments.empty());
 
   final flags = ModularFlags();
-
-  @override
-  void debugPrintModular(String text) {
-    if (flags.isDebug) {
-      debugPrint(text);
-    }
-  }
 
   @override
   final String initialRoute = '/';
