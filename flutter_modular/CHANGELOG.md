@@ -1,3 +1,8 @@
+## [6.0.2] - 2023-08-01
+
+- fix: [#867](https://github.com/Flutterando/modular/issues/867)
+
+
 ## [6.0.1] - 2023-08-01
 
 - fix: InnerModules in routes.
