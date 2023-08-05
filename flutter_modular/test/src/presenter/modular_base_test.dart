@@ -112,14 +112,6 @@ void main() {
     reset(unbindModule);
   });
 
-  test('debugPrintModular', () {
-    modularBase.debugPrintModular('text');
-    expect((modularBase as ModularBase).flags.isDebug, true);
-    (modularBase as ModularBase).flags.isDebug = false;
-    modularBase.debugPrintModular('text');
-    expect((modularBase as ModularBase).flags.isDebug, false);
-  });
-
   test('to', () {
     expect(modularBase.to, isA<IModularNavigator>());
   });

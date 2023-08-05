@@ -42,12 +42,15 @@ class ModularAppState extends State<ModularApp> {
   void initState() {
     super.initState();
     Modular.init(widget.module);
+    if ((Modular as ModularBase).flags.isDebug) {
+      setPrintResolver(debugPrint);
+    }
   }
 
   @override
   void dispose() {
     Modular.destroy();
-    Modular.debugPrintModular('-- ${widget.module.runtimeType} DISPOSED');
+    printResolverFunc?.call('-- ${widget.module.runtimeType} DISPOSED');
     cleanGlobals();
     super.dispose();
   }

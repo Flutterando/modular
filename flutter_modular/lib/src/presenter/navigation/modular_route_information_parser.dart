@@ -9,6 +9,7 @@ import '../../domain/usecases/get_arguments.dart';
 import '../../domain/usecases/get_route.dart';
 import '../../domain/usecases/report_push.dart';
 import '../../domain/usecases/set_arguments.dart';
+import '../../infra/services/url_service/url_service.dart';
 import 'modular_book.dart';
 
 class ModularRouteInformationParser
@@ -17,6 +18,7 @@ class ModularRouteInformationParser
   final GetArguments getArguments;
   final SetArguments setArguments;
   final ReportPush reportPush;
+  final UrlService urlService;
 
   bool _firstParse = false;
 
@@ -25,6 +27,7 @@ class ModularRouteInformationParser
     required this.getArguments,
     required this.setArguments,
     required this.reportPush,
+    required this.urlService,
   });
 
   @override
@@ -35,7 +38,7 @@ class ModularRouteInformationParser
       if (routeInformation.location == null ||
           routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
-        path = Modular.initialRoutePath;
+        path = urlService.getPath() ?? Modular.initialRoutePath;
       } else {
         path = routeInformation.location!;
       }
@@ -43,7 +46,7 @@ class ModularRouteInformationParser
       _firstParse = true;
     } else {
       // ignore: invalid_use_of_visible_for_testing_member
-      path = routeInformation.location ?? Modular.initialRoutePath;
+      path = urlService.getPath() ?? Modular.initialRoutePath;
     }
 
     return selectBook(path);

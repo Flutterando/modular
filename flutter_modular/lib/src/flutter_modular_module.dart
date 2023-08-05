@@ -20,6 +20,7 @@ import 'domain/usecases/unbind_module.dart';
 import 'infra/services/bind_service_impl.dart';
 import 'infra/services/module_service_impl.dart';
 import 'infra/services/route_service_impl.dart';
+import 'infra/services/url_service/url_service.dart';
 import 'presenter/modular_base.dart';
 import 'presenter/navigation/modular_route_information_parser.dart';
 import 'presenter/navigation/modular_router_delegate.dart';
@@ -42,6 +43,7 @@ final injector = AutoInjector(
     i.add<BindService>(BindServiceImpl.new);
     i.add<ModuleService>(ModuleServiceImpl.new);
     i.add<RouteService>(RouteServiceImpl.new);
+    i.add<UrlService>(UrlService.create);
     //domain
     i.add<DisposeBind>(DisposeBindImpl.new);
     i.add<FinishModule>(FinishModuleImpl.new);
