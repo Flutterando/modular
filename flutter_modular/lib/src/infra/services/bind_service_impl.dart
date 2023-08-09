@@ -26,14 +26,26 @@ class BindServiceImpl extends BindService {
   }
 
   @override
-  Result<Unit, ModularError> replaceInstance<T>(T instance) {
-    final isAdded = injector.isAdded<T>();
-    if (!isAdded) {
-      return BindNotFoundException('$T unregistred', StackTrace.current)
-          .toFailure();
+  Result<Unit, ModularError> replaceInstance<T>(T instance, [Type? module]) {
+    var tag = module?.toString() ?? '';
+
+    if (tag.isEmpty) {
+      tag = injector.tags.firstWhere(
+        (innerTag) => injector.isAdded<T>(innerTag),
+        orElse: () => '',
+      );
+    } else {
+      tag = injector.isAdded<T>(tag) ? tag : '';
     }
 
-    injector.replaceInstance<T>(instance);
+    if (tag.isEmpty) {
+      return BindNotFoundException(
+        '$T unregistred',
+        StackTrace.current,
+      ).toFailure();
+    }
+
+    injector.replaceInstance<T>(instance, tag);
     return Success.unit();
   }
 }

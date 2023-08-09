@@ -226,10 +226,15 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   @override
   void popUntil(bool Function(Route) predicate) {
     var isFoundedPages = currentConfiguration?.routes.where((route) {
-      return predicate(CustomModalRoute(ModularPage(
-          route: route,
-          args: ModularArguments.empty(),
-          flags: ModularFlags())));
+      return predicate(
+        CustomModalRoute(
+          ModularPage(
+            route: route,
+            args: ModularArguments.empty(),
+            flags: ModularFlags(),
+          ),
+        ),
+      );
     });
 
     isFoundedPages ??= [];
@@ -242,41 +247,44 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
 
   @override
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
-      String routeName, bool Function(Route) predicate,
-      {Object? arguments, bool forRoot = false}) async {
+    String routeName,
+    bool Function(Route) predicate, {
+    Object? arguments,
+    bool forRoot = false,
+  }) async {
     final popComplete = Completer();
-    var book = await parser.selectBook(routeName,
-        arguments: arguments, popCallback: popComplete.complete);
-    if (forRoot) {
-      final list = currentConfiguration!.routes.where((route) {
-        return predicate(CustomModalRoute(ModularPage(
+    final book = await parser.selectBook(
+      routeName,
+      arguments: arguments,
+      popCallback: popComplete.complete,
+    );
+
+    final actualRoutes = currentConfiguration!.routes.toList();
+
+    final reversed = actualRoutes.reversed.toList();
+
+    for (final route in reversed) {
+      final result = predicate(
+        CustomModalRoute(
+          ModularPage(
             route: route,
             args: ModularArguments.empty(),
-            flags: ModularFlags())));
-      }).toList();
-      book = currentConfiguration!
-          .copyWith(routes: [...list, book.routes.last.copyWith(schema: '')]);
-      await setNewRoutePath(book);
-    } else {
-      final list = currentConfiguration!.routes.where((route) {
-        return predicate(CustomModalRoute(ModularPage(
-            route: route,
-            args: ModularArguments.empty(),
-            flags: ModularFlags())));
-      }).toList();
-      for (final route in book.routes.reversed) {
-        if (list
-                .firstWhere(
-                    (element) => element.uri.toString() == route.uri.toString(),
-                    orElse: ParallelRoute.empty)
-                .name ==
-            '') {
-          list.add(route);
-        }
+            flags: ModularFlags(),
+          ),
+        ),
+      );
+
+      if (result) {
+        break;
       }
 
-      await setNewRoutePath(book.copyWith(routes: list));
+      actualRoutes.remove(route);
     }
+
+    await setNewRoutePath(book.copyWith(routes: [
+      ...actualRoutes,
+      ...book.routes,
+    ]));
 
     return await popComplete.future;
   }
