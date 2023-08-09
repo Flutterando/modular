@@ -83,7 +83,7 @@ abstract class IModularBase {
   void unbindModule<T extends Module>({String? type});
 
   /// replace instance
-  void replaceInstance<T>(T instance);
+  void replaceInstance<T>(T instance, [Type? module]);
 
   @visibleForTesting
   String get initialRoutePath;
@@ -154,10 +154,8 @@ class ModularBase implements IModularBase {
   @override
   void init(Module module) {
     if (!_moduleHasBeenStarted) {
-      startModule(module).fold(
-        (r) => printResolverFunc?.call('${module.runtimeType} started!'),
-        (l) => throw l,
-      );
+      startModule(module).getOrThrow();
+      printResolverFunc?.call('${module.runtimeType} started!');
       _moduleHasBeenStarted = true;
     } else {
       throw ModuleStartedException(
@@ -219,7 +217,7 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  void replaceInstance<T>(T instance) {
-    replaceInstanceUsecase.call<T>(instance).getOrThrow();
+  void replaceInstance<T>(T instance, [Type? module]) {
+    replaceInstanceUsecase.call<T>(instance, module).getOrThrow();
   }
 }

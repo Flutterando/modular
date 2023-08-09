@@ -117,6 +117,7 @@ void main() {
   });
 
   test('init', () {
+    setPrintResolver((text) {});
     final module = ModuleMock();
     when(() => startModule.call(module)).thenReturn(const Success(unit));
     modularBase.init(module);

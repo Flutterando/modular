@@ -1,3 +1,8 @@
+## [6.0.3] - 2023-08-09
+
+- fix: [#875](https://github.com/Flutterando/modular/issues/875)
+- fix: [#615](https://github.com/Flutterando/modular/issues/615)
+
 ## [6.0.2] - 2023-08-01
 
 - fix: [#867](https://github.com/Flutterando/modular/issues/867)

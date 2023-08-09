@@ -41,7 +41,8 @@ void main() {
   group('replaceInstance', () {
     test('should replace instance returning unit', () {
       const instance = 'String';
-      when(() => injector.isAdded<String>()).thenReturn(true);
+      when(() => injector.tags).thenReturn({'String'});
+      when(() => injector.isAdded<String>('String')).thenReturn(true);
       when(() => injector.replaceInstance<String>(instance)).thenReturnVoid();
 
       final result = service.replaceInstance<String>(instance);
@@ -51,7 +52,17 @@ void main() {
 
     test('should return error if instance unregistred', () async {
       const instance = 'String';
-      when(() => injector.isAdded<String>()).thenReturn(false);
+      when(() => injector.isAdded<String>('String')).thenReturn(false);
+
+      final result = service.replaceInstance<String>(instance, String);
+
+      expect(result.isError(), true);
+    });
+
+    test('should return error if instance unregistred without tags', () async {
+      const instance = 'String';
+      when(() => injector.tags).thenReturn({'String'});
+      when(() => injector.isAdded<String>('String')).thenReturn(false);
 
       final result = service.replaceInstance<String>(instance);
 
