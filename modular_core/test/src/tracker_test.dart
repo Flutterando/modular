@@ -24,7 +24,7 @@ void main() {
     tracker.runApp(module);
   });
 
-  test('thwow error if runApp not iniciate module', () {
+  test('throw error if runApp not initiate module', () {
     tracker.finishApp();
     expect(() => tracker.module, throwsA(isA<TrackerNotInitiated>()));
   });
@@ -136,7 +136,7 @@ class MyModule extends Module {
       CustomRoute(
         '/',
         data: 'first',
-        middlewares: [CustomMidleware()],
+        middlewares: [CustomMiddleware()],
         children: [
           CustomRoute('/second', data: 'second'),
         ],
@@ -208,7 +208,7 @@ class ImportedModule2 extends Module {
 
 class EmptyModule extends Module {}
 
-class CustomMidleware implements Middleware {
+class CustomMiddleware implements Middleware {
   @override
   FutureOr<ModularRoute?> pre(ModularRoute route) {
     pos(route, '');
