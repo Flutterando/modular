@@ -1,31 +1,28 @@
 library modular_core;
 
-import 'package:modular_core/src/di/injector.dart';
-import 'package:modular_interfaces/modular_interfaces.dart';
+import 'dart:async';
 
-import 'src/route/tracker.dart' as t;
+import 'package:auto_injector/auto_injector.dart';
+import 'package:characters/characters.dart';
+import 'package:meta/meta.dart';
 
-export 'src/di/async_bind.dart';
-export 'src/di/resolvers.dart';
-export 'src/di/injector.dart';
-export 'src/di/disposable.dart';
-export 'src/di/bind_context.dart';
-export 'src/di/reassemble_mixin.dart';
-export 'src/route/modular_route.dart';
-export 'src/route/route_context.dart';
-export 'package:modular_interfaces/modular_interfaces.dart';
-export 'src/route/tracker.dart';
+export 'package:auto_injector/auto_injector.dart';
 
-/// Starting object to get routes and binds.
-Tracker? _tracker;
+// errors
+part 'src/errors/errors.dart';
+// di
+part 'src/module/disposable.dart';
+// modules
+part 'src/module/module.dart';
+// route
+part 'src/route/arguments.dart';
+part 'src/route/middleware.dart';
+part 'src/route/route.dart';
+part 'src/route/route_manager.dart';
+part 'src/tracker.dart';
 
-Tracker get modularTracker {
-  _tracker ??= t.TrackerImpl(InjectorImpl());
-  return _tracker!;
-}
+void Function(String text)? printResolverFunc;
 
-///clean ModularTracker singleton
-void cleanTracker() {
-  _tracker?.finishApp();
-  _tracker = null;
+void setPrintResolver(void Function(String text) fn) {
+  printResolverFunc = fn;
 }

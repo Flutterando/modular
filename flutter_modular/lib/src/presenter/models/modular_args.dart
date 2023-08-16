@@ -1,7 +1,8 @@
 /// Flags can change Modular behavior.
 /// [isDebug] = Enables text printing for debugging.
 /// [isCupertino] = Works with Cupertino-style routes.
-/// [experimentalNotAllowedParentBinds] = Prohibits taking any bind of parent modules,
+/// [experimentalNotAllowedParentBinds] = Prohibits taking
+/// any bind of parent modules,
 /// forcing the imports of the same in the current module to be accessed.
 /// This is the same behavior as the system.
 class ModularFlags {

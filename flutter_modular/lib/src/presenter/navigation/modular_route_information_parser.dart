@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:modular_core/modular_core.dart';
+import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
 import '../../domain/dtos/route_dto.dart';
@@ -9,6 +9,7 @@ import '../../domain/usecases/get_arguments.dart';
 import '../../domain/usecases/get_route.dart';
 import '../../domain/usecases/report_push.dart';
 import '../../domain/usecases/set_arguments.dart';
+import '../../infra/services/url_service/url_service.dart';
 import 'modular_book.dart';
 
 class ModularRouteInformationParser
@@ -17,6 +18,7 @@ class ModularRouteInformationParser
   final GetArguments getArguments;
   final SetArguments setArguments;
   final ReportPush reportPush;
+  final UrlService urlService;
 
   bool _firstParse = false;
 
@@ -25,6 +27,7 @@ class ModularRouteInformationParser
     required this.getArguments,
     required this.setArguments,
     required this.reportPush,
+    required this.urlService,
   });
 
   @override
@@ -35,7 +38,7 @@ class ModularRouteInformationParser
       if (routeInformation.location == null ||
           routeInformation.location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
-        path = Modular.initialRoutePath;
+        path = urlService.getPath() ?? Modular.initialRoutePath;
       } else {
         path = routeInformation.location!;
       }
@@ -43,10 +46,10 @@ class ModularRouteInformationParser
       _firstParse = true;
     } else {
       // ignore: invalid_use_of_visible_for_testing_member
-      path = routeInformation.location ?? Modular.initialRoutePath;
+      path = urlService.getPath() ?? Modular.initialRoutePath;
     }
 
-    return await selectBook(path);
+    return selectBook(path);
   }
 
   @override
@@ -77,13 +80,17 @@ class ModularRouteInformationParser
       while (parent != '') {
         var child = await selectRoute(parent, arguments: arguments);
         parent = child.parent;
+        if (parent == route.parent) {
+          parent = '';
+          continue;
+        }
         child = child.copyWith(schema: parent);
         book.routes.insert(0, child);
       }
 
       setArguments(modularArgs);
 
-      for (var booksRoute in book.routes) {
+      for (final booksRoute in book.routes) {
         reportPush(booksRoute);
       }
     }
@@ -92,9 +99,11 @@ class ModularRouteInformationParser
   }
 
   String _resolverPath(String relativePath) {
-    return getArguments.call().fold((l) => relativePath, (r) {
-      return r.uri.resolve(relativePath).toString();
-    });
+    return getArguments //
+        .call()
+        .map((r) => r.uri.resolve(relativePath))
+        .map((s) => s.toString())
+        .getOrDefault(relativePath);
   }
 
   FutureOr<ParallelRoute> selectRoute(String path, {dynamic arguments}) async {
@@ -105,37 +114,40 @@ class ModularRouteInformationParser
     path = _resolverPath(path);
 
     final params = RouteParmsDTO(url: path, arguments: arguments);
-    final result = await getRoute.call(params);
-    return await result.fold<FutureOr<ParallelRoute>>((modularError) async {
-      if (path.endsWith('/')) {
-        throw modularError;
-      }
+    return getRoute
+        .call(params) //
+        .map(_routeSuccess)
+        .recover((modularError) {
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
-      final result = await getRoute.call(params);
-      return await result.fold((l) => throw modularError, (route) {
+      return getRoute
+          .call(params) //
+          .map(_routeSuccess)
+          .map((success) {
         debugPrint('[MODULAR WARNING] - Please, use $path/ instead of $path.');
-        return _routeSuccess(route);
+
+        return success;
       });
-    }, (route) => _routeSuccess(route));
+    }).getOrThrow();
   }
 
   FutureOr<ParallelRoute> _routeSuccess(ModularRoute? route) async {
-    final arguments = getArguments().getOrElse((l) => ModularArguments.empty());
-    for (var middleware in route!.middlewares) {
-      route = await middleware.pos(route!, arguments);
+    final modularArguments =
+        getArguments().getOrElse((l) => ModularArguments.empty());
+    for (final middleware in route!.middlewares) {
+      route = await middleware.pos(route!, modularArguments);
       if (route == null) {
         break;
       }
     }
 
     if (route is RedirectRoute) {
-      route = await selectRoute(route.to, arguments: arguments);
+      route = await selectRoute(route.to, arguments: modularArguments.data);
     }
 
     if (route != null) {
       return route as ParallelRoute;
     }
 
-    throw Exception('route can\'t null');
+    throw Exception("route can't null");
   }
 }

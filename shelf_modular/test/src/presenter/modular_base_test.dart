@@ -3,53 +3,16 @@ import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 import 'package:shelf_modular/src/domain/dtos/route_dto.dart';
 import 'package:shelf_modular/src/domain/errors/errors.dart';
-import 'package:shelf_modular/src/domain/usecases/dispose_bind.dart';
-import 'package:shelf_modular/src/domain/usecases/finish_module.dart';
-import 'package:shelf_modular/src/domain/usecases/get_arguments.dart';
-import 'package:shelf_modular/src/domain/usecases/get_bind.dart';
-import 'package:shelf_modular/src/domain/usecases/get_route.dart';
-import 'package:shelf_modular/src/domain/usecases/module_ready.dart';
-import 'package:shelf_modular/src/domain/usecases/reassemble_tracker.dart';
-import 'package:shelf_modular/src/domain/usecases/release_scoped_binds.dart';
-import 'package:shelf_modular/src/domain/usecases/report_push.dart';
-import 'package:shelf_modular/src/domain/usecases/start_module.dart';
 import 'package:shelf_modular/src/presenter/errors/errors.dart';
 import 'package:shelf_modular/src/presenter/modular_base.dart';
-import 'package:shelf_modular/src/shared/either.dart';
-import 'package:test/expect.dart';
-import 'package:test/scaffolding.dart';
+import 'package:test/test.dart';
 
 import '../mocks/mocks.dart';
-
-class DisposeBindMock extends Mock implements DisposeBind {}
-
-class GetArgumentsMock extends Mock implements GetArguments {}
-
-class FinishModuleMock extends Mock implements FinishModule {}
-
-class GetBindMock extends Mock implements GetBind {}
-
-class StartModuleMock extends Mock implements StartModule {}
-
-class GetRouteMock extends Mock implements GetRoute {}
-
-class ReleaseScopedBindsMock extends Mock implements ReleaseScopedBinds {}
-
-class IsModuleReadyImplMock extends Mock implements IsModuleReadyImpl {}
-
-class RequestMock extends Mock implements Request {}
-
-class RouteMock extends Mock implements Route {}
-
-class DisposableMock extends Mock implements Disposable {}
-
-class ReportPushMock extends Mock implements ReportPush {}
-
-class ReassembleTrackerMock extends Mock implements ReassembleTracker {}
 
 void main() {
   final disposeBind = DisposeBindMock();
@@ -58,77 +21,58 @@ void main() {
   final finishModule = FinishModuleMock();
   final startModule = StartModuleMock();
   final getRoute = GetRouteMock();
-  final releaseScopedBinds = ReleaseScopedBindsMock();
-  final isModuleReadyImpl = IsModuleReadyImplMock();
+
   final reportPush = ReportPushMock();
-  final reassembleTracker = ReassembleTrackerMock();
 
   late IModularBase modularBase;
 
   setUpAll(() {
-    registerFallbackValue(RouteParmsDTO(url: '/'));
+    registerFallbackValue(const RouteParmsDTO(url: '/'));
   });
 
   setUp(() {
     modularBase = ModularBase(
-        disposeBind,
-        finishModule,
-        getBind,
-        startModule,
-        isModuleReadyImpl,
-        getRoute,
-        getArguments,
-        releaseScopedBinds,
-        reportPush,
-        reassembleTracker);
+      disposeBind,
+      finishModule,
+      getBind,
+      startModule,
+      getRoute,
+      getArguments,
+      reportPush,
+    );
   });
 
   test('dispose', () {
-    when(() => disposeBind.call()).thenReturn(right(true));
+    when(disposeBind.call).thenReturn(const Success(true));
     expect(modularBase.dispose(), true);
   });
 
   test('get', () {
-    when(() => getBind.call<String>()).thenReturn(right('modular'));
+    when(() => getBind.call<String>()).thenReturn(const Success('modular'));
     expect(modularBase.get<String>(), 'modular');
-  });
-
-  test('getAsync', () {
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(right(Future.value('modular')));
-    expect(modularBase.getAsync<String>(), completion('modular'));
-    reset(getBind);
-    when(() => getBind.call<Future<String>>())
-        .thenReturn(left(BindNotFoundException('')));
-    expect(modularBase.getAsync<String>(defaultValue: 'changed'),
-        completion('changed'));
-  });
-
-  test('isModuleReady', () {
-    when(() => isModuleReadyImpl.call()).thenAnswer((_) async => right(true));
-    expect(modularBase.isModuleReady(), completes);
+    expect(modularBase.tryGet<String>(), 'modular');
   });
 
   test('destroy', () {
-    when(() => finishModule.call()).thenReturn(right(unit));
+    when(finishModule.call).thenReturn(const Success(unit));
     modularBase.destroy();
-    verify(() => finishModule.call()).called(1);
+    verify(finishModule.call).called(1);
   });
 
   test('start (call)', () {
-    final module = RouteContextMock();
-    when(() => startModule.call(module)).thenReturn(right(unit));
-    final handler =
-        modularBase.call(module: module, middlewares: [MyGuard(true)]);
-
-    when(() => reassembleTracker.call()).thenReturn(right(unit));
-
-    modularBase.reassemble();
+    final module = ModuleMock();
+    when(() => startModule.call(module)).thenReturn(const Success(unit));
+    final handler = modularBase.call(
+      module: module,
+      middlewares: [MyGuard(true)],
+    );
 
     verify(() => startModule.call(module)).called(1);
-    expect(handler, isA<FutureOr<Response> Function(Request request)>());
-    expect(() => modularBase.start(module: module),
-        throwsA(isA<ModuleStartedException>()));
+    expect(handler, isA<Future<Response> Function(Request)>());
+    expect(
+      () => modularBase.start(module: module),
+      throwsA(isA<ModuleStartedException>()),
+    );
   });
 
   test('handler', () async {
@@ -141,10 +85,9 @@ void main() {
 
     when(() => route.middlewares).thenReturn([]);
     when(() => route.handler).thenReturn(() => response);
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 200);
@@ -159,24 +102,22 @@ void main() {
     when(() => route.handler).thenReturn((String v) {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
 
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getRoute.call(any())).thenThrow(Error());
+    when(() => getRoute.call(any())).thenThrow(Exception());
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
   });
   test('handler with  hijacked request', () async {
     final request = RequestMock();
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => request.method)
-        .thenThrow(Exception('Got a response for hijacked request'));
+    when(() => request.method).thenThrow(
+      Exception('Got a response for hijacked request'),
+    );
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 200);
@@ -189,10 +130,9 @@ void main() {
 
     when(() => request.method).thenReturn('GET');
     when(() => request.url).thenReturn(Uri.parse(''));
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+    when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 404);
@@ -207,11 +147,10 @@ void main() {
     when(() => route.handler).thenReturn((String v) {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
@@ -226,12 +165,12 @@ void main() {
     when(() => route.handler).thenReturn(() {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any()))
-        .thenAnswer((_) async => left(RouteNotFoundException('')));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer(
+      (_) async => const Failure(RouteNotFoundException('')),
+    );
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 404);
@@ -246,18 +185,18 @@ void main() {
     when(() => route.handler).thenReturn(() {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any()))
-        .thenAnswer((_) async => left(ModuleStartedException('')));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer(
+      (_) async => const Failure(ModuleStartedException('')),
+    );
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
   });
 
-  test('handler error \'Handler not correct\'', () async {
+  test("handler error 'Handler not correct'", () async {
     final request = RequestMock();
     final route = RouteMock();
 
@@ -266,12 +205,12 @@ void main() {
     when(() => route.handler).thenReturn(() {});
     when(() => route.middlewares).thenReturn([]);
 
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any()))
-        .thenAnswer((_) async => left(ModuleStartedException('')));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer(
+      (_) async => const Failure(ModuleStartedException('')),
+    );
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 500);
@@ -288,11 +227,10 @@ void main() {
 
     when(() => route.middlewares).thenReturn([MyGuard(true), MyGuard(false)]);
     when(() => route.handler).thenReturn(() => response);
-    when(() => releaseScopedBinds.call()).thenReturn(right(unit));
-    when(() => getArguments.call()).thenReturn(right(ModularArguments.empty()));
-    when(() => getRoute.call(any())).thenAnswer((_) async => right(route));
+    when(getArguments.call).thenReturn(Success(ModularArguments.empty()));
+    when(() => getRoute.call(any())).thenAnswer((_) async => Success(route));
 
-    when(() => reportPush.call(route)).thenReturn(right(unit));
+    when(() => reportPush.call(route)).thenReturn(const Success(unit));
 
     final result = await (modularBase as ModularBase).handler(request);
     expect(result.statusCode, 403);
@@ -305,8 +243,9 @@ void main() {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
     when(() => request.headers).thenReturn({});
-    when(() => request.readAsString())
-        .thenAnswer((_) async => jsonEncode({'name': 'Jacob'}));
+    when(request.readAsString).thenAnswer(
+      (_) async => jsonEncode({'name': 'Jacob'}),
+    );
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result['name'], 'Jacob');
   });
@@ -314,10 +253,11 @@ void main() {
   test('tryJsonDecode isMultipart false with FormatException', () async {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
-    when(() => request.headers)
-        .thenReturn({'Content-Type': MediaType('image', 'png').toString()});
+    when(() => request.headers).thenReturn(
+      {'Content-Type': MediaType('image', 'png').toString()},
+    );
+    when(request.readAsString).thenThrow(const FormatException());
 
-    when(() => request.readAsString()).thenThrow(FormatException());
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result, {});
   });
@@ -326,9 +266,11 @@ void main() {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
     when(() => request.headers).thenReturn({
-      'Content-Type':
-          MediaType('multipart', 'form-data', {'boundary': 'boundary'})
-              .toString()
+      'Content-Type': MediaType(
+        'multipart',
+        'form-data',
+        {'boundary': 'boundary'},
+      ).toString()
     });
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result.isEmpty, true);
@@ -338,6 +280,7 @@ void main() {
 class MyGuard extends RouteGuard {
   final bool activate;
 
+  // ignore: avoid_positional_boolean_parameters
   MyGuard(this.activate);
 
   @override

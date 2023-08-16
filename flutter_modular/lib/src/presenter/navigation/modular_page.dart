@@ -1,37 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modular_core/modular_core.dart';
+
 import '../errors/errors.dart';
 import '../models/modular_args.dart';
 import '../models/route.dart';
-import 'package:modular_core/modular_core.dart';
 
 class ModularPage<T> extends Page<T> {
   final ParallelRoute route;
   final bool isEmpty;
   final ModularFlags flags;
-  final ModularArguments args;
 
-  ModularPage(
-      {LocalKey? key,
-      required this.route,
-      this.isEmpty = false,
-      required this.args,
-      required this.flags})
-      : super(key: key, name: route.uri.toString(), arguments: args.data);
+  ModularPage({
+    LocalKey? key,
+    required this.route,
+    this.isEmpty = false,
+    required ModularArguments args,
+    required this.flags,
+  }) : super(key: key, name: route.uri.toString(), arguments: args.data);
 
   factory ModularPage.empty() {
     return ModularPage(
-        isEmpty: true,
-        route: ParallelRoute.empty(),
-        args: ModularArguments.empty(),
-        flags: ModularFlags());
+      isEmpty: true,
+      route: ParallelRoute.empty(),
+      args: ModularArguments.empty(),
+      flags: ModularFlags(),
+    );
   }
 
   @override
   Route<T> createRoute(BuildContext context) {
     late final Widget page;
     if (route.child != null) {
-      page = route.child!(context, args);
+      page = route.child!(context);
     } else {
       throw ModularPageException('Child not be null');
     }
@@ -48,6 +49,7 @@ class ModularPage<T> extends Page<T> {
         maintainState: route.maintainState,
         transitionsBuilder: transition.transitionBuilder,
         transitionDuration: transition.transitionDuration,
+        fullscreenDialog: route.isFullscreenDialog,
       );
     } else if (transitionType == TransitionType.defaultTransition) {
       // Helper function
@@ -58,23 +60,26 @@ class ModularPage<T> extends Page<T> {
           settings: this,
           maintainState: route.maintainState,
           builder: widgetBuilder,
+          fullscreenDialog: route.isFullscreenDialog,
         );
       }
       return MaterialPageRoute<T>(
         settings: this,
         maintainState: route.maintainState,
         builder: widgetBuilder,
+        fullscreenDialog: route.isFullscreenDialog,
       );
     } else if (transitionType == TransitionType.noTransition) {
       return NoTransitionMaterialPageRoute<T>(
         settings: this,
         maintainState: route.maintainState,
         builder: (_) => page,
+        fullscreenDialog: route.isFullscreenDialog,
       );
     } else {
-      var selectTransition = route.transitions[transitionType];
+      final selectTransition = route.transitions[transitionType];
       return selectTransition!(
-          (_, __) => page,
+          (_) => page,
           route.duration ?? const Duration(milliseconds: 300),
           this,
           route.maintainState) as Route<T>;

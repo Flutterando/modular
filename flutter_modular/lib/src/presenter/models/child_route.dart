@@ -12,11 +12,14 @@ class ChildRoute<T> extends ParallelRoute<T> {
     List<ParallelRoute> children = const [],
     Duration? duration,
     TransitionType? transition,
+    bool isFullscreenDialog = false,
     bool maintainState = true,
     List<RouteGuard> guards = const [],
   })  : assert(name.startsWith('/'), 'The name must always start with a /'),
-        assert(children.where((e) => e.name == name).isEmpty,
-            'Don\'t use name "/" in route\'s children when parent be "/" too'),
+        assert(
+          children.where((e) => e.name == name).isEmpty,
+          'Don\'t use name "/" in route\'s children when parent be "/" too',
+        ),
         super(
           name: name,
           child: child,
@@ -25,6 +28,7 @@ class ChildRoute<T> extends ParallelRoute<T> {
           children: children,
           duration: duration,
           transition: transition,
+          isFullscreenDialog: isFullscreenDialog,
           middlewares: guards,
         );
 }

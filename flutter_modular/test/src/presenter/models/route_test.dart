@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_modular/src/presenter/models/module.dart';
-import 'package:flutter_modular/src/presenter/models/route.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('route child', () {
     final route = ParallelRoute.child(
       '/',
-      child: (_, __) => Container(),
+      child: (_) => Container(),
       customTransition: CustomTransition(
         transitionBuilder: (_, anim1, anim2, child) => child,
       ),
@@ -23,6 +22,13 @@ void main() {
   test('route copyWith', () {
     final route = ParallelRoute.module('/', module: MyModule2()).copyWith();
     expect(route.name, '/');
+  });
+
+  test('route addParent', () {
+    final routeParent = ParallelRoute.empty().copyWith(name: '/parent');
+    final route =
+        ParallelRoute.empty().copyWith(name: '/').addParent(routeParent);
+    expect(route.name, '/parent/');
   });
 }
 

@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 (module.exports = {
   title: 'Modular',
   tagline: 'A smart project structure',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://modular.flutterando.com.br',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',

@@ -1,6 +1,6 @@
-import '../../presenter/models/module.dart';
 import 'package:modular_core/modular_core.dart';
-import '../../shared/either.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../../domain/services/module_service.dart';
 
 class ModuleServiceImpl extends ModuleService {
@@ -9,31 +9,26 @@ class ModuleServiceImpl extends ModuleService {
   ModuleServiceImpl(this.tracker);
 
   @override
-  Either<ModularError, Unit> finish() {
+  Result<Unit, ModularError> finish() {
     tracker.finishApp();
-    return right(unit);
+    return const Success(unit);
   }
 
   @override
-  Either<ModularError, Unit> start(RouteContext module) {
+  Result<Unit, ModularError> start(Module module) {
     tracker.runApp(module);
-    return right(unit);
+    return const Success(unit);
   }
 
   @override
-  Future<Either<ModularError, bool>> isModuleReady<M extends Module>() {
-    return tracker.injector.isModuleReady<M>().then((value) => right(value));
+  Result<Unit, ModularError> bind(Module module, [String? tag]) {
+    tracker.bindModule(module, tag);
+    return const Success(unit);
   }
 
   @override
-  Either<ModularError, Unit> bind(BindContext module) {
-    tracker.injector.addBindContext(module);
-    return right(unit);
-  }
-
-  @override
-  Either<ModularError, Unit> unbind<T extends BindContext>({Type? type}) {
-    tracker.injector.removeBindContext<T>(type: type);
-    return right(unit);
+  Result<Unit, ModularError> unbind<T extends Module>({String? type}) {
+    tracker.unbindModule(type ?? T.toString());
+    return const Success(unit);
   }
 }

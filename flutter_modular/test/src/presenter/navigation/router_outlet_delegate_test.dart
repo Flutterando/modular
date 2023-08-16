@@ -41,7 +41,7 @@ void main() {
   });
 
   test('setNewRoutePath...', () {
-    expect(() async => await outlet.setNewRoutePath(ParallelRoute.empty()),
+    expect(() => outlet.setNewRoutePath(ParallelRoute.empty()),
         throwsA(isAssertionError));
   });
 

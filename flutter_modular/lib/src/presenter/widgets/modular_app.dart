@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
-import '../../../flutter_modular.dart';
+import 'package:flutter_modular/src/flutter_modular_module.dart';
+import 'package:modular_core/modular_core.dart';
 
+import '../../../flutter_modular.dart';
 import '../modular_base.dart';
 
 /// Widget responsible for starting the Modular engine.
@@ -21,7 +23,9 @@ class ModularApp extends StatefulWidget {
     /// Home application containing the MaterialApp or CupertinoApp.
     bool debugMode = true,
 
-    /// Prohibits taking any bind of parent modules, forcing the imports of the same in the current module to be accessed. This is the same behavior as the system. Default is false;
+    /// Prohibits taking any bind of parent modules, forcing the imports
+    /// of the same in the current module to be accessed.
+    /// This is the same behavior as the system. Default is false;
     bool notAllowedParentBinds = false,
   }) : super(key: key) {
     (Modular as ModularBase).flags.experimentalNotAllowedParentBinds =
@@ -38,21 +42,17 @@ class ModularAppState extends State<ModularApp> {
   void initState() {
     super.initState();
     Modular.init(widget.module);
+    if ((Modular as ModularBase).flags.isDebug) {
+      setPrintResolver(debugPrint);
+    }
   }
 
   @override
   void dispose() {
     Modular.destroy();
-    Modular.debugPrintModular(
-        '-- ${widget.module.runtimeType.toString()} DISPOSED');
+    printResolverFunc?.call('-- ${widget.module.runtimeType} DISPOSED');
     cleanGlobals();
     super.dispose();
-  }
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    Modular.reassemble();
   }
 
   @override
@@ -66,17 +66,9 @@ typedef SelectCallback<T> = Function(T bind);
 class _Register<T> {
   final T value;
   Type get type => T;
-  final SelectCallback<T>? _select;
+  final dynamic notifier;
 
-  _Register(this.value, this._select);
-
-  dynamic getSelected() {
-    final result = _select?.call(value);
-    if (result != null) {
-      return result;
-    }
-    return value;
-  }
+  _Register(this.value, this.notifier);
 
   @override
   bool operator ==(Object object) =>
@@ -94,18 +86,19 @@ class _ModularInherited extends InheritedWidget {
       : super(key: key, child: child);
 
   static T of<T extends Object>(BuildContext context,
-      {bool listen = true, SelectCallback<T>? select}) {
-    final entry = Modular.getBindEntry<T>();
-    final bind = entry.bind as Bind;
+      {bool listen = true, SelectCallback<T>? onSelect}) {
+    final instance = injector<AutoInjector>().get<T>();
+    final notifier =
+        onSelect?.call(instance) ?? injector<AutoInjector>().getNotifier<T>();
     if (listen) {
-      final registre = _Register<T>(entry.value, select ?? bind.onSelectorFunc);
+      final registre = _Register<T>(instance, notifier ?? instance);
       final inherited =
           context.dependOnInheritedWidgetOfExactType<_ModularInherited>(
               aspect: registre)!;
       inherited.updateShouldNotify(inherited);
     }
 
-    return entry.value;
+    return instance;
   }
 
   @override
@@ -134,7 +127,7 @@ class _InheritedModularElement extends InheritedElement {
       return;
     }
 
-    final value = aspect.getSelected();
+    final value = aspect.notifier;
 
     if (value is Listenable) {
       value.addListener(() => _handleUpdate(aspect.type));
@@ -169,7 +162,7 @@ class _InheritedModularElement extends InheritedElement {
     var registers = getDependencies(dependent) as Set<_Register>?;
     registers ??= {};
 
-    for (var register in registers) {
+    for (final register in registers) {
       if (register.type == current) {
         dependent.didChangeDependencies();
       }
@@ -182,8 +175,8 @@ extension ModularWatchExtension on BuildContext {
   /// watch your changes
   ///
   /// SUPPORTED CLASS ([Listenable], [Stream]).
-  T watch<T extends Object>([SelectCallback<T>? select]) {
-    return _ModularInherited.of<T>(this, select: select);
+  T watch<T extends Object>([SelectCallback<T>? onSelect]) {
+    return _ModularInherited.of<T>(this, onSelect: onSelect);
   }
 
   /// Request an instance by [Type]

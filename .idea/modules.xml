@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/flutter_modular/melos_flutter_modular.iml" filepath="$PROJECT_DIR$/flutter_modular/melos_flutter_modular.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flutter_modular\\example/melos_flutter_modular_example.iml" filepath="$PROJECT_DIR$/flutter_modular\\example/melos_flutter_modular_example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins\\modular_bloc_bind/melos_modular_bloc_bind.iml" filepath="$PROJECT_DIR$/plugins\\modular_bloc_bind/melos_modular_bloc_bind.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins\\modular_bloc_bind\\example/melos_modular_bloc_bind_example.iml" filepath="$PROJECT_DIR$/plugins\\modular_bloc_bind\\example/melos_modular_bloc_bind_example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modular_core/melos_modular_core.iml" filepath="$PROJECT_DIR$/modular_core/melos_modular_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins\\modular_triple_bind/melos_modular_triple_bind.iml" filepath="$PROJECT_DIR$/plugins\\modular_triple_bind/melos_modular_triple_bind.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins\\modular_triple_bind\\example/melos_modular_triple_bind_example.iml" filepath="$PROJECT_DIR$/plugins\\modular_triple_bind\\example/melos_modular_triple_bind_example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shelf_modular/melos_shelf_modular.iml" filepath="$PROJECT_DIR$/shelf_modular/melos_shelf_modular.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shelf_modular\\example/melos_shelf_modular_example.iml" filepath="$PROJECT_DIR$/shelf_modular\\example/melos_shelf_modular_example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/melos_modular.iml" filepath="$PROJECT_DIR$/melos_modular.iml" />
+    </modules>
+  </component>
+</project>

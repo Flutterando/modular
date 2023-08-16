@@ -1,15 +1,9 @@
-import 'package:example/src/app_module.dart';
-import 'package:hotreloader/hotreloader.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular_example/src/app_module.dart';
 
 void main(List<String> args) async {
-  await HotReloader.create(
-    onBeforeReload: (ctx) => Modular.reassemble(),
-    onAfterReload: (ctx) => print(ctx.reloadReports),
-  );
-
   final handler = Modular(
     module: AppModule(),
     middlewares: [

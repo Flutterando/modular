@@ -15,9 +15,8 @@ void main() {
     await tester.pump();
     expect(find.byKey(key), findsOneWidget);
 
-    final state = tester.state<ModularAppState>(find.byKey(modularKey));
+    //final state = tester.state<ModularAppState>(find.byKey(modularKey));
     final result = Modular.get<String>();
-    state.reassemble();
     expect(result, 'test');
 
     await tester.pump();
@@ -41,17 +40,21 @@ final key = UniqueKey();
 
 class CustomModule extends Module {
   @override
-  List<Bind> get binds => [
-        Bind.factory((i) => 'test'),
-        Bind.singleton((i) => ValueNotifier<int>(0)),
-        Bind.singleton((i) => Stream<int>.value(0).asBroadcastStream()),
-        Bind.singleton((i) => MyStore()),
-      ];
+  void binds(Injector i) {
+    i.addInstance<String>('test');
+    i.addSingleton<ValueNotifier<int>>(() => ValueNotifier<int>(0));
+    i.addSingleton<Stream<int>>(
+      () => Stream<int>.value(0).asBroadcastStream(),
+    );
+    i.addSingleton<MyStore>(MyStore.new);
+
+    i.args;
+  }
 
   @override
-  List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, __) => const Home()),
-      ];
+  void routes(RouteManager r) {
+    r.child('/', child: (_) => const Home());
+  }
 }
 
 class AppWidget extends StatelessWidget {
@@ -62,8 +65,7 @@ class AppWidget extends StatelessWidget {
     context.read<String>();
 
     return MaterialApp.router(
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
+      routerConfig: Modular.routerConfig,
     );
   }
 }
@@ -73,8 +75,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = context.watch<ValueNotifier>();
-    final stream = context.watch<Stream>();
+    final notifier = context.watch<ValueNotifier<int>>();
+    final stream = context.watch<Stream<int>>();
     final store = context.watch<MyStore>();
 
     return Container(

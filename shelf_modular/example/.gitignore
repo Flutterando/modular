@@ -4,3 +4,4 @@
 
 # Conventional directory for build output.
 build/
+pubspec.lock

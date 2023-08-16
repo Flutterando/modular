@@ -1,9 +1,9 @@
 import 'package:modular_core/modular_core.dart';
-import 'package:shelf_modular/src/shared/either.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/route_service.dart';
 
 abstract class ReportPush {
-  Either<ModularError, Unit> call(ModularRoute route);
+  Result<Unit, ModularError> call(ModularRoute route);
 }
 
 class ReportPushImpl implements ReportPush {
@@ -12,7 +12,7 @@ class ReportPushImpl implements ReportPush {
   ReportPushImpl(this.service);
 
   @override
-  Either<ModularError, Unit> call(ModularRoute route) {
+  Result<Unit, ModularError> call(ModularRoute route) {
     return service.reportPush(route);
   }
 }

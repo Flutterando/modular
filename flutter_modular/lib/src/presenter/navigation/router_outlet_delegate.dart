@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../flutter_modular.dart';
 
+import '../../../flutter_modular.dart';
 import 'custom_navigator.dart';
 import 'modular_page.dart';
 import 'modular_router_delegate.dart';
@@ -43,6 +43,6 @@ class RouterOutletDelegate extends RouterDelegate<ParallelRoute>
 
   @override
   Future<void> setNewRoutePath(ParallelRoute configuration) async {
-    assert(false);
+    assert(false, 'Dont use this');
   }
 }

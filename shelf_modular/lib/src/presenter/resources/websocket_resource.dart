@@ -23,23 +23,29 @@ abstract class WebSocketResource {
 
     _websockets.add(socket);
     connect(socket);
-    socket.stream.listen((message) {
-      onMessage(message, socket);
-    }, onDone: () {
-      _websockets.remove(socket);
-      disconnect(socket);
-    });
+    socket.stream.listen(
+      (message) {
+        onMessage(message, socket);
+      },
+      onDone: () {
+        _websockets.remove(socket);
+        disconnect(socket);
+      },
+    );
   }
 
-  void broadcast(dynamic message,
-      {WebSocket? currentSocket, Iterable<String> rooms = const []}) {
-    for (var room in rooms.isEmpty ? [''] : rooms) {
+  void broadcast(
+    dynamic message, {
+    WebSocket? currentSocket,
+    Iterable<String> rooms = const [],
+  }) {
+    for (final room in rooms.isEmpty ? [''] : rooms) {
       var list = _websockets.where((socket) => currentSocket != socket);
       if (room.isNotEmpty) {
         list = list.where((socket) => socket._enteredRooms.contains(room));
       }
 
-      for (var websocket in list) {
+      for (final websocket in list) {
         websocket.sink.add(message);
       }
     }
@@ -51,8 +57,11 @@ class WebSocket {
   final Set<String> _enteredRooms = {};
   late final Stream _stream = _channel.stream.asBroadcastStream();
   Set<String> get enteredRooms => Set<String>.unmodifiable(_enteredRooms);
-  final void Function(dynamic message,
-      {WebSocket? currentSocket, Iterable<String> rooms}) _broadcast;
+  final void Function(
+    dynamic message, {
+    WebSocket? currentSocket,
+    Iterable<String> rooms,
+  }) _broadcast;
   dynamic tag;
 
   Stream get stream => _stream;

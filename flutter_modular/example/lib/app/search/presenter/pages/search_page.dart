@@ -1,7 +1,7 @@
-import 'package:example/app/search/domain/entities/result.dart';
-import 'package:example/app/search/domain/errors/erros.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular_example/app/search/domain/entities/result.dart';
+import 'package:flutter_modular_example/app/search/domain/errors/erros.dart';
 
 import '../stores/search_store.dart';
 
@@ -39,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildError(Failure error) {
+  Widget _buildError(error) {
     if (error is EmptyList) {
       return const Center(
         child: Text('Nothing has been found'),

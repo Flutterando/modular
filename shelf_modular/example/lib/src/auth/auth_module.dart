@@ -1,6 +1,6 @@
-import 'package:example/src/auth/external/shared/token/token_manager.dart';
-import 'package:example/src/auth/presenter/auth_resource.dart';
 import 'package:shelf_modular/shelf_modular.dart';
+import 'package:shelf_modular_example/src/auth/external/shared/token/token_manager.dart';
+import 'package:shelf_modular_example/src/auth/presenter/auth_resource.dart';
 
 import 'domain/usecases/check_token.dart';
 import 'domain/usecases/login.dart';
@@ -12,23 +12,22 @@ import 'infra/repositories/auth_repository.dart';
 
 class AuthModule extends Module {
   @override
-  List<Bind<Object>> get binds => [
-        //external
-        Bind.scoped((i) => RedisService()),
-        Bind.scoped((i) => PostgresConnect()),
-        Bind.factory((i) => TokenManager()),
-        Bind.factory(
-            (i) => AuthDatasourceImpl(tokenManager: i(), redis: i(), pg: i())),
-        //infra
-        Bind.factory((i) => AuthRepositoryImpl(i())),
-        //domain
-        Bind.factory((i) => LoginImpl(i())),
-        Bind.factory((i) => RefreshTokenImpl(i())),
-        Bind.factory((i) => CheckTokenImpl(i())),
-      ];
+  void binds(i) {
+    //external
+    i.addSingleton(RedisService.new);
+    i.addSingleton(PostgresConnect.new);
+    i.add(TokenManager.new);
+    i.add(AuthDatasourceImpl.new);
+    //infra
+    i.add(AuthRepositoryImpl.new);
+    //domain
+    i.add(LoginImpl.new);
+    i.add(RefreshTokenImpl.new);
+    i.add(CheckTokenImpl.new);
+  }
 
   @override
-  List<ModularRoute> get routes => [
-        Route.resource(AuthResource()),
-      ];
+  void routes(r) {
+    r.resource(AuthResource());
+  }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('instance', () {
-    final route = WildcardRoute(child: (_, __) => Container());
+    final route = WildcardRoute(child: (_) => Container());
     expect(route.name, '/**');
   });
 }
