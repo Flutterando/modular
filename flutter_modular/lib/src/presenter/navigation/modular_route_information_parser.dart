@@ -35,12 +35,11 @@ class ModularRouteInformationParser
       RouteInformation routeInformation) async {
     var path = '';
     if (!_firstParse) {
-      if (routeInformation.location == null ||
-          routeInformation.location == '/') {
+      if (routeInformation.uri.toString() == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = urlService.getPath() ?? Modular.initialRoutePath;
       } else {
-        path = routeInformation.location!;
+        path = routeInformation.uri.toString();
       }
 
       _firstParse = true;
@@ -54,7 +53,7 @@ class ModularRouteInformationParser
 
   @override
   RouteInformation restoreRouteInformation(ModularBook configuration) {
-    return RouteInformation(location: configuration.uri.toString());
+    return RouteInformation(uri: configuration.uri);
   }
 
   Future<ModularBook> selectBook(String path,

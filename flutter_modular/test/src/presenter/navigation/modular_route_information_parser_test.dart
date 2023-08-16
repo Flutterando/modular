@@ -180,7 +180,7 @@ void main() {
     final route = ParallelRouteMock();
     when(() => route.uri).thenReturn(Uri.parse('/test'));
     final info = parser.restoreRouteInformation(ModularBook(routes: [route]));
-    expect(info.location, '/test');
+    expect(info.uri.toString(), '/test');
   });
 
   test('parseRouteInformation with location null', () {
@@ -197,10 +197,10 @@ void main() {
     when(() => routeMock.middlewares).thenReturn([Guard()]);
 
     expect(
-        parser.parseRouteInformation(const RouteInformation(location: '/test')),
+        parser.parseRouteInformation(RouteInformation(uri: Uri.parse('/test'))),
         completion(isA<ModularBook>()));
     expect(
-        parser.parseRouteInformation(const RouteInformation(location: '/test')),
+        parser.parseRouteInformation(RouteInformation(uri: Uri.parse('/test'))),
         completion(isA<ModularBook>()));
     expect(Guard().pre(routeMock), routeMock);
   });
@@ -217,7 +217,7 @@ void main() {
 
     expect(
         () =>
-            parser.parseRouteInformation(const RouteInformation(location: '/')),
+            parser.parseRouteInformation(RouteInformation(uri: Uri.parse('/'))),
         throwsA(isA<GuardedRouteException>()));
   });
 
@@ -233,7 +233,7 @@ void main() {
 
     expect(
         () =>
-            parser.parseRouteInformation(const RouteInformation(location: '/')),
+            parser.parseRouteInformation(RouteInformation(uri: Uri.parse('/'))),
         throwsA(isA<Exception>()));
   });
 
