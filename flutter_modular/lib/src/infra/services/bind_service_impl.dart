@@ -10,15 +10,19 @@ class BindServiceImpl extends BindService {
   BindServiceImpl(this.injector);
 
   @override
-  Result<bool, ModularError> disposeBind<T extends Object>() {
+  Result<bool, ModularError> disposeBind<T extends Object>({String? tag}) {
+    if (tag?.isNotEmpty ?? false) {
+      injector.disposeSingletonsByTag(tag!);
+      return const Success(true);
+    }
     final result = injector.disposeSingleton<T>();
     return Success(result != null);
   }
 
   @override
-  Result<T, ModularError> getBind<T extends Object>() {
+  Result<T, ModularError> getBind<T extends Object>({String? tag}) {
     try {
-      final result = injector.get<T>();
+      final result = injector.get<T>(tag: tag);
       return Success(result);
     } on AutoInjectorException catch (e, s) {
       return Failure(BindNotFoundException(e.toString(), s));
