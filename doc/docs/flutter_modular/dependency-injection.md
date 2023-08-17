@@ -114,7 +114,11 @@ class AppModule extends Module {
   void binds(i) {
     i.add(XPTOEmail.new);
     i.add<EmailService>(XPTOEmailService.new);
-    i.addSingleton(Client.new)
+    i.addSingleton(Client.new);
+
+    //You could register bind by tag
+    i.addSingleton<IHomeController>(HomeController.new, tag: 'home');
+    i.addSingleton<IHomeController>(HomeController2.new, tag: 'home2');
   }
   
   ...
@@ -129,6 +133,9 @@ final client = Modular.get<Client>();
 
 // or set a default value
 final client = Modular.get<Client>(defaultValue: Client());
+
+//if you wanna get a instance by tag name
+final client = Modular.get<IHomeController>(tag: 'home');
 ```
 
 ## Auto Dispose
