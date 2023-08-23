@@ -114,9 +114,8 @@ class AppModule extends Module {
   void binds(i) {
     i.add(XPTOEmail.new);
     i.add<EmailService>(XPTOEmailService.new);
-    i.addSingleton(Client.new)
+    i.addSingleton(Client.new);
   }
-  
   ...
 }
 ```

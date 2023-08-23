@@ -13,7 +13,7 @@ The `watch()` method was added to [BuildContext] through extensions, making acce
 class Body extends StatelessWidget {
   Widget build(BuildContext context){
     final notifier = context.watch<ValueNotifier>();
-    return Text('${notifier.value}')
+    return Text('${notifier.value}');
   }
 }
 ```
@@ -46,7 +46,7 @@ We can add a selection through an anonymous function indicating which property i
 class Body extends StatelessWidget {
   Widget build(BuildContext context){
     final bloc = context.watch<CounterBloc>((bloc) => bloc.stream);
-    return Text('${bloc.state}')
+    return Text('${bloc.state}');
   }
 }
 ```
@@ -61,7 +61,7 @@ class OnlyErrorWidget extends StatelessWidget {
   Widget build(BuildContext context){
     // changes with store.setError();
     final store = context.watch<MyTripleStore>((store) => store.selectError);
-    return Text('${store.error}')
+    return Text('${store.error}');
   }
 }
 ```
