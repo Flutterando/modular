@@ -40,13 +40,13 @@ class ModularRouteInformationParser
       // 3.10 wrapper
       final location = [null].contains(routeInformation.location)
           ? '/'
-          : routeInformation.location;
+          : routeInformation.location!;
       if (location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = urlService.getPath() ?? Modular.initialRoutePath;
       } else {
         // 3.10 wrapper
-        path = [null].contains(location) ? '' : location;
+        path = location;
       }
 
       _firstParse = true;
