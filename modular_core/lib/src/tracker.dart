@@ -173,11 +173,7 @@ class _Tracker implements Tracker {
   }
 
   void _removeRegisters(String tag) {
-    injector.disposeSingletonsByTag(
-      tag,
-      onRemoved: _disposeInstance,
-    );
-    injector.removeByTag(tag);
+    injector.disposeInjectorByTag(tag, _disposeInstance);
 
     printResolverFunc?.call('-- $tag DISPOSED');
   }
@@ -350,7 +346,7 @@ class _Tracker implements Tracker {
 
   @override
   void finishApp() {
-    injector.removeAll();
+    injector.disposeRecursive();
     routeMap.clear();
     _disposeTags.clear();
     _nullableModule = null;
