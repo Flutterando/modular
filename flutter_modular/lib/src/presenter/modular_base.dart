@@ -45,15 +45,15 @@ abstract class IModularBase {
   IModularNavigator? navigatorDelegate;
 
   /// Request an instance by [Type]
-  B get<B extends Object>();
+  B get<B extends Object>({String? key});
 
   /// Request an instance by [Type]
   /// <br>
   /// Return null if not found instance
-  B? tryGet<B extends Object>();
+  B? tryGet<B extends Object>({String? key});
 
   /// Dispose a bind by [Type]
-  bool dispose<B extends Object>();
+  bool dispose<B extends Object>({String? key});
 
   /// Navigator 2.0 initializator: RouteInformationParser
   ModularRouteInformationParser get routeInformationParser;
@@ -83,7 +83,7 @@ abstract class IModularBase {
   void unbindModule<T extends Module>({String? type});
 
   /// replace instance
-  void replaceInstance<T>(T instance, [Type? module]);
+  void replaceInstance<T>(T instance, {String? key});
 
   @visibleForTesting
   String get initialRoutePath;
@@ -132,17 +132,17 @@ class ModularBase implements IModularBase {
   });
 
   @override
-  bool dispose<B extends Object>() =>
-      disposeBind<B>().getOrElse((left) => false);
+  bool dispose<B extends Object>({String? key}) =>
+      disposeBind<B>(key).getOrElse((left) => false);
 
   @override
-  B get<B extends Object>() {
-    return getBind<B>().getOrThrow();
+  B get<B extends Object>({String? key}) {
+    return getBind<B>(key).getOrThrow();
   }
 
   @override
-  B? tryGet<B extends Object>() {
-    return getBind<B>().getOrNull();
+  B? tryGet<B extends Object>({String? key}) {
+    return getBind<B>(key).getOrNull();
   }
 
   @override
@@ -201,7 +201,8 @@ class ModularBase implements IModularBase {
     routerDelegate: routerDelegate,
     routeInformationParser: routeInformationParser,
     routeInformationProvider: PlatformRouteInformationProvider(
-      initialRouteInformation: const RouteInformation(),
+      // ignore: deprecated_member_use
+      initialRouteInformation: const RouteInformation(location: '/'),
     ),
     backButtonDispatcher: RootBackButtonDispatcher(),
   );
@@ -217,7 +218,7 @@ class ModularBase implements IModularBase {
   }
 
   @override
-  void replaceInstance<T>(T instance, [Type? module]) {
-    replaceInstanceUsecase.call<T>(instance, module).getOrThrow();
+  void replaceInstance<T>(T instance, {String? key}) {
+    replaceInstanceUsecase.call<T>(instance, key).getOrThrow();
   }
 }
