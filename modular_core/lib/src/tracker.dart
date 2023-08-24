@@ -253,10 +253,10 @@ class _Tracker implements Tracker {
 
   AutoInjector _createInjector(Module module, [String? tag]) {
     final newInjector = AutoInjector(tag: tag ?? module.runtimeType.toString());
-    module.binds(newInjector);
     for (final importedModule in module.imports) {
       importedModule.exportedBinds(newInjector);
     }
+    module.binds(newInjector);
     return newInjector;
   }
 
