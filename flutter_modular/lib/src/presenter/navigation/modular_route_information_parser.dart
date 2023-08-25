@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -35,12 +37,16 @@ class ModularRouteInformationParser
       RouteInformation routeInformation) async {
     var path = '';
     if (!_firstParse) {
-      if (routeInformation.location == null ||
-          routeInformation.location == '/') {
+      // 3.10 wrapper
+      final location = [null].contains(routeInformation.location)
+          ? '/'
+          : routeInformation.location!;
+      if (location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = urlService.getPath() ?? Modular.initialRoutePath;
       } else {
-        path = routeInformation.location!;
+        // 3.10 wrapper
+        path = location;
       }
 
       _firstParse = true;

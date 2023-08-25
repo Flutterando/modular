@@ -115,6 +115,9 @@ class AppModule extends Module {
     i.add(XPTOEmail.new);
     i.add<EmailService>(XPTOEmailService.new);
     i.addSingleton(Client.new);
+
+    // Register with Key
+    i.addSingleton(Client.new, key: 'OtherClient');
   }
   
   ...
@@ -129,6 +132,12 @@ final client = Modular.get<Client>();
 
 // or set a default value
 final client = Modular.get<Client>(defaultValue: Client());
+
+// or use tryGet
+Client? client = Modular.tryGet<Client>();
+
+// or get with key
+Client client = Modular.get(key: 'OtherCLient');
 ```
 
 ## Auto Dispose

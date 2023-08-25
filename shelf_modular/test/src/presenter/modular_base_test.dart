@@ -265,13 +265,15 @@ void main() {
   test('tryJsonDecode isMultipart true return {}', () async {
     final request = RequestMock();
     when(() => request.method).thenReturn('POST');
-    when(() => request.headers).thenReturn({
-      'Content-Type': MediaType(
-        'multipart',
-        'form-data',
-        {'boundary': 'boundary'},
-      ).toString()
-    });
+    when(() => request.headers).thenReturn(
+      {
+        'Content-Type': MediaType(
+          'multipart',
+          'form-data',
+          {'boundary': 'boundary'},
+        ).toString(),
+      },
+    );
     final result = await (modularBase as ModularBase).tryJsonDecode(request);
     expect(result.isEmpty, true);
   });

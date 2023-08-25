@@ -1,5 +1,6 @@
 {
-    "dart.flutterSdkPath": "/Users/jacobmoura/fvm/versions/stable",
+    "dart.flutterSdkPath": "/Users/jacob/.puro/envs/stable/flutter",
     "dart.lineLength": 80,
     "editor.formatOnSave": true,
+    "dart.sdkPath": "/Users/jacob/.puro/envs/stable/flutter/bin/cache/dart-sdk"
 }

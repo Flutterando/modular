@@ -16,10 +16,5 @@
 			"name": "Documentation",
 			"path": "doc"
 		}
-	],
-	"settings": {
-		"dart.flutterSdkPath": "D:\\fvm\\sdks\\versions\\stable",
-		"lcov.branchCoverage": "off",
-		"lcov.path": "coverage/lcov.info"
-	}
+	]
 }

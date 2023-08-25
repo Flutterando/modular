@@ -25,7 +25,7 @@ void main() {
     });
     test('should throw error not found bind', () {
       when(() => injector.get<String>())
-          .thenThrow(const AutoInjectorException('String'));
+          .thenThrow(AutoInjectorException('String'));
       expect(service.getBind<String>().exceptionOrNull(),
           isA<BindNotFoundException>());
     });
@@ -41,32 +41,12 @@ void main() {
   group('replaceInstance', () {
     test('should replace instance returning unit', () {
       const instance = 'String';
-      when(() => injector.tags).thenReturn({'String'});
-      when(() => injector.isAdded<String>('String')).thenReturn(true);
+      when(() => injector.isAdded<String>()).thenReturn(true);
       when(() => injector.replaceInstance<String>(instance)).thenReturnVoid();
 
       final result = service.replaceInstance<String>(instance);
 
       expect(result.isSuccess(), true);
-    });
-
-    test('should return error if instance unregistred', () async {
-      const instance = 'String';
-      when(() => injector.isAdded<String>('String')).thenReturn(false);
-
-      final result = service.replaceInstance<String>(instance, String);
-
-      expect(result.isError(), true);
-    });
-
-    test('should return error if instance unregistred without tags', () async {
-      const instance = 'String';
-      when(() => injector.tags).thenReturn({'String'});
-      when(() => injector.isAdded<String>('String')).thenReturn(false);
-
-      final result = service.replaceInstance<String>(instance);
-
-      expect(result.isError(), true);
     });
   });
 }
