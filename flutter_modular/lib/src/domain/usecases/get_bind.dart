@@ -4,7 +4,7 @@ import 'package:result_dart/result_dart.dart';
 import '../services/bind_service.dart';
 
 abstract class GetBind {
-  Result<T, ModularError> call<T extends Object>({String? tag});
+  Result<T, ModularError> call<T extends Object>();
 }
 
 class GetBindImpl implements GetBind {
@@ -13,7 +13,7 @@ class GetBindImpl implements GetBind {
   GetBindImpl(this.bindService);
 
   @override
-  Result<T, ModularError> call<T extends Object>({String? tag}) {
-    return bindService.getBind<T>(tag: tag);
+  Result<T, ModularError> call<T extends Object>() {
+    return bindService.getBind<T>();
   }
 }
