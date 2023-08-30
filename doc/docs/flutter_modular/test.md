@@ -56,10 +56,10 @@ The `Modular` has tools that help you change an instance for a mock in order to 
 class MyModule extends Module {
   @override
   void binds(i){
-    i.addInstance<Dio>(Dio())
-    i.add(XPTOEmail.new)
-    i.add<EmailService>(XPTOEmailService.new)
-    i.addSingleton(Client.new)
+    i.addInstance<Dio>(Dio());
+    i.add(XPTOEmail.new);
+    i.add<EmailService>(XPTOEmailService.new);
+    i.addSingleton(Client.new);
   }
 }
 ... 

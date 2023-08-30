@@ -26,8 +26,8 @@ We register the binds in **AppModule**:
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
-    Bind.factory((i) => XPTOEmail())
-    Bind.factory<EmailService>((i) => XPTOEmailService(i()))
+    Bind.factory((i) => XPTOEmail()),
+    Bind.factory<EmailService>((i) => XPTOEmailService(i())),
     Bind.scoped((i) => Client(i()))
   ];
   

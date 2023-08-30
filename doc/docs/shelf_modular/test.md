@@ -20,9 +20,9 @@ mock. Let's take look at the example below:
 class MyModule extends Module {
   @override
   List<Bind> get binds => [
-    Bind.factory<Dio>((i) => Dio())
-    Bind.factory((i) => XPTOEmail(i()))
-    Bind.factory<EmailService>((i) => XPTOEmailService(i()))
+    Bind.factory<Dio>((i) => Dio()),
+    Bind.factory((i) => XPTOEmail(i())),
+    Bind.factory<EmailService>((i) => XPTOEmailService(i())),
     Bind.singleton((i) => Client(i()))
   ];
 }
