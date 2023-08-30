@@ -8,6 +8,10 @@ i.add(MyController.new, key: 'Custom');
 Modular.get(key: 'Custom');
 ```
 
+## [6.0.4] - 2023-08-16
+
+- fix: support Flutter 3.13
+
 ## [6.0.3] - 2023-08-09
 
 - fix: [#875](https://github.com/Flutterando/modular/issues/875)
