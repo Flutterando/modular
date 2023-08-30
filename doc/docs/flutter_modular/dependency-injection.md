@@ -119,7 +119,6 @@ class AppModule extends Module {
     // Register with Key
     i.addSingleton(Client.new, key: 'OtherClient');
   }
-  
   ...
 }
 ```
