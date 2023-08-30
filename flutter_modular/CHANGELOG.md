@@ -1,3 +1,6 @@
+## [6.1.1] - 2023-08-8
+- Fix Exported Dependencies
+
 ## [6.1.0+1] - 2023-08-24
 
 - Add: Register and get with keys:

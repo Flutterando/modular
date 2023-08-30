@@ -1,4 +1,4 @@
-## 3.1.0+1 - 2023/08/24
+## 3.1.1 - 2023/08/24
 
 * fix: Fix Import Modules Dependencies
 

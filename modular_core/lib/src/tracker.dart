@@ -56,6 +56,7 @@ class _Tracker implements Tracker {
   final AutoInjector injector;
 
   final _disposeTags = <Type, List<String>>{};
+  final _importedInjector = <String, AutoInjector>{};
 
   Module? _nullableModule;
   @override
@@ -254,7 +255,15 @@ class _Tracker implements Tracker {
   AutoInjector _createInjector(Module module, [String? tag]) {
     final newInjector = AutoInjector(tag: tag ?? module.runtimeType.toString());
     for (final importedModule in module.imports) {
-      importedModule.exportedBinds(newInjector);
+      final importTag = importedModule.runtimeType.toString();
+      late AutoInjector importInject;
+      if (!_importedInjector.containsKey(importTag)) {
+        importInject = _createInjector(importedModule, '${importTag}_Imported');
+        importedModule.exportedBinds(importInject);
+      } else {
+        importInject = _importedInjector[importTag]!;
+      }
+      newInjector.addInjector(importInject);
     }
     module.binds(newInjector);
     return newInjector;
