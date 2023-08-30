@@ -1,3 +1,13 @@
+## [6.1.0+1] - 2023-08-24
+
+- Add: Register and get with keys:
+```dart
+i.add(MyController.new, key: 'Custom');
+...
+
+Modular.get(key: 'Custom');
+```
+
 ## [6.0.3] - 2023-08-09
 
 - fix: [#875](https://github.com/Flutterando/modular/issues/875)

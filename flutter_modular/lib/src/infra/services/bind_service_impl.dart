@@ -10,15 +10,15 @@ class BindServiceImpl extends BindService {
   BindServiceImpl(this.injector);
 
   @override
-  Result<bool, ModularError> disposeBind<T extends Object>() {
-    final result = injector.disposeSingleton<T>();
+  Result<bool, ModularError> disposeBind<T extends Object>([String? key]) {
+    final result = injector.disposeSingleton<T>(key: key);
     return Success(result != null);
   }
 
   @override
-  Result<T, ModularError> getBind<T extends Object>() {
+  Result<T, ModularError> getBind<T extends Object>([String? key]) {
     try {
-      final result = injector.get<T>();
+      final result = injector.get<T>(key: key);
       return Success(result);
     } on AutoInjectorException catch (e, s) {
       return Failure(BindNotFoundException(e.toString(), s));
@@ -26,26 +26,8 @@ class BindServiceImpl extends BindService {
   }
 
   @override
-  Result<Unit, ModularError> replaceInstance<T>(T instance, [Type? module]) {
-    var tag = module?.toString() ?? '';
-
-    if (tag.isEmpty) {
-      tag = injector.tags.firstWhere(
-        (innerTag) => injector.isAdded<T>(innerTag),
-        orElse: () => '',
-      );
-    } else {
-      tag = injector.isAdded<T>(tag) ? tag : '';
-    }
-
-    if (tag.isEmpty) {
-      return BindNotFoundException(
-        '$T unregistred',
-        StackTrace.current,
-      ).toFailure();
-    }
-
-    injector.replaceInstance<T>(instance, tag);
+  Result<Unit, ModularError> replaceInstance<T>(T instance, [String? key]) {
+    injector.replaceInstance(instance, key: key);
     return Success.unit();
   }
 }

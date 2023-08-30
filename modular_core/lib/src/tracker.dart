@@ -173,11 +173,7 @@ class _Tracker implements Tracker {
   }
 
   void _removeRegisters(String tag) {
-    injector.disposeSingletonsByTag(
-      tag,
-      onRemoved: _disposeInstance,
-    );
-    injector.removeByTag(tag);
+    injector.disposeInjectorByTag(tag, _disposeInstance);
 
     printResolverFunc?.call('-- $tag DISPOSED');
   }
@@ -257,10 +253,10 @@ class _Tracker implements Tracker {
 
   AutoInjector _createInjector(Module module, [String? tag]) {
     final newInjector = AutoInjector(tag: tag ?? module.runtimeType.toString());
-    module.binds(newInjector);
     for (final importedModule in module.imports) {
       importedModule.exportedBinds(newInjector);
     }
+    module.binds(newInjector);
     return newInjector;
   }
 
@@ -350,7 +346,7 @@ class _Tracker implements Tracker {
 
   @override
   void finishApp() {
-    injector.removeAll();
+    injector.disposeRecursive();
     routeMap.clear();
     _disposeTags.clear();
     _nullableModule = null;
