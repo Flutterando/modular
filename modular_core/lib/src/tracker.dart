@@ -252,19 +252,26 @@ class _Tracker implements Tracker {
     return newUrl.join('/');
   }
 
+  AutoInjector _createExportedInjector(Module importedModule) {
+    final importTag = importedModule.runtimeType.toString();
+    late AutoInjector exportedInject;
+    if (!_importedInjector.containsKey(importTag)) {
+      exportedInject = _createInjector(importedModule, '${importTag}_Imported');
+      importedModule.exportedBinds(exportedInject);
+    } else {
+      exportedInject = _importedInjector[importTag]!;
+    }
+
+    return exportedInject;
+  }
+
   AutoInjector _createInjector(Module module, [String? tag]) {
     final newInjector = AutoInjector(tag: tag ?? module.runtimeType.toString());
     for (final importedModule in module.imports) {
-      final importTag = importedModule.runtimeType.toString();
-      late AutoInjector importInject;
-      if (!_importedInjector.containsKey(importTag)) {
-        importInject = _createInjector(importedModule, '${importTag}_Imported');
-        importedModule.exportedBinds(importInject);
-      } else {
-        importInject = _importedInjector[importTag]!;
-      }
-      newInjector.addInjector(importInject);
+      final exportedInject = _createExportedInjector(importedModule);
+      newInjector.addInjector(exportedInject);
     }
+
     module.binds(newInjector);
     return newInjector;
   }
