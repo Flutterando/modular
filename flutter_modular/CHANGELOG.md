@@ -1,3 +1,12 @@
+## [6.3.0] - 2023-08-31
+- Fix phantom dependencies.
+  When an instance was registered in an ancestor Module, it was available to its children
+  automatically. This created comprehension issues when the module was separated from the base app.
+  Now we recommend creating a global Module, exporting the binds and importing them into the modules.
+
+## [6.1.1] - 2023-08-8
+- Fix Exported Dependencies
+
 ## [6.1.0+1] - 2023-08-24
 
 - Add: Register and get with keys:
