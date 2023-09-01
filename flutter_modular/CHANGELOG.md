@@ -1,3 +1,6 @@
+## [6.3.1]
+Fix: [#890](https://github.com/Flutterando/modular/issues/890)
+
 ## [6.3.0] - 2023-08-31
 - Fix phantom dependencies.
   When an instance was registered in an ancestor Module, it was available to its children
