@@ -6,6 +6,8 @@ import 'package:auto_injector/auto_injector.dart';
 import 'package:characters/characters.dart';
 import 'package:meta/meta.dart';
 
+import 'src/binds/tracker_injector.dart';
+
 export 'package:auto_injector/auto_injector.dart';
 
 // errors

@@ -258,6 +258,7 @@ class _Tracker implements Tracker {
     if (!_importedInjector.containsKey(importTag)) {
       exportedInject = _createInjector(importedModule, '${importTag}_Imported');
       importedModule.exportedBinds(exportedInject);
+      _importedInjector[importTag] = exportedInject;
     } else {
       exportedInject = _importedInjector[importTag]!;
     }
@@ -266,14 +267,17 @@ class _Tracker implements Tracker {
   }
 
   AutoInjector _createInjector(Module module, [String? tag]) {
-    final newInjector = AutoInjector(tag: tag ?? module.runtimeType.toString());
+    final newInjector = TrackerInjector(
+      injector,
+      tag ?? module.runtimeType.toString(),
+    );
     for (final importedModule in module.imports) {
       final exportedInject = _createExportedInjector(importedModule);
-      newInjector.addInjector(exportedInject);
+      newInjector.local.addInjector(exportedInject);
     }
 
     module.binds(newInjector);
-    return newInjector;
+    return newInjector.local;
   }
 
   void addRoutes(Module module) {
@@ -315,8 +319,7 @@ class _Tracker implements Tracker {
       }
 
       if (preview.name.contains('**')) {
-        final c =
-            actual.name.split('/').length > preview.name.split('/').length;
+        final c = actual.name.split('/').length > preview.name.split('/').length;
         if (!actual.name.contains('**') || c) {
           return 1;
         }

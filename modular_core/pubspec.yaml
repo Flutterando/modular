@@ -1,6 +1,6 @@
 name: modular_core
 description: Smart project structure with dependency injection and route management
-version: 3.3.1
+version: 3.3.2
 homepage: https://github.com/Flutterando/modular
 
 environment:
