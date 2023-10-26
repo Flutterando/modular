@@ -133,7 +133,7 @@ There are some ModularRoute types: **ChildRoute**, **ModuleRoute**, **RedirectRo
 **RedirectRoute**: Redirect to other route.<br />
 **WildcardRoute**: Default route in Module.<br /> <br />
 
-Inside the `routes(e);` method we can use: <br />
+Inside the `routes(r);` method we can use: <br />
 **r.child => ChildRoute**. <br />
 **r.module => ModuleRoute**. <br />
 **r.redirect => RedirectRoute**. <br />
