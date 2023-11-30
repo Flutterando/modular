@@ -2,6 +2,7 @@ library flutter_modular_forked;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular/src/flutter_modular_module.dart';
 import 'package:modular_core/modular_core.dart';
 
@@ -98,9 +99,6 @@ class RouterOutletState extends State<RouterOutlet> {
   /// visible for test
   @visibleForTesting
   void listener() {
-    print(Modular.to.path);
-    final modal = ModalRoute.of(context)?.settings as ModularPage?;
-
     setState(() {});
   }
 
@@ -117,15 +115,20 @@ class RouterOutletState extends State<RouterOutlet> {
       _navigatorKey,
       currentObservers,
     );
-    if (!(modal?.route.children.any((e) => Modular.to.path.contains(e.name)) ??
-        true)) {
-      print('is not a children');
+
+    /// Prevent RouterOutlent to take back button priority
+    /// when the new named route, is not a children
+    if (_newRouteIsNotChildren(modal.route)) {
       _backButtonDispatcher = null;
       return;
     }
     final router = Router.of(context);
     _backButtonDispatcher = router.backButtonDispatcher //
         ?.createChildBackButtonDispatcher();
+  }
+
+  bool _newRouteIsNotChildren(ParallelRoute route) {
+    return !route.children.any((e) => Modular.to.path.contains(e.name));
   }
 
   @override
