@@ -1,4 +1,4 @@
-library flutter_modular_forked;
+library flutter_modular;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
