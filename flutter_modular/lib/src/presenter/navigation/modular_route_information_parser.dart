@@ -22,7 +22,7 @@ class ModularRouteInformationParser
   final ReportPush reportPush;
   final UrlService urlService;
 
-  bool _firstParse = false;
+  final bool _firstParse = false;
 
   ModularRouteInformationParser({
     required this.getRoute,
@@ -40,7 +40,7 @@ class ModularRouteInformationParser
       // 3.10 wrapper
       final location = [null].contains(routeInformation.location)
           ? '/'
-          : routeInformation.location!;
+          : routeInformation.location;
       if (location == '/') {
         // ignore: invalid_use_of_visible_for_testing_member
         path = urlService.getPath() ?? Modular.initialRoutePath;
@@ -48,8 +48,6 @@ class ModularRouteInformationParser
         // 3.10 wrapper
         path = location;
       }
-
-      _firstParse = true;
     } else {
       // ignore: invalid_use_of_visible_for_testing_member
       path = urlService.getPath() ?? Modular.initialRoutePath;
