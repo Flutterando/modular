@@ -2,6 +2,8 @@
 
 import 'dart:html';
 
+import 'package:flutter_web_plugins/url_strategy.dart';
+
 import 'url_service.dart';
 
 class WebUrlService extends UrlService {
@@ -9,11 +11,13 @@ class WebUrlService extends UrlService {
   String? getPath() {
     final href = window.location.href;
 
-    if (href.contains('#')) {
+    if (urlStrategy is PathUrlStrategy) {
+      return resolvePath(href);
+    } else if (href.contains('#')) {
       return href.split('#').last;
     }
 
-    return '/';
+    return null;
   }
 }
 
