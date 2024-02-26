@@ -6,7 +6,15 @@ import 'url_service.dart';
 
 class WebUrlService extends UrlService {
   @override
-  String? getPath() => resolvePath(window.location.href);
+  String? getPath() {
+    final href = window.location.href;
+
+    if (href.contains('#')) {
+      return href.split('#').last;
+    }
+
+    return '/';
+  }
 }
 
 UrlService create() {
