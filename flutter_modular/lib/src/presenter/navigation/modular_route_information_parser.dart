@@ -47,9 +47,6 @@ class ModularRouteInformationParser
       path = location;
     }
 
-    // ignore: invalid_use_of_visible_for_testing_member
-    path = urlService.getPath() ?? Modular.initialRoutePath;
-
     return selectBook(path);
   }
 
