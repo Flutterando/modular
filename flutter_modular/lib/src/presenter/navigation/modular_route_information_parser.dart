@@ -35,6 +35,7 @@ class ModularRouteInformationParser
       RouteInformation routeInformation) async {
     var path = '';
 
+    // 3.10 wrapper
     final location = [null].contains(routeInformation.location)
         ? '/'
         : routeInformation.location;
