@@ -22,8 +22,6 @@ class ModularRouteInformationParser
   final ReportPush reportPush;
   final UrlService urlService;
 
-  final bool _firstParse = false;
-
   ModularRouteInformationParser({
     required this.getRoute,
     required this.getArguments,
@@ -36,22 +34,20 @@ class ModularRouteInformationParser
   Future<ModularBook> parseRouteInformation(
       RouteInformation routeInformation) async {
     var path = '';
-    if (!_firstParse) {
-      // 3.10 wrapper
-      final location = [null].contains(routeInformation.location)
-          ? '/'
-          : routeInformation.location;
-      if (location == '/') {
-        // ignore: invalid_use_of_visible_for_testing_member
-        path = urlService.getPath() ?? Modular.initialRoutePath;
-      } else {
-        // 3.10 wrapper
-        path = location;
-      }
-    } else {
+
+    final location = [null].contains(routeInformation.location)
+        ? '/'
+        : routeInformation.location;
+    if (location == '/') {
       // ignore: invalid_use_of_visible_for_testing_member
       path = urlService.getPath() ?? Modular.initialRoutePath;
+    } else {
+      // 3.10 wrapper
+      path = location;
     }
+
+    // ignore: invalid_use_of_visible_for_testing_member
+    path = urlService.getPath() ?? Modular.initialRoutePath;
 
     return selectBook(path);
   }
