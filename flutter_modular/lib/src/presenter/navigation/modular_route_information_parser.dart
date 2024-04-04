@@ -36,7 +36,7 @@ class ModularRouteInformationParser
     var path = '';
 
     // 3.10 wrapper
-    final location = [null].contains(routeInformation.location)
+    final location = [null].contains(routeInformation.uri.path)
         ? '/'
         : routeInformation.uri.path;
     if (location == '/') {
