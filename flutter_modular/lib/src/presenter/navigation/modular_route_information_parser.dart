@@ -38,7 +38,7 @@ class ModularRouteInformationParser
     // 3.10 wrapper
     final location = [null].contains(routeInformation.location)
         ? '/'
-        : routeInformation.location;
+        : routeInformation.uri.path;
     if (location == '/') {
       // ignore: invalid_use_of_visible_for_testing_member
       path = urlService.getPath() ?? Modular.initialRoutePath;
