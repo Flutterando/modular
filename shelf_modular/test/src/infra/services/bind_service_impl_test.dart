@@ -18,7 +18,7 @@ void main() {
     });
     test('should throw error not found bind', () {
       when(() => injector.get<String>()).thenThrow(
-        const AutoInjectorException('String'),
+        AutoInjectorException('String'),
       );
       expect(
         service.getBind<String>().fold(id, id),
