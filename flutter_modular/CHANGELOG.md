@@ -1,3 +1,6 @@
+## [6.3.3] - 2024-04-08
+- Fix Deep Link
+
 ## [6.3.0] - 2023-08-31
 - Fix phantom dependencies.
   When an instance was registered in an ancestor Module, it was available to its children
