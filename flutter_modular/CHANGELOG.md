@@ -1,3 +1,6 @@
+## [6.3.4] - 2024-05-23
+- Bug fix in Flutter Web
+
 ## [6.3.3] - 2024-04-08
 - Fix Deep Link
 
