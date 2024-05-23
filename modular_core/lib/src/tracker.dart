@@ -264,6 +264,7 @@ class _Tracker implements Tracker {
     if (!_importedInjector.containsKey(importTag)) {
       exportedInject = _createInjector(importedModule, '${importTag}_Imported');
       importedModule.exportedBinds(exportedInject);
+      _importedInjector[importTag] = exportedInject;
     } else {
       exportedInject = _importedInjector[importTag]!;
     }
