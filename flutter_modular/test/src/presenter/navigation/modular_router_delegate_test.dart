@@ -159,7 +159,45 @@ void main() {
     expect(delegate.currentConfiguration?.routes.length, 0);
     expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
+  test('onPopPage with parent/child route', () {
+    final route = RouteMock();
+    final parallel = ParallelRouteMock();
+    when(() => parallel.uri).thenReturn(Uri.parse('/'));
+    final page = ModularPage(
+        route: parallel, args: ModularArguments.empty(), flags: ModularFlags());
+    when(() => route.didPop(null)).thenReturn(true);
+    when(() => route.settings).thenReturn(page);
+    when(() => route.isFirst).thenReturn(false);
 
+    when(() => reportPopMock.call(parallel)).thenReturn(const Success(unit));
+
+    final childRoute = RouteMock();
+    final childParallel = ParallelRouteMock();
+    when(() => childParallel.uri).thenReturn(Uri.parse('/child'));
+    when(() => childParallel.parent).thenReturn('/');
+    final childPage = ModularPage(
+        route: childParallel, args: ModularArguments.empty(), flags: ModularFlags());
+    when(() => childRoute.didPop(null)).thenReturn(true);
+    when(() => childRoute.settings).thenReturn(childPage);
+    when(() => childRoute.isFirst).thenReturn(false);
+
+    when(() => reportPopMock.call(childParallel)).thenReturn(const Success(unit));
+
+    final arguments = ModularArguments.empty();
+    final getArgsMock = GetArgumentsMock();
+    final setArgsMock = SetArgumentsMock();
+    when(() => parser.getArguments).thenReturn(getArgsMock);
+    when(() => parser.setArguments).thenReturn(setArgsMock);
+
+    when(getArgsMock.call).thenReturn(Success(arguments));
+    when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
+
+    delegate.currentConfiguration = ModularBook(routes: [parallel, childParallel]);
+    expect(delegate.currentConfiguration?.routes.length, 2);
+    delegate.onPopPage(route, null);
+    expect(delegate.currentConfiguration?.routes.length, 0);
+    expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
+  });
   test('pushNamed with forRoot', () async {
     final route1 = ParallelRouteMock();
     final route2 = ParallelRouteMock();
