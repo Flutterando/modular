@@ -19,6 +19,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:modular_core/modular_core.dart';
 import 'package:result_dart/result_dart.dart';
 
+import '../../mocks/mocks.dart';
 import '../modular_base_test.dart';
 
 class GetRouteMock extends Mock implements GetRoute {}
@@ -256,6 +257,20 @@ void main() {
     when(() => routeMock.copyWith(popCallback: any(named: 'popCallback')))
         .thenReturn(routeMock);
     expect(parser.selectBook('/', popCallback: (r) {}), completes);
+  });
+
+  test('selectRoute with wildcard', () {
+    final routeMock = ParallelRouteMock();
+    when(() => routeMock.uri).thenReturn(Uri.parse('/'));
+    when(() => routeMock.parent).thenReturn('');
+    when(() => routeMock.schema).thenReturn('');
+    when(() => routeMock.middlewares).thenReturn([]);
+
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+
+    final moduleMock = ModuleMock();
+    when(() => routeMock.children)
+        .thenReturn([ModuleRoute('/test', module: moduleMock)]);
   });
 }
 

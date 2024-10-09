@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/domain/errors/errors.dart';
+import 'package:modular_core/modular_core.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
@@ -112,10 +114,16 @@ class ModularRouteInformationParser
     path = _resolverPath(path);
 
     final params = RouteParmsDTO(url: path, arguments: arguments);
-    return getRoute
-        .call(params) //
-        .map(_routeSuccess)
-        .recover((modularError) {
+
+    final fistTrying = getRoute.call(params).flatMap<ModularRoute>((success) {
+      if (success.name == '/**') {
+        return const Failure(RouteNotFoundException(
+            'Wildcard is not available for the first time'));
+      }
+      return Success(success);
+    });
+
+    return fistTrying.map(_routeSuccess).recover((modularError) {
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
       return getRoute
           .call(params) //
