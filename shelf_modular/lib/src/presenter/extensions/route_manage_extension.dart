@@ -45,9 +45,10 @@ extension RouteManagerExt on RouteManager {
 
   void resource(
     Resource resource, {
+    String name = '/',
     List<ModularMiddleware> middlewares = const [],
   }) {
-    add(Route.resource(resource, middlewares: middlewares));
+    add(Route.resource(name, resource: resource, middlewares: middlewares));
   }
 
   void module(
