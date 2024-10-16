@@ -13,7 +13,8 @@ export 'package:modular_core/modular_core.dart'
         Injector,
         AutoInjectorException,
         ModularArguments,
-        RouteManager;
+        RouteManager,
+        setPrintResolver;
 
 export 'src/presenter/extensions/route_manage_extension.dart';
 export 'src/presenter/middlewares/middlewares.dart';
