@@ -197,6 +197,9 @@ class ModularBase implements IModularBase {
     if (!_isMultipart(request)) {
       try {
         final data = await request.readAsString();
+
+        if (data.isEmpty) return {};
+
         return jsonDecode(data);
       } on FormatException catch (e) {
         print(e);
