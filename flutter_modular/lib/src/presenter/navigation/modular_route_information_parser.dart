@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/src/domain/errors/errors.dart';
-import 'package:modular_core/modular_core.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
