@@ -16,6 +16,12 @@ dependencies:
   shelf_web_socket: ">=1.0.1 <2.0.0"
   result_dart: ">=1.0.5 <2.0.0"
 
+dependency_overrides:
+  modular_core:
+    git:
+      url: https://github.com/necodeIT/modular.git
+      path: modular_core
+
 dev_dependencies:
   mocktail: ^0.3.0
   flutterando_analysis: ^0.0.2
