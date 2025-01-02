@@ -84,18 +84,18 @@ void main() {
 
   setUp(() {
     modularBase = ModularBase(
-      disposeBind: disposeBind,
-      finishModule: finishModule,
-      getArguments: getArguments,
-      getBind: getBind,
-      navigator: modularNavigator,
-      startModule: startModule,
-      routeInformationParser: routeInformationParser,
-      routerDelegate: routerDelegate,
-      setArgumentsUsecase: setArguments,
-      bindModuleUsecase: bindModule,
-      replaceInstanceUsecase: replaceInstance,
-      unbindModuleUsecase: unbindModule,
+      routeInformationParser,
+      routerDelegate,
+      disposeBind,
+      getArguments,
+      finishModule,
+      getBind,
+      startModule,
+      modularNavigator,
+      setArguments,
+      bindModule,
+      unbindModule,
+      replaceInstance,
     );
 
     reset(disposeBind);

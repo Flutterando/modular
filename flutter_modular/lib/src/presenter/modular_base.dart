@@ -116,20 +116,20 @@ class ModularBase implements IModularBase {
   @override
   String get initialRoutePath => _initialRoutePath;
 
-  ModularBase({
-    required this.routeInformationParser,
-    required this.routerDelegate,
-    required this.disposeBind,
-    required this.getArguments,
-    required this.finishModule,
-    required this.getBind,
-    required this.startModule,
-    required this.navigator,
-    required this.setArgumentsUsecase,
-    required this.bindModuleUsecase,
-    required this.unbindModuleUsecase,
-    required this.replaceInstanceUsecase,
-  });
+  ModularBase(
+    this.routeInformationParser,
+    this.routerDelegate,
+    this.disposeBind,
+    this.getArguments,
+    this.finishModule,
+    this.getBind,
+    this.startModule,
+    this.navigator,
+    this.setArgumentsUsecase,
+    this.bindModuleUsecase,
+    this.unbindModuleUsecase,
+    this.replaceInstanceUsecase,
+  );
 
   @override
   bool dispose<B extends Object>({String? key}) =>

@@ -23,10 +23,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
   final ReportPop reportPop;
   List<NavigatorObserver> observers = [];
 
-  ModularRouterDelegate(
-      {required this.parser,
-      required this.navigatorKey,
-      required this.reportPop});
+  ModularRouterDelegate(this.parser, this.navigatorKey, this.reportPop);
 
   @override
   ModularBook? currentConfiguration;
