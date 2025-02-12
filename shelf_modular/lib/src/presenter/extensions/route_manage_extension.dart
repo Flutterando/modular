@@ -1,5 +1,3 @@
-import 'package:modular_core/modular_core.dart';
-
 import '../../../shelf_modular.dart';
 
 extension RouteManagerExt on RouteManager {
