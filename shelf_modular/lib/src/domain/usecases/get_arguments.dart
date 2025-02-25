@@ -3,7 +3,7 @@ import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/route_service.dart';
 
 abstract class GetArguments {
-  Result<ModularArguments, ModularError> call();
+  ResultDart<ModularArguments, ModularError> call();
 }
 
 class GetArgumentsImpl implements GetArguments {
@@ -12,7 +12,7 @@ class GetArgumentsImpl implements GetArguments {
   GetArgumentsImpl(this.service);
 
   @override
-  Result<ModularArguments, ModularError> call() {
+  ResultDart<ModularArguments, ModularError> call() {
     return service.getArguments();
   }
 }

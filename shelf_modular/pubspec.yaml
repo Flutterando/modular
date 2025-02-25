@@ -14,7 +14,7 @@ dependencies:
   http_parser: ">=4.0.1 <5.0.0"
   web_socket_channel: ">=2.2.0 <3.0.0"
   shelf_web_socket: ">=1.0.1 <2.0.0"
-  result_dart: ">=1.0.5 <2.0.0"
+  result_dart: ">=2.0.0 <3.0.0"
 
 dev_dependencies:
   mocktail: ^0.3.0

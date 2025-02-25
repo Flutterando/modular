@@ -3,7 +3,7 @@ import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/bind_service.dart';
 
 abstract class DisposeBind {
-  Result<bool, ModularError> call<T extends Object>();
+  ResultDart<bool, ModularError> call<T extends Object>();
 }
 
 class DisposeBindImpl implements DisposeBind {
@@ -12,7 +12,7 @@ class DisposeBindImpl implements DisposeBind {
   DisposeBindImpl(this.bindService);
 
   @override
-  Result<bool, ModularError> call<T extends Object>() {
+  ResultDart<bool, ModularError> call<T extends Object>() {
     return bindService.disposeBind<T>();
   }
 }

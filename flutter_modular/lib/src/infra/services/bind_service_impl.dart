@@ -10,13 +10,13 @@ class BindServiceImpl extends BindService {
   BindServiceImpl(this.injector);
 
   @override
-  Result<bool, ModularError> disposeBind<T extends Object>([String? key]) {
+  ResultDart<bool, ModularError> disposeBind<T extends Object>([String? key]) {
     final result = injector.disposeSingleton<T>(key: key);
     return Success(result != null);
   }
 
   @override
-  Result<T, ModularError> getBind<T extends Object>([String? key]) {
+  ResultDart<T, ModularError> getBind<T extends Object>([String? key]) {
     try {
       final result = injector.get<T>(key: key);
       return Success(result);
@@ -26,7 +26,7 @@ class BindServiceImpl extends BindService {
   }
 
   @override
-  Result<Unit, ModularError> replaceInstance<T>(T instance, [String? key]) {
+  ResultDart<Unit, ModularError> replaceInstance<T>(T instance, [String? key]) {
     injector.replaceInstance(instance, key: key);
     return Success.unit();
   }
