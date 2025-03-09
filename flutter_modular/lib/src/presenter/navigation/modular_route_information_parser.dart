@@ -22,13 +22,13 @@ class ModularRouteInformationParser
   final ReportPush reportPush;
   final UrlService urlService;
 
-  ModularRouteInformationParser({
-    required this.getRoute,
-    required this.getArguments,
-    required this.setArguments,
-    required this.reportPush,
-    required this.urlService,
-  });
+  ModularRouteInformationParser(
+    this.getRoute,
+    this.getArguments,
+    this.setArguments,
+    this.reportPush,
+    this.urlService,
+  );
 
   @override
   Future<ModularBook> parseRouteInformation(
