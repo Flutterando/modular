@@ -3,7 +3,7 @@ import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/route_service.dart';
 
 abstract class ReportPush {
-  Result<Unit, ModularError> call(ModularRoute route);
+  ResultDart<Unit, ModularError> call(ModularRoute route);
 }
 
 class ReportPushImpl implements ReportPush {
@@ -12,7 +12,7 @@ class ReportPushImpl implements ReportPush {
   ReportPushImpl(this.service);
 
   @override
-  Result<Unit, ModularError> call(ModularRoute route) {
+  ResultDart<Unit, ModularError> call(ModularRoute route) {
     return service.reportPush(route);
   }
 }

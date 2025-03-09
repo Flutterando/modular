@@ -9,25 +9,25 @@ class ModuleServiceImpl extends ModuleService {
   ModuleServiceImpl(this.tracker);
 
   @override
-  Result<Unit, ModularError> finish() {
+  ResultDart<Unit, ModularError> finish() {
     tracker.finishApp();
     return const Success(unit);
   }
 
   @override
-  Result<Unit, ModularError> start(Module module) {
+  ResultDart<Unit, ModularError> start(Module module) {
     tracker.runApp(module);
     return const Success(unit);
   }
 
   @override
-  Result<Unit, ModularError> bind(Module module, [String? tag]) {
+  ResultDart<Unit, ModularError> bind(Module module, [String? tag]) {
     tracker.bindModule(module, tag);
     return const Success(unit);
   }
 
   @override
-  Result<Unit, ModularError> unbind<T extends Module>({String? type}) {
+  ResultDart<Unit, ModularError> unbind<T extends Module>({String? type}) {
     tracker.unbindModule(type ?? T.toString());
     return const Success(unit);
   }

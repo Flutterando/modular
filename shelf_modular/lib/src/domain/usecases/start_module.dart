@@ -3,7 +3,7 @@ import 'package:result_dart/result_dart.dart';
 import 'package:shelf_modular/src/domain/services/module_service.dart';
 
 abstract class StartModule {
-  Result<Unit, ModularError> call(Module module);
+  ResultDart<Unit, ModularError> call(Module module);
 }
 
 class StartModuleImpl implements StartModule {
@@ -12,7 +12,7 @@ class StartModuleImpl implements StartModule {
   StartModuleImpl(this.moduleService);
 
   @override
-  Result<Unit, ModularError> call(Module module) {
+  ResultDart<Unit, ModularError> call(Module module) {
     return moduleService.start(module);
   }
 }

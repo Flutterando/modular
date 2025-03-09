@@ -4,9 +4,9 @@ import 'package:result_dart/result_dart.dart';
 import '../dtos/route_dto.dart';
 
 abstract class RouteService {
-  AsyncResult<ModularRoute, ModularError> getRoute(RouteParmsDTO params);
-  Result<ModularArguments, ModularError> getArguments();
-  Result<Unit, ModularError> setArguments(ModularArguments args);
-  Result<Unit, ModularError> reportPop(ModularRoute route);
-  Result<Unit, ModularError> reportPush(ModularRoute route);
+  AsyncResultDart<ModularRoute, ModularError> getRoute(RouteParmsDTO params);
+  ResultDart<ModularArguments, ModularError> getArguments();
+  ResultDart<Unit, ModularError> setArguments(ModularArguments args);
+  ResultDart<Unit, ModularError> reportPop(ModularRoute route);
+  ResultDart<Unit, ModularError> reportPush(ModularRoute route);
 }

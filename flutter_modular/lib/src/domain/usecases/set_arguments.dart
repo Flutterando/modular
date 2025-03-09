@@ -4,7 +4,7 @@ import 'package:result_dart/result_dart.dart';
 import '../services/route_service.dart';
 
 abstract class SetArguments {
-  Result<Unit, ModularError> call(ModularArguments args);
+  ResultDart<Unit, ModularError> call(ModularArguments args);
 }
 
 class SetArgumentsImpl implements SetArguments {
@@ -13,7 +13,7 @@ class SetArgumentsImpl implements SetArguments {
   SetArgumentsImpl(this.service);
 
   @override
-  Result<Unit, ModularError> call(ModularArguments args) {
+  ResultDart<Unit, ModularError> call(ModularArguments args) {
     return service.setArguments(args);
   }
 }

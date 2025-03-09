@@ -9,13 +9,13 @@ class BindServiceImpl extends BindService {
   BindServiceImpl(this.injector);
 
   @override
-  Result<bool, ModularError> disposeBind<T extends Object>() {
+  ResultDart<bool, ModularError> disposeBind<T extends Object>() {
     final result = injector.disposeSingleton<T>();
     return Success(result != null);
   }
 
   @override
-  Result<T, ModularError> getBind<T extends Object>() {
+  ResultDart<T, ModularError> getBind<T extends Object>() {
     try {
       final result = injector.get<T>();
       return Success(result);
