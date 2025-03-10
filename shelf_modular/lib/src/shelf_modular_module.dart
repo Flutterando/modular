@@ -26,7 +26,7 @@ final _innerInjector = AutoInjector(
 final injector = AutoInjector(
   tag: 'ModularCore',
   on: (i) {
-    i.add<Tracker>(Tracker.new);
+    i.addLazySingleton<Tracker>(Tracker.new);
     i.addInstance<AutoInjector>(_innerInjector);
     //infra
     i.add<BindService>(BindServiceImpl.new);

@@ -12,11 +12,12 @@ class WebUrlService extends UrlService {
   String? getPath() {
     final href = window.location.href;
 
-    if (urlStrategy is HashUrlStrategy) {
-      if (href.endsWith(Modular.initialRoute)) {
-        return Modular.initialRoute;
-      } else if (href.contains('#')) {
+  if (urlStrategy is HashUrlStrategy) {
+      if (href.contains('#')) {
         return href.split('#').last;
+      } else if (href.endsWith(Modular.initialRoute)) {
+        return Modular.initialRoute;
+        
       }
     }
 

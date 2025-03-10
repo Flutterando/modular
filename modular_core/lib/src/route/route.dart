@@ -96,4 +96,9 @@ class ModularKey {
   }) {
     return ModularKey(schema: schema ?? this.schema, name: name ?? this.name);
   }
+
+  @override
+  String toString() {
+    return 'ModularKey(schema: $schema, name: $name)';
+  }
 }

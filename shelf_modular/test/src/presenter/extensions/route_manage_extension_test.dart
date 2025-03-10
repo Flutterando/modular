@@ -21,7 +21,7 @@ void main() {
 
 class CustomResource extends Resource {
   @override
-  List<Route> get routes => [];
+  void routes(RouteManager r) {}
 }
 
 class CustomModule extends Module {}

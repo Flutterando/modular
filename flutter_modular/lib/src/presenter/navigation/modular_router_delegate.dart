@@ -114,6 +114,7 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     final parallel = page.route;
     parallel.popCallback?.call(result);
     currentConfiguration?.routes.remove(parallel);
+    currentConfiguration?.routes.removeWhere((element) => element.parent == parallel.uri.toString());
     if (currentConfiguration?.routes.indexWhere(
             (element) => element.uri.toString() == parallel.uri.toString()) ==
         -1) {
