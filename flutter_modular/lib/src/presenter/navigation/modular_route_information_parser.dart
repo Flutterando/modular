@@ -2,7 +2,9 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/infra/services/url_service/html_url_service.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
@@ -42,6 +44,11 @@ class ModularRouteInformationParser
     if (location == '/') {
       // ignore: invalid_use_of_visible_for_testing_member
       path = urlService.getPath() ?? Modular.initialRoutePath;
+
+      if (urlService is WebUrlService && path == '/') {
+        // ignore: invalid_use_of_visible_for_testing_member
+        path = Modular.initialRoutePath;
+      }
     } else {
       // 3.10 wrapper
       path = location;
