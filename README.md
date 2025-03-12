@@ -77,6 +77,18 @@ If it's for the Flutterando version of the template just send a message to us (o
 
 Let's find out how to implement a Modular structure in your project.
 
+<!-- SPONSORS -->
+<!-- For now nZest is the only sponsor for Flutterando packages. The community is open to more support for it's open source endeavors, so check it out and make contact with us through the links provided at the end -->
+## Sponsors
+
+<a href="https://www.nzest.co/">
+    <img src="https://cdn.discordapp.com/attachments/1305001560962633749/1349417507722625155/nZest-logo-2.png?ex=67d3067c&is=67d1b4fc&hm=a3c2c662c810458cff967656a5a02825d02d35a28887fb9c56c2476dca97d8ce&" alt="Logo" width="200">
+  </a>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<br>
+
+
 ## <div id="what-is-modular?">What is Modular?</div>
 
 Modular proposes to solve two problems:
