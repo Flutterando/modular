@@ -92,7 +92,9 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
       return;
     }
 
-    final diffTimes = currentTime.difference(_lastClick).inMilliseconds;
+    final diffTimes = currentTime.isBefore(_lastClick)
+        ? 0
+        : currentTime.difference(_lastClick).inMilliseconds;
     if (diffTimes < 500) {
       await Future.delayed(Duration(milliseconds: 500 - diffTimes));
       if (_lastRouteName != routeName) {
