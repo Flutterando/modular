@@ -115,7 +115,7 @@ class ModularRouteInformationParser
     final params = RouteParmsDTO(url: path, arguments: arguments);
 
     final fistTrying = getRoute.call(params).flatMap<ModularRoute>((success) {
-      if (success.name == '/**') {
+      if (success.name.endsWith('/**')) {
         return const Failure(RouteNotFoundException(
             'Wildcard is not available for the first time'));
       }
