@@ -81,6 +81,27 @@ void main() {
     expect(book.chapters().first.name, '/');
   });
 
+  test('parseRouteInformation calls selectBook with correct arguments',
+      () async {
+    final routeMock = ParallelRouteMock();
+    final params = {'param': 'value'};
+    final uri = Uri.parse('/test');
+    when(() => routeMock.uri).thenReturn(uri);
+    when(() => routeMock.parent).thenReturn('');
+    when(() => routeMock.middlewares).thenReturn([]);
+    when(() => getRoute.call(any()))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments(uri: uri, data: params)));
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+
+    const routeInformation = RouteInformation(location: '/test?param=value');
+    final book = await parser.parseRouteInformation(routeInformation);
+
+    expect(book.uri.toString(), '/test');
+    expect(parser.getArguments.call().getOrNull()?.data, params);
+  });
+
   test('selectBook with parents', () async {
     final routeMock = ParallelRouteMock();
     when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
