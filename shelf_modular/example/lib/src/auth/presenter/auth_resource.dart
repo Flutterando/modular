@@ -11,12 +11,13 @@ import 'guards/auth_guard.dart';
 
 class AuthResource implements Resource {
   @override
-  List<Route> get routes => [
-        Route.get('/login', login),
-        Route.get('/refresh_token/:token', refreshToken),
-        Route.get('/check_token', checkToken, middlewares: [AuthGuard()]),
-        Route.get('/get_user', getUser, middlewares: [AuthGuard()]),
-      ];
+  void routes(RouteManager r) {
+    r
+      ..get('/login', login)
+      ..get('/refresh_token/:token', refreshToken)
+      ..get('/check_token', checkToken, middlewares: [AuthGuard()])
+      ..get('/get_user', getUser, middlewares: [AuthGuard()]);
+  }
 
   FutureOr<Response> login(Request request, Injector injector) async {
     final credentials = request.headers['Authorization']?.split(' ').last;

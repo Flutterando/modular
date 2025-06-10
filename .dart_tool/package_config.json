@@ -2,247 +2,933 @@
   "configVersion": 2,
   "packages": [
     {
-      "name": "ansi_styles",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/ansi_styles-0.3.2+1",
+      "name": "_fe_analyzer_shared",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/_fe_analyzer_shared-82.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "alice",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/alice-0.4.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "analyzer",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/analyzer-7.4.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/args-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "asn1lib",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/asn1lib-1.6.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "async",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/async-2.13.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "auto_injector",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/auto_injector-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "bloc",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/bloc-8.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
-      "name": "args",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.4.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "async",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.11.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
       "name": "boolean_selector",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/boolean_selector-2.1.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/boolean_selector-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "buffer",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/buffer-1.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "characters",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/characters-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "charcode",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/charcode-1.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "checked_yaml",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/checked_yaml-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "chopper",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/chopper-7.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cli_config",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/cli_config-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "clock",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/clock-1.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "collection",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/collection-1.19.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "convert",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/convert-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "coverage",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/coverage-1.14.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "cross_file",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/cross_file-0.3.4+2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "crypto",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/crypto-3.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "crypto_keys",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/crypto_keys-0.3.0+2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "dartz",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/dartz-0.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "dbus",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/dbus-0.7.11",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
-      "name": "charcode",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/charcode-1.3.1",
+      "name": "dio",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/dio-5.8.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "dio_web_adapter",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/dio_web_adapter-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "equatable",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/equatable-2.0.7",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
-      "name": "cli_launcher",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/cli_launcher-0.3.1",
+      "name": "fake_async",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/fake_async-1.3.3",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.3"
     },
     {
-      "name": "cli_util",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/cli_util-0.3.5",
+      "name": "ffi",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/ffi-2.1.4",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "collection",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.17.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "conventional_commit",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/conventional_commit-0.6.0+1",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.7"
     },
     {
       "name": "file",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/file-6.1.4",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/file-6.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "fixnum",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/fixnum-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "flutter",
+      "rootUri": "file:///C:/flutter/packages/flutter",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "flutter_lints",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutter_lints-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "flutter_local_notifications",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutter_local_notifications-17.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutter_local_notifications_linux-4.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutter_local_notifications_platform_interface-7.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_mobx",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutter_mobx-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_test",
+      "rootUri": "file:///C:/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "flutter_triple",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutter_triple-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "flutterando_analysis",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/flutterando_analysis-0.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "fpdart",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/fpdart-0.0.14",
+      "packageUri": "lib/",
+      "languageVersion": "2.13"
+    },
+    {
+      "name": "frontend_server_client",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/frontend_server_client-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "glob",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/glob-2.1.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/glob-2.1.3",
       "packageUri": "lib/",
-      "languageVersion": "2.15"
+      "languageVersion": "3.3"
     },
     {
-      "name": "graphs",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/graphs-2.2.0",
+      "name": "hotreloader",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/hotreloader-4.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.5",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/http-1.4.0",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "http_multi_server",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/http_multi_server-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "http_parser",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "io",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/io-1.0.4",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/io-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "jose",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/jose-0.3.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "js",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/js-0.7.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
     },
     {
       "name": "json_annotation",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.8.0",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/json_annotation-4.9.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "leak_tracker",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/leak_tracker-10.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "leak_tracker_flutter_testing",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "leak_tracker_testing",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/leak_tracker_testing-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "lints",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/lints-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/logging-1.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "matcher",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.15",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/matcher-0.12.17",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
-      "name": "melos",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/melos-3.0.1",
+      "name": "material_color_utilities",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/material_color_utilities-0.11.1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.9.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/meta-1.16.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
-      "name": "mustache_template",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/mustache_template-2.0.0",
+      "name": "mime",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/mime-1.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "mobx",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/mobx-2.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "mocktail",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/mocktail-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "nested",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "node_preamble",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/node_preamble-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "open_filex",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/open_filex-4.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "package_config",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/package_config-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/package_info_plus-6.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/package_info_plus_platform_interface-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "path",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.8.3",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path-1.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path_provider",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path_provider-2.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path_provider_android",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path_provider_android-2.2.17",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "path_provider_foundation",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path_provider_foundation-2.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "path_provider_linux",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path_provider_linux-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "path_provider_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path_provider_platform_interface-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "path_provider_windows",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/path_provider_windows-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "pedantic",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/pedantic-1.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "permission_handler",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/permission_handler-11.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/permission_handler_android-12.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/permission_handler_apple-9.4.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "permission_handler_html",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/permission_handler_html-0.1.3+5",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/permission_handler_platform_interface-4.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/permission_handler_windows-0.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/petitparser-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
     },
     {
       "name": "platform",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.0",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/platform-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "pointycastle",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/pointycastle-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "pool",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/pool-1.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
-      "name": "process",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/process-4.2.4",
+      "name": "postgres",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/postgres-2.6.4",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "3.0"
     },
     {
-      "name": "prompts",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/prompts-2.0.0",
+      "name": "provider",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/provider-6.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "pub_semver",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/pub_semver-2.1.3",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/pub_semver-2.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
-      "name": "pub_updater",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/pub_updater-0.2.4",
+      "name": "pubspec_parse",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/pubspec_parse-1.5.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.6"
     },
     {
-      "name": "pubspec",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/pubspec-2.3.0",
+      "name": "qs_dart",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/qs_dart-1.3.7+1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "quiver",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/quiver-3.2.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/quiver-3.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
-      "name": "source_span",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.10.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "stack_trace",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.11.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "stream_channel",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/stream_channel-2.1.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.14"
-    },
-    {
-      "name": "string_scanner",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/string_scanner-1.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "term_glyph",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/term_glyph-1.2.1",
+      "name": "recursive_regex",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/recursive_regex-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
+      "name": "redis_dart",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/redis_dart-0.1.0+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "result_dart",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/result_dart-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "rx_notifier",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/rx_notifier-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "rx_notifier_annotation",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/rx_notifier_annotation-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "rxdart",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/rxdart-0.27.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "sasl_scram",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/sasl_scram-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "saslprep",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/saslprep-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "sensors_plus",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/sensors_plus-5.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "sensors_plus_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/sensors_plus_platform_interface-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "share_plus",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/share_plus-9.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "share_plus_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/share_plus_platform_interface-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "shelf",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/shelf-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_packages_handler",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/shelf_packages_handler-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_static",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/shelf_static-1.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "shelf_web_socket",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/shelf_web_socket-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "sky_engine",
+      "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "source_map_stack_trace",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/source_map_stack_trace-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "source_maps",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/source_maps-0.10.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "source_span",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/source_span-1.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "sprintf",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "stack_trace",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/stack_trace-1.12.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "stream_channel",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/stream_channel-2.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "stream_transform",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/stream_transform-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "string_scanner",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/string_scanner-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "term_glyph",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/term_glyph-1.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "test",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/test-1.25.15",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
       "name": "test_api",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.5.2",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/test_api-0.7.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "test_core",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/test_core-0.6.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "timezone",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/timezone-0.9.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "triple",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/triple-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "typed_data",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.3.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/typed_data-1.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
-      "name": "uri",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/uri-1.0.0",
+      "name": "unorm_dart",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/unorm_dart-0.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "url_launcher",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher-6.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "url_launcher_android",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_android-6.3.16",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_ios",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_ios-6.3.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "url_launcher_linux",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_linux-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "url_launcher_macos",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_macos-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "url_launcher_platform_interface",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_platform_interface-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_web",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_web-2.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_windows",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/url_launcher_windows-3.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "uuid",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/uuid-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "vector_math",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/vector_math-2.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "vm_service",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/vm_service-15.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "watcher",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/watcher-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "weak_map",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/weak_map-4.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "web",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/web-0.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "web_socket_channel",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/web_socket_channel-2.4.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "webkit_inspection_protocol",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/win32-5.13.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "x509",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/x509-0.2.4+3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "xdg_directories",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/xdg_directories-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "xml",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/xml-6.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "yaml",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.1",
+      "rootUri": "file:///C:/Users/jacob/.puro/shared/pub_cache/hosted/pub.dev/yaml-3.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
-      "name": "yaml_edit",
-      "rootUri": "file:///C:/Users/jacob/AppData/Local/Pub/Cache/hosted/pub.dev/yaml_edit-2.1.0",
+      "name": "flutter_modular_workspace",
+      "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "modular_core",
+      "rootUri": "../modular_core",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
     },
     {
       "name": "flutter_modular",
-      "rootUri": "../",
+      "rootUri": "../flutter_modular",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "shelf_modular",
+      "rootUri": "../shelf_modular",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "flutter_modular_example",
+      "rootUri": "../flutter_modular/example",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "shelf_modular_example",
+      "rootUri": "../shelf_modular/example",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
     }
   ],
-  "generated": "2023-04-22T02:01:37.945706Z",
   "generator": "pub",
-  "generatorVersion": "2.19.3"
+  "generatorVersion": "3.8.1",
+  "flutterRoot": "file:///C:/flutter",
+  "flutterVersion": "3.32.1",
+  "pubCache": "file:///C:/Users/jacob/.puro/shared/pub_cache"
 }

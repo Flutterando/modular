@@ -1,3 +1,8 @@
+## 3.4.0 - 2025/06/10
+
+- Fix Deep Link query parameters.
+- Update Result.
+
 ## 3.1.1 - 2023/08/24
 
 * fix: Fix Import Modules Dependencies
