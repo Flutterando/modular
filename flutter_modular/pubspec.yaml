@@ -21,4 +21,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+dependency_overrides:
+  modular_core:
+    git:
+      url: https://github.com/necodeIT/modular.git
+      path: modular_core
+
 

@@ -123,7 +123,9 @@ class ModularBase implements IModularBase {
   @visibleForTesting
   FutureOr<Response> handler(Request request) async {
     try {
-      final data = await tryJsonDecode(request);
+      final body = await request.readAsString();
+
+      final data = await tryJsonDecode(request.change(body: body));
       final params = RouteParmsDTO(
         url: '/${request.url.toString()}',
         schema: request.method,
@@ -131,7 +133,7 @@ class ModularBase implements IModularBase {
       );
       return getRoute //
           .call(params)
-          .map((route) => _routeSuccess(route, request))
+          .map((route) => _routeSuccess(route, request.change(body: body)))
           .mapError(_routeError)
           .fold(identity, identity);
     } on Exception catch (e, s) {
@@ -142,7 +144,7 @@ class ModularBase implements IModularBase {
       } else {
         print(e.toString());
         print('STACK TRACE \n $s');
-        return Response.internalServerError(body: '${e.toString()}/n$s');
+        return Response.internalServerError();
       }
     }
   }
@@ -197,6 +199,9 @@ class ModularBase implements IModularBase {
     if (!_isMultipart(request)) {
       try {
         final data = await request.readAsString();
+
+        if (data.isEmpty) return {};
+
         return jsonDecode(data);
       } on FormatException catch (e) {
         print(e);
