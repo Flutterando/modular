@@ -1,3 +1,6 @@
+## [6.3.4] - 2025-03-31
+- FIX: prevent navigation block when device time is adjusted backward
+
 ## [6.3.3] - 2024-04-08
 - Fix Deep Link
 
