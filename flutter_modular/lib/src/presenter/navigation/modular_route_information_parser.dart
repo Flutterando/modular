@@ -43,6 +43,13 @@ class ModularRouteInformationParser
     if (location == '/') {
       // ignore: invalid_use_of_visible_for_testing_member
       path = urlService.getPath() ?? Modular.initialRoutePath;
+
+      if ((const bool.fromEnvironment('dart.tool.dart2wasm') ||
+              const bool.fromEnvironment('dart.library.js_util')) &&
+          path == '/') {
+        // ignore: invalid_use_of_visible_for_testing_member
+        path = Modular.initialRoutePath;
+      }
     } else {
       // 3.10 wrapper
       path = location;
