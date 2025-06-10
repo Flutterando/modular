@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/src/domain/errors/errors.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../flutter_modular.dart';
@@ -42,6 +43,13 @@ class ModularRouteInformationParser
     if (location == '/') {
       // ignore: invalid_use_of_visible_for_testing_member
       path = urlService.getPath() ?? Modular.initialRoutePath;
+
+      if ((const bool.fromEnvironment('dart.tool.dart2wasm') ||
+              const bool.fromEnvironment('dart.library.js_util')) &&
+          path == '/') {
+        // ignore: invalid_use_of_visible_for_testing_member
+        path = Modular.initialRoutePath;
+      }
     } else {
       // 3.10 wrapper
       path = location;
@@ -115,10 +123,16 @@ class ModularRouteInformationParser
     path = _resolverPath(path);
 
     final params = RouteParmsDTO(url: path, arguments: arguments);
-    return getRoute
-        .call(params) //
-        .map(_routeSuccess)
-        .recover((modularError) {
+
+    final fistTrying = getRoute.call(params).flatMap<ModularRoute>((success) {
+      if (success.name.endsWith('/**')) {
+        return const Failure(RouteNotFoundException(
+            'Wildcard is not available for the first time'));
+      }
+      return Success(success);
+    });
+
+    return fistTrying.map(_routeSuccess).recover((modularError) {
       final params = RouteParmsDTO(url: '$path/', arguments: arguments);
       return getRoute
           .call(params) //

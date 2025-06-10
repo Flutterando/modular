@@ -162,7 +162,7 @@ class _Tracker implements Tracker {
         continue;
       }
 
-      moduleTags.remove(tag);
+      moduleTags.removeWhere((element) => element.startsWith(tag));
       if (tag.characters.last == '/') {
         moduleTags.remove('$tag/'.replaceAll('//', ''));
       }

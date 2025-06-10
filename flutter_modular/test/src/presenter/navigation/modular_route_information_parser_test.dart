@@ -67,6 +67,7 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
     when(() => routeMock.schema).thenReturn('');
+    when(() => routeMock.name).thenReturn('/');
     when(() => getRoute.call(any()))
         .thenAnswer((_) async => Success(routeMock));
     when(() => getArguments.call())
@@ -107,6 +108,7 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
     when(() => routeMock.parent).thenReturn('/');
     when(() => routeMock.schema).thenReturn('/');
+    when(() => routeMock.name).thenReturn('/test');
     when(() => routeMock.middlewares).thenReturn([Guard()]);
     when(() => routeMock.copyWith(schema: any(named: 'schema')))
         .thenReturn(routeMock);
@@ -115,6 +117,7 @@ void main() {
     when(() => routeParent.uri).thenReturn(Uri.parse('/'));
     when(() => routeParent.parent).thenReturn('');
     when(() => routeParent.schema).thenReturn('');
+    when(() => routeParent.name).thenReturn('/');
     when(() => routeParent.middlewares).thenReturn([Guard()]);
     when(() => routeParent.copyWith(schema: any(named: 'schema')))
         .thenReturn(routeParent);
@@ -145,6 +148,7 @@ void main() {
     when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
     when(() => routeMock.parent).thenReturn('/');
     when(() => routeMock.schema).thenReturn('/');
+    when(() => routeMock.name).thenReturn('/test');
     when(() => routeMock.middlewares).thenReturn([Guard()]);
     when(() => routeMock.copyWith(schema: any(named: 'schema')))
         .thenReturn(routeMock);
@@ -153,6 +157,7 @@ void main() {
     when(() => routeParent.uri).thenReturn(Uri.parse('/'));
     when(() => routeParent.parent).thenReturn('');
     when(() => routeParent.schema).thenReturn('');
+    when(() => routeParent.name).thenReturn('/');
     when(() => routeParent.middlewares).thenReturn([Guard()]);
     when(() => routeParent.copyWith(schema: any(named: 'schema')))
         .thenReturn(routeParent);
@@ -210,6 +215,7 @@ void main() {
     final routeMock = ParallelRouteMock();
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
     when(() => routeMock.parent).thenReturn('');
+    when(() => routeMock.name).thenReturn('/');
 
     when(() => reportPush(routeMock)).thenReturn(const Success(unit));
 
@@ -237,6 +243,7 @@ void main() {
         .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([Guard(false)]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
+    when(() => routeMock.name).thenReturn('/');
 
     expect(
         () =>
@@ -253,6 +260,7 @@ void main() {
         .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([MiddlewareNull()]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
+    when(() => routeMock.name).thenReturn('/');
 
     expect(
         () =>
@@ -273,10 +281,59 @@ void main() {
         .thenReturn(Success(ModularArguments.empty()));
     when(() => routeMock.middlewares).thenReturn([]);
     when(() => routeMock.uri).thenReturn(Uri.parse('/'));
+    when(() => routeMock.name).thenReturn('/');
     when(() => routeMock.parent).thenReturn('');
     when(() => routeMock.copyWith(popCallback: any(named: 'popCallback')))
         .thenReturn(routeMock);
     expect(parser.selectBook('/', popCallback: (r) {}), completes);
+  });
+
+  test('selectRoute with wildcard', () async {
+    final routeMock = ParallelRouteMock();
+    when(() => routeMock.uri).thenReturn(Uri.parse('/parent/test'));
+    when(() => routeMock.parent).thenReturn('/parent');
+    when(() => routeMock.schema).thenReturn('/parent');
+    when(() => routeMock.name).thenReturn('/test');
+    when(() => routeMock.middlewares).thenReturn([Guard()]);
+    when(() => routeMock.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeMock);
+
+    final routeMock1 = ParallelRouteMock();
+    when(() => routeMock1.uri).thenReturn(Uri.parse('/**'));
+    when(() => routeMock1.parent).thenReturn('');
+    when(() => routeMock1.schema).thenReturn('');
+    when(() => routeMock1.name).thenReturn('/**');
+    when(() => routeMock1.middlewares).thenReturn([Guard()]);
+    when(() => routeMock1.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeMock);
+
+    final routeParent = ParallelRouteMock();
+    when(() => routeParent.uri).thenReturn(Uri.parse('/parent'));
+    when(() => routeParent.parent).thenReturn('');
+    when(() => routeParent.schema).thenReturn('');
+    when(() => routeParent.name).thenReturn('/parent');
+    when(() => routeParent.middlewares).thenReturn([Guard()]);
+    when(() => routeParent.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeParent);
+
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+    when(() => reportPush(routeMock1)).thenReturn(const Success(unit));
+    when(() => reportPush(routeParent)).thenReturn(const Success(unit));
+
+    when(() => getRoute.call(const RouteParmsDTO(url: '/parent/test')))
+        .thenAnswer((_) async => Success(routeMock1));
+    when(() => getRoute.call(const RouteParmsDTO(url: '/parent/test/')))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getRoute.call(const RouteParmsDTO(url: '/parent')))
+        .thenAnswer((_) async => Success(routeParent));
+    when(() => getArguments.call())
+        .thenReturn(Success(ModularArguments.empty()));
+
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
+
+    final book = await parser.selectBook('/parent/test');
+    expect(book.uri.toString(), '/parent/test');
+    expect(book.chapters().first.name, '/parent');
   });
 }
 

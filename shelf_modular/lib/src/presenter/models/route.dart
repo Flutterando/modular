@@ -82,12 +82,18 @@ class Route extends ModularRoute {
   }
 
   factory Route.resource(
-    Resource resource, {
+    String name, {
+    required Resource resource,
     List<ModularMiddleware> middlewares = const [],
   }) {
+    final manager = RouteManager();
+
+    resource.routes(manager);
+
     return Route._(
-      '/',
-      children: resource.routes,
+      name,
+      // ignore: invalid_use_of_visible_for_testing_member
+      children: manager.allRoutes,
       middlewares: middlewares,
     );
   }
