@@ -33,7 +33,7 @@ void main() {
     expect(route.name, '/');
   });
   test('route resource', () {
-    final route = Route.resource(MyResource());
+    final route = Route.resource('/', resource: MyResource());
     expect(route.name, '/');
   });
 
@@ -42,7 +42,7 @@ void main() {
     expect(route.name, '/');
   });
   test('route copyWith', () {
-    final route = Route.resource(MyResource()).copyWith();
+    final route = Route.resource('/', resource: MyResource()).copyWith();
     expect(route.name, '/');
   });
 }
@@ -51,7 +51,7 @@ class MyModule extends Module {}
 
 class MyResource extends Resource {
   @override
-  List<Route> get routes => [];
+  void routes(RouteManager r) {}
 }
 
 class MyWebsocketResource extends WebSocketResource {

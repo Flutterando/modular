@@ -1,9 +1,12 @@
-name: flutter_modular
-description: Smart project structure with dependency injection and route management
-homepage: https://github.com/Flutterando/modular
-
+name: flutter_modular_workspace
+publish_to: none
 environment:
-  sdk: ">=2.18.0 <3.0.0"
-  
-dev_dependencies:
-  melos: ^3.0.1
+  sdk: ">=3.6.0 <4.0.0"
+
+workspace:
+  - modular_core
+  - flutter_modular
+  - shelf_modular
+  # examples
+  - flutter_modular/example
+  - shelf_modular/example

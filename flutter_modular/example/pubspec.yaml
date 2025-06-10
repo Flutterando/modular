@@ -17,17 +17,18 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
+resolution: workspace
+
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   dartz: ^0.10.0-nullsafety.2
   flutter_mobx: ^2.0.1
   flutter_triple: ^2.1.4
   http: ^1.1.0
-  flutter_modular: 
-    path: ../
-  alice: ^0.3.3
+  flutter_modular:
+  alice: ^0.4.2
   bloc: ^8.0.3
   flutter:
     sdk: flutter
@@ -39,8 +40,7 @@ dev_dependencies:
   flutter_lints: ^2.0.2
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
-
+  mocktail: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
