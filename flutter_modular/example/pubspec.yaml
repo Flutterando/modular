@@ -28,7 +28,7 @@ dependencies:
   flutter_triple: ^2.1.4
   http: ^1.1.0
   flutter_modular:
-  alice: ^0.4.2
+  alice: ^1.0.0-dev.12
   bloc: ^8.0.3
   flutter:
     sdk: flutter
