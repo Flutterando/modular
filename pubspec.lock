@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.4"
+  asp:
+    dependency: transitive
+    description:
+      name: asp
+      sha256: "97acd3bceceea0b12dd8001a60b577eee5d4ae695c518d2ed8e93b59fbb3e798"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   async:
     dependency: transitive
     description:
@@ -303,10 +311,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_triple
-      sha256: aef6471c9cee0007780234c27a969a057d6edb895d7aa923152e9eccbe1893a7
+      sha256: fb2a7a07e5f6553f4b7d0ab529bd96ad092645c4e5496f162fa34b851a04bc17
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "3.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -768,22 +776,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  rx_notifier:
-    dependency: transitive
-    description:
-      name: rx_notifier
-      sha256: "08201324c0a2c6987c13798277f9bab592fcc2dfde362d21789f60eed8bd9ea2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
-  rx_notifier_annotation:
-    dependency: transitive
-    description:
-      name: rx_notifier_annotation
-      sha256: "362496563d617aa6fa21ab9c131f66348f3266b6580d69ecc23d2c23a52070a2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   rxdart:
     dependency: transitive
     description:
