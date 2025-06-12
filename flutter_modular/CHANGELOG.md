@@ -1,3 +1,6 @@
+## [6.4.1] - 2025/06/12
+- Fix AppModule Dispose.
+
 ## [6.4.0] - 2025-06-10
 - Fix Deep Link query parameters.
 - Update Result.
