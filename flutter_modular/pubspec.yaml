@@ -1,6 +1,6 @@
 name: flutter_modular
 description: Smart project structure with dependency injection and route management
-version: 6.4.0
+version: 6.4.1
 homepage: https://github.com/Flutterando/modular
 
 resolution: workspace
@@ -9,7 +9,7 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  modular_core: ">=3.4.0 <4.0.0"
+  modular_core: ">=3.4.1 <4.0.0"
   meta: ">=1.3.0 <2.0.0"
   result_dart: ">=2.1.0 <3.0.0"
   flutter:
