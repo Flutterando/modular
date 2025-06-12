@@ -324,10 +324,10 @@ packages:
     dependency: transitive
     description:
       name: fpdart
-      sha256: cfeeedd030503c8317868411659cf95c4a204cc3e82d7e9fff2e272aaef12655
+      sha256: "1b84ce64453974159f08046f5d05592020d1fcb2099d7fe6ec58da0e7337af77"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.14"
+    version: "1.1.1"
   frontend_server_client:
     dependency: transitive
     description:
