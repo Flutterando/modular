@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: ad7a95d7c381363d48b54e00cb680f024fd97009067244454e9b4850337608e8
+      sha256: "1fc2624898e92485122eb2b1698dd42511d7ff6574f84a3a8606fc4549a1e8f8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   bloc:
     dependency: transitive
     description:
