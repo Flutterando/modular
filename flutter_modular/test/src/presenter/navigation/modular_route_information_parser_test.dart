@@ -89,6 +89,7 @@ void main() {
     final uri = Uri.parse('/test');
     when(() => routeMock.uri).thenReturn(uri);
     when(() => routeMock.parent).thenReturn('');
+    when(() => routeMock.name).thenReturn('/test'); // Add this line
     when(() => routeMock.middlewares).thenReturn([]);
     when(() => getRoute.call(any()))
         .thenAnswer((_) async => Success(routeMock));
@@ -334,6 +335,55 @@ void main() {
     final book = await parser.selectBook('/parent/test');
     expect(book.uri.toString(), '/parent/test');
     expect(book.chapters().first.name, '/parent');
+  });
+
+  test('selectRoute recover with query parameters', () {
+    final args = ModularArguments.empty();
+
+    final routeMock = ParallelRouteMock();
+    when(() => routeMock.uri).thenReturn(Uri.parse('/test/'));
+    when(() => routeMock.parent).thenReturn('');
+    when(() => routeMock.schema).thenReturn('');
+    when(() => routeMock.middlewares).thenReturn([]);
+
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+
+    when(() => getRoute.call(RouteParmsDTO(url: '/test?a=0', arguments: args)))
+        .thenAnswer((_) async => Failure(ModularPageException('')));
+    when(() => getRoute.call(RouteParmsDTO(url: '/test/?a=0', arguments: args)))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getArguments.call()).thenReturn(Success(args));
+
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
+
+    expect(parser.selectRoute('/test?a=0', arguments: args), completes);
+  });
+
+  test('selectRoute with resolver route with /', () async {
+    final args = ModularArguments.empty();
+
+    final routeMock = ParallelRouteMock();
+    when(() => routeMock.uri).thenReturn(Uri.parse('/test'));
+    when(() => routeMock.parent).thenReturn('');
+    when(() => routeMock.name).thenReturn('');
+    when(() => routeMock.schema).thenReturn('');
+    when(() => routeMock.middlewares).thenReturn([]);
+
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+
+    when(() => getRoute.call(RouteParmsDTO(url: '/test', arguments: args)))
+        .thenAnswer((_) async => Success(routeMock));
+    when(() => getRoute.call(RouteParmsDTO(url: '/test/', arguments: args)))
+        .thenAnswer((_) async => Failure(ModularPageException('')));
+    when(() => getArguments.call()).thenReturn(Success(args));
+
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
+
+    final route = await parser.selectRoute('/test', arguments: args);
+    expect(route.uri.toString(), '/test');
+
+    final route1 = await parser.selectRoute('/test/', arguments: args);
+    expect(route1.uri.toString(), '/test');
   });
 }
 

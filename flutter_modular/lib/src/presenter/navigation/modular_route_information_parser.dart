@@ -133,7 +133,13 @@ class ModularRouteInformationParser
     });
 
     return fistTrying.map(_routeSuccess).recover((modularError) {
-      final params = RouteParmsDTO(url: '$path/', arguments: arguments);
+      var uri = Uri.parse(path);
+      if (uri.path.endsWith('/')) {
+        uri = uri.replace(path: uri.path.substring(0, uri.path.length - 1));
+      } else {
+        uri = uri.replace(path: '${uri.path}/');
+      }
+      final params = RouteParmsDTO(url: uri.toString(), arguments: arguments);
       return getRoute
           .call(params) //
           .map(_routeSuccess)

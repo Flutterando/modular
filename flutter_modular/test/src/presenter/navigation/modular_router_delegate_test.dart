@@ -132,6 +132,7 @@ void main() {
     final route = RouteMock();
     final parallel = ParallelRouteMock();
     when(() => parallel.uri).thenReturn(Uri.parse('/'));
+    when(() => parallel.parent).thenReturn(''); // Add this line
     final page = ModularPage(
         route: parallel, args: ModularArguments.empty(), flags: ModularFlags());
     when(() => route.didPop(null)).thenReturn(true);
@@ -159,6 +160,7 @@ void main() {
     final route = RouteMock();
     final parallel = ParallelRouteMock();
     when(() => parallel.uri).thenReturn(Uri.parse('/'));
+    when(() => parallel.parent).thenReturn(''); // Add this line
     final page = ModularPage(
         route: parallel, args: ModularArguments.empty(), flags: ModularFlags());
     when(() => route.didPop(null)).thenReturn(true);
@@ -172,12 +174,15 @@ void main() {
     when(() => childParallel.uri).thenReturn(Uri.parse('/child'));
     when(() => childParallel.parent).thenReturn('/');
     final childPage = ModularPage(
-        route: childParallel, args: ModularArguments.empty(), flags: ModularFlags());
+        route: childParallel,
+        args: ModularArguments.empty(),
+        flags: ModularFlags());
     when(() => childRoute.didPop(null)).thenReturn(true);
     when(() => childRoute.settings).thenReturn(childPage);
     when(() => childRoute.isFirst).thenReturn(false);
 
-    when(() => reportPopMock.call(childParallel)).thenReturn(const Success(unit));
+    when(() => reportPopMock.call(childParallel))
+        .thenReturn(const Success(unit));
 
     final arguments = ModularArguments.empty();
     final getArgsMock = GetArgumentsMock();
@@ -188,7 +193,8 @@ void main() {
     when(getArgsMock.call).thenReturn(Success(arguments));
     when(() => setArgsMock.call(any())).thenReturn(const Success(unit));
 
-    delegate.currentConfiguration = ModularBook(routes: [parallel, childParallel]);
+    delegate.currentConfiguration =
+        ModularBook(routes: [parallel, childParallel]);
     expect(delegate.currentConfiguration?.routes.length, 2);
     delegate.onPopPage(route, null);
     expect(delegate.currentConfiguration?.routes.length, 0);

@@ -115,12 +115,25 @@ class ModularRouterDelegate extends RouterDelegate<ModularBook>
     final page = route.settings as ModularPage;
     final parallel = page.route;
     parallel.popCallback?.call(result);
-    currentConfiguration?.routes.remove(parallel);
-    if (currentConfiguration?.routes.indexWhere(
-            (element) => element.uri.toString() == parallel.uri.toString()) ==
-        -1) {
-      reportPop.call(parallel);
+
+    // Remove the current route and all child routes that depend on it
+    final routesToRemove = <ParallelRoute>[];
+    routesToRemove.add(parallel);
+
+    // Find all child routes that have this route as parent
+    final parallelPath = parallel.uri.path;
+    for (final route in currentConfiguration?.routes ?? <ParallelRoute>[]) {
+      if (route.parent == parallelPath && route != parallel) {
+        routesToRemove.add(route);
+      }
     }
+
+    // Remove all routes and report them
+    for (final routeToRemove in routesToRemove) {
+      currentConfiguration?.routes.remove(routeToRemove);
+      reportPop.call(routeToRemove);
+    }
+
     final arguments =
         parser.getArguments().getOrElse((l) => ModularArguments.empty());
     parser.setArguments(arguments.copyWith(uri: currentConfiguration!.uri));
