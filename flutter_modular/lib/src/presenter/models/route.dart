@@ -211,14 +211,16 @@ class CustomTransition {
     Animation<double>,
     Animation<double>,
   )? pageBuilder;
+  final RouteBuilder? routeBuilder;
   final Duration transitionDuration;
   final Duration reverseTransitionDuration;
   final bool opaque;
 
   CustomTransition(
       {required this.transitionBuilder,
+      this.pageBuilder,
+      this.routeBuilder,
       this.transitionDuration = const Duration(milliseconds: 300),
       this.reverseTransitionDuration = const Duration(milliseconds: 300),
-      this.opaque = true,
-      this.pageBuilder});
+      this.opaque = true});
 }
