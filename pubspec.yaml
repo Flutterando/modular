@@ -6,7 +6,5 @@ environment:
 workspace:
   - modular_core
   - flutter_modular
-  - shelf_modular
   # examples
   - flutter_modular/example
-  - shelf_modular/example

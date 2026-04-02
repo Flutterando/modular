@@ -57,29 +57,4 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         
-  shelf_modular:
-    name: shelf modular
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '3.10.6'
-    
-    - name: get packages
-      run: flutter pub get
-      working-directory: shelf_modular
-    
-    - name: Flutter Test
-      run: flutter test --coverage --coverage-path ../coverage/lcov.info
-      working-directory: shelf_modular
-      
-    - name: Codecov GitHub Action
-      uses: codecov/codecov-action@v2.0.3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
 
