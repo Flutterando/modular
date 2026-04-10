@@ -33,6 +33,11 @@ class UrlServiceMock extends Mock implements UrlService {}
 
 class ParallelRouteFake extends Fake implements ModularRoute {}
 
+class _ConcreteUrlService extends UrlService {
+  @override
+  String? getPath() => null;
+}
+
 void main() {
   late ModularRouteInformationParser parser;
   late GetRouteMock getRoute;
@@ -140,6 +145,49 @@ void main() {
     expect(book.chapters('/').first.name, '/test');
   });
 
+  test('selectBook with parents preserves query params after parent resolution',
+      () async {
+    final queryUri = Uri.parse('/auth/login?type=EMPRESA');
+    final routeMock = ParallelRouteMock();
+    when(() => routeMock.uri).thenReturn(Uri.parse('/auth/login'));
+    when(() => routeMock.parent).thenReturn('/auth');
+    when(() => routeMock.schema).thenReturn('/auth');
+    when(() => routeMock.name).thenReturn('/login');
+    when(() => routeMock.middlewares).thenReturn([Guard()]);
+    when(() => routeMock.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeMock);
+
+    final routeParent = ParallelRouteMock();
+    when(() => routeParent.uri).thenReturn(Uri.parse('/auth'));
+    when(() => routeParent.parent).thenReturn('');
+    when(() => routeParent.schema).thenReturn('');
+    when(() => routeParent.name).thenReturn('/auth');
+    when(() => routeParent.middlewares).thenReturn([Guard()]);
+    when(() => routeParent.copyWith(schema: any(named: 'schema')))
+        .thenReturn(routeParent);
+
+    when(() => reportPush(routeMock)).thenReturn(const Success(unit));
+    when(() => reportPush(routeParent)).thenReturn(const Success(unit));
+
+    when(() => getRoute.call(any())).thenAnswer((invocation) async {
+      final dto = invocation.positionalArguments.first as RouteParmsDTO;
+      if (dto.url.startsWith('/auth/login')) {
+        return Success(routeMock);
+      }
+      return Success(routeParent);
+    });
+
+    final argsWithQuery = ModularArguments(uri: queryUri);
+    when(() => getArguments.call()).thenReturn(Success(argsWithQuery));
+    when(() => setArguments.call(any())).thenReturn(const Success(unit));
+
+    await parser.selectBook('/auth/login?type=EMPRESA');
+
+    final captured = verify(() => setArguments.call(captureAny())).captured.last
+        as ModularArguments;
+    expect(captured.uri.queryParameters['type'], 'EMPRESA');
+  });
+
   test('selectRoute with RedirectRoute', () async {
     final redirect = RedirectRoute('/oo', to: '/test');
     final modularArgument = ModularArguments.empty();
@@ -181,6 +229,7 @@ void main() {
     expect(book.chapters().first.name, '/');
     expect(book.chapters('/').first.name, '/test');
   });
+
   test('selectRoute with resolver route withless /', () async {
     final args = ModularArguments.empty();
 
@@ -334,6 +383,40 @@ void main() {
     final book = await parser.selectBook('/parent/test');
     expect(book.uri.toString(), '/parent/test');
     expect(book.chapters().first.name, '/parent');
+  });
+
+  group('UrlService.resolvePath', () {
+    test('preserves query parameters', () {
+      final service = _ConcreteUrlService();
+      expect(
+        service.resolvePath('http://localhost/auth/login?type=EMPRESA'),
+        '/auth/login?type=EMPRESA',
+      );
+    });
+
+    test('preserves query parameters in fragment (HashStrategy)', () {
+      final service = _ConcreteUrlService();
+      expect(
+        service.resolvePath('http://localhost/#/auth/login?type=EMPRESA'),
+        '/auth/login?type=EMPRESA',
+      );
+    });
+
+    test('returns path without query when no query exists', () {
+      final service = _ConcreteUrlService();
+      expect(
+        service.resolvePath('http://localhost/auth/login'),
+        '/auth/login',
+      );
+    });
+
+    test('returns fragment without query when fragment has no query', () {
+      final service = _ConcreteUrlService();
+      expect(
+        service.resolvePath('http://localhost/#/auth/login'),
+        '/auth/login',
+      );
+    });
   });
 }
 

@@ -51,8 +51,9 @@ class ModularRouteInformationParser
         path = Modular.initialRoutePath;
       }
     } else {
-      // 3.10 wrapper
-      path = location;
+      // Preserve query parameters from the original URI
+      final query = routeInformation.uri.query;
+      path = query.isNotEmpty ? '$location?$query' : location;
     }
 
     return selectBook(
@@ -97,7 +98,18 @@ class ModularRouteInformationParser
         book.routes.insert(0, child);
       }
 
-      setArguments(modularArgs);
+      // Preserve query parameters from the resolved route.
+      // After resolving parent routes, the tracker updates arguments
+      // with the correct URI (including query params). Only restore
+      // old args if they already contain query params, otherwise
+      // keep the resolved args to avoid losing them.
+      final resolvedArgs =
+          getArguments().getOrElse((l) => ModularArguments.empty());
+      if (modularArgs.uri.hasQuery) {
+        setArguments(modularArgs);
+      } else {
+        setArguments(resolvedArgs);
+      }
 
       for (final booksRoute in book.routes) {
         reportPush(booksRoute);

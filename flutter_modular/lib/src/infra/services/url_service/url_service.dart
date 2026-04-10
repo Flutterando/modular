@@ -12,7 +12,14 @@ abstract class UrlService {
   String resolvePath(String path) {
     final uri = Uri.parse(path);
     if (uri.hasFragment) {
+      final fragmentUri = Uri.parse(uri.fragment);
+      if (fragmentUri.query.isNotEmpty) {
+        return '${fragmentUri.path}?${fragmentUri.query}';
+      }
       return uri.fragment;
+    }
+    if (uri.query.isNotEmpty) {
+      return '${uri.path}?${uri.query}';
     }
     return uri.path;
   }
