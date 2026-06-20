@@ -174,7 +174,7 @@ class ModularBase implements IModularBase {
   final flags = ModularFlags();
 
   @override
-  final String initialRoute = '/';
+  String get initialRoute => _initialRoutePath;
 
   @override
   void setInitialRoute(String value) {
@@ -201,8 +201,7 @@ class ModularBase implements IModularBase {
     routerDelegate: routerDelegate,
     routeInformationParser: routeInformationParser,
     routeInformationProvider: PlatformRouteInformationProvider(
-      // ignore: deprecated_member_use
-      initialRouteInformation: const RouteInformation(location: '/'),
+      initialRouteInformation: const RouteInformation(uri: Uri.parse(initialRoute)),
     ),
     backButtonDispatcher: RootBackButtonDispatcher(),
   );
