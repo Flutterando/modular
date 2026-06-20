@@ -173,4 +173,25 @@ void main() {
     expect(page.createRoute(context), isA<Route>());
     expect(page.route.isFullscreenDialog, equals(true));
   });
+
+  test('createRoute custom route builder', () {
+    final args = ModularArguments.empty();
+    final context = BuildContextMock();
+    final route = ParallelRouteMock();
+    final widget = Container();
+    when(() => route.child).thenReturn((_) => widget);
+    when(() => route.uri).thenReturn(Uri.parse('/'));
+    when(() => route.transition).thenReturn(TransitionType.custom);
+    when(() => route.customTransition).thenReturn(CustomTransition(
+      transitionBuilder: (_, __, ___, child) => child,
+      routeBuilder: (builder, settings) => CupertinoSheetRoute(
+        builder: builder,
+        settings: settings,
+      ),
+    ));
+
+    final page = ModularPage(args: args, flags: ModularFlags(), route: route);
+    final pageRoute = page.createRoute(context);
+    expect(pageRoute, isA<CupertinoSheetRoute>());
+  });
 }

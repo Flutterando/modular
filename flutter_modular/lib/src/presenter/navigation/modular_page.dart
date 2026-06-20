@@ -42,6 +42,10 @@ class ModularPage<T> extends Page<T> {
     if (transitionType == TransitionType.custom &&
         route.customTransition != null) {
       final transition = route.customTransition!;
+      if (transition.routeBuilder != null) {
+        return transition.routeBuilder!((context) => page, this) as Route<T>;
+      }
+
       return PageRouteBuilder<T>(
         pageBuilder: transition.pageBuilder ?? (context, _, __) => page,
         opaque: transition.opaque,
