@@ -308,7 +308,7 @@ Remember to include a tag, and to follow [Conventional Commits](https://www.conv
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTACT -->
+<!-- CONTACT V7 -->
 ## <div id="contact">💬 Contact</div>
 
 Flutterando Community
