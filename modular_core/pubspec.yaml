@@ -6,7 +6,7 @@ homepage: https://github.com/Flutterando/modular
 resolution: workspace
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
   auto_injector: ">=2.1.0 <3.0.0"
