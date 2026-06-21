@@ -20,7 +20,7 @@ version: 1.0.0+1
 resolution: workspace
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
   dartz: ^0.10.0-nullsafety.2

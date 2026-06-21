@@ -201,7 +201,9 @@ class ModularBase implements IModularBase {
     routerDelegate: routerDelegate,
     routeInformationParser: routeInformationParser,
     routeInformationProvider: PlatformRouteInformationProvider(
-      initialRouteInformation: const RouteInformation(uri: Uri.parse(initialRoute)),
+      initialRouteInformation: RouteInformation(
+        uri: Uri.parse(initialRoute),
+      ),
     ),
     backButtonDispatcher: RootBackButtonDispatcher(),
   );

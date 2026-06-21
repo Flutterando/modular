@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -41,14 +39,12 @@ class ModularRouteInformationParser
         ? '/'
         : routeInformation.uri.path;
     if (location == '/') {
-      // ignore: invalid_use_of_visible_for_testing_member
-      path = urlService.getPath() ?? Modular.initialRoutePath;
+      path = urlService.getPath() ?? Modular.initialRoute;
 
       if ((const bool.fromEnvironment('dart.tool.dart2wasm') ||
               const bool.fromEnvironment('dart.library.js_util')) &&
           path == '/') {
-        // ignore: invalid_use_of_visible_for_testing_member
-        path = Modular.initialRoutePath;
+        path = Modular.initialRoute;
       }
     } else {
       // 3.10 wrapper
@@ -63,7 +59,7 @@ class ModularRouteInformationParser
 
   @override
   RouteInformation restoreRouteInformation(ModularBook configuration) {
-    return RouteInformation(location: configuration.uri.toString());
+    return RouteInformation(uri: configuration.uri);
   }
 
   Future<ModularBook> selectBook(String path,

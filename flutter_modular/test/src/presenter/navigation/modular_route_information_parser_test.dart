@@ -88,6 +88,7 @@ void main() {
     final params = {'param': 'value'};
     final uri = Uri.parse('/test');
     when(() => routeMock.uri).thenReturn(uri);
+    when(() => routeMock.name).thenReturn('/test');
     when(() => routeMock.parent).thenReturn('');
     when(() => routeMock.middlewares).thenReturn([]);
     when(() => getRoute.call(any()))

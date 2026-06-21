@@ -1,6 +1,6 @@
 import 'io_url_service.dart'
 // for web
-    if (dart.library.html) 'html_url_service.dart' as impl;
+    if (dart.library.js_interop) 'web_url_service.dart' as impl;
 
 abstract class UrlService {
   String? getPath();

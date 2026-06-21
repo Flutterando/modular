@@ -10,13 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
+        distribution: 'temurin'
+        java-version: '17'
+    - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.10.6'
+        channel: 'stable'
+        flutter-version: '3.41.7'
     
     - name: get packages
       run: flutter pub get
@@ -27,7 +29,7 @@ jobs:
       working-directory: flutter_modular
       
     - name: Codecov GitHub Action
-      uses: codecov/codecov-action@v2.0.3
+      uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -36,13 +38,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
+        distribution: 'temurin'
+        java-version: '17'
+    - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.10.6'
+        channel: 'stable'
+        flutter-version: '3.41.7'
     
     - name: get packages
       run: flutter pub get
@@ -53,7 +57,7 @@ jobs:
       working-directory: modular_core
       
     - name: Codecov GitHub Action
-      uses: codecov/codecov-action@v2.0.3
+      uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         
@@ -62,13 +66,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
+        distribution: 'temurin'
+        java-version: '17'
+    - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.10.6'
+        channel: 'stable'
+        flutter-version: '3.41.7'
     
     - name: get packages
       run: flutter pub get
@@ -79,7 +85,7 @@ jobs:
       working-directory: shelf_modular
       
     - name: Codecov GitHub Action
-      uses: codecov/codecov-action@v2.0.3
+      uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 

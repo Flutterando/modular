@@ -191,7 +191,10 @@ void main() {
     delegate.currentConfiguration = ModularBook(routes: [parallel, childParallel]);
     expect(delegate.currentConfiguration?.routes.length, 2);
     delegate.onPopPage(route, null);
-    expect(delegate.currentConfiguration?.routes.length, 0);
+    // Only the popped route is removed; child routes are preserved.
+    // Cascade removal of children was intentionally removed in the
+    // route-removal-logic fix (commit bd4d19f, released in 3.4.1).
+    expect(delegate.currentConfiguration?.routes.length, 1);
     expect(delegate.navigateHistory, delegate.currentConfiguration?.routes);
   });
   test('pushNamed with forRoot', () async {
