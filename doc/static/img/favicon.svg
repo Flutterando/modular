@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" role="img" aria-label="Modular">
+  <rect width="80" height="80" rx="18" fill="#a77b00"/>
+  <g transform="translate(8 8) scale(0.8)">
+    <rect x="14" y="30" width="44" height="44" rx="11" fill="#EADCB4"/>
+    <rect x="21" y="22" width="44" height="44" rx="11" fill="#D6B873"/>
+    <rect x="28" y="14" width="44" height="44" rx="11" fill="#ffffff"/>
+  </g>
+</svg>

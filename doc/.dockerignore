@@ -1,0 +1,9 @@
+# Keep the build context small and reproducible.
+node_modules
+build
+.docusaurus
+.cache-loader
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store

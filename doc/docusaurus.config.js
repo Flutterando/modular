@@ -1,5 +1,6 @@
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const {themes} = require('prism-react-renderer');
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
@@ -9,10 +10,36 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
   url: 'https://modular.flutterando.com.br',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  markdown: {
+    // Parse .md as CommonMark (so `<...>`/`{...}` in prose are literal — the
+    // legacy reference pages are full of Dart generics); use .mdx for JSX.
+    format: 'detect',
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
+  favicon: 'img/favicon.svg',
   organizationName: 'flutterando', // Usually your GitHub org/user name.
   projectName: 'modular', // Usually your repo name.
+
+  // Brand fonts: Space Grotesk (display), Inter (body), JetBrains Mono (technical).
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+  ],
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
+  ],
 
   presets: [
     [
@@ -38,7 +65,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         title: 'Modular',
         logo: {
           alt: 'Modular Logo',
-          src: 'img/logo.png',
+          src: 'img/logo.svg',
         },
         items: [
           {
@@ -67,10 +94,6 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
               {
                 label: 'flutter_modular',
                 to: '/docs/flutter_modular/start',
-              },
-              {
-                label: 'shelf_modular',
-                to: '/docs/shelf_modular/start',
               },
             ],
           },

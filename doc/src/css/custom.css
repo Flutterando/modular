@@ -1,19 +1,90 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Global styles. Infima is bundled by the classic template; we override it here
+ * to match the Modular brand: ochre/gold accent, technical type, warm-espresso
+ * surfaces. Tokens come straight from the Claude Design file (accent #a77b00,
+ * deep #241606, ink #1a1305). Fonts (Space Grotesk / Inter / JetBrains Mono) are
+ * loaded via `stylesheets` in docusaurus.config.js.
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #b97200;
-  --ifm-color-primary-dark: #b97200;
-  --ifm-color-primary-darker: #b97200;
-  --ifm-color-primary-darkest: #da8a0b;
-  --ifm-color-primary-light: #c57e0d;
-  --ifm-color-primary-lighter: #b87d1e;
-  --ifm-color-primary-lightest: #dba349;
-  --ifm-code-font-size: 95%;
+  /* Brand — ochre / gold (#a77b00, the pinned Modular accent) */
+  --ifm-color-primary: #a77b00;
+  --ifm-color-primary-dark: #9a7100;
+  --ifm-color-primary-darker: #916b00;
+  --ifm-color-primary-darkest: #785800;
+  --ifm-color-primary-light: #b78808;
+  --ifm-color-primary-lighter: #c2920f;
+  --ifm-color-primary-lightest: #d8ab33;
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ifm-heading-font-family: 'Space Grotesk', var(--ifm-font-family-base);
+  --ifm-font-family-monospace: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --ifm-code-font-size: 92%;
+  --ifm-heading-font-weight: 700;
+
+  /* Ink */
+  --ifm-heading-color: #1a1305;
+  --ifm-font-color-base: #2b251c;
+
+  /* Brand tokens (reused by the homepage) */
+  --brand-ink: #1a1305;
+  --brand-deep: #241606;
+  --brand-canvas: #e7e6e2;
+  --brand-muted: #5a6b65;
+  --brand-line: #e7e3db;
+
+  /* Chrome */
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-footer-background-color: #241606;
+  --ifm-footer-color: #d6cbb9;
+  --ifm-footer-link-color: #d6cbb9;
+  --ifm-footer-title-color: #ffffff;
+  --ifm-footer-link-hover-color: #ffffff;
+}
+
+html[data-theme='dark'] {
+  /* Brighter gold for contrast on dark surfaces */
+  --ifm-color-primary: #e3b24a;
+  --ifm-color-primary-dark: #dea838;
+  --ifm-color-primary-darker: #daa22c;
+  --ifm-color-primary-darkest: #b9871d;
+  --ifm-color-primary-light: #e7ba5e;
+  --ifm-color-primary-lighter: #eabf6b;
+  --ifm-color-primary-lightest: #f1d295;
+
+  --ifm-background-color: #161003;
+  --ifm-background-surface-color: #221805;
+  --ifm-heading-color: #ffffff;
+  --ifm-navbar-background-color: #241606;
+  --ifm-footer-background-color: #120c03;
+}
+
+/* Tighten heading tracking to match the wordmark */
+h1,
+h2,
+h3,
+.navbar__title,
+.hero__title {
+  letter-spacing: -0.02em;
+}
+
+.navbar__title {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+}
+
+/* Primary buttons: brand glow like the design's CTA */
+.button--primary {
+  box-shadow: 0 12px 24px -12px rgba(167, 123, 0, 0.7);
+}
+
+/* Footer category labels in the technical mono, like the brand */
+.footer__title {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .docusaurus-highlight-code-line {
