@@ -1,0 +1,19 @@
+name: Publish to pub.dev
+
+# Publishes on a version tag (e.g. v7.0.0, v7.0.0-dev.1) via pub.dev's automated
+# publishing (GitHub OIDC — no stored credentials). One-time setup required on
+# pub.dev: package Admin → Automated publishing → enable GitHub Actions for
+# repo `Flutterando/modular` with tag pattern `v{{version}}`.
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  publish:
+    permissions:
+      id-token: write # required for OIDC token exchange with pub.dev
+    # Flutter package → the reusable workflow must use the Flutter SDK.
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      flutter: true

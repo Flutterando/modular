@@ -1,1 +1,29 @@
+# Miscellaneous
+*.class
+*.log
+*.swp
+.DS_Store
+.atom/
+.history
+.svn/
+
+# IntelliJ / VS Code
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Flutter / Dart / Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+
+# A library package should not commit a resolved lockfile or local overrides.
+pubspec.lock
 pubspec_overrides.yaml
