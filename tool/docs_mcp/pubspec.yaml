@@ -2,7 +2,7 @@ name: flutter_modular_docs_mcp
 description: >-
   MCP server that serves the flutter_modular documentation to AI coding clients
   as searchable resources plus a keyword search tool.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/Flutterando/modular
 homepage: https://modular.flutterando.com.br
 topics:

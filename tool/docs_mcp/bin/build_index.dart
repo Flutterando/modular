@@ -50,9 +50,13 @@ void main(List<String> args) {
 }
 
 /// Scope: top-level docs (intro/platforms) + flutter_modular v7, excluding the
-/// legacy v5/v6 pages and the deprecated shelf_modular section.
+/// legacy pages (`legacy/`, `legacy-6/`, …) and the deprecated shelf_modular
+/// section.
 bool _include(String rel) {
-  if (rel.contains('legacy/') || rel.contains('shelf_modular/')) return false;
+  if (RegExp(r'(^|/)legacy').hasMatch(rel) ||
+      rel.contains('shelf_modular/')) {
+    return false;
+  }
   return rel.startsWith('flutter_modular/') || !rel.contains('/');
 }
 
