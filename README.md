@@ -10,31 +10,36 @@ If it's for the Flutterando version of the template just send a message to us (o
 -->
 
 
-  <h1 align="center">Flutter Modular</h1>
-
-
-<!-- PROJECT LOGO -->
+<!-- PROJECT LOGO & BRAND -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://raw.githubusercontent.com/Flutterando/modular/master/flutter_modular.png" alt="Logo" width="170" style=" padding-right: 30px;">
-  </a>
-  <a href="https://github.com/Flutterando/README-Template/">
-    <img src="https://raw.githubusercontent.com/Flutterando/README-Template/master/readme_assets/logo-flutterando.png" alt="Logo" width="95">
+  <a href="https://modular.flutterando.com.br">
+    <img src="art/modular-logo.png" alt="Modular" width="120">
   </a>
 
-  <br />
+  <h1 align="center" style="letter-spacing: -0.02em;">Flutter Modular</h1>
+
   <p align="center">
-    Welcome to Flutter Modular!
-    A smart project structure.
-    <br>
-    <br>
-    <a href="https://modular.flutterando.com.br/docs/intro">View Example</a>
+    <strong>A smart, modular project structure</strong>
+    <br />
+    Route management, dependency injection and scoped state — organized by feature, the Flutter way.
+  </p>
+
+  <p align="center">
+    <a href="https://pub.dev/packages/flutter_modular"><img src="https://img.shields.io/badge/flutter__modular-v7-a77b00?style=for-the-badge&labelColor=241606" alt="flutter_modular v7"></a>
+    <a href="https://pub.dev/packages/flutter_modular"><img src="https://img.shields.io/pub/v/flutter_modular?style=for-the-badge&label=pub&color=a77b00&labelColor=241606" alt="pub version"></a>
+    <a href="https://github.com/Flutterando/modular/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Flutterando/modular?style=for-the-badge&color=a77b00&labelColor=241606" alt="license"></a>
+  </p>
+
+  <p align="center">
+    <a href="https://modular.flutterando.com.br/docs/intro">Documentation</a>
     ·
     <a href="https://github.com/Flutterando/modular/issues">Report Bug</a>
     ·
     <a href="https://github.com/Flutterando/modular/issues">Request Feature</a>
   </p>
+
+  <sub>Maintained by <a href="https://www.flutterando.com.br">Flutterando</a></sub>
 </div>
 
 <br>
