@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   auto_injector: ">=2.1.0 <3.0.0"
-  characters: ">=1.4.0 <2.0.0"
+  characters: ^1.4.1
   meta: ">=1.3.0 <2.0.0"
 
 dev_dependencies:
