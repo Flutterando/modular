@@ -1,0 +1,36 @@
+# What reaches pub.dev is only the package essentials:
+#   pubspec.yaml, LICENSE, README.md, CHANGELOG.md, analysis_options.yaml,
+#   lib/, and example/README.md (the snippet shown on the Example tab).
+# Everything listed below is repo-only.
+#
+# NOTE: when a .pubignore exists, pub uses it INSTEAD of .gitignore at this
+# level — so build/tooling artifacts must be re-listed here too.
+
+# Build / tooling artifacts
+build/
+.dart_tool/
+coverage/
+*.log
+*.lock
+.DS_Store
+
+# Tests are not needed by consumers of the package.
+test/
+
+# From the example, pub.dev only needs the README; the rest of the demo app
+# (lib/, test/, pubspec.yaml, platform config) is repo-only.
+example/*
+!example/README.md
+
+# Docs site, CI, IDE, contributor and project-meta files.
+doc/
+.github/
+.idea/
+.vscode/
+.gitignore
+.pubignore
+.metadata
+.all-contributorsrc
+devtools_options.yaml
+flutter_modular.png
+CONTRIBUTING.md

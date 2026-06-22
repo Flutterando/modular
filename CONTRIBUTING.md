@@ -41,9 +41,9 @@ For a contribution to be accepted:
 - Documentation should always be updated or added.*
 - Examples should always be updated or added.*
 - Tests should always be updated or added.*
-- Format the Dart code accordingly with `flutter format`.
-- Your code should pass the analyzer checks `melos run analyze`.
-- Your code should pass all tests `melos run test`.
+- Format the Dart code accordingly with `dart format .`.
+- Your code should pass the analyzer checks `flutter analyze`.
+- Your code should pass all tests `flutter test`.
 - Start your PR title with a [conventional commit] type
   (`feat:`, `fix:` etc).
 
@@ -61,26 +61,24 @@ and it will be automatically reflected in the PR.
    (e.g. `git clone git@github.com:<YOUR_GITHUB_USER>/modular.git`).
 
 ### Environment Setup
-Modular uses [Melos] to manage the project and dependencies.
+`flutter_modular` is a single Flutter package with its demo in `example/`, wired together as a
+[pub workspace] — one `flutter pub get` at the root resolves both.
 
-To install Melos, run the following command from your terminal:
-
-```bash
-flutter pub global activate melos
-```
-
-Next, at the root of your locally cloned repository bootstrap the projects dependencies:
+At the root of your locally cloned repository:
 
 ```bash
-melos bootstrap
+flutter pub get          # resolves the package + example
+flutter analyze          # static analysis
+flutter test             # the package test suite
 ```
 
-The bootstrap command locally links all dependencies within the project without having to
-provide manual [`dependency_overrides`][pubspec doc]. This allows all
-plugins, examples and tests to build from the local clone project. You should only need to run this
-command once.
+To run the checks for the demo app:
 
-> You do not need to run `flutter pub get` once bootstrap has been completed.
+```bash
+cd example
+flutter analyze
+flutter test
+```
 
 ### Performing changes
  - Create a new local branch from `main` (e.g. `git checkout -b my-new-feature`)
@@ -119,6 +117,5 @@ Examples of PR titles:
 [PRs]: https://github.com/Flutterando/modular/pulls
 [fork guide]: https://guides.github.com/activities/forking/#fork
 [Discord]: https://discord.gg/7qvSXRMMYw
-[Melos]: https://github.com/invertase/melos
-[pubspec doc]: https://dart.dev/tools/pub/pubspec
+[pub workspace]: https://dart.dev/tools/pub/workspaces
 [conventional commit]: https://www.conventionalcommits.org

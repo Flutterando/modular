@@ -13,8 +13,8 @@ relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 - [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `docs:` etc).
 - [ ] I have read the [Contributor Guide] and followed the process outlined for submitting PRs.
 - [ ] I have updated/added tests for ALL new/updated/fixed functionality.
-- [ ] I have updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
-- [ ] I have updated/added relevant examples in `examples`.
+- [ ] I have updated/added relevant documentation in `doc` and added dartdoc comments with `///`.
+- [ ] I have updated/added relevant examples in `example`.
 
 ## Breaking Change
 

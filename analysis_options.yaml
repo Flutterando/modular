@@ -1,0 +1,6 @@
+include: package:flutterando_analysis/flutter_package.yaml
+
+linter:
+  rules:
+    public_member_api_docs: false
+    require_trailing_commas: false

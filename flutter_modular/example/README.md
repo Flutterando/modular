@@ -1,3 +1,0 @@
-# Search
-
-![search](search.gif)

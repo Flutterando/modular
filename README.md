@@ -56,9 +56,11 @@ If it's for the Flutterando version of the template just send a message to us (o
   </li>
     <li><a href="#usage">Usage</a></li>     
     <ol>
-      <li><a href="#starting-a-project">Starting a project</a></li>
-      <li><a href="#the-modularApp">The ModularApp</a></li>
-      <li><a href="#creating-the-main-module">Creating the Main Module</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#declare-a-module">Declare a module</a></li>
+      <li><a href="#bootstrap-with-modularapp">Bootstrap with ModularApp</a></li>
+      <li><a href="#navigate">Navigate</a></li>
+      <li><a href="#page-scoped-state">Page-scoped state</a></li>
     </ol>
   </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -178,117 +180,73 @@ Go to the next topic and start your journey towards an intelligent structure.
 
 ## <div id="usage">✨ Usage</div>
 
-**flutter_modular** was built using the engine of **modular_core** that's responsible for the dependency injection system and route management. The routing system emulates a tree of modules, just like Flutter does in it's widget trees. Therefore we can add one module inside another one by creating links to the parent module.
+> **flutter_modular 7 is a ground-up rewrite.** A **Module** is now exactly the two things that couple a Flutter app — **Dependency Injection + Routes** — declared with a small functional API. State is **page-scoped**, tied to the route lifecycle, so ownership and disposal stop being your problem and the durable truth lives in a repository/service registered in DI. Full, runnable demonstrations (nested routes, `RouterOutlet` shells, route guards, per-module DI lifecycle, `arguments`/pop-results) live in [`example/`](example/).
 
-## <div id="starting-a-project">Starting a project</div>
+### Install
 
-Our first goal will be the creation of a simple app with no defined structure or architecture yet, so that we can study the initial components of **flutter_modular**
-
-Create a new Flutter project:
-```
-flutter create my_smart_app
-```
-
-Now add the **flutter_modular** to pubspec.yaml:
 ```yaml
-
 dependencies:
-  flutter_modular: any
-
+  flutter_modular: ^7.0.0-dev.1
 ```
 
-If that succeeded, we are ready to move on!
+or run `flutter pub add flutter_modular`.
 
->**💡 TIP:** Flutter's CLI has a tool that makes package installation easier in the project. Use the command: 
->`(flutter pub add flutter_modular)`
+### Declare a module
 
-## <div id="the-modularApp">The ModularApp</div>
+A module groups routes and dependency injection. Shared dependencies are registered with `addSingleton`/`add*`, routes with `route(...)`, and submodules with `module(...)`.
 
-We need to add a **ModularApp** Widget in the root of our project. MainModule and MainWidget will be created in the next steps, but for now let's change our **main.dart** file:
-
-```dart title="lib/main.dart"
-
-import 'package:flutter/material.dart';
-
-void main(){
-  return runApp(ModularApp(module: /*<MainModule>*/, child: /*<MainWidget>*/));
-}
-
-```
-
-**ModularApp** forces us to add a main Module and main Widget. What are we going to do next?
-This Widget does the initial setup so everything can work as expected. For more details go to **ModularApp** doc.
-
->**💡 TIP:** It's important that **ModularApp** is the first widget in your app!
-
-
-## <div id="creating-the-main-module">Creating the Main Module</div>
-
-A module represents a set of Routes and Binds.
-- **ROUTE**: Page setup eligible for navigation.
-- **BIND**: Represents an object that will be available for injection to other dependencies.
-
-We'll see more info about these topics further below.
-
-We can have several modules, but for now, let's just create a main module called **AppModule**:
-
-```dart title="lib/main.dart" {8-16}
-import 'package:flutter/material.dart';
+```dart
 import 'package:flutter_modular/flutter_modular.dart';
 
-void main(){
-  return runApp(ModularApp(module: AppModule(), child: <MainWidget>));
-}
-
-class AppModule extends Module {
-  @override
-  List<Bind> get binds => [];
-
-  @override
-  List<ModularRoute> get routes => [];
-}
+final appModule = createModule(register: (c) {
+  c
+    ..addSingleton<Counter>(Counter.new)                       // shared dependency (SSoT)
+    ..route('/', child: (ctx, state) => const HomePage())
+    ..route('/details/:id',
+        child: (ctx, state) => DetailsPage(id: state.params['id']!));
+});
 ```
 
-Note that the module is just a class that inherits from the **Module** class, overriding the **binds** and **routes** properties.
-With this we have a route and injection mechanism separate from the application and can be both applied in a global context (as we are doing) or in a local context, for example, creating a module that contains only binds and routes only for a specific feature!
+### Bootstrap with ModularApp
 
-We've added **AppModule** to ModularApp. Now we need an initial route, so let's create a StatelessWidget to serve as the home page.
+`ModularApp` is the first widget, above `MaterialApp`. It bootstraps the module, owns the injector, and exposes the router config.
 
-```dart title="lib/main.dart" {14,18-27}
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
-void main(){
-  return runApp(ModularApp(module: AppModule(), child: <MainWidget>));
-}
-
-class AppModule extends Module {
-  @override
-  List<Bind> get binds => [];
-
-  @override
-  List<ModularRoute> get routes => [
-    ChildRoute('/', child: (context, args) => HomePage()),
-  ];
-}
-
-class HomePage extends StatelessWidget {
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Center(
-        child: Text('This is initial page'),
-      ),
+```dart
+void main() => runApp(
+      ModularApp(module: appModule, child: const AppRoot()),
     );
-  }
+
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp.router(
+        routerConfig: ModularApp.routerConfigOf(context),
+      );
 }
 ```
 
-We've created a Widget called **HomePage** and added its instances in a route called **ChildRoute**.
+### Navigate
 
->**💡 TIP:** There are two ModularRoute types: **ChildRoute** and **ModuleRoute**.
- >- **ChildRoute**: Serves to build a Widget.
- >- **ModuleRoute**: Concatenates another module.
+```dart
+context.pushNamed('/details/42'); // stacks a page (push stays out of the URL)
+context.navigate('/');            // replaces the stack (owns the URL, resets history)
+context.pop(result);              // pops, delivering a result to the awaiting pushNamed
+```
+
+### Page-scoped state
+
+State lives 1:1 with a view via `provide` — built in a page-local scope and disposed when the route leaves, so there are no floating globals and no manual `dispose`.
+
+```dart
+c.route('/counter',
+  provide: (s) => s.addChangeNotifier<CounterViewModel>(CounterViewModel.new),
+  child: (ctx, state) => const CounterPage(),
+);
+
+// inside the page:
+final vm = context.watch<CounterViewModel>(); // rebuilds when the VM notifies
+```
 
 <!-- CONTRIBUTING -->
 ## <div id="contributing">🧑‍💻 Contributing</div>
