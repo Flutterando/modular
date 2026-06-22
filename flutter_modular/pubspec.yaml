@@ -19,6 +19,6 @@ dependencies:
 
 dev_dependencies:
   flutterando_analysis: ^0.0.2
-  mocktail: ^1.0.4
+  mocktail: ^1.0.5
   flutter_test:
     sdk: flutter
