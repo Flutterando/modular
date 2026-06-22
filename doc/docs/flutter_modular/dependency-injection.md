@@ -2,186 +2,105 @@
 sidebar_position: 3
 ---
 
-# Dependency Injection
+# Dependency injection
 
-We generally code with maintainability and scalability in mind, applying project-specific patterns
-to a given function and improving the structure of our code. We must pay attention to our code, 
-otherwise it can become a hidden problem. Let's look at a practical example:
+Modular's DI is powered by [`auto_injector`](https://pub.dev/packages/auto_injector).
+You register constructors on a module's `ModularContext`; Modular resolves each
+dependency's own constructor arguments from the graph automatically.
 
-```dart
-class Client {
-  void sendEmail(String email, String title, String body){
-    final xpto = XPTOEmail();
-    xpto.sendEmail(email, title, body);
-  }
-}
-```
+## Registering dependencies
 
-Here we have a **Client** class with a method called **sendEmail()** running the send routine on **XPTOEmail** class instance.
-Despite being a simple and functional approach, having a class instance within the method, it presents some problems:
-
-- Makes it impossible to replace the instance `xpto`.
-- Makes Unit Tests more difficult, as you would not be able to create `XPTOEmail()` Fake/Mock instance.
-- Entirely dependent on the functioning of an external class.
-
-We call it "Dependency Coupling" when we use an outer class in this way, because the *Client* class
-is totally dependent on the functioning of the **XPTOEmail** object.
-
-To break a class's bond with its dependency, we generally prefer to "inject" the dependency instances through a constructor, setters, or methods. That's what we call "Dependency Injection".
-
-Let's fix the **Customer** class by injecting the **XPTOEmail** instance by constructor:
+Inside `register`, declare dependencies on the context (`c`):
 
 ```dart
-class Client {
-
-  final XPTOEmail xpto;
-  Client(this.xpto);
-
-  void sendEmail(String email, String title, String body){
-    xpto.sendEmail(email, title, body);
-  }
-}
+final coreModule = createModule(
+  register: (c) {
+    c
+      ..addSingleton<ProductService>(ProductService.new)
+      ..addSingleton<ProductRepository>(ProductRepository.new) // gets ProductService injected
+      ..addSingleton<AppSession>(AppSession.new);
+  },
+);
 ```
-This way, we reduce the coupling **XPTOEmail** object has to the **Client** object.
 
-We still have a problem with this implementation. Despite *cohesion*, the Client class has a dependency on an external source, and even being injected by constructor, replacing it with another email service would not be a simple task.
-Our code still has coupling, but we can improve this using `interfaces`. Let's create an interface
-to define a signature, or "contract" for the **sendEmail** method. With this in place, any class that implements this interface can be injected into the class **Client**:
+| Method | Builds | Lifetime |
+|---|---|---|
+| `add<T>(T Function(...))` | a **new** instance every time it is resolved | per resolution |
+| `addSingleton<T>(T Function(...))` | once, **eagerly** at registration | one shared instance |
+| `addLazySingleton<T>(T Function(...))` | once, on **first** resolution | one shared instance |
+| `addInstance<T>(T value)` | nothing — registers an existing object | the value you pass |
+
+You pass a **constructor reference** (e.g. `ProductRepository.new`), not an instance.
+`auto_injector` reads its parameters and supplies them from the graph, so a repository
+that takes a service in its constructor just works once both are registered.
+
+## Resolving with `inject<T>()`
+
+Constructor injection covers most needs — a class declares what it needs as constructor
+parameters and the graph fills them in. When you need to reach a dependency from a place
+that has no constructor — a route **guard**, a callback, a top‑level function — use
+`inject<T>()`:
 
 ```dart
-abstract class EmailService {
-  void sendEmail(String email, String title, String body);
-}
-
-class XPTOEmailService implements EmailService {
-
-  final XPTOEmail xpto;
-  XPTOEmailService(this.xpto);
-
-  void sendEmail(String email, String title, String body) {
-    xpto.sendEmail(email, title, body);
-  }
-}
+c.route(
+  '/settings/secret',
+  // inject<T>() reads DI at guard-eval time without exposing the injector object.
+  guards: [(state) => inject<AppSession>().unlocked ? null : '/home/settings'],
+  child: (ctx, state) => const SecretPage(),
+);
 ```
 
-So we can create implementations of any email services. Finally, let's replace the dependency on
-XPTOEmail by the EmailService interface:
+`inject<T>()` resolves `T` from the **live** module graph (the injector object itself
+stays private — Angular‑style). It throws a `StateError` if no Modular app has
+bootstrapped yet, and because it reads the live graph, a feature module's dependencies
+are reachable through it only while that feature is active.
+
+## Bind lifecycle
+
+*Where* a dependency is registered decides *how long* it lives — this is the other half
+of the module `path` rule from [Modules](./module.md#a-modules-path-decides-what-it-is).
+
+### Root‑owned (shared DI, never disposed)
+
+Dependencies in a **path‑less** module are committed **eagerly** at bootstrap and live
+for the whole app. They are your durable truth — repositories, services, sessions. A
+leaving route never disposes them.
 
 ```dart
-class Client {
-
-  final EmailService service;
-  Client(this.service);
-
-  void sendEmail(String email, String title, String body){
-    service.sendEmail(email, title, body);
-  }
-}
+final coreModule = createModule(            // no path → root-owned
+  register: (c) => c.addSingleton<ProductRepository>(ProductRepository.new),
+);
 ```
 
-Then We create the **Client** instance:
+### Feature‑scoped (bound on entry, disposed on exit)
+
+Dependencies in a module **with a `path`** are bound lazily when the feature's **first
+route enters** the stack, and disposed when its **last route leaves**. Disposal is
+automatic for `ChangeNotifier`s and [`Disposable`](./state-management.md#disposable)s —
+their `dispose()` is called.
 
 ```dart
-//dependencies
-final xpto = XPTOEmail();
-final service = XPTOEmailService(xpto)
-
-// instance
-final client = Client(service);
+final productsModule = createModule(
+  path: '/products',                        // feature → binds disposed when it leaves
+  register: (c) {
+    c.add<ProductSearchController>(ProductSearchController.new);
+    // ...routes...
+  },
+);
 ```
 
-This object creation method solves coupling issues but may increase instance creation complexity, as we can see in the **Client** class. The **flutter_modular** Dependency Injection System solves this problem simply and effectively.
+This mirrors how the "active path list" worked in 6.x: a feature's resources exist only
+while the feature is on screen.
 
-## Instance registration
+:::tip Where should a dependency live?
+Put the **source of truth** (repositories, services, app session) in a root‑owned
+module — it must outlive any single page. Put **feature‑local** machinery in the
+feature's own module so it is cleaned up when the user leaves. For state that is 1:1
+with a single page, prefer page‑scoped [`provide`](./state-management.md) over a module
+bind.
+:::
 
-The strategy for building an instance with its dependencies comprise register all objects in a module and
-manufactures them on demand or in single-instance form(singleton). All instance registration process
-is managed by [auto_injector](https://pub.dev/packages/auto_injector)
+## Next
 
-There are a few ways to build a Bind to register object instances:
-
-
-- *injector.add*: Build an instance on demand (Factory).
-- *injector.addSingleton*: Build an instance only once when the module starts.
-- *injector.addLazySingleton*: Build an instance only once when prompted.
-- *injector.addInstance*: Adds an existing instance.
-
-We register the binds in **AppModule**:
-
-```dart
-class AppModule extends Module {
-  @override
-  void binds(i) {
-    i.add(XPTOEmail.new);
-    i.add<EmailService>(XPTOEmailService.new);
-    i.addSingleton(Client.new);
-
-    // Register with Key
-    i.addSingleton(Client.new, key: 'OtherClient');
-  }
-  ...
-}
-```
-The dependencies of these instances will be resolved automatically using the [auto_injector](https://pub.dev/packages/auto_injector) mechanisms.
-
-To get a resolved instance use `Modular.get`:
-
-```dart
-final client = Modular.get<Client>();
-
-// or set a default value
-final client = Modular.get<Client>(defaultValue: Client());
-
-// or use tryGet
-Client? client = Modular.tryGet<Client>();
-
-// or get with key
-Client client = Modular.get(key: 'OtherCLient');
-```
-
-## Auto Dispose
-
-The lifetime of a Bind singleton ends when its module 'dies'. But there are some objects that, by default, 
-run an instance destruction routine and are automatically removed from memory. Here they are:
-
-- Stream/Sink (Dart Native).
-- ChangeNotifier/ValueNotifier (Flutter Native).
-
-For registered objects that are not part of this list, we can use **BindConfig** or implement a **Disposable** interface on the instance where we want to run an algorithm before dispose:
-
-**Using BindConfig**:
-
-The dispose of an instance can be set directly in `Register` by implementing the `onDispose` property:
-
-```dart
-@override
-void binds(i) {
-  i.addSingleton<MyBloc>(MyBloc.new, config: BindConfig(
-    onDispose: (bloc) => bloc.close(),
-  ));
-}
-```
-
-**Using Disposable interface**
-
-Doing this does not require **BindConfig**, but creates a link between the package and the class.
-
-```dart
-class MyController implements Disposable {
-  final controller = StreamController();
-
-  @override
-  void dispose() {
-    controller.close();
-  }
-}
-```
-
-
-**flutter_modular** also offers a singleton removal option from the dependency injection system 
-by calling the **Modular.dispose**() method even with an active module:
-
-```dart
-Modular.dispose<MySingletonBind>();
-```
-
+- Bind state to a page's lifecycle → [State management](./state-management.md)
+- Use dependencies in guards → [Navigation › Guards](./navigation.md#guards)

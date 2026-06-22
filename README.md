@@ -168,10 +168,10 @@ Go to the next topic and start your journey towards an intelligent structure.
     - Yes, the dependency injection system is agnostic to any kind of class
      including the reactivity that makes up state management.
 
-- Can I use dynamic routes or Wildcards?
-    - Yes! The entire route tree responds as on the Web. Therefore, you can use dynamic parameters,
-     query, fragments or simply include a wildcard to enable a redirect
-     to a 404 page for example.
+- Can I use dynamic routes?
+    - Yes! The entire route tree responds as on the Web. You can use dynamic `:params`,
+     query strings, relative paths, nested routes and persistent shells (`RouterOutlet`).
+     Use a route guard to redirect (e.g. to a 404 or a login page).
 
 - Do I need to create a Module for all features?
     - No. You can create a module only when you think it's necessary or when the feature is no longer a part of
@@ -186,7 +186,7 @@ Go to the next topic and start your journey towards an intelligent structure.
 
 ```yaml
 dependencies:
-  flutter_modular: ^7.0.0-dev.1
+  flutter_modular: ^7.0.0
 ```
 
 or run `flutter pub add flutter_modular`.

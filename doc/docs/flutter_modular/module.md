@@ -1,218 +1,149 @@
 ---
-sidebar_position: 5
+sidebar_position: 2
 ---
 
-# Module
+# Modules & composition
 
-A module clusters all routes and binds relative to a scope or feature of the application and may contain sub modules forming one single composition. 
-It means that to access a bind, it needs to be in a parent module that's already started, otherwise, the bind will not be visible to be recovered using a system injection.
-A Module’s lifetime ends when the last page is closed.
+A **Module** is the unit of structure in Modular: it declares a scope's **dependency
+injection** and **routes**, and nothing else. The two things that couple a Flutter app
+are exactly DI + Routes, so a module is the app's coupling map made explicit.
 
-## The ModuleRoute
+## Creating a module
 
-It is a kind of **ModularRoute** and contains some properties existing in **ChildRoute** such as *transition*, *customTransition*, *duration* and *guards*.
-
-:::tip TIP
-
-It's important to remember that when adding a property in **ModuleRoute**, ALL child routes inherited this behavior.
-For example, if you add *TransitionType.fadeIn* to the *transition* property, the child routes will also have their *transition* property changed to the same *transition* type.
-Although, if you define a property on the child route of a **ModuleRoute**, the child route will ignore its module change and keep the value defined in the child.
-
-:::
-
-In **Modular**, everything is done observing the routes, so let’s create a second module to include using **ModuleRoute**:
-
-```dart title="lib/main.dart" {22,27-34}
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
-void main(){
-  return runApp(ModularApp(module: AppModule(), child: AppWidget()));
-}
-
-class AppWidget extends StatelessWidget {
-  Widget build(BuildContext context){
-    return MaterialApp.router(
-      title: 'My Smart App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      routerConfig: Modular.routerConfig,
-    ); //added by extension 
-  }
-}
-
-class AppModule extends Module {
-
-  @override
-  void routes(r) {
-    r.module('/', module: HomeModule());
-  }
-
-}
-
-class HomeModule extends Module {
-
-  @override
-  void routes(r) {
-    r.child('/', child: (context) => HomePage());
-  }
-
-}
-
-class HomePage extends StatelessWidget {
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Center(
-        child: Text('This is initial page'),
-      ),
-    );
-  }
-}
-```
-
-What we see here:
-
--	We created **HomeModule** module and added **HomePage** widget with **ChildRoute**.
--	Then we added **HomeModule** to **AppModule** using **ModuleRoute**.
--	Finally, we merged **HomeModule** routes into **AppModule**.
-
-Now, we'll head into a fundamental issue to understand routing when one module is affiliated to another.
-
-:::danger ATTENTION
-
-It's not allowed to use dynamic routes as the name of a **ModuleRoute**, because it would compromise the semantics and the purpose of this kind of route. 
-The ending point of a route must always be referenced with **ChildRoute**.
-
-:::
-
-## Routing between modules
-
-**flutter_modular** works with “named routes”, with segments, query, fragments, very similar to what we see on web. Let’s look at the anatomy of a “path” to access a route within a submodule, we will need to consider the segments of the route path represented by URI (Uniform Resource Identifier). For example:
-```
-/home/user/1
-```
-
-:::tip TIP
-
-We call “segment” the text separated by `/`. For example, the URI `/home/user/1` has three segments, being them [‘home’, ‘user’, ‘1’];
-
-:::
-
-The composition of a route must contain the route’s name (declared in **ModuleRoute**) and then the child route. See the following use case:
+Build a module functionally with `createModule`, and store it in a top‑level `final`:
 
 ```dart
-class AModule extends Module {
-  @override
-  void routes(r) {
-    r.child('/', child: (context) => APage());
-    r.module('/b-module', module: BModule());
-  }
-}
+import 'package:flutter_modular/flutter_modular.dart';
 
-class BModule extends Module {
-  @override
- void routes(r) {
-    r.child('/', child: (context, args) => BPage());
-    r.child('/other', child: (context, args) => OtherPage());
- }
-}
-```
-In this scenario, there are two routes in **AModule**, a **ChildRoute** called `/` and a **ModuleRoute** called `/b-module`.
-
-**BModule** contains another two **ChildRoute** called `/` and `/other`, respectively. 
-
-How would you call **ChildRoute** `/other`? The answer is in follow up. Assuming that AModule is the application’s root module, 
-then the initial segment will be the name of the **BModule**, because we need to get a route that is within it.
-
-```
-/b-module
-```
-The next segment will be the name of the route we want, the `/other`.
-
-```
-/b-module/other
-```
-DONE! When you execute the `Modular.to.navigate(‘/b-module/other’)` the page that will appear will be **OtherPage()** widget.
-
-The logic is the same when the submodule contains a route named as `/`. Understanding this, we assume that the available routes in this example are:
-```
-/                  =>  APage() 
-/b-module/         =>  BPage() 
-/b-module/other    =>  OtherPage() 
+final homeModule = createModule(
+  path: '/home',
+  register: (c) {
+    c.route('/', child: (ctx, state) => const HomePage());
+  },
+);
 ```
 
-:::tip TIP
+The `register` callback receives a `ModularContext` (`c`), the single surface a module
+declares itself through:
 
-When the concatenation of named routes takes place and generates a `//`, this route is normalized to `/`. This explains the first example in this section.
+| On `ModularContext` | Purpose |
+|---|---|
+| `c.route(path, child:, …)` | Declare a route (see [Navigation](./navigation.md)) |
+| `c.module(other, {at})` | Include another module |
+| `c.add<T>` / `addSingleton<T>` / `addLazySingleton<T>` / `addInstance<T>` | Register a dependency (see [DI](./dependency-injection.md)) |
 
+:::warning Modules are deduplicated by identity
+Composition dedups modules by **object identity**, so always reference the same `final`
+value. Calling `createModule(...)` twice for the same logical module creates two
+distinct objects and defeats the dedup.
 :::
 
-:::tip TIP
+## A module's `path` decides what it is
 
-If there is a route called `/` in the submodule **flutter_modular** will understand it as “default” route, if no other segment is already placed after the module. For example:
+This is the central idea of v7. Whether a module declares a `path` changes its meaning:
 
-`/b-module`  =>  BPage()
+### A module **with** a `path` is a *feature*
 
-Same as:
+Its routes are **flattened under that path**, and its dependencies are
+**feature‑scoped** — bound when its first route enters the stack and disposed when its
+last route leaves (covered in [DI lifecycle](./dependency-injection.md#bind-lifecycle)).
 
-`/b-module/` =>  BPage() 
-
-:::
-
-## Relative Vs Absolute paths
-
-When a route path is literally described, then we say it is an absolute path, such as `/foo/bar`. But we can consider the current path and use the notion of POSIX to enter on a route. For example:
-
-We are on the `/foo/bar` route and we want to go to the `/foo/baz` route. Using POSIX, just inform **Modular.navigate(‘./bar’)**
-
-Note that there is a `./` at the beginning of the path. This causes only the end segment to be swapped.
-
-:::tip TIP
-
-The concept of relative path is applied as in terminals, CMD and file import.
-
-Expressions like `../` would replace the penultimate segment onwards.
-
-:::
-
-:::tip TIP
-
-Use the concept of relative routes to optimize navigation between pages in the same module. 
-This favors the complete decoupling of the module, as it will not need the previous segments.
-
-:::
-
-## Module import
-
-A module can be created only to store instances. A use case would be established when we have a Shared or Core Module containing all the main binds and distributed among all modules. To use a module only with instances, we must import it into a module containing routes. See the next example:
-
-```dart {10-13}
-class CoreModule extends Module {
-  @override
-  void exportedBinds(i){
-    i.addSingleton(HttpClient.new);
-    i.addSingleton(LocalStorage.new);
-  }
-}
-
-class AppModule extends Module {
-  @override
-  List<Module> get imports => [
-    CoreModule(),
-  ]
-
-  @override
-  void routes(r){
-    r.child('/', child: (context) => HomePage());
-  }
-}
+```dart
+// Mounted at /products → these relative routes become /products and /products/:id.
+final productsModule = createModule(
+  path: '/products',
+  register: (c) {
+    c
+      ..route('/', child: (ctx, state) => const ProductListPage())
+      ..route('/:id', child: (ctx, state) => ProductDetailPage(id: state['id']!));
+  },
+);
 ```
 
-Note that instances of **CoreModule** are registered in the `exportedBinds` method instead of the `binds` method, this means that these instances can be imported into another module.
+A mount path is a **static prefix**: it must start with `/` and contain no dynamic
+segment. Dynamic `:params` belong to the routes *inside* a module, not to where the
+module mounts.
 
-:::danger ATTENTION
+```dart
+createModule(path: '/checkout', register: (_) {});  // ✅ ok
+createModule(register: (_) {});                      // ✅ ok — no path (see below)
+createModule(path: 'checkout', register: (_) {});    // ❌ AssertionError — must start with '/'
+createModule(path: '/users/:id', register: (_) {});  // ❌ AssertionError — no ':param' in a mount path
+```
 
-The module import is only for **Instance registers**. **Routes** won't be imported.
+### A module **without** a `path` is *shared DI*
 
-:::
+Its dependencies are **root‑owned**: bound eagerly and never disposed — they live for
+the whole app. This is where your Single Source of Truth belongs.
 
+```dart
+/// CORE — the shared data layer. Everything here is an app-wide singleton in this
+/// route-less module, so it is root-owned and lives for the whole app.
+final coreModule = createModule(
+  register: (c) {
+    c
+      ..addSingleton<ProductService>(ProductService.new)
+      ..addSingleton<ProductRepository>(ProductRepository.new)
+      ..addSingleton<AppSession>(AppSession.new);
+  },
+);
+```
+
+## Composing modules
+
+Use `c.module(...)` to include one module in another. A feature lists its sub‑features;
+the root module is the whole app's composition:
+
+```dart
+/// THE ROOT MODULE — composition only. This file is the app's coupling map: which
+/// modules exist and how they connect.
+final appModule = createModule(
+  register: (c) {
+    c
+      ..module(coreModule)   // shared DI (no path) → root-owned
+      ..module(homeModule);  // feature (path '/home') → mounted there
+  },
+);
+```
+
+Each module declares its **own** `path`, so a parent usually just lists them:
+
+```dart
+final homeModule = createModule(
+  path: '/home',
+  register: (c) {
+    c
+      ..route('/', child: (ctx, state) => const HomePage())
+      ..module(productsModule)   // → /home/products
+      ..module(settingsModule)
+      ..module(dashboardModule);
+  },
+);
+```
+
+Because `productsModule` is included under `homeModule` (mounted at `/home`), its routes
+land at `/home/products` and `/home/products/:id`. Composition concatenates the paths,
+just like the module tree mirrors the widget tree.
+
+### Overriding the mount with `at:`
+
+`at:` is the rare override of a module's own `path` at the include site — mount the same
+module somewhere else:
+
+```dart
+c.module(productsModule, at: '/catalog'); // routes become /catalog, /catalog/:id
+```
+
+Most apps never need `at:`; let each module name its own mount.
+
+## Feature vs. shell
+
+`module(...)` **flattens** a sub‑module's routes under its path — there is no visible
+shell wrapping them. When you want chrome that **persists** across child routes (a
+bottom bar, a sidebar), declare a `RouterOutlet` explicitly inside a route's
+`children`. See [Nested routes & RouterOutlet](./nested-routes.md).
+
+## Next
+
+- Register and resolve dependencies → [Dependency injection](./dependency-injection.md)
+- Declare routes, params and guards → [Navigation](./navigation.md)

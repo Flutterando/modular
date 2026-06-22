@@ -1,27 +1,187 @@
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
+ * Homepage hero — Modular brand. Emerald-tinted surface, technical type,
+ * a grid texture and a terminal card, mirroring the brand exploration.
  */
 
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
+.hero {
   position: relative;
   overflow: hidden;
+  padding: 5.5rem 1rem 5rem;
+  background: color-mix(in oklab, var(--ifm-color-primary) 9%, var(--ifm-background-color));
+  text-align: center;
 }
 
-@media screen and (max-width: 966px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroGrid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+      color-mix(in oklab, var(--ifm-color-primary) 14%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--ifm-color-primary) 14%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 18%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 18%, #000 30%, transparent 75%);
 }
 
-.buttons {
+.heroInner {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  margin-bottom: 1.6rem;
+  background: var(--ifm-background-color);
+  border: 1px solid color-mix(in oklab, var(--ifm-color-primary) 25%, var(--ifm-background-color));
+  border-radius: 100px;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  color: color-mix(in oklab, var(--ifm-color-primary) 80%, var(--ifm-heading-color));
+}
+
+.badgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+}
+
+.heroTitle {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin: 0;
+  color: var(--ifm-heading-color);
+}
+
+.heroSubtitle {
+  font-size: 1.18rem;
+  line-height: 1.55;
+  color: var(--brand-muted);
+  margin: 1.4rem 0 0;
+  max-width: 540px;
+}
+
+html[data-theme='dark'] .heroSubtitle {
+  color: #9fb3aa;
+}
+
+.heroButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 2.2rem;
+}
+
+.btnPrimary {
+  background: var(--ifm-color-primary);
+  color: #fff;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 11px;
+  padding: 0.85rem 1.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 12px 24px -10px color-mix(in oklab, var(--ifm-color-primary) 70%, transparent);
+}
+
+.btnPrimary:hover {
+  background: var(--ifm-color-primary-dark);
+  color: #fff;
+}
+
+.btnSecondary {
+  background: var(--ifm-background-color);
+  color: var(--ifm-heading-color);
+  border: 1px solid color-mix(in oklab, var(--ifm-color-primary) 18%, var(--brand-line));
+  border-radius: 11px;
+  padding: 0.85rem 1.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.btnSecondary:hover {
+  color: var(--ifm-heading-color);
+  border-color: var(--ifm-color-primary);
+}
+
+.arrow {
+  font-family: var(--ifm-font-family-monospace);
+}
+
+/* Terminal card */
+.terminal {
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 460px;
+  background: #1a1305;
+  border-radius: 13px;
+  overflow: hidden;
+  text-align: left;
+  box-shadow: 0 24px 50px -24px rgba(36, 22, 6, 0.5);
+}
+
+.terminalBar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 7px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.space {
-  width: 14px
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.dot[data-c='r'] { background: #ff5f57; }
+.dot[data-c='y'] { background: #febc2e; }
+.dot[data-c='g'] { background: #28c840; }
+
+.terminalTitle {
+  margin-left: 8px;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.72rem;
+  color: #5d6b64;
+}
+
+.terminalBody {
+  padding: 18px 20px;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #e8efec;
+}
+
+.terminalComment {
+  color: #5d6b64;
+}
+
+.terminalPrompt {
+  color: color-mix(in oklab, var(--ifm-color-primary) 45%, #fff);
+}
+
+.terminalPkg {
+  color: color-mix(in oklab, var(--ifm-color-primary) 55%, #fff);
+}
+
+@media screen and (max-width: 768px) {
+  .hero {
+    padding: 3.5rem 1rem 3.25rem;
+  }
 }

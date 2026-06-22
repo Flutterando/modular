@@ -2,213 +2,191 @@
 sidebar_position: 1
 ---
 
-# Start
+# Getting started
 
-**flutter_modular** was built using the engine of **modular_core** that's responsible for the dependency injection system and route management. The routing system emulates a tree of modules, just like Flutter does in it's widget trees. Therefore we can add one module inside another one by creating links to the parent module.
+This page builds the smallest possible Modular app — a counter — and explains each
+piece. By the end you will have a module, an app bootstrap, and a page‑scoped view
+model wired to a route.
 
-## Inspirations from the Angular
+## Install
 
-The entire **flutter_modular** system came from studies carried out in Angular (another Google framework) and adapted to the Flutter world. Therefore, there are many similarities between the **flutter_modular** and Angular Routes and Dependency Injection System.
+Add **flutter_modular** to your project:
 
-Routes are reflected in the Application using the the new Navigator 2.0 features alongside the use of multiple nested browsers. We call this feature RouterOutlet, just like in Angular.
-
-Each module can be completely independent, so the same module can be used in multiple products. By dividing modules into packages, we can approach a micro-frontend application structure.
-
-
-## Starting a project
-
-Our first goal will be the creation of a simple app with no defined structure or architecture yet, so that we can study the initial components of **flutter_modular**
-
-Create a new Flutter project:
-```
-flutter create my_smart_app
+```bash
+flutter pub add flutter_modular
 ```
 
-Now add the **flutter_modular** to pubspec.yaml:
-```yaml
+That yields a dependency on the v7 line:
 
+```yaml title="pubspec.yaml"
 dependencies:
-  flutter_modular: 6.x.x
-
+  flutter_modular: ^7.0.0
 ```
 
-If that succeeded, we are ready to move on!
+## A module is DI + Routes
 
-:::tip TIP
+Everything starts with a **Module**: the object that declares a scope's dependency
+injection and its routes. Build one functionally with `createModule`:
 
-Flutter's CLI has a tool that makes package installation easier in the project. Use the command:
+```dart
+import 'package:flutter_modular/flutter_modular.dart';
 
-`flutter pub add flutter_modular`
+final appModule = createModule(
+  register: (c) {
+    c.route(
+      '/',
+      provide: (s) => s.addChangeNotifier<CounterViewModel>(CounterViewModel.new),
+      child: (context, state) => const CounterPage(),
+    );
+  },
+);
+```
 
+- `c.route('/', child: ...)` declares the route shown at `/`. The builder receives the
+  `BuildContext` and a [`RouteState`](./navigation.md#routestate) (path params, query,
+  arguments).
+- `provide:` declares **page‑scoped state** for that route — here a `CounterViewModel`
+  built when the page mounts and `dispose()`d when it leaves. More on that in
+  [State management](./state-management.md).
+
+:::tip Store modules in a `final`
+Modules are deduplicated **by identity**. Keep each one in a top‑level `final` and
+reference that same value everywhere it is composed — never `createModule(...)` twice
+for the same logical module.
 :::
 
-## The ModularApp
+## Bootstrap with ModularApp
 
-We need to add a **ModularApp** Widget in the root of our project. MainModule and MainWidget will be created in the next steps, but for now let's change our **main.dart** file:
+`ModularApp` is the **first widget** of your app, sitting *above* `MaterialApp`. It
+bootstraps the module once (collecting its routes + DI), owns the resulting injector,
+and builds the router config:
 
 ```dart title="lib/main.dart"
-
-import 'package:flutter/material.dart';
-
-void main(){
-  return runApp(ModularApp(module: /*<MainModule>*/, child: /*<MainWidget>*/));
-}
-
-```
-
-**ModularApp** forces us to add a main Module and main Widget. What are we going to do next?
-This Widget does the initial setup so everything can work as expected. For more details go to **ModularApp** doc.
-
-:::tip TIP
-
-It's important that **ModularApp** is the first widget in your app!
-
-:::
-
-## Creating the Main Module
-
-We can have several modules, but for now, let's just create a main module called **AppModule**:
-
-```dart title="lib/main.dart" {8-18}
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-void main(){
-  return runApp(ModularApp(module: AppModule(), child: <MainWidget>));
-}
-
-class AppModule extends Module {
-
-  @override
-  void binds(i) {}
-
-  @override
-  void routes(r) {}
+void main() {
+  runApp(
+    ModularApp(
+      module: appModule,
+      child: const AppRoot(),
+    ),
+  );
 }
 ```
 
-Note that the module is just a class that inherits from the **Module** class, overriding the **binds** and **routes** method.
-With this we have a route and injection mechanism separate from the application and can be both applied in a global context (as we are doing) or in a local context, for example, creating a module that contains only binds and routes only for a specific feature!
+The `child` is your `MaterialApp.router`. It reads the router config that `ModularApp`
+built with `ModularApp.routerConfigOf(context)`:
 
-We've added **AppModule** to ModularApp. Now we need an initial route, so let's create a StatelessWidget to serve as the home page.
-
-```dart title="lib/main.dart" {14,18-27}
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
-void main(){
-  return runApp(ModularApp(module: AppModule(), child: <MainWidget>));
-}
-
-class AppModule extends Module {
-  @override
-  void binds(i) {}
+```dart
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
 
   @override
-  void routes(r) {
-    r.child('/', child: (context) => HomePage()),
-  }
-}
-
-class HomePage extends StatelessWidget {
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Center(
-        child: Text('This is initial page'),
-      ),
-    );
-  }
-}
-```
-
-We've created a Widget called **HomePage** and added its instances in a route called **ChildRoute**.
-
-:::tip TIP
-
-There are some ModularRoute types: **ChildRoute**, **ModuleRoute**, **RedirectRoute** and **WildcardRoute**.
-
-**ChildRoute**: Serves to build a Widget. <br />
-**ModuleRoute**: Concatenates another module. <br />
-**RedirectRoute**: Redirect to other route.<br />
-**WildcardRoute**: Default route in Module.<br /> <br />
-
-Inside the `routes(r);` method we can use: <br />
-**r.child => ChildRoute**. <br />
-**r.module => ModuleRoute**. <br />
-**r.redirect => RedirectRoute**. <br />
-**r.wildcard => WildcardRoute**. <br />
-
-:::
-
-## Creating the Main Widget
-
-The main Widget's function is to instantiate the MaterialApp or CupertinoApp.
-
-In these main Widgets it's also necessary to set the custom route system. For this next snippet we'll use **MaterialApp**, but the process is exactly the same for CupertinoApp.
-
-```dart title="lib/main.dart" {8-16}
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
-void main(){
-  return runApp(ModularApp(module: AppModule(), child: AppWidget()));
-}
-
-class AppWidget extends StatelessWidget {
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'My Smart App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      routerConfig: Modular.routerConfig,
-    ); //added by extension 
+      routerConfig: ModularApp.routerConfigOf(context),
+    );
+  }
+}
+```
+
+:::warning
+`ModularApp` must be **above** the `MaterialApp.router` that reads
+`routerConfigOf(context)`. That position is also what makes *app‑scoped* state
+(theme, locale, session) possible — see [State management](./state-management.md#app-scoped-state).
+:::
+
+## The full counter
+
+Putting it together — a complete, runnable app (this is the package's own
+[`example`](https://github.com/Flutterando/modular/tree/master/example) in miniature):
+
+```dart title="lib/main.dart"
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+/// A page-scoped view model (built per page mount, disposed on exit).
+class CounterViewModel extends ChangeNotifier {
+  int count = 0;
+
+  void increment() {
+    count++;
+    notifyListeners();
   }
 }
 
-class AppModule extends Module {
-  @override
-  void binds(i) {}
+final appModule = createModule(
+  register: (c) {
+    c.route(
+      '/',
+      provide: (s) => s.addChangeNotifier<CounterViewModel>(CounterViewModel.new),
+      child: (context, state) => const CounterPage(),
+    );
+  },
+);
+
+void main() {
+  runApp(ModularApp(module: appModule, child: const AppRoot()));
+}
+
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
 
   @override
-  void routes(r) {
-    r.child('/', child: (context) => HomePage()),
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'flutter_modular counter',
+      routerConfig: ModularApp.routerConfigOf(context),
+    );
   }
 }
 
-class HomePage extends StatelessWidget {
-  Widget build(BuildContext context){
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<CounterViewModel>(); // reactive, page-scoped
     return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Center(
-        child: Text('This is initial page'),
+      appBar: AppBar(title: const Text('Counter')),
+      body: Center(child: Text('count: ${vm.count}')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: context.read<CounterViewModel>().increment,
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 ```
 
-Here we create a Widget called **AppWidget** containing an instance of **MaterialApp.router**. 
+## Configuring the root
 
-
-## Support methods
-
-Navigator 2.0 made Flutter's routing system more dynamic, but some information, previously passed in MaterialApp or CupertinoApp, has been removed, and it will be necessary to configure it using Modular's own support methods.
+`ModularApp` accepts a few options for the root navigator and the entry route:
 
 ```dart
-Modular.setNavigatorKey(myNavigatorKey);
-
-Modular.setObservers([myObserver]);
-
-Modular.setInitialRoute('/home');
+ModularApp(
+  module: appModule,
+  initialRoute: '/home',            // first route when the platform reports no deep link
+  navigatorKey: myNavigatorKey,     // imperative access from outside the tree
+  navigatorObservers: [myObserver], // analytics, RouteObserver, …
+  child: const AppRoot(),
+);
 ```
 
-You can change the `prints` with function `setPrintResolver`:
-```dart
-setPrintResolver((text) => print(text));
-// deactivate
-setPrintResolver((text){});
-```
+- **`initialRoute`** is shown when the platform hands you the bare `/` (app cold‑start
+  with no deep link). A real entry URL — a web refresh on `/products/3`, an app link —
+  overrides it.
+- **`navigatorKey`** lets you reach the root `Navigator` imperatively (e.g. to show a
+  global dialog). A fresh key is created if you omit it.
+- **`navigatorObservers`** are attached to the root navigator.
 
+:::tip Clean URLs on the web
+Call `usePathUrlStrategy()` (from `package:flutter_web_plugins/url_strategy.dart`) at
+the top of `main()` to get `/products/3` instead of `/#/products/3`. It is a no‑op off
+the web.
+:::
 
-
-That's enough to run a Modular app. In the next steps let's explore navigation.
+That is enough to run a Modular app. Next, learn how to grow it into multiple features
+with [Modules](./module.md), or jump to [Navigation](./navigation.md).
