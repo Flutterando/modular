@@ -34,5 +34,6 @@ doc/
 devtools_options.yaml
 flutter_modular.png
 CONTRIBUTING.md
+CLAUDE.md
 
 tool/
