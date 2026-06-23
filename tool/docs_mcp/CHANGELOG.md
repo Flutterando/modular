@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- Re-embed the refreshed state-management page: documents the page-scoped
+  `addStreamable`/`addListenable` escape hatches and BLoC/Cubit registration
+  (a `addBloc` extension over `addStreamable`).
+
 ## 0.2.0
 
 - Re-embed the documentation rewritten for flutter_modular v7 (the served

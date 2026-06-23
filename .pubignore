@@ -36,4 +36,9 @@ flutter_modular.png
 CONTRIBUTING.md
 CLAUDE.md
 
-tool/
+# NOTE: do NOT blanket-exclude `tool/` here. `dart pub publish` applies this
+# root .pubignore to nested packages too (e.g. tool/docs_mcp, published as
+# `flutter_modular_docs_mcp`), so excluding the dir would also strip the files
+# that package needs to publish. Exclude only build artifacts instead.
+tool/**/.dart_tool/
+tool/**/build/
