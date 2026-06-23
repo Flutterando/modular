@@ -231,6 +231,22 @@ Selector<CartViewModel, int>(
 );
 ```
 
+`context.select<T, R>` is the **method‑based twin** of `Selector` — call it inside
+`build` to subscribe to a derived value; the widget rebuilds only when that value
+changes (compared with `==`). It mirrors `context.select` from **provider**, so
+migrating is a near drop‑in:
+
+```dart
+// Inside build(): rebuilds only when `cart.items.length` changes.
+final count = context.select<CartViewModel, int>((cart) => cart.items.length);
+return Badge(label: Text('$count'));
+```
+
+:::note
+Like in provider, only call `context.select` from `build` — never in `initState` or
+`didChangeDependencies`.
+:::
+
 ## App‑scoped state {#app-scoped-state}
 
 Page‑scoped state lives *below* the `Navigator`, so it cannot rebuild the `MaterialApp`
