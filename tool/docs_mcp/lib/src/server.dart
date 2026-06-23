@@ -14,7 +14,7 @@ import 'generated/docs_data.g.dart';
 import 'search_index.dart';
 
 /// Version reported to clients in the MCP `initialize` handshake.
-const String serverVersion = '0.2.2';
+const String serverVersion = '0.2.3';
 
 /// URI scheme/prefix under which each doc page is exposed as a resource.
 const String _uriPrefix = 'modular-docs:///';

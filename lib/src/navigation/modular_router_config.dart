@@ -6,6 +6,7 @@ import '../route/modular_route.dart';
 import '../route/route_state.dart';
 import 'modular_route_information_parser.dart';
 import 'modular_router_delegate.dart';
+import 'transition.dart';
 
 /// Wires the Navigator 2.0 pieces into a [RouterConfig] for
 /// `MaterialApp.router(routerConfig: ...)`.
@@ -20,6 +21,7 @@ RouterConfig<RouteState> modularRouterConfig(
   String initialRoute = '/',
   GlobalKey<NavigatorState>? navigatorKey,
   List<NavigatorObserver> observers = const [],
+  PageTransition defaultTransition = TransitionType.material,
 }) {
   final inj = injector ?? (AutoInjector()..commit());
   return RouterConfig<RouteState>(
@@ -29,6 +31,7 @@ RouterConfig<RouteState> modularRouterConfig(
       manager: manager,
       navigatorKey: navigatorKey,
       observers: observers,
+      defaultTransition: defaultTransition,
     ),
     routeInformationParser: ModularRouteInformationParser(),
     routeInformationProvider: PlatformRouteInformationProvider(

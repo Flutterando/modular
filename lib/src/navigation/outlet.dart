@@ -20,6 +20,7 @@ Widget buildRouteLevel({
   required Map<String, String> params,
   required RouteCollection routes,
   Object? arguments,
+  PageTransition defaultTransition = TransitionType.material,
 }) {
   final level = chain[index];
   final merged = {...params, ...level.params};
@@ -39,6 +40,7 @@ Widget buildRouteLevel({
     params: merged,
     arguments: arguments,
     routes: routes,
+    defaultTransition: defaultTransition,
     child: page,
   );
 }
@@ -51,6 +53,7 @@ class _OutletScope extends InheritedWidget {
     required this.uri,
     required this.params,
     required this.routes,
+    required this.defaultTransition,
     required super.child,
     this.arguments,
   });
@@ -62,6 +65,10 @@ class _OutletScope extends InheritedWidget {
   final Map<String, String> params;
   final Object? arguments;
   final RouteCollection routes;
+
+  /// The app-wide fallback transition, carried down so a nested outlet's pages
+  /// inherit it for routes that declare none. See [buildRouteLevel].
+  final PageTransition defaultTransition;
 
   static _OutletScope? of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<_OutletScope>();
@@ -301,12 +308,11 @@ class RouterOutletState extends State<RouterOutlet> {
       params: _scope.params,
       arguments: entry.arguments,
       routes: _scope.routes,
+      defaultTransition: _scope.defaultTransition,
     );
-    return buildTransitionPage(
-      chain[_scope.index].route.transition,
-      entry.key,
-      child,
-    );
+    final transition =
+        chain[_scope.index].route.transition ?? _scope.defaultTransition;
+    return transition.buildPage(entry.key, child);
   }
 }
 

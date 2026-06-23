@@ -32,7 +32,7 @@ c.route(
   void Function(Scoped scoped)? provide,       // page-scoped state — see State management
   void Function(ModularContext c)? children,   // nested routes — see Nested routes
   List<ModularGuard>? guards,                  // redirects — see below
-  TransitionType transition,                   // material | fade | none
+  PageTransition? transition,                  // preset, CustomTransition, or your own — see below
 });
 ```
 
@@ -175,13 +175,78 @@ gate authenticated areas, or to redirect unknown paths to a 404 page.
 
 ## Transitions
 
-Set a route's page transition with `transition:`:
+A route's page transition is any **`PageTransition`** — the contract that turns a
+route into the `Page` pushed on the stack. There are three ways to supply one,
+from simplest to most powerful.
+
+### 1. Presets
+
+`TransitionType` ships three ready-made transitions, and each value **is** a
+`PageTransition`:
 
 ```dart
 c.route('/details', transition: TransitionType.fade, child: ...);
 ```
 
-`TransitionType` is `material` (the default), `fade`, or `none` (instant).
+`TransitionType` is `material`, `fade`, or `none` (instant).
+
+### 2. `CustomTransition` — bring your own animation
+
+When you just want a different animation, `CustomTransition` builds the `Page` for
+you; you supply the `transitionsBuilder` (same signature as
+`PageRouteBuilder.transitionsBuilder`) and, optionally, `duration` and a few route
+flags (`reverseDuration`, `opaque`, `barrierColor`, `barrierDismissible`,
+`fullscreenDialog`):
+
+```dart
+c.route('/details/:id',
+  transition: CustomTransition(
+    duration: const Duration(milliseconds: 250),
+    transitionsBuilder: (context, animation, secondary, child) => SlideTransition(
+      position: animation.drive(
+        Tween(begin: const Offset(1, 0), end: Offset.zero),
+      ),
+      child: child,
+    ),
+  ),
+  child: (ctx, state) => DetailsPage(id: state['id']!));
+```
+
+### 3. Implement `PageTransition` — own the whole `Page`
+
+For full control — a `CupertinoPage` with interactive swipe-back, a
+`fullscreenDialog`, a custom barrier, shared-axis from the `animations` package —
+implement `PageTransition` and return whatever `Page` you like:
+
+```dart
+class SharedAxisTransition extends PageTransition {
+  const SharedAxisTransition();
+
+  @override
+  Page<void> buildPage(LocalKey key, Widget child) =>
+      // any Page you want — e.g. CupertinoPage, a custom PageRouteBuilder, …
+      CupertinoPage<void>(key: key, child: child);
+}
+
+c.route('/profile', transition: const SharedAxisTransition(), child: ...);
+```
+
+### An app-wide default
+
+Set a fallback transition once on `ModularApp.defaultTransition`; every route that
+doesn't declare its own inherits it. Precedence is **route-local → app default →
+`material`**:
+
+```dart
+ModularApp(
+  module: appModule,
+  defaultTransition: TransitionType.fade, // every route fades unless it overrides
+  child: const AppRoot(),
+);
+```
+
+A route's own `transition:` always wins over the app default; leave it unset to
+inherit. With no `defaultTransition` set, the default is `TransitionType.material`.
 
 ## Next
 

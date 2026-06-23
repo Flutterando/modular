@@ -25,11 +25,16 @@ class ModularRouterDelegate extends RouterDelegate<RouteState>
     this.manager,
     GlobalKey<NavigatorState>? navigatorKey,
     this.observers = const [],
+    this.defaultTransition = TransitionType.material,
   }) : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>();
 
   final RouteCollection routes;
   final AutoInjector injector;
   final ModuleManager? manager;
+
+  /// The app-wide fallback transition, applied to any route that declares none
+  /// (`ModularRoute.transition == null`). Set via `ModularApp.transition`.
+  final PageTransition defaultTransition;
 
   /// Observers attached to the root [Navigator] (analytics, a `RouteObserver`
   /// for route-aware widgets, etc.).
@@ -299,8 +304,10 @@ class ModularRouterDelegate extends RouterDelegate<RouteState>
       params: const {},
       arguments: entry.state.arguments,
       routes: routes,
+      defaultTransition: defaultTransition,
     );
-    return buildTransitionPage(chain.first.route.transition, entry.key, child);
+    final transition = chain.first.route.transition ?? defaultTransition;
+    return transition.buildPage(entry.key, child);
   }
 }
 

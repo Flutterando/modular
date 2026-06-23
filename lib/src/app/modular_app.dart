@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../module/module.dart';
 import '../navigation/modular_router_config.dart';
+import '../navigation/transition.dart';
 import '../route/route_state.dart';
 import '../state/scoped.dart';
 
@@ -45,6 +46,7 @@ class ModularApp extends StatefulWidget {
     this.initialRoute = '/',
     this.navigatorKey,
     this.navigatorObservers = const [],
+    this.defaultTransition = TransitionType.material,
     super.key,
   });
 
@@ -73,6 +75,13 @@ class ModularApp extends StatefulWidget {
   /// for route-aware widgets, etc.
   final List<NavigatorObserver> navigatorObservers;
 
+  /// The app-wide DEFAULT page transition, applied to every route that doesn't
+  /// declare its own (`route(transition:)` left unset). A route's local
+  /// transition always wins; this is the fallback. Defaults to
+  /// [TransitionType.material]. Accepts any [PageTransition] — a preset, a
+  /// [CustomTransition], or your own implementation.
+  final PageTransition defaultTransition;
+
   /// The router config built by the nearest enclosing [ModularApp].
   static RouterConfig<RouteState> routerConfigOf(BuildContext context) {
     final scope = context
@@ -98,6 +107,7 @@ class _ModularAppState extends State<ModularApp> {
     initialRoute: widget.initialRoute,
     navigatorKey: widget.navigatorKey,
     observers: widget.navigatorObservers,
+    defaultTransition: widget.defaultTransition,
   );
 
   @override
