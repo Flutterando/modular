@@ -168,9 +168,10 @@ class CounterPage extends StatelessWidget {
 ```dart
 ModularApp(
   module: appModule,
-  initialRoute: '/home',            // first route when the platform reports no deep link
-  navigatorKey: myNavigatorKey,     // imperative access from outside the tree
-  navigatorObservers: [myObserver], // analytics, RouteObserver, …
+  initialRoute: '/home',                  // first route when the platform reports no deep link
+  navigatorKey: myNavigatorKey,           // imperative access from outside the tree
+  navigatorObservers: [myObserver],       // analytics, RouteObserver, …
+  defaultTransition: TransitionType.fade, // app-wide fallback page transition
   child: const AppRoot(),
 );
 ```
@@ -181,6 +182,9 @@ ModularApp(
 - **`navigatorKey`** lets you reach the root `Navigator` imperatively (e.g. to show a
   global dialog). A fresh key is created if you omit it.
 - **`navigatorObservers`** are attached to the root navigator.
+- **`defaultTransition`** is the page transition every route inherits unless it sets its
+  own `transition:`. Defaults to `TransitionType.material`. See
+  [Transitions](./navigation.md#transitions).
 
 :::tip Clean URLs on the web
 Call `usePathUrlStrategy()` (from `package:flutter_web_plugins/url_strategy.dart`) at

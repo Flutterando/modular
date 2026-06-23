@@ -62,7 +62,7 @@ abstract class ModularContext {
     void Function(Scoped scoped)? provide,
     void Function(ModularContext c)? children,
     List<ModularGuard>? guards,
-    TransitionType transition,
+    PageTransition? transition,
   });
 
   /// Include another module. The mount path is [at] ?? `module.path`:
@@ -237,7 +237,7 @@ class _ContextImpl implements ModularContext {
     void Function(Scoped scoped)? provide,
     void Function(ModularContext c)? children,
     List<ModularGuard>? guards,
-    TransitionType transition = TransitionType.material,
+    PageTransition? transition,
   }) {
     var nested = const <ModularRoute>[];
     if (children != null) {

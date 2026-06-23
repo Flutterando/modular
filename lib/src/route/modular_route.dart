@@ -22,7 +22,7 @@ class ModularRoute {
     this.provide,
     this.children = const [],
     this.guards = const [],
-    this.transition = TransitionType.material,
+    this.transition,
     this.ownerTags = const [],
   });
 
@@ -31,7 +31,10 @@ class ModularRoute {
   final void Function(Scoped scoped)? provide;
   final List<ModularRoute> children;
   final List<ModularGuard> guards;
-  final TransitionType transition;
+
+  /// This route's page transition, or `null` to inherit the app-wide default
+  /// (`ModularApp.transition`, itself defaulting to [TransitionType.material]).
+  final PageTransition? transition;
 
   /// Tags of the feature modules (mounted via `module(at:)`) that own this
   /// route. When the LAST active route of a tag leaves the stack, that module's
