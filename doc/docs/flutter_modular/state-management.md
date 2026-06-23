@@ -30,7 +30,7 @@ final productsModule = createModule(
         '/:id',
         provide: (s) {
           s
-            ..addDisposable<RealtimeConnection>(RealtimeConnection.new)
+            ..add<RealtimeConnection>(RealtimeConnection.new)
             ..addChangeNotifier<ProductDetailViewModel>(ProductDetailViewModel.new)
             ..addStream<int>(_viewersStream);
         },
@@ -40,15 +40,20 @@ final productsModule = createModule(
 );
 ```
 
-The `Scoped` registrar (`s`) offers three kinds of registration:
+The rule is **`addChangeNotifier`** (a reactive view model) and **`addStream`**
+(stream‑backed state); **`add`** registers a plain non‑reactive object. The `Scoped`
+registrar (`s`) offers:
 
 | Method | For | Reactive? | Disposed on unmount? |
 |---|---|---|---|
 | `addChangeNotifier<T>(ctor)` | a `ChangeNotifier` view model | ✅ via `watch`/`read` | ✅ `dispose()` |
-| `addDisposable<T>(ctor)` | a non‑reactive resource (socket, use‑case) | ❌ | ✅ `dispose()` |
 | `addStream<T>(create)` | stream‑backed state | ✅ as `StreamValue<T>` | ✅ cancels the subscription |
+| `add<T>(ctor)` | a non‑reactive object (socket, use‑case, config) | ❌ | ✅ if it implements `Disposable` |
 
 Reactivity and lifecycle are **independent**: a thing can have either, both, or neither.
+For reactive objects that don't fit the two rules above — a **BLoC**, a **Cubit**, a
+controller exposing a `Listenable` — there are two escape hatches,
+[`addStreamable` and `addListenable`](#exceptions-addstreamable-and-addlistenable).
 
 ### addChangeNotifier — a reactive view model
 
@@ -72,11 +77,12 @@ class ProductListViewModel extends ChangeNotifier {
 }
 ```
 
-### addDisposable — a non‑reactive resource
+### add — a non‑reactive resource
 
 For something that needs lifecycle but no reactivity — a connection, a subscription
 manager, a use‑case holding a handle. It is built as a per‑page singleton, so a view
-model can **inject the same instance**, and `dispose()`d on exit:
+model can **inject the same instance**. If it implements `Disposable`, it is
+`dispose()`d on exit — `add` **always** checks for `Disposable`:
 
 ```dart
 class RealtimeConnection implements Disposable {
@@ -112,6 +118,87 @@ Stream<int> _viewersStream() =>
 // In the page:
 final viewers = context.watch<StreamValue<int>>().value; // latest int, or null
 ```
+
+## Exceptions: addStreamable and addListenable
+
+`addChangeNotifier` and `addStream` cover the common cases. When an object's reactivity
+lives on a **property** — its `stream`, or a `Listenable` it exposes — and you want to
+expose the **object itself** (to read its synchronous state and call its methods), reach
+for these two escape hatches. Each takes a factory, a selector for the reactive source,
+and a (required) dispose callback:
+
+- `addStreamable<T>(ctor, (t) => t.stream, (t) => t.close())` — reactivity is a `Stream`.
+  `context.watch<T>()` returns the object; rebuilds fire on each emission.
+- `addListenable<T>(ctor, (t) => t.someListenable, (t) => t.dispose())` — reactivity is a
+  `Listenable` property.
+
+```dart
+// A controller that is NOT a ChangeNotifier but exposes one:
+class SearchController {
+  final ValueNotifier<String> query = ValueNotifier('');
+  void dispose() => query.dispose();
+}
+
+provide: (s) => s.addListenable<SearchController>(
+  SearchController.new,
+  (c) => c.query,        // the rebuild trigger
+  (c) => c.dispose(),    // cleanup on unmount
+);
+```
+
+:::note
+Prefer `addChangeNotifier`/`addStream`. Use `addStreamable`/`addListenable` only when the
+reactive source is a property of the object you want to expose.
+:::
+
+## BLoC and Cubit
+
+A **BLoC** or **Cubit** is exactly the streamable case: it exposes a synchronous `state`,
+a `stream` of changes, and an async `close()`. Register it with `addStreamable` —
+`context.watch<T>()` returns the **BLoC/Cubit** itself, so you read `state` directly and
+rebuilds are driven by its stream:
+
+```dart
+// CounterCubit is a Cubit from the `bloc` package.
+route(
+  '/counter',
+  provide: (s) => s.addStreamable<CounterCubit>(
+    CounterCubit.new,
+    (c) => c.stream,
+    (c) => c.close(),
+  ),
+  child: (ctx, state) {
+    final counter = ctx.watch<CounterCubit>(); // the Cubit itself
+    return Text('${counter.state}');           // read its synchronous state
+  },
+);
+```
+
+flutter_modular has **no dependency on the `bloc` package** — `addStreamable` takes the
+`stream` and `close` as callbacks. To make this a one‑liner, add a small extension on
+`Scoped` in your app. Because both **BLoC** and **Cubit** extend `BlocBase` (which has
+`.stream` and `.close()`), a single `addBloc` covers both:
+
+```dart
+import 'package:bloc/bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+/// Registers a page-scoped BLoC or Cubit: reactive via its stream, closed on unmount.
+extension BlocScoped on Scoped {
+  void addBloc<B extends BlocBase<Object?>>(B Function() create) =>
+      addStreamable<B>(create, (b) => b.stream, (b) => b.close());
+}
+```
+
+```dart
+// Now registering any BLoC or Cubit is one line:
+provide: (s) => s.addBloc<CounterCubit>(CounterCubit.new),
+```
+
+:::tip
+With the extension above, `addBloc<MyBloc>(MyBloc.new)` works for both **BLoC** and
+**Cubit** — one line to get a page‑scoped, auto‑closed, reactive instance.
+:::
 
 ## Reading state: `watch` and `read`
 
@@ -201,7 +288,7 @@ abstract interface class Disposable {
 }
 ```
 
-Implement it and register with `addDisposable` (page‑scoped) — Modular builds it in the
+Implement it and register with `add` (page‑scoped) — Modular builds it in the
 page‑local injector and calls `dispose()` on unmount. Feature‑module binds that
 implement `Disposable` (or `ChangeNotifier`) are likewise disposed when the feature
 leaves the stack; see [DI lifecycle](./dependency-injection.md#bind-lifecycle).
