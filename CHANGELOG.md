@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.0.2
+
+- **`context.select<T, R>(selector)`** — the method-based twin of the `Selector`
+  widget. Reads a value derived from a page-scoped `T` and rebuilds the calling
+  widget **only when the selected value changes** (`==`). Mirrors
+  `context.select` from `provider` to ease migration; call it from `build`.
+
 ## 7.0.1
 
 - **Page-scoped BLoC/Cubit support.** New `Scoped.addStreamable<T>(ctor,

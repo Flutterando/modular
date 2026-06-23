@@ -2,7 +2,7 @@
 ///
 /// Navigator 2.0 (route matching + page stack + guards + transitions), the
 /// module system (`createModule` / `ModularContext`), page-scoped state
-/// (`provide` / `Scoped` + `context.watch`/`read`, `Consumer`/`Selector`;
+/// (`provide` / `Scoped` + `context.watch`/`read`/`select`, `Consumer`/`Selector`;
 /// `addChangeNotifier`/`addStream` as the rule, `addStreamable`/`addListenable`
 /// for BLoC/Cubit-style objects, `add` for non-reactive resources), and nested
 /// routes (`children` + `RouterOutlet`).

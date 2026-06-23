@@ -251,6 +251,9 @@ c.route('/counter',
 
 // inside the page:
 final vm = context.watch<CounterViewModel>(); // rebuilds when the VM notifies
+
+// granular: rebuild only when the selected value changes (provider-style)
+final count = context.select<CounterViewModel, int>((vm) => vm.count);
 ```
 
 <!-- CONTRIBUTING -->

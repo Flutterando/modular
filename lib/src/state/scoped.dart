@@ -294,6 +294,120 @@ class _VMInherited<T extends Object> extends InheritedNotifier<Listenable> {
   });
 
   final T value;
+
+  @override
+  InheritedElement createElement() => _VMInheritedElement<T>(this);
+}
+
+/// A selector aspect: given the current value, reports whether the value this
+/// dependent derived from it has changed (and therefore needs a rebuild).
+typedef _SelectorAspect<T> = bool Function(T value);
+
+/// Per-dependent record of the selectors registered via `context.select<T>`.
+/// [shouldClear] is flipped on by a microtask after each build so the next
+/// build's first `select` call discards the previous build's stale selectors.
+class _SelectDependency<T> {
+  final List<_SelectorAspect<T>> selectors = [];
+  bool shouldClear = false;
+  bool clearScheduled = false;
+}
+
+/// Marker dependency for a `watch` dependent (notified on every trigger).
+const Object _watchAll = Object();
+
+/// Element for [_VMInherited]. It reproduces [InheritedNotifier]'s "rebuild
+/// dependents when the trigger fires" behaviour, but adds per-dependent aspect
+/// filtering so `context.select<T, R>` rebuilds a dependent ONLY when its
+/// selected value changes — the method-based twin of the `Selector` widget. A
+/// `watch` dependent (no aspect) is still notified on every trigger.
+class _VMInheritedElement<T extends Object> extends InheritedElement {
+  _VMInheritedElement(_VMInherited<T> widget) : super(widget) {
+    widget.notifier?.addListener(_handleUpdate);
+  }
+
+  bool _dirty = false;
+
+  _VMInherited<T> get _widget => widget as _VMInherited<T>;
+
+  @override
+  void update(_VMInherited<T> newWidget) {
+    final oldNotifier = _widget.notifier;
+    final newNotifier = newWidget.notifier;
+    if (oldNotifier != newNotifier) {
+      oldNotifier?.removeListener(_handleUpdate);
+      newNotifier?.addListener(_handleUpdate);
+    }
+    super.update(newWidget);
+  }
+
+  void _handleUpdate() {
+    _dirty = true;
+    markNeedsBuild();
+  }
+
+  @override
+  Widget build() {
+    if (_dirty) notifyClients(_widget);
+    return super.build();
+  }
+
+  @override
+  void notifyClients(InheritedNotifier<Listenable> oldWidget) {
+    super.notifyClients(oldWidget);
+    _dirty = false;
+  }
+
+  @override
+  void unmount() {
+    _widget.notifier?.removeListener(_handleUpdate);
+    super.unmount();
+  }
+
+  @override
+  void updateDependencies(Element dependent, Object? aspect) {
+    final current = getDependencies(dependent);
+    // Already subscribed to the whole value (a prior `watch`) — selectors are
+    // irrelevant from here on; stay subscribed to everything.
+    if (current != null && current is! _SelectDependency<T>) return;
+
+    if (aspect is _SelectorAspect<T>) {
+      final dep = (current as _SelectDependency<T>?) ?? _SelectDependency<T>();
+      if (dep.shouldClear) {
+        dep.shouldClear = false;
+        dep.selectors.clear();
+      }
+      if (!dep.clearScheduled) {
+        dep.clearScheduled = true;
+        scheduleMicrotask(() {
+          dep
+            ..clearScheduled = false
+            ..shouldClear = true;
+        });
+      }
+      dep.selectors.add(aspect);
+      setDependencies(dependent, dep);
+    } else {
+      // `watch`: no aspect — depend on every notification.
+      setDependencies(dependent, _watchAll);
+    }
+  }
+
+  @override
+  void notifyDependent(InheritedWidget oldWidget, Element dependent) {
+    final dependencies = getDependencies(dependent);
+    if (dependencies is _SelectDependency<T>) {
+      final value = _widget.value;
+      for (final hasChanged in dependencies.selectors) {
+        if (hasChanged(value)) {
+          dependent.didChangeDependencies();
+          return;
+        }
+      }
+      return;
+    }
+    // `watch` (or default) — always rebuild.
+    dependent.didChangeDependencies();
+  }
 }
 
 /// Wraps a page subtree: builds the page-scoped instances in a page-local
@@ -382,6 +496,30 @@ extension ModularStateX on BuildContext {
       throw FlutterError('context.watch<$T>(): no scoped $T provided.');
     }
     return inherited.value;
+  }
+
+  /// Reactively reads a value [R] DERIVED from a page-scoped [T], rebuilding
+  /// only when the selected value changes (compared with `==`). It is the
+  /// method-based twin of the `Selector` widget — call it inside `build` to
+  /// scope a rebuild to exactly what a widget uses:
+  ///
+  /// ```dart
+  /// final name = context.select<UserVM, String>((vm) => vm.name);
+  /// ```
+  ///
+  /// Mirrors `context.select` from `provider`, easing migration. Like there,
+  /// only call it from `build` (never in `initState`/`didChangeDependencies`).
+  R select<T extends Object, R>(R Function(T value) selector) {
+    final element = getElementForInheritedWidgetOfExactType<_VMInherited<T>>();
+    if (element == null) {
+      throw FlutterError('context.select<$T, $R>(): no scoped $T provided.');
+    }
+    final selected = selector((element.widget as _VMInherited<T>).value);
+    dependOnInheritedElement(
+      element,
+      aspect: (T value) => selector(value) != selected,
+    );
+    return selected;
   }
 
   /// Reads a page-scoped value of type [T] WITHOUT subscribing to rebuilds.
