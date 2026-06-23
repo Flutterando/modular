@@ -12,7 +12,7 @@ import 'viewmodels/product_list_view_model.dart';
 /// live in `pages/` and `viewmodels/`.
 ///
 /// Demonstrates: page-scoped view models (`addChangeNotifier`), params to the
-/// view (`/:id`), `addDisposable` (non-reactive resource), and `addStream`.
+/// view (`/:id`), `add` (non-reactive `Disposable` resource), and `addStream`.
 /// ---------------------------------------------------------------------------
 
 /// `addStream` demo: a live "people viewing" ticker.
@@ -36,7 +36,7 @@ final productsModule = createModule(
         '/:id',
         provide: (s) {
           s
-            ..addDisposable<RealtimeConnection>(RealtimeConnection.new)
+            ..add<RealtimeConnection>(RealtimeConnection.new)
             ..addChangeNotifier<ProductDetailViewModel>(
               ProductDetailViewModel.new,
             )

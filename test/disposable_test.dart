@@ -24,7 +24,7 @@ final feedModule = createModule(
     c.route(
       '/feed',
       provide: (s) => s
-        ..addDisposable<Connection>(Connection.new)
+        ..add<Connection>(Connection.new)
         ..addChangeNotifier<FeedVM>(FeedVM.new),
       child: (ctx, state) {
         captured = ctx.watch<FeedVM>().connection;
@@ -38,8 +38,8 @@ void main() {
   setUp(() => captured = null);
 
   testWidgets(
-    'page-scoped Disposable is the same instance the VM injects (per-page '
-    'singleton) and is disposed on unmount — without being reactive',
+    'page-scoped add() instance is the same the VM injects (per-page '
+    'singleton) and is disposed on unmount because it implements Disposable',
     (tester) async {
       final boot = bootstrapModule(feedModule);
       await tester.pumpWidget(
@@ -56,10 +56,10 @@ void main() {
       final connection = captured!;
       expect(connection.closed, isFalse);
 
-      // Unmount the page. The Connection — never provided through an
-      // InheritedNotifier — is still cleaned up. Because the VM-injected
-      // instance is the one that closes, this also proves the per-page
-      // singleton sharing.
+      // Unmount the page. The Connection — registered via add(), non-reactive
+      // — is cleaned up because it implements Disposable. Because the
+      // VM-injected instance is the one that closes, this also proves the
+      // per-page singleton sharing.
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
 

@@ -1,5 +1,23 @@
 # Changelog
 
+## 7.0.1
+
+- **Page-scoped BLoC/Cubit support.** New `Scoped.addStreamable<T>(ctor,
+  (t) => t.stream, (t) => t.close())` exposes the object itself via
+  `context.watch<T>()` (read its synchronous `state`, call its methods) while
+  rebuilds are driven by its stream — flutter_modular keeps **no dependency on
+  the `bloc` package** (stream/close are caller callbacks). Companion
+  `addListenable<T>(ctor, (t) => t.listenable, (t) => t.dispose())` for objects
+  whose reactivity is a `Listenable` property. See the docs for a suggested
+  `addBloc` extension covering both BLoC and Cubit.
+- **`add<T>(ctor)`** — non-reactive page-scoped object, readable via
+  `context.read`/`watch` and disposed on unmount when it implements
+  `Disposable`. **Breaking:** replaces `addDisposable`, which is removed (the
+  `Disposable` interface is retained).
+- `addChangeNotifier` reexpressed over `addListenable`;
+  `watch`/`read`/`Consumer`/`Selector` now accept any `Object` (not just
+  `Listenable`), so a non-`Listenable` reactive object can be exposed.
+
 ## 7.0.0-dev.1
 
 Ground-up rewrite of flutter_modular. **Breaking:** the v6 API (`Module` with

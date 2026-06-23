@@ -6,7 +6,7 @@
 #   ./publish-docker.sh [TAG]          # TAG defaults to "latest"
 #
 # Environment variables:
-#   DOCKER_USER      Docker Hub user/org        (default: flutterando)
+#   DOCKER_USER      Docker Hub user/org        (default: jacobmoura7)
 #   IMAGE_NAME       repository name            (default: modular-docs)
 #   PLATFORMS        target platforms           (default: linux/amd64,linux/arm64)
 #   DOCKER_PASSWORD  if set (with DOCKER_USER), used for a non-interactive login
@@ -19,7 +19,7 @@ set -euo pipefail
 # Always run from the doc/ directory (where the Dockerfile lives).
 cd "$(dirname "$0")"
 
-DOCKER_USER="${DOCKER_USER:-flutterando}"
+DOCKER_USER="${DOCKER_USER:-jacobmoura7}"
 IMAGE_NAME="${IMAGE_NAME:-modular-docs}"
 PLATFORMS="${PLATFORMS:-linux/amd64,linux/arm64}"
 TAG="${1:-latest}"
