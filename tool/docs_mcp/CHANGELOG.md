@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3
+
+- Re-embed the navigation page with the reworked **Transitions** section: the
+  open `PageTransition` contract, the `CustomTransition` convenience, custom
+  `PageTransition` implementations, and the app-wide `ModularApp.defaultTransition`
+  (precedence: route-local → app default → `material`).
+
 ## 0.2.2
 
 - Re-embed the state-management page documenting `context.select<T, R>` — the
