@@ -1,5 +1,26 @@
 # Changelog
 
+## 7.0.3
+
+- **Customizable route transitions.** `route(transition:)` and the new app-wide
+  `ModularApp(defaultTransition:)` now accept any `PageTransition`, an open
+  contract that builds the route's `Page`. Three ways to supply one:
+  - the **`TransitionType`** presets (`material`, `fade`, `none`) — each value
+    now *is* a `PageTransition`, so existing `transition: TransitionType.fade`
+    keeps working;
+  - **`CustomTransition`** — the inline convenience: pass a
+    `transitionsBuilder` (same signature as `PageRouteBuilder`) and optionally
+    tune `duration`/`reverseDuration`/`opaque`/`barrierColor`/
+    `barrierDismissible`/`fullscreenDialog`; Modular still owns the `Page`;
+  - implement **`PageTransition`** yourself for full control of the `Page`
+    (e.g. a `CupertinoPage` with swipe-back, a `fullscreenDialog`, shared-axis
+    from the `animations` package).
+- **App-wide default.** `ModularApp.defaultTransition` (default
+  `TransitionType.material`) applies to every route that doesn't declare its
+  own. Precedence: route-local → app default → `material`. `route(transition:)`
+  now defaults to `null` (inherit the app default) instead of forcing
+  `material`.
+
 ## 7.0.2
 
 - **`context.select<T, R>(selector)`** — the method-based twin of the `Selector`

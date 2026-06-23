@@ -1,6 +1,6 @@
 name: flutter_modular
 description: Smart project structure with dependency injection and route management for Flutter.
-version: 7.0.2
+version: 7.0.3
 homepage: https://github.com/Flutterando/modular
 repository: https://github.com/Flutterando/modular
 issue_tracker: https://github.com/Flutterando/modular/issues
