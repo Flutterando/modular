@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2
+
+- Re-embed the state-management page documenting `context.select<T, R>` — the
+  method-based twin of the `Selector` widget (provider-style granular rebuilds).
+
 ## 0.2.1
 
 - Re-embed the refreshed state-management page: documents the page-scoped
