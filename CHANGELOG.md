@@ -1,5 +1,22 @@
 # Changelog
 
+## 7.1.0
+
+- **Feature modules can now consume shared/core dependencies directly.** A
+  module-level bind inside a feature (a module with a `path`) — `addSingleton`,
+  `add`, `addLazySingleton` — now resolves dependencies registered in a
+  root-owned shared module (a path-less `module(...)`, the "core"). Previously
+  only page-scoped `provide` binds could reach the core; a feature's
+  module-level binds ran in a leaf injector that couldn't see root-owned binds,
+  forcing shared deps to be threaded in by hand. This removes that asymmetry:
+  **a core consumer can be a `provide`, the core itself, OR a feature
+  module-level bind** — all alike. A feature's own bind still shadows a
+  same-typed core bind (local wins; core is the fallback).
+- Requires `auto_injector >= 2.2.0`, which adds the opt-in upward resolution
+  (`addInjector(child, resolveUpward: true)`) this builds on, fixes a
+  dispose-listener accumulation in its layer graph, and adds an
+  `UpwardResolutionCycle` guard against mutual upward links.
+
 ## 7.0.3
 
 - **Customizable route transitions.** `route(transition:)` and the new app-wide
