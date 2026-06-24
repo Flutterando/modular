@@ -100,6 +100,92 @@ with a single page, prefer page‑scoped [`provide`](./state-management.md) over
 bind.
 :::
 
+## Sharing dependencies across modules
+
+Put a dependency that many features need — a config, an HTTP client, a session — in
+a **root‑owned** (path‑less) "core" module, and depend on it **by type** anywhere.
+You never thread it by hand: a feature's own binds, and its page‑scoped
+[`provide`](./state-management.md) binds, both resolve it from the graph.
+
+```dart
+// CORE (root-owned): the shared dependency, registered once
+final coreModule = createModule(
+  register: (c) => c.addInstance<ApiConfig>(ApiConfig('https://api.example')),
+);
+
+// FEATURE: its OWN bind depends on the core ApiConfig — supplied automatically
+final ordersModule = createModule(
+  path: '/orders',
+  register: (c) => c
+    ..add<OrdersGateway>(OrdersGateway.new)   // OrdersGateway(ApiConfig) ← from core
+    ..route('/', child: (ctx, state) => const OrdersPage()),
+);
+
+final appModule = createModule(
+  register: (c) => c
+    ..module(coreModule)     // included once at the root → visible to every feature
+    ..module(ordersModule),  // takes NO parameters; resolves ApiConfig by type
+);
+```
+
+You include the shared module **once at the root** — there is no need to re‑import it
+in each feature (simpler than Angular's per‑feature `SharedModule`). Because the binds
+are root‑owned, every feature sees them.
+
+:::info Precedence — local shadows the core
+If a feature registers its **own** bind of the same type, that local bind wins; the
+core bind is the fallback. So a feature can override a shared default for itself
+without affecting the rest of the app.
+:::
+
+:::note Requires 7.1.0+
+Resolving a core dependency from a feature's **module‑level** bind needs
+flutter_modular **7.1.0** (`auto_injector >= 2.2.0`). Page‑scoped `provide` binds
+resolved the core in earlier versions too.
+:::
+
+## Async bootstrap (Hive, SharedPreferences, a DB connection)
+
+`register` is **synchronous**, but some shared dependencies need an `await` to come up
+— opening a Hive box, reading `SharedPreferences`, connecting a database. The idiom is
+to do that `await` **once**, in a builder that *returns the module*, and capture the
+ready instances in its closure. `main` stays thin and features take no parameters:
+
+```dart
+Future<Module> buildCoreModule() async {
+  await Hive.initFlutter();
+  final box = await Hive.openBox<dynamic>('app');     // awaited once, here
+  return createModule(
+    register: (c) => c
+      // the raw box stays private in the closure — expose the CONTRACT
+      ..addInstance<SettingsRepository>(HiveSettingsRepository(box)),
+  );
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final core = await buildCoreModule();               // one await, one instance
+  runApp(ModularApp(module: buildAppModule(core), child: const AppRoot()));
+}
+
+Module buildAppModule(Module core) => createModule(
+  register: (c) => c
+    ..module(core)            // shared, root-owned — features resolve it by type
+    ..module(ordersModule),   // no parameters threaded in
+);
+```
+
+Blocking on the bootstrap once, then registering the *ready* instances with
+`addInstance`, keeps the rest of the app synchronous — no loading states sprinkled
+through your widgets. Combined with cross‑module resolution above, `ordersModule`'s
+binds resolve `SettingsRepository` from the core with **zero** parameter threading.
+
+:::warning Build the async module once
+`buildCoreModule()` returns a **new** module each call, and composition dedups by
+identity — so call it **once** and reference that single instance. Calling it twice
+would open the Hive box twice and register two distinct modules.
+:::
+
 ## Next
 
 - Bind state to a page's lifecycle → [State management](./state-management.md)
