@@ -187,7 +187,7 @@ class ModuleManager {
     }
     root
       ..uncommit()
-      ..addInjector(injector)
+      ..addInjector(injector, resolveUpward: true)
       ..commit();
   }
 
