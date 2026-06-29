@@ -114,6 +114,10 @@ class RouterOutletState extends State<RouterOutlet> {
   final List<_OutletEntry> _stack = [];
   int _seq = 0;
 
+  /// Expose a event stream of the routes change
+  final _routeController = StreamController<Uri>.broadcast();
+  Stream<Uri> get onRouteChanged => _routeController.stream;
+
   /// Whether this outlet has a sub-route above its seed to pop.
   bool get canPop => _stack.length > 1;
 
@@ -146,6 +150,12 @@ class RouterOutletState extends State<RouterOutlet> {
     }
   }
 
+  @override
+  void dispose() {
+    _routeController.close();
+    super.dispose();
+  }
+
   _OutletEntry _entry(Uri uri, Object? arguments) => _OutletEntry(
     uri,
     ValueKey('outlet-${identityHashCode(this)}-${_seq++}'),
@@ -158,7 +168,7 @@ class RouterOutletState extends State<RouterOutlet> {
   Future<T?> push<T extends Object?>(String path, {Object? arguments}) {
     final entry = _entry(Uri.parse(path), arguments);
     setState(() => _stack.add(entry));
-    _reportLocation();
+    _reportLocation(path);
     return entry.completer.future.then((value) => value as T?);
   }
 
@@ -186,7 +196,7 @@ class RouterOutletState extends State<RouterOutlet> {
         ..clear()
         ..add(_entry(Uri.parse(path), arguments));
     });
-    _reportLocation();
+    _reportLocation(path);
   }
 
   /// Replaces this outlet's TOP sub-route with [path].
@@ -197,7 +207,7 @@ class RouterOutletState extends State<RouterOutlet> {
     }
     final entry = _entry(Uri.parse(path), arguments);
     setState(() => _stack.add(entry));
-    _reportLocation();
+    _reportLocation(path);
     return entry.completer.future.then((value) => value as T?);
   }
 
@@ -228,7 +238,7 @@ class RouterOutletState extends State<RouterOutlet> {
     }
     final entry = _entry(Uri.parse(path), arguments);
     setState(() => _stack.add(entry));
-    _reportLocation();
+    _reportLocation(path);
     return entry.completer.future.then((value) => value as T?);
   }
 
@@ -252,15 +262,23 @@ class RouterOutletState extends State<RouterOutlet> {
       if (!removed.completer.isCompleted) removed.completer.complete(null);
     }
     setState(() {});
-    _reportLocation();
+    _reportLocation(path);
     return entry.completer.future.then((value) => value as T?);
   }
 
   /// Reports this outlet's current base sub-route to the root delegate so the
   /// URL reflects the outlet (a tab switch shows up). A push/pop leaves the
   /// base unchanged, so it reports the same value and stays out of the URL.
-  void _reportLocation() {
+  void _reportLocation([String? path]) {
     if (_stack.isEmpty) return;
+
+    /// Convert the String path to a Uri and notfiy the route stream
+    if (path != null) {
+      _routeController.add(Uri.parse(path));
+    } else {
+      _routeController.add(_stack.last.uri);
+    }
+
     final delegate = Router.maybeOf(context)?.routerDelegate;
     if (delegate is ModularRouterDelegate) {
       delegate.reportNestedLocation(_stack.first.uri);
