@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_injector/auto_injector.dart';
 import 'package:flutter/material.dart';
 
+import '../module/module.dart';
 import '../route/modular_route.dart';
 import '../route/route_state.dart';
 import '../state/scoped.dart';
@@ -113,6 +114,7 @@ class RouterOutletState extends State<RouterOutlet> {
   Uri? _seedUri;
   final List<_OutletEntry> _stack = [];
   int _seq = 0;
+  ModuleManager? _manager;
 
   /// Whether this outlet has a sub-route above its seed to pop.
   bool get canPop => _stack.length > 1;
@@ -134,30 +136,61 @@ class RouterOutletState extends State<RouterOutlet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _scope = _OutletScope.of(context)!;
+    final delegate = Router.maybeOf(context)?.routerDelegate;
+    _manager = delegate is ModularRouterDelegate ? delegate.manager : null;
     // (Re)seed the sub-stack when the top route (the scope URL) changes.
     if (_seedUri != _scope.uri) {
       _seedUri = _scope.uri;
-      for (final e in _stack) {
-        if (!e.completer.isCompleted) e.completer.complete(null);
-      }
-      _stack
-        ..clear()
-        ..add(_entry(_scope.uri, _scope.arguments));
+      _clear();
+      _add(_entry(_scope.uri, _scope.arguments));
     }
   }
 
-  _OutletEntry _entry(Uri uri, Object? arguments) => _OutletEntry(
-    uri,
-    ValueKey('outlet-${identityHashCode(this)}-${_seq++}'),
-    Completer<Object?>(),
-    arguments,
-  );
+  @override
+  void dispose() {
+    _clear();
+    super.dispose();
+  }
+
+  /// Creates an entry and ACTIVATES its owning feature module(s) in the
+  /// [ModuleManager] — like a root stack entry — so a feature reached only
+  /// through this outlet gets its binds before its page builds.
+  _OutletEntry _entry(Uri uri, Object? arguments) {
+    final id = 'outlet-${identityHashCode(this)}-${_seq++}';
+    final tags = _scope.routes.match(uri)?.last.route.ownerTags ?? const [];
+    return _OutletEntry(
+      uri,
+      ValueKey(id),
+      id,
+      Completer<Object?>(),
+      arguments,
+      tags,
+    );
+  }
+
+  void _add(_OutletEntry entry) {
+    _manager?.enter(entry.id, entry.ownerTags);
+    _stack.add(entry);
+  }
+
+  /// Completes [entry]'s future and releases its feature module(s).
+  void _detach(_OutletEntry entry, Object? result) {
+    if (!entry.completer.isCompleted) entry.completer.complete(result);
+    _manager?.leave(entry.id, entry.ownerTags);
+  }
+
+  void _clear() {
+    for (final e in _stack) {
+      _detach(e, null);
+    }
+    _stack.clear();
+  }
 
   /// Pushes [path] onto THIS outlet's sub-stack (the parent shell persists);
   /// the returned future completes with the value passed to `pop(result)`.
   Future<T?> push<T extends Object?>(String path, {Object? arguments}) {
     final entry = _entry(Uri.parse(path), arguments);
-    setState(() => _stack.add(entry));
+    setState(() => _add(entry));
     _reportLocation();
     return entry.completer.future.then((value) => value as T?);
   }
@@ -178,13 +211,12 @@ class RouterOutletState extends State<RouterOutlet> {
   /// Replaces this outlet's WHOLE sub-stack with [path] — the shell "navigate"
   /// (a bottom-bar tab switch swaps the body without stacking history).
   void navigate(String path, {Object? arguments}) {
-    for (final entry in _stack) {
-      if (!entry.completer.isCompleted) entry.completer.complete(null);
-    }
+    final entry = _entry(Uri.parse(path), arguments);
     setState(() {
-      _stack
-        ..clear()
-        ..add(_entry(Uri.parse(path), arguments));
+      _add(entry);
+      _stack.remove(entry);
+      _clear();
+      _stack.add(entry);
     });
     _reportLocation();
   }
@@ -192,11 +224,10 @@ class RouterOutletState extends State<RouterOutlet> {
   /// Replaces this outlet's TOP sub-route with [path].
   Future<T?> replace<T extends Object?>(String path, {Object? arguments}) {
     if (_stack.isNotEmpty) {
-      final top = _stack.removeLast();
-      if (!top.completer.isCompleted) top.completer.complete(null);
+      _detach(_stack.removeLast(), null);
     }
     final entry = _entry(Uri.parse(path), arguments);
-    setState(() => _stack.add(entry));
+    setState(() => _add(entry));
     _reportLocation();
     return entry.completer.future.then((value) => value as T?);
   }
@@ -208,8 +239,7 @@ class RouterOutletState extends State<RouterOutlet> {
         !predicate(
           RouteState(uri: _stack.last.uri, arguments: _stack.last.arguments),
         )) {
-      final top = _stack.removeLast();
-      if (!top.completer.isCompleted) top.completer.complete(null);
+      _detach(_stack.removeLast(), null);
       changed = true;
     }
     if (changed && mounted) setState(() {});
@@ -223,11 +253,10 @@ class RouterOutletState extends State<RouterOutlet> {
     Object? arguments,
   }) {
     if (_stack.isNotEmpty) {
-      final top = _stack.removeLast();
-      if (!top.completer.isCompleted) top.completer.complete(result);
+      _detach(_stack.removeLast(), result);
     }
     final entry = _entry(Uri.parse(path), arguments);
-    setState(() => _stack.add(entry));
+    setState(() => _add(entry));
     _reportLocation();
     return entry.completer.future.then((value) => value as T?);
   }
@@ -240,7 +269,7 @@ class RouterOutletState extends State<RouterOutlet> {
     Object? arguments,
   }) {
     final entry = _entry(Uri.parse(path), arguments);
-    _stack.add(entry);
+    _add(entry);
     while (_stack.length > 1 &&
         !predicate(
           RouteState(
@@ -248,8 +277,7 @@ class RouterOutletState extends State<RouterOutlet> {
             arguments: _stack[_stack.length - 2].arguments,
           ),
         )) {
-      final removed = _stack.removeAt(_stack.length - 2);
-      if (!removed.completer.isCompleted) removed.completer.complete(null);
+      _detach(_stack.removeAt(_stack.length - 2), null);
     }
     setState(() {});
     _reportLocation();
@@ -270,8 +298,7 @@ class RouterOutletState extends State<RouterOutlet> {
   void _remove(Key? key, Object? result) {
     final index = _stack.indexWhere((e) => e.key == key);
     if (index == -1) return;
-    final entry = _stack.removeAt(index);
-    if (!entry.completer.isCompleted) entry.completer.complete(result);
+    _detach(_stack.removeAt(index), result);
     if (mounted) setState(() {});
     _reportLocation();
   }
@@ -317,9 +344,18 @@ class RouterOutletState extends State<RouterOutlet> {
 }
 
 class _OutletEntry {
-  _OutletEntry(this.uri, this.key, this.completer, this.arguments);
+  _OutletEntry(
+    this.uri,
+    this.key,
+    this.id,
+    this.completer,
+    this.arguments,
+    this.ownerTags,
+  );
   final Uri uri;
   final LocalKey key;
+  final String id;
+  final List<String> ownerTags;
   final Completer<Object?> completer;
   final Object? arguments;
 }
