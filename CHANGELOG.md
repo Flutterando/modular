@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.1.1
+
+- **Fix: feature modules reached through a `RouterOutlet` now get their binds.**
+  The outlet keeps its own sub-stack but never reported its entries to the
+  module manager, so a feature mounted as a child of a shell (e.g. `/` with a
+  `RouterOutlet` body) failed with "X not registered" when navigated to inside
+  the outlet. Outlet entries now activate and release their feature modules on
+  push, navigate, replace, pop and dispose, just like root stack entries.
+
 ## 7.1.0
 
 - **Feature modules can now consume shared/core dependencies directly.** A
